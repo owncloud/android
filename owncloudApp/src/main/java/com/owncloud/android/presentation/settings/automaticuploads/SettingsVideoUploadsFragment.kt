@@ -3,8 +3,9 @@
  *
  * @author Juan Carlos Garrote Gascón
  * @author Aitor Ballesteros Pavón
+ * @author Jorge Aguado Recio
  *
- * Copyright (C) 2023 ownCloud GmbH.
+ * Copyright (C) 2024 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -48,7 +49,9 @@ import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_VIDEO_UPLOADS_PATH
 import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_VIDEO_UPLOADS_SOURCE
 import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_VIDEO_UPLOADS_WIFI_ONLY
 import com.owncloud.android.domain.automaticuploads.model.UploadBehavior
+import com.owncloud.android.extensions.collectLatestLifecycleFlow
 import com.owncloud.android.extensions.showAlertDialog
+import com.owncloud.android.presentation.accounts.ManageAccountsViewModel
 import com.owncloud.android.ui.activity.FolderPickerActivity
 import com.owncloud.android.utils.DisplayUtils
 import kotlinx.coroutines.launch
@@ -59,6 +62,7 @@ class SettingsVideoUploadsFragment : PreferenceFragmentCompat() {
 
     // ViewModel
     private val videosViewModel by viewModel<SettingsVideoUploadsViewModel>()
+    private val manageAccountsViewModel by viewModel<ManageAccountsViewModel>()
 
     private var prefEnableVideoUploads: SwitchPreferenceCompat? = null
     private var prefVideoUploadsPath: Preference? = null
@@ -100,10 +104,7 @@ class SettingsVideoUploadsFragment : PreferenceFragmentCompat() {
             entries = listOf(getString(R.string.pref_behaviour_entries_keep_file), getString(R.string.pref_behaviour_entries_remove_original_file)).toTypedArray()
             entryValues = listOf(UploadBehavior.COPY.name, UploadBehavior.MOVE.name).toTypedArray()
         }
-        prefVideoUploadsAccount = findPreference<ListPreference>(PREF__CAMERA_VIDEO_UPLOADS_ACCOUNT_NAME)?.apply {
-            entries = videosViewModel.getLoggedAccountNames()
-            entryValues = videosViewModel.getLoggedAccountNames()
-        }
+        prefVideoUploadsAccount = findPreference<ListPreference>(PREF__CAMERA_VIDEO_UPLOADS_ACCOUNT_NAME)
 
         val comment = getString(R.string.prefs_camera_upload_source_path_title_required)
         prefVideoUploadsSourcePath?.title = String.format(prefVideoUploadsSourcePath?.title.toString(), comment)
@@ -120,18 +121,30 @@ class SettingsVideoUploadsFragment : PreferenceFragmentCompat() {
     private fun initLiveDataObservers() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                videosViewModel.videoUploads.collect { videoUploadsConfiguration ->
-                    enableVideoUploads(videoUploadsConfiguration != null)
-                    videoUploadsConfiguration?.let {
-                        prefVideoUploadsAccount?.value = it.accountName
-                        prefVideoUploadsPath?.summary = videosViewModel.getUploadPathString()
-                        prefVideoUploadsSourcePath?.summary = DisplayUtils.getPathWithoutLastSlash(it.sourcePath.toUri().path)
-                        prefVideoUploadsOnWifi?.isChecked = it.wifiOnly
-                        prefVideoUploadsOnCharging?.isChecked = it.chargingOnly
-                        prefVideoUploadsBehaviour?.value = it.behavior.name
-                        prefVideoUploadsLastSync?.summary = DisplayUtils.unixTimeToHumanReadable(it.lastSyncTimestamp)
-                        spaceId = it.spaceId
-                    } ?: resetFields()
+                collectLatestLifecycleFlow(manageAccountsViewModel.userQuotas) { listUserQuotas ->
+                    val availableAccounts = listUserQuotas.filter { it.available != -4L }
+                    prefVideoUploadsAccount?.apply {
+                        entries = availableAccounts.map { it.accountName }.toTypedArray()
+                        entryValues = availableAccounts.map { it.accountName }.toTypedArray()
+                    }
+
+                    if (availableAccounts.isEmpty()) {
+                        disableFields()
+                    } else {
+                        videosViewModel.videoUploads.collect { videoUploadsConfiguration ->
+                            enableVideoUploads(videoUploadsConfiguration != null)
+                            videoUploadsConfiguration?.let {
+                                prefVideoUploadsAccount?.value = it.accountName
+                                prefVideoUploadsPath?.summary = videosViewModel.getUploadPathString()
+                                prefVideoUploadsSourcePath?.summary = DisplayUtils.getPathWithoutLastSlash(it.sourcePath.toUri().path)
+                                prefVideoUploadsOnWifi?.isChecked = it.wifiOnly
+                                prefVideoUploadsOnCharging?.isChecked = it.chargingOnly
+                                prefVideoUploadsBehaviour?.value = it.behavior.name
+                                prefVideoUploadsLastSync?.summary = DisplayUtils.unixTimeToHumanReadable(it.lastSyncTimestamp)
+                                spaceId = it.spaceId
+                            } ?: resetFields()
+                        }
+                    }
                 }
             }
         }
@@ -244,5 +257,17 @@ class SettingsVideoUploadsFragment : PreferenceFragmentCompat() {
         prefVideoUploadsOnCharging?.isChecked = false
         prefVideoUploadsBehaviour?.value = UploadBehavior.COPY.name
         prefVideoUploadsLastSync?.summary = null
+    }
+
+    private fun disableFields() {
+        prefEnableVideoUploads?.isChecked = false
+        prefEnableVideoUploads?.isEnabled = false
+        prefVideoUploadsAccount?.isEnabled = false
+        prefVideoUploadsPath?.isEnabled = false
+        prefVideoUploadsSourcePath?.isEnabled = false
+        prefVideoUploadsOnWifi?.isEnabled = false
+        prefVideoUploadsOnCharging?.isEnabled = false
+        prefVideoUploadsBehaviour?.isEnabled = false
+        prefVideoUploadsLastSync?.isEnabled = false
     }
 }

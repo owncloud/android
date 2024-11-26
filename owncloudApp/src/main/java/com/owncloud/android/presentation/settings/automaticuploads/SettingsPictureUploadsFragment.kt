@@ -3,8 +3,9 @@
  *
  * @author Juan Carlos Garrote Gascón
  * @author Aitor Ballesteros Pavón
+ * @author Jorge Aguado Recio
  *
- * Copyright (C) 2023 ownCloud GmbH.
+ * Copyright (C) 2024 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -48,7 +49,9 @@ import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_PA
 import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_SOURCE
 import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_WIFI_ONLY
 import com.owncloud.android.domain.automaticuploads.model.UploadBehavior
+import com.owncloud.android.extensions.collectLatestLifecycleFlow
 import com.owncloud.android.extensions.showAlertDialog
+import com.owncloud.android.presentation.accounts.ManageAccountsViewModel
 import com.owncloud.android.ui.activity.FolderPickerActivity
 import com.owncloud.android.utils.DisplayUtils
 import kotlinx.coroutines.launch
@@ -59,6 +62,7 @@ class SettingsPictureUploadsFragment : PreferenceFragmentCompat() {
 
     // ViewModel
     private val picturesViewModel by viewModel<SettingsPictureUploadsViewModel>()
+    private val manageAccountsViewModel by viewModel<ManageAccountsViewModel>()
 
     private var prefEnablePictureUploads: SwitchPreferenceCompat? = null
     private var prefPictureUploadsPath: Preference? = null
@@ -103,10 +107,7 @@ class SettingsPictureUploadsFragment : PreferenceFragmentCompat() {
             ).toTypedArray()
             entryValues = listOf(UploadBehavior.COPY.name, UploadBehavior.MOVE.name).toTypedArray()
         }
-        prefPictureUploadsAccount = findPreference<ListPreference>(PREF__CAMERA_PICTURE_UPLOADS_ACCOUNT_NAME)?.apply {
-            entries = picturesViewModel.getLoggedAccountNames()
-            entryValues = picturesViewModel.getLoggedAccountNames()
-        }
+        prefPictureUploadsAccount = findPreference(PREF__CAMERA_PICTURE_UPLOADS_ACCOUNT_NAME)
 
         val comment = getString(R.string.prefs_camera_upload_source_path_title_required)
         prefPictureUploadsSourcePath?.title = String.format(prefPictureUploadsSourcePath?.title.toString(), comment)
@@ -123,18 +124,30 @@ class SettingsPictureUploadsFragment : PreferenceFragmentCompat() {
     private fun initStateObservers() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                picturesViewModel.pictureUploads.collect { pictureUploadsConfiguration ->
-                    enablePictureUploads(pictureUploadsConfiguration != null)
-                    pictureUploadsConfiguration?.let {
-                        prefPictureUploadsAccount?.value = it.accountName
-                        prefPictureUploadsPath?.summary = picturesViewModel.getUploadPathString()
-                        prefPictureUploadsSourcePath?.summary = DisplayUtils.getPathWithoutLastSlash(it.sourcePath.toUri().path)
-                        prefPictureUploadsOnWifi?.isChecked = it.wifiOnly
-                        prefPictureUploadsOnCharging?.isChecked = it.chargingOnly
-                        prefPictureUploadsBehaviour?.value = it.behavior.name
-                        prefPictureUploadsLastSync?.summary = DisplayUtils.unixTimeToHumanReadable(it.lastSyncTimestamp)
-                        spaceId = it.spaceId
-                    } ?: resetFields()
+                collectLatestLifecycleFlow(manageAccountsViewModel.userQuotas) { listUserQuotas ->
+                    val availableAccounts = listUserQuotas.filter { it.available != -4L }
+                    prefPictureUploadsAccount?.apply {
+                        entries = availableAccounts.map { it.accountName }.toTypedArray()
+                        entryValues = availableAccounts.map { it.accountName }.toTypedArray()
+                    }
+
+                    if (availableAccounts.isEmpty()) {
+                        disableFields()
+                    } else {
+                        picturesViewModel.pictureUploads.collect { pictureUploadsConfiguration ->
+                            enablePictureUploads(pictureUploadsConfiguration != null)
+                            pictureUploadsConfiguration?.let {
+                                prefPictureUploadsAccount?.value = it.accountName
+                                prefPictureUploadsPath?.summary = picturesViewModel.getUploadPathString()
+                                prefPictureUploadsSourcePath?.summary = DisplayUtils.getPathWithoutLastSlash(it.sourcePath.toUri().path)
+                                prefPictureUploadsOnWifi?.isChecked = it.wifiOnly
+                                prefPictureUploadsOnCharging?.isChecked = it.chargingOnly
+                                prefPictureUploadsBehaviour?.value = it.behavior.name
+                                prefPictureUploadsLastSync?.summary = DisplayUtils.unixTimeToHumanReadable(it.lastSyncTimestamp)
+                                spaceId = it.spaceId
+                            } ?: resetFields()
+                        }
+                    }
                 }
             }
         }
@@ -247,5 +260,17 @@ class SettingsPictureUploadsFragment : PreferenceFragmentCompat() {
         prefPictureUploadsOnCharging?.isChecked = false
         prefPictureUploadsBehaviour?.value = UploadBehavior.COPY.name
         prefPictureUploadsLastSync?.summary = null
+    }
+
+    private fun disableFields() {
+        prefEnablePictureUploads?.isChecked = false
+        prefEnablePictureUploads?.isEnabled = false
+        prefPictureUploadsAccount?.isEnabled = false
+        prefPictureUploadsPath?.isEnabled = false
+        prefPictureUploadsSourcePath?.isEnabled = false
+        prefPictureUploadsOnWifi?.isEnabled = false
+        prefPictureUploadsOnCharging?.isEnabled = false
+        prefPictureUploadsBehaviour?.isEnabled = false
+        prefPictureUploadsLastSync?.isEnabled = false
     }
 }
