@@ -45,7 +45,7 @@ class OCSpacesRepository(
                 } else {
                     UserQuota(accountName, it.quota?.remaining!!, it.quota?.used!!, it.quota?.total!!, UserQuotaState.fromValue(it.quota?.state!!))
                 }
-            } ?: UserQuota (accountName, -4, 0, 0, UserQuotaState.NORMAL)
+            } ?: UserQuota(accountName, -4, 0, 0, UserQuotaState.NORMAL)
             localUserDataSource.saveQuotaForAccount(accountName, userQuota)
         }
     }

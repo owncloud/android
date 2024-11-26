@@ -431,7 +431,7 @@ class FileDisplayActivity : FileActivity(),
         transaction.commit()
     }
 
-    private fun initAndShowEmptyPersonalFolder(){
+    private fun initAndShowEmptyPersonalFolder() {
         val emptyListFragment = MainEmptyListFragment()
         this.fileListOption = FileListOption.ALL_FILES
         val transaction = supportFragmentManager.beginTransaction()

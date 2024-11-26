@@ -44,7 +44,7 @@ class MainEmptyListFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        with (binding.emptyDataParent) {
+        with(binding.emptyDataParent) {
             listEmptyDatasetIcon.setImageResource(R.drawable.ic_folder)
             listEmptyDatasetTitle.setText(R.string.file_list_empty_title_all_files)
             listEmptyDatasetSubTitle.setText(R.string.light_users_subtitle)
