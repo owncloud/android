@@ -4,7 +4,7 @@
  * @author Abel García de Prada
  * @author Juan Carlos Garrote Gascón
  *
- * Copyright (C) 2022 ownCloud GmbH.
+ * Copyright (C) 2024 ownCloud GmbH.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -205,7 +205,7 @@ data class SpacesCapabilities(
     val enabled: Boolean,
     val projects: Boolean,
     @Json(name = "share_jail")
-    val shareJail: Boolean,
+    val shareJail: Boolean?,
 ) {
     fun toSpaces() = RemoteSpaces(enabled, projects, shareJail)
 }
