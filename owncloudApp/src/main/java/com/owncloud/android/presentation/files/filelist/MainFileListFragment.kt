@@ -612,7 +612,7 @@ class MainFileListFragment : Fragment(),
 
             binding.spaceHeader.root.apply {
                 if ((fileListUiState.space?.isProject == true || fileListUiState.space?.isPersonal == true)
-                    && fileListUiState.folderToDisplay?.remotePath == ROOT_PATH) {
+                    && fileListUiState.folderToDisplay?.remotePath == ROOT_PATH && fileListUiState.fileListOption != FileListOption.AV_OFFLINE) {
                     isVisible = true
                     animate().translationY(0f).duration = 100
                 } else {
