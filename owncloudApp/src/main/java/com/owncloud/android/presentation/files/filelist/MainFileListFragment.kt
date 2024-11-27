@@ -610,9 +610,9 @@ class MainFileListFragment : Fragment(),
             )
             showOrHideEmptyView(fileListUiState)
 
-
             binding.spaceHeader.root.apply {
-                if (fileListUiState.space?.isProject == true && fileListUiState.folderToDisplay?.remotePath == ROOT_PATH) {
+                if ((fileListUiState.space?.isProject == true || fileListUiState.space?.isPersonal == true)
+                    && fileListUiState.folderToDisplay?.remotePath == ROOT_PATH) {
                     isVisible = true
                     animate().translationY(0f).duration = 100
                 } else {

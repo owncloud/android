@@ -43,8 +43,7 @@
                 android:id="@+id/space_header_image"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scaleType="centerCrop"
-                android:src="@drawable/ic_spaces" />
+                android:scaleType="fitCenter" />
 
     </androidx.cardview.widget.CardView>
 
