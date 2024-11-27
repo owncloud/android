@@ -763,7 +763,7 @@ class FileDisplayActivity : FileActivity(),
                 // If current file is root folder
                 else if (currentDirDisplayed.parentId == ROOT_PARENT_ID) {
                     // If current space is a project space (not personal, not shares), navigate back to the spaces list
-                    if (mainFileListFragment?.getCurrentSpace()?.isProject == true) {
+                    if (mainFileListFragment?.getCurrentSpace()?.isProject == true || mainFileListFragment?.getCurrentSpace()?.isPersonal == true) {
                         navigateTo(FileListOption.SPACES_LIST)
                     }
                     // If current space is not a project space (personal or shares) or it is null ("Files" in oC10), close the app
@@ -965,7 +965,7 @@ class FileDisplayActivity : FileActivity(),
         // If we come from a preview activity (image or video), not updating toolbar when initializing this activity or it will show the root folder one
         if (intent.action == ACTION_DETAILS && chosenFile?.remotePath == OCFile.ROOT_PATH && secondFragment is FileDetailsFragment) return
 
-        if (chosenFile == null || (chosenFile.remotePath == OCFile.ROOT_PATH && (space == null || !space.isProject))) {
+        if (chosenFile == null || (chosenFile.remotePath == OCFile.ROOT_PATH && (space == null || (!space.isProject && !space.isPersonal)))) {
             val title =
                 when (fileListOption) {
                     FileListOption.AV_OFFLINE -> getString(R.string.drawer_item_only_available_offline)
@@ -980,7 +980,7 @@ class FileDisplayActivity : FileActivity(),
                 }
             setTitle(title)
             setupRootToolbar(title = title, isSearchEnabled = true, isAvatarRequested = false)
-        } else if (space?.isProject == true && chosenFile.remotePath == OCFile.ROOT_PATH) {
+        } else if ((space?.isProject == true || space?.isPersonal == true) && chosenFile.remotePath == OCFile.ROOT_PATH) {
             updateStandardToolbar(title = space.name, displayHomeAsUpEnabled = true, homeButtonEnabled = true)
         } else {
             updateStandardToolbar(title = chosenFile.fileName, displayHomeAsUpEnabled = true, homeButtonEnabled = true)
