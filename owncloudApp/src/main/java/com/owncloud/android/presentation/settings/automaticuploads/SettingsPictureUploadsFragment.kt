@@ -132,10 +132,10 @@ class SettingsPictureUploadsFragment : PreferenceFragmentCompat() {
                     }
 
                     if (availableAccounts.isEmpty()) {
-                        disableFields()
+                        enablePictureUploads(false, true)
                     } else {
                         picturesViewModel.pictureUploads.collect { pictureUploadsConfiguration ->
-                            enablePictureUploads(pictureUploadsConfiguration != null)
+                            enablePictureUploads(pictureUploadsConfiguration != null, false)
                             pictureUploadsConfiguration?.let {
                                 prefPictureUploadsAccount?.value = it.accountName
                                 prefPictureUploadsPath?.summary = picturesViewModel.getUploadPathString()
@@ -241,8 +241,11 @@ class SettingsPictureUploadsFragment : PreferenceFragmentCompat() {
         super.onDestroy()
     }
 
-    private fun enablePictureUploads(value: Boolean) {
+    private fun enablePictureUploads(value: Boolean, isLightUser: Boolean) {
         prefEnablePictureUploads?.isChecked = value
+        if (isLightUser) {
+            prefEnablePictureUploads?.isEnabled = false
+        }
         prefPictureUploadsPath?.isEnabled = value
         prefPictureUploadsOnWifi?.isEnabled = value
         prefPictureUploadsOnCharging?.isEnabled = value
@@ -262,15 +265,4 @@ class SettingsPictureUploadsFragment : PreferenceFragmentCompat() {
         prefPictureUploadsLastSync?.summary = null
     }
 
-    private fun disableFields() {
-        prefEnablePictureUploads?.isChecked = false
-        prefEnablePictureUploads?.isEnabled = false
-        prefPictureUploadsAccount?.isEnabled = false
-        prefPictureUploadsPath?.isEnabled = false
-        prefPictureUploadsSourcePath?.isEnabled = false
-        prefPictureUploadsOnWifi?.isEnabled = false
-        prefPictureUploadsOnCharging?.isEnabled = false
-        prefPictureUploadsBehaviour?.isEnabled = false
-        prefPictureUploadsLastSync?.isEnabled = false
-    }
 }

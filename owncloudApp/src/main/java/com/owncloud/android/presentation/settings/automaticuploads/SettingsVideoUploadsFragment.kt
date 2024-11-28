@@ -129,10 +129,10 @@ class SettingsVideoUploadsFragment : PreferenceFragmentCompat() {
                     }
 
                     if (availableAccounts.isEmpty()) {
-                        disableFields()
+                        enableVideoUploads(false, true)
                     } else {
                         videosViewModel.videoUploads.collect { videoUploadsConfiguration ->
-                            enableVideoUploads(videoUploadsConfiguration != null)
+                            enableVideoUploads(videoUploadsConfiguration != null, false)
                             videoUploadsConfiguration?.let {
                                 prefVideoUploadsAccount?.value = it.accountName
                                 prefVideoUploadsPath?.summary = videosViewModel.getUploadPathString()
@@ -238,8 +238,11 @@ class SettingsVideoUploadsFragment : PreferenceFragmentCompat() {
         super.onDestroy()
     }
 
-    private fun enableVideoUploads(value: Boolean) {
+    private fun enableVideoUploads(value: Boolean, isLightUser: Boolean) {
         prefEnableVideoUploads?.isChecked = value
+        if (isLightUser) {
+            prefEnableVideoUploads?.isEnabled = false
+        }
         prefVideoUploadsPath?.isEnabled = value
         prefVideoUploadsOnWifi?.isEnabled = value
         prefVideoUploadsOnCharging?.isEnabled = value
@@ -259,15 +262,4 @@ class SettingsVideoUploadsFragment : PreferenceFragmentCompat() {
         prefVideoUploadsLastSync?.summary = null
     }
 
-    private fun disableFields() {
-        prefEnableVideoUploads?.isChecked = false
-        prefEnableVideoUploads?.isEnabled = false
-        prefVideoUploadsAccount?.isEnabled = false
-        prefVideoUploadsPath?.isEnabled = false
-        prefVideoUploadsSourcePath?.isEnabled = false
-        prefVideoUploadsOnWifi?.isEnabled = false
-        prefVideoUploadsOnCharging?.isEnabled = false
-        prefVideoUploadsBehaviour?.isEnabled = false
-        prefVideoUploadsLastSync?.isEnabled = false
-    }
 }
