@@ -73,7 +73,6 @@ import com.owncloud.android.data.providers.implementation.OCSharedPreferencesPro
 import com.owncloud.android.db.PreferenceManager;
 import com.owncloud.android.domain.exceptions.UnauthorizedException;
 import com.owncloud.android.domain.files.model.OCFile;
-import com.owncloud.android.domain.spaces.model.OCSpace;
 import com.owncloud.android.extensions.ActivityExtKt;
 import com.owncloud.android.extensions.ThrowableExtKt;
 import com.owncloud.android.lib.common.OwnCloudAccount;
@@ -118,6 +117,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static com.owncloud.android.presentation.settings.advanced.SettingsAdvancedFragment.PREF_SHOW_HIDDEN_FILES;
+import static org.koin.core.parameter.ParametersHolderKt.parametersOf;
 import static org.koin.java.KoinJavaComponent.get;
 import static org.koin.java.KoinJavaComponent.inject;
 
@@ -222,14 +222,11 @@ public class ReceiveExternalFilesActivity extends FileActivity
         }
         mSortOptionsView.setVisibility(View.GONE);
 
-        mReceiveExternalFilesViewModel = get(ReceiveExternalFilesViewModel.class);
-        subscribeToViewModels();
 
         initPickerListener();
 
     }
     private void subscribeToViewModels() {
-        mReceiveExternalFilesViewModel.areSpacesAllowed(getAccount().name);
         mReceiveExternalFilesViewModel.getSpacesAreAllowed().observe(this, spaces -> {
             areSpacesAllowed = spaces;
 
@@ -339,7 +336,8 @@ public class ReceiveExternalFilesActivity extends FileActivity
     @Override
     protected void onAccountSet(boolean stateWasRecovered) {
         super.onAccountSet(mAccountWasRestored);
-        mReceiveExternalFilesViewModel.areSpacesAllowed(getAccount().name);
+        mReceiveExternalFilesViewModel = get(ReceiveExternalFilesViewModel.class, null , () -> parametersOf(getAccount().name));
+        subscribeToViewModels();
         initTargetFolder();
 
         mReceiveExternalFilesViewModel.getSyncFolderLiveData().observe(this, eventUiResult -> {
@@ -362,7 +360,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
                 } else if (uiResult instanceof UIResult.Success) {
                     mSyncInProgress = false;
                     updateDirectoryList();
-                    if (mParents.size() == 1) {
+                    if (mParents.size() == 1 && !areSpacesAllowed) {
                         updateToolbar(getString(R.string.uploader_top_message));
                     }
                     if(fragmentContainer.getVisibility() == View.VISIBLE) {
@@ -435,7 +433,6 @@ public class ReceiveExternalFilesActivity extends FileActivity
                     onAccountSet(mAccountWasRestored);
                     dialog.dismiss();
                     PreferenceManager.setLastUploadPath("/", this);
-                    mReceiveExternalFilesViewModel.areSpacesAllowed(getAccount().name);
                     mAccountSelected = true;
                     mAccountSelectionShowing = false;
                 });
@@ -460,7 +457,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
             String full_path = generatePath(mParents);
             startSyncFolderOperation(getStorageManager().getFileByPath(full_path, currentSpaceId));
             updateDirectoryList();
-            if (mParents.size() <= 1) {
+            if (mParents.size() <= 1 && !areSpacesAllowed) {
                 updateToolbar(getString(R.string.uploader_top_message));
             }
         }

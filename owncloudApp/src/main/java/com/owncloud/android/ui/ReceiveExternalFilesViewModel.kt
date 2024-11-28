@@ -35,6 +35,7 @@ class ReceiveExternalFilesViewModel(
     private val synchronizeFolderUseCase: SynchronizeFolderUseCase,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
     private val getStoredCapabilitiesUseCase: GetStoredCapabilitiesUseCase,
+    private val accountName: String,
 ) : ViewModel() {
 
     private val _syncFolderLiveData = MediatorLiveData<Event<UIResult<Unit>>>()
@@ -42,6 +43,14 @@ class ReceiveExternalFilesViewModel(
 
     private val _spacesAreAllowed = MutableLiveData<Boolean>()
     val spacesAreAllowed: LiveData<Boolean> = _spacesAreAllowed
+
+    init {
+        viewModelScope.launch(coroutinesDispatcherProvider.io) {
+            val capabilities = getStoredCapabilitiesUseCase(GetStoredCapabilitiesUseCase.Params(accountName))
+            val spacesAvailableForAccount = capabilities?.isSpacesAllowed() == true
+            _spacesAreAllowed.postValue(spacesAvailableForAccount)
+        }
+    }
 
     fun refreshFolderUseCase(
         folderToSync: OCFile,
@@ -57,13 +66,5 @@ class ReceiveExternalFilesViewModel(
             syncMode = SynchronizeFolderUseCase.SyncFolderMode.REFRESH_FOLDER
         )
     )
-
-    fun areSpacesAllowed(accountName: String) {
-        viewModelScope.launch(coroutinesDispatcherProvider.io) {
-            val capabilities = getStoredCapabilitiesUseCase(GetStoredCapabilitiesUseCase.Params(accountName))
-            val spacesAvailableForAccount = capabilities?.isSpacesAllowed() == true
-            _spacesAreAllowed.postValue(spacesAvailableForAccount)
-        }
-    }
 
 }

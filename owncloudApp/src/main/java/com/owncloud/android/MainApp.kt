@@ -51,7 +51,6 @@ import com.owncloud.android.domain.capabilities.usecases.GetStoredCapabilitiesUs
 import com.owncloud.android.domain.spaces.model.OCSpace
 import com.owncloud.android.domain.spaces.usecases.GetPersonalSpaceForAccountUseCase
 import com.owncloud.android.domain.user.usecases.GetStoredQuotaUseCase
-import com.owncloud.android.domain.user.usecases.GetUserQuotasUseCase
 import com.owncloud.android.extensions.createNotificationChannel
 import com.owncloud.android.lib.common.SingleSessionManager
 import com.owncloud.android.presentation.authentication.AccountUtils
