@@ -51,6 +51,7 @@ import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_VIDEO_UPLOADS_WIFI
 import com.owncloud.android.domain.automaticuploads.model.UploadBehavior
 import com.owncloud.android.extensions.collectLatestLifecycleFlow
 import com.owncloud.android.extensions.showAlertDialog
+import com.owncloud.android.extensions.showMessageInSnackbar
 import com.owncloud.android.presentation.accounts.ManageAccountsViewModel
 import com.owncloud.android.ui.activity.FolderPickerActivity
 import com.owncloud.android.utils.DisplayUtils
@@ -130,6 +131,7 @@ class SettingsVideoUploadsFragment : PreferenceFragmentCompat() {
 
                     if (availableAccounts.isEmpty()) {
                         enableVideoUploads(false, true)
+                        showMessageInSnackbar(getString(R.string.prefs_automatic_uploads_not_available_users_light))
                     } else {
                         videosViewModel.videoUploads.collect { videoUploadsConfiguration ->
                             enableVideoUploads(videoUploadsConfiguration != null, false)

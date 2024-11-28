@@ -78,6 +78,7 @@
     <string name="prefs_camera_video_upload_path_title">Video upload path</string>
     <string name="prefs_camera_video_upload_on_wifi">Upload videos via wifi only</string>
     <string name="prefs_camera_video_upload_on_charging">Upload videos only when charging</string>
+    <string name="prefs_automatic_uploads_not_available_users_light">Automatic uploads are not available for users light</string>
     <string name="prefs_subsection_advanced">Advanced</string>
     <string name="prefs_subsection_notifications">Manage notifications</string>
     <string name="prefs_show_hidden_files">Show hidden files</string>
@@ -739,8 +740,8 @@
     <string name="release_notes_4_5_0_subtitle_feedback_in_previews">Added feedback when (un)setting av. offline in all previews and updated options menu depending on file status</string>
     <string name="release_notes_4_5_0_title_quota_improvements">Improvements in storage occupation display</string>
     <string name="release_notes_4_5_0_subtitle_quota_improvements">Storage occupation refreshed frequently in file and refresh operations and available in accounts manager view, besides of drawer menu</string>
-    <string name="release_notes_4_5_0_title_light_users">ownCloud Infinite Scale servers light users</string>
-    <string name="release_notes_4_5_0_subtitle_light_users">ownCloud Infinite Scale servers light users (users without personal space) are now supported in the app</string>
+    <string name="release_notes_4_5_0_title_light_users">ownCloud Infinite Scale servers users light</string>
+    <string name="release_notes_4_5_0_subtitle_light_users">ownCloud Infinite Scale servers users light (users without personal space) are now supported in the app</string>
 
 
     <!-- Open in web -->
