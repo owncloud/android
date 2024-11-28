@@ -1,6 +1,6 @@
 Enhancement: oCIS Light Users
 
-oCIS light users (users without personal space) have been supported in the app
+Support for oCIS light users has been added to the app
 
 https://github.com/owncloud/android/issues/4490
 https://github.com/owncloud/android/pull/4518

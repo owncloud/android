@@ -431,7 +431,7 @@ class FileDisplayActivity : FileActivity(),
         transaction.commit()
     }
 
-    private fun initAndShowEmptyPersonalFolder() {
+    private fun initAndShowEmptyPersonalSpace() {
         val emptyListFragment = MainEmptyListFragment()
         this.fileListOption = FileListOption.ALL_FILES
         val transaction = supportFragmentManager.beginTransaction()
@@ -1772,7 +1772,7 @@ class FileDisplayActivity : FileActivity(),
                 if (isLightUser) {
                     file = null
                     fileListOption = newFileListOption
-                    initAndShowEmptyPersonalFolder()
+                    initAndShowEmptyPersonalSpace()
                     updateToolbar(null)
                 } else {
                     if (previousFileListOption != newFileListOption || initialState) {

@@ -165,7 +165,7 @@
     <string name="file_list_empty_title_available_offline">No available offline files</string>
     <string name="file_list_empty_title_shared_by_links">No shared links</string>
     <string name="file_list_empty_subtitle_all_files">Upload some content or sync with your devices!</string>
-    <string name="light_users_subtitle">Personal folder is not available</string>
+    <string name="light_users_subtitle">Personal space is not available</string>
     <string name="shares_list_empty_title">No shares</string>
     <string name="shares_list_empty_subtitle">You are not collaborating on other people\'s resources.</string>
     <string name="spaces_list_empty_subtitle">You don\'t have access to any space!</string>
@@ -739,8 +739,8 @@
     <string name="release_notes_4_5_0_subtitle_feedback_in_previews">Added feedback when (un)setting av. offline in all previews and updated options menu depending on file status</string>
     <string name="release_notes_4_5_0_title_quota_improvements">Improvements in storage occupation display</string>
     <string name="release_notes_4_5_0_subtitle_quota_improvements">Storage occupation refreshed frequently in file and refresh operations and available in accounts manager view, besides of drawer menu</string>
-    <string name="release_notes_4_5_0_title_light_users">oCIS Light users</string>
-    <string name="release_notes_4_5_0_subtitle_light_users">Light users (users without personal space) are now supported in the app</string>
+    <string name="release_notes_4_5_0_title_light_users">ownCloud Infinite Scale servers light users</string>
+    <string name="release_notes_4_5_0_subtitle_light_users">ownCloud Infinite Scale servers light users (users without personal space) are now supported in the app</string>
 
 
     <!-- Open in web -->
