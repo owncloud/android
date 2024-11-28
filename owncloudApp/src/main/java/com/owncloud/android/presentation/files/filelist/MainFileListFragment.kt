@@ -316,7 +316,11 @@ class MainFileListFragment : Fragment(),
         // Observe the current folder displayed
         collectLatestLifecycleFlow(mainFileListViewModel.currentFolderDisplayed) { currentFolderDisplayed: OCFile ->
             fileActions?.onCurrentFolderUpdated(currentFolderDisplayed, mainFileListViewModel.getSpace())
-            val fileListOption = (requireActivity() as FileDisplayActivity).fileListOption
+            val fileListOption = if (isPickingAFolder()) {
+                mainFileListViewModel.fileListOption.value
+            } else {
+                (requireActivity() as FileDisplayActivity).fileListOption
+            }
             val refreshFolderNeeded = fileListOption.isAllFiles() ||
                     (!fileListOption.isAllFiles() && currentFolderDisplayed.remotePath != ROOT_PATH && !fileListOption.isAvailableOffline())
             if (refreshFolderNeeded) {
