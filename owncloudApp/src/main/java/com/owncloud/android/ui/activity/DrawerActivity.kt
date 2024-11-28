@@ -317,17 +317,18 @@ abstract class DrawerActivity : ToolbarActivity() {
                                 getAccountQuotaBar()?.isVisible = false
                                 getAccountQuotaStatusText()?.isVisible = false
                             }
+
                             userQuota.available < 0 -> { // Pending, unknown or unlimited free storage
-                               getAccountQuotaBar()?.apply {
+                                getAccountQuotaBar()?.apply {
                                    isVisible = true
                                    progress = 0
                                    progressTintList = ColorStateList.valueOf(resources.getColor(R.color.color_accent))
-                               }
-                               getAccountQuotaText()?.text = String.format(
+                                }
+                                getAccountQuotaText()?.text = String.format(
                                    getString(R.string.drawer_unavailable_free_storage),
                                    DisplayUtils.bytesToHumanReadable(userQuota.used, this, true)
-                               )
-                            getAccountQuotaStatusText()?.visibility = View.GONE
+                                )
+                                getAccountQuotaStatusText()?.visibility = View.GONE
                             }
 
                             userQuota.available == 0L -> { // Exceeded storage. The value is over 100%.
