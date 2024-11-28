@@ -25,7 +25,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.widget.SearchView
+import android.widget.TextView
 import com.owncloud.android.R
 import com.owncloud.android.databinding.MainEmptyListFragmentBinding
 
@@ -44,13 +44,16 @@ class MainEmptyListFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        with(binding.emptyDataParent) {
+        binding.emptyDataParent.apply {
             listEmptyDatasetIcon.setImageResource(R.drawable.ic_folder)
             listEmptyDatasetTitle.setText(R.string.file_list_empty_title_all_files)
             listEmptyDatasetSubTitle.setText(R.string.light_users_subtitle)
         }
-        val searchViewRootToolbar = requireActivity().findViewById<SearchView>(R.id.root_toolbar_search_view)
-        searchViewRootToolbar.queryHint = getString(R.string.actionbar_search)
+        val titleToolbar = requireActivity().findViewById<TextView>(R.id.root_toolbar_title)
+        titleToolbar.apply {
+            setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, 0, 0)
+            titleToolbar.isClickable = false
+        }
     }
 
 
