@@ -50,6 +50,7 @@ import com.owncloud.android.dependecyinjection.viewModelModule
 import com.owncloud.android.domain.capabilities.usecases.GetStoredCapabilitiesUseCase
 import com.owncloud.android.domain.spaces.model.OCSpace
 import com.owncloud.android.domain.spaces.usecases.GetPersonalSpaceForAccountUseCase
+import com.owncloud.android.domain.user.usecases.GetStoredQuotaUseCase
 import com.owncloud.android.domain.user.usecases.GetUserQuotasUseCase
 import com.owncloud.android.extensions.createNotificationChannel
 import com.owncloud.android.lib.common.SingleSessionManager
@@ -195,11 +196,15 @@ class MainApp : Application() {
                         }
                     }
 
-                    val getUserQuotasUseCase: GetUserQuotasUseCase by inject()
-                    val userQuotas = withContext(CoroutineScope(CoroutinesDispatcherProvider().io).coroutineContext) {
-                        getUserQuotasUseCase(Unit)
+                    val getStoredQuotaUseCase: GetStoredQuotaUseCase by inject()
+                    val quota = withContext(CoroutineScope(CoroutinesDispatcherProvider().io).coroutineContext) {
+                        getStoredQuotaUseCase(
+                            GetStoredQuotaUseCase.Params(
+                                accountName = account.name
+                            )
+                        )
                     }
-                    val isLightUser = userQuotas.filter { it.accountName == account.name }.any { it.available == -4L }
+                    val isLightUser = quota.getDataOrNull()?.available == -4L
 
                     spacesAllowed && personalSpace == null && !isLightUser
                 }
