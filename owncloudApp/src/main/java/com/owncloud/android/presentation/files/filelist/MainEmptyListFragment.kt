@@ -52,7 +52,7 @@ class MainEmptyListFragment : Fragment() {
         val titleToolbar = requireActivity().findViewById<TextView>(R.id.root_toolbar_title)
         titleToolbar.apply {
             setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, 0, 0)
-            titleToolbar.isClickable = false
+            isClickable = false
         }
     }
 
