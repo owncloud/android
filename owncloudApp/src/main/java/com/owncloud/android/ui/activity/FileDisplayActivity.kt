@@ -73,7 +73,6 @@ import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.files.model.OCFile.Companion.ROOT_PARENT_ID
 import com.owncloud.android.domain.spaces.model.OCSpace
-import com.owncloud.android.domain.user.model.UserQuota
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.checkPasscodeEnforced
 import com.owncloud.android.extensions.collectLatestLifecycleFlow
@@ -324,10 +323,9 @@ class FileDisplayActivity : FileActivity(),
             capabilitiesViewModel.capabilities.observe(this, Event.EventObserver {
                 onCapabilitiesOperationFinish(it)
             })
+            isLightUser = drawerViewModel.checkUserLight(account.name)
+            navigateTo(fileListOption, initialState = true)
 
-            drawerViewModel.userQuota.observe(this, Event.EventObserver {
-                onUserQuotaOperationFinish(it)
-            })
         }
 
         startListeningToOperations()
@@ -1520,15 +1518,6 @@ class FileDisplayActivity : FileActivity(),
                 }
             }
         }
-    }
-
-    private fun onUserQuotaOperationFinish(uiResult: UIResult<UserQuota?>) {
-        if (uiResult is UIResult.Success) {
-            if (uiResult.data?.available == -4L) {
-                isLightUser = true
-            }
-        }
-        navigateTo(fileListOption, initialState = true)
     }
 
     override fun onSavedCertificate() {
