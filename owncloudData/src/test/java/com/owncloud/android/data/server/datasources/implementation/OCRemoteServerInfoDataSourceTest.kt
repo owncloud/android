@@ -4,7 +4,7 @@
  * @author Abel García de Prada
  * @author Juan Carlos Garrote Gascón
  *
- * Copyright (C) 2023 ownCloud GmbH.
+ * Copyright (C) 2024 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -213,7 +213,7 @@ class OCRemoteServerInfoDataSourceTest {
     fun `getServerInfo returns ServerInfo with bearer and insecure connection`() {
         val expectedValue = OC_INSECURE_SERVER_INFO_BEARER_AUTH
 
-        prepareRemoteStatusToBeRetrieved(remoteServerInfo.copy(baseUrl = expectedValue.baseUrl, isSecureConnection = true))
+        prepareRemoteStatusToBeRetrieved(remoteServerInfo.copy(baseUrl = expectedValue.baseUrl, isSecureConnection = false))
         prepareAuthorizationMethodToBeRetrieved(AuthenticationMethod.BEARER_TOKEN, true)
 
         val currentValue = ocRemoteServerInfoDatasource.getServerInfo(expectedValue.baseUrl, false)
@@ -221,6 +221,18 @@ class OCRemoteServerInfoDataSourceTest {
 
         verify(exactly = 1) { ocServerInfoService.getRemoteStatus(expectedValue.baseUrl, ocClientMocked) }
         verify(exactly = 1) { ocServerInfoService.checkPathExistence(expectedValue.baseUrl, false, ocClientMocked) }
+    }
+
+    @Test
+    fun `getServerInfo returns ServerInfo with bearer and secure connection when OIDC enforcement is enabled`() {
+        val expectedValue = OC_SECURE_SERVER_INFO_BEARER_AUTH
+
+        prepareRemoteStatusToBeRetrieved(remoteServerInfo.copy(baseUrl = expectedValue.baseUrl, isSecureConnection = true))
+
+        val currentValue = ocRemoteServerInfoDatasource.getServerInfo(expectedValue.baseUrl, true)
+        assertEquals(expectedValue, currentValue)
+
+        verify(exactly = 1) { ocServerInfoService.getRemoteStatus(expectedValue.baseUrl, ocClientMocked) }
     }
 
     @Test(expected = NoConnectionWithServerException::class)
