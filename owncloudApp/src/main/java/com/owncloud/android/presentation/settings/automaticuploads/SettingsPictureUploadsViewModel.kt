@@ -82,20 +82,18 @@ class SettingsPictureUploadsViewModel(
         }
     }
 
-    fun enablePictureUploads() {
-        // Use current account as default. It should never be null. If no accounts are attached, picture uploads are hidden
-        accountProvider.getCurrentOwnCloudAccount()?.name?.let { name ->
-            viewModelScope.launch(coroutinesDispatcherProvider.io) {
-                getPersonalSpaceForAccount(name)
-                savePictureUploadsConfigurationUseCase(
-                    SavePictureUploadsConfigurationUseCase.Params(
-                        composePictureUploadsConfiguration(
-                            accountName = name,
-                            spaceId = pictureUploadsSpace?.id,
-                        )
+    fun enablePictureUploads(accountName: String) {
+        // Use selected account as default.
+        viewModelScope.launch(coroutinesDispatcherProvider.io) {
+            getPersonalSpaceForAccount(accountName)
+            savePictureUploadsConfigurationUseCase(
+                SavePictureUploadsConfigurationUseCase.Params(
+                    composePictureUploadsConfiguration(
+                        accountName = accountName,
+                        spaceId = pictureUploadsSpace?.id,
                     )
                 )
-            }
+            )
         }
     }
 

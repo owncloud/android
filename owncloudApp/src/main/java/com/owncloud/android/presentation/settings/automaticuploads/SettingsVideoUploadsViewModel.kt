@@ -82,20 +82,18 @@ class SettingsVideoUploadsViewModel(
         }
     }
 
-    fun enableVideoUploads() {
-        // Use current account as default. It should never be null. If no accounts are attached, video uploads are hidden
-        accountProvider.getCurrentOwnCloudAccount()?.name?.let { name ->
-            viewModelScope.launch(coroutinesDispatcherProvider.io) {
-                getPersonalSpaceForAccount(name)
-                saveVideoUploadsConfigurationUseCase(
-                    SaveVideoUploadsConfigurationUseCase.Params(
-                        composeVideoUploadsConfiguration(
-                            accountName = name,
-                            spaceId = videoUploadsSpace?.id,
-                        )
+    fun enableVideoUploads(accountName: String) {
+        // Use selected account as default.
+        viewModelScope.launch(coroutinesDispatcherProvider.io) {
+            getPersonalSpaceForAccount(accountName)
+            saveVideoUploadsConfigurationUseCase(
+                SaveVideoUploadsConfigurationUseCase.Params(
+                    composeVideoUploadsConfiguration(
+                        accountName = accountName,
+                        spaceId = videoUploadsSpace?.id,
                     )
                 )
-            }
+            )
         }
     }
 

@@ -74,6 +74,7 @@ class SettingsPictureUploadsFragment : PreferenceFragmentCompat() {
     private var prefPictureUploadsAccount: ListPreference? = null
     private var prefPictureUploadsLastSync: Preference? = null
     private var spaceId: String? = null
+    private lateinit var selectedAccount: String
 
     private val selectPictureUploadsPathLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -136,10 +137,11 @@ class SettingsPictureUploadsFragment : PreferenceFragmentCompat() {
                         enablePictureUploads(false, true)
                         showMessageInSnackbar(getString(R.string.prefs_automatic_uploads_not_available_users_light))
                     } else {
+                        selectedAccount = availableAccounts.first().accountName
                         picturesViewModel.pictureUploads.collect { pictureUploadsConfiguration ->
                             enablePictureUploads(pictureUploadsConfiguration != null, false)
                             pictureUploadsConfiguration?.let {
-                                prefPictureUploadsAccount?.value = it.accountName
+                                prefPictureUploadsAccount?.value = selectedAccount
                                 prefPictureUploadsPath?.summary = picturesViewModel.getUploadPathString()
                                 prefPictureUploadsSourcePath?.summary = DisplayUtils.getPathWithoutLastSlash(it.sourcePath.toUri().path)
                                 prefPictureUploadsOnWifi?.isChecked = it.wifiOnly
@@ -160,7 +162,7 @@ class SettingsPictureUploadsFragment : PreferenceFragmentCompat() {
             val value = newValue as Boolean
 
             if (value) {
-                picturesViewModel.enablePictureUploads()
+                picturesViewModel.enablePictureUploads(selectedAccount)
                 showAlertDialog(
                     title = getString(R.string.common_important),
                     message = getString(R.string.proper_pics_folder_warning_camera_upload)

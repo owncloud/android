@@ -74,6 +74,7 @@ class SettingsVideoUploadsFragment : PreferenceFragmentCompat() {
     private var prefVideoUploadsAccount: ListPreference? = null
     private var prefVideoUploadsLastSync: Preference? = null
     private var spaceId: String? = null
+    private lateinit var selectedAccount: String
 
     private val selectVideoUploadsPathLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -133,10 +134,11 @@ class SettingsVideoUploadsFragment : PreferenceFragmentCompat() {
                         enableVideoUploads(false, true)
                         showMessageInSnackbar(getString(R.string.prefs_automatic_uploads_not_available_users_light))
                     } else {
+                        selectedAccount = availableAccounts.first().accountName
                         videosViewModel.videoUploads.collect { videoUploadsConfiguration ->
                             enableVideoUploads(videoUploadsConfiguration != null, false)
                             videoUploadsConfiguration?.let {
-                                prefVideoUploadsAccount?.value = it.accountName
+                                prefVideoUploadsAccount?.value = selectedAccount
                                 prefVideoUploadsPath?.summary = videosViewModel.getUploadPathString()
                                 prefVideoUploadsSourcePath?.summary = DisplayUtils.getPathWithoutLastSlash(it.sourcePath.toUri().path)
                                 prefVideoUploadsOnWifi?.isChecked = it.wifiOnly
@@ -157,7 +159,7 @@ class SettingsVideoUploadsFragment : PreferenceFragmentCompat() {
             val value = newValue as Boolean
 
             if (value) {
-                videosViewModel.enableVideoUploads()
+                videosViewModel.enableVideoUploads(selectedAccount)
                 showAlertDialog(
                     title = getString(R.string.common_important),
                     message = getString(R.string.proper_videos_folder_warning_camera_upload)
