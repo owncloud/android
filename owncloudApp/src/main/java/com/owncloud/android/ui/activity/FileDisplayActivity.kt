@@ -92,6 +92,7 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode
 import com.owncloud.android.lib.resources.status.OwnCloudVersion
 import com.owncloud.android.operations.SyncProfileOperation
+import com.owncloud.android.presentation.accounts.ManageAccountsViewModel
 import com.owncloud.android.presentation.authentication.AccountUtils.getCurrentOwnCloudAccount
 import com.owncloud.android.presentation.capabilities.CapabilityViewModel
 import com.owncloud.android.presentation.common.DrawerViewModel
@@ -187,7 +188,7 @@ class FileDisplayActivity : FileActivity(),
     private val fileOperationsViewModel: FileOperationsViewModel by viewModel()
     private val transfersViewModel: TransfersViewModel by viewModel()
     private lateinit var  spacesListViewModel: SpacesListViewModel
-    private val drawerViewModel: DrawerViewModel by viewModel()
+    private val manageAccountsViewModel: ManageAccountsViewModel by viewModel()
 
     private val sharedPreferences: SharedPreferencesProvider by inject()
 
@@ -323,7 +324,7 @@ class FileDisplayActivity : FileActivity(),
             capabilitiesViewModel.capabilities.observe(this, Event.EventObserver {
                 onCapabilitiesOperationFinish(it)
             })
-            isLightUser = drawerViewModel.checkUserLight(account.name)
+            isLightUser = manageAccountsViewModel.checkUserLight(account.name)
             navigateTo(fileListOption, initialState = true)
 
         }

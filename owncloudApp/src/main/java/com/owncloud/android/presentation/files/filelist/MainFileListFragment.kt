@@ -316,11 +316,7 @@ class MainFileListFragment : Fragment(),
         // Observe the current folder displayed
         collectLatestLifecycleFlow(mainFileListViewModel.currentFolderDisplayed) { currentFolderDisplayed: OCFile ->
             fileActions?.onCurrentFolderUpdated(currentFolderDisplayed, mainFileListViewModel.getSpace())
-            val fileListOption = if (isPickingAFolder()) {
-                mainFileListViewModel.fileListOption.value
-            } else {
-                (requireActivity() as FileDisplayActivity).fileListOption
-            }
+            val fileListOption = mainFileListViewModel.fileListOption.value
             val refreshFolderNeeded = fileListOption.isAllFiles() ||
                     (!fileListOption.isAllFiles() && currentFolderDisplayed.remotePath != ROOT_PATH && !fileListOption.isAvailableOffline())
             if (refreshFolderNeeded) {
@@ -814,9 +810,9 @@ class MainFileListFragment : Fragment(),
     }
 
     fun updateFileListOption(newFileListOption: FileListOption, file: OCFile) {
-        mainFileListViewModel.updateFolderToDisplay(file)
         mainFileListViewModel.updateFileListOption(newFileListOption)
         binding.swipeRefreshMainFileList.isEnabled = newFileListOption != FileListOption.AV_OFFLINE
+        mainFileListViewModel.updateFolderToDisplay(file)
         showOrHideFab(newFileListOption, file)
     }
 

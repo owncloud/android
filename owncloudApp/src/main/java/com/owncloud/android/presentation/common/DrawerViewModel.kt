@@ -110,11 +110,4 @@ class DrawerViewModel(
         }
     }
 
-    fun checkUserLight(accountName: String): Boolean = runBlocking(CoroutinesDispatcherProvider().io) {
-        val quota = withContext(CoroutinesDispatcherProvider().io) {
-            getStoredQuotaUseCase(GetStoredQuotaUseCase.Params(accountName))
-        }
-        quota.getDataOrNull()?.available == -4L
-    }
-
 }
