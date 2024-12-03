@@ -137,7 +137,15 @@ class SettingsPictureUploadsFragment : PreferenceFragmentCompat() {
                         enablePictureUploads(false, true)
                         showMessageInSnackbar(getString(R.string.prefs_automatic_uploads_not_available_users_light))
                     } else {
-                        selectedAccount = availableAccounts.first().accountName
+                        val currentAccount = manageAccountsViewModel.getCurrentAccount()?.name
+                        currentAccount?.let {
+                            selectedAccount = if (manageAccountsViewModel.checkUserLight(currentAccount)) {
+                                availableAccounts.first().accountName
+                            } else {
+                                currentAccount
+                            }
+                        }
+
                         picturesViewModel.pictureUploads.collect { pictureUploadsConfiguration ->
                             enablePictureUploads(pictureUploadsConfiguration != null, false)
                             pictureUploadsConfiguration?.let {
