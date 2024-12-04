@@ -146,7 +146,7 @@ class SettingsVideoUploadsFragment : PreferenceFragmentCompat() {
                         videosViewModel.videoUploads.collect { videoUploadsConfiguration ->
                             enableVideoUploads(videoUploadsConfiguration != null, false)
                             videoUploadsConfiguration?.let {
-                                prefVideoUploadsAccount?.value = selectedAccount
+                                prefVideoUploadsAccount?.value = it.accountName
                                 prefVideoUploadsPath?.summary = videosViewModel.getUploadPathString()
                                 prefVideoUploadsSourcePath?.summary = DisplayUtils.getPathWithoutLastSlash(it.sourcePath.toUri().path)
                                 prefVideoUploadsOnWifi?.isChecked = it.wifiOnly

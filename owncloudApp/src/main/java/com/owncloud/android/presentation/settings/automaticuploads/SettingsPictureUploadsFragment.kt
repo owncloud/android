@@ -149,7 +149,7 @@ class SettingsPictureUploadsFragment : PreferenceFragmentCompat() {
                         picturesViewModel.pictureUploads.collect { pictureUploadsConfiguration ->
                             enablePictureUploads(pictureUploadsConfiguration != null, false)
                             pictureUploadsConfiguration?.let {
-                                prefPictureUploadsAccount?.value = selectedAccount
+                                prefPictureUploadsAccount?.value = it.accountName
                                 prefPictureUploadsPath?.summary = picturesViewModel.getUploadPathString()
                                 prefPictureUploadsSourcePath?.summary = DisplayUtils.getPathWithoutLastSlash(it.sourcePath.toUri().path)
                                 prefPictureUploadsOnWifi?.isChecked = it.wifiOnly
