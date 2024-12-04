@@ -375,7 +375,8 @@ class MainFileListFragment : Fragment(),
                     // Mimetypes not supported via open in web, send 500
                     if (uiResult.error is InstanceNotConfiguredException) {
                         val message =
-                            getString(R.string.open_in_web_error_generic) + " " + getString(R.string.error_reason) + " " + getString(R.string.open_in_web_error_not_supported)
+                            getString(R.string.open_in_web_error_generic) + " " + getString(R.string.error_reason) +
+                                    " " + getString(R.string.open_in_web_error_not_supported)
                         this.showMessageInSnackbar(message, Snackbar.LENGTH_LONG)
                     } else if (uiResult.error is TooEarlyException) {
                         this.showMessageInSnackbar(getString(R.string.open_in_web_error_too_early), Snackbar.LENGTH_LONG)
@@ -835,7 +836,8 @@ class MainFileListFragment : Fragment(),
      * @param newFileListOption new file list option to enable.
      */
     private fun showOrHideFab(newFileListOption: FileListOption, currentFolder: OCFile) {
-        if (!newFileListOption.isAllFiles() || isPickingAFolder() || (!currentFolder.hasAddFilePermission && !currentFolder.hasAddSubdirectoriesPermission)) {
+        if (!newFileListOption.isAllFiles() || isPickingAFolder() ||
+            (!currentFolder.hasAddFilePermission && !currentFolder.hasAddSubdirectoriesPermission)) {
             toggleFabVisibility(false)
         } else {
             toggleFabVisibility(true)
@@ -881,7 +883,8 @@ class MainFileListFragment : Fragment(),
                 fabNewfile.isFocusable = isFabExpanded()
                 fabNewshortcut.isFocusable = isFabExpanded()
                 if (fabMain.isExpanded) {
-                    binding.fabMain.findViewById<AddFloatingActionButton>(com.getbase.floatingactionbutton.R.id.fab_expand_menu_button).contentDescription = getString(R.string.content_description_add_new_content_expanded)
+                    binding.fabMain.findViewById<AddFloatingActionButton>(com.getbase.floatingactionbutton.R.id.fab_expand_menu_button)
+                        .contentDescription = getString(R.string.content_description_add_new_content_expanded)
                 } else {
                     setFabMainContentDescription()
                 }
@@ -1451,16 +1454,23 @@ class MainFileListFragment : Fragment(),
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 val roleAccessibilityDescription = getString(R.string.button_role_accessibility)
                 menu?.apply {
-                    findItem(R.id.file_action_select_all)?.contentDescription = "${getString(R.string.actionbar_select_all)} $roleAccessibilityDescription"
-                    findItem(R.id.action_select_inverse)?.contentDescription = "${getString(R.string.actionbar_select_inverse)} $roleAccessibilityDescription"
-                    findItem(R.id.action_open_file_with)?.contentDescription = "${getString(R.string.actionbar_open_with)} $roleAccessibilityDescription"
+                    findItem(R.id.file_action_select_all)?.contentDescription =
+                        "${getString(R.string.actionbar_select_all)} $roleAccessibilityDescription"
+                    findItem(R.id.action_select_inverse)?.contentDescription =
+                        "${getString(R.string.actionbar_select_inverse)} $roleAccessibilityDescription"
+                    findItem(R.id.action_open_file_with)?.contentDescription =
+                        "${getString(R.string.actionbar_open_with)} $roleAccessibilityDescription"
                     findItem(R.id.action_rename_file)?.contentDescription = "${getString(R.string.common_rename)} $roleAccessibilityDescription"
                     findItem(R.id.action_move)?.contentDescription = "${getString(R.string.actionbar_move)} $roleAccessibilityDescription"
                     findItem(R.id.action_copy)?.contentDescription = "${getString(R.string.copy)} $roleAccessibilityDescription"
-                    findItem(R.id.action_send_file)?.contentDescription = "${getString(R.string.actionbar_send_file)} $roleAccessibilityDescription"
-                    findItem(R.id.action_set_available_offline)?.contentDescription = "${getString(R.string.set_available_offline)} $roleAccessibilityDescription"
-                    findItem(R.id.action_unset_available_offline)?.contentDescription = "${getString(R.string.unset_available_offline)} $roleAccessibilityDescription"
-                    findItem(R.id.action_see_details)?.contentDescription = "${getString(R.string.actionbar_see_details)} $roleAccessibilityDescription"
+                    findItem(R.id.action_send_file)?.contentDescription =
+                        "${getString(R.string.actionbar_send_file)} $roleAccessibilityDescription"
+                    findItem(R.id.action_set_available_offline)?.contentDescription =
+                        "${getString(R.string.set_available_offline)} $roleAccessibilityDescription"
+                    findItem(R.id.action_unset_available_offline)?.contentDescription =
+                        "${getString(R.string.unset_available_offline)} $roleAccessibilityDescription"
+                    findItem(R.id.action_see_details)?.contentDescription =
+                        "${getString(R.string.actionbar_see_details)} $roleAccessibilityDescription"
                     findItem(R.id.action_remove_file)?.contentDescription = "${getString(R.string.common_remove)} $roleAccessibilityDescription"
                 }
             }

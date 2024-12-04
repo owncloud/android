@@ -751,7 +751,8 @@ class FileDisplayActivity : FileActivity(),
                 // If secondFragment was shown, we need to navigate to the parent of the displayed file
                 // Need a cleanup
                 val folderIdToDisplay =
-                    if (fileListOption == FileListOption.AV_OFFLINE) storageManager.getRootPersonalFolder()!!.id!! else secondFragment!!.file!!.parentId!!
+                    if (fileListOption == FileListOption.AV_OFFLINE) storageManager.getRootPersonalFolder()!!.id!!
+                    else secondFragment!!.file!!.parentId!!
                 mainFileListFragment?.navigateToFolderId(folderIdToDisplay)
                 cleanSecondFragment()
                 updateToolbar(mainFileListFragment?.getCurrentFile())
@@ -965,7 +966,8 @@ class FileDisplayActivity : FileActivity(),
     private fun updateToolbar(chosenFileFromParam: OCFile?, space: OCSpace? = null) {
         val chosenFile = chosenFileFromParam ?: file // If no file is passed, current file decides
 
-        // If we come from a preview activity (image or video), not updating toolbar when initializing this activity or it will show the root folder one
+        // If we come from a preview activity (image or video), not updating toolbar when initializing this activity
+        // or it will show the root folder one
         if (intent.action == ACTION_DETAILS && chosenFile?.remotePath == OCFile.ROOT_PATH && secondFragment is FileDetailsFragment) return
 
         if (chosenFile == null || (chosenFile.remotePath == OCFile.ROOT_PATH && (space == null ||

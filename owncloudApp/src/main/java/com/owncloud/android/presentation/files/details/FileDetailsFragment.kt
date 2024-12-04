@@ -149,7 +149,8 @@ class FileDetailsFragment : FileFragment() {
                 // Mimetypes not supported via open in web, send 500
                 if (uiResult.error is InstanceNotConfiguredException) {
                     val message =
-                        getString(R.string.open_in_web_error_generic) + " " + getString(R.string.error_reason) + " " + getString(R.string.open_in_web_error_not_supported)
+                        getString(R.string.open_in_web_error_generic) + " " + getString(R.string.error_reason) +
+                                " " + getString(R.string.open_in_web_error_not_supported)
                     this.showMessageInSnackbar(message, Snackbar.LENGTH_LONG)
                 } else if (uiResult.error is TooEarlyException) {
                     this.showMessageInSnackbar(getString(R.string.open_in_web_error_too_early), Snackbar.LENGTH_LONG)

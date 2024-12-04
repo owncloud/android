@@ -52,14 +52,15 @@ class FileDataStorageManager(
             getFileByPathAndAccount(remotePath, account.name, spaceId)
         }
 
-    private fun getFileByPathAndAccount(remotePath: String, accountName: String, spaceId: String? = null): OCFile? = runBlocking(CoroutinesDispatcherProvider().io) {
-        val getFileByRemotePathUseCase: GetFileByRemotePathUseCase by inject()
+    private fun getFileByPathAndAccount(remotePath: String, accountName: String, spaceId: String? = null): OCFile? =
+        runBlocking(CoroutinesDispatcherProvider().io) {
+            val getFileByRemotePathUseCase: GetFileByRemotePathUseCase by inject()
 
-        val result = withContext(CoroutineScope(CoroutinesDispatcherProvider().io).coroutineContext) {
-            getFileByRemotePathUseCase(GetFileByRemotePathUseCase.Params(accountName, remotePath, spaceId))
-        }.getDataOrNull()
-        result
-    }
+            val result = withContext(CoroutineScope(CoroutinesDispatcherProvider().io).coroutineContext) {
+                getFileByRemotePathUseCase(GetFileByRemotePathUseCase.Params(accountName, remotePath, spaceId))
+            }.getDataOrNull()
+            result
+        }
 
     fun getRootPersonalFolder() = runBlocking(CoroutinesDispatcherProvider().io) {
         val getPersonalRootFolderForAccountUseCase: GetPersonalRootFolderForAccountUseCase by inject()

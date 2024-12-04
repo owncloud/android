@@ -58,7 +58,8 @@ class LogsProvider(
     private fun initHttpLogs() {
         val httpLogsEnabled: Boolean = sharedPreferencesProvider.getBoolean(PREFERENCE_LOG_HTTP, false)
         LogInterceptor.httpLogsEnabled = httpLogsEnabled
-        val redactAuthHeader = mdmProvider.getBrandingBoolean(mdmKey = CONFIGURATION_REDACT_AUTH_HEADER_LOGS, booleanKey = R.bool.redact_auth_header_logs)
+        val redactAuthHeader =
+            mdmProvider.getBrandingBoolean(mdmKey = CONFIGURATION_REDACT_AUTH_HEADER_LOGS, booleanKey = R.bool.redact_auth_header_logs)
         LogInterceptor.redactAuthHeader = redactAuthHeader
     }
 

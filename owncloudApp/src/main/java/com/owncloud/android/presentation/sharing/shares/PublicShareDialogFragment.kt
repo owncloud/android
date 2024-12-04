@@ -518,7 +518,8 @@ class PublicShareDialogFragment : DialogFragment() {
                 val x = event.x.toInt()
                 val y = event.y.toInt()
                 val bounds = rightDrawable.bounds
-                if (x >= view.right - bounds.width() - fuzz && x <= view.right - view.paddingRight + fuzz && y >= view.paddingTop - fuzz && y <= view.height - view.paddingBottom + fuzz) {
+                if (x >= view.right - bounds.width() - fuzz && x <= view.right - view.paddingRight + fuzz && y >= view.paddingTop - fuzz &&
+                    y <= view.height - view.paddingBottom + fuzz) {
 
                     return onDrawableTouch(event)
                 }
@@ -836,7 +837,9 @@ class PublicShareDialogFragment : DialogFragment() {
         //  - Upload only is supported by the server version
         //  - Upload only capability is set
         //  - Allow editing capability is set
-        if (!(isSharedFolder && serverVersion?.isPublicSharingWriteOnlySupported == true && capabilities?.filesSharingPublicSupportsUploadOnly == CapabilityBooleanType.TRUE && capabilities?.filesSharingPublicUpload == CapabilityBooleanType.TRUE)) {
+        if (!(isSharedFolder && serverVersion?.isPublicSharingWriteOnlySupported == true &&
+                    capabilities?.filesSharingPublicSupportsUploadOnly == CapabilityBooleanType.TRUE &&
+                    capabilities?.filesSharingPublicUpload == CapabilityBooleanType.TRUE)) {
             binding.shareViaLinkEditPermissionGroup.isVisible = false
         }
 
@@ -867,7 +870,12 @@ class PublicShareDialogFragment : DialogFragment() {
         }
 
         // Set password label when opening the dialog
-        if (binding.shareViaLinkEditPermissionReadOnly.isChecked && capabilities?.filesSharingPublicPasswordEnforcedReadOnly == CapabilityBooleanType.TRUE || binding.shareViaLinkEditPermissionReadAndWrite.isChecked && capabilities?.filesSharingPublicPasswordEnforcedReadWrite == CapabilityBooleanType.TRUE || binding.shareViaLinkEditPermissionUploadFiles.isChecked && capabilities?.filesSharingPublicPasswordEnforcedUploadOnly == CapabilityBooleanType.TRUE) {
+        if (binding.shareViaLinkEditPermissionReadOnly.isChecked &&
+            capabilities?.filesSharingPublicPasswordEnforcedReadOnly == CapabilityBooleanType.TRUE ||
+            binding.shareViaLinkEditPermissionReadAndWrite.isChecked &&
+            capabilities?.filesSharingPublicPasswordEnforcedReadWrite == CapabilityBooleanType.TRUE ||
+            binding.shareViaLinkEditPermissionUploadFiles.isChecked &&
+            capabilities?.filesSharingPublicPasswordEnforcedUploadOnly == CapabilityBooleanType.TRUE) {
             setPasswordEnforced()
         }
 
@@ -898,7 +906,9 @@ class PublicShareDialogFragment : DialogFragment() {
 
         // When there's no password enforced for capability
         val hasPasswordEnforcedFor =
-            capabilities?.filesSharingPublicPasswordEnforcedReadOnly == CapabilityBooleanType.TRUE || capabilities?.filesSharingPublicPasswordEnforcedReadWrite == CapabilityBooleanType.TRUE || capabilities?.filesSharingPublicPasswordEnforcedUploadOnly == CapabilityBooleanType.TRUE
+            capabilities?.filesSharingPublicPasswordEnforcedReadOnly == CapabilityBooleanType.TRUE ||
+                    capabilities?.filesSharingPublicPasswordEnforcedReadWrite == CapabilityBooleanType.TRUE ||
+                    capabilities?.filesSharingPublicPasswordEnforcedUploadOnly == CapabilityBooleanType.TRUE
 
         // hide password switch if password is enforced to prevent it is removed
         if (!hasPasswordEnforcedFor && capabilities?.filesSharingPublicPasswordEnforced == CapabilityBooleanType.TRUE) {

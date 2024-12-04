@@ -34,7 +34,7 @@ import com.owncloud.android.domain.sharing.shares.model.OCShare
  * contained in that activity.
  *
  *
- * See the Android Training lesson [Communicating with Other Fragments](http://developer.android.com/training/basics/fragments/communicating.html) for more information.
+ * See the Android docs [Communicating with fragments](https://developer.android.com/guide/fragments/communicate) for more information.
  */
 interface ShareFragmentListener {
     fun copyOrSendPrivateLink(file: OCFile)

@@ -73,7 +73,8 @@ class SynchronizeFileUseCase(
 
             // 3. Check if file has changed locally
             val changedLocally = fileToSynchronize.localModificationTimestamp > fileToSynchronize.lastSyncDateForData!!
-            Timber.i("Local file modification timestamp :${fileToSynchronize.localModificationTimestamp} and last sync date for data :${fileToSynchronize.lastSyncDateForData}")
+            Timber.i("Local file modification timestamp :${fileToSynchronize.localModificationTimestamp}" +
+                    " and last sync date for data :${fileToSynchronize.lastSyncDateForData}")
             Timber.i("So it has changed locally: $changedLocally")
 
             // 4. Check if file has changed remotely
