@@ -548,7 +548,8 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
             codeChallenge = authenticationViewModel.codeChallenge,
             state = authenticationViewModel.oidcState,
             username = username,
-            sendLoginHintAndUser = mdmProvider.getBrandingBoolean(mdmKey = CONFIGURATION_SEND_LOGIN_HINT_AND_USER, booleanKey = R.bool.send_login_hint_and_user),
+            sendLoginHintAndUser = mdmProvider.getBrandingBoolean(mdmKey = CONFIGURATION_SEND_LOGIN_HINT_AND_USER,
+                booleanKey = R.bool.send_login_hint_and_user),
         )
 
         try {
@@ -585,7 +586,8 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
                 val authorizationError = intent.data?.getQueryParameter("error")
                 val authorizationErrorDescription = intent.data?.getQueryParameter("error_description")
 
-                Timber.e("OAuth request to get authorization code failed. Error: [$authorizationError]. Error description: [$authorizationErrorDescription]")
+                Timber.e("OAuth request to get authorization code failed. Error: [$authorizationError]." +
+                        " Error description: [$authorizationErrorDescription]")
                 val authorizationException =
                     if (authorizationError == "access_denied") UnauthorizedException() else Throwable()
                 updateOAuthStatusIconAndText(authorizationException)
