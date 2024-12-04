@@ -61,7 +61,8 @@ class CreateRemoteFileWithAppProviderOperation(
             }
 
             val status = client.executeHttpMethod(postMethod)
-            Timber.d("Create file $filename with app provider in folder with ID $parentContainerId - $status${if (!isSuccess(status)) "(FAIL)" else ""}")
+            Timber.d("Create file $filename with app provider in folder with ID $parentContainerId" +
+                    " - $status${if (!isSuccess(status)) "(FAIL)" else ""}")
 
             if (isSuccess(status)) RemoteOperationResult<String>(ResultCode.OK).apply {
                 val moshi = Moshi.Builder().build()
