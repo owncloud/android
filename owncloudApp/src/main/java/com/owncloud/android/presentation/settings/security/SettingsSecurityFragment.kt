@@ -172,7 +172,8 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
             if (!BiometricManager.isHardwareDetected()) { // Biometric not supported
                 screenSecurity?.removePreferenceFromScreen(prefBiometric)
             } else {
-                if (prefPasscode?.isChecked == false && prefPattern?.isChecked == false) { // Disable biometric lock if Passcode or Pattern locks are disabled
+                // Disable biometric lock if Passcode or Pattern locks are disabled
+                if (prefPasscode?.isChecked == false && prefPattern?.isChecked == false) {
                     disableBiometric()
                 }
 

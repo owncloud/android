@@ -376,7 +376,8 @@ abstract class DrawerActivity : ToolbarActivity() {
                                         visibility = View.VISIBLE
                                         text = getString(R.string.drawer_nearing_quota)
                                     }
-                                } else if (userQuota.state == UserQuotaState.CRITICAL || userQuota.state == UserQuotaState.EXCEEDED) { // Critical storage. Value over 90%
+                                } else if (userQuota.state == UserQuotaState.CRITICAL ||
+                                    userQuota.state == UserQuotaState.EXCEEDED) { // Critical storage. Value over 90%
                                     getAccountQuotaBar()?.apply {
                                         isVisible = true
                                         progress = userQuota.getRelative().toInt()
@@ -496,7 +497,8 @@ abstract class DrawerActivity : ToolbarActivity() {
                 findItem(R.id.nav_settings)?.contentDescription = "${getString(R.string.actionbar_settings)} $roleAccessibilityDescription"
                 findItem(R.id.drawer_menu_feedback)?.contentDescription = "${getString(R.string.drawer_feedback)} $roleAccessibilityDescription"
                 findItem(R.id.drawer_menu_help)?.contentDescription = "${getString(R.string.prefs_help)} $roleAccessibilityDescription"
-                findItem(R.id.drawer_menu_privacy_policy)?.contentDescription = "${getString(R.string.prefs_privacy_policy)} $roleAccessibilityDescription"
+                findItem(R.id.drawer_menu_privacy_policy)?.contentDescription =
+                    "${getString(R.string.prefs_privacy_policy)} $roleAccessibilityDescription"
             }
         }
     }
