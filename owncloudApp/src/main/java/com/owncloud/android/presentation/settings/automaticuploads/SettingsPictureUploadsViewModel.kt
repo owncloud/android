@@ -3,8 +3,9 @@
  *
  * @author Juan Carlos Garrote Gascón
  * @author Aitor Ballesteros Pavón
+ * @author Jorge Aguado Recio
  *
- * Copyright (C) 2023 ownCloud GmbH.
+ * Copyright (C) 2024 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -81,20 +82,18 @@ class SettingsPictureUploadsViewModel(
         }
     }
 
-    fun enablePictureUploads() {
-        // Use current account as default. It should never be null. If no accounts are attached, picture uploads are hidden
-        accountProvider.getCurrentOwnCloudAccount()?.name?.let { name ->
-            viewModelScope.launch(coroutinesDispatcherProvider.io) {
-                getPersonalSpaceForAccount(name)
-                savePictureUploadsConfigurationUseCase(
-                    SavePictureUploadsConfigurationUseCase.Params(
-                        composePictureUploadsConfiguration(
-                            accountName = name,
-                            spaceId = pictureUploadsSpace?.id,
-                        )
+    fun enablePictureUploads(accountName: String) {
+        // Use selected account as default.
+        viewModelScope.launch(coroutinesDispatcherProvider.io) {
+            getPersonalSpaceForAccount(accountName)
+            savePictureUploadsConfigurationUseCase(
+                SavePictureUploadsConfigurationUseCase.Params(
+                    composePictureUploadsConfiguration(
+                        accountName = accountName,
+                        spaceId = pictureUploadsSpace?.id,
                     )
                 )
-            }
+            )
         }
     }
 
@@ -123,8 +122,6 @@ class SettingsPictureUploadsViewModel(
     }
 
     fun getPictureUploadsAccount() = _pictureUploads.value?.accountName
-
-    fun getLoggedAccountNames(): Array<String> = accountProvider.getLoggedAccounts().map { it.name }.toTypedArray()
 
     fun getPictureUploadsPath() = _pictureUploads.value?.uploadPath ?: PREF__CAMERA_UPLOADS_DEFAULT_PATH
 

@@ -39,15 +39,14 @@ class OCSpacesRepository(
         remoteSpacesDataSource.refreshSpacesForAccount(accountName).also { listOfSpaces ->
             localSpacesDataSource.saveSpacesForAccount(listOfSpaces)
             val personalSpace = listOfSpaces.find { it.isPersonal }
-            personalSpace?.let {
-                val userQuota = if (it.quota?.total!!.toInt() == 0) {
+            val userQuota = personalSpace?.let {
+                if (it.quota?.total!!.toInt() == 0) {
                     UserQuota(accountName, -3, it.quota?.used!!, it.quota?.total!!, UserQuotaState.fromValue(it.quota?.state!!))
                 } else {
                     UserQuota(accountName, it.quota?.remaining!!, it.quota?.used!!, it.quota?.total!!, UserQuotaState.fromValue(it.quota?.state!!))
                 }
-                localUserDataSource.saveQuotaForAccount(accountName, userQuota)
-            }
-
+            } ?: UserQuota(accountName, -4, 0, 0, UserQuotaState.NORMAL)
+            localUserDataSource.saveQuotaForAccount(accountName, userQuota)
         }
     }
 

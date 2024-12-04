@@ -3,8 +3,9 @@
  *
  * @author Juan Carlos Garrote Gascón
  * @author Aitor Ballesteros Pavón
+ * @author Jorge Aguado Recio
  *
- * Copyright (C) 2023 ownCloud GmbH.
+ * Copyright (C) 2024 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -81,20 +82,18 @@ class SettingsVideoUploadsViewModel(
         }
     }
 
-    fun enableVideoUploads() {
-        // Use current account as default. It should never be null. If no accounts are attached, video uploads are hidden
-        accountProvider.getCurrentOwnCloudAccount()?.name?.let { name ->
-            viewModelScope.launch(coroutinesDispatcherProvider.io) {
-                getPersonalSpaceForAccount(name)
-                saveVideoUploadsConfigurationUseCase(
-                    SaveVideoUploadsConfigurationUseCase.Params(
-                        composeVideoUploadsConfiguration(
-                            accountName = name,
-                            spaceId = videoUploadsSpace?.id,
-                        )
+    fun enableVideoUploads(accountName: String) {
+        // Use selected account as default.
+        viewModelScope.launch(coroutinesDispatcherProvider.io) {
+            getPersonalSpaceForAccount(accountName)
+            saveVideoUploadsConfigurationUseCase(
+                SaveVideoUploadsConfigurationUseCase.Params(
+                    composeVideoUploadsConfiguration(
+                        accountName = accountName,
+                        spaceId = videoUploadsSpace?.id,
                     )
                 )
-            }
+            )
         }
     }
 
@@ -123,8 +122,6 @@ class SettingsVideoUploadsViewModel(
     }
 
     fun getVideoUploadsAccount() = _videoUploads.value?.accountName
-
-    fun getLoggedAccountNames(): Array<String> = accountProvider.getLoggedAccounts().map { it.name }.toTypedArray()
 
     fun getVideoUploadsPath() = _videoUploads.value?.uploadPath ?: PREF__CAMERA_UPLOADS_DEFAULT_PATH
 

@@ -50,6 +50,7 @@ import com.owncloud.android.dependecyinjection.viewModelModule
 import com.owncloud.android.domain.capabilities.usecases.GetStoredCapabilitiesUseCase
 import com.owncloud.android.domain.spaces.model.OCSpace
 import com.owncloud.android.domain.spaces.usecases.GetPersonalSpaceForAccountUseCase
+import com.owncloud.android.domain.user.usecases.GetStoredQuotaUseCase
 import com.owncloud.android.extensions.createNotificationChannel
 import com.owncloud.android.lib.common.SingleSessionManager
 import com.owncloud.android.presentation.authentication.AccountUtils
@@ -194,7 +195,17 @@ class MainApp : Application() {
                         }
                     }
 
-                    spacesAllowed && personalSpace == null
+                    val getStoredQuotaUseCase: GetStoredQuotaUseCase by inject()
+                    val quota = withContext(CoroutineScope(CoroutinesDispatcherProvider().io).coroutineContext) {
+                        getStoredQuotaUseCase(
+                            GetStoredQuotaUseCase.Params(
+                                accountName = account.name
+                            )
+                        )
+                    }
+                    val isLightUser = quota.getDataOrNull()?.available == -4L
+
+                    spacesAllowed && personalSpace == null && !isLightUser
                 }
 
             override fun onActivityStarted(activity: Activity) {

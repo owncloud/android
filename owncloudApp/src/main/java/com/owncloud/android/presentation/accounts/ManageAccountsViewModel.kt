@@ -29,6 +29,7 @@ import androidx.lifecycle.viewModelScope
 import com.owncloud.android.domain.user.model.UserQuota
 import com.owncloud.android.domain.automaticuploads.model.AutomaticUploadsConfiguration
 import com.owncloud.android.domain.automaticuploads.usecases.GetAutomaticUploadsConfigurationUseCase
+import com.owncloud.android.domain.user.usecases.GetStoredQuotaUseCase
 import com.owncloud.android.domain.user.usecases.GetUserQuotasAsStreamUseCase
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.ViewModelExt.runUseCaseWithResult
@@ -40,11 +41,14 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 
 class ManageAccountsViewModel(
     private val accountProvider: AccountProvider,
     private val removeLocalFilesForAccountUseCase: RemoveLocalFilesForAccountUseCase,
     private val getAutomaticUploadsConfigurationUseCase: GetAutomaticUploadsConfigurationUseCase,
+    private val getStoredQuotaUseCase: GetStoredQuotaUseCase,
     getUserQuotasAsStreamUseCase: GetUserQuotasAsStreamUseCase,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
 ) : ViewModel() {
@@ -83,5 +87,12 @@ class ManageAccountsViewModel(
     fun hasAutomaticUploadsAttached(accountName: String): Boolean {
         return accountName == automaticUploadsConfiguration?.pictureUploadsConfiguration?.accountName ||
                 accountName == automaticUploadsConfiguration?.videoUploadsConfiguration?.accountName
+    }
+
+    fun checkUserLight(accountName: String): Boolean = runBlocking(CoroutinesDispatcherProvider().io) {
+        val quota = withContext(CoroutinesDispatcherProvider().io) {
+            getStoredQuotaUseCase(GetStoredQuotaUseCase.Params(accountName))
+        }
+        quota.getDataOrNull()?.available == -4L
     }
 }

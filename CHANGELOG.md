@@ -40,6 +40,7 @@ ownCloud admins and users.
 * Enhancement - Quota improvements from GraphAPI: [#4411](https://github.com/owncloud/android/issues/4411)
 * Enhancement - Upgraded AGP version to 8.7.2: [#4478](https://github.com/owncloud/android/issues/4478)
 * Enhancement - Added text labels for BottomNavigationView: [#4484](https://github.com/owncloud/android/issues/4484)
+* Enhancement - OCIS Light Users: [#4490](https://github.com/owncloud/android/issues/4490)
 * Enhancement - Enforce OIDC auth flow via branding: [#4500](https://github.com/owncloud/android/issues/4500)
 
 ## Details
@@ -93,6 +94,13 @@ ownCloud admins and users.
 
    https://github.com/owncloud/android/issues/4484
    https://github.com/owncloud/android/pull/4498
+
+* Enhancement - OCIS Light Users: [#4490](https://github.com/owncloud/android/issues/4490)
+
+   OCIS light users (users without personal space) are now supported in the app
+
+   https://github.com/owncloud/android/issues/4490
+   https://github.com/owncloud/android/pull/4518
 
 * Enhancement - Enforce OIDC auth flow via branding: [#4500](https://github.com/owncloud/android/issues/4500)
 

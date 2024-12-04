@@ -258,6 +258,7 @@ class MainFileListFragment : Fragment(),
         binding.recyclerViewMainFileList.adapter = fileListAdapter
 
         // Set Swipe to refresh and its listener
+        binding.swipeRefreshMainFileList.isEnabled = mainFileListViewModel.fileListOption.value != FileListOption.AV_OFFLINE
         binding.swipeRefreshMainFileList.setOnRefreshListener {
             fileOperationsViewModel.performOperation(
                 FileOperation.RefreshFolderOperation(
@@ -317,7 +318,7 @@ class MainFileListFragment : Fragment(),
             fileActions?.onCurrentFolderUpdated(currentFolderDisplayed, mainFileListViewModel.getSpace())
             val fileListOption = mainFileListViewModel.fileListOption.value
             val refreshFolderNeeded = fileListOption.isAllFiles() ||
-                    (!fileListOption.isAllFiles() && currentFolderDisplayed.remotePath != ROOT_PATH)
+                    (!fileListOption.isAllFiles() && currentFolderDisplayed.remotePath != ROOT_PATH && !fileListOption.isAvailableOffline())
             if (refreshFolderNeeded) {
                 fileOperationsViewModel.performOperation(
                     FileOperation.RefreshFolderOperation(
@@ -609,29 +610,28 @@ class MainFileListFragment : Fragment(),
             )
             showOrHideEmptyView(fileListUiState)
 
-            fileListUiState.space?.let {
-                binding.spaceHeader.root.apply {
-                    if (fileListUiState.space.isProject && fileListUiState.folderToDisplay?.remotePath == ROOT_PATH) {
-                        isVisible = true
-                        animate().translationY(0f).duration = 100
-                    } else {
-                        animate().translationY(-height.toFloat()).withEndAction { isVisible = false }
-                    }
-                }
 
-                val spaceSpecialImage = it.getSpaceSpecialImage()
-                if (spaceSpecialImage != null) {
-                    binding.spaceHeader.spaceHeaderImage.load(
-                        ThumbnailsRequester.getPreviewUriForSpaceSpecial(spaceSpecialImage),
-                        ThumbnailsRequester.getCoilImageLoader()
-                    ) {
-                        placeholder(R.drawable.ic_spaces)
-                        error(R.drawable.ic_spaces)
-                    }
+            binding.spaceHeader.root.apply {
+                if (fileListUiState.space?.isProject == true && fileListUiState.folderToDisplay?.remotePath == ROOT_PATH) {
+                    isVisible = true
+                    animate().translationY(0f).duration = 100
+                } else {
+                    animate().translationY(-height.toFloat()).withEndAction { isVisible = false }
                 }
-                binding.spaceHeader.spaceHeaderName.text = it.name
-                binding.spaceHeader.spaceHeaderSubtitle.text = it.description
             }
+
+            val spaceSpecialImage = fileListUiState.space?.getSpaceSpecialImage()
+            if (spaceSpecialImage != null) {
+                binding.spaceHeader.spaceHeaderImage.load(
+                    ThumbnailsRequester.getPreviewUriForSpaceSpecial(spaceSpecialImage),
+                    ThumbnailsRequester.getCoilImageLoader()
+                ) {
+                    placeholder(R.drawable.ic_spaces)
+                    error(R.drawable.ic_spaces)
+                }
+            }
+            binding.spaceHeader.spaceHeaderName.text = fileListUiState.space?.name
+            binding.spaceHeader.spaceHeaderSubtitle.text = fileListUiState.space?.description
 
             actionMode?.invalidate()
         }
@@ -810,8 +810,9 @@ class MainFileListFragment : Fragment(),
     }
 
     fun updateFileListOption(newFileListOption: FileListOption, file: OCFile) {
-        mainFileListViewModel.updateFolderToDisplay(file)
         mainFileListViewModel.updateFileListOption(newFileListOption)
+        binding.swipeRefreshMainFileList.isEnabled = newFileListOption != FileListOption.AV_OFFLINE
+        mainFileListViewModel.updateFolderToDisplay(file)
         showOrHideFab(newFileListOption, file)
     }
 

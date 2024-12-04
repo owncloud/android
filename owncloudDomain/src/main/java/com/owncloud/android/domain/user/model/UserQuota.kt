@@ -26,7 +26,7 @@ import kotlin.math.roundToLong
 
 data class UserQuota(
     val accountName: String,
-    val available: Long,
+    val available: Long, // -4 : Light Users | -3: Unlimited quota | OTHER: Limited quota
     val used: Long,
     val total: Long?,
     val state: UserQuotaState?

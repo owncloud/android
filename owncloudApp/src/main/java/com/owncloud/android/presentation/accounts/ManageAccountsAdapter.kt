@@ -156,6 +156,11 @@ class ManageAccountsAdapter(
 
     private fun updateQuota(quotaText: TextView, quotaBar: ProgressBar, userQuota: UserQuota, context: Context) {
         when {
+            userQuota.available == -4L -> { // Light users (oCIS)
+                quotaBar.visibility = View.GONE
+                quotaText.text = context.getString(R.string.drawer_unavailable_used_storage)
+            }
+
             userQuota.available < 0 -> { // Pending, unknown or unlimited free storage. The progress bar is hid
                 quotaBar.visibility = View.GONE
                 quotaText.text = DisplayUtils.bytesToHumanReadable(userQuota.used, context, false)

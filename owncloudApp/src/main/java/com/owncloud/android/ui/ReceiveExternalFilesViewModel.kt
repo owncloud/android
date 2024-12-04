@@ -1,7 +1,7 @@
 /**
  * ownCloud Android client application
  *
- * Copyright (C) 2022 ownCloud GmbH.
+ * Copyright (C) 2024 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -22,9 +22,8 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.owncloud.android.domain.capabilities.usecases.GetStoredCapabilitiesUseCase
 import com.owncloud.android.domain.files.model.OCFile
-import com.owncloud.android.domain.spaces.model.OCSpace
-import com.owncloud.android.domain.spaces.usecases.GetPersonalSpaceForAccountUseCase
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.ViewModelExt.runUseCaseWithResult
 import com.owncloud.android.presentation.common.UIResult
@@ -35,15 +34,23 @@ import kotlinx.coroutines.launch
 class ReceiveExternalFilesViewModel(
     private val synchronizeFolderUseCase: SynchronizeFolderUseCase,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
-    private val getPersonalSpaceForAccountUseCase: GetPersonalSpaceForAccountUseCase,
+    private val getStoredCapabilitiesUseCase: GetStoredCapabilitiesUseCase,
+    private val accountName: String,
 ) : ViewModel() {
 
     private val _syncFolderLiveData = MediatorLiveData<Event<UIResult<Unit>>>()
     val syncFolderLiveData: LiveData<Event<UIResult<Unit>>> = _syncFolderLiveData
 
-    private val _personalSpaceLiveData = MutableLiveData<OCSpace?>()
-    val personalSpaceLiveData: LiveData<OCSpace?> = _personalSpaceLiveData
+    private val _spacesAreAllowed = MutableLiveData<Boolean>()
+    val spacesAreAllowed: LiveData<Boolean> = _spacesAreAllowed
 
+    init {
+        viewModelScope.launch(coroutinesDispatcherProvider.io) {
+            val capabilities = getStoredCapabilitiesUseCase(GetStoredCapabilitiesUseCase.Params(accountName))
+            val spacesAvailableForAccount = capabilities?.isSpacesAllowed() == true
+            _spacesAreAllowed.postValue(spacesAvailableForAccount)
+        }
+    }
 
     fun refreshFolderUseCase(
         folderToSync: OCFile,
@@ -59,17 +66,5 @@ class ReceiveExternalFilesViewModel(
             syncMode = SynchronizeFolderUseCase.SyncFolderMode.REFRESH_FOLDER
         )
     )
-
-    fun getPersonalSpaceForAccount(accountName: String) {
-        viewModelScope.launch(coroutinesDispatcherProvider.io) {
-            val result = getPersonalSpaceForAccountUseCase(
-               GetPersonalSpaceForAccountUseCase.Params(
-                    accountName = accountName
-                )
-            )
-            _personalSpaceLiveData.postValue(result)
-        }
-    }
-
 
 }

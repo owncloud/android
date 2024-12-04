@@ -92,11 +92,13 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode
 import com.owncloud.android.lib.resources.status.OwnCloudVersion
 import com.owncloud.android.operations.SyncProfileOperation
+import com.owncloud.android.presentation.accounts.ManageAccountsViewModel
 import com.owncloud.android.presentation.authentication.AccountUtils.getCurrentOwnCloudAccount
 import com.owncloud.android.presentation.capabilities.CapabilityViewModel
 import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.presentation.conflicts.ConflictsResolveActivity
 import com.owncloud.android.presentation.files.details.FileDetailsFragment
+import com.owncloud.android.presentation.files.filelist.MainEmptyListFragment
 import com.owncloud.android.presentation.files.filelist.MainFileListFragment
 import com.owncloud.android.presentation.files.operations.FileOperation
 import com.owncloud.android.presentation.files.operations.FileOperationsViewModel
@@ -176,7 +178,7 @@ class FileDisplayActivity : FileActivity(),
 
     private var syncInProgress = false
 
-    private var fileListOption = FileListOption.ALL_FILES
+    var fileListOption = FileListOption.ALL_FILES
     private var waitingToSend: OCFile? = null
     private var waitingToOpen: OCFile? = null
 
@@ -185,6 +187,7 @@ class FileDisplayActivity : FileActivity(),
     private val fileOperationsViewModel: FileOperationsViewModel by viewModel()
     private val transfersViewModel: TransfersViewModel by viewModel()
     private lateinit var  spacesListViewModel: SpacesListViewModel
+    private val manageAccountsViewModel: ManageAccountsViewModel by viewModel()
 
     private val sharedPreferences: SharedPreferencesProvider by inject()
 
@@ -192,6 +195,8 @@ class FileDisplayActivity : FileActivity(),
         internal set
 
     private lateinit var binding: ActivityMainBinding
+
+    private var isLightUser = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Timber.v("onCreate() start")
@@ -318,7 +323,9 @@ class FileDisplayActivity : FileActivity(),
             capabilitiesViewModel.capabilities.observe(this, Event.EventObserver {
                 onCapabilitiesOperationFinish(it)
             })
+            isLightUser = manageAccountsViewModel.checkUserLight(account.name)
             navigateTo(fileListOption, initialState = true)
+
         }
 
         startListeningToOperations()
@@ -419,6 +426,14 @@ class FileDisplayActivity : FileActivity(),
         this.fileListOption = FileListOption.SHARED_BY_LINK
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.left_fragment_container, sharesFragment)
+        transaction.commit()
+    }
+
+    private fun initAndShowEmptyPersonalSpace() {
+        val emptyListFragment = MainEmptyListFragment()
+        this.fileListOption = FileListOption.ALL_FILES
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.left_fragment_container, emptyListFragment)
         transaction.commit()
     }
 
@@ -1743,13 +1758,20 @@ class FileDisplayActivity : FileActivity(),
         val previousFileListOption = fileListOption
         when (newFileListOption) {
             FileListOption.ALL_FILES -> {
-                if (previousFileListOption != newFileListOption || initialState) {
-                    file = storageManager.getRootPersonalFolder()
+                if (isLightUser) {
+                    file = null
                     fileListOption = newFileListOption
-                    mainFileListFragment?.updateFileListOption(newFileListOption, file) ?: initAndShowListOfFiles(newFileListOption)
-                    updateToolbar(file)
+                    initAndShowEmptyPersonalSpace()
+                    updateToolbar(null)
                 } else {
-                    browseToRoot()
+                    if (previousFileListOption != newFileListOption || initialState) {
+                        file = storageManager.getRootPersonalFolder()
+                        fileListOption = newFileListOption
+                        mainFileListFragment?.updateFileListOption(newFileListOption, file) ?: initAndShowListOfFiles(newFileListOption)
+                        updateToolbar(file)
+                    } else {
+                        browseToRoot()
+                    }
                 }
             }
 

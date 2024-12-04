@@ -51,7 +51,7 @@ class GetBaseUrlRemoteOperation : RemoteOperation<String?>() {
 
             val status = client.executeHttpMethod(propFindMethod)
 
-            if (isSuccess(status)) {
+            if (isSuccess(status) || status == HttpConstants.HTTP_NOT_FOUND) { // A light user returns 404 (NOT FOUND)
                 RemoteOperationResult<String?>(RemoteOperationResult.ResultCode.OK).apply {
                     data = propFindMethod.getFinalUrl().toString()
                 }
