@@ -206,7 +206,8 @@ class PreviewImageFragment : FileFragment() {
 
     private fun setRolesAccessibilityToMenuItems(menu: Menu) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            menu.findItem(R.id.action_see_details)?.contentDescription = "${getString(R.string.actionbar_see_details)} ${getString(R.string.button_role_accessibility)}"
+            menu.findItem(R.id.action_see_details)?.contentDescription =
+                "${getString(R.string.actionbar_see_details)} ${getString(R.string.button_role_accessibility)}"
         }
     }
 
