@@ -3,6 +3,7 @@
  *
  * @author David González Verdugo
  * @author Jorge Aguado Recio
+ *
  * Copyright (C) 2024 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -32,7 +33,7 @@ import org.junit.Test
 class OCShareeRepositoryTest {
 
     private val remoteShareeDataSource = mockk<RemoteShareeDataSource>(relaxUnitFun = true)
-    private val oCShareeRepository: OCShareeRepository = OCShareeRepository(remoteShareeDataSource)
+    private val oCShareeRepository = OCShareeRepository(remoteShareeDataSource)
 
     private val searchString = "user"
     private val requestedPage = 1
