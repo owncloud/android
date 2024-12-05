@@ -19,497 +19,281 @@
 
 package com.owncloud.android.data.sharing.shares.repository
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.owncloud.android.data.sharing.shares.datasources.LocalShareDataSource
 import com.owncloud.android.data.sharing.shares.datasources.RemoteShareDataSource
-import com.owncloud.android.domain.exceptions.FileNotFoundException
-import com.owncloud.android.domain.exceptions.NoConnectionWithServerException
 import com.owncloud.android.domain.sharing.shares.model.OCShare
 import com.owncloud.android.domain.sharing.shares.model.ShareType
+import com.owncloud.android.lib.resources.shares.RemoteShare
 import com.owncloud.android.testutil.OC_ACCOUNT_NAME
 import com.owncloud.android.testutil.OC_PRIVATE_SHARE
 import com.owncloud.android.testutil.OC_PUBLIC_SHARE
 import com.owncloud.android.testutil.OC_SHARE
+import com.owncloud.android.testutil.OC_SHAREE
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import org.junit.Assert
-import org.junit.Rule
+import junit.framework.TestCase.assertEquals
 import org.junit.Test
 
 class OCShareRepositoryTest {
-    @Rule
-    @JvmField
-    val instantExecutorRule = InstantTaskExecutorRule()
 
-    private val localShareDataSource = mockk<LocalShareDataSource>(relaxed = true)
-    private val remoteShareDataSource = mockk<RemoteShareDataSource>(relaxed = true)
-    private val ocShareRepository: OCShareRepository =
-        OCShareRepository(localShareDataSource, remoteShareDataSource)
+    private val localShareDataSource = mockk<LocalShareDataSource>(relaxUnitFun =  true)
+    private val remoteShareDataSource = mockk<RemoteShareDataSource>(relaxUnitFun = true)
+    private val ocShareRepository = OCShareRepository(localShareDataSource, remoteShareDataSource)
 
-    private val shares = arrayListOf(
-        OC_PUBLIC_SHARE,
-        OC_PRIVATE_SHARE,
-        OC_PRIVATE_SHARE,
-        OC_PUBLIC_SHARE
-    )
-
+    private val listOfShares = listOf(OC_PRIVATE_SHARE, OC_PUBLIC_SHARE)
     private val filePath = "/Images"
-    private val accountName = "admin@server"
+    private val password = "password"
+    private val permissions = 1
+    private val expiration = RemoteShare.INIT_EXPIRATION_DATE_IN_MILLIS
 
     @Test
-    fun refreshSharesFromNetworkOk() {
-        every { remoteShareDataSource.getShares(any(), any(), any(), any()) } returns shares
-
-        ocShareRepository.refreshSharesFromNetwork(filePath, accountName)
-
-        verify(exactly = 1) {
-            remoteShareDataSource.getShares(
+    fun `insertPrivateShare inserts a private OCShare correctly`() {
+        every {
+            remoteShareDataSource.insert(
                 remoteFilePath = filePath,
-                reshares = true,
-                subfiles = false,
-                accountName = accountName
+                shareType = OC_PRIVATE_SHARE.shareType,
+                shareWith = OC_SHAREE.shareWith,
+                permissions = permissions,
+                name = "",
+                password = "",
+                expirationDate = expiration,
+                accountName = OC_ACCOUNT_NAME
             )
-        }
-
-        verify(exactly = 1) {
-            localShareDataSource.replaceShares(shares)
-        }
-    }
-
-    @Test
-    fun refreshSharesFromNetworkEmptyShares() {
-        every { remoteShareDataSource.getShares(any(), any(), any(), any()) } returns listOf()
-
-        ocShareRepository.refreshSharesFromNetwork(filePath, accountName)
-
-        verify(exactly = 1) {
-            remoteShareDataSource.getShares(
-                remoteFilePath = filePath,
-                reshares = true,
-                subfiles = false,
-                accountName = accountName
-            )
-        }
-
-        verify(exactly = 1) {
-            localShareDataSource.deleteSharesForFile(filePath, accountName)
-        }
-    }
-
-    @Test(expected = NoConnectionWithServerException::class)
-    fun refreshSharesFromNetworkNoConnection() {
-        every { remoteShareDataSource.getShares(any(), any(), any(), any()) } throws NoConnectionWithServerException()
-
-        ocShareRepository.refreshSharesFromNetwork(filePath, accountName)
-
-        verify(exactly = 1) {
-            remoteShareDataSource.getShares(
-                remoteFilePath = filePath,
-                reshares = true,
-                subfiles = false,
-                accountName = accountName
-            )
-        }
-
-        verify(exactly = 1) {
-            localShareDataSource.replaceShares(shares)
-        }
-    }
-
-    @Test
-    fun getSharesAsLiveDataOk() {
-        val sharesLiveData = MutableLiveData<List<OCShare>>()
+        } returns OC_PRIVATE_SHARE
 
         every {
-            localShareDataSource.getSharesAsLiveData(any(), any(), any())
-        } returns sharesLiveData
+            localShareDataSource.insert(OC_PRIVATE_SHARE)
+        } returns 1
 
-        val sharesEmitted = mutableListOf<List<OCShare>>()
-        ocShareRepository.getSharesAsLiveData(filePath, accountName).observeForever {
-            sharesEmitted.add(it!!)
+        ocShareRepository.insertPrivateShare(filePath, OC_PRIVATE_SHARE.shareType, OC_SHAREE.shareWith, permissions, OC_ACCOUNT_NAME)
+
+        verify(exactly = 1) {
+            remoteShareDataSource.insert(
+                remoteFilePath = filePath,
+                shareType = OC_PRIVATE_SHARE.shareType,
+                shareWith = OC_SHAREE.shareWith,
+                permissions = permissions,
+                name = "",
+                password = "",
+                expirationDate = expiration,
+                accountName = OC_ACCOUNT_NAME
+            )
+            localShareDataSource.insert(OC_PRIVATE_SHARE)
         }
-
-        val sharesToEmit = listOf(shares)
-        sharesToEmit.forEach {
-            sharesLiveData.postValue(it)
-        }
-
-        Assert.assertEquals(sharesToEmit, sharesEmitted)
-    }
-
-    @Test(expected = Exception::class)
-    fun getSharesAsLiveDataException() {
-        val sharesLiveData = MutableLiveData<List<OCShare>>()
-
-        every {
-            localShareDataSource.getSharesAsLiveData(any(), any(), any())
-        } throws Exception()
-
-        val sharesEmitted = mutableListOf<List<OCShare>>()
-        ocShareRepository.getSharesAsLiveData(filePath, accountName)
-
-        val sharesToEmit = listOf(shares)
-        sharesToEmit.forEach {
-            sharesLiveData.postValue(it)
-        }
-
-        Assert.assertEquals(sharesToEmit, sharesEmitted)
     }
 
     @Test
-    fun getShareAsLiveDataOk() {
-        val shareLiveData = MutableLiveData<OCShare>()
+    fun `updatePrivateShare updates a private OCShare correctly`() {
+        every {
+            remoteShareDataSource.updateShare(
+                remoteId = OC_PRIVATE_SHARE.remoteId,
+                name = "",
+                password = "",
+                expirationDateInMillis = expiration,
+                permissions = permissions,
+                accountName = OC_ACCOUNT_NAME
+            )
+        } returns OC_PRIVATE_SHARE
 
         every {
-            localShareDataSource.getShareAsLiveData(any())
+            localShareDataSource.update(OC_PRIVATE_SHARE)
+        } returns 1
+
+        ocShareRepository.updatePrivateShare(OC_PRIVATE_SHARE.remoteId, permissions, OC_ACCOUNT_NAME)
+
+        verify(exactly = 1) {
+            remoteShareDataSource.updateShare(
+                remoteId = OC_PRIVATE_SHARE.remoteId,
+                name = "",
+                password = "",
+                expirationDateInMillis = expiration,
+                permissions = permissions,
+                accountName = OC_ACCOUNT_NAME
+            )
+            localShareDataSource.update(OC_PRIVATE_SHARE)
+        }
+    }
+
+    @Test
+    fun `insertPublicShare inserts a public OCShare correctly`() {
+        every {
+            remoteShareDataSource.insert(
+                remoteFilePath = filePath,
+                shareType = OC_PUBLIC_SHARE.shareType,
+                shareWith = "",
+                permissions = permissions,
+                name = OC_PUBLIC_SHARE.name!!,
+                password = password,
+                expirationDate = expiration,
+                accountName = OC_ACCOUNT_NAME
+            )
+        } returns OC_PUBLIC_SHARE
+
+        every {
+            localShareDataSource.insert(OC_PUBLIC_SHARE)
+        } returns 1
+
+        ocShareRepository.insertPublicShare(filePath, permissions, OC_PUBLIC_SHARE.name!!, password, expiration, OC_ACCOUNT_NAME)
+
+        verify(exactly = 1) {
+            remoteShareDataSource.insert(
+                remoteFilePath = filePath,
+                shareType = OC_PUBLIC_SHARE.shareType,
+                shareWith = "",
+                permissions = permissions,
+                name = OC_PUBLIC_SHARE.name!!,
+                password = password,
+                expirationDate = expiration,
+                accountName = OC_ACCOUNT_NAME
+            )
+            localShareDataSource.insert(OC_PUBLIC_SHARE)
+        }
+    }
+
+    @Test
+    fun `updatePublicShare updates a public OCShare correctly`() {
+        every {
+            remoteShareDataSource.updateShare(
+                remoteId = OC_PUBLIC_SHARE.remoteId,
+                name = OC_PUBLIC_SHARE.name!!,
+                password = password,
+                expirationDateInMillis = expiration,
+                permissions = permissions,
+                accountName = OC_ACCOUNT_NAME
+            )
+        } returns OC_PUBLIC_SHARE
+
+        every {
+            localShareDataSource.update(OC_PUBLIC_SHARE)
+        } returns 1
+
+        ocShareRepository.updatePublicShare(OC_PUBLIC_SHARE.remoteId, OC_PUBLIC_SHARE.name!!, password, expiration, permissions, OC_ACCOUNT_NAME)
+
+        verify(exactly = 1) {
+            remoteShareDataSource.updateShare(
+                remoteId = OC_PUBLIC_SHARE.remoteId,
+                name = OC_PUBLIC_SHARE.name!!,
+                password = password,
+                expirationDateInMillis = expiration,
+                permissions = permissions,
+                accountName = OC_ACCOUNT_NAME
+            )
+            localShareDataSource.update(OC_PUBLIC_SHARE)
+        }
+    }
+
+    @Test
+    fun `getSharesAsLiveData returns a LiveData with a list of OCShares`() {
+        val sharesLiveDataList: LiveData<List<OCShare>> = MutableLiveData(listOfShares)
+
+        every {
+            localShareDataSource.getSharesAsLiveData(
+                filePath = filePath,
+                accountName = OC_ACCOUNT_NAME,
+                shareTypes = listOf(ShareType.PUBLIC_LINK, ShareType.USER, ShareType.GROUP, ShareType.FEDERATED)
+            )
+        } returns sharesLiveDataList
+
+        val sharesResult = ocShareRepository.getSharesAsLiveData(filePath, OC_ACCOUNT_NAME)
+        assertEquals(sharesResult, sharesLiveDataList)
+
+        verify(exactly = 1) {
+            localShareDataSource.getSharesAsLiveData(
+                filePath = filePath,
+                accountName = OC_ACCOUNT_NAME,
+                shareTypes = listOf(ShareType.PUBLIC_LINK, ShareType.USER, ShareType.GROUP, ShareType.FEDERATED)
+            )
+        }
+    }
+
+    @Test
+    fun `getShareAsLiveData returns a LiveData with an OCShare`() {
+        val shareLiveData: LiveData<OCShare> = MutableLiveData(OC_SHARE)
+
+        every {
+            localShareDataSource.getShareAsLiveData(OC_SHARE.remoteId)
         } returns shareLiveData
 
-        val sharesEmitted = mutableListOf<OCShare>()
-        ocShareRepository.getShareAsLiveData(OC_SHARE.remoteId).observeForever {
-            sharesEmitted.add(it!!)
-        }
-
-        val sharesToEmit = listOf(shares.first())
-
-        sharesToEmit.forEach {
-            shareLiveData.postValue(it)
-        }
-
-        Assert.assertEquals(sharesToEmit, sharesEmitted)
-    }
-
-    @Test(expected = Exception::class)
-    fun getShareAsLiveDataException() {
-        val shareLiveData = MutableLiveData<OCShare>()
-
-        every {
-            localShareDataSource.getShareAsLiveData(any())
-        } throws Exception()
-
-        val sharesEmitted = mutableListOf<OCShare>()
-        ocShareRepository.getShareAsLiveData(OC_SHARE.remoteId)
-
-        val sharesToEmit = listOf(shares.first())
-
-        sharesToEmit.forEach {
-            shareLiveData.postValue(it)
-        }
-
-        Assert.assertEquals(sharesToEmit, sharesEmitted)
-    }
-
-    @Test
-    fun insertPublicShareOk() {
-        every {
-            remoteShareDataSource.insert(
-                any(),
-                any(),
-                any(),
-                any(),
-                any(),
-                any(),
-                any(),
-                any()
-            )
-        } returns shares.first()
-
-        ocShareRepository.insertPublicShare(
-            filePath,
-            -1,
-            "Docs link",
-            "password",
-            2000,
-            accountName
-        )
+        val shareResult = ocShareRepository.getShareAsLiveData(OC_SHARE.remoteId)
+        assertEquals(shareResult, shareLiveData)
 
         verify(exactly = 1) {
-            remoteShareDataSource.insert(
-                filePath,
-                ShareType.PUBLIC_LINK,
-                "",
-                -1,
-                "Docs link",
-                "password",
-                2000,
-                accountName
-            )
-        }
-
-        verify(exactly = 1) { localShareDataSource.insert(shares.first()) }
-    }
-
-    @Test(expected = FileNotFoundException::class)
-    fun insertPublicShareFileNotFoundException() {
-        every {
-            remoteShareDataSource.insert(
-                any(),
-                any(),
-                any(),
-                any(),
-                any(),
-                any(),
-                any(),
-                any()
-            )
-        } throws FileNotFoundException()
-
-        ocShareRepository.insertPublicShare(
-            filePath,
-            -1,
-            "Docs link",
-            "password",
-            2000,
-            accountName
-        )
-
-        verify(exactly = 1) {
-            remoteShareDataSource.insert(
-                filePath,
-                ShareType.PUBLIC_LINK,
-                "",
-                -1,
-                "Docs link",
-                "password",
-                2000,
-                accountName
-            )
-        }
-
-        verify(exactly = 0) {
-            localShareDataSource.insert(shares.first())
+            localShareDataSource.getShareAsLiveData(OC_SHARE.remoteId)
         }
     }
 
     @Test
-    fun updatePublicShareOk() {
+    fun `refreshSharesFromNetwork refreshes shares correctly when the list of shares is not empty`() {
         every {
-            remoteShareDataSource.updateShare(
-                any(),
-                any(),
-                any(),
-                any(),
-                any(),
-                any()
+            remoteShareDataSource.getShares(
+                remoteFilePath = filePath,
+                reshares = true,
+                subfiles = false,
+                accountName = OC_ACCOUNT_NAME
             )
-        } returns shares.first()
+        } returns listOfShares
 
-        ocShareRepository.updatePublicShare(
-            OC_SHARE.remoteId,
-            "Docs link",
-            "password",
-            2000,
-            -1,
-            accountName
-        )
+        every {
+            localShareDataSource.replaceShares(listOfShares)
+        } returns listOf(1, 1, 1, 1)
+
+        ocShareRepository.refreshSharesFromNetwork(filePath, OC_ACCOUNT_NAME)
 
         verify(exactly = 1) {
-            remoteShareDataSource.updateShare(
-                OC_SHARE.remoteId,
-                "Docs link",
-                "password",
-                2000,
-                -1,
-                accountName
+            remoteShareDataSource.getShares(
+                remoteFilePath = filePath,
+                reshares = true,
+                subfiles = false,
+                accountName = OC_ACCOUNT_NAME
             )
-        }
-
-        verify(exactly = 1) { localShareDataSource.update(shares.first()) }
-    }
-
-    @Test(expected = FileNotFoundException::class)
-    fun updatePublicShareFileNotFoundException() {
-        every {
-            remoteShareDataSource.updateShare(
-                any(),
-                any(),
-                any(),
-                any(),
-                any(),
-                any()
-            )
-        } throws FileNotFoundException()
-
-        ocShareRepository.updatePublicShare(
-            OC_SHARE.remoteId,
-            "Docs link",
-            "password",
-            2000,
-            -1,
-            accountName
-        )
-
-        verify(exactly = 1) {
-            remoteShareDataSource.updateShare(
-                OC_SHARE.remoteId,
-                "Docs link",
-                "password",
-                2000,
-                -1,
-                accountName
-            )
-        }
-
-        verify(exactly = 0) {
-            localShareDataSource.update(shares.first())
+            localShareDataSource.replaceShares(listOfShares)
         }
     }
 
     @Test
-    fun insertPrivateShareOk() {
+    fun `refreshSharesFromNetwork refreshes shares correctly when the list of shares is empty`() {
         every {
-            remoteShareDataSource.insert(
-                any(),
-                any(),
-                any(),
-                any(),
-                any(),
-                any(),
-                any(),
-                any()
+            remoteShareDataSource.getShares(
+                remoteFilePath = filePath,
+                reshares = true,
+                subfiles = false,
+                accountName = OC_ACCOUNT_NAME
             )
-        } returns shares[2]
+        } returns emptyList()
 
-        ocShareRepository.insertPrivateShare(
-            filePath,
-            ShareType.GROUP,
-            "whoever",
-            -1,
-            accountName
-        )
+        every {
+            localShareDataSource.replaceShares(emptyList())
+        } returns emptyList()
+
+        ocShareRepository.refreshSharesFromNetwork(filePath, OC_ACCOUNT_NAME)
 
         verify(exactly = 1) {
-            remoteShareDataSource.insert(
-                filePath,
-                ShareType.GROUP,
-                "whoever",
-                -1,
-                accountName = accountName
+            remoteShareDataSource.getShares(
+                remoteFilePath = filePath,
+                reshares = true,
+                subfiles = false,
+                accountName = OC_ACCOUNT_NAME
             )
-        }
-
-        verify(exactly = 1) { localShareDataSource.insert(shares[2]) }
-    }
-
-    @Test(expected = FileNotFoundException::class)
-    fun insertPrivateShareFileNotFoundException() {
-        every {
-            remoteShareDataSource.insert(
-                any(),
-                any(),
-                any(),
-                any(),
-                any(),
-                any(),
-                any(),
-                any()
-            )
-        } throws FileNotFoundException()
-
-        ocShareRepository.insertPrivateShare(
-            filePath,
-            ShareType.GROUP,
-            "whoever",
-            -1,
-            accountName
-        )
-
-        verify(exactly = 1) {
-            remoteShareDataSource.insert(
-                filePath,
-                ShareType.GROUP,
-                "whoever",
-                -1,
-                accountName = accountName
-            )
-        }
-
-        verify(exactly = 0) {
-            localShareDataSource.insert(shares[2])
+            localShareDataSource.deleteSharesForFile(filePath, OC_ACCOUNT_NAME)
+            localShareDataSource.replaceShares(emptyList())
         }
     }
 
     @Test
-    fun updatePrivateShareOk() {
+    fun `deleteShare deletes a share correctly`() {
         every {
-            remoteShareDataSource.updateShare(
-                any(),
-                any(),
-                any(),
-                any(),
-                any(),
-                any()
-            )
-        } returns shares[2]
+            localShareDataSource.deleteShare(OC_SHARE.remoteId)
+        } returns 1
 
-        ocShareRepository.updatePrivateShare(
-            OC_SHARE.remoteId,
-            -1,
-            accountName
-        )
+        ocShareRepository.deleteShare(OC_SHARE.remoteId, OC_ACCOUNT_NAME)
 
         verify(exactly = 1) {
-            remoteShareDataSource.updateShare(
-                OC_SHARE.remoteId,
-                permissions = -1,
-                accountName = accountName
-            )
+            remoteShareDataSource.deleteShare(OC_SHARE.remoteId, OC_ACCOUNT_NAME)
+            localShareDataSource.deleteShare(OC_SHARE.remoteId)
         }
-
-        verify(exactly = 1) { localShareDataSource.update(shares[2]) }
     }
 
-    @Test(expected = FileNotFoundException::class)
-    fun updatePrivateShareFileNotFoundException() {
-        every {
-            remoteShareDataSource.updateShare(
-                any(),
-                any(),
-                any(),
-                any(),
-                any(),
-                any()
-            )
-        } throws FileNotFoundException()
-
-        ocShareRepository.updatePrivateShare(
-            OC_SHARE.remoteId,
-            -1,
-            accountName
-        )
-
-        verify(exactly = 1) {
-            remoteShareDataSource.updateShare(
-                OC_SHARE.remoteId,
-                permissions = -1,
-                accountName = accountName
-            )
-        }
-
-        verify(exactly = 0) { localShareDataSource.update(shares[2]) }
-    }
-
-    @Test
-    fun removeShare() {
-        val shareId = "fjCZxtidwFrzoCl"
-        ocShareRepository.deleteShare(shareId, OC_ACCOUNT_NAME)
-
-        verify(exactly = 1) { remoteShareDataSource.deleteShare(shareId, OC_ACCOUNT_NAME) }
-        verify(exactly = 1) { localShareDataSource.deleteShare(shareId) }
-    }
-
-    @Test(expected = FileNotFoundException::class)
-    fun removeShareFileNotFoundException() {
-        val shareId = "fjCZxtidwFrzoCl"
-
-        every {
-            remoteShareDataSource.deleteShare(shareId, OC_ACCOUNT_NAME)
-        } throws FileNotFoundException()
-
-        ocShareRepository.deleteShare(shareId, OC_ACCOUNT_NAME)
-
-        verify(exactly = 1) { remoteShareDataSource.deleteShare(shareId, OC_ACCOUNT_NAME) }
-        verify(exactly = 0) { localShareDataSource.deleteShare(shareId) }
-    }
 }
