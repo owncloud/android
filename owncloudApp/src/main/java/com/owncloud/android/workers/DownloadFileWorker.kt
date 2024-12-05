@@ -34,6 +34,7 @@ import com.owncloud.android.data.executeRemoteOperation
 import com.owncloud.android.data.providers.LocalStorageProvider
 import com.owncloud.android.domain.exceptions.CancelledException
 import com.owncloud.android.domain.exceptions.LocalStorageNotMovedException
+import com.owncloud.android.domain.exceptions.NetworkErrorException
 import com.owncloud.android.domain.exceptions.NoConnectionWithServerException
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.files.usecases.CleanConflictUseCase
@@ -58,6 +59,7 @@ import com.owncloud.android.ui.activity.FileDisplayActivity
 import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter
 import com.owncloud.android.ui.preview.PreviewImageActivity
 import com.owncloud.android.ui.preview.PreviewImageFragment.Companion.canBePreviewed
+import com.owncloud.android.utils.ConnectivityUtils.isNetworkActive
 import com.owncloud.android.utils.DOWNLOAD_NOTIFICATION_CHANNEL_ID
 import com.owncloud.android.utils.DOWNLOAD_NOTIFICATION_ID_DEFAULT
 import com.owncloud.android.utils.FileStorageUtils
@@ -125,7 +127,17 @@ class DownloadFileWorker(
             notifyDownloadResult(null)
         } catch (throwable: Throwable) {
             Timber.e(throwable)
-            notifyDownloadResult(throwable)
+            val isNetworkError = throwable is NetworkErrorException || throwable is NoConnectionWithServerException
+            val shouldRetry = isNetworkError && isNetworkActive(appContext)
+            if (shouldRetry) {
+                if (runAttemptCount < MAX_RETRIES) {
+                    Result.retry()
+                } else {
+                    notifyDownloadResult(throwable)
+                }
+            } else {
+                notifyDownloadResult(throwable)
+            }
         }
     }
 
@@ -358,6 +370,8 @@ class DownloadFileWorker(
     }
 
     companion object {
+        const val SECONDS_BACKOFF_DELAY = 10_000L
+        const val MAX_RETRIES = 2
         const val KEY_PARAM_ACCOUNT = "KEY_PARAM_ACCOUNT"
         const val KEY_PARAM_FILE_ID = "KEY_PARAM_FILE_ID"
         const val WORKER_KEY_PROGRESS = "KEY_PROGRESS"
