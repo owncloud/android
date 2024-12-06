@@ -77,6 +77,7 @@
   <string name="prefs_camera_video_upload_path_title">Videote üleslaadimise kaust</string>
   <string name="prefs_camera_video_upload_on_wifi">Laadi videod üles ainult WiFi-t kasutades</string>
   <string name="prefs_camera_video_upload_on_charging">Laadi videoid üles vaid aku laadimise ajal</string>
+  <string name="prefs_automatic_uploads_not_available_users_light">Automaatsed üleslaadimised ei ole saadaval \"light\" kasutajatele</string>
   <string name="prefs_subsection_advanced">Lisavalikud</string>
   <string name="prefs_subsection_notifications">Halda teavitusi</string>
   <string name="prefs_show_hidden_files">Näita peidetud faile</string>
@@ -161,6 +162,7 @@
   <string name="file_list_empty_title_available_offline">Võrguühenduseta saadavalolevaid faile ei ole</string>
   <string name="file_list_empty_title_shared_by_links">Jagatud linke pole</string>
   <string name="file_list_empty_subtitle_all_files">Laadi sisu üles või süngi oma seadmetega!</string>
+  <string name="light_users_subtitle">Personaalne ruum ei ole saadaval</string>
   <string name="shares_list_empty_title">Jagamisi ei ole</string>
   <string name="shares_list_empty_subtitle">Sa ei tee koostööd teiste inimeste ressurssides.</string>
   <string name="spaces_list_empty_subtitle">Sul ei ole juurdepääsu ühelegi ruumile!</string>
@@ -682,6 +684,8 @@
   <string name="release_notes_4_5_0_subtitle_feedback_in_previews">Lisatud on võrguühenduseta failide saadavuse tagasiside kõikidesse eelvaadetesse ning valikute menüüd uuendatakse vastavalt faili staatusele</string>
   <string name="release_notes_4_5_0_title_quota_improvements">Täiustused salvestusmahu kasutuse kuvamisel</string>
   <string name="release_notes_4_5_0_subtitle_quota_improvements">Salvestusmahu kasutust värskendatakse faili- ja värskendustoimingutes tihti ning on lisaks menüüle saadaval ka kontode halduse vaates</string>
+  <string name="release_notes_4_5_0_title_light_users">ownCloud Infinite Scale serveri \"light\" kasutajad</string>
+  <string name="release_notes_4_5_0_subtitle_light_users">ownCloud Infinite Scale serveri \"light\" kasutajad (kasutajad ilma personaalse ruumita) on nüüd rakenduse poolt toetatud</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Ava veebis</string>
   <string name="ic_action_open_with_web">Ava %1$s (veebis)</string>
