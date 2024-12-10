@@ -396,7 +396,8 @@ class OCFileRepository(
                             // DO NOT update etag till contents are synced.
                             etag = localChildToSync.etag
                             needsToUpdateThumbnail =
-                                (!remoteChild.isFolder && remoteChild.modificationTimestamp != localChildToSync.modificationTimestamp) || localChildToSync.needsToUpdateThumbnail
+                                (!remoteChild.isFolder && remoteChild.modificationTimestamp != localChildToSync.modificationTimestamp) ||
+                                        localChildToSync.needsToUpdateThumbnail
                             // Probably not needed, if the child was already in the database, the av offline status should be also there
                             if (remoteFolder.isAvailableOffline) {
                                 availableOfflineStatus = AVAILABLE_OFFLINE_PARENT
@@ -584,7 +585,8 @@ class OCFileRepository(
 
         // 1. Remove folder content recursively
         folderContent.forEach { file ->
-            if (!(onlyFromLocalStorage && file.isAvailableOffline)) { // The condition will not be met when onlyFromLocalStorage is true and the file is of type available offline
+            // The condition will not be met when onlyFromLocalStorage is true and the file is of type available offline
+            if (!(onlyFromLocalStorage && file.isAvailableOffline)) {
                 if (file.isFolder) {
                     deleteLocalFolderRecursively(ocFile = file, onlyFromLocalStorage = onlyFromLocalStorage)
                 } else {

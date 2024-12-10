@@ -296,7 +296,9 @@ class OCLocalFileDataSourceTest {
 
     @Test
     fun `getSearchAvailableOfflineFolderContent returns a list of OCFile`() {
-        every { fileDao.getSearchAvailableOfflineFolderContent(OC_FILE_AVAILABLE_OFFLINE_ENTITY.parentId!!, "test") } returns listOf(OC_FILE_AVAILABLE_OFFLINE_ENTITY)
+        every {
+            fileDao.getSearchAvailableOfflineFolderContent(OC_FILE_AVAILABLE_OFFLINE_ENTITY.parentId!!, "test")
+        } returns listOf(OC_FILE_AVAILABLE_OFFLINE_ENTITY)
 
         val result = ocLocalFileDataSource.getSearchAvailableOfflineFolderContent(OC_FILE_AVAILABLE_OFFLINE_ENTITY.parentId!!, "test")
 
@@ -384,7 +386,9 @@ class OCLocalFileDataSourceTest {
 
     @Test
     fun `getSharedByLinkWithSyncInfoForAccountAsFlow returns a Flow with a list of OCFileWithSyncInfo`() = runTest {
-        val fileAndFileSyncEntitySharedByLink = OC_FILE_AND_FILE_SYNC.copy(file = OC_FILE_ENTITY.copy(sharedByLink = true).apply { this.id = OC_FILE_ENTITY.id })
+        val fileAndFileSyncEntitySharedByLink = OC_FILE_AND_FILE_SYNC.copy(file = OC_FILE_ENTITY.copy(sharedByLink = true).apply {
+            this.id = OC_FILE_ENTITY.id
+        })
 
         val fileWithSyncInfoSharedByLink = OC_FILE_WITH_SYNC_INFO_AND_SPACE.copy(file = OC_FILE.copy(sharedByLink = true))
 
@@ -411,14 +415,18 @@ class OCLocalFileDataSourceTest {
     @Test
     fun `getFilesWithSyncInfoAvailableOfflineFromAccountAsFlow returns a Flow with a list of OCFileWithSyncInfo`() = runTest {
         val fileAndFileSyncEntityAvailableOffline = OC_FILE_AND_FILE_SYNC.copy(
-            file = OC_FILE_ENTITY.copy(availableOfflineStatus = AvailableOfflineStatus.AVAILABLE_OFFLINE.ordinal).apply { this.id = OC_FILE_ENTITY.id }
+            file = OC_FILE_ENTITY.copy(availableOfflineStatus = AvailableOfflineStatus.AVAILABLE_OFFLINE.ordinal).apply {
+                this.id = OC_FILE_ENTITY.id
+            }
         )
 
         val fileWithSyncInfoAvailableOffline = OC_FILE_WITH_SYNC_INFO_AND_SPACE.copy(
             file = OC_FILE.copy(availableOfflineStatus = AvailableOfflineStatus.AVAILABLE_OFFLINE)
         )
 
-        every { fileDao.getFilesWithSyncInfoAvailableOfflineFromAccountAsFlow(OC_ACCOUNT_NAME) } returns flowOf(listOf(fileAndFileSyncEntityAvailableOffline))
+        every {
+            fileDao.getFilesWithSyncInfoAvailableOfflineFromAccountAsFlow(OC_ACCOUNT_NAME)
+        } returns flowOf(listOf(fileAndFileSyncEntityAvailableOffline))
 
         val result = ocLocalFileDataSource.getFilesWithSyncInfoAvailableOfflineFromAccountAsFlow(OC_ACCOUNT_NAME).first()
 
@@ -428,7 +436,8 @@ class OCLocalFileDataSourceTest {
     }
 
     @Test
-    fun `getFilesWithSyncInfoAvailableOfflineFromAccountAsFlow returns a Flow with an empty list when DAO returns a Flow with an empty list`() = runTest {
+    fun `getFilesWithSyncInfoAvailableOfflineFromAccountAsFlow returns a Flow with an empty list when DAO returns a Flow with an empty list`()
+    = runTest {
         every { fileDao.getFilesWithSyncInfoAvailableOfflineFromAccountAsFlow(OC_ACCOUNT_NAME) } returns flowOf(emptyList())
 
         val result = ocLocalFileDataSource.getFilesWithSyncInfoAvailableOfflineFromAccountAsFlow(OC_ACCOUNT_NAME).first()
