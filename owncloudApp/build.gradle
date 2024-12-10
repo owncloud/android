@@ -3,6 +3,7 @@ apply plugin: 'com.google.devtools.ksp'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-parcelize'
 
+// Commit SHA1 and Git Remote
 def commitSHA1 = 'COMMIT_SHA1'
 def gitRemote = 'GIT_REMOTE'
 
@@ -136,7 +137,6 @@ android {
     }
 
     buildTypes {
-
         release {
             if (System.env.OC_RELEASE_KEYSTORE) {
                 signingConfig signingConfigs.release
@@ -185,16 +185,12 @@ android {
     testNamespace "com.owncloud.android.test"
 }
 
-// Updates output file names of a given variant to format
-// [appName].[variant.versionName].[OC_BUILD_NUMBER]-[variant.name].apk.
-//
-// OC_BUILD_NUMBER is an environment variable read directly in this method. If undefined, it's not added.
-//
-// @param variant           Build variant instance which output file name will be updated.
-// @param appName           String to use as first part of the new file name. May be undefined, the original
-//                          project.archivesBaseName property will be used instead.
-// @param callerProject     Caller project.
+// Apply Detekt configuration to use jvmTarget 17
+tasks.withType(io.gitlab.arturbosch.detekt.Detekt).configureEach {
+    jvmTarget = "17"
+}
 
+// Helper methods
 def setOutputFileName(variant, appName, callerProject) {
     logger.info("Setting new name for output of variant $variant.name")
 
@@ -202,21 +198,8 @@ def setOutputFileName(variant, appName, callerProject) {
     def originalName = originalFile.name
     println "originalName is $originalName"
 
-    def newName = ""
-
-    if (appName) {
-        newName += appName
-    } else {
-        newName += "owncloud"
-    }
-
+    def newName = appName ?: "owncloud"
     def versionName = "$variant.mergedFlavor.versionName"
-    if (variant.mergedFlavor.manifestPlaceholders.versionName != null) {
-        versionName = "$variant.mergedFlavor.manifestPlaceholders.versionName"
-    }
-    if (variant.buildType.manifestPlaceholders.versionName != null) {
-        versionName = "$variant.buildType.manifestPlaceholders.versionName"
-    }
     newName += "_$versionName"
 
     def buildNumber = System.env.OC_BUILD_NUMBER
@@ -241,7 +224,6 @@ static def getLatestGitHash() {
 static def getGitOriginRemote() {
     def process = "git remote -v".execute()
     def values = process.text.toString().trim().split("\\r\\n|\\n|\\r")
-
     def found = values.find { it.startsWith("origin") && it.endsWith("(push)") }
     return found.replace("origin", "").replace("(push)", "").replace(".git", "").trim()
 }

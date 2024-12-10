@@ -15,12 +15,14 @@ buildscript {
         classpath libs.android.gradlePlugin
         classpath libs.kotlin.gradlePlugin
         classpath libs.ktlint.gradlePlugin
+        classpath "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.23.0" // Added Detekt plugin
     }
 }
 
 plugins {
     alias libs.plugins.sonarqube
     alias libs.plugins.ksp apply false
+    id "io.gitlab.arturbosch.detekt" version "1.23.0" // Added Detekt plugin declaration
 }
 
 allprojects {
@@ -37,12 +39,18 @@ subprojects {
     apply plugin: "com.google.devtools.ksp"
     apply plugin: "org.jlleitschuh.gradle.ktlint"
     apply plugin: "org.sonarqube"
+    apply plugin: "io.gitlab.arturbosch.detekt" // Applied Detekt plugin
+
+    detekt {
+        config = files("$rootDir/config/detekt.yml") // Points to Detekt config file
+        buildUponDefaultConfig = true
+    }
 }
 
 sonarqube {
     properties {
-        property "sonar.projectKey", "owncloud_android"
-        property "sonar.organization", "owncloud-1"
+        property "sonar.projectKey", "Franlexa/Android" // Updated to your GitHub project
+        property "sonar.organization", "owncloud" // Updated organization
         property "sonar.projectVersion", getBranchName()
         property "sonar.host.url", "https://sonarcloud.io"
     }
@@ -51,4 +59,22 @@ sonarqube {
 def getBranchName() {
     def name = "git rev-parse --abbrev-ref HEAD".execute()
     return name.text.toString().trim()
+}
+
+// Added instructions for Detekt configuration generation
+task generateDetektConfig(type: JavaExec) {
+    main = "io.gitlab.arturbosch.detekt.cli.Main"
+    classpath = configurations.detekt
+    args "--generate-config", "--config", "$rootDir/config/detekt.yml"
+}
+
+// Ensure Android build features comply with Gradle's new versions
+subprojects {
+    afterEvaluate {
+        android {
+            buildFeatures {
+                buildConfig = true
+            }
+        }
+    }
 }
