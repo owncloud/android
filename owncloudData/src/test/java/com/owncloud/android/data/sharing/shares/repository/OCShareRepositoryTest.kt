@@ -198,7 +198,7 @@ class OCShareRepositoryTest {
         } returns sharesLiveDataList
 
         val sharesResult = ocShareRepository.getSharesAsLiveData(filePath, OC_ACCOUNT_NAME)
-        assertEquals(sharesResult, sharesLiveDataList)
+        assertEquals(sharesLiveDataList, sharesResult)
 
         verify(exactly = 1) {
             localShareDataSource.getSharesAsLiveData(
@@ -218,7 +218,7 @@ class OCShareRepositoryTest {
         } returns shareLiveData
 
         val shareResult = ocShareRepository.getShareAsLiveData(OC_SHARE.remoteId)
-        assertEquals(shareResult, shareLiveData)
+        assertEquals(shareLiveData, shareResult)
 
         verify(exactly = 1) {
             localShareDataSource.getShareAsLiveData(OC_SHARE.remoteId)
