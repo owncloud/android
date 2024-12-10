@@ -24,7 +24,7 @@ package com.owncloud.android.data.oauth
 
 import com.owncloud.android.data.oauth.datasources.RemoteOAuthDataSource
 import com.owncloud.android.data.oauth.repository.OCOAuthRepository
-import com.owncloud.android.testutil.OC_SECURE_SERVER_INFO_BASIC_AUTH
+import com.owncloud.android.testutil.OC_SECURE_SERVER_INFO_OIDC_AUTH
 import com.owncloud.android.testutil.oauth.OC_CLIENT_REGISTRATION
 import com.owncloud.android.testutil.oauth.OC_CLIENT_REGISTRATION_REQUEST
 import com.owncloud.android.testutil.oauth.OC_OIDC_SERVER_CONFIGURATION
@@ -44,14 +44,14 @@ class OCOAuthRepositoryTest {
     @Test
     fun `performOIDCDiscovery returns an OIDCServerConfiguration`() {
         every {
-            remoteOAuthDataSource.performOIDCDiscovery(OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl)
+            remoteOAuthDataSource.performOIDCDiscovery(OC_SECURE_SERVER_INFO_OIDC_AUTH.baseUrl)
         } returns OC_OIDC_SERVER_CONFIGURATION
 
-        val oidcServerConfiguration = oAuthRepository.performOIDCDiscovery(OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl)
+        val oidcServerConfiguration = oAuthRepository.performOIDCDiscovery(OC_SECURE_SERVER_INFO_OIDC_AUTH.baseUrl)
         assertEquals(OC_OIDC_SERVER_CONFIGURATION, oidcServerConfiguration)
 
         verify(exactly = 1) {
-            remoteOAuthDataSource.performOIDCDiscovery(OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl)
+            remoteOAuthDataSource.performOIDCDiscovery(OC_SECURE_SERVER_INFO_OIDC_AUTH.baseUrl)
         }
     }
 
