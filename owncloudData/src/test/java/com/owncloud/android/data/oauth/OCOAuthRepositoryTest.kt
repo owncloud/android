@@ -24,7 +24,6 @@ package com.owncloud.android.data.oauth
 
 import com.owncloud.android.data.oauth.datasources.RemoteOAuthDataSource
 import com.owncloud.android.data.oauth.repository.OCOAuthRepository
-import com.owncloud.android.domain.authentication.oauth.OAuthRepository
 import com.owncloud.android.testutil.OC_SECURE_SERVER_INFO_BASIC_AUTH
 import com.owncloud.android.testutil.oauth.OC_CLIENT_REGISTRATION
 import com.owncloud.android.testutil.oauth.OC_CLIENT_REGISTRATION_REQUEST
