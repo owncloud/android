@@ -1,0 +1,8 @@
+repos:
+  - repo: local
+    hooks:
+      - id: detekt
+        name: Run Detekt
+        entry: ./gradlew detekt
+        language: system
+        files: \.kt$
