@@ -298,13 +298,13 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
     }
 
     private fun getLegacyWebfingerIsError(uiResult: UIResult.Error<String>) {
-        when (uiResult.error) {
-            is NoNetworkConnectionException -> binding.webfingerStatusText.run {
+        if (uiResult.error is NoNetworkConnectionException) {
+            binding.webfingerStatusText.run {
                 text = getString(R.string.error_no_network_connection)
                 setCompoundDrawablesWithIntrinsicBounds(R.drawable.no_network, 0, 0, 0)
             }
-
-            else -> binding.webfingerStatusText.run {
+        } else {
+            binding.webfingerStatusText.run {
                 text = uiResult.getThrowableOrNull()?.parseError("", resources, true)
                 setCompoundDrawablesWithIntrinsicBounds(R.drawable.common_error, 0, 0, 0)
             }
@@ -616,17 +616,15 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         var clientId: String? = null
         var clientSecret: String? = null
 
-        when (val serverInfo = authenticationViewModel.serverInfo.value?.peekContent()?.getStoredData()) {
-            is ServerInfo.OIDCServer -> {
-                tokenEndPoint = serverInfo.oidcServerConfiguration.tokenEndpoint
-                if (serverInfo.oidcServerConfiguration.isTokenEndpointAuthMethodSupportedClientSecretPost()) {
-                    clientId = clientRegistrationInfo?.clientId ?: contextProvider.getString(R.string.oauth2_client_id)
-                    clientSecret = clientRegistrationInfo?.clientSecret ?: contextProvider.getString(R.string.oauth2_client_secret)
-                }
+        val serverInfo = authenticationViewModel.serverInfo.value?.peekContent()?.getStoredData()
+        if (serverInfo is ServerInfo.OIDCServer) {
+            tokenEndPoint = serverInfo.oidcServerConfiguration.tokenEndpoint
+            if (serverInfo.oidcServerConfiguration.isTokenEndpointAuthMethodSupportedClientSecretPost()) {
+                clientId = clientRegistrationInfo?.clientId ?: contextProvider.getString(R.string.oauth2_client_id)
+                clientSecret = clientRegistrationInfo?.clientSecret ?: contextProvider.getString(R.string.oauth2_client_secret)
             }
-            else -> {
-                tokenEndPoint = "$serverBaseUrl${File.separator}${contextProvider.getString(R.string.oauth2_url_endpoint_access)}"
-            }
+        } else {
+            tokenEndPoint = "$serverBaseUrl${File.separator}${contextProvider.getString(R.string.oauth2_url_endpoint_access)}"
         }
 
         val scope = resources.getString(R.string.oauth2_openid_scope)
