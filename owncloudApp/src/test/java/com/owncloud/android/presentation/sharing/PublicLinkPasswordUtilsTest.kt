@@ -40,7 +40,7 @@ class PublicLinkPasswordUtilsTest {
 
     @Test
     fun `generatePassword creates password fulfilling all policies`() {
-        for (i in 1..1000) {
+        repeat (1000) {
             val password = generatePassword(
                 minChars = minCharacters,
                 maxChars = maxCharacters,

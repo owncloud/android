@@ -283,7 +283,6 @@ class UsersAndGroupsSearchProvider : ContentProvider() {
 
         private const val SEARCH = 1
 
-        private const val DEFAULT_MIN_CHARACTERS_TO_SEARCH = 4
         private const val RESULTS_PER_PAGE = 30
         private const val REQUESTED_PAGE = 1
 
