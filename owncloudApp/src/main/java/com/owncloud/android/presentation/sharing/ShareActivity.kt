@@ -294,11 +294,12 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         var retval = true
-        when (item.itemId) {
-            android.R.id.home -> if (!supportFragmentManager.popBackStackImmediate()) {
+        if (item.itemId == android.R.id.home) {
+            if (!supportFragmentManager.popBackStackImmediate()) {
                 finish()
             }
-            else -> retval = super.onOptionsItemSelected(item)
+        } else {
+            retval = super.onOptionsItemSelected(item)
         }
         return retval
     }
@@ -317,14 +318,13 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
     }
 
     override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {
-        return when (keyCode) {
-            KeyEvent.KEYCODE_DPAD_DOWN -> {
-                if (findViewById<View>(R.id.owncloud_app_bar).hasFocus()) {
-                    findViewById<View>(R.id.share_fragment_container).requestFocus()
-                }
-                true
+        return if (keyCode == KeyEvent.KEYCODE_DPAD_DOWN) {
+            if (findViewById<View>(R.id.owncloud_app_bar).hasFocus()) {
+                findViewById<View>(R.id.share_fragment_container).requestFocus()
             }
-            else -> super.onKeyUp(keyCode, event)
+            true
+        } else {
+            super.onKeyUp(keyCode, event)
         }
     }
 

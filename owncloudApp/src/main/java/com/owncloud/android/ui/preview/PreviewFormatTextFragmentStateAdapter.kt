@@ -47,9 +47,10 @@ class PreviewFormatTextFragmentStateAdapter(
     override fun getItemCount(): Int = 2
 
     override fun createFragment(position: Int): Fragment {
-        return when (position) {
-            0 -> PreviewFormatTextFragment.newInstance(text, mimeType)
-            else -> PreviewFormatTextFragment.newInstance(text)
+        return if (position == 0) {
+            PreviewFormatTextFragment.newInstance(text, mimeType)
+        } else {
+            PreviewFormatTextFragment.newInstance(text)
         }
     }
 

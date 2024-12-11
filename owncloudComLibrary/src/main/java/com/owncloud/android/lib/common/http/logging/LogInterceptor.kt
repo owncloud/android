@@ -136,14 +136,7 @@ class LogInterceptor : Interceptor {
                     LogResponse(
                         Response(
                             headers = logHeaders(response.headers),
-                            body = if (responseBody == null) {
-                                null
-                            } else {
-                                Body(
-                                    data = responseBody,
-                                    length = bodyLength,
-                                )
-                            },
+                            body = responseBody?.let { Body(data = responseBody, length = bodyLength) },
                             info = ResponseInfo(
                                 id = requestId,
                                 method = request.method,

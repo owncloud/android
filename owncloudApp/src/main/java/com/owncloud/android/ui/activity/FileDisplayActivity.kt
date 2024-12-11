@@ -749,7 +749,8 @@ class FileDisplayActivity : FileActivity(),
                 // If secondFragment was shown, we need to navigate to the parent of the displayed file
                 // Need a cleanup
                 val folderIdToDisplay =
-                    if (fileListOption == FileListOption.AV_OFFLINE) storageManager.getRootPersonalFolder()!!.id!! else secondFragment!!.file!!.parentId!!
+                    if (fileListOption == FileListOption.AV_OFFLINE) storageManager.getRootPersonalFolder()!!.id!!
+                    else secondFragment!!.file!!.parentId!!
                 mainFileListFragment?.navigateToFolderId(folderIdToDisplay)
                 cleanSecondFragment()
                 updateToolbar(mainFileListFragment?.getCurrentFile())
@@ -861,14 +862,8 @@ class FileDisplayActivity : FileActivity(),
                     syncInProgress = true
 
                 } else {
-                    var currentFile: OCFile? = if (file == null)
-                        null
-                    else
-                        storageManager.getFileByPath(file.remotePath, file.spaceId)
-                    val currentDir = if (currentDir == null)
-                        null
-                    else
-                        storageManager.getFileByPath(currentDir!!.remotePath, currentDir.spaceId)
+                    var currentFile: OCFile? = file?.let { storageManager.getFileByPath(file.remotePath, file.spaceId) }
+                    val currentDir = currentDir?.let { storageManager.getFileByPath(currentDir!!.remotePath, currentDir.spaceId) }
 
                     if (currentDir == null) {
                         // current folder was removed from the server
@@ -962,7 +957,8 @@ class FileDisplayActivity : FileActivity(),
     private fun updateToolbar(chosenFileFromParam: OCFile?, space: OCSpace? = null) {
         val chosenFile = chosenFileFromParam ?: file // If no file is passed, current file decides
 
-        // If we come from a preview activity (image or video), not updating toolbar when initializing this activity or it will show the root folder one
+        // If we come from a preview activity (image or video), not updating toolbar when initializing this activity
+        // or it will show the root folder one
         if (intent.action == ACTION_DETAILS && chosenFile?.remotePath == OCFile.ROOT_PATH && secondFragment is FileDetailsFragment) return
 
         if (chosenFile == null || (chosenFile.remotePath == OCFile.ROOT_PATH && (space == null || !space.isProject))) {
@@ -2010,14 +2006,13 @@ class FileDisplayActivity : FileActivity(),
     }
 
     override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {
-        return when (keyCode) {
-            KeyEvent.KEYCODE_DPAD_DOWN -> {
-                if (findViewById<View>(R.id.owncloud_app_bar).hasFocus()) {
-                    findViewById<View>(R.id.left_fragment_container).requestFocus()
-                }
-                true
+        return if (keyCode == KeyEvent.KEYCODE_DPAD_DOWN) {
+            if (findViewById<View>(R.id.owncloud_app_bar).hasFocus()) {
+                findViewById<View>(R.id.left_fragment_container).requestFocus()
             }
-            else -> super.onKeyUp(keyCode, event)
+            true
+        } else {
+            super.onKeyUp(keyCode, event)
         }
     }
 
@@ -2031,7 +2026,6 @@ class FileDisplayActivity : FileActivity(),
         private const val KEY_WAITING_TO_SEND = "WAITING_TO_SEND"
         private const val KEY_UPLOAD_HELPER = "FILE_UPLOAD_HELPER"
         private const val KEY_FILE_LIST_OPTION = "FILE_LIST_OPTION"
-        private const val MAX_URL_LENGTH = 90
         const val MIMETYPE_TEXT_URI_LIST = "text/uri-list"
         const val KEY_DEEP_LINK_ACCOUNTS_CHECKED = "DEEP_LINK_ACCOUNTS_CHECKED"
 

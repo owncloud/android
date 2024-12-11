@@ -37,7 +37,8 @@ class OCServerInfoRepositoryTest {
     private val remoteServerInfoDataSource = mockk<RemoteServerInfoDataSource>(relaxed = true)
     private val webFingerDataSource = mockk<RemoteWebFingerDataSource>(relaxed = true)
     private val oidcRemoteOAuthDataSource = mockk<RemoteOAuthDataSource>(relaxed = true)
-    private val ocServerInfoRepository: OCServerInfoRepository = OCServerInfoRepository(remoteServerInfoDataSource, webFingerDataSource, oidcRemoteOAuthDataSource)
+    private val ocServerInfoRepository: OCServerInfoRepository =
+        OCServerInfoRepository(remoteServerInfoDataSource, webFingerDataSource, oidcRemoteOAuthDataSource)
 
     @Test
     fun getServerInfoSuccess() {

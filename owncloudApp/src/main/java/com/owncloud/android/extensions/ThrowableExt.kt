@@ -106,11 +106,10 @@ fun Throwable.parseError(
             else -> resources.getString(R.string.common_error_unknown)
         }
 
-        return when {
-            showJustReason -> {
-                reason
-            }
-            else -> "$genericErrorMessage ${resources.getString(R.string.error_reason)} ${reason.lowercase(Locale.getDefault())}"
+        return if (showJustReason) {
+            reason
+        } else {
+            "$genericErrorMessage ${resources.getString(R.string.error_reason)} ${reason.lowercase(Locale.getDefault())}"
         }
     }
 }
