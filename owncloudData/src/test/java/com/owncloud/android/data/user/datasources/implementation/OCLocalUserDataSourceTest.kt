@@ -3,8 +3,9 @@
  *
  * @author Abel García de Prada
  * @author Aitor Ballesteros Pavón
+ * @author Jorge Aguado Recio
  *
- * Copyright (C) 2023 ownCloud GmbH.
+ * Copyright (C) 2024 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -29,6 +30,9 @@ import com.owncloud.android.testutil.OC_USER_QUOTA
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Before
@@ -82,12 +86,16 @@ class OCLocalUserDataSourceTest {
     }
 
     @Test
-    fun `deleteQuotaForAccount removes user quota correctly`() {
+    fun `getQuotaForAccountAsFlow returns a Flow with an UserQuota`() = runTest {
+        every {
+            ocUserQuotaDao.getQuotaForAccountAsFlow(OC_ACCOUNT_NAME)
+        } returns flowOf(userQuotaEntity)
 
-        ocLocalUserDataSource.deleteQuotaForAccount(OC_ACCOUNT_NAME)
+        val userQuota = ocLocalUserDataSource.getQuotaForAccountAsFlow(OC_ACCOUNT_NAME).first()
+        assertEquals(userQuotaEntity.toModel(), userQuota)
 
         verify(exactly = 1) {
-            ocUserQuotaDao.deleteQuotaForAccount(OC_ACCOUNT_NAME)
+            ocUserQuotaDao.getQuotaForAccountAsFlow(OC_ACCOUNT_NAME)
         }
     }
 
@@ -104,4 +112,29 @@ class OCLocalUserDataSourceTest {
             ocUserQuotaDao.getAllUserQuotas()
         }
     }
+
+    @Test
+    fun `getAllUserQuotasAsFlow returns a Flow with a list of UserQuota`() = runTest {
+        every {
+            ocUserQuotaDao.getAllUserQuotasAsFlow()
+        } returns flowOf(listOf(userQuotaEntity))
+
+        val listOfUserQuotas = ocLocalUserDataSource.getAllUserQuotasAsFlow().first()
+        assertEquals(listOf(userQuotaEntity.toModel()), listOfUserQuotas)
+
+        verify(exactly = 1) {
+            ocUserQuotaDao.getAllUserQuotasAsFlow()
+        }
+    }
+
+    @Test
+    fun `deleteQuotaForAccount removes user quota correctly`() {
+
+        ocLocalUserDataSource.deleteQuotaForAccount(OC_ACCOUNT_NAME)
+
+        verify(exactly = 1) {
+            ocUserQuotaDao.deleteQuotaForAccount(OC_ACCOUNT_NAME)
+        }
+    }
+
 }
