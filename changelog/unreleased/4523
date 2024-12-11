@@ -1,0 +1,7 @@
+Enhancement: Unit tests for repository classes - Part 3
+
+Unit tests for OCFolderBackupRepository, OCOAuthRepository, OCServerInfoRepository,
+OCShareeRepository, OCShareRepository classes have been completed.
+
+https://github.com/owncloud/android/issues/4234
+https://github.com/owncloud/android/pull/4523
