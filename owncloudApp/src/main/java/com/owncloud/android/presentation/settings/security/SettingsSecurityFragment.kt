@@ -107,7 +107,6 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.settings_security, rootKey)
-
         screenSecurity = findPreference(SCREEN_SECURITY)
         prefPasscode = findPreference(PassCodeActivity.PREFERENCE_SET_PASSCODE)
         prefPattern = findPreference(PatternActivity.PREFERENCE_SET_PATTERN)
@@ -173,9 +172,7 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
                 screenSecurity?.removePreferenceFromScreen(prefBiometric)
             } else {
                 // Disable biometric lock if Passcode or Pattern locks are disabled
-                if (prefPasscode?.isChecked == false && prefPattern?.isChecked == false) {
-                    disableBiometric()
-                }
+                if (prefPasscode?.isChecked == false && prefPattern?.isChecked == false) { disableBiometric() }
 
                 prefBiometric?.setOnPreferenceChangeListener { _: Preference?, newValue: Any ->
                     val incomingValue = newValue as Boolean
@@ -191,9 +188,7 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
         }
 
         // Lock application
-        if (prefPasscode?.isChecked == false && prefPattern?.isChecked == false) {
-            prefLockApplication?.isEnabled = false
-        }
+        if (prefPasscode?.isChecked == false && prefPattern?.isChecked == false) { prefLockApplication?.isEnabled = false }
 
         // Lock access from document provider
         prefLockAccessDocumentProvider?.setOnPreferenceChangeListener { _: Preference?, newValue: Any ->

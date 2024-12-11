@@ -167,15 +167,9 @@ class UsersAndGroupsSearchProvider : ContentProvider() {
             var dataUri: Uri? = null
             var count = 0
 
-            val userBaseUri = Uri.Builder().scheme(CONTENT).authority(
-                suggestAuthority!! + DATA_USER_SUFFIX
-            ).build()
-            val groupBaseUri = Uri.Builder().scheme(CONTENT).authority(
-                suggestAuthority!! + DATA_GROUP_SUFFIX
-            ).build()
-            val remoteBaseUri = Uri.Builder().scheme(CONTENT).authority(
-                suggestAuthority!! + DATA_REMOTE_SUFFIX
-            ).build()
+            val userBaseUri = Uri.Builder().scheme(CONTENT).authority(suggestAuthority!! + DATA_USER_SUFFIX).build()
+            val groupBaseUri = Uri.Builder().scheme(CONTENT).authority(suggestAuthority!! + DATA_GROUP_SUFFIX).build()
+            val remoteBaseUri = Uri.Builder().scheme(CONTENT).authority(suggestAuthority!! + DATA_REMOTE_SUFFIX).build()
 
             val federatedShareAllowed = capabilities?.filesSharingFederationOutgoing?.isTrue ?: false
 
@@ -184,9 +178,7 @@ class UsersAndGroupsSearchProvider : ContentProvider() {
                 val fullName = AccountManager.get(context).getUserData(account, KEY_DISPLAY_NAME)
                 while (namesIt.hasNext()) {
                     item = namesIt.next()
-                    if (item.label == userName || item.label == fullName && item.shareType == ShareType.USER) {
-                        continue
-                    }
+                    if (item.label == userName || item.label == fullName && item.shareType == ShareType.USER) { continue }
                     var userName = item.label
                     val type = item.shareType
                     val shareWith = item.shareWith
@@ -212,15 +204,10 @@ class UsersAndGroupsSearchProvider : ContentProvider() {
                         ShareType.FEDERATED -> {
                             if (federatedShareAllowed) {
                                 icon = R.drawable.ic_user
-                                displayName = if (userName == shareWith) {
-                                    context?.getString(R.string.share_remote_clarification, userName)
-                                } else {
-                                    val uriSplitted =
-                                        shareWith.split("@".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-                                    context?.getString(
-                                        R.string.share_known_remote_clarification, userName,
-                                        uriSplitted[uriSplitted.size - 1]
-                                    )
+                                displayName = if (userName == shareWith) { context?.getString(R.string.share_remote_clarification, userName) }
+                                else {
+                                    val uriSplitted = shareWith.split("@".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+                                    context?.getString(R.string.share_known_remote_clarification, userName, uriSplitted[uriSplitted.size - 1])
                                 }
                                 dataUri = Uri.withAppendedPath(remoteBaseUri, shareWith)
                             }
