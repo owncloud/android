@@ -482,6 +482,7 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
             createCameraUploadsSyncTable(db)
         }
 
+        @Suppress("LongMethod")
         override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
             Timber.i("SQL : Entering in onUpgrade")
             var upgraded = false

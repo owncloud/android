@@ -207,71 +207,7 @@ class FileListAdapter(
             holder.itemView.findViewById<ImageView>(R.id.shared_via_users_icon).isVisible =
                 file.sharedWithSharee == true || file.isSharedWithMe
 
-            when (viewType) {
-                ViewType.LIST_ITEM.ordinal -> {
-                    val view = holder as ListViewHolder
-                    view.binding.let {
-                        it.fileListConstraintLayout.filterTouchesWhenObscured = PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(context)
-                        it.Filename.text = file.fileName
-                        it.fileListSize.text = DisplayUtils.bytesToHumanReadable(file.length, context, true)
-                        it.fileListLastMod.text = DisplayUtils.getRelativeTimestamp(context, file.modificationTimestamp)
-                        it.threeDotMenu.isVisible = getCheckedItems().isEmpty()
-                        it.threeDotMenu.contentDescription = context.getString(R.string.content_description_file_operations, file.fileName)
-                        if (fileListOption.isAvailableOffline() || (fileListOption.isSharedByLink() && fileWithSyncInfo.space == null)) {
-                            it.spacePathLine.path.apply {
-                                text = file.getParentRemotePath()
-                                isVisible = true
-                            }
-                            fileWithSyncInfo.space?.let { space ->
-                                it.spacePathLine.spaceIcon.isVisible = true
-                                it.spacePathLine.spaceName.isVisible = true
-                                if (space.isPersonal) {
-                                    it.spacePathLine.spaceIcon.setImageResource(R.drawable.ic_folder)
-                                    it.spacePathLine.spaceName.setText(R.string.bottom_nav_personal)
-                                } else {
-                                    it.spacePathLine.spaceName.text = space.name
-                                }
-                            }
-                        } else {
-                            it.spacePathLine.path.isVisible = false
-                            it.spacePathLine.spaceIcon.isVisible = false
-                            it.spacePathLine.spaceName.isVisible = false
-                        }
-                        it.threeDotMenu.setOnClickListener {
-                            listener.onThreeDotButtonClick(fileWithSyncInfo = fileWithSyncInfo)
-                        }
-                    }
-                }
-
-                ViewType.GRID_ITEM.ordinal -> {
-                    // Filename
-                    val view = holder as GridViewHolder
-                    view.binding.Filename.text = file.fileName
-                }
-
-                ViewType.GRID_IMAGE.ordinal -> {
-                    val view = holder as GridImageViewHolder
-                    val layoutParams = fileIcon.layoutParams as ViewGroup.MarginLayoutParams
-
-                    if (thumbnail == null) {
-                        view.binding.Filename.text = file.fileName
-                        // Reset layout params values default
-                        manageGridLayoutParams(
-                            layoutParams = layoutParams,
-                            marginVertical = 0,
-                            height = context.resources.getDimensionPixelSize(R.dimen.item_file_grid_height),
-                            width = context.resources.getDimensionPixelSize(R.dimen.item_file_grid_width),
-                        )
-                    } else {
-                        manageGridLayoutParams(
-                            layoutParams = layoutParams,
-                            marginVertical = context.resources.getDimensionPixelSize(R.dimen.item_file_image_grid_margin),
-                            height = ViewGroup.LayoutParams.MATCH_PARENT,
-                            width = ViewGroup.LayoutParams.MATCH_PARENT,
-                        )
-                    }
-                }
-            }
+            setSpecificViewHolder(viewType, holder, fileWithSyncInfo, thumbnail)
 
             setIconPinAccordingToFilesLocalState(holder.itemView.findViewById(R.id.localFileIndicator), fileWithSyncInfo)
 
@@ -338,6 +274,77 @@ class FileListAdapter(
                     isFullSpan = true
                 }
                 view.binding.footerText.text = file.text
+            }
+        }
+    }
+
+    private fun setSpecificViewHolder(viewType: Int, holder: RecyclerView.ViewHolder, fileWithSyncInfo: OCFileWithSyncInfo, thumbnail: Bitmap?) {
+        val file = fileWithSyncInfo.file
+
+        when (viewType) {
+            ViewType.LIST_ITEM.ordinal -> {
+                val view = holder as ListViewHolder
+                view.binding.let {
+                    it.fileListConstraintLayout.filterTouchesWhenObscured = PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(context)
+                    it.Filename.text = file.fileName
+                    it.fileListSize.text = DisplayUtils.bytesToHumanReadable(file.length, context, true)
+                    it.fileListLastMod.text = DisplayUtils.getRelativeTimestamp(context, file.modificationTimestamp)
+                    it.threeDotMenu.isVisible = getCheckedItems().isEmpty()
+                    it.threeDotMenu.contentDescription = context.getString(R.string.content_description_file_operations, file.fileName)
+                    if (fileListOption.isAvailableOffline() || (fileListOption.isSharedByLink() && fileWithSyncInfo.space == null)) {
+                        it.spacePathLine.path.apply {
+                            text = file.getParentRemotePath()
+                            isVisible = true
+                        }
+                        fileWithSyncInfo.space?.let { space ->
+                            it.spacePathLine.spaceIcon.isVisible = true
+                            it.spacePathLine.spaceName.isVisible = true
+                            if (space.isPersonal) {
+                                it.spacePathLine.spaceIcon.setImageResource(R.drawable.ic_folder)
+                                it.spacePathLine.spaceName.setText(R.string.bottom_nav_personal)
+                            } else {
+                                it.spacePathLine.spaceName.text = space.name
+                            }
+                        }
+                    } else {
+                        it.spacePathLine.path.isVisible = false
+                        it.spacePathLine.spaceIcon.isVisible = false
+                        it.spacePathLine.spaceName.isVisible = false
+                    }
+                    it.threeDotMenu.setOnClickListener {
+                        listener.onThreeDotButtonClick(fileWithSyncInfo = fileWithSyncInfo)
+                    }
+                }
+            }
+
+            ViewType.GRID_ITEM.ordinal -> {
+                // Filename
+                val view = holder as GridViewHolder
+                view.binding.Filename.text = file.fileName
+            }
+
+            ViewType.GRID_IMAGE.ordinal -> {
+                val view = holder as GridImageViewHolder
+                val fileIcon = holder.itemView.findViewById<ImageView>(R.id.thumbnail)
+                val layoutParams = fileIcon.layoutParams as ViewGroup.MarginLayoutParams
+
+                if (thumbnail == null) {
+                    view.binding.Filename.text = file.fileName
+                    // Reset layout params values default
+                    manageGridLayoutParams(
+                        layoutParams = layoutParams,
+                        marginVertical = 0,
+                        height = context.resources.getDimensionPixelSize(R.dimen.item_file_grid_height),
+                        width = context.resources.getDimensionPixelSize(R.dimen.item_file_grid_width),
+                    )
+                } else {
+                    manageGridLayoutParams(
+                        layoutParams = layoutParams,
+                        marginVertical = context.resources.getDimensionPixelSize(R.dimen.item_file_image_grid_margin),
+                        height = ViewGroup.LayoutParams.MATCH_PARENT,
+                        width = ViewGroup.LayoutParams.MATCH_PARENT,
+                    )
+                }
             }
         }
     }
