@@ -43,6 +43,7 @@ ownCloud admins and users.
 * Enhancement - Added text labels for BottomNavigationView: [#4484](https://github.com/owncloud/android/issues/4484)
 * Enhancement - OCIS Light Users: [#4490](https://github.com/owncloud/android/issues/4490)
 * Enhancement - Enforce OIDC auth flow via branding: [#4500](https://github.com/owncloud/android/issues/4500)
+* Enhancement - Technical improvements for user quota: [#4521](https://github.com/owncloud/android/issues/4521)
 
 ## Details
 
@@ -123,6 +124,14 @@ ownCloud admins and users.
 
    https://github.com/owncloud/android/issues/4500
    https://github.com/owncloud/android/pull/4516
+
+* Enhancement - Technical improvements for user quota: [#4521](https://github.com/owncloud/android/issues/4521)
+
+   A new use case has been added to fetch the user quota as a flow. Also, all
+   unnecessary calls from DrawerActivity have been removed.
+
+   https://github.com/owncloud/android/issues/4521
+   https://github.com/owncloud/android/pull/4525
 
 # Changelog for ownCloud Android Client [4.4.1] (2024-10-30)
 
