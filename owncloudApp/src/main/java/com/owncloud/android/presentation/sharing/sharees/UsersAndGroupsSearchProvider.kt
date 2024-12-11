@@ -204,8 +204,8 @@ class UsersAndGroupsSearchProvider : ContentProvider() {
                         ShareType.FEDERATED -> {
                             if (federatedShareAllowed) {
                                 icon = R.drawable.ic_user
-                                displayName = if (userName == shareWith) { context?.getString(R.string.share_remote_clarification, userName) }
-                                else {
+                                displayName = if (userName == shareWith) { context?.getString(R.string.share_remote_clarification, userName)
+                                } else {
                                     val uriSplitted = shareWith.split("@".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
                                     context?.getString(R.string.share_known_remote_clarification, userName, uriSplitted[uriSplitted.size - 1])
                                 }

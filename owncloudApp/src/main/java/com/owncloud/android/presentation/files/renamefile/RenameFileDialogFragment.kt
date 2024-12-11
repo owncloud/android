@@ -34,7 +34,6 @@ import com.google.android.material.textfield.TextInputLayout
 import com.owncloud.android.R
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.extensions.avoidScreenshotsIfNeeded
-import com.owncloud.android.extensions.showMessageInSnackbar
 import com.owncloud.android.presentation.files.operations.FileOperation
 import com.owncloud.android.presentation.files.operations.FileOperationsViewModel
 import com.owncloud.android.utils.PreferenceUtils
@@ -139,17 +138,6 @@ class RenameFileDialogFragment : DialogFragment(), DialogInterface.OnClickListen
             val newFileName = (getDialog()!!.findViewById<View>(R.id.user_input) as TextView).text.toString()
             filesViewModel.performOperation(FileOperation.RenameOperation(targetFile!!, newFileName))
         }
-    }
-
-    /**
-     * Show a temporary message in a Snackbar bound to the content view of the parent Activity
-     *
-     * @param messageResource Message to show.
-     */
-    private fun showSnackMessage(messageResource: Int) {
-        showMessageInSnackbar(
-            message = getString(messageResource)
-        )
     }
 
     companion object {
