@@ -436,16 +436,16 @@ class OCLocalFileDataSourceTest {
     }
 
     @Test
-    fun `getFilesWithSyncInfoAvailableOfflineFromAccountAsFlow returns a Flow with an empty list when DAO returns a Flow with an empty list`()
-    = runTest {
-        every { fileDao.getFilesWithSyncInfoAvailableOfflineFromAccountAsFlow(OC_ACCOUNT_NAME) } returns flowOf(emptyList())
+    fun `getFilesWithSyncInfoAvailableOfflineFromAccountAsFlow returns a Flow with an empty list when DAO returns a Flow with an empty list`() =
+        runTest {
+            every { fileDao.getFilesWithSyncInfoAvailableOfflineFromAccountAsFlow(OC_ACCOUNT_NAME) } returns flowOf(emptyList())
 
-        val result = ocLocalFileDataSource.getFilesWithSyncInfoAvailableOfflineFromAccountAsFlow(OC_ACCOUNT_NAME).first()
+            val result = ocLocalFileDataSource.getFilesWithSyncInfoAvailableOfflineFromAccountAsFlow(OC_ACCOUNT_NAME).first()
 
-        assertEquals(emptyList<OCFileWithSyncInfo>(), result)
+            assertEquals(emptyList<OCFileWithSyncInfo>(), result)
 
-        verify(exactly = 1) { fileDao.getFilesWithSyncInfoAvailableOfflineFromAccountAsFlow(OC_ACCOUNT_NAME) }
-    }
+            verify(exactly = 1) { fileDao.getFilesWithSyncInfoAvailableOfflineFromAccountAsFlow(OC_ACCOUNT_NAME) }
+        }
 
     @Test
     fun `getFilesAvailableOfflineFromAccount returns a list of OCFile`() {
