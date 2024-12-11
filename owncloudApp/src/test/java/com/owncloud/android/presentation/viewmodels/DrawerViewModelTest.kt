@@ -21,16 +21,11 @@
 package com.owncloud.android.presentation.viewmodels
 
 import com.owncloud.android.data.providers.LocalStorageProvider
-import com.owncloud.android.domain.UseCaseResult
-import com.owncloud.android.domain.user.model.UserQuota
-import com.owncloud.android.domain.user.usecases.GetStoredQuotaUseCase
+import com.owncloud.android.domain.user.usecases.GetStoredQuotaAsStreamUseCase
 import com.owncloud.android.domain.user.usecases.GetUserQuotasUseCase
-import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.presentation.common.DrawerViewModel
-import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.providers.ContextProvider
 import com.owncloud.android.testutil.OC_ACCOUNT_NAME
-import com.owncloud.android.testutil.OC_USER_QUOTA
 import com.owncloud.android.usecases.accounts.RemoveAccountUseCase
 import io.mockk.every
 import io.mockk.mockk
@@ -39,7 +34,6 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
-import org.junit.Test
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.module
@@ -47,7 +41,7 @@ import org.koin.dsl.module
 @ExperimentalCoroutinesApi
 class DrawerViewModelTest : ViewModelTest() {
     private lateinit var drawerViewModel: DrawerViewModel
-    private lateinit var getStoredQuotaUseCase: GetStoredQuotaUseCase
+    private lateinit var getStoredQuotaAsStreamUseCase: GetStoredQuotaAsStreamUseCase
     private lateinit var removeAccountUseCase: RemoveAccountUseCase
     private lateinit var getUserQuotasUseCase: GetUserQuotasUseCase
     private lateinit var localStorageProvider: LocalStorageProvider
@@ -56,68 +50,45 @@ class DrawerViewModelTest : ViewModelTest() {
 
     private val commonException = Exception()
 
-    @Before
-    fun setUp() {
-        contextProvider = mockk()
+   @Before
+   fun setUp() {
+       contextProvider = mockk()
 
-        every { contextProvider.isConnected() } returns true
+       every { contextProvider.isConnected() } returns true
 
-        Dispatchers.setMain(testCoroutineDispatcher)
-        startKoin {
-            allowOverride(override = true)
-            modules(
-                module {
-                    factory {
-                        contextProvider
-                    }
-                })
-        }
+       Dispatchers.setMain(testCoroutineDispatcher)
+       startKoin {
+           allowOverride(override = true)
+           modules(
+               module {
+                   factory {
+                       contextProvider
+                   }
+               })
+       }
 
-        getStoredQuotaUseCase = mockk()
-        removeAccountUseCase = mockk()
-        getUserQuotasUseCase = mockk()
-        localStorageProvider = mockk()
+       getStoredQuotaAsStreamUseCase = mockk()
+       removeAccountUseCase = mockk()
+       getUserQuotasUseCase = mockk()
+       localStorageProvider = mockk()
 
-        testCoroutineDispatcher.pauseDispatcher()
+       testCoroutineDispatcher.pauseDispatcher()
 
-        drawerViewModel = DrawerViewModel(
-            getStoredQuotaUseCase = getStoredQuotaUseCase,
-            removeAccountUseCase = removeAccountUseCase,
-            getUserQuotasUseCase = getUserQuotasUseCase,
-            localStorageProvider = localStorageProvider,
-            coroutinesDispatcherProvider = coroutineDispatcherProvider,
-            contextProvider = contextProvider,
-        )
-    }
+       drawerViewModel = DrawerViewModel(
+           getStoredQuotaAsStreamUseCase = getStoredQuotaAsStreamUseCase,
+           removeAccountUseCase = removeAccountUseCase,
+           getUserQuotasUseCase = getUserQuotasUseCase,
+           localStorageProvider = localStorageProvider,
+           coroutinesDispatcherProvider = coroutineDispatcherProvider,
+           contextProvider = contextProvider,
+           accountName = OC_ACCOUNT_NAME
+       )
+   }
 
-    @After
-    override fun tearDown() {
-        super.tearDown()
-        stopKoin()
-    }
+   @After
+   override fun tearDown() {
+       super.tearDown()
+       stopKoin()
+   }
 
-    @Test
-    fun getStoredQuotaOk() {
-        every { getStoredQuotaUseCase(any()) } returns UseCaseResult.Success(OC_USER_QUOTA)
-        drawerViewModel.getStoredQuota(OC_ACCOUNT_NAME)
-
-        assertEmittedValues(
-            expectedValues = listOf<Event<UIResult<UserQuota>>>(
-                Event(UIResult.Loading()), Event(UIResult.Success(OC_USER_QUOTA))
-            ),
-            liveData = drawerViewModel.userQuota
-        )
-    }
-
-    @Test
-    fun getStoredQuotaException() {
-        every { getStoredQuotaUseCase(any()) } returns UseCaseResult.Error(commonException)
-        drawerViewModel.getStoredQuota(OC_ACCOUNT_NAME)
-
-        assertEmittedValues(
-            expectedValues = listOf<Event<UIResult<UserQuota>>>
-                (Event(UIResult.Loading()), Event(UIResult.Error(commonException))),
-            liveData = drawerViewModel.userQuota
-        )
-    }
 }
