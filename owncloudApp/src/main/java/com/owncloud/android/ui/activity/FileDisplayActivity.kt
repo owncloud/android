@@ -862,14 +862,8 @@ class FileDisplayActivity : FileActivity(),
                     syncInProgress = true
 
                 } else {
-                    var currentFile: OCFile? = if (file == null)
-                        null
-                    else
-                        storageManager.getFileByPath(file.remotePath, file.spaceId)
-                    val currentDir = if (currentDir == null)
-                        null
-                    else
-                        storageManager.getFileByPath(currentDir!!.remotePath, currentDir.spaceId)
+                    var currentFile: OCFile? = file?.let { storageManager.getFileByPath(file.remotePath, file.spaceId) }
+                    val currentDir = currentDir?.let { storageManager.getFileByPath(currentDir!!.remotePath, currentDir.spaceId) }
 
                     if (currentDir == null) {
                         // current folder was removed from the server
