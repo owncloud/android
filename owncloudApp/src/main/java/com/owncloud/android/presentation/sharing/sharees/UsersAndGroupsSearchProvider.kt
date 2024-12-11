@@ -112,9 +112,10 @@ class UsersAndGroupsSearchProvider : ContentProvider() {
         sortOrder: String?
     ): Cursor? {
         Timber.d("query received in thread ${Thread.currentThread().name}")
-        return when (uriMatcher.match(uri)) {
-            SEARCH -> searchForUsersOrGroups(uri)
-            else -> null
+        return if (uriMatcher.match(uri) == SEARCH) {
+            searchForUsersOrGroups(uri)
+        } else {
+            null
         }
     }
 

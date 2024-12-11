@@ -2012,14 +2012,13 @@ class FileDisplayActivity : FileActivity(),
     }
 
     override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {
-        return when (keyCode) {
-            KeyEvent.KEYCODE_DPAD_DOWN -> {
-                if (findViewById<View>(R.id.owncloud_app_bar).hasFocus()) {
-                    findViewById<View>(R.id.left_fragment_container).requestFocus()
-                }
-                true
+        return if (keyCode == KeyEvent.KEYCODE_DPAD_DOWN) {
+            if (findViewById<View>(R.id.owncloud_app_bar).hasFocus()) {
+                findViewById<View>(R.id.left_fragment_container).requestFocus()
             }
-            else -> super.onKeyUp(keyCode, event)
+            true
+        } else {
+            super.onKeyUp(keyCode, event)
         }
     }
 
