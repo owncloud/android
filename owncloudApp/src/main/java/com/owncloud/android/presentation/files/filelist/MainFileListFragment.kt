@@ -1611,7 +1611,6 @@ class MainFileListFragment : Fragment(),
         private const val DIALOG_CREATE_FOLDER = "DIALOG_CREATE_FOLDER"
         private const val DIALOG_CREATE_SHORTCUT = "DIALOG_CREATE_SHORTCUT"
 
-        private const val TAG_SECOND_FRAGMENT = "SECOND_FRAGMENT"
         private const val FILE_DOCXF_EXTENSION = "docxf"
 
         @JvmStatic
