@@ -53,22 +53,22 @@ fun generatePassword(
     val passwordChars = mutableListOf<Char>()
 
     // Include the minimum number of digits established by the policy
-    repeat (minDigits) {
+    repeat(minDigits) {
         passwordChars.add(charsetDigits[secureRandom.nextInt(charsetDigits.size)])
     }
 
     // Include the minimum number of lowercase chars established by the policy
-    repeat (minLowercaseCharacters) {
+    repeat(minLowercaseCharacters) {
         passwordChars.add(charsetLowercase[secureRandom.nextInt(charsetLowercase.size)])
     }
 
     // Include the minimum number of uppercase chars established by the policy
-    repeat (minUppercaseCharacters) {
+    repeat(minUppercaseCharacters) {
         passwordChars.add(charsetUppercase[secureRandom.nextInt(charsetUppercase.size)])
     }
 
     // Include the minimum number of special chars established by the policy
-    repeat (minSpecialCharacters) {
+    repeat(minSpecialCharacters) {
         passwordChars.add(charsetSpecial[secureRandom.nextInt(charsetSpecial.size)])
     }
 
