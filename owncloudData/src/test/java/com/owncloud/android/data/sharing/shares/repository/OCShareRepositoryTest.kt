@@ -19,6 +19,7 @@
 
 package com.owncloud.android.data.sharing.shares.repository
 
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.owncloud.android.data.sharing.shares.datasources.LocalShareDataSource
@@ -31,13 +32,19 @@ import com.owncloud.android.testutil.OC_PRIVATE_SHARE
 import com.owncloud.android.testutil.OC_PUBLIC_SHARE
 import com.owncloud.android.testutil.OC_SHARE
 import com.owncloud.android.testutil.OC_SHAREE
+import com.owncloud.android.testutil.livedata.getLastEmittedValue
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import junit.framework.TestCase.assertEquals
+import org.junit.Rule
 import org.junit.Test
 
 class OCShareRepositoryTest {
+
+    @Rule
+    @JvmField
+    val instantExecutorRule = InstantTaskExecutorRule()
 
     private val localShareDataSource = mockk<LocalShareDataSource>(relaxUnitFun =  true)
     private val remoteShareDataSource = mockk<RemoteShareDataSource>(relaxUnitFun = true)
@@ -187,7 +194,7 @@ class OCShareRepositoryTest {
 
     @Test
     fun `getSharesAsLiveData returns a LiveData with a list of OCShares`() {
-        val sharesLiveDataList: LiveData<List<OCShare>> = MutableLiveData(listOfShares)
+        val sharesLiveDataList: LiveData<List<OCShare>> = MutableLiveData(listOf(OC_SHARE))
 
         every {
             localShareDataSource.getSharesAsLiveData(
@@ -197,8 +204,8 @@ class OCShareRepositoryTest {
             )
         } returns sharesLiveDataList
 
-        val sharesResult = ocShareRepository.getSharesAsLiveData(filePath, OC_ACCOUNT_NAME)
-        assertEquals(sharesLiveDataList, sharesResult)
+        val sharesResult = ocShareRepository.getSharesAsLiveData(filePath, OC_ACCOUNT_NAME).getLastEmittedValue()
+        assertEquals(sharesLiveDataList.value, sharesResult)
 
         verify(exactly = 1) {
             localShareDataSource.getSharesAsLiveData(
@@ -211,14 +218,14 @@ class OCShareRepositoryTest {
 
     @Test
     fun `getShareAsLiveData returns a LiveData with an OCShare`() {
-        val shareLiveData: LiveData<OCShare> = MutableLiveData(OC_SHARE)
+        val shareAsLiveData: LiveData<OCShare> = MutableLiveData(OC_SHARE)
 
         every {
             localShareDataSource.getShareAsLiveData(OC_SHARE.remoteId)
-        } returns shareLiveData
+        } returns shareAsLiveData
 
-        val shareResult = ocShareRepository.getShareAsLiveData(OC_SHARE.remoteId)
-        assertEquals(shareLiveData, shareResult)
+        val shareResult = ocShareRepository.getShareAsLiveData(OC_SHARE.remoteId).getLastEmittedValue()
+        assertEquals(shareAsLiveData.value, shareResult)
 
         verify(exactly = 1) {
             localShareDataSource.getShareAsLiveData(OC_SHARE.remoteId)
