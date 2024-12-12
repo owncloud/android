@@ -20,7 +20,6 @@
 
 package com.owncloud.android.data.folderbackup.repository
 
-import com.owncloud.android.data.folderbackup.OCFolderBackupRepository
 import com.owncloud.android.data.folderbackup.datasources.LocalFolderBackupDataSource
 import com.owncloud.android.testutil.OC_AUTOMATIC_UPLOADS_CONFIGURATION
 import com.owncloud.android.testutil.OC_BACKUP

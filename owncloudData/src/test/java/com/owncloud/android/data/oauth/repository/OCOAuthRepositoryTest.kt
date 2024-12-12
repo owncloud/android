@@ -20,10 +20,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.data.oauth
+package com.owncloud.android.data.oauth.repository
 
 import com.owncloud.android.data.oauth.datasources.RemoteOAuthDataSource
-import com.owncloud.android.data.oauth.repository.OCOAuthRepository
 import com.owncloud.android.testutil.OC_SECURE_SERVER_INFO_OIDC_AUTH
 import com.owncloud.android.testutil.oauth.OC_CLIENT_REGISTRATION
 import com.owncloud.android.testutil.oauth.OC_CLIENT_REGISTRATION_REQUEST
