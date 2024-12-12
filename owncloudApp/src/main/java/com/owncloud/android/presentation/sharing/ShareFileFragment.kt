@@ -257,7 +257,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
         showOrHidePrivateLink()
 
         // Hide share features sections that are not enabled
-        hideSectionsDisabledInBuildTime(view)
+        hideSectionsDisabledInBuildTime()
 
         binding.addUserButton.setOnClickListener {
             // Show Search Fragment
@@ -537,7 +537,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
      * Hide share features sections that are not enabled
      *
      */
-    private fun hideSectionsDisabledInBuildTime(view: View) {
+    private fun hideSectionsDisabledInBuildTime() {
         val shareViaLinkAllowed = requireActivity().resources.getBoolean(R.bool.share_via_link_feature)
         val shareWithUsersAllowed = requireActivity().resources.getBoolean(R.bool.share_with_users_feature)
         val shareWarningAllowed = requireActivity().resources.getBoolean(R.bool.warning_sharing_public_link)

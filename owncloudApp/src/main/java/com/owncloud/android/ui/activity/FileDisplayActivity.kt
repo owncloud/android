@@ -62,7 +62,6 @@ import com.owncloud.android.MainApp
 import com.owncloud.android.R
 import com.owncloud.android.data.providers.SharedPreferencesProvider
 import com.owncloud.android.databinding.ActivityMainBinding
-import com.owncloud.android.domain.automaticuploads.model.UploadBehavior
 import com.owncloud.android.domain.capabilities.model.OCCapability
 import com.owncloud.android.domain.exceptions.AccountNotFoundException
 import com.owncloud.android.domain.exceptions.DeepLinkException
@@ -373,11 +372,6 @@ class FileDisplayActivity : FileActivity(),
             if (!stateWasRecovered) {
                 Timber.d("Initializing Fragments in onAccountChanged..")
                 initFragmentsWithFile()
-                file?.isFolder?.let { isFolder ->
-                    if (isFolder) {
-                        startSyncFolderOperation(file, false)
-                    }
-                }
                 val syncProfileOperation = SyncProfileOperation(account)
                 syncProfileOperation.syncUserProfile()
                 val workManagerProvider = WorkManagerProvider(context = baseContext)
@@ -606,7 +600,7 @@ class FileDisplayActivity : FileActivity(),
         // Handle calls form internal activities.
         if (requestCode == REQUEST_CODE__SELECT_CONTENT_FROM_APPS && (resultCode == RESULT_OK || resultCode == RESULT_OK_AND_MOVE)) {
 
-            requestUploadOfContentFromApps(data, resultCode)
+            requestUploadOfContentFromApps(data)
 
         } else if (requestCode == REQUEST_CODE__UPLOAD_FROM_CAMERA) {
             if (resultCode == RESULT_OK || resultCode == RESULT_OK_AND_MOVE) {
@@ -620,7 +614,7 @@ class FileDisplayActivity : FileActivity(),
                         capturedFilePaths: Array<String>
                     ) {
                         if (hasEnoughSpace) {
-                            requestUploadOfFilesFromFileSystem(capturedFilePaths, UploadBehavior.MOVE.toLegacyLocalBehavior())
+                            requestUploadOfFilesFromFileSystem(capturedFilePaths)
                         }
                     }
                 })
@@ -642,7 +636,7 @@ class FileDisplayActivity : FileActivity(),
         }
     }
 
-    private fun requestUploadOfFilesFromFileSystem(filePaths: Array<String>?, behaviour: Int) {
+    private fun requestUploadOfFilesFromFileSystem(filePaths: Array<String>?) {
         if (filePaths != null) {
             val remotePaths = arrayOfNulls<String>(filePaths.size)
             val remotePathBase = currentDir?.remotePath
@@ -663,7 +657,7 @@ class FileDisplayActivity : FileActivity(),
         }
     }
 
-    private fun requestUploadOfContentFromApps(contentIntent: Intent?, resultCode: Int) {
+    private fun requestUploadOfContentFromApps(contentIntent: Intent?) {
         val streamsToUpload = ArrayList<Uri>()
 
         if (contentIntent!!.clipData != null && contentIntent.clipData!!.itemCount > 0) {
@@ -923,7 +917,6 @@ class FileDisplayActivity : FileActivity(),
             val root = storageManager.getRootPersonalFolder()
             listOfFiles.navigateToFolder(root!!)
             file = root
-            startSyncFolderOperation(root, false)
         }
         cleanSecondFragment()
     }
@@ -1521,26 +1514,7 @@ class FileDisplayActivity : FileActivity(),
     }
 
     override fun onSavedCertificate() {
-        startSyncFolderOperation(currentDir, false)
-    }
-
-    /**
-     * Starts an operation to refresh the requested folder.
-     *
-     *
-     * The operation is run in a new background thread created on the fly.
-     *
-     *
-     * The refresh updates is a "light sync": properties of regular files in folder are updated (including
-     * associated shares), but not their contents. Only the contents of files marked to be kept-in-sync are
-     * synchronized too.
-     *
-     * @param folder     Folder to refresh.
-     * @param ignoreETag If 'true', the data from the server will be fetched and synced even if the eTag
-     * didn't change.
-     */
-    fun startSyncFolderOperation(folder: OCFile?, ignoreETag: Boolean) {
-        // TODO: SYNC FOLDER
+        // Nothing to do
     }
 
     private fun requestForDownload(file: OCFile) {
@@ -1921,7 +1895,7 @@ class FileDisplayActivity : FileActivity(),
     }
 
     override fun uploadShortcutFileFromApp(shortcutFilePath: Array<String>) {
-        requestUploadOfFilesFromFileSystem(shortcutFilePath, UploadBehavior.MOVE.toLegacyLocalBehavior())
+        requestUploadOfFilesFromFileSystem(shortcutFilePath)
     }
 
     override fun uploadFromFileSystem() {

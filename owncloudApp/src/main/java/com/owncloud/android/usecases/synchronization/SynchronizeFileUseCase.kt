@@ -102,7 +102,7 @@ class SynchronizeFileUseCase(
             } else if (changedLocally) {
                 // 5.3 File has change ONLY locally -> upload new version
                 Timber.i("File ${fileToSynchronize.fileName} has changed locally. Let's upload the new version")
-                val uuid = requestForUpload(accountName, fileToSynchronize, fileToSynchronize.etag!!)
+                val uuid = requestForUpload(accountName, fileToSynchronize)
                 return SyncType.UploadEnqueued(uuid)
             } else {
                 // 5.4 File has not change locally not remotely -> do nothing
@@ -121,7 +121,7 @@ class SynchronizeFileUseCase(
         )
     }
 
-    private fun requestForUpload(accountName: String, ocFile: OCFile, etagInConflict: String): UUID? {
+    private fun requestForUpload(accountName: String, ocFile: OCFile): UUID? {
         return uploadFileInConflictUseCase(
             UploadFileInConflictUseCase.Params(
                 accountName = accountName,

@@ -157,7 +157,7 @@ object NotificationUtils {
      * @param account        account which the file in conflict belongs to
      */
     @JvmStatic
-    fun notifyConflict(fileInConflict: OCFile, account: Account?, context: Context) {
+    fun notifyConflict(fileInConflict: OCFile, context: Context) {
         val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val notificationBuilder = newNotificationBuilder(context, FILE_SYNC_CONFLICT_NOTIFICATION_CHANNEL_ID)
         notificationBuilder
