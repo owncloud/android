@@ -485,21 +485,19 @@ class MainFileListFragment : Fragment(),
                         if (thumbnail != null) {
                             thumbnailBottomSheet.setImageBitmap(thumbnail)
                         }
-                        if (file.needsToUpdateThumbnail) {
+                        if (file.needsToUpdateThumbnail && ThumbnailsCacheManager.cancelPotentialThumbnailWork(file, thumbnailBottomSheet)) {
                             // generate new Thumbnail
-                            if (ThumbnailsCacheManager.cancelPotentialThumbnailWork(file, thumbnailBottomSheet)) {
-                                val task = ThumbnailsCacheManager.ThumbnailGenerationTask(
-                                    thumbnailBottomSheet,
-                                    AccountUtils.getCurrentOwnCloudAccount(requireContext())
-                                )
-                                val asyncDrawable = ThumbnailsCacheManager.AsyncThumbnailDrawable(resources, thumbnail, task)
+                            val task = ThumbnailsCacheManager.ThumbnailGenerationTask(
+                                thumbnailBottomSheet,
+                                AccountUtils.getCurrentOwnCloudAccount(requireContext())
+                            )
+                            val asyncDrawable = ThumbnailsCacheManager.AsyncThumbnailDrawable(resources, thumbnail, task)
 
-                                // If drawable is not visible, do not update it.
-                                if (asyncDrawable.minimumHeight > 0 && asyncDrawable.minimumWidth > 0) {
-                                    thumbnailBottomSheet.setImageDrawable(asyncDrawable)
-                                }
-                                task.execute(file)
+                            // If drawable is not visible, do not update it.
+                            if (asyncDrawable.minimumHeight > 0 && asyncDrawable.minimumWidth > 0) {
+                                thumbnailBottomSheet.setImageDrawable(asyncDrawable)
                             }
+                            task.execute(file)
                         }
 
                         if (file.mimeType == "image/png") {

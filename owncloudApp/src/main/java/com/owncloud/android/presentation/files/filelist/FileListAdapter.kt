@@ -243,18 +243,16 @@ class FileListAdapter(
                 if (thumbnail != null) {
                     fileIcon.setImageBitmap(thumbnail)
                 }
-                if (file.needsToUpdateThumbnail) {
+                if (file.needsToUpdateThumbnail && ThumbnailsCacheManager.cancelPotentialThumbnailWork(file, fileIcon)) {
                     // generate new Thumbnail
-                    if (ThumbnailsCacheManager.cancelPotentialThumbnailWork(file, fileIcon)) {
-                        val task = ThumbnailsCacheManager.ThumbnailGenerationTask(fileIcon, account)
-                        val asyncDrawable = ThumbnailsCacheManager.AsyncThumbnailDrawable(context.resources, thumbnail, task)
+                    val task = ThumbnailsCacheManager.ThumbnailGenerationTask(fileIcon, account)
+                    val asyncDrawable = ThumbnailsCacheManager.AsyncThumbnailDrawable(context.resources, thumbnail, task)
 
-                        // If drawable is not visible, do not update it.
-                        if (asyncDrawable.minimumHeight > 0 && asyncDrawable.minimumWidth > 0) {
-                            fileIcon.setImageDrawable(asyncDrawable)
-                        }
-                        task.execute(file)
+                    // If drawable is not visible, do not update it.
+                    if (asyncDrawable.minimumHeight > 0 && asyncDrawable.minimumWidth > 0) {
+                        fileIcon.setImageDrawable(asyncDrawable)
                     }
+                    task.execute(file)
                 }
 
                 if (file.mimeType == "image/png") {
