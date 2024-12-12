@@ -33,7 +33,7 @@ import org.junit.Test
 class OCShareeRepositoryTest {
 
     private val remoteShareeDataSource = mockk<RemoteShareeDataSource>(relaxUnitFun = true)
-    private val oCShareeRepository = OCShareeRepository(remoteShareeDataSource)
+    private val ocShareeRepository = OCShareeRepository(remoteShareeDataSource)
 
     private val searchString = "user"
     private val requestedPage = 1
@@ -45,7 +45,7 @@ class OCShareeRepositoryTest {
             remoteShareeDataSource.getSharees(searchString, requestedPage, resultsPerPage, OC_ACCOUNT_NAME)
         } returns listOf(OC_SHAREE)
 
-        val listOfSharees = oCShareeRepository.getSharees(searchString, requestedPage, resultsPerPage, OC_ACCOUNT_NAME)
+        val listOfSharees = ocShareeRepository.getSharees(searchString, requestedPage, resultsPerPage, OC_ACCOUNT_NAME)
         assertEquals(listOf(OC_SHAREE), listOfSharees)
 
         verify(exactly = 1) {

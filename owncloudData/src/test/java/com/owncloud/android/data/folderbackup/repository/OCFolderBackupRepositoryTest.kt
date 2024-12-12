@@ -42,7 +42,7 @@ class OCFolderBackupRepositoryTest {
     private val pictureUploadsName = "Pictures uploads"
 
     @Test
-    fun `getAutomaticUploadsConfiguration returns AutomaticUploadsConfiguration`() {
+    fun `getAutomaticUploadsConfiguration returns an AutomaticUploadsConfiguration`() {
         every {
             localFolderBackupDataSource.getAutomaticUploadsConfiguration()
         } returns OC_AUTOMATIC_UPLOADS_CONFIGURATION
@@ -56,7 +56,7 @@ class OCFolderBackupRepositoryTest {
     }
 
     @Test
-    fun `getAutomaticUploadsConfiguration returns null when local data source returns a null configuration`() {
+    fun `getAutomaticUploadsConfiguration returns null when local datasource returns a null configuration`() {
         every {
             localFolderBackupDataSource.getAutomaticUploadsConfiguration()
         } returns null
@@ -84,7 +84,7 @@ class OCFolderBackupRepositoryTest {
     }
 
     @Test
-    fun `getFolderBackupConfigurationByNameAsFlow returns a Flow with null when local data source returns a Flow with null `() = runTest {
+    fun `getFolderBackupConfigurationByNameAsFlow returns a Flow with null when local datasource returns a Flow with null `() = runTest {
         every {
             localFolderBackupDataSource.getFolderBackupConfigurationByNameAsFlow(pictureUploadsName)
         } returns flowOf(null)
@@ -107,7 +107,7 @@ class OCFolderBackupRepositoryTest {
     }
 
     @Test
-    fun `resetFolderBackupConfigurationByName resets a folder backup configuration correctly by the name`() {
+    fun `resetFolderBackupConfigurationByName resets a folder backup configuration by name correctly`() {
         ocFolderBackupRepository.resetFolderBackupConfigurationByName(pictureUploadsName)
 
         verify(exactly = 1) {

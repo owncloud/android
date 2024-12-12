@@ -66,7 +66,7 @@ class OCShareRepositoryTest {
 
         every {
             localShareDataSource.insert(OC_PRIVATE_SHARE)
-        } returns 1
+        } returns 1 // The result of this method is not used, so it can be anything
 
         ocShareRepository.insertPrivateShare(filePath, OC_PRIVATE_SHARE.shareType, OC_SHAREE.shareWith, permissions, OC_ACCOUNT_NAME)
 
@@ -100,7 +100,7 @@ class OCShareRepositoryTest {
 
         every {
             localShareDataSource.update(OC_PRIVATE_SHARE)
-        } returns 1
+        } returns 1 // The result of this method is not used, so it can be anything
 
         ocShareRepository.updatePrivateShare(OC_PRIVATE_SHARE.remoteId, permissions, OC_ACCOUNT_NAME)
 
@@ -134,7 +134,7 @@ class OCShareRepositoryTest {
 
         every {
             localShareDataSource.insert(OC_PUBLIC_SHARE)
-        } returns 1
+        } returns 1 // The result of this method is not used, so it can be anything
 
         ocShareRepository.insertPublicShare(filePath, permissions, OC_PUBLIC_SHARE.name!!, password, expiration, OC_ACCOUNT_NAME)
 
@@ -168,7 +168,7 @@ class OCShareRepositoryTest {
 
         every {
             localShareDataSource.update(OC_PUBLIC_SHARE)
-        } returns 1
+        } returns 1 // The result of this method is not used, so it can be anything
 
         ocShareRepository.updatePublicShare(OC_PUBLIC_SHARE.remoteId, OC_PUBLIC_SHARE.name!!, password, expiration, permissions, OC_ACCOUNT_NAME)
 
@@ -226,7 +226,7 @@ class OCShareRepositoryTest {
     }
 
     @Test
-    fun `refreshSharesFromNetwork refreshes shares correctly when the list of shares is not empty`() {
+    fun `refreshSharesFromNetwork refreshes shares correctly when the list of shares received is not empty`() {
         every {
             remoteShareDataSource.getShares(
                 remoteFilePath = filePath,
@@ -238,7 +238,7 @@ class OCShareRepositoryTest {
 
         every {
             localShareDataSource.replaceShares(listOfShares)
-        } returns listOf(1, 1, 1, 1)
+        } returns listOf(1, 1) // The result of this method is not used, so it can be anything
 
         ocShareRepository.refreshSharesFromNetwork(filePath, OC_ACCOUNT_NAME)
 
@@ -254,7 +254,7 @@ class OCShareRepositoryTest {
     }
 
     @Test
-    fun `refreshSharesFromNetwork refreshes shares correctly when the list of shares is empty`() {
+    fun `refreshSharesFromNetwork deletes local shares and refreshes shares correctly when the list of shares received is empty`() {
         every {
             remoteShareDataSource.getShares(
                 remoteFilePath = filePath,
@@ -286,7 +286,7 @@ class OCShareRepositoryTest {
     fun `deleteShare deletes a share correctly`() {
         every {
             localShareDataSource.deleteShare(OC_SHARE.remoteId)
-        } returns 1
+        } returns 1 // The result of this method is not used, so it can be anything
 
         ocShareRepository.deleteShare(OC_SHARE.remoteId, OC_ACCOUNT_NAME)
 

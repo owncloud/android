@@ -64,7 +64,7 @@ class OCServerInfoRepositoryTest {
     }
 
     @Test
-    fun `getServerInfo returns a BasicServer when creatingAccount parameter is true and webfinger datasource returns null`() {
+    fun `getServerInfo returns a BasicServer when creatingAccount parameter is true and webfinger datasource throws an exception`() {
         every {
             remoteWebFingerDataSource.getInstancesFromWebFinger(
                 lookupServer = OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl,
@@ -95,7 +95,7 @@ class OCServerInfoRepositoryTest {
     }
 
     @Test
-    fun `getServerInfo returns an OAuthServer when creatingAccount parameter is false`() {
+    fun `getServerInfo returns an OAuth2Server when creatingAccount parameter is false`() {
         every {
             remoteServerInfoDataSource.getServerInfo(OC_SECURE_SERVER_INFO_BEARER_AUTH.baseUrl, false)
         } returns OC_SECURE_SERVER_INFO_BEARER_AUTH
@@ -118,7 +118,7 @@ class OCServerInfoRepositoryTest {
     }
 
     @Test
-    fun `getServerInfo returns an OAuthServer when creatingAccount parameter is true and webfinger datasource returns null`() {
+    fun `getServerInfo returns an OAuth2Server when creatingAccount parameter is true and webfinger datasource throws an exception`() {
         every {
             remoteWebFingerDataSource.getInstancesFromWebFinger(
                 lookupServer = OC_SECURE_SERVER_INFO_BEARER_AUTH.baseUrl,
@@ -177,7 +177,7 @@ class OCServerInfoRepositoryTest {
     }
 
     @Test
-    fun `getServerInfo returns an OIDCServer when creatingAccount parameter is true and web finger datasource returns null`() {
+    fun `getServerInfo returns an OIDCServer when creatingAccount parameter is true and webfinger datasource throws an exception`() {
         every {
             remoteWebFingerDataSource.getInstancesFromWebFinger(
                 lookupServer = OC_SECURE_SERVER_INFO_OIDC_AUTH.baseUrl,
@@ -213,7 +213,7 @@ class OCServerInfoRepositoryTest {
     }
 
     @Test
-    fun `getServerInfo returns an OIDCServer when creatingAccount is true and web finger data source returns an instance`() {
+    fun `getServerInfo returns an OIDCServer when creatingAccount is true and webfinger datasource returns an OIDC issuer`() {
         every {
             remoteWebFingerDataSource.getInstancesFromWebFinger(
                 lookupServer = OC_SECURE_SERVER_INFO_OIDC_AUTH_WEBFINGER_INSTANCE.baseUrl,
