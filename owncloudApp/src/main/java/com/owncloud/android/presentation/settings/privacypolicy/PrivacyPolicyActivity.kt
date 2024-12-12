@@ -91,9 +91,10 @@ class PrivacyPolicyActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         var retval = true
-        when (item.itemId) {
-            android.R.id.home -> finish()
-            else -> retval = super.onOptionsItemSelected(item)
+        if (item.itemId == android.R.id.home) {
+            finish()
+        } else {
+            retval = super.onOptionsItemSelected(item)
         }
         return retval
     }

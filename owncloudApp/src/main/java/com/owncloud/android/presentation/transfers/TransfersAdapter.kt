@@ -77,137 +77,11 @@ class TransfersAdapter(
         when (holder) {
             is TransferItemViewHolder -> {
                 val transferItem = getItem(position) as TransferItem
-                holder.binding.apply {
-                    val remoteFile = File(transferItem.transfer.remotePath)
-
-                    var fileName = remoteFile.name
-                    if (fileName.isEmpty()) {
-                        fileName = File.separator
-                    }
-                    uploadName.text = fileName
-
-                    transferItem.space?.let {
-                        spacePathLine.spaceName.isVisible = true
-                        spacePathLine.spaceIcon.isVisible = true
-                        if (it.isPersonal) {
-                            spacePathLine.spaceIcon.setImageResource(R.drawable.ic_folder)
-                            spacePathLine.spaceName.setText(R.string.bottom_nav_personal)
-                        } else {
-                            spacePathLine.spaceName.text = it.name
-                        }
-                    }
-
-                    remoteFile.parent?.let {
-                        spacePathLine.path.text = if (it.endsWith("${OCFile.PATH_SEPARATOR}")) it else "$it${OCFile.PATH_SEPARATOR}"
-                    }
-
-                    uploadFileSize.text = DisplayUtils.bytesToHumanReadable(transferItem.transfer.fileSize, holder.itemView.context, true)
-
-                    uploadDate.isVisible =
-                        transferItem.transfer.transferEndTimestamp != null && transferItem.transfer.status != TransferStatus.TRANSFER_FAILED
-                    transferItem.transfer.transferEndTimestamp?.let {
-                        val dateString = DisplayUtils.getRelativeDateTimeString(
-                            holder.itemView.context,
-                            it,
-                            DateUtils.SECOND_IN_MILLIS,
-                            DateUtils.WEEK_IN_MILLIS,
-                            0
-                        )
-                        uploadDate.text = ", $dateString"
-                    }
-
-                    try {
-                        val account = AccountUtils.getOwnCloudAccountByName(holder.itemView.context, transferItem.transfer.accountName)
-                        val oca = OwnCloudAccount(account, holder.itemView.context)
-                        val accountName = oca.displayName + " @ " +
-                                DisplayUtils.convertIdn(account.name.substring(account.name.lastIndexOf("@") + 1), false)
-                        uploadAccount.text = accountName
-                    } catch (e: Exception) {
-                        Timber.w("Couldn't get display name for account, using old style")
-                        uploadAccount.text = transferItem.transfer.accountName
-                    }
-
-                    uploadStatus.isVisible = transferItem.transfer.status != TransferStatus.TRANSFER_SUCCEEDED
-                    uploadStatus.text = " — " + holder.itemView.context.getString(transferItem.transfer.statusToStringRes())
-
-                    Glide.with(holder.itemView)
-                        .load(transferItem.transfer.localPath)
-                        .diskCacheStrategy(DiskCacheStrategy.ALL)
-                        .placeholder(
-                            MimetypeIconUtil.getFileTypeIconId(
-                                MimetypeIconUtil.getBestMimeTypeByFilename(transferItem.transfer.localPath),
-                                fileName
-                            )
-                        )
-                        .into(thumbnail)
-
-                    uploadRightButton.isVisible = transferItem.transfer.status != TransferStatus.TRANSFER_SUCCEEDED
-
-                    uploadProgressBar.isVisible = transferItem.transfer.status == TransferStatus.TRANSFER_IN_PROGRESS
-
-                    holder.itemView.setOnClickListener(null)
-
-                    when (transferItem.transfer.status) {
-                        TransferStatus.TRANSFER_IN_PROGRESS, TransferStatus.TRANSFER_QUEUED -> {
-                            uploadRightButton.apply {
-                                setImageResource(R.drawable.ic_action_cancel_grey)
-                                setOnClickListener {
-                                    cancel(transferItem.transfer)
-                                }
-                            }
-                        }
-                        TransferStatus.TRANSFER_FAILED -> {
-                            uploadRightButton.apply {
-                                setImageResource(R.drawable.ic_action_delete_grey)
-                                setOnClickListener {
-                                    cancel(transferItem.transfer)
-                                }
-                            }
-                            holder.itemView.setOnClickListener {
-                                retry(transferItem.transfer)
-                            }
-                            holder.binding.ListItemLayout.isClickable = true
-                            holder.binding.ListItemLayout.isFocusable = true
-                        }
-                        TransferStatus.TRANSFER_SUCCEEDED -> {
-                            // Nothing to do
-                        }
-                    }
-                }
+                onBindTransferItemViewHolder(holder, transferItem)
             }
             is HeaderItemViewHolder -> {
                 val headerItem = getItem(position) as HeaderItem
-                holder.binding.apply {
-                    uploadListGroupName.text = holder.itemView.context.getString(headerTitleStringRes(headerItem.status))
-
-                    val stringResFileCount =
-                        if (headerItem.numberTransfers == 1) R.string.uploads_view_group_file_count_single else R.string.uploads_view_group_file_count
-                    val fileCountText: String = String.format(holder.itemView.context.getString(stringResFileCount), headerItem.numberTransfers)
-                    textViewFileCount.text = fileCountText
-
-                    uploadListGroupButtonClear.isVisible = headerItem.status == TransferStatus.TRANSFER_FAILED ||
-                            headerItem.status == TransferStatus.TRANSFER_SUCCEEDED
-                    uploadListGroupButtonRetry.isVisible = headerItem.status == TransferStatus.TRANSFER_FAILED
-
-                    when (headerItem.status) {
-                        TransferStatus.TRANSFER_FAILED -> {
-                            uploadListGroupButtonClear.setOnClickListener {
-                                clearFailed()
-                            }
-                            uploadListGroupButtonRetry.setOnClickListener {
-                                retryFailed()
-                            }
-                        }
-                        TransferStatus.TRANSFER_SUCCEEDED -> {
-                            uploadListGroupButtonClear.setOnClickListener {
-                                clearSuccessful()
-                            }
-                        }
-                        TransferStatus.TRANSFER_QUEUED, TransferStatus.TRANSFER_IN_PROGRESS -> {
-                            // Nothing to do
-                        }
-                    }
-                }
+                onBindHeaderItemViewHolder(holder, headerItem)
             }
         }
 
@@ -224,6 +98,142 @@ class TransfersAdapter(
             }
         }
 
+    }
+
+    private fun onBindTransferItemViewHolder(holder: TransferItemViewHolder, transferItem: TransferItem) {
+        holder.binding.apply {
+            val remoteFile = File(transferItem.transfer.remotePath)
+
+            var fileName = remoteFile.name
+            if (fileName.isEmpty()) {
+                fileName = File.separator
+            }
+            uploadName.text = fileName
+
+            transferItem.space?.let {
+                spacePathLine.spaceName.isVisible = true
+                spacePathLine.spaceIcon.isVisible = true
+                if (it.isPersonal) {
+                    spacePathLine.spaceIcon.setImageResource(R.drawable.ic_folder)
+                    spacePathLine.spaceName.setText(R.string.bottom_nav_personal)
+                } else {
+                    spacePathLine.spaceName.text = it.name
+                }
+            }
+
+            remoteFile.parent?.let {
+                spacePathLine.path.text = if (it.endsWith("${OCFile.PATH_SEPARATOR}")) it else "$it${OCFile.PATH_SEPARATOR}"
+            }
+
+            uploadFileSize.text = DisplayUtils.bytesToHumanReadable(transferItem.transfer.fileSize, holder.itemView.context, true)
+
+            uploadDate.isVisible =
+                transferItem.transfer.transferEndTimestamp != null && transferItem.transfer.status != TransferStatus.TRANSFER_FAILED
+            transferItem.transfer.transferEndTimestamp?.let {
+                val dateString = DisplayUtils.getRelativeDateTimeString(
+                    holder.itemView.context,
+                    it,
+                    DateUtils.SECOND_IN_MILLIS,
+                    DateUtils.WEEK_IN_MILLIS,
+                    0
+                )
+                uploadDate.text = ", $dateString"
+            }
+
+            try {
+                val account = AccountUtils.getOwnCloudAccountByName(holder.itemView.context, transferItem.transfer.accountName)
+                val oca = OwnCloudAccount(account, holder.itemView.context)
+                val accountName = oca.displayName + " @ " +
+                        DisplayUtils.convertIdn(account.name.substring(account.name.lastIndexOf("@") + 1), false)
+                uploadAccount.text = accountName
+            } catch (e: Exception) {
+                Timber.w("Couldn't get display name for account, using old style")
+                uploadAccount.text = transferItem.transfer.accountName
+            }
+
+            uploadStatus.isVisible = transferItem.transfer.status != TransferStatus.TRANSFER_SUCCEEDED
+            uploadStatus.text = " — " + holder.itemView.context.getString(transferItem.transfer.statusToStringRes())
+
+            Glide.with(holder.itemView)
+                .load(transferItem.transfer.localPath)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .placeholder(
+                    MimetypeIconUtil.getFileTypeIconId(
+                        MimetypeIconUtil.getBestMimeTypeByFilename(transferItem.transfer.localPath),
+                        fileName
+                    )
+                )
+                .into(thumbnail)
+
+            uploadRightButton.isVisible = transferItem.transfer.status != TransferStatus.TRANSFER_SUCCEEDED
+
+            uploadProgressBar.isVisible = transferItem.transfer.status == TransferStatus.TRANSFER_IN_PROGRESS
+
+            holder.itemView.setOnClickListener(null)
+
+            when (transferItem.transfer.status) {
+                TransferStatus.TRANSFER_IN_PROGRESS, TransferStatus.TRANSFER_QUEUED -> {
+                    uploadRightButton.apply {
+                        setImageResource(R.drawable.ic_action_cancel_grey)
+                        setOnClickListener {
+                            cancel(transferItem.transfer)
+                        }
+                    }
+                }
+
+                TransferStatus.TRANSFER_FAILED -> {
+                    uploadRightButton.apply {
+                        setImageResource(R.drawable.ic_action_delete_grey)
+                        setOnClickListener {
+                            cancel(transferItem.transfer)
+                        }
+                    }
+                    holder.itemView.setOnClickListener {
+                        retry(transferItem.transfer)
+                    }
+                    holder.binding.ListItemLayout.isClickable = true
+                    holder.binding.ListItemLayout.isFocusable = true
+                }
+
+                TransferStatus.TRANSFER_SUCCEEDED -> {
+                    // Nothing to do
+                }
+            }
+        }
+    }
+
+    private fun onBindHeaderItemViewHolder(holder: HeaderItemViewHolder, headerItem: HeaderItem) {
+        holder.binding.apply {
+            uploadListGroupName.text = holder.itemView.context.getString(headerTitleStringRes(headerItem.status))
+
+            val stringResFileCount =
+                if (headerItem.numberTransfers == 1) R.string.uploads_view_group_file_count_single else R.string.uploads_view_group_file_count
+            val fileCountText: String = String.format(holder.itemView.context.getString(stringResFileCount), headerItem.numberTransfers)
+            textViewFileCount.text = fileCountText
+
+            uploadListGroupButtonClear.isVisible = headerItem.status == TransferStatus.TRANSFER_FAILED ||
+                    headerItem.status == TransferStatus.TRANSFER_SUCCEEDED
+            uploadListGroupButtonRetry.isVisible = headerItem.status == TransferStatus.TRANSFER_FAILED
+
+            when (headerItem.status) {
+                TransferStatus.TRANSFER_FAILED -> {
+                    uploadListGroupButtonClear.setOnClickListener {
+                        clearFailed()
+                    }
+                    uploadListGroupButtonRetry.setOnClickListener {
+                        retryFailed()
+                    }
+                }
+                TransferStatus.TRANSFER_SUCCEEDED -> {
+                    uploadListGroupButtonClear.setOnClickListener {
+                        clearSuccessful()
+                    }
+                }
+                TransferStatus.TRANSFER_QUEUED, TransferStatus.TRANSFER_IN_PROGRESS -> {
+                    // Nothing to do
+                }
+            }
+        }
     }
 
     private fun headerTitleStringRes(status: TransferStatus): Int {

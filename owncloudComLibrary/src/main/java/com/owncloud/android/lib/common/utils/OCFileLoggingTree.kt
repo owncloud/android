@@ -48,9 +48,8 @@ class OCFileLoggingTree(
 
     init {
         externalCacheDir.let {
-            if (!it.exists()) {
-                if (!it.mkdirs())
-                    Log.e(LOG_TAG, "couldn't create ${it.absoluteFile}")
+            if (!it.exists() && !it.mkdirs()) {
+                Log.e(LOG_TAG, "couldn't create ${it.absoluteFile}")
             }
 
             var fileNameTimestamp = SimpleDateFormat(LOG_FILE_TIME_FORMAT, Locale.getDefault()).format(Date())

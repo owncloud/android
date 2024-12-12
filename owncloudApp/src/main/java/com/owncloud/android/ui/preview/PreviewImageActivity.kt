@@ -253,16 +253,15 @@ class PreviewImageActivity : FileActivity(),
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            android.R.id.home -> {
-                if (isDrawerOpen()) {
-                    closeDrawer()
-                } else {
-                    backToDisplayActivity()
-                }
-                true
+        return if (item.itemId == android.R.id.home) {
+            if (isDrawerOpen()) {
+                closeDrawer()
+            } else {
+                backToDisplayActivity()
             }
-            else -> super.onOptionsItemSelected(item)
+            true
+        } else {
+            super.onOptionsItemSelected(item)
         }
     }
 
@@ -411,12 +410,11 @@ class PreviewImageActivity : FileActivity(),
     }
 
     override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {
-        return when (keyCode) {
-            KeyEvent.KEYCODE_TAB -> {
-                showSystemUI(fullScreenAnchorView)
-                true
-            }
-            else -> super.onKeyUp(keyCode, event)
+        return if (keyCode == KeyEvent.KEYCODE_TAB) {
+            showSystemUI(fullScreenAnchorView)
+            true
+        } else {
+            super.onKeyUp(keyCode, event)
         }
     }
 

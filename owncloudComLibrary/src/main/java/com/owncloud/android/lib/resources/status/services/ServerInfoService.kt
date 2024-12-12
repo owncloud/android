@@ -23,7 +23,6 @@
  */
 package com.owncloud.android.lib.resources.status.services
 
-
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.status.RemoteServerInfo

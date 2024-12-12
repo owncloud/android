@@ -215,9 +215,10 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, EnableBiom
                 }
 
                 PasscodeAction.REMOVE -> {
-                    when (status.type) {
-                        PasscodeType.OK -> actionRemoveOk()
-                        else -> actionRemoveError()
+                    if (status.type == PasscodeType.OK) {
+                        actionRemoveOk()
+                    } else {
+                        actionRemoveError()
                     }
                 }
 

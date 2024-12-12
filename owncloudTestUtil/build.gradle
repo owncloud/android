@@ -33,4 +33,8 @@ dependencies {
     implementation project(':owncloudComLibrary')
     implementation libs.kotlin.stdlib
     implementation libs.androidx.lifecycle.livedata.ktx
+
+    // Detekt
+    detektPlugins libs.detekt.formatting
+    detektPlugins libs.detekt.libraries
 }

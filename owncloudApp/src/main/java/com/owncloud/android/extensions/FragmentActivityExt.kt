@@ -18,7 +18,7 @@
  * along with this program.  If not, see <http:></http:>//www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.ui.utils
+package com.owncloud.android.extensions
 
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentActivity

@@ -132,7 +132,7 @@ data class OCCapabilityEntity(
     @PrimaryKey(autoGenerate = true) var id: Int = 0
 
     companion object {
-        fun fromCursor(cursor: Cursor): OCCapabilityEntity = cursor.use { it ->
+        fun fromCursor(cursor: Cursor): OCCapabilityEntity = cursor.use {
             OCCapabilityEntity(
                 it.getString(it.getColumnIndexOrThrow(CAPABILITIES_ACCOUNT_NAME)),
                 it.getInt(it.getColumnIndexOrThrow(CAPABILITIES_VERSION_MAJOR)),

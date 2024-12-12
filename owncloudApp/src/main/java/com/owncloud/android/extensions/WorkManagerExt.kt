@@ -62,16 +62,6 @@ fun WorkManager.getRunningWorkInfosLiveData(tags: List<String>): LiveData<List<W
 fun WorkManager.isDownloadPending(account: Account, file: OCFile): Boolean =
     this.getWorkInfoByTags(getTagsForDownload(file, account.name)).any { !it.state.isFinished }
 
-/**
- * Check if an upload is pending. It could be enqueued, uploading or blocked.
- * @param account - Owner of the file
- * @param file - File to check whether it is pending.
- *
- * @return true if the download is pending.
- */
-fun WorkManager.isUploadPending(account: Account, file: OCFile): Boolean = false
-// TODO: Uploads work different from downloads. So that, this one will be different.
-
 fun getTagsForDownload(file: OCFile, accountName: String) =
     listOf(TRANSFER_TAG_DOWNLOAD, file.id.toString(), accountName)
 

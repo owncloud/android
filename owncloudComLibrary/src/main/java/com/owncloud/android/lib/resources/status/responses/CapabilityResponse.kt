@@ -50,10 +50,14 @@ data class CapabilityResponse(
         filesSharingApiEnabled = CapabilityBooleanType.fromBooleanValue(capabilities?.fileSharingCapabilities?.fileSharingApiEnabled),
         filesSharingResharing = CapabilityBooleanType.fromBooleanValue(capabilities?.fileSharingCapabilities?.fileSharingReSharing),
         filesSharingPublicEnabled = CapabilityBooleanType.fromBooleanValue(capabilities?.fileSharingCapabilities?.fileSharingPublic?.enabled),
-        filesSharingPublicUpload = CapabilityBooleanType.fromBooleanValue(capabilities?.fileSharingCapabilities?.fileSharingPublic?.fileSharingPublicUpload),
-        filesSharingPublicSupportsUploadOnly = CapabilityBooleanType.fromBooleanValue(capabilities?.fileSharingCapabilities?.fileSharingPublic?.fileSharingPublicUploadOnly),
-        filesSharingPublicMultiple = CapabilityBooleanType.fromBooleanValue(capabilities?.fileSharingCapabilities?.fileSharingPublic?.fileSharingPublicMultiple),
-        filesSharingPublicPasswordEnforced = CapabilityBooleanType.fromBooleanValue(capabilities?.fileSharingCapabilities?.fileSharingPublic?.fileSharingPublicPassword?.enforced),
+        filesSharingPublicUpload =
+        CapabilityBooleanType.fromBooleanValue(capabilities?.fileSharingCapabilities?.fileSharingPublic?.fileSharingPublicUpload),
+        filesSharingPublicSupportsUploadOnly =
+        CapabilityBooleanType.fromBooleanValue(capabilities?.fileSharingCapabilities?.fileSharingPublic?.fileSharingPublicUploadOnly),
+        filesSharingPublicMultiple =
+        CapabilityBooleanType.fromBooleanValue(capabilities?.fileSharingCapabilities?.fileSharingPublic?.fileSharingPublicMultiple),
+        filesSharingPublicPasswordEnforced =
+        CapabilityBooleanType.fromBooleanValue(capabilities?.fileSharingCapabilities?.fileSharingPublic?.fileSharingPublicPassword?.enforced),
         filesSharingPublicPasswordEnforcedReadOnly = CapabilityBooleanType.fromBooleanValue(
             capabilities?.fileSharingCapabilities?.fileSharingPublic?.fileSharingPublicPassword?.enforcedFor?.enforcedReadOnly
         ),
@@ -63,7 +67,8 @@ data class CapabilityResponse(
         filesSharingPublicPasswordEnforcedUploadOnly = CapabilityBooleanType.fromBooleanValue(
             capabilities?.fileSharingCapabilities?.fileSharingPublic?.fileSharingPublicPassword?.enforcedFor?.enforcedUploadOnly
         ),
-        filesSharingPublicExpireDateEnabled = CapabilityBooleanType.fromBooleanValue(capabilities?.fileSharingCapabilities?.fileSharingPublic?.fileSharingPublicExpireDate?.enabled),
+        filesSharingPublicExpireDateEnabled =
+        CapabilityBooleanType.fromBooleanValue(capabilities?.fileSharingCapabilities?.fileSharingPublic?.fileSharingPublicExpireDate?.enabled),
         filesSharingPublicExpireDateDays = capabilities?.fileSharingCapabilities?.fileSharingPublic?.fileSharingPublicExpireDate?.days
             ?: 0,
         filesSharingPublicExpireDateEnforced = CapabilityBooleanType.fromBooleanValue(
@@ -75,9 +80,12 @@ data class CapabilityResponse(
         filesPrivateLinks = capabilities?.fileCapabilities?.privateLinks?.let { CapabilityBooleanType.fromBooleanValue(it) }
             ?: CapabilityBooleanType.UNKNOWN,
         filesAppProviders = capabilities?.fileCapabilities?.appProviders?.map { it.toAppProviders() },
-        filesSharingFederationIncoming = CapabilityBooleanType.fromBooleanValue(capabilities?.fileSharingCapabilities?.fileSharingFederation?.incoming),
-        filesSharingFederationOutgoing = CapabilityBooleanType.fromBooleanValue(capabilities?.fileSharingCapabilities?.fileSharingFederation?.outgoing),
-        filesSharingUserProfilePicture = CapabilityBooleanType.fromBooleanValue(capabilities?.fileSharingCapabilities?.fileSharingUser?.profilePicture),
+        filesSharingFederationIncoming =
+        CapabilityBooleanType.fromBooleanValue(capabilities?.fileSharingCapabilities?.fileSharingFederation?.incoming),
+        filesSharingFederationOutgoing =
+        CapabilityBooleanType.fromBooleanValue(capabilities?.fileSharingCapabilities?.fileSharingFederation?.outgoing),
+        filesSharingUserProfilePicture =
+        CapabilityBooleanType.fromBooleanValue(capabilities?.fileSharingCapabilities?.fileSharingUser?.profilePicture),
         spaces = capabilities?.spacesCapabilities?.toSpaces(),
         passwordPolicy = capabilities?.passwordPolicyCapabilities?.toPasswordPolicy(),
     )

@@ -156,7 +156,6 @@ class ErrorMessageAdapter {
          */
         fun getResultMessage(
             result: RemoteOperationResult<*>,
-            operation: RemoteOperation<*>?,
             resources: Resources
         ): String {
             val formatter = Formatter(resources)
@@ -184,7 +183,7 @@ class ErrorMessageAdapter {
                 ResultCode.CONFLICT -> formatter.format(R.string.move_file_error)
                 ResultCode.INVALID_COPY_INTO_DESCENDANT ->
                     formatter.format(R.string.copy_file_invalid_into_descendent)
-                else -> getCommonMessageForResult(operation, result, resources)
+                else -> getCommonMessageForResult(result, resources)
             }
         }
 
@@ -197,7 +196,6 @@ class ErrorMessageAdapter {
          * @return User message corresponding to 'result'.
          */
         private fun getCommonMessageForResult(
-            operation: RemoteOperation<*>?,
             result: RemoteOperationResult<*>,
             res: Resources
         ): String {
@@ -226,7 +224,7 @@ class ErrorMessageAdapter {
                 ResultCode.ACCOUNT_NOT_THE_SAME -> formatter.format(R.string.auth_account_not_the_same)
                 ResultCode.OK_REDIRECT_TO_NON_SECURE_CONNECTION -> formatter.format(R.string.auth_redirect_non_secure_connection_title)
                 else -> if (result.httpPhrase != null && result.httpPhrase.isNotEmpty())
-                    result.httpPhrase else getGenericErrorMessageForOperation(operation, result, res)
+                    result.httpPhrase else getGenericErrorMessageForOperation(result, res)
             }
         }
 
@@ -238,7 +236,6 @@ class ErrorMessageAdapter {
          * @return User message corresponding to a generic error of 'operation'.
          */
         private fun getGenericErrorMessageForOperation(
-            operation: RemoteOperation<*>?,
             result: RemoteOperationResult<*>,
             res: Resources
         ): String {

@@ -31,7 +31,11 @@ val MIGRATION_32_33 = object : Migration(32, 33) {
 
         try {
             // 1. Create new OCShares table
-            database.execSQL("CREATE TABLE IF NOT EXISTS `${OCSHARES_TABLE_NAME}2` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `share_type` INTEGER NOT NULL, `share_with` TEXT, `path` TEXT NOT NULL, `permissions` INTEGER NOT NULL, `shared_date` INTEGER NOT NULL, `expiration_date` INTEGER NOT NULL, `token` TEXT, `shared_with_display_name` TEXT, `share_with_additional_info` TEXT, `is_directory` INTEGER NOT NULL, `id_remote_shared` TEXT NOT NULL, `owner_share` TEXT NOT NULL, `name` TEXT, `url` TEXT)")
+            database.execSQL("CREATE TABLE IF NOT EXISTS `${OCSHARES_TABLE_NAME}2` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
+                    " `share_type` INTEGER NOT NULL, `share_with` TEXT, `path` TEXT NOT NULL, `permissions` INTEGER NOT NULL, `shared_date`" +
+                    " INTEGER NOT NULL, `expiration_date` INTEGER NOT NULL, `token` TEXT, `shared_with_display_name` TEXT," +
+                    " `share_with_additional_info` TEXT, `is_directory` INTEGER NOT NULL, `id_remote_shared` TEXT NOT NULL, `owner_share`" +
+                    " TEXT NOT NULL, `name` TEXT, `url` TEXT)")
 
             // 2. Get old OCShares and insert them into the new table
             val cursor = database.query("SELECT * FROM $OCSHARES_TABLE_NAME")

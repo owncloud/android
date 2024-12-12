@@ -25,7 +25,8 @@ import java.security.SecureRandom
 private val charsetLowercase = ('a'..'z').toList()
 private val charsetUppercase = ('A'..'Z').toList()
 private val charsetDigits = ('0'..'9').toList()
-private val charsetSpecial = listOf('!', '#', '$', '%', '&', '\'', '(', ')', '*', '+', ',', '-', '.', '/', ':', ';', '<', '=', '>', '?', '@', '[', '\\', ']', '^', '_', '`', '{', '|', '}', '~')
+private val charsetSpecial = listOf('!', '#', '$', '%', '&', '\'', '(', ')', '*', '+', ',', '-', '.', '/', ':', ';', '<', '=', '>', '?', '@',
+    '[', '\\', ']', '^', '_', '`', '{', '|', '}', '~')
 
 fun generatePassword(
     minChars: Int?,
@@ -52,22 +53,22 @@ fun generatePassword(
     val passwordChars = mutableListOf<Char>()
 
     // Include the minimum number of digits established by the policy
-    for (i in 1..minDigits) {
+    repeat(minDigits) {
         passwordChars.add(charsetDigits[secureRandom.nextInt(charsetDigits.size)])
     }
 
     // Include the minimum number of lowercase chars established by the policy
-    for (i in 1..minLowercaseCharacters) {
+    repeat(minLowercaseCharacters) {
         passwordChars.add(charsetLowercase[secureRandom.nextInt(charsetLowercase.size)])
     }
 
     // Include the minimum number of uppercase chars established by the policy
-    for (i in 1..minUppercaseCharacters) {
+    repeat(minUppercaseCharacters) {
         passwordChars.add(charsetUppercase[secureRandom.nextInt(charsetUppercase.size)])
     }
 
     // Include the minimum number of special chars established by the policy
-    for (i in 1..minSpecialCharacters) {
+    repeat(minSpecialCharacters) {
         passwordChars.add(charsetSpecial[secureRandom.nextInt(charsetSpecial.size)])
     }
 

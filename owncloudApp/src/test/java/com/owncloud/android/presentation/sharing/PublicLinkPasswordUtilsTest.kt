@@ -28,7 +28,8 @@ class PublicLinkPasswordUtilsTest {
     private val charsetLowercase = ('a'..'z').toList()
     private val charsetUppercase = ('A'..'Z').toList()
     private val charsetDigits = ('0'..'9').toList()
-    private val charsetSpecial = listOf('!', '#', '$', '%', '&', '\'', '(', ')', '*', '+', ',', '-', '.', '/', ':', ';', '<', '=', '>', '?', '@', '[', '\\', ']', '^', '_', '`', '{', '|', '}', '~')
+    private val charsetSpecial = listOf('!', '#', '$', '%', '&', '\'', '(', ')', '*', '+', ',', '-', '.', '/', ':', ';', '<', '=', '>', '?', '@',
+        '[', '\\', ']', '^', '_', '`', '{', '|', '}', '~')
 
     private val minCharacters = 10
     private val maxCharacters = 100
@@ -39,7 +40,7 @@ class PublicLinkPasswordUtilsTest {
 
     @Test
     fun `generatePassword creates password fulfilling all policies`() {
-        for (i in 1..1000) {
+        repeat(1000) {
             val password = generatePassword(
                 minChars = minCharacters,
                 maxChars = maxCharacters,

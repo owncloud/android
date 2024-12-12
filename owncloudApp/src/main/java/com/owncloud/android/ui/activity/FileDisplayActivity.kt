@@ -62,7 +62,6 @@ import com.owncloud.android.MainApp
 import com.owncloud.android.R
 import com.owncloud.android.data.providers.SharedPreferencesProvider
 import com.owncloud.android.databinding.ActivityMainBinding
-import com.owncloud.android.domain.automaticuploads.model.UploadBehavior
 import com.owncloud.android.domain.capabilities.model.OCCapability
 import com.owncloud.android.domain.exceptions.AccountNotFoundException
 import com.owncloud.android.domain.exceptions.DeepLinkException
@@ -371,11 +370,6 @@ class FileDisplayActivity : FileActivity(),
             if (!stateWasRecovered) {
                 Timber.d("Initializing Fragments in onAccountChanged..")
                 initFragmentsWithFile()
-                file?.isFolder?.let { isFolder ->
-                    if (isFolder) {
-                        startSyncFolderOperation(file, false)
-                    }
-                }
                 val syncProfileOperation = SyncProfileOperation(account)
                 syncProfileOperation.syncUserProfile()
                 val workManagerProvider = WorkManagerProvider(context = baseContext)
@@ -604,7 +598,7 @@ class FileDisplayActivity : FileActivity(),
         // Handle calls form internal activities.
         if (requestCode == REQUEST_CODE__SELECT_CONTENT_FROM_APPS && (resultCode == RESULT_OK || resultCode == RESULT_OK_AND_MOVE)) {
 
-            requestUploadOfContentFromApps(data, resultCode)
+            requestUploadOfContentFromApps(data)
 
         } else if (requestCode == REQUEST_CODE__UPLOAD_FROM_CAMERA) {
             if (resultCode == RESULT_OK || resultCode == RESULT_OK_AND_MOVE) {
@@ -618,7 +612,7 @@ class FileDisplayActivity : FileActivity(),
                         capturedFilePaths: Array<String>
                     ) {
                         if (hasEnoughSpace) {
-                            requestUploadOfFilesFromFileSystem(capturedFilePaths, UploadBehavior.MOVE.toLegacyLocalBehavior())
+                            requestUploadOfFilesFromFileSystem(capturedFilePaths)
                         }
                     }
                 })
@@ -640,7 +634,7 @@ class FileDisplayActivity : FileActivity(),
         }
     }
 
-    private fun requestUploadOfFilesFromFileSystem(filePaths: Array<String>?, behaviour: Int) {
+    private fun requestUploadOfFilesFromFileSystem(filePaths: Array<String>?) {
         if (filePaths != null) {
             val remotePaths = arrayOfNulls<String>(filePaths.size)
             val remotePathBase = currentDir?.remotePath
@@ -661,7 +655,7 @@ class FileDisplayActivity : FileActivity(),
         }
     }
 
-    private fun requestUploadOfContentFromApps(contentIntent: Intent?, resultCode: Int) {
+    private fun requestUploadOfContentFromApps(contentIntent: Intent?) {
         val streamsToUpload = ArrayList<Uri>()
 
         if (contentIntent!!.clipData != null && contentIntent.clipData!!.itemCount > 0) {
@@ -749,7 +743,8 @@ class FileDisplayActivity : FileActivity(),
                 // If secondFragment was shown, we need to navigate to the parent of the displayed file
                 // Need a cleanup
                 val folderIdToDisplay =
-                    if (fileListOption == FileListOption.AV_OFFLINE) storageManager.getRootPersonalFolder()!!.id!! else secondFragment!!.file!!.parentId!!
+                    if (fileListOption == FileListOption.AV_OFFLINE) storageManager.getRootPersonalFolder()!!.id!!
+                    else secondFragment!!.file!!.parentId!!
                 mainFileListFragment?.navigateToFolderId(folderIdToDisplay)
                 cleanSecondFragment()
                 updateToolbar(mainFileListFragment?.getCurrentFile())
@@ -861,14 +856,8 @@ class FileDisplayActivity : FileActivity(),
                     syncInProgress = true
 
                 } else {
-                    var currentFile: OCFile? = if (file == null)
-                        null
-                    else
-                        storageManager.getFileByPath(file.remotePath, file.spaceId)
-                    val currentDir = if (currentDir == null)
-                        null
-                    else
-                        storageManager.getFileByPath(currentDir!!.remotePath, currentDir.spaceId)
+                    var currentFile: OCFile? = file?.let { storageManager.getFileByPath(file.remotePath, file.spaceId) }
+                    val currentDir = currentDir?.let { storageManager.getFileByPath(currentDir!!.remotePath, currentDir.spaceId) }
 
                     if (currentDir == null) {
                         // current folder was removed from the server
@@ -925,7 +914,6 @@ class FileDisplayActivity : FileActivity(),
             val root = storageManager.getRootPersonalFolder()
             listOfFiles.navigateToFolder(root!!)
             file = root
-            startSyncFolderOperation(root, false)
         }
         cleanSecondFragment()
     }
@@ -962,7 +950,8 @@ class FileDisplayActivity : FileActivity(),
     private fun updateToolbar(chosenFileFromParam: OCFile?, space: OCSpace? = null) {
         val chosenFile = chosenFileFromParam ?: file // If no file is passed, current file decides
 
-        // If we come from a preview activity (image or video), not updating toolbar when initializing this activity or it will show the root folder one
+        // If we come from a preview activity (image or video), not updating toolbar when initializing this activity
+        // or it will show the root folder one
         if (intent.action == ACTION_DETAILS && chosenFile?.remotePath == OCFile.ROOT_PATH && secondFragment is FileDetailsFragment) return
 
         if (chosenFile == null || (chosenFile.remotePath == OCFile.ROOT_PATH && (space == null || !space.isProject))) {
@@ -1521,26 +1510,7 @@ class FileDisplayActivity : FileActivity(),
     }
 
     override fun onSavedCertificate() {
-        startSyncFolderOperation(currentDir, false)
-    }
-
-    /**
-     * Starts an operation to refresh the requested folder.
-     *
-     *
-     * The operation is run in a new background thread created on the fly.
-     *
-     *
-     * The refresh updates is a "light sync": properties of regular files in folder are updated (including
-     * associated shares), but not their contents. Only the contents of files marked to be kept-in-sync are
-     * synchronized too.
-     *
-     * @param folder     Folder to refresh.
-     * @param ignoreETag If 'true', the data from the server will be fetched and synced even if the eTag
-     * didn't change.
-     */
-    fun startSyncFolderOperation(folder: OCFile?, ignoreETag: Boolean) {
-        // TODO: SYNC FOLDER
+        // Nothing to do
     }
 
     private fun requestForDownload(file: OCFile) {
@@ -1921,7 +1891,7 @@ class FileDisplayActivity : FileActivity(),
     }
 
     override fun uploadShortcutFileFromApp(shortcutFilePath: Array<String>) {
-        requestUploadOfFilesFromFileSystem(shortcutFilePath, UploadBehavior.MOVE.toLegacyLocalBehavior())
+        requestUploadOfFilesFromFileSystem(shortcutFilePath)
     }
 
     override fun uploadFromFileSystem() {
@@ -2010,14 +1980,13 @@ class FileDisplayActivity : FileActivity(),
     }
 
     override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {
-        return when (keyCode) {
-            KeyEvent.KEYCODE_DPAD_DOWN -> {
-                if (findViewById<View>(R.id.owncloud_app_bar).hasFocus()) {
-                    findViewById<View>(R.id.left_fragment_container).requestFocus()
-                }
-                true
+        return if (keyCode == KeyEvent.KEYCODE_DPAD_DOWN) {
+            if (findViewById<View>(R.id.owncloud_app_bar).hasFocus()) {
+                findViewById<View>(R.id.left_fragment_container).requestFocus()
             }
-            else -> super.onKeyUp(keyCode, event)
+            true
+        } else {
+            super.onKeyUp(keyCode, event)
         }
     }
 
@@ -2031,7 +2000,6 @@ class FileDisplayActivity : FileActivity(),
         private const val KEY_WAITING_TO_SEND = "WAITING_TO_SEND"
         private const val KEY_UPLOAD_HELPER = "FILE_UPLOAD_HELPER"
         private const val KEY_FILE_LIST_OPTION = "FILE_LIST_OPTION"
-        private const val MAX_URL_LENGTH = 90
         const val MIMETYPE_TEXT_URI_LIST = "text/uri-list"
         const val KEY_DEEP_LINK_ACCOUNTS_CHECKED = "DEEP_LINK_ACCOUNTS_CHECKED"
 

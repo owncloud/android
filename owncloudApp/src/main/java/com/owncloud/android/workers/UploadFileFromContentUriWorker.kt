@@ -180,10 +180,8 @@ class UploadFileFromContentUriWorker(
     private fun copyFileToLocalStorage() {
         val cacheFile = File(cachePath)
         val cacheDir = cacheFile.parentFile
-        if (cacheDir != null) {
-            if (!cacheDir.exists()) {
-                cacheDir.mkdirs()
-            }
+        if (cacheDir != null && !cacheDir.exists()) {
+            cacheDir.mkdirs()
         }
         cacheFile.createNewFile()
 

@@ -131,6 +131,7 @@ class OCFileRepositoryTest {
         }
     }
 
+    @Suppress("MaxLineLength")
     @Test
     fun `copyFile returns a list with the OCFile in conflict (the copied OCFile) when replace parameter is empty and expected path already exists`() {
         every {
@@ -341,6 +342,7 @@ class OCFileRepositoryTest {
         }
     }
 
+    @Suppress("MaxLineLength")
     @Test
     fun `copyFile removes target folder locally and throws a ConflictException when replace parameter is empty and expected path doesn't exist but target folder doesn't exist anymore`() {
         every {
@@ -398,6 +400,7 @@ class OCFileRepositoryTest {
         }
     }
 
+    @Suppress("MaxLineLength")
     @Test
     fun `copyFile removes source file locally and throws a FileNotFoundException when replace parameter is empty and expected path doesn't exist but source file doesn't exist anymore`() {
         every {
@@ -548,7 +551,11 @@ class OCFileRepositoryTest {
             )
         } returns OC_FILE_WITH_SPACE_ID
 
-        val ocFile = ocFileRepository.getFileByRemotePath(OC_FILE_WITH_SPACE_ID.remotePath, OC_FOLDER_WITH_SPACE_ID.owner, OC_FOLDER_WITH_SPACE_ID.spaceId)
+        val ocFile = ocFileRepository.getFileByRemotePath(
+            OC_FILE_WITH_SPACE_ID.remotePath,
+            OC_FOLDER_WITH_SPACE_ID.owner,
+            OC_FOLDER_WITH_SPACE_ID.spaceId
+        )
         assertEquals(OC_FILE_WITH_SPACE_ID, ocFile)
 
         verify(exactly = 1) {
@@ -570,7 +577,11 @@ class OCFileRepositoryTest {
             )
         } returns null
 
-        val ocFile = ocFileRepository.getFileByRemotePath(OC_FILE_WITH_SPACE_ID.remotePath, OC_FOLDER_WITH_SPACE_ID.owner, OC_FOLDER_WITH_SPACE_ID.spaceId)
+        val ocFile = ocFileRepository.getFileByRemotePath(
+            OC_FILE_WITH_SPACE_ID.remotePath,
+            OC_FOLDER_WITH_SPACE_ID.owner,
+            OC_FOLDER_WITH_SPACE_ID.spaceId
+        )
         assertNull(ocFile)
 
         verify(exactly = 1) {
@@ -1093,6 +1104,7 @@ class OCFileRepositoryTest {
         }
     }
 
+    @Suppress("MaxLineLength")
     @Test
     fun `moveFile returns an empty list with no OCFiles in conflict when replace parameter is empty, expected path doesn't exist and file has a conflict`() {
         every {
@@ -1271,6 +1283,7 @@ class OCFileRepositoryTest {
         }
     }
 
+    @Suppress("MaxLineLength")
     @Test
     fun `moveFile removes target folder locally and throws a ConflictException when replace parameter is empty and expected path doesn't exist but target folder doesn't exist anymore`() {
         every {
@@ -1334,6 +1347,7 @@ class OCFileRepositoryTest {
         }
     }
 
+    @Suppress("MaxLineLength")
     @Test
     fun `moveFile removes source file locally and throws a FileNotFoundException when replace parameter is empty and expected path doesn't exist but source file doesn't exist anymore`() {
         every {
@@ -1449,7 +1463,12 @@ class OCFileRepositoryTest {
             )
         } returns emptyList()
 
-        val listOfFiles = ocFileRepository.refreshFolder(OC_PARENT_FOLDER_WITH_SPACE_ID.remotePath, OC_PARENT_FOLDER_WITH_SPACE_ID.owner, OC_PARENT_FOLDER_WITH_SPACE_ID.spaceId, false)
+        val listOfFiles = ocFileRepository.refreshFolder(
+            OC_PARENT_FOLDER_WITH_SPACE_ID.remotePath,
+            OC_PARENT_FOLDER_WITH_SPACE_ID.owner,
+            OC_PARENT_FOLDER_WITH_SPACE_ID.spaceId,
+            false
+        )
         assertEquals(emptyList<OCFile>(), listOfFiles)
 
         verify(exactly = 1) {
@@ -1505,7 +1524,12 @@ class OCFileRepositoryTest {
             )
         } returns emptyList()
 
-        val listOfFiles = ocFileRepository.refreshFolder(OC_PARENT_FOLDER_WITH_SPACE_ID.remotePath, OC_PARENT_FOLDER_WITH_SPACE_ID.owner, OC_PARENT_FOLDER_WITH_SPACE_ID.spaceId, false)
+        val listOfFiles = ocFileRepository.refreshFolder(
+            OC_PARENT_FOLDER_WITH_SPACE_ID.remotePath,
+            OC_PARENT_FOLDER_WITH_SPACE_ID.owner,
+            OC_PARENT_FOLDER_WITH_SPACE_ID.spaceId,
+            false
+        )
         assertEquals(emptyList<OCFile>(), listOfFiles)
 
         verify(exactly = 1) {
@@ -1533,6 +1557,7 @@ class OCFileRepositoryTest {
         }
     }
 
+    @Suppress("MaxLineLength")
     @Test
     fun `refreshFolder returns a list with the OCFile that changed when folder and its content already exists in database but needs to be updated`() {
         val ocParentFolderWithoutSpaceId = OC_PARENT_FOLDER_WITH_SPACE_ID.copy(spaceId = null)
@@ -1563,7 +1588,12 @@ class OCFileRepositoryTest {
             )
         } returns listOf(OC_FILE_WITH_SPACE_ID)
 
-        val listOfFiles = ocFileRepository.refreshFolder(OC_PARENT_FOLDER_WITH_SPACE_ID.remotePath, OC_PARENT_FOLDER_WITH_SPACE_ID.owner, OC_PARENT_FOLDER_WITH_SPACE_ID.spaceId, true)
+        val listOfFiles = ocFileRepository.refreshFolder(
+            OC_PARENT_FOLDER_WITH_SPACE_ID.remotePath,
+            OC_PARENT_FOLDER_WITH_SPACE_ID.owner,
+            OC_PARENT_FOLDER_WITH_SPACE_ID.spaceId,
+            true
+        )
         assertEquals(listOf(OC_FILE_WITH_SPACE_ID), listOfFiles)
 
         verify(exactly = 1) {
@@ -1591,6 +1621,7 @@ class OCFileRepositoryTest {
         }
     }
 
+    @Suppress("MaxLineLength")
     @Test
     fun `refreshFolder returns an empty list of OCFiles when folder and its content already exists in database updated and the action is not set folder available offline or synchronize`() {
         val ocParentFolderWithoutSpaceId = OC_PARENT_FOLDER_WITH_SPACE_ID.copy(spaceId = null)
@@ -1621,7 +1652,12 @@ class OCFileRepositoryTest {
             )
         } returns emptyList()
 
-        val listOfFiles = ocFileRepository.refreshFolder(OC_PARENT_FOLDER_WITH_SPACE_ID.remotePath, OC_PARENT_FOLDER_WITH_SPACE_ID.owner, OC_PARENT_FOLDER_WITH_SPACE_ID.spaceId, false)
+        val listOfFiles = ocFileRepository.refreshFolder(
+            OC_PARENT_FOLDER_WITH_SPACE_ID.remotePath,
+            OC_PARENT_FOLDER_WITH_SPACE_ID.owner,
+            OC_PARENT_FOLDER_WITH_SPACE_ID.spaceId,
+            false
+        )
         assertEquals(emptyList<OCFile>(), listOfFiles)
 
         verify(exactly = 1) {
@@ -1649,11 +1685,13 @@ class OCFileRepositoryTest {
         }
     }
 
+    @Suppress("MaxLineLength")
     @Test
     fun `refreshFolder returns an empty list of OCFiles when folder and its content already exists in database but there are additional files in conflict in local to be removed`() {
         val ocParentFolderWithoutSpaceId = OC_PARENT_FOLDER_WITH_SPACE_ID.copy(spaceId = null)
         val ocFileWithoutSpaceId = OC_FILE_WITH_SPACE_ID.copy(spaceId = null)
-        val additionalOcFile = OC_FILE_WITH_SPACE_ID.copy(id = 300, remotePath = "/Folder/image3.jpt", remoteId = "00000003oci9p7er2hox2", privateLink = "http://server.url/f/70", etagInConflict = etagInConflict)
+        val additionalOcFile = OC_FILE_WITH_SPACE_ID.copy(id = 300, remotePath = "/Folder/image3.jpt",
+            remoteId = "00000003oci9p7er2hox2", privateLink = "http://server.url/f/70", etagInConflict = etagInConflict)
         every {
             remoteFileDataSource.refreshFolder(
                 remotePath = OC_PARENT_FOLDER_WITH_SPACE_ID.remotePath,
@@ -1683,7 +1721,11 @@ class OCFileRepositoryTest {
             )
         } returns emptyList()
 
-        val listOfFiles = ocFileRepository.refreshFolder(OC_PARENT_FOLDER_WITH_SPACE_ID.remotePath, OC_PARENT_FOLDER_WITH_SPACE_ID.owner, OC_PARENT_FOLDER_WITH_SPACE_ID.spaceId, false)
+        val listOfFiles = ocFileRepository.refreshFolder(
+            OC_PARENT_FOLDER_WITH_SPACE_ID.remotePath,
+            OC_PARENT_FOLDER_WITH_SPACE_ID.owner,
+            OC_PARENT_FOLDER_WITH_SPACE_ID.spaceId,
+            false)
         assertEquals(emptyList<OCFile>(), listOfFiles)
 
         verify(exactly = 1) {

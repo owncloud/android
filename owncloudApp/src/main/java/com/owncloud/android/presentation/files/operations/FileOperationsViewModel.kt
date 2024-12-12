@@ -275,7 +275,8 @@ class FileOperationsViewModel(
                 remotePath = fileOperation.folderToRefresh.remotePath,
                 accountName = fileOperation.folderToRefresh.owner,
                 spaceId = fileOperation.folderToRefresh.spaceId,
-                syncMode = if (fileOperation.shouldSyncContents) SynchronizeFolderUseCase.SyncFolderMode.SYNC_CONTENTS else SynchronizeFolderUseCase.SyncFolderMode.REFRESH_FOLDER
+                syncMode = if (fileOperation.shouldSyncContents) SynchronizeFolderUseCase.SyncFolderMode.SYNC_CONTENTS
+                else SynchronizeFolderUseCase.SyncFolderMode.REFRESH_FOLDER
             )
         )
     }
