@@ -47,7 +47,7 @@ import com.owncloud.android.presentation.sharing.sharees.SearchShareesFragment
 import com.owncloud.android.presentation.sharing.sharees.UsersAndGroupsSearchProvider
 import com.owncloud.android.presentation.sharing.shares.PublicShareDialogFragment
 import com.owncloud.android.ui.activity.FileActivity
-import com.owncloud.android.ui.utils.showDialogFragment
+import com.owncloud.android.extensions.showDialogFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import timber.log.Timber
