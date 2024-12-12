@@ -161,7 +161,6 @@ class DocumentsStorageProvider : DocumentsProvider() {
                             context?.let {
                                 NotificationUtils.notifyConflict(
                                     fileInConflict = ocFile,
-                                    account = AccountUtils.getOwnCloudAccountByName(it, ocFile.owner),
                                     context = it
                                 )
                             }
