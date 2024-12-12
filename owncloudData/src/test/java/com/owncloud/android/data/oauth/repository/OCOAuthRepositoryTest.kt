@@ -37,7 +37,7 @@ import org.junit.Test
 
 class OCOAuthRepositoryTest {
 
-    private val remoteOAuthDataSource = mockk<RemoteOAuthDataSource>(relaxUnitFun = true)
+    private val remoteOAuthDataSource = mockk<RemoteOAuthDataSource>()
     private val oAuthRepository = OCOAuthRepository(remoteOAuthDataSource)
 
     @Test

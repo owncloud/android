@@ -40,9 +40,9 @@ import org.junit.Test
 
 class OCServerInfoRepositoryTest {
 
-    private val remoteServerInfoDataSource = mockk<RemoteServerInfoDataSource>(relaxUnitFun = true)
-    private val remoteWebFingerDataSource = mockk<RemoteWebFingerDataSource>(relaxUnitFun = true)
-    private val remoteOAuthDataSource = mockk<RemoteOAuthDataSource>(relaxUnitFun = true)
+    private val remoteServerInfoDataSource = mockk<RemoteServerInfoDataSource>()
+    private val remoteWebFingerDataSource = mockk<RemoteWebFingerDataSource>()
+    private val remoteOAuthDataSource = mockk<RemoteOAuthDataSource>()
     private val ocServerInfoRepository = OCServerInfoRepository(remoteServerInfoDataSource, remoteWebFingerDataSource, remoteOAuthDataSource)
 
     @Test

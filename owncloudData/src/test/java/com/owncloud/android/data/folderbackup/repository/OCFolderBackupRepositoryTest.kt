@@ -38,8 +38,6 @@ class OCFolderBackupRepositoryTest {
     private val localFolderBackupDataSource = mockk<LocalFolderBackupDataSource>(relaxUnitFun = true)
     private val ocFolderBackupRepository = OCFolderBackupRepository(localFolderBackupDataSource)
 
-    private val pictureUploadsName = "Pictures uploads"
-
     @Test
     fun `getAutomaticUploadsConfiguration returns an AutomaticUploadsConfiguration`() {
         every {
@@ -71,28 +69,28 @@ class OCFolderBackupRepositoryTest {
     @Test
     fun `getFolderBackupConfigurationByNameAsFlow returns a Flow with a FolderBackUpConfiguration`() = runTest {
         every {
-            localFolderBackupDataSource.getFolderBackupConfigurationByNameAsFlow(pictureUploadsName)
+            localFolderBackupDataSource.getFolderBackupConfigurationByNameAsFlow(OC_BACKUP.name)
         } returns flowOf(OC_BACKUP)
 
-        val folderBackUpConfiguration = ocFolderBackupRepository.getFolderBackupConfigurationByNameAsFlow(pictureUploadsName).first()
+        val folderBackUpConfiguration = ocFolderBackupRepository.getFolderBackupConfigurationByNameAsFlow(OC_BACKUP.name).first()
         assertEquals(OC_BACKUP, folderBackUpConfiguration)
 
         verify(exactly = 1) {
-            localFolderBackupDataSource.getFolderBackupConfigurationByNameAsFlow(pictureUploadsName)
+            localFolderBackupDataSource.getFolderBackupConfigurationByNameAsFlow(OC_BACKUP.name)
         }
     }
 
     @Test
     fun `getFolderBackupConfigurationByNameAsFlow returns a Flow with null when local datasource returns a Flow with null `() = runTest {
         every {
-            localFolderBackupDataSource.getFolderBackupConfigurationByNameAsFlow(pictureUploadsName)
+            localFolderBackupDataSource.getFolderBackupConfigurationByNameAsFlow(OC_BACKUP.name)
         } returns flowOf(null)
 
-        val folderBackUpConfiguration = ocFolderBackupRepository.getFolderBackupConfigurationByNameAsFlow(pictureUploadsName).first()
+        val folderBackUpConfiguration = ocFolderBackupRepository.getFolderBackupConfigurationByNameAsFlow(OC_BACKUP.name).first()
         assertNull(folderBackUpConfiguration)
 
         verify(exactly = 1) {
-            localFolderBackupDataSource.getFolderBackupConfigurationByNameAsFlow(pictureUploadsName)
+            localFolderBackupDataSource.getFolderBackupConfigurationByNameAsFlow(OC_BACKUP.name)
         }
     }
 
@@ -107,10 +105,10 @@ class OCFolderBackupRepositoryTest {
 
     @Test
     fun `resetFolderBackupConfigurationByName resets a folder backup configuration by name correctly`() {
-        ocFolderBackupRepository.resetFolderBackupConfigurationByName(pictureUploadsName)
+        ocFolderBackupRepository.resetFolderBackupConfigurationByName(OC_BACKUP.name)
 
         verify(exactly = 1) {
-            localFolderBackupDataSource.resetFolderBackupConfigurationByName(pictureUploadsName)
+            localFolderBackupDataSource.resetFolderBackupConfigurationByName(OC_BACKUP.name)
         }
     }
 

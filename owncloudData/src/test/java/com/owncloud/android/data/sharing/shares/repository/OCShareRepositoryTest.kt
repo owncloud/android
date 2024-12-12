@@ -44,9 +44,9 @@ class OCShareRepositoryTest {
     private val ocShareRepository = OCShareRepository(localShareDataSource, remoteShareDataSource)
 
     private val listOfShares = listOf(OC_PRIVATE_SHARE, OC_PUBLIC_SHARE)
-    private val filePath = "/Images"
+    private val filePath = OC_SHARE.path
     private val password = "password"
-    private val permissions = 1
+    private val permissions = OC_SHARE.permissions
     private val expiration = RemoteShare.INIT_EXPIRATION_DATE_IN_MILLIS
 
     @Test

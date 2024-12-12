@@ -32,15 +32,15 @@ import org.junit.Test
 
 class OCShareeRepositoryTest {
 
-    private val remoteShareeDataSource = mockk<RemoteShareeDataSource>(relaxUnitFun = true)
+    private val remoteShareeDataSource = mockk<RemoteShareeDataSource>()
     private val ocShareeRepository = OCShareeRepository(remoteShareeDataSource)
-
-    private val searchString = "user"
-    private val requestedPage = 1
-    private val resultsPerPage = 30
 
     @Test
     fun `getSharees returns a list of OCSharees`() {
+        val searchString = "user"
+        val requestedPage = 1
+        val resultsPerPage = 30
+
         every {
             remoteShareeDataSource.getSharees(searchString, requestedPage, resultsPerPage, OC_ACCOUNT_NAME)
         } returns listOf(OC_SHAREE)
