@@ -21,7 +21,6 @@
 
 package com.owncloud.android.presentation.spaces
 
-
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.owncloud.android.domain.UseCaseResult
