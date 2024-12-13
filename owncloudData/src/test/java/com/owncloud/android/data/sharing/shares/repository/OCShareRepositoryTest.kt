@@ -71,9 +71,10 @@ class OCShareRepositoryTest {
             )
         } returns OC_PRIVATE_SHARE
 
+        // The result of this method is not used, so it can be anything
         every {
             localShareDataSource.insert(OC_PRIVATE_SHARE)
-        } returns 1 // The result of this method is not used, so it can be anything
+        } returns 1
 
         ocShareRepository.insertPrivateShare(filePath, OC_PRIVATE_SHARE.shareType, OC_SHAREE.shareWith, permissions, OC_ACCOUNT_NAME)
 
@@ -105,9 +106,10 @@ class OCShareRepositoryTest {
             )
         } returns OC_PRIVATE_SHARE
 
+        // The result of this method is not used, so it can be anything
         every {
             localShareDataSource.update(OC_PRIVATE_SHARE)
-        } returns 1 // The result of this method is not used, so it can be anything
+        } returns 1
 
         ocShareRepository.updatePrivateShare(OC_PRIVATE_SHARE.remoteId, permissions, OC_ACCOUNT_NAME)
 
@@ -139,9 +141,10 @@ class OCShareRepositoryTest {
             )
         } returns OC_PUBLIC_SHARE
 
+        // The result of this method is not used, so it can be anything
         every {
             localShareDataSource.insert(OC_PUBLIC_SHARE)
-        } returns 1 // The result of this method is not used, so it can be anything
+        } returns 1
 
         ocShareRepository.insertPublicShare(filePath, permissions, OC_PUBLIC_SHARE.name!!, password, expiration, OC_ACCOUNT_NAME)
 
@@ -173,9 +176,10 @@ class OCShareRepositoryTest {
             )
         } returns OC_PUBLIC_SHARE
 
+        // The result of this method is not used, so it can be anything
         every {
             localShareDataSource.update(OC_PUBLIC_SHARE)
-        } returns 1 // The result of this method is not used, so it can be anything
+        } returns 1
 
         ocShareRepository.updatePublicShare(OC_PUBLIC_SHARE.remoteId, OC_PUBLIC_SHARE.name!!, password, expiration, permissions, OC_ACCOUNT_NAME)
 
@@ -204,8 +208,8 @@ class OCShareRepositoryTest {
             )
         } returns sharesLiveDataList
 
-        val sharesResult = ocShareRepository.getSharesAsLiveData(filePath, OC_ACCOUNT_NAME).getLastEmittedValue()
-        assertEquals(sharesLiveDataList.value, sharesResult)
+        val sharesResult = ocShareRepository.getSharesAsLiveData(filePath, OC_ACCOUNT_NAME).getLastEmittedValue()!!
+        assertEquals(OC_SHARE, sharesResult.first())
 
         verify(exactly = 1) {
             localShareDataSource.getSharesAsLiveData(
@@ -224,8 +228,8 @@ class OCShareRepositoryTest {
             localShareDataSource.getShareAsLiveData(OC_SHARE.remoteId)
         } returns shareAsLiveData
 
-        val shareResult = ocShareRepository.getShareAsLiveData(OC_SHARE.remoteId).getLastEmittedValue()
-        assertEquals(shareAsLiveData.value, shareResult)
+        val shareResult = ocShareRepository.getShareAsLiveData(OC_SHARE.remoteId).getLastEmittedValue()!!
+        assertEquals(OC_SHARE, shareResult)
 
         verify(exactly = 1) {
             localShareDataSource.getShareAsLiveData(OC_SHARE.remoteId)
@@ -243,9 +247,10 @@ class OCShareRepositoryTest {
             )
         } returns listOfShares
 
+        // The result of this method is not used, so it can be anything
         every {
             localShareDataSource.replaceShares(listOfShares)
-        } returns listOf(1, 1) // The result of this method is not used, so it can be anything
+        } returns listOf(1, 1)
 
         ocShareRepository.refreshSharesFromNetwork(filePath, OC_ACCOUNT_NAME)
 
@@ -291,9 +296,10 @@ class OCShareRepositoryTest {
 
     @Test
     fun `deleteShare deletes a share correctly`() {
+        // The result of this method is not used, so it can be anything
         every {
             localShareDataSource.deleteShare(OC_SHARE.remoteId)
-        } returns 1 // The result of this method is not used, so it can be anything
+        } returns 1
 
         ocShareRepository.deleteShare(OC_SHARE.remoteId, OC_ACCOUNT_NAME)
 
