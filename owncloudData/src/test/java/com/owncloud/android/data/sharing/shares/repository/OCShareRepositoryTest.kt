@@ -209,6 +209,7 @@ class OCShareRepositoryTest {
         } returns sharesLiveDataList
 
         val sharesResult = ocShareRepository.getSharesAsLiveData(filePath, OC_ACCOUNT_NAME).getLastEmittedValue()!!
+        assertEquals(1, sharesResult.size)
         assertEquals(OC_SHARE, sharesResult.first())
 
         verify(exactly = 1) {
