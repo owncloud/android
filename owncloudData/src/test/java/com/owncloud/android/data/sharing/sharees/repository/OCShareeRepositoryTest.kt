@@ -2,7 +2,9 @@
  * ownCloud Android client application
  *
  * @author David González Verdugo
- * Copyright (C) 2020 ownCloud GmbH.
+ * @author Jorge Aguado Recio
+ *
+ * Copyright (C) 2024 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -20,37 +22,34 @@
 package com.owncloud.android.data.sharing.sharees.repository
 
 import com.owncloud.android.data.sharing.sharees.datasources.RemoteShareeDataSource
-import com.owncloud.android.domain.exceptions.NoConnectionWithServerException
 import com.owncloud.android.testutil.OC_ACCOUNT_NAME
+import com.owncloud.android.testutil.OC_SHAREE
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import org.junit.Assert.assertEquals
 import org.junit.Test
 
 class OCShareeRepositoryTest {
 
-    private val remoteShareeDataSource = mockk<RemoteShareeDataSource>(relaxed = true)
-    private val oCShareeRepository: OCShareeRepository = OCShareeRepository((remoteShareeDataSource))
+    private val remoteShareeDataSource = mockk<RemoteShareeDataSource>()
+    private val ocShareeRepository = OCShareeRepository(remoteShareeDataSource)
 
     @Test
-    fun readShareesFromNetworkOk() {
-        every { remoteShareeDataSource.getSharees(any(), any(), any(), any()) } returns arrayListOf()
+    fun `getSharees returns a list of OCSharees`() {
+        val searchString = "user"
+        val requestedPage = 1
+        val resultsPerPage = 30
 
-        oCShareeRepository.getSharees("user", 1, 5, OC_ACCOUNT_NAME)
+        every {
+            remoteShareeDataSource.getSharees(searchString, requestedPage, resultsPerPage, OC_ACCOUNT_NAME)
+        } returns listOf(OC_SHAREE)
 
-        verify(exactly = 1) {
-            remoteShareeDataSource.getSharees("user", 1, 5, OC_ACCOUNT_NAME)
-        }
-    }
-
-    @Test(expected = NoConnectionWithServerException::class)
-    fun readShareesFromNetworkNoConnection() {
-        every { remoteShareeDataSource.getSharees(any(), any(), any(), any()) } throws NoConnectionWithServerException()
-
-        oCShareeRepository.getSharees("user", 1, 5, OC_ACCOUNT_NAME)
+        val listOfSharees = ocShareeRepository.getSharees(searchString, requestedPage, resultsPerPage, OC_ACCOUNT_NAME)
+        assertEquals(listOf(OC_SHAREE), listOfSharees)
 
         verify(exactly = 1) {
-            remoteShareeDataSource.getSharees("user", 1, 5, OC_ACCOUNT_NAME)
+            remoteShareeDataSource.getSharees(searchString, requestedPage, resultsPerPage, OC_ACCOUNT_NAME)
         }
     }
 }

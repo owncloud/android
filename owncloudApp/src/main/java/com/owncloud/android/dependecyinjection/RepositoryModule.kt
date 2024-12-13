@@ -26,7 +26,7 @@ import com.owncloud.android.data.appregistry.repository.OCAppRegistryRepository
 import com.owncloud.android.data.authentication.repository.OCAuthenticationRepository
 import com.owncloud.android.data.capabilities.repository.OCCapabilityRepository
 import com.owncloud.android.data.files.repository.OCFileRepository
-import com.owncloud.android.data.folderbackup.OCFolderBackupRepository
+import com.owncloud.android.data.folderbackup.repository.OCFolderBackupRepository
 import com.owncloud.android.data.oauth.repository.OCOAuthRepository
 import com.owncloud.android.data.server.repository.OCServerInfoRepository
 import com.owncloud.android.data.sharing.sharees.repository.OCShareeRepository
