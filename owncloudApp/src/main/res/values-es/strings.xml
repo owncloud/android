@@ -29,6 +29,9 @@
   <string name="drawer_open">Abrir</string>
   <string name="drawer_loading_quota">Cargando cuota</string>
   <string name="drawer_quota">%1$s de %2$s usado (%3$s %%)</string>
+  <string name="drawer_exceeded_quota">Almacenamiento lleno</string>
+  <string name="drawer_nearing_quota">Almacenamiento casi lleno</string>
+  <string name="drawer_critical_quota">Almacenamiento muy cerca de estar lleno</string>
   <string name="drawer_unavailable_free_storage">%1$s en uso</string>
   <string name="drawer_unavailable_used_storage">No hay información de uso de almacenamiento disponible</string>
   <string name="drawer_feedback">Sugerencias</string>
@@ -57,7 +60,9 @@
   <string name="prefs_touches_with_other_visible_windows_summary">Permite los toques  cuando la vista está oculta por otra ventana visible. Habilítelo para utilizar aplicaciones de filtrado de luz.</string>
   <string name="confirmation_touches_with_other_windows_title">¿Está seguro que desea habilitar esta función?</string>
   <string name="confirmation_touches_with_other_windows_message">Use esta funcionalidad bajo su propio riesgo. Una aplicación maliciosa podría intentar engañarle para que realice algunas acciones sin que lo sepa, utilizando otras vistas.</string>
+  <string name="prefs_subsection_picture_uploads">Subidas automáticas de imágenes</string>
   <string name="prefs_subsection_picture_uploads_summary">Administre localización y comportamiento de las imágenes subidas automáticamente</string>
+  <string name="prefs_subsection_video_uploads">Subidas automáticas de vídeos</string>
   <string name="prefs_subsection_video_uploads_summary">Administre localización y comportamiento de los videos subidos automáticamente</string>
   <string name="prefs_camera_picture_upload">Cargas de imágenes</string>
   <string name="prefs_camera_picture_upload_summary">Carga automáticamente las fotos tomadas por cámara</string>
@@ -72,6 +77,7 @@
   <string name="prefs_camera_video_upload_path_title">Ruta de subida de videos</string>
   <string name="prefs_camera_video_upload_on_wifi">Subir vídeos por wifi únicamente</string>
   <string name="prefs_camera_video_upload_on_charging">Subir vídeos solo cuando se está cargando</string>
+  <string name="prefs_automatic_uploads_not_available_users_light">Las subidas automáticas no están disponibles para usuarios light</string>
   <string name="prefs_subsection_advanced">Avanzado</string>
   <string name="prefs_subsection_notifications">Gestionar notificaciones</string>
   <string name="prefs_show_hidden_files">Mostrar archivos ocultos</string>
@@ -156,6 +162,7 @@
   <string name="file_list_empty_title_available_offline">No hay ficheros sin conexión</string>
   <string name="file_list_empty_title_shared_by_links">No hay enlaces compartidos</string>
   <string name="file_list_empty_subtitle_all_files">¡Suba algún contenido o sincronice con sus dispositivos!</string>
+  <string name="light_users_subtitle">El space personal no está disponible</string>
   <string name="shares_list_empty_title">Sin acciones</string>
   <string name="shares_list_empty_subtitle">No colaboras con recursos ajenos</string>
   <string name="spaces_list_empty_subtitle">¡No tienes acceso a ningún espacio!</string>
