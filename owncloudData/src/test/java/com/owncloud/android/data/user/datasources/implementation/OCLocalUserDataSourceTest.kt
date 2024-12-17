@@ -106,7 +106,7 @@ class OCLocalUserDataSourceTest {
 
         val resultActual = ocLocalUserDataSource.getAllUserQuotas()
 
-        assertEquals(listOf(userQuotaEntity.toModel()), resultActual)
+        assertEquals(listOf(OC_USER_QUOTA), resultActual)
 
         verify(exactly = 1) {
             ocUserQuotaDao.getAllUserQuotas()
@@ -120,7 +120,7 @@ class OCLocalUserDataSourceTest {
         } returns flowOf(listOf(userQuotaEntity))
 
         val listOfUserQuotas = ocLocalUserDataSource.getAllUserQuotasAsFlow().first()
-        assertEquals(listOf(userQuotaEntity.toModel()), listOfUserQuotas)
+        assertEquals(listOf(OC_USER_QUOTA), listOfUserQuotas)
 
         verify(exactly = 1) {
             ocUserQuotaDao.getAllUserQuotasAsFlow()
