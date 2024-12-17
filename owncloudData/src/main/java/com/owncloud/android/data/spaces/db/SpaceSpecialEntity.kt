@@ -4,7 +4,7 @@
  * @author Abel García de Prada
  * @author Juan Carlos Garrote Gascón
  *
- * Copyright (C) 2022 ownCloud GmbH.
+ * Copyright (C) 2024 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -54,7 +54,7 @@ data class SpaceSpecialEntity(
     @ColumnInfo(name = SPACES_SPECIAL_ID)
     val id: String,
     @ColumnInfo(name = SPACES_LAST_MODIFIED_DATE_TIME)
-    val lastModifiedDateTime: String,
+    val lastModifiedDateTime: String?,
     val name: String,
     val size: Int,
     @ColumnInfo(name = SPACES_SPECIAL_FOLDER_NAME)
