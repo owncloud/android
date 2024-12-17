@@ -41,8 +41,8 @@ class OCLocalUserDataSource(
     override fun getQuotaForAccount(accountName: String): UserQuota? =
         userDao.getQuotaForAccount(accountName = accountName)?.toModel()
 
-    override fun getQuotaForAccountAsFlow(accountName: String): Flow<UserQuota> =
-        userDao.getQuotaForAccountAsFlow(accountName = accountName).map { it.toModel() }
+    override fun getQuotaForAccountAsFlow(accountName: String): Flow<UserQuota?> =
+        userDao.getQuotaForAccountAsFlow(accountName = accountName).map { it?.toModel() }
 
     override fun getAllUserQuotas(): List<UserQuota> {
         return userDao.getAllUserQuotas().map { userQuotaEntity ->

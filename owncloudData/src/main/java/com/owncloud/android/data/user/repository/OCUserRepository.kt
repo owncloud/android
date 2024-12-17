@@ -43,7 +43,7 @@ class OCUserRepository(
     override fun getStoredUserQuota(accountName: String): UserQuota? =
         localUserDataSource.getQuotaForAccount(accountName)
 
-    override fun getStoredUserQuotaAsFlow(accountName: String): Flow<UserQuota> =
+    override fun getStoredUserQuotaAsFlow(accountName: String): Flow<UserQuota?> =
         localUserDataSource.getQuotaForAccountAsFlow(accountName)
 
     override fun getAllUserQuotas(): List<UserQuota> =

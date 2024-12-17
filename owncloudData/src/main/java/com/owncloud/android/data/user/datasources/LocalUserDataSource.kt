@@ -36,7 +36,7 @@ interface LocalUserDataSource {
 
     fun getQuotaForAccountAsFlow(
         accountName: String
-    ): Flow<UserQuota>
+    ): Flow<UserQuota?>
 
     fun getAllUserQuotas(): List<UserQuota>
 
