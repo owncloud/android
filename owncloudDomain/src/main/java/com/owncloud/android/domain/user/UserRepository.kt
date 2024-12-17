@@ -31,7 +31,7 @@ interface UserRepository {
     fun getUserInfo(accountName: String): UserInfo
     fun getUserQuota(accountName: String): UserQuota
     fun getStoredUserQuota(accountName: String): UserQuota?
-    fun getStoredUserQuotaAsFlow(accountName: String): Flow<UserQuota>
+    fun getStoredUserQuotaAsFlow(accountName: String): Flow<UserQuota?>
     fun getAllUserQuotas(): List<UserQuota>
     fun getAllUserQuotasAsFlow(): Flow<List<UserQuota>>
     fun getUserAvatar(accountName: String): UserAvatar

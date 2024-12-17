@@ -38,7 +38,7 @@ interface UserDao {
     @Query(SELECT_QUOTA)
     fun getQuotaForAccountAsFlow(
         accountName: String
-    ): Flow<UserQuotaEntity>
+    ): Flow<UserQuotaEntity?>
 
     @Query(SELECT_ALL_QUOTAS)
     fun getAllUserQuotas(): List<UserQuotaEntity>

@@ -27,9 +27,9 @@ import kotlinx.coroutines.flow.Flow
 
 class GetStoredQuotaAsStreamUseCase(
     private val userRepository: UserRepository
-) : BaseUseCase<Flow<UserQuota>, GetStoredQuotaAsStreamUseCase.Params>() {
+) : BaseUseCase<Flow<UserQuota?>, GetStoredQuotaAsStreamUseCase.Params>() {
 
-    override fun run(params: Params): Flow<UserQuota> =
+    override fun run(params: Params): Flow<UserQuota?> =
         userRepository.getStoredUserQuotaAsFlow(params.accountName)
 
     data class Params(val accountName: String)
