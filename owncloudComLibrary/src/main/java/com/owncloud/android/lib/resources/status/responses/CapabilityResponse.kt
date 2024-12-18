@@ -206,8 +206,10 @@ data class SpacesCapabilities(
     val projects: Boolean,
     @Json(name = "share_jail")
     val shareJail: Boolean?,
+    @Json(name = "has_multiple_personal_spaces")
+    val hasMultiplePersonalSpaces: Boolean?,
 ) {
-    fun toSpaces() = RemoteSpaces(enabled, projects, shareJail)
+    fun toSpaces() = RemoteSpaces(enabled, projects, shareJail, hasMultiplePersonalSpaces)
 }
 
 @JsonClass(generateAdapter = true)

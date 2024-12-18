@@ -83,6 +83,7 @@ data class OCCapability(
         val enabled: Boolean,
         val projects: Boolean,
         val shareJail: Boolean?,
+        val hasMultiplePersonalSpaces: Boolean?,
     )
 
     data class PasswordPolicy(
