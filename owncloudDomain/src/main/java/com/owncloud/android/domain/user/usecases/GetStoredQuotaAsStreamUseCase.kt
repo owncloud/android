@@ -20,14 +20,14 @@
 
 package com.owncloud.android.domain.user.usecases
 
-import com.owncloud.android.domain.BaseUseCase
+import com.owncloud.android.domain.BaseUseCaseWithResult
 import com.owncloud.android.domain.user.UserRepository
 import com.owncloud.android.domain.user.model.UserQuota
 import kotlinx.coroutines.flow.Flow
 
 class GetStoredQuotaAsStreamUseCase(
     private val userRepository: UserRepository
-) : BaseUseCase<Flow<UserQuota?>, GetStoredQuotaAsStreamUseCase.Params>() {
+) : BaseUseCaseWithResult<Flow<UserQuota?>, GetStoredQuotaAsStreamUseCase.Params>() {
 
     override fun run(params: Params): Flow<UserQuota?> =
         userRepository.getStoredUserQuotaAsFlow(params.accountName)
