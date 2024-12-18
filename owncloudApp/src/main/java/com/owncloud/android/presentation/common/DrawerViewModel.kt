@@ -32,11 +32,15 @@ import com.owncloud.android.data.providers.LocalStorageProvider
 import com.owncloud.android.domain.user.model.UserQuota
 import com.owncloud.android.domain.user.usecases.GetStoredQuotaAsStreamUseCase
 import com.owncloud.android.domain.user.usecases.GetUserQuotasUseCase
+import com.owncloud.android.domain.utils.Event
+import com.owncloud.android.extensions.ViewModelExt.runUseCaseWithResult
 import com.owncloud.android.presentation.authentication.AccountUtils
 import com.owncloud.android.providers.ContextProvider
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import com.owncloud.android.usecases.accounts.RemoveAccountUseCase
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -50,7 +54,19 @@ class DrawerViewModel(
     accountName: String,
 ) : ViewModel() {
 
-    val userQuota: Flow<UserQuota> = getStoredQuotaAsStreamUseCase(GetStoredQuotaAsStreamUseCase.Params(accountName))
+    private val _userQuota = MutableStateFlow<Event<UIResult<Flow<UserQuota?>>>?>(null)
+    val userQuota: StateFlow<Event<UIResult<Flow<UserQuota?>>>?> = _userQuota
+
+    init {
+        runUseCaseWithResult(
+            coroutineDispatcher = coroutinesDispatcherProvider.io,
+            requiresConnection = false,
+            showLoading = true,
+            flow = _userQuota,
+            useCase = getStoredQuotaAsStreamUseCase,
+            useCaseParams = GetStoredQuotaAsStreamUseCase.Params(accountName = accountName),
+        )
+    }
 
     fun getAccounts(context: Context): List<Account> {
         return AccountUtils.getAccounts(context).asList()
