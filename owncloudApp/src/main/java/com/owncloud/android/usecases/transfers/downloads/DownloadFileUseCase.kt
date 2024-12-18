@@ -18,6 +18,7 @@
  */
 package com.owncloud.android.usecases.transfers.downloads
 
+import androidx.work.BackoffPolicy
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.workDataOf
@@ -29,8 +30,10 @@ import com.owncloud.android.extensions.getTagsForDownload
 import com.owncloud.android.usecases.transfers.MAXIMUM_NUMBER_OF_RETRIES
 import com.owncloud.android.usecases.transfers.TRANSFER_TAG_DOWNLOAD
 import com.owncloud.android.workers.DownloadFileWorker
+import com.owncloud.android.workers.DownloadFileWorker.Companion.SECONDS_BACKOFF_DELAY
 import timber.log.Timber
 import java.util.UUID
+import java.util.concurrent.TimeUnit
 
 /**
  * We will use [WorkManager] to perform downloads.
@@ -93,6 +96,7 @@ class DownloadFileUseCase(
         )
 
         val downloadFileWork = OneTimeWorkRequestBuilder<DownloadFileWorker>()
+            .setBackoffCriteria(backoffPolicy = BackoffPolicy.LINEAR, backoffDelay = SECONDS_BACKOFF_DELAY, timeUnit = TimeUnit.MILLISECONDS)
             .setInputData(inputData)
             .addTag(ocFile.id.toString())
             .addTag(accountName)

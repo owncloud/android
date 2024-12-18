@@ -23,6 +23,7 @@
 package com.owncloud.android.usecases.transfers.uploads
 
 import android.net.Uri
+import androidx.work.BackoffPolicy
 import androidx.work.Constraints
 import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequestBuilder
@@ -32,7 +33,9 @@ import com.owncloud.android.domain.BaseUseCase
 import com.owncloud.android.domain.automaticuploads.model.UploadBehavior
 import com.owncloud.android.workers.RemoveSourceFileWorker
 import com.owncloud.android.workers.UploadFileFromContentUriWorker
+import com.owncloud.android.workers.UploadFileFromContentUriWorker.Companion.SECONDS_BACKOFF_DELAY
 import timber.log.Timber
+import java.util.concurrent.TimeUnit
 
 class UploadFileFromContentUriUseCase(
     private val workManager: WorkManager
@@ -58,6 +61,7 @@ class UploadFileFromContentUriUseCase(
             .build()
 
         val uploadFileFromContentUriWorker = OneTimeWorkRequestBuilder<UploadFileFromContentUriWorker>()
+            .setBackoffCriteria(backoffPolicy = BackoffPolicy.LINEAR, backoffDelay = SECONDS_BACKOFF_DELAY, timeUnit = TimeUnit.MILLISECONDS)
             .setInputData(inputDataUploadFileFromContentUriWorker)
             .setConstraints(constraints)
             .addTag(params.accountName)
