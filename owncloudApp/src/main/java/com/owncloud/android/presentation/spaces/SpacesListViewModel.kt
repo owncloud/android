@@ -21,15 +21,16 @@
 
 package com.owncloud.android.presentation.spaces
 
-
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.owncloud.android.domain.UseCaseResult
+import com.owncloud.android.domain.capabilities.usecases.GetStoredCapabilitiesUseCase
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.files.model.OCFile.Companion.ROOT_PATH
 import com.owncloud.android.domain.files.usecases.GetFileByRemotePathUseCase
 import com.owncloud.android.domain.spaces.model.OCSpace
 import com.owncloud.android.domain.spaces.usecases.GetPersonalAndProjectSpacesWithSpecialsForAccountAsStreamUseCase
+import com.owncloud.android.domain.spaces.usecases.GetPersonalSpacesWithSpecialsForAccountAsStreamUseCase
 import com.owncloud.android.domain.spaces.usecases.GetProjectSpacesWithSpecialsForAccountAsStreamUseCase
 import com.owncloud.android.domain.spaces.usecases.RefreshSpacesFromServerAsyncUseCase
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
@@ -40,28 +41,34 @@ import kotlinx.coroutines.launch
 
 class SpacesListViewModel(
     private val refreshSpacesFromServerAsyncUseCase: RefreshSpacesFromServerAsyncUseCase,
+    private val getPersonalSpacesWithSpecialsForAccountAsStreamUseCase: GetPersonalSpacesWithSpecialsForAccountAsStreamUseCase,
     private val getPersonalAndProjectSpacesWithSpecialsForAccountAsStreamUseCase: GetPersonalAndProjectSpacesWithSpecialsForAccountAsStreamUseCase,
     private val getProjectSpacesWithSpecialsForAccountAsStreamUseCase: GetProjectSpacesWithSpecialsForAccountAsStreamUseCase,
     private val getFileByRemotePathUseCase: GetFileByRemotePathUseCase,
+    private val getStoredCapabilitiesUseCase: GetStoredCapabilitiesUseCase,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
     private val accountName: String,
     private val showPersonalSpace: Boolean,
 ) : ViewModel() {
 
     private val _spacesList: MutableStateFlow<SpacesListUiState> =
-        MutableStateFlow(SpacesListUiState(spaces = emptyList(), refreshing = false, error = null, searchFilter = ""))
+        MutableStateFlow(SpacesListUiState(spaces = emptyList(), refreshing = false, error = null, searchFilter = "", isMultiPersonal = false))
     val spacesList: StateFlow<SpacesListUiState> = _spacesList
 
     init {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
             refreshSpacesFromServer()
-            val spacesListFlow = if (showPersonalSpace) getPersonalAndProjectSpacesWithSpecialsForAccountAsStreamUseCase(
+            val capabilities = getStoredCapabilitiesUseCase(GetStoredCapabilitiesUseCase.Params(accountName))
+            val isMultiPersonal = capabilities?.spaces?.hasMultiplePersonalSpaces
+            val spacesListFlow = if (isMultiPersonal == true) getPersonalSpacesWithSpecialsForAccountAsStreamUseCase(
+                GetPersonalSpacesWithSpecialsForAccountAsStreamUseCase.Params(accountName = accountName)
+            ) else if (showPersonalSpace) getPersonalAndProjectSpacesWithSpecialsForAccountAsStreamUseCase(
                 GetPersonalAndProjectSpacesWithSpecialsForAccountAsStreamUseCase.Params(accountName = accountName)
             ) else getProjectSpacesWithSpecialsForAccountAsStreamUseCase(
                 GetProjectSpacesWithSpecialsForAccountAsStreamUseCase.Params(accountName = accountName)
             )
             spacesListFlow.collect { spaces ->
-                _spacesList.update { it.copy(spaces = spaces) }
+                _spacesList.update { it.copy(spaces = spaces, isMultiPersonal = isMultiPersonal == true) }
             }
         }
     }
@@ -100,6 +107,7 @@ class SpacesListViewModel(
         val rootFolderFromSelectedSpace: OCFile? = null,
         val refreshing: Boolean,
         val error: Throwable?,
-        val searchFilter: String
+        val searchFilter: String,
+        val isMultiPersonal: Boolean,
     )
 }

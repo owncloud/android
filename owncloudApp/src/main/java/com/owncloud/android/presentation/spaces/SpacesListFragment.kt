@@ -99,10 +99,10 @@ class SpacesListFragment : SpacesListAdapter.SpacesListAdapterListener, Fragment
                     }
                 }
                 showOrHideEmptyView(spacesToListFiltered)
-                spacesListAdapter.setData(spacesToListFiltered)
+                spacesListAdapter.setData(spacesToListFiltered, uiState.isMultiPersonal)
             } else {
                 showOrHideEmptyView(uiState.spaces)
-                spacesListAdapter.setData(uiState.spaces.filter { !it.isDisabled })
+                spacesListAdapter.setData(uiState.spaces.filter { !it.isDisabled }, uiState.isMultiPersonal)
             }
             binding.swipeRefreshSpacesList.isRefreshing = uiState.refreshing
             uiState.error?.let { showErrorInSnackbar(R.string.spaces_sync_failed, it) }
