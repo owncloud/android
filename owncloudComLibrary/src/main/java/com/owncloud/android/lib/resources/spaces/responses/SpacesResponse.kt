@@ -1,5 +1,5 @@
 /* ownCloud Android Library is available under MIT license
- *   Copyright (C) 2022 ownCloud GmbH.
+ *   Copyright (C) 2024 ownCloud GmbH.
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -20,6 +20,7 @@
  *   CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *   THE SOFTWARE.
  */
+
 package com.owncloud.android.lib.resources.spaces.responses
 
 import com.squareup.moshi.JsonClass
@@ -32,7 +33,7 @@ data class SpacesResponseWrapper(
 @JsonClass(generateAdapter = true)
 data class SpaceResponse(
     val description: String?,
-    val driveAlias: String,
+    val driveAlias: String?,
     val driveType: String,
     val id: String,
     val lastModifiedDateTime: String?,
@@ -41,7 +42,7 @@ data class SpaceResponse(
     val quota: QuotaResponse?,
     val root: RootResponse,
     val special: List<SpecialResponse>?,
-    val webUrl: String,
+    val webUrl: String?,
 )
 
 @JsonClass(generateAdapter = true)
@@ -70,7 +71,7 @@ data class SpecialResponse(
     val eTag: String,
     val file: FileResponse,
     val id: String,
-    val lastModifiedDateTime: String,
+    val lastModifiedDateTime: String?,
     val name: String,
     val size: Int,
     val specialFolder: SpecialFolderResponse,

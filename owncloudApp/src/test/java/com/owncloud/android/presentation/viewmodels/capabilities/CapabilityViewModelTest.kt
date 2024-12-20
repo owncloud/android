@@ -25,6 +25,7 @@ import androidx.lifecycle.MutableLiveData
 import com.owncloud.android.domain.UseCaseResult
 import com.owncloud.android.domain.capabilities.model.OCCapability
 import com.owncloud.android.domain.capabilities.usecases.GetCapabilitiesAsLiveDataUseCase
+import com.owncloud.android.domain.capabilities.usecases.GetStoredCapabilitiesUseCase
 import com.owncloud.android.domain.capabilities.usecases.RefreshCapabilitiesFromServerAsyncUseCase
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.presentation.common.UIResult
@@ -62,6 +63,7 @@ class CapabilityViewModelTest {
 
     private lateinit var getCapabilitiesAsLiveDataUseCase: GetCapabilitiesAsLiveDataUseCase
     private lateinit var refreshCapabilitiesFromServerUseCase: RefreshCapabilitiesFromServerAsyncUseCase
+    private lateinit var getStoredCapabilitiesUseCase: GetStoredCapabilitiesUseCase
     private lateinit var ocContextProvider: ContextProvider
 
     private val capabilitiesLiveData = MutableLiveData<OCCapability>()
@@ -111,6 +113,7 @@ class CapabilityViewModelTest {
     private fun initTest() {
         getCapabilitiesAsLiveDataUseCase = spyk(mockkClass(GetCapabilitiesAsLiveDataUseCase::class))
         refreshCapabilitiesFromServerUseCase = spyk(mockkClass(RefreshCapabilitiesFromServerAsyncUseCase::class))
+        getStoredCapabilitiesUseCase = spyk(mockkClass(GetStoredCapabilitiesUseCase::class))
 
         every { getCapabilitiesAsLiveDataUseCase(any()) } returns capabilitiesLiveData
 
@@ -118,6 +121,7 @@ class CapabilityViewModelTest {
             accountName = testAccountName,
             getCapabilitiesAsLiveDataUseCase = getCapabilitiesAsLiveDataUseCase,
             refreshCapabilitiesFromServerAsyncUseCase = refreshCapabilitiesFromServerUseCase,
+            getStoredCapabilitiesUseCase = getStoredCapabilitiesUseCase,
             coroutineDispatcherProvider = coroutineDispatcherProvider
         )
     }

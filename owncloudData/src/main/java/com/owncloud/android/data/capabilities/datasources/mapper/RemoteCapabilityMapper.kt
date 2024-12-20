@@ -2,7 +2,9 @@
  * ownCloud Android client application
  *
  * @author David González Verdugo
- * Copyright (C) 2020 ownCloud GmbH.
+ * @author Juan Carlos Garrote Gascón
+ *
+ * Copyright (C) 2024 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -122,7 +124,7 @@ class RemoteCapabilityMapper : RemoteMapper<OCCapability, RemoteCapability> {
         OCCapability.AppProviders(enabled, version, appsUrl, openUrl, openWebUrl, newUrl)
 
     private fun RemoteCapability.RemoteSpaces.toSpaces() =
-        OCCapability.Spaces(enabled, projects, shareJail)
+        OCCapability.Spaces(enabled, projects, shareJail, hasMultiplePersonalSpaces)
 
     private fun RemoteCapability.RemotePasswordPolicy.toPasswordPolicy() =
         OCCapability.PasswordPolicy(maxCharacters, minCharacters, minDigits, minLowercaseCharacters, minSpecialCharacters, minUppercaseCharacters)

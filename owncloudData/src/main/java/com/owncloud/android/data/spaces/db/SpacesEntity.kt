@@ -4,7 +4,7 @@
  * @author Abel García de Prada
  * @author Juan Carlos Garrote Gascón
  *
- * Copyright (C) 2023 ownCloud GmbH.
+ * Copyright (C) 2024 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -45,7 +45,7 @@ data class SpacesEntity(
     @ColumnInfo(name = SPACES_ACCOUNT_NAME)
     val accountName: String,
     @ColumnInfo(name = SPACES_DRIVE_ALIAS)
-    val driveAlias: String,
+    val driveAlias: String?,
     @ColumnInfo(name = SPACES_DRIVE_TYPE)
     val driveType: String,
     @ColumnInfo(name = SPACES_ID)
@@ -60,7 +60,7 @@ data class SpacesEntity(
     @Embedded
     val root: SpaceRootEntity,
     @ColumnInfo(name = SPACES_WEB_URL)
-    val webUrl: String,
+    val webUrl: String?,
     val description: String?,
 ) {
 
