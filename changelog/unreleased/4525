@@ -1,0 +1,7 @@
+Enhancement: Technical improvements for user quota
+
+A new use case has been added to fetch the user quota as a flow.
+Also, all unnecessary calls from DrawerActivity have been removed.
+
+https://github.com/owncloud/android/issues/4521
+https://github.com/owncloud/android/pull/4525

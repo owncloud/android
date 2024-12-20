@@ -5,6 +5,7 @@
  * @author Abel García de Prada
  * @author Juan Carlos Garrote Gascón
  * @author Aitor Ballesteros Pavón
+ * @author Jorge Aguado Recio
  *
  * Copyright (C) 2024 ownCloud GmbH.
  *
@@ -101,6 +102,7 @@ import com.owncloud.android.domain.transfers.usecases.GetAllTransfersAsStreamUse
 import com.owncloud.android.domain.transfers.usecases.GetAllTransfersUseCase
 import com.owncloud.android.domain.transfers.usecases.UpdatePendingUploadsPathUseCase
 import com.owncloud.android.domain.user.usecases.GetStoredQuotaUseCase
+import com.owncloud.android.domain.user.usecases.GetStoredQuotaAsStreamUseCase
 import com.owncloud.android.domain.user.usecases.GetUserAvatarAsyncUseCase
 import com.owncloud.android.domain.user.usecases.GetUserInfoAsyncUseCase
 import com.owncloud.android.domain.user.usecases.GetUserQuotasUseCase
@@ -252,6 +254,7 @@ val useCaseModule = module {
     factoryOf(::UploadFilesFromSystemUseCase)
 
     // User
+    factoryOf(::GetStoredQuotaAsStreamUseCase)
     factoryOf(::GetStoredQuotaUseCase)
     factoryOf(::GetUserAvatarAsyncUseCase)
     factoryOf(::GetUserInfoAsyncUseCase)
