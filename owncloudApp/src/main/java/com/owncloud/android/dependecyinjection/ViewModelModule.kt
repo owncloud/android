@@ -85,7 +85,7 @@ val viewModelModule = module {
     viewModelOf(::SettingsViewModel)
     viewModelOf(::FileOperationsViewModel)
 
-    viewModel { (accountName: String) -> CapabilityViewModel(accountName, get(), get(), get()) }
+    viewModel { (accountName: String) -> CapabilityViewModel(accountName, get(), get(), get(), get()) }
     viewModel { (action: PasscodeAction) -> PassCodeViewModel(get(), get(), action) }
     viewModel { (filePath: String, accountName: String) ->
         ShareViewModel(filePath, accountName, get(), get(), get(), get(), get(), get(), get(), get(), get(), get())
@@ -99,6 +99,6 @@ val viewModelModule = module {
     viewModel { TransfersViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
     viewModel { ReceiveExternalFilesViewModel(get(), get(), get(), get()) }
     viewModel { (accountName: String, showPersonalSpace: Boolean) ->
-        SpacesListViewModel(get(), get(), get(), get(), get(), accountName, showPersonalSpace)
+        SpacesListViewModel(get(), get(), get(), get(), get(), get(), get(), accountName, showPersonalSpace)
     }
 }
