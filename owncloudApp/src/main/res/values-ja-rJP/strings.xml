@@ -5,6 +5,7 @@
   <string name="global_date">日付</string>
   <string name="global_size">サイズ</string>
   <string name="actionbar_search">このフォルダーを探す</string>
+  <string name="actionbar_search_space">検索スペース</string>
   <string name="actionbar_sync">アカウントを同期</string>
   <string name="actionbar_upload">アップロード</string>
   <string name="actionbar_upload_from_apps">他アプリからのコンテンツ</string>
@@ -28,6 +29,9 @@
   <string name="drawer_open">開く</string>
   <string name="drawer_loading_quota">読み込み割り当て</string>
   <string name="drawer_quota">使用された%2$sの%1$s(%3$s %%)</string>
+  <string name="drawer_exceeded_quota">ストレージが満杯です</string>
+  <string name="drawer_nearing_quota">ストレージが満杯に近いです</string>
+  <string name="drawer_critical_quota">ストレージがほぼ満杯です</string>
   <string name="drawer_unavailable_free_storage">%1$s を使用中</string>
   <string name="drawer_unavailable_used_storage">利用可能なストレージ利用状況はありません。</string>
   <string name="drawer_feedback">フィードバック</string>
@@ -73,6 +77,7 @@
   <string name="prefs_camera_video_upload_path_title">動画アップロードパス</string>
   <string name="prefs_camera_video_upload_on_wifi">WiFi経由でのみ動画をアップロード</string>
   <string name="prefs_camera_video_upload_on_charging">充電中のみ動画をアップロードする</string>
+  <string name="prefs_automatic_uploads_not_available_users_light">自動アップロードはライトユーザーでは利用できません</string>
   <string name="prefs_subsection_advanced">詳細設定</string>
   <string name="prefs_subsection_notifications">通知の管理</string>
   <string name="prefs_show_hidden_files">隠しファイルを表示</string>
@@ -158,6 +163,7 @@
   <string name="file_list_empty_title_available_offline">利用可能なオフラインファイルがない</string>
   <string name="file_list_empty_title_shared_by_links">共有リンクはありません</string>
   <string name="file_list_empty_subtitle_all_files">何かコンテンツをアップロードするか、デバイスからファイルを同期してください。</string>
+  <string name="light_users_subtitle">個人スペースは利用できません</string>
   <string name="shares_list_empty_title">株式なし</string>
   <string name="shares_list_empty_subtitle">他人のリソースで共同作業をしているわけではない。</string>
   <string name="spaces_list_empty_subtitle">スペースにアクセスできない！</string>
@@ -485,6 +491,8 @@
   <string name="prefs_category_accounts">アカウント</string>
   <string name="prefs_add_account">アカウントを追加</string>
   <string name="drawer_manage_accounts">アカウント管理</string>
+  <string name="manage_accounts_quota">%1$s の %2$s</string>
+  <string name="used_quota_title_manage_accounts">使用:</string>
   <string name="auth_redirect_non_secure_connection_title">暗号化されていない接続を経て、暗号化接続へリダイレクトされました。</string>
   <string name="actionbar_logger">ログ</string>
   <string name="log_send_history_button">履歴を送信</string>
@@ -673,6 +681,10 @@
   <string name="release_notes_bugfixes_subtitle">アプリの使い心地を向上するため、いくつかのバグを修正しました</string>
   <string name="release_notes_4_5_0_title_feedback_in_previews">すべてのプレビューでオフラインAV視聴設定(解除)時のフィードバック</string>
   <string name="release_notes_4_5_0_subtitle_feedback_in_previews">すべてのプレビューで、AVオフライン視聴の設定(または解除)する際のフィードバックを追加し、ファイルのステータスに応じてオプションメニューを更新しました</string>
+  <string name="release_notes_4_5_0_title_quota_improvements">ストレージ占有表示の改善</string>
+  <string name="release_notes_4_5_0_subtitle_quota_improvements">ストレージの占有状況は、ファイルおよび更新操作で頻繁に更新され、ドロワーメニューのほかに、アカウント管理表示でも利用できます。</string>
+  <string name="release_notes_4_5_0_title_light_users">ownCloud 無限スケールサーバ  ライトユーザー</string>
+  <string name="release_notes_4_5_0_subtitle_light_users">ownCloud 無限スケールサーバーのライトユーザー（個人スペースのないユーザー）がアプリでサポートされるようになりました</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Webで開く</string>
   <string name="ic_action_open_with_web">%1$s(Web) で開く</string>
