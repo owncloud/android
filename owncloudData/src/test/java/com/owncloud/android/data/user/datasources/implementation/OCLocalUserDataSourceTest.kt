@@ -23,7 +23,6 @@
 package com.owncloud.android.data.user.datasources.implementation
 
 import com.owncloud.android.data.user.datasources.implementation.OCLocalUserDataSource.Companion.toEntity
-import com.owncloud.android.data.user.datasources.implementation.OCLocalUserDataSource.Companion.toModel
 import com.owncloud.android.data.user.db.UserDao
 import com.owncloud.android.testutil.OC_ACCOUNT_NAME
 import com.owncloud.android.testutil.OC_USER_QUOTA
@@ -92,7 +91,7 @@ class OCLocalUserDataSourceTest {
         } returns flowOf(userQuotaEntity)
 
         val userQuota = ocLocalUserDataSource.getQuotaForAccountAsFlow(OC_ACCOUNT_NAME).first()
-        assertEquals(userQuotaEntity.toModel(), userQuota)
+        assertEquals(OC_USER_QUOTA, userQuota)
 
         verify(exactly = 1) {
             ocUserQuotaDao.getQuotaForAccountAsFlow(OC_ACCOUNT_NAME)
