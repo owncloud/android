@@ -1513,10 +1513,6 @@ class FileDisplayActivity : FileActivity(),
         }
     }
 
-    override fun onSavedCertificate() {
-        // Nothing to do
-    }
-
     private fun requestForDownload(file: OCFile) {
         val downloadFileUseCase: DownloadFileUseCase by inject()
 

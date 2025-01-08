@@ -294,10 +294,8 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         var retval = true
-        if (item.itemId == android.R.id.home) {
-            if (!supportFragmentManager.popBackStackImmediate()) {
-                finish()
-            }
+        if (item.itemId == android.R.id.home && !supportFragmentManager.popBackStackImmediate()) {
+            finish()
         } else {
             retval = super.onOptionsItemSelected(item)
         }
