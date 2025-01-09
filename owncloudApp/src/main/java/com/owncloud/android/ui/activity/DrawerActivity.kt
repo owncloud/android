@@ -588,9 +588,8 @@ abstract class DrawerActivity : ToolbarActivity() {
      * @param id the view's id
      * @return The view if found or `null` otherwise.
      */
-    private fun findNavigationViewChildById(id: Int): View {
-        return (findViewById<View>(R.id.nav_view) as NavigationView).getHeaderView(0).findViewById(id)
-    }
+    private fun findNavigationViewChildById(id: Int): View =
+        (findViewById<View>(R.id.nav_view) as NavigationView).getHeaderView(0).findViewById(id)
 
     /**
      * Adds other listeners to react on changes of the drawer layout.

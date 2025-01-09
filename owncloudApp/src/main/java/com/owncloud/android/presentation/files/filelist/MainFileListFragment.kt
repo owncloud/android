@@ -662,15 +662,14 @@ class MainFileListFragment : Fragment(),
         }
     }
 
-    private suspend fun getDrawableFromUrl(context: Context, url: String): Drawable? {
-        return withContext(Dispatchers.IO) {
+    private suspend fun getDrawableFromUrl(context: Context, url: String): Drawable? =
+        withContext(Dispatchers.IO) {
             Glide.with(context)
                 .load(url)
                 .fitCenter()
                 .submit()
                 .get()
         }
-    }
 
     private fun observeFileListUiState() {
         collectLatestLifecycleFlow(mainFileListViewModel.fileListUiState) { fileListUiState ->
@@ -1188,13 +1187,11 @@ class MainFileListFragment : Fragment(),
      *
      * @return The currently viewed OCFile
      */
-    fun getCurrentFile(): OCFile {
-        return mainFileListViewModel.getFile()
-    }
+    fun getCurrentFile(): OCFile =
+        mainFileListViewModel.getFile()
 
-    fun getCurrentSpace(): OCSpace? {
-        return mainFileListViewModel.getSpace()
-    }
+    fun getCurrentSpace(): OCSpace? =
+        mainFileListViewModel.getSpace()
 
     private fun setDrawerStatus(enabled: Boolean) {
         (activity as FileActivity).setDrawerLockMode(if (enabled) DrawerLayout.LOCK_MODE_UNLOCKED else DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
@@ -1537,9 +1534,8 @@ class MainFileListFragment : Fragment(),
             }
         }
 
-        override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
-            return onFileActionChosen(item?.itemId)
-        }
+        override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean =
+            onFileActionChosen(item?.itemId)
 
         override fun onDestroyActionMode(mode: ActionMode?) {
             setDrawerStatus(enabled = true)

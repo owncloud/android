@@ -147,8 +147,8 @@ class UploadFileFromFileSystemWorker(
         return true
     }
 
-    private fun retrieveUploadInfoFromDatabase(): OCTransfer? {
-        return transferRepository.getTransferById(uploadIdInStorageManager).also {
+    private fun retrieveUploadInfoFromDatabase(): OCTransfer? =
+        transferRepository.getTransferById(uploadIdInStorageManager).also {
             if (it != null) {
                 Timber.d("Upload with id ($uploadIdInStorageManager) has been found in database.")
                 Timber.d("Upload info: $it")
@@ -157,7 +157,6 @@ class UploadFileFromFileSystemWorker(
                 Timber.w("$uploadPath won't be uploaded")
             }
         }
-    }
 
     private fun checkPermissionsToReadDocumentAreGranted() {
         val fileInFileSystem = File(fileSystemPath)
@@ -312,13 +311,12 @@ class UploadFileFromFileSystemWorker(
         )
     }
 
-    private fun getUploadStatusForThrowable(throwable: Throwable?): TransferStatus {
-        return if (throwable == null) {
+    private fun getUploadStatusForThrowable(throwable: Throwable?): TransferStatus =
+        if (throwable == null) {
             TransferStatus.TRANSFER_SUCCEEDED
         } else {
             TransferStatus.TRANSFER_FAILED
         }
-    }
 
     /**
      * Update the database with latest details about this file.

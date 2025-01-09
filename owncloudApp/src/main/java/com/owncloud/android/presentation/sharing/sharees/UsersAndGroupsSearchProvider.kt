@@ -56,10 +56,9 @@ import java.util.Locale
 class UsersAndGroupsSearchProvider : ContentProvider() {
     private lateinit var uriMatcher: UriMatcher
 
-    override fun getType(uri: Uri): String? {
+    override fun getType(uri: Uri): String? =
         // TODO implement
-        return null
-    }
+        null
 
     override fun onCreate(): Boolean {
         try {
@@ -240,20 +239,17 @@ class UsersAndGroupsSearchProvider : ContentProvider() {
         return response
     }
 
-    override fun insert(uri: Uri, values: ContentValues?): Uri? {
+    override fun insert(uri: Uri, values: ContentValues?): Uri? =
         // TODO implementation
-        return null
-    }
+        null
 
-    override fun delete(uri: Uri, selection: String?, selectionArgs: Array<String>?): Int {
+    override fun delete(uri: Uri, selection: String?, selectionArgs: Array<String>?): Int =
         // TODO implementation
-        return 0
-    }
+        0
 
-    override fun update(uri: Uri, values: ContentValues?, selection: String?, selectionArgs: Array<String>?): Int {
+    override fun update(uri: Uri, values: ContentValues?, selection: String?, selectionArgs: Array<String>?): Int =
         // TODO implementation
-        return 0
-    }
+        0
 
     /**
      * Show error genericErrorMessage
@@ -298,8 +294,7 @@ class UsersAndGroupsSearchProvider : ContentProvider() {
             private set
         private val shareTypes = HashMap<String, ShareType>()
 
-        fun getShareType(authority: String?): ShareType? {
-            return shareTypes[authority]
-        }
+        fun getShareType(authority: String?): ShareType? =
+            shareTypes[authority]
     }
 }

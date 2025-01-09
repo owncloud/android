@@ -83,9 +83,8 @@ object PassCodeManager {
         else false
     }
 
-    fun isPassCodeEnabled(): Boolean {
-        return preferencesProvider.getBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false)
-    }
+    fun isPassCodeEnabled(): Boolean =
+        preferencesProvider.getBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false)
 
     private fun askUserForPasscode(activity: Activity) {
         val i = Intent(appContext, PassCodeActivity::class.java).apply {

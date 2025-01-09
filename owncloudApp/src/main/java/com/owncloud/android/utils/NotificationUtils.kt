@@ -49,12 +49,11 @@ object NotificationUtils {
     const val pendingIntentFlags = PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
 
     @JvmStatic
-    fun newNotificationBuilder(context: Context, channelId: String): NotificationCompat.Builder {
-        return NotificationCompat.Builder(context, channelId).apply {
+    fun newNotificationBuilder(context: Context, channelId: String): NotificationCompat.Builder =
+         NotificationCompat.Builder(context, channelId).apply {
             color = ContextCompat.getColor(context, R.color.primary)
             setSmallIcon(R.drawable.notification_icon)
         }
-    }
 
     fun createBasicNotification(
         context: Context,

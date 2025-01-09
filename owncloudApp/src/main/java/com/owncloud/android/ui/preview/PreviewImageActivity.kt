@@ -252,8 +252,8 @@ class PreviewImageActivity : FileActivity(),
         }
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return if (item.itemId == android.R.id.home) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean =
+        if (item.itemId == android.R.id.home) {
             if (isDrawerOpen()) {
                 closeDrawer()
             } else {
@@ -263,7 +263,6 @@ class PreviewImageActivity : FileActivity(),
         } else {
             super.onOptionsItemSelected(item)
         }
-    }
 
     override fun onResume() {
         super.onResume()
@@ -405,18 +404,16 @@ class PreviewImageActivity : FileActivity(),
     }
 
     // The main_menu won't be displayed
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        return false
-    }
+    override fun onCreateOptionsMenu(menu: Menu): Boolean =
+        false
 
-    override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {
-        return if (keyCode == KeyEvent.KEYCODE_TAB) {
+    override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean =
+        if (keyCode == KeyEvent.KEYCODE_TAB) {
             showSystemUI(fullScreenAnchorView)
             true
         } else {
             super.onKeyUp(keyCode, event)
         }
-    }
 
     companion object {
         private const val INITIAL_HIDE_DELAY = 0 // immediate hide

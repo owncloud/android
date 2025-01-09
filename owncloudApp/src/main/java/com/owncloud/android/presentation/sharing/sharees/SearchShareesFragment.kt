@@ -132,9 +132,8 @@ class SearchShareesFragment : Fragment(),
                 // a user / group will be picked only if selected in the list of suggestions
             }
 
-            override fun onQueryTextChange(newText: String): Boolean {
-                return false   // let it for the parent listener in the hierarchy / default behaviour
-            }
+            override fun onQueryTextChange(newText: String): Boolean =
+                false   // let it for the parent listener in the hierarchy / default behaviour
         })
     }
 

@@ -177,13 +177,11 @@ class MainFileListViewModel(
         }
     }
 
-    fun getFile(): OCFile {
-        return currentFolderDisplayed.value
-    }
+    fun getFile(): OCFile =
+        currentFolderDisplayed.value
 
-    fun getSpace(): OCSpace? {
-        return space.value
-    }
+    fun getSpace(): OCSpace? =
+        space.value
 
     fun setGridModeAsPreferred() {
         savePreferredLayoutManager(true)
@@ -199,15 +197,14 @@ class MainFileListViewModel(
 
     fun isGridModeSetAsPreferred() = sharedPreferencesProvider.getBoolean(RECYCLER_VIEW_PREFERRED, false)
 
-    private fun sortList(filesWithSyncInfo: List<OCFileWithSyncInfo>, sortTypeAndOrder: Pair<SortType, SortOrder>): List<OCFileWithSyncInfo> {
-        return sortFilesWithSyncInfoUseCase(
+    private fun sortList(filesWithSyncInfo: List<OCFileWithSyncInfo>, sortTypeAndOrder: Pair<SortType, SortOrder>): List<OCFileWithSyncInfo> =
+        sortFilesWithSyncInfoUseCase(
             SortFilesWithSyncInfoUseCase.Params(
                 listOfFiles = filesWithSyncInfo,
                 sortType = SortTypeDomain.fromPreferences(sortTypeAndOrder.first.ordinal),
                 ascending = sortTypeAndOrder.second == SortOrder.SORT_ORDER_ASCENDING
             )
         )
-    }
 
     fun manageBrowseUp() {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {

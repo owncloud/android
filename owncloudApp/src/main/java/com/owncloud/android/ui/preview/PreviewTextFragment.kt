@@ -135,8 +135,8 @@ class PreviewTextFragment : FileFragment() {
         }
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean =
+        when (item.itemId) {
             R.id.action_share_file -> {
                 mContainerActivity.fileOperationsHelper.showShareFile(file)
                 true
@@ -187,7 +187,6 @@ class PreviewTextFragment : FileFragment() {
                 super.onOptionsItemSelected(item)
             }
         }
-    }
 
     override fun onDestroyView() {
         super.onDestroyView()

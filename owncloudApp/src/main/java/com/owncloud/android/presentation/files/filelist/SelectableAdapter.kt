@@ -32,9 +32,8 @@ abstract class SelectableAdapter<VH : RecyclerView.ViewHolder?> :
      * @param position Position of the item to check
      * @return true if the item is selected, false otherwise
      */
-    fun isSelected(position: Int): Boolean {
-        return getSelectedItems().contains(position)
-    }
+    fun isSelected(position: Int): Boolean =
+        getSelectedItems().contains(position)
 
     /**
      * Toggle the selection status of the item at a given position

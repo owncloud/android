@@ -41,16 +41,14 @@ fun WorkManager.getWorkInfoByTags(tags: List<String>): List<WorkInfo> =
 /**
  * Get a list of WorkInfo of running workers that matches EVERY tag.
  */
-fun WorkManager.getRunningWorkInfosByTags(tags: List<String>): List<WorkInfo> {
-    return getWorkInfos(buildWorkQuery(tags = tags, states = listOf(WorkInfo.State.RUNNING))).get().filter { it.tags.containsAll(tags) }
-}
+fun WorkManager.getRunningWorkInfosByTags(tags: List<String>): List<WorkInfo> =
+    getWorkInfos(buildWorkQuery(tags = tags, states = listOf(WorkInfo.State.RUNNING))).get().filter { it.tags.containsAll(tags) }
 
 /**
  * Get a list of WorkInfo of running workers as LiveData that matches at least one of the tags.
  */
-fun WorkManager.getRunningWorkInfosLiveData(tags: List<String>): LiveData<List<WorkInfo>> {
-    return getWorkInfosLiveData(buildWorkQuery(tags = tags, states = listOf(WorkInfo.State.RUNNING)))
-}
+fun WorkManager.getRunningWorkInfosLiveData(tags: List<String>): LiveData<List<WorkInfo>> =
+     getWorkInfosLiveData(buildWorkQuery(tags = tags, states = listOf(WorkInfo.State.RUNNING)))
 
 /**
  * Check if a download is pending. It could be enqueued, downloading or blocked.

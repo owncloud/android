@@ -146,11 +146,10 @@ class BiometricViewModel(
         return if (pinString.isEmpty()) null else pinString
     }
 
-    fun isBiometricLockAvailable(): Boolean {
-        return if (!BiometricManager.isHardwareDetected()) { // Biometric not supported
+    fun isBiometricLockAvailable(): Boolean =
+        if (!BiometricManager.isHardwareDetected()) { // Biometric not supported
             false
         } else BiometricManager.hasEnrolledBiometric() // Biometric not enrolled
-    }
 
     companion object {
         private const val ANDROID_KEY_STORE = "AndroidKeyStore"

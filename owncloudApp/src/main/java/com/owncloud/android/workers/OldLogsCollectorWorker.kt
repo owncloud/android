@@ -58,9 +58,8 @@ class OldLogsCollectorWorker(
         return File(logsPath)
     }
 
-    private fun getLogsFiles(logsFolder: File): List<File> {
-        return logsFolder.listFiles()?.toList() ?: listOf()
-    }
+    private fun getLogsFiles(logsFolder: File): List<File> =
+        logsFolder.listFiles()?.toList() ?: listOf()
 
     private fun removeOldLogs(logFiles: List<File>) {
         logFiles.forEach { log ->

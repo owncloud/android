@@ -112,17 +112,16 @@ class SynchronizeFileUseCase(
         }
     }
 
-    private fun requestForDownload(accountName: String, ocFile: OCFile): UUID? {
-        return downloadFileUseCase(
+    private fun requestForDownload(accountName: String, ocFile: OCFile): UUID? =
+        downloadFileUseCase(
             DownloadFileUseCase.Params(
                 accountName = accountName,
                 file = ocFile
             )
         )
-    }
 
-    private fun requestForUpload(accountName: String, ocFile: OCFile): UUID? {
-        return uploadFileInConflictUseCase(
+    private fun requestForUpload(accountName: String, ocFile: OCFile): UUID? =
+        uploadFileInConflictUseCase(
             UploadFileInConflictUseCase.Params(
                 accountName = accountName,
                 localPath = ocFile.storagePath!!,
@@ -130,7 +129,6 @@ class SynchronizeFileUseCase(
                 spaceId = ocFile.spaceId,
             )
         )
-    }
 
     data class Params(
         val fileToSynchronize: OCFile,

@@ -172,13 +172,12 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
         return count
     }
 
-    override fun getType(uri: Uri): String {
-        return when (uriMatcher.match(uri)) {
+    override fun getType(uri: Uri): String =
+        when (uriMatcher.match(uri)) {
             ROOT_DIRECTORY -> ProviderTableMeta.CONTENT_TYPE
             SINGLE_FILE -> ProviderTableMeta.CONTENT_TYPE_ITEM
             else -> throw IllegalArgumentException("Unknown Uri id.$uri")
         }
-    }
 
     override fun insert(uri: Uri, values: ContentValues?): Uri? {
         val newUri: Uri?
@@ -1309,14 +1308,12 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
     }
 
     @Throws(FileNotFoundException::class)
-    override fun openFile(uri: Uri, mode: String, signal: CancellationSignal?): ParcelFileDescriptor? {
-        return super.openFile(uri, mode, signal)
-    }
+    override fun openFile(uri: Uri, mode: String, signal: CancellationSignal?): ParcelFileDescriptor? =
+        super.openFile(uri, mode, signal)
 
     @Throws(FileNotFoundException::class)
-    override fun openFile(uri: Uri, mode: String): ParcelFileDescriptor? {
-        return super.openFile(uri, mode)
-    }
+    override fun openFile(uri: Uri, mode: String): ParcelFileDescriptor? =
+        super.openFile(uri, mode)
 
     /**
      * Grants that total count of successful uploads stored is not greater than MAX_SUCCESSFUL_UPLOADS.

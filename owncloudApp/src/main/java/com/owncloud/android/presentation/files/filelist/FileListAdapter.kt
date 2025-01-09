@@ -85,8 +85,8 @@ class FileListAdapter(
         diffResult.dispatchUpdatesTo(this)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return when (viewType) {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder =
+        when (viewType) {
             ViewType.LIST_ITEM.ordinal -> {
                 val binding = ItemFileListBinding.inflate(LayoutInflater.from(parent.context), parent, false)
                 binding.root.apply {
@@ -123,7 +123,6 @@ class FileListAdapter(
                 FooterViewHolder(binding)
             }
         }
-    }
 
     override fun getItemCount(): Int = files.size
 
@@ -131,9 +130,9 @@ class FileListAdapter(
 
     private fun isFooter(position: Int) = position == files.size.minus(1)
 
-    override fun getItemViewType(position: Int): Int {
+    override fun getItemViewType(position: Int): Int =
 
-        return if (isFooter(position)) {
+        if (isFooter(position)) {
             ViewType.FOOTER.ordinal
         } else {
             when {
@@ -150,7 +149,6 @@ class FileListAdapter(
                 }
             }
         }
-    }
 
     fun getCheckedItems(): List<OCFileWithSyncInfo> {
         val checkedItems = mutableListOf<OCFileWithSyncInfo>()

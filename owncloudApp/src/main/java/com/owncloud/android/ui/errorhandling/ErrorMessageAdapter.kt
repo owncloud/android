@@ -49,29 +49,23 @@ class ErrorMessageAdapter {
 
     private class Formatter(val resources: Resources) {
 
-        fun format(resId: Int): String {
-            return resources.getString(resId)
-        }
+        fun format(resId: Int): String =
+            resources.getString(resId)
 
-        fun format(resId: Int, m1: String?): String {
-            return String.format(resources.getString(resId), m1)
-        }
+        fun format(resId: Int, m1: String?): String =
+            String.format(resources.getString(resId), m1)
 
-        fun format(resId: Int, m1: Int): String {
-            return String.format(resources.getString(resId), resources.getString(m1))
-        }
+        fun format(resId: Int, m1: Int): String =
+            String.format(resources.getString(resId), resources.getString(m1))
 
-        fun format(resId: Int, m1: String, m2: String): String {
-            return String.format(resources.getString(resId), m1, m2)
-        }
+        fun format(resId: Int, m1: String, m2: String): String =
+            String.format(resources.getString(resId), m1, m2)
 
-        fun format(resId: Int, m1: String?, m2: Int): String {
-            return String.format(resources.getString(resId), m1, resources.getString(m2))
-        }
+        fun format(resId: Int, m1: String?, m2: Int): String =
+            String.format(resources.getString(resId), m1, resources.getString(m2))
 
-        fun forbidden(resId1: Int): String {
-            return String.format(resources.getString(R.string.forbidden_permissions), resources.getString(resId1))
-        }
+        fun forbidden(resId1: Int): String =
+            String.format(resources.getString(R.string.forbidden_permissions), resources.getString(resId1))
     }
 
     companion object {
@@ -114,8 +108,8 @@ class ErrorMessageAdapter {
             formatter: Formatter,
             throwable: Throwable,
             transferOperation: TransferOperation.Upload
-        ): String {
-            return when (throwable) {
+        ): String =
+            when (throwable) {
                 is LocalStorageFullException -> formatter.format(
                     R.string.error__upload__local_file_not_copied,
                     transferOperation.fileName, R.string.app_name
@@ -143,7 +137,6 @@ class ErrorMessageAdapter {
                 else -> formatter.format(R.string.uploader_upload_failed_content_single, transferOperation.fileName)
 
             }
-        }
 
         /**
          * Return an internationalized user message corresponding to an operation result

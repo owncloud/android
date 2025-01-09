@@ -1979,8 +1979,8 @@ class FileDisplayActivity : FileActivity(),
         }
     }
 
-    override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {
-        return if (keyCode == KeyEvent.KEYCODE_DPAD_DOWN) {
+    override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean =
+        if (keyCode == KeyEvent.KEYCODE_DPAD_DOWN) {
             if (findViewById<View>(R.id.owncloud_app_bar).hasFocus()) {
                 findViewById<View>(R.id.left_fragment_container).requestFocus()
             }
@@ -1988,7 +1988,6 @@ class FileDisplayActivity : FileActivity(),
         } else {
             super.onKeyUp(keyCode, event)
         }
-    }
 
     companion object {
         private const val TAG_LIST_OF_FILES = "LIST_OF_FILES"

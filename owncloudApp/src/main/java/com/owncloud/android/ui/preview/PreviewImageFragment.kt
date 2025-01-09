@@ -214,8 +214,8 @@ class PreviewImageFragment : FileFragment() {
     /**
      * {@inheritDoc}
      */
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean =
+        when (item.itemId) {
             R.id.action_share_file -> {
                 mContainerActivity.fileOperationsHelper.showShareFile(file)
                 true
@@ -261,7 +261,6 @@ class PreviewImageFragment : FileFragment() {
 
             else -> super.onOptionsItemSelected(item)
         }
-    }
 
     private fun seeDetails() {
         mContainerActivity.showDetails(file)
@@ -345,9 +344,8 @@ class PreviewImageFragment : FileFragment() {
 
     private fun isSVGFile(file: OCFile): Boolean = file.mimeType == MIME_SVG
 
-    private fun getBackgroundColor(file: OCFile): Int {
-        return if (isSVGFile(file)) Color.WHITE else Color.BLACK
-    }
+    private fun getBackgroundColor(file: OCFile): Int =
+        if (isSVGFile(file)) Color.WHITE else Color.BLACK
 
     /**
      * Finishes the preview
@@ -393,8 +391,7 @@ class PreviewImageFragment : FileFragment() {
          * @return 'True' if the file can be handled by the fragment.
          */
         @JvmStatic
-        fun canBePreviewed(file: OCFile?): Boolean {
-            return file != null && file.isImage
-        }
+        fun canBePreviewed(file: OCFile?): Boolean =
+            file != null && file.isImage
     }
 }

@@ -146,11 +146,10 @@ class CreateFolderDialogFragment : DialogFragment() {
          * @return Dialog ready to show.
          */
         @JvmStatic
-        fun newInstance(parent: OCFile, listener: CreateFolderListener): CreateFolderDialogFragment {
-            return CreateFolderDialogFragment().apply {
+        fun newInstance(parent: OCFile, listener: CreateFolderListener): CreateFolderDialogFragment =
+            CreateFolderDialogFragment().apply {
                 createFolderListener = listener
                 parentFolder = parent
             }
-        }
     }
 }

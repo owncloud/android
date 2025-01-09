@@ -311,12 +311,11 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
     }
 
     // The main_menu won't be displayed
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        return false
-    }
+    override fun onCreateOptionsMenu(menu: Menu): Boolean =
+        false
 
-    override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {
-        return if (keyCode == KeyEvent.KEYCODE_DPAD_DOWN) {
+    override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean =
+        if (keyCode == KeyEvent.KEYCODE_DPAD_DOWN) {
             if (findViewById<View>(R.id.owncloud_app_bar).hasFocus()) {
                 findViewById<View>(R.id.share_fragment_container).requestFocus()
             }
@@ -324,7 +323,6 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
         } else {
             super.onKeyUp(keyCode, event)
         }
-    }
 
     companion object {
         const val TAG_SHARE_FRAGMENT = "SHARE_FRAGMENT"

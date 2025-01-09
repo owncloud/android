@@ -92,14 +92,13 @@ class FileDataStorageManager(
 
     fun fileExists(path: String): Boolean = getFileByPath(path) != null
 
-    fun getFolderContent(f: OCFile?): List<OCFile> {
-        return if (f != null && f.isFolder && f.id != -1L) {
+    fun getFolderContent(f: OCFile?): List<OCFile> =
+        if (f != null && f.isFolder && f.id != -1L) {
             // TODO: Remove !!
             getFolderContent(f.id!!)
         } else {
             listOf()
         }
-    }
 
     // TODO: New_arch: Remove this and call usecase inside FilesViewModel
     fun getFolderImages(folder: OCFile?): List<OCFile> = runBlocking(CoroutinesDispatcherProvider().io) {

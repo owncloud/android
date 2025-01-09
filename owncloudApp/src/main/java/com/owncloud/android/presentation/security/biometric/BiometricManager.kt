@@ -92,16 +92,13 @@ object BiometricManager {
         else false
     }
 
-    fun isBiometricEnabled(): Boolean {
-        return preferencesProvider.getBoolean(BiometricActivity.PREFERENCE_SET_BIOMETRIC, false)
-    }
+    fun isBiometricEnabled(): Boolean =
+        preferencesProvider.getBoolean(BiometricActivity.PREFERENCE_SET_BIOMETRIC, false)
 
-    fun isHardwareDetected(): Boolean {
-        return biometricManager.canAuthenticate(BIOMETRIC_WEAK) != BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE &&
+    fun isHardwareDetected(): Boolean =
+        biometricManager.canAuthenticate(BIOMETRIC_WEAK) != BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE &&
                 biometricManager.canAuthenticate(BIOMETRIC_WEAK) != BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE
-    }
 
-    fun hasEnrolledBiometric(): Boolean {
-        return biometricManager.canAuthenticate(BIOMETRIC_WEAK) != BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED
-    }
+    fun hasEnrolledBiometric(): Boolean =
+        biometricManager.canAuthenticate(BIOMETRIC_WEAK) != BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED
 }

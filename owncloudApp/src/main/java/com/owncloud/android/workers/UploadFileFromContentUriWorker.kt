@@ -149,8 +149,8 @@ class UploadFileFromContentUriWorker(
         return true
     }
 
-    private fun retrieveUploadInfoFromDatabase(): OCTransfer? {
-        return transferRepository.getTransferById(uploadIdInStorageManager).also {
+    private fun retrieveUploadInfoFromDatabase(): OCTransfer? =
+        transferRepository.getTransferById(uploadIdInStorageManager).also {
             if (it != null) {
                 Timber.d("Upload with id ($uploadIdInStorageManager) has been found in database.")
                 Timber.d("Upload info: $it")
@@ -159,7 +159,6 @@ class UploadFileFromContentUriWorker(
                 Timber.w("$uploadPath won't be uploaded")
             }
         }
-    }
 
     private fun checkDocumentFileExists() {
         val documentFile = DocumentFile.fromSingleUri(appContext, contentUri)
@@ -324,13 +323,12 @@ class UploadFileFromContentUriWorker(
         )
     }
 
-    private fun getUploadStatusForThrowable(throwable: Throwable?): TransferStatus {
-        return if (throwable == null) {
+    private fun getUploadStatusForThrowable(throwable: Throwable?): TransferStatus =
+        if (throwable == null) {
             TransferStatus.TRANSFER_SUCCEEDED
         } else {
             TransferStatus.TRANSFER_FAILED
         }
-    }
 
     private fun showNotification(throwable: Throwable) {
         // check credentials error

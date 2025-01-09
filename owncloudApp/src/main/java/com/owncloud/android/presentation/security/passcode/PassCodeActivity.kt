@@ -431,8 +431,8 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, EnableBiom
         }
     }
 
-    override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {
-        return when (keyCode) {
+    override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean =
+         when (keyCode) {
 
             in KeyEvent.KEYCODE_0..KeyEvent.KEYCODE_9 -> {
                 val number = keyCode - KeyEvent.KEYCODE_0
@@ -454,7 +454,6 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, EnableBiom
 
             else -> super.onKeyUp(keyCode, event)
         }
-    }
 
     companion object {
         const val ACTION_CREATE = "ACTION_REQUEST_WITH_RESULT"

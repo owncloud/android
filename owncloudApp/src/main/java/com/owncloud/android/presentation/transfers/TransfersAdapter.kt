@@ -236,14 +236,13 @@ class TransfersAdapter(
         }
     }
 
-    private fun headerTitleStringRes(status: TransferStatus): Int {
-        return when (status) {
+    private fun headerTitleStringRes(status: TransferStatus): Int =
+        when (status) {
             TransferStatus.TRANSFER_IN_PROGRESS -> R.string.uploads_view_group_current_uploads
             TransferStatus.TRANSFER_FAILED -> R.string.uploads_view_group_failed_uploads
             TransferStatus.TRANSFER_SUCCEEDED -> R.string.uploads_view_group_finished_uploads
             TransferStatus.TRANSFER_QUEUED -> R.string.uploads_view_group_queued_uploads
         }
-    }
 
     fun setData(transfersWithSpace: List<Pair<OCTransfer, OCSpace?>>) {
         val transfersGroupedByStatus = transfersWithSpace.groupBy { it.first.status }
@@ -278,12 +277,11 @@ class TransfersAdapter(
 
     override fun getItemCount(): Int = transferItemsList.size
 
-    override fun getItemViewType(position: Int): Int {
-        return when (getItem(position)) {
+    override fun getItemViewType(position: Int): Int =
+        when (getItem(position)) {
             is TransferItem -> TransferRecyclerItemViewType.ITEM_VIEW_TRANSFER.ordinal
             is HeaderItem -> TransferRecyclerItemViewType.ITEM_VIEW_HEADER.ordinal
         }
-    }
 
     fun getItem(position: Int) = transferItemsList[position]
 

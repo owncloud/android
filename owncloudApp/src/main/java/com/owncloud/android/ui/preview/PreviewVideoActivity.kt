@@ -368,8 +368,8 @@ class PreviewVideoActivity : FileActivity(), Player.Listener, OnPrepareVideoPlay
         }
     }
 
-    override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-        return when (menuItem.itemId) {
+    override fun onMenuItemSelected(menuItem: MenuItem): Boolean =
+        when (menuItem.itemId) {
             R.id.action_share_file -> {
                 fileOperationsHelper.showShareFile(file)
                 true
@@ -440,12 +440,10 @@ class PreviewVideoActivity : FileActivity(), Player.Listener, OnPrepareVideoPlay
                 false
             }
         }
-    }
 
     // The main_menu won't be displayed
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        return false
-    }
+    override fun onCreateOptionsMenu(menu: Menu): Boolean =
+        false
 
     companion object {
         const val EXTRA_FILE = "FILE"
@@ -470,8 +468,7 @@ class PreviewVideoActivity : FileActivity(), Player.Listener, OnPrepareVideoPlay
          * @param file File to test if can be previewed.
          * @return 'True' if the file can be handled by the fragment.
          */
-        fun canBePreviewed(file: OCFile?): Boolean {
-            return file != null && file.isVideo
-        }
+        fun canBePreviewed(file: OCFile?): Boolean =
+            file != null && file.isVideo
     }
 }

@@ -94,8 +94,7 @@ class StorageMigrationActivity : AppCompatActivity() {
             }
         }
 
-        private fun shouldShow(context: Context): Boolean {
-            return !hasAlreadyMigratedToScopedStorage(context) && hasDataInLegacyStorage() && hasAccessToLegacyStorage()
-        }
+        private fun shouldShow(context: Context): Boolean =
+            !hasAlreadyMigratedToScopedStorage(context) && hasDataInLegacyStorage() && hasAccessToLegacyStorage()
     }
 }
