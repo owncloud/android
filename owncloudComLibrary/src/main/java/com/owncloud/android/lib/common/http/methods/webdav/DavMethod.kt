@@ -51,8 +51,8 @@ abstract class DavMethod protected constructor(url: URL) : HttpBaseMethod(url) {
     protected abstract fun onDavExecute(davResource: DavOCResource): Int
 
     @Throws(Exception::class)
-    override fun onExecute(okHttpClient: OkHttpClient): Int {
-        return try {
+    override fun onExecute(okHttpClient: OkHttpClient): Int =
+        try {
              davResource = DavOCResource(
                 okHttpClient.newBuilder().followRedirects(false).build(),
                 httpUrl,
@@ -84,7 +84,6 @@ abstract class DavMethod protected constructor(url: URL) : HttpBaseMethod(url) {
             }
             httpException.code
         }
-    }
 
     //////////////////////////////
     //         Getter

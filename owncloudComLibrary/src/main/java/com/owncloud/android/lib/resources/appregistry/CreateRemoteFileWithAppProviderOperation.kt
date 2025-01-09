@@ -47,8 +47,8 @@ class CreateRemoteFileWithAppProviderOperation(
     private val filename: String,
 ) : RemoteOperation<String>() {
 
-    override fun run(client: OwnCloudClient): RemoteOperationResult<String> {
-        return try {
+    override fun run(client: OwnCloudClient): RemoteOperationResult<String> =
+        try {
 
             val createFileWithAppProviderRequestBody = CreateFileWithAppProviderParams(parentContainerId, filename)
                 .toRequestBody()
@@ -77,7 +77,6 @@ class CreateRemoteFileWithAppProviderOperation(
             Timber.e(e, "Create file $filename with app provider in folder with ID $parentContainerId failed")
             result
         }
-    }
 
     private fun isSuccess(status: Int) = status == HttpConstants.HTTP_OK
 

@@ -63,12 +63,11 @@ internal class StatusRequester {
         return URL(oldLocationURL.protocol, oldLocationURL.host, oldLocationURL.port, redirectedLocation).toString()
     }
 
-    private fun getGetMethod(url: String): GetMethod {
-        return GetMethod(URL(url)).apply {
+    private fun getGetMethod(url: String): GetMethod =
+        GetMethod(URL(url)).apply {
             setReadTimeout(TRY_CONNECTION_TIMEOUT, TimeUnit.SECONDS)
             setConnectionTimeout(TRY_CONNECTION_TIMEOUT, TimeUnit.SECONDS)
         }
-    }
 
     data class RequestResult(
         val getMethod: GetMethod,

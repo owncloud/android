@@ -85,9 +85,8 @@ abstract class HttpBaseMethod constructor(url: URL) {
      *** Requests ***
      ****************/
 
-    fun getRequestHeader(name: String): String? {
-        return request.header(name)
-    }
+    fun getRequestHeader(name: String): String? =
+        request.header(name)
 
     fun getRequestHeadersAsHashMap(): HashMap<String, String?> {
         val headers: HashMap<String, String?> = HashMap()
@@ -126,20 +125,17 @@ abstract class HttpBaseMethod constructor(url: URL) {
         get() = response.message
 
     // Headers
-    open fun getResponseHeaders(): Headers? {
-        return response.headers
-    }
+    open fun getResponseHeaders(): Headers? =
+        response.headers
 
-    open fun getResponseHeader(headerName: String): String? {
-        return response.header(headerName)
-    }
+    open fun getResponseHeader(headerName: String): String? =
+        response.header(headerName)
 
     // Body
     fun getResponseBodyAsString(): String = response.peekBody(Long.MAX_VALUE).string()
 
-    open fun getResponseBodyAsStream(): InputStream? {
-        return response.body?.byteStream()
-    }
+    open fun getResponseBodyAsStream(): InputStream? =
+        response.body?.byteStream()
 
     /**
      * returns the final url after following the last redirect.
