@@ -42,7 +42,7 @@ class SpacesListAdapter(
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val spacesList = mutableListOf<OCSpace>()
-    private var isMultiPersonal: Boolean = false
+    private var isMultiPersonal = false
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val binding = SpacesListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
