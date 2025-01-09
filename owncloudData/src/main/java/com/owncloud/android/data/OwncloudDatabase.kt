@@ -117,10 +117,10 @@ abstract class OwncloudDatabase : RoomDatabase() {
 
         fun getDatabase(
             context: Context
-        ): OwncloudDatabase {
+        ): OwncloudDatabase =
             // if the INSTANCE is not null, then return it,
             // if it is, then create the database
-            return INSTANCE ?: synchronized(this) {
+            INSTANCE ?: synchronized(this) {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     OwncloudDatabase::class.java,
@@ -131,7 +131,6 @@ abstract class OwncloudDatabase : RoomDatabase() {
                 INSTANCE = instance
                 instance
             }
-        }
 
         @VisibleForTesting
         fun switchToInMemory(context: Context, vararg migrations: Migration) {

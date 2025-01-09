@@ -105,8 +105,8 @@ data class OCFileEntity(
         get() = mimeType.isOneOf(MIME_DIR, MIME_DIR_UNIX)
 
     companion object {
-        fun fromCursor(cursor: Cursor): OCFileEntity {
-            return OCFileEntity(
+        fun fromCursor(cursor: Cursor): OCFileEntity =
+            OCFileEntity(
                 parentId = cursor.getLong(cursor.getColumnIndexOrThrow(FILE_PARENT)),
                 remotePath = cursor.getString(cursor.getColumnIndexOrThrow(FILE_PATH)),
                 owner = cursor.getString(cursor.getColumnIndexOrThrow(FILE_ACCOUNT_OWNER)),
@@ -132,7 +132,6 @@ data class OCFileEntity(
             ).apply {
                 id = cursor.getLong(cursor.getColumnIndexOrThrow(_ID))
             }
-        }
 
         private fun Cursor.getStringFromColumnOrEmpty(
             columnName: String

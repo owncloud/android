@@ -81,9 +81,8 @@ class CameraUploadsMigrationToRoom(val sharedPreferencesProvider: SharedPreferen
         return if (uploadPath!!.endsWith(File.separator)) uploadPath else uploadPath + File.separator
     }
 
-    private fun getSourcePathForPreference(keyPreference: String): String {
-        return sharedPreferencesProvider.getString(keyPreference, null) ?: ""
-    }
+    private fun getSourcePathForPreference(keyPreference: String): String =
+        sharedPreferencesProvider.getString(keyPreference, null) ?: ""
 
     private fun getBehaviorForPreference(keyPreference: String): UploadBehavior {
         val storedBehaviour = sharedPreferencesProvider.getString(keyPreference, null) ?: return UploadBehavior.COPY

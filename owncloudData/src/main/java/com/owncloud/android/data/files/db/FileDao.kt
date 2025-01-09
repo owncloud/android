@@ -478,15 +478,14 @@ interface FileDao {
     private fun getNewAvailableOfflineStatus(
         parentFolderAvailableOfflineStatus: Int?,
         currentFileAvailableOfflineStatus: Int?,
-    ): Int {
-        return if ((parentFolderAvailableOfflineStatus != null) &&
+    ): Int =
+        if ((parentFolderAvailableOfflineStatus != null) &&
             parentFolderAvailableOfflineStatus.isOneOf(AVAILABLE_OFFLINE.ordinal, AVAILABLE_OFFLINE_PARENT.ordinal)
         ) {
             AVAILABLE_OFFLINE_PARENT.ordinal
         } else if (currentFileAvailableOfflineStatus == AVAILABLE_OFFLINE.ordinal) {
             AVAILABLE_OFFLINE.ordinal
         } else NOT_AVAILABLE_OFFLINE.ordinal
-    }
 
     companion object {
 

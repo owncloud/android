@@ -62,13 +62,12 @@ sealed class LocalStorageProvider(private val rootFolderName: String) {
         accountName: String,
         remotePath: String,
         spaceId: String?,
-    ): String {
-        return if (spaceId != null) {
+    ): String =
+        if (spaceId != null) {
             getAccountDirectoryPath(accountName) + File.separator + spaceId + File.separator + remotePath
         } else {
             getAccountDirectoryPath(accountName) + remotePath
         }
-    }
 
     /**
      * Get expected remote path for a file creation, rename, move etc

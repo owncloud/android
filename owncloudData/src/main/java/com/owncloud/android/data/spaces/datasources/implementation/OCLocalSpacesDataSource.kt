@@ -62,30 +62,27 @@ class OCLocalSpacesDataSource(
         spacesDao.insertOrDeleteSpaces(spaceEntities, spaceSpecialEntities)
     }
 
-    override fun getPersonalSpaceForAccount(accountName: String): OCSpace? {
-        return spacesDao.getSpacesByDriveTypeForAccount(
+    override fun getPersonalSpaceForAccount(accountName: String): OCSpace? =
+        spacesDao.getSpacesByDriveTypeForAccount(
             accountName = accountName,
             filterDriveTypes = setOf(DRIVE_TYPE_PERSONAL)
         ).map { it.toModel() }.firstOrNull()
-    }
 
-    override fun getSharesSpaceForAccount(accountName: String): OCSpace? {
-        return spacesDao.getSpaceByIdForAccount(spaceId = SPACE_ID_SHARES, accountName = accountName)?.toModel()
-    }
+    override fun getSharesSpaceForAccount(accountName: String): OCSpace? =
+        spacesDao.getSpaceByIdForAccount(spaceId = SPACE_ID_SHARES, accountName = accountName)?.toModel()
 
-    override fun getSpacesFromEveryAccountAsStream(): Flow<List<OCSpace>> {
-        return spacesDao.getSpacesByDriveTypeFromEveryAccountAsStream(
+    override fun getSpacesFromEveryAccountAsStream(): Flow<List<OCSpace>> =
+        spacesDao.getSpacesByDriveTypeFromEveryAccountAsStream(
             filterDriveTypes = setOf(DRIVE_TYPE_PERSONAL, DRIVE_TYPE_PROJECT)
         ).map { spaceEntities ->
             spaceEntities.map { spaceEntity -> spaceEntity.toModel() }
         }
-    }
 
     override fun getSpacesByDriveTypeWithSpecialsForAccountAsFlow(
         accountName: String,
         filterDriveTypes: Set<String>,
-    ): Flow<List<OCSpace>> {
-        return spacesDao.getSpacesByDriveTypeWithSpecialsForAccountAsFlow(
+    ): Flow<List<OCSpace>> =
+        spacesDao.getSpacesByDriveTypeWithSpecialsForAccountAsFlow(
             accountName = accountName,
             filterDriveTypes = filterDriveTypes,
         ).map { spacesWithSpecialsEntitiesList ->
@@ -93,26 +90,21 @@ class OCLocalSpacesDataSource(
                 spacesWithSpecialsEntity.toModel()
             }
         }
-    }
 
-    override fun getPersonalAndProjectSpacesForAccount(accountName: String): List<OCSpace> {
-        return spacesDao.getSpacesByDriveTypeForAccount(
+    override fun getPersonalAndProjectSpacesForAccount(accountName: String): List<OCSpace> =
+        spacesDao.getSpacesByDriveTypeForAccount(
             accountName = accountName,
             filterDriveTypes = setOf(DRIVE_TYPE_PERSONAL, DRIVE_TYPE_PROJECT),
         ).map { it.toModel() }
-    }
 
-    override fun getSpaceWithSpecialsByIdForAccount(spaceId: String?, accountName: String): OCSpace {
-        return spacesDao.getSpaceWithSpecialsByIdForAccount(spaceId, accountName).toModel()
-    }
+    override fun getSpaceWithSpecialsByIdForAccount(spaceId: String?, accountName: String): OCSpace =
+        spacesDao.getSpaceWithSpecialsByIdForAccount(spaceId, accountName).toModel()
 
-    override fun getSpaceByIdForAccount(spaceId: String?, accountName: String): OCSpace? {
-        return spacesDao.getSpaceByIdForAccount(spaceId = spaceId, accountName = accountName)?.toModel()
-    }
+    override fun getSpaceByIdForAccount(spaceId: String?, accountName: String): OCSpace? =
+        spacesDao.getSpaceByIdForAccount(spaceId = spaceId, accountName = accountName)?.toModel()
 
-    override fun getWebDavUrlForSpace(spaceId: String?, accountName: String): String? {
-        return spacesDao.getWebDavUrlForSpace(spaceId, accountName)
-    }
+    override fun getWebDavUrlForSpace(spaceId: String?, accountName: String): String? =
+        spacesDao.getWebDavUrlForSpace(spaceId, accountName)
 
     override fun deleteSpacesForAccount(accountName: String) {
         spacesDao.deleteSpacesForAccount(accountName)
