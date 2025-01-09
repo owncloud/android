@@ -45,19 +45,18 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 
 class DrawerViewModel(
-    getStoredQuotaAsStreamUseCase: GetStoredQuotaAsStreamUseCase,
+    private val getStoredQuotaAsStreamUseCase: GetStoredQuotaAsStreamUseCase,
     private val removeAccountUseCase: RemoveAccountUseCase,
     private val getUserQuotasUseCase: GetUserQuotasUseCase,
     private val localStorageProvider: LocalStorageProvider,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
     private val contextProvider: ContextProvider,
-    accountName: String,
 ) : ViewModel() {
 
     private val _userQuota = MutableStateFlow<Event<UIResult<Flow<UserQuota?>>>?>(null)
     val userQuota: StateFlow<Event<UIResult<Flow<UserQuota?>>>?> = _userQuota
 
-    init {
+    fun getUserQuota(accountName: String) {
         runUseCaseWithResult(
             coroutineDispatcher = coroutinesDispatcherProvider.io,
             requiresConnection = false,

@@ -84,11 +84,7 @@ import timber.log.Timber
  */
 abstract class DrawerActivity : ToolbarActivity() {
 
-    private val drawerViewModel by viewModel<DrawerViewModel> {
-        parametersOf(
-            account?.name
-        )
-    }
+    private val drawerViewModel by viewModel<DrawerViewModel>()
     private val capabilitiesViewModel by viewModel<CapabilityViewModel> {
         parametersOf(
             account?.name
@@ -460,6 +456,7 @@ abstract class DrawerActivity : ToolbarActivity() {
                     account = account,
                     displayRadius = currentAccountAvatarRadiusDimension
                 )
+                drawerViewModel.getUserQuota(account.name)
                 updateQuota()
             }
         }
@@ -543,7 +540,6 @@ abstract class DrawerActivity : ToolbarActivity() {
                 it.isDrawerIndicatorEnabled = true
             }
         }
-        updateQuota()
         setOnAccountsUpdatedListener()
     }
 

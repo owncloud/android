@@ -25,7 +25,6 @@ import com.owncloud.android.domain.user.usecases.GetStoredQuotaAsStreamUseCase
 import com.owncloud.android.domain.user.usecases.GetUserQuotasUseCase
 import com.owncloud.android.presentation.common.DrawerViewModel
 import com.owncloud.android.providers.ContextProvider
-import com.owncloud.android.testutil.OC_ACCOUNT_NAME
 import com.owncloud.android.usecases.accounts.RemoveAccountUseCase
 import io.mockk.every
 import io.mockk.mockk
@@ -81,7 +80,6 @@ class DrawerViewModelTest : ViewModelTest() {
             localStorageProvider = localStorageProvider,
             coroutinesDispatcherProvider = coroutineDispatcherProvider,
             contextProvider = contextProvider,
-            accountName = OC_ACCOUNT_NAME
         )
     }
 
