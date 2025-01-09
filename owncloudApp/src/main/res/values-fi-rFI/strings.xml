@@ -680,6 +680,9 @@
   <string name="release_notes_icon">Julkaisutiedotteen ikoni</string>
   <string name="release_notes_bugfixes_title">Pieniä bugikorjauksia</string>
   <string name="release_notes_bugfixes_subtitle">Joitain bugeja korjattu sovelluksen käyttökokemuksen parantamiseksi</string>
+  <string name="release_notes_4_5_0_title_quota_improvements">Parannuksia tallennusmediasta varatun tilan näyttämisessä</string>
+  <string name="release_notes_4_5_0_title_light_users">ownCloud Infinite Scale-palvelimen kevytkäyttäjät</string>
+  <string name="release_notes_4_5_0_subtitle_light_users">ownCloud Infinite Scale-palvelimen kevytkäyttäjät (so. käyttäjät ilman henkilökohtaista tallennustilaa) on nyt tuettu sovelluksessa</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Avoinna verkossa</string>
   <string name="ic_action_open_with_web">Avoinna %1$s (web)</string>
@@ -735,12 +738,15 @@
   <string name="content_description_get_edit_public_link">Muokkaa julkista linkkiä</string>
   <string name="content_description_remove_account">Poista tili</string>
   <string name="content_description_add_new_content">Lisää uutta sisältöä</string>
+  <string name="content_description_add_new_content_expanded">Lisää uutta sisältöä laajennettu</string>
   <string name="content_description_clean_account_storage">Siivoa tilin tallennuskohdetta</string>
   <string name="content_description_logo">Logo</string>
   <string name="content_description_add_share">Lisää jako</string>
   <string name="content_description_edit_share">Muokkaa jakoa</string>
   <string name="content_description_delete_share">Poista jako</string>
   <string name="content_description_file_operations">%1$s operaatiota</string>
+  <string name="content_description_sort_by_name_ascending">Järjestä %1$s mukaan nousevasti</string>
+  <string name="content_description_sort_by_name_descending">Järjestä %1$s mukaan laskevasti</string>
   <string name="content_description_create_new_folder">Luo uusi kansio</string>
   <string name="create_shortcut_dialog_title">Luo oikopolku</string>
   <string name="create_shortcut_dialog_url">URL</string>
@@ -766,4 +772,5 @@
   <string name="audio_preview_label">Äänen esikuuntelu</string>
   <string name="details_label">Tiedot</string>
   <string name="text_preview_label">Tekstin esikatselu</string>
+  <string name="release_notes_title_enhanced_bottom_nav_bar">Lisätty tekstietiketit alapalkkiin</string>
 </resources>

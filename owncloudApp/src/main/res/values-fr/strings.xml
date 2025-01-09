@@ -18,6 +18,7 @@
   <string name="actionbar_descending">Décroissant</string>
   <string name="actionbar_sort_title">Trier</string>
   <string name="fab_new_file">Nouveau document</string>
+  <string name="fab_new_shortcut">Nouveau raccourci</string>
   <string name="drawer_item_all_files">Tous les fichiers</string>
   <string name="drawer_item_only_available_offline">Disponible hors-ligne</string>
   <string name="drawer_item_shared_by_link_files">Partagés par lien</string>
@@ -27,6 +28,7 @@
   <string name="drawer_open">Ouvrir</string>
   <string name="drawer_loading_quota">Chargement du quota</string>
   <string name="drawer_quota">%1$ssur %2$sutilisé(s) (%3$s %%)</string>
+  <string name="drawer_exceeded_quota">Espace de stockage saturé</string>
   <string name="drawer_unavailable_free_storage">%1$s utilisé(s)</string>
   <string name="drawer_unavailable_used_storage">Aucune information d\'utilisation du stockage disponible</string>
   <string name="drawer_feedback">Retour d’expérience</string>
@@ -351,6 +353,8 @@ Téléchargez-le ici : %2$s</string>
   <string name="rename_dialog_title">Entrez un nouveau nom</string>
   <string name="rename_local_fail_msg">La version locale ne peut être renommée, veuillez réessayer avec un nom différent</string>
   <string name="rename_server_fail_msg">Renommage impossible</string>
+  <string name="file_already_exists">Fichier déjà existant</string>
+  <string name="folder_already_exists">Dossier déjà existant</string>
   <string name="sync_file_fail_msg">Le fichier distant n\'a pu être vérifié</string>
   <string name="sync_file_nothing_to_do_msg">Le contenu du fichier est déjà synchronisé</string>
   <string name="sync_file_not_found_msg">Fichier non trouvé</string>
