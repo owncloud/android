@@ -47,7 +47,7 @@ object BiometricManager {
         mutableSetOf(BiometricActivity::class.java, PassCodeActivity::class.java, PatternActivity::class.java)
     private val visibleActivities: MutableSet<Class<*>> = mutableSetOf()
     private val preferencesProvider = OCSharedPreferencesProvider(appContext)
-    private val biometricManager: BiometricManager = BiometricManager.from(appContext)
+    private val androidBiometricManager: BiometricManager = BiometricManager.from(appContext)
 
     fun onActivityStarted(activity: Activity) {
         if (!exemptOfBiometricActivities.contains(activity.javaClass) && biometricShouldBeRequested()) {
@@ -96,9 +96,9 @@ object BiometricManager {
         preferencesProvider.getBoolean(BiometricActivity.PREFERENCE_SET_BIOMETRIC, false)
 
     fun isHardwareDetected(): Boolean =
-        biometricManager.canAuthenticate(BIOMETRIC_WEAK) != BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE &&
-                biometricManager.canAuthenticate(BIOMETRIC_WEAK) != BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE
+        androidBiometricManager.canAuthenticate(BIOMETRIC_WEAK) != BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE &&
+                androidBiometricManager.canAuthenticate(BIOMETRIC_WEAK) != BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE
 
     fun hasEnrolledBiometric(): Boolean =
-        biometricManager.canAuthenticate(BIOMETRIC_WEAK) != BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED
+        androidBiometricManager.canAuthenticate(BIOMETRIC_WEAK) != BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED
 }
