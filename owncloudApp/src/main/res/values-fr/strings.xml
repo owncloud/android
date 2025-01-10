@@ -29,6 +29,8 @@
   <string name="drawer_loading_quota">Chargement du quota</string>
   <string name="drawer_quota">%1$ssur %2$sutilisé(s) (%3$s %%)</string>
   <string name="drawer_exceeded_quota">Espace de stockage saturé</string>
+  <string name="drawer_nearing_quota">Espace de stockage saturé prochainement</string>
+  <string name="drawer_critical_quota">Espace de stockage saturé très prochainement</string>
   <string name="drawer_unavailable_free_storage">%1$s utilisé(s)</string>
   <string name="drawer_unavailable_used_storage">Aucune information d\'utilisation du stockage disponible</string>
   <string name="drawer_feedback">Retour d’expérience</string>
@@ -57,7 +59,9 @@
   <string name="prefs_touches_with_other_visible_windows_summary">Autoriser les interactions quand une autre fenêtre visible se superpose a l\'affichage. Activer pour utiliser le fonctionnement des applications de filtre lumineux.</string>
   <string name="confirmation_touches_with_other_windows_title">Êtes-vous sûr de vouloir activer cette fonctionnalité ?</string>
   <string name="confirmation_touches_with_other_windows_message">Utilisez cette fonctionnalité à vos propres risques. Une application malveillante pourrait tenter de vous pousser à effectuer des actions en falsifiant l\'affichage.</string>
+  <string name="prefs_subsection_picture_uploads">Téléversement automatique des images</string>
   <string name="prefs_subsection_picture_uploads_summary">Gérer l\'emplacement et le comportement des images téléversées automatiquement</string>
+  <string name="prefs_subsection_video_uploads">Téléversement automatique des vidéos</string>
   <string name="prefs_subsection_video_uploads_summary">Gérer l\'emplacement et le comportement des vidéos téléversées automatiquement</string>
   <string name="prefs_camera_picture_upload">Envoi d\'images</string>
   <string name="prefs_camera_picture_upload_summary">Téléverser automatiquement les images prises par l\'appareil photo</string>
