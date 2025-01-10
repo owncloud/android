@@ -1,7 +1,6 @@
 /**
  * ownCloud Android client application
  *
- * @author Abel García de Prada
  * @author Jorge Aguado Recio
  *
  * Copyright (C) 2024 ownCloud GmbH.
@@ -19,30 +18,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.data.user.datasources
+package com.owncloud.android.domain.user.usecases
 
+import com.owncloud.android.domain.BaseUseCaseWithResult
+import com.owncloud.android.domain.user.UserRepository
 import com.owncloud.android.domain.user.model.UserQuota
 import kotlinx.coroutines.flow.Flow
 
-interface LocalUserDataSource {
-    fun saveQuotaForAccount(
-        accountName: String,
-        userQuota: UserQuota
-    )
+class GetStoredQuotaAsStreamUseCase(
+    private val userRepository: UserRepository
+) : BaseUseCaseWithResult<Flow<UserQuota?>, GetStoredQuotaAsStreamUseCase.Params>() {
 
-    fun getQuotaForAccount(
-        accountName: String
-    ): UserQuota?
+    override fun run(params: Params): Flow<UserQuota?> =
+        userRepository.getStoredUserQuotaAsFlow(params.accountName)
 
-    fun getQuotaForAccountAsFlow(
-        accountName: String
-    ): Flow<UserQuota?>
-
-    fun getAllUserQuotas(): List<UserQuota>
-
-    fun getAllUserQuotasAsFlow(): Flow<List<UserQuota>>
-
-    fun deleteQuotaForAccount(
-        accountName: String
-    )
+    data class Params(val accountName: String)
 }

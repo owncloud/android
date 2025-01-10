@@ -183,7 +183,8 @@ class ManageAccountsAdapter(
             }
 
             else -> { // Limited storage. Value under 100%
-                if (userQuota.state == UserQuotaState.CRITICAL || userQuota.state == UserQuotaState.EXCEEDED) { // Value over 90%
+                if (userQuota.state == UserQuotaState.CRITICAL || userQuota.state == UserQuotaState.EXCEEDED ||
+                    userQuota.state == UserQuotaState.NEARING) { // Value over 75%
                     quotaBar.apply {
                         progressTintList = ColorStateList.valueOf(resources.getColor(R.color.quota_exceeded))
                     }
