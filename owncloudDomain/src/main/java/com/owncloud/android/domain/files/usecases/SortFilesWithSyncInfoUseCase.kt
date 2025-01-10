@@ -25,13 +25,12 @@ import com.owncloud.android.domain.files.model.OCFileWithSyncInfo
 
 class SortFilesWithSyncInfoUseCase : BaseUseCase<List<OCFileWithSyncInfo>, SortFilesWithSyncInfoUseCase.Params>() {
 
-    override fun run(params: Params): List<OCFileWithSyncInfo> {
-        return when (params.sortType) {
+    override fun run(params: Params): List<OCFileWithSyncInfo> =
+        when (params.sortType) {
             SortType.SORT_BY_NAME -> sortByName(params.listOfFiles, params.ascending)
             SortType.SORT_BY_SIZE -> sortBySize(params.listOfFiles, params.ascending)
             SortType.SORT_BY_DATE -> sortByDate(params.listOfFiles, params.ascending)
         }
-    }
 
     private fun sortByName(listOfFiles: List<OCFileWithSyncInfo>, ascending: Boolean): List<OCFileWithSyncInfo> {
         val newListOfFiles =
@@ -42,15 +41,13 @@ class SortFilesWithSyncInfoUseCase : BaseUseCase<List<OCFileWithSyncInfo>, SortF
         return newListOfFiles.sortedByDescending { it.file.isFolder }
     }
 
-    private fun sortBySize(listOfFiles: List<OCFileWithSyncInfo>, ascending: Boolean): List<OCFileWithSyncInfo> {
-        return if (ascending) listOfFiles.sortedBy { it.file.length }
+    private fun sortBySize(listOfFiles: List<OCFileWithSyncInfo>, ascending: Boolean): List<OCFileWithSyncInfo> =
+        if (ascending) listOfFiles.sortedBy { it.file.length }
         else listOfFiles.sortedByDescending { it.file.length }
-    }
 
-    private fun sortByDate(listOfFiles: List<OCFileWithSyncInfo>, ascending: Boolean): List<OCFileWithSyncInfo> {
-        return if (ascending) listOfFiles.sortedBy { it.file.modificationTimestamp }
+    private fun sortByDate(listOfFiles: List<OCFileWithSyncInfo>, ascending: Boolean): List<OCFileWithSyncInfo> =
+        if (ascending) listOfFiles.sortedBy { it.file.modificationTimestamp }
         else listOfFiles.sortedByDescending { it.file.modificationTimestamp }
-    }
 
     data class Params(
         val listOfFiles: List<OCFileWithSyncInfo>,
