@@ -5,7 +5,7 @@
   <string name="global_date">Fecha</string>
   <string name="global_size">Tamaño</string>
   <string name="actionbar_search">Buscar esta carpeta</string>
-  <string name="actionbar_search_space">Buscar Spaces</string>
+  <string name="actionbar_search_space">Buscar espacios</string>
   <string name="actionbar_sync">Actualizar cuenta</string>
   <string name="actionbar_upload">Subir</string>
   <string name="actionbar_upload_from_apps">Contenido de otras aplicaciones</string>
@@ -19,7 +19,7 @@
   <string name="actionbar_descending">Descendente</string>
   <string name="actionbar_sort_title">Ordenar por</string>
   <string name="fab_new_file">Nuevo documento</string>
-  <string name="fab_new_shortcut">Nuevo acceso directo</string>
+  <string name="fab_new_shortcut">Nuevo atajo</string>
   <string name="drawer_item_all_files">Todos los archivos</string>
   <string name="drawer_item_only_available_offline">Disponible offline</string>
   <string name="drawer_item_shared_by_link_files">Compartido por enlace</string>
@@ -87,7 +87,7 @@
   <string name="prefs_log_title">Habilitar registro</string>
   <string name="prefs_log_summary">Se utiliza para registrar problemas.</string>
   <string name="prefs_log_title_history">Historial del registro</string>
-  <string name="prefs_log_summary_history">Muestra los logs registrados.</string>
+  <string name="prefs_log_summary_history">Esto muestra los logs registrados.</string>
   <string name="prefs_log_delete_history_button">Eliminar Historial</string>
   <string name="prefs_help">Ayuda</string>
   <string name="prefs_sync_calendar_contacts">Sincronice sus contactos, calendarios y tareas</string>
@@ -672,6 +672,9 @@ Póngase en contacto con su administrador</string>
   <string name="content_description_get_edit_public_link">Editar enlace público</string>
   <string name="content_description_remove_account">Eliminar cuenta</string>
   <string name="content_description_add_new_content">Añadir nuevo contenido</string>
+  <string name="content_description_add_new_content_expanded">Se ha producido un error al configurar el bloqueo mediante contraseña.
+</string>
+  <string name="content_description_clean_account_storage">Almacenamiento limpio de cuentas</string>
   <string name="content_description_logo">Logo</string>
   <string name="content_description_add_share">Añadir compartición</string>
   <string name="content_description_edit_share">Editar compartición</string>
