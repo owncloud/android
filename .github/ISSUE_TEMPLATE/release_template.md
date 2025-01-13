@@ -40,7 +40,7 @@ If you don't need some of the steps, cross them by removing the "[ ]" and surrou
  - [ ] [DIS] Publish a new [release](https://github.com/owncloud/android/releases) in owncloud/android
  - [ ] [DIS] Release published in Play Store
  - [ ] [COM] Publish post in central.owncloud.org ([Category:News + Tag:android](https://central.owncloud.org/tags/c/news/5/android))
- - [ ] [COM] Inform in "ownCloud General" that release is out
+ - [ ] [COM] Inform in "ownCloud General" and #general that release is out
  - [ ] [GIT] Merge `master` into `release/M.m.p`, fixing all the conflicts that could happen, in owncloud/android
  - [ ] [GIT] Merge without rebasing `release/M.m.p` branch into `master`, in owncloud/android
  - [ ] [COM] Ping @DeepDiver1975 to update release information in https://owncloud.com/mobile-apps/
@@ -82,7 +82,7 @@ _____
  - [ ] [GIT] Move tag `latest` pointing the same commit as the release commit
  - [ ] [DIS] Publish a new [release](https://github.com/owncloud/android/releases) in owncloud/android
  - [ ] [DIS] Release published in Play Store
- - [ ] [COM] Inform in #general that release is out
+ - [ ] [COM] Inform in "ownCloud General" and #general that release is out
  - [ ] [GIT] Merge `master` into `release/M.m.p`, fixing all the conflicts that could happen, in owncloud/android
  - [ ] [GIT] Merge without rebasing `release/M.m.p` branch into `master`, in owncloud/android
  - [ ] [COM] Ping @DeepDiver1975 to update release information in https://owncloud.com/mobile-apps/
