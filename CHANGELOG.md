@@ -43,6 +43,7 @@ ownCloud admins and users.
 * Enhancement - Added text labels for BottomNavigationView: [#4484](https://github.com/owncloud/android/issues/4484)
 * Enhancement - OCIS Light Users: [#4490](https://github.com/owncloud/android/issues/4490)
 * Enhancement - Enforce OIDC auth flow via branding: [#4500](https://github.com/owncloud/android/issues/4500)
+* Enhancement - Multi-Personal (1st round): [#4514](https://github.com/owncloud/android/issues/4514)
 * Enhancement - Technical improvements for user quota: [#4521](https://github.com/owncloud/android/issues/4521)
 
 ## Details
@@ -124,6 +125,15 @@ ownCloud admins and users.
 
    https://github.com/owncloud/android/issues/4500
    https://github.com/owncloud/android/pull/4516
+
+* Enhancement - Multi-Personal (1st round): [#4514](https://github.com/owncloud/android/issues/4514)
+
+   Support for multi-personal accounts has been added. This first approach displays
+   all personal spaces in the Spaces tab, not showing project spaces. In addition,
+   the Personal tab shows an empty view since there is not a single personal space.
+
+   https://github.com/owncloud/android/issues/4514
+   https://github.com/owncloud/android/pull/4527/files
 
 * Enhancement - Technical improvements for user quota: [#4521](https://github.com/owncloud/android/issues/4521)
 

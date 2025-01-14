@@ -94,6 +94,7 @@ import com.owncloud.android.extensions.toStringResId
 import com.owncloud.android.extensions.toSubtitleStringRes
 import com.owncloud.android.extensions.toTitleStringRes
 import com.owncloud.android.presentation.authentication.AccountUtils
+import com.owncloud.android.presentation.capabilities.CapabilityViewModel
 import com.owncloud.android.presentation.common.BottomSheetFragmentItemView
 import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.presentation.files.SortBottomSheetFragment
@@ -152,6 +153,11 @@ class MainFileListFragment : Fragment(),
             false,
         )
     }
+    private val capabilityViewModel: CapabilityViewModel by viewModel {
+        parametersOf(
+            requireArguments().getString(ARG_ACCOUNT_NAME),
+        )
+    }
 
     private var _binding: MainFileListFragmentBinding? = null
     private val binding get() = _binding!!
@@ -173,6 +179,8 @@ class MainFileListFragment : Fragment(),
 
     private var openInWebProviders: Map<String, Int> = hashMapOf()
 
+    private var isMultiPersonal = false
+
     private var menu: Menu? = null
     private var checkedFiles: List<OCFile> = emptyList()
     private var filesToRemove: List<OCFile> = emptyList()
@@ -191,6 +199,7 @@ class MainFileListFragment : Fragment(),
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        isMultiPersonal = capabilityViewModel.checkMultiPersonal()
         initViews()
         subscribeToViewModels()
     }
@@ -610,9 +619,9 @@ class MainFileListFragment : Fragment(),
             )
             showOrHideEmptyView(fileListUiState)
 
-
             binding.spaceHeader.root.apply {
-                if (fileListUiState.space?.isProject == true && fileListUiState.folderToDisplay?.remotePath == ROOT_PATH) {
+                if ((fileListUiState.space?.isProject == true || (fileListUiState.space?.isPersonal == true && isMultiPersonal)) &&
+                    fileListUiState.folderToDisplay?.remotePath == ROOT_PATH && fileListUiState.fileListOption != FileListOption.AV_OFFLINE) {
                     isVisible = true
                     animate().translationY(0f).duration = 100
                 } else {

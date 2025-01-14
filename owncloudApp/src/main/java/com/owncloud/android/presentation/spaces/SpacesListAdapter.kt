@@ -42,6 +42,7 @@ class SpacesListAdapter(
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val spacesList = mutableListOf<OCSpace>()
+    private var isMultiPersonal = false
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val binding = SpacesListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -59,7 +60,7 @@ class SpacesListAdapter(
             }
             spacesListItemCard.setAccessibilityRole(className = Button::class.java)
 
-            if (space.isPersonal) {
+            if (space.isPersonal && !isMultiPersonal) {
                 spacesListItemName.text = holder.itemView.context.getString(R.string.bottom_nav_personal)
                 spacesListItemImage.apply {
                     dispose()
@@ -90,7 +91,8 @@ class SpacesListAdapter(
         }
     }
 
-    fun setData(spaces: List<OCSpace>) {
+    fun setData(spaces: List<OCSpace>, hasMultiplePersonalSpaces: Boolean) {
+        isMultiPersonal = hasMultiplePersonalSpaces
         val diffCallback = SpacesListDiffUtil(spacesList, spaces)
         val diffResult = DiffUtil.calculateDiff(diffCallback)
         spacesList.clear()

@@ -43,6 +43,7 @@ import com.owncloud.android.extensions.showErrorInSnackbar
 import com.owncloud.android.extensions.toDrawableRes
 import com.owncloud.android.extensions.toSubtitleStringRes
 import com.owncloud.android.extensions.toTitleStringRes
+import com.owncloud.android.presentation.capabilities.CapabilityViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
@@ -50,10 +51,17 @@ class SpacesListFragment : SpacesListAdapter.SpacesListAdapterListener, Fragment
     private var _binding: SpacesListFragmentBinding? = null
     private val binding get() = _binding!!
 
+    private var isMultiPersonal = false
+
     private val spacesListViewModel: SpacesListViewModel by viewModel {
         parametersOf(
             requireArguments().getString(BUNDLE_ACCOUNT_NAME),
             requireArguments().getBoolean(BUNDLE_SHOW_PERSONAL_SPACE),
+        )
+    }
+    private val capabilityViewModel: CapabilityViewModel by viewModel {
+        parametersOf(
+            requireArguments().getString(BUNDLE_ACCOUNT_NAME),
         )
     }
 
@@ -69,6 +77,7 @@ class SpacesListFragment : SpacesListAdapter.SpacesListAdapterListener, Fragment
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        isMultiPersonal = capabilityViewModel.checkMultiPersonal()
         initViews()
         subscribeToViewModels()
     }
@@ -99,10 +108,10 @@ class SpacesListFragment : SpacesListAdapter.SpacesListAdapterListener, Fragment
                     }
                 }
                 showOrHideEmptyView(spacesToListFiltered)
-                spacesListAdapter.setData(spacesToListFiltered)
+                spacesListAdapter.setData(spacesToListFiltered, isMultiPersonal)
             } else {
                 showOrHideEmptyView(uiState.spaces)
-                spacesListAdapter.setData(uiState.spaces.filter { !it.isDisabled })
+                spacesListAdapter.setData(uiState.spaces.filter { !it.isDisabled }, isMultiPersonal)
             }
             binding.swipeRefreshSpacesList.isRefreshing = uiState.refreshing
             uiState.error?.let { showErrorInSnackbar(R.string.spaces_sync_failed, it) }

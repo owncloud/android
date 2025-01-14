@@ -22,6 +22,7 @@
 
 package com.owncloud.android.data.spaces.repository
 
+import com.owncloud.android.data.capabilities.datasources.LocalCapabilitiesDataSource
 import com.owncloud.android.data.spaces.datasources.LocalSpacesDataSource
 import com.owncloud.android.data.spaces.datasources.RemoteSpacesDataSource
 import com.owncloud.android.data.user.datasources.LocalUserDataSource
@@ -34,13 +35,18 @@ class OCSpacesRepository(
     private val localSpacesDataSource: LocalSpacesDataSource,
     private val localUserDataSource: LocalUserDataSource,
     private val remoteSpacesDataSource: RemoteSpacesDataSource,
+    private val localCapabilitiesDataSource: LocalCapabilitiesDataSource,
 ) : SpacesRepository {
     override fun refreshSpacesForAccount(accountName: String) {
         remoteSpacesDataSource.refreshSpacesForAccount(accountName).also { listOfSpaces ->
             localSpacesDataSource.saveSpacesForAccount(listOfSpaces)
             val personalSpace = listOfSpaces.find { it.isPersonal }
+            val capabilities = localCapabilitiesDataSource.getCapabilitiesForAccount(accountName)
+            val isMultiPersonal = capabilities?.spaces?.hasMultiplePersonalSpaces
             val userQuota = personalSpace?.let {
-                if (it.quota?.total!!.toInt() == 0) {
+                if (isMultiPersonal == true) {
+                    UserQuota(accountName, -4, 0, 0, UserQuotaState.NORMAL)
+                } else if (it.quota?.total!!.toInt() == 0) {
                     UserQuota(accountName, -3, it.quota?.used!!, it.quota?.total!!, UserQuotaState.fromValue(it.quota?.state!!))
                 } else {
                     UserQuota(accountName, it.quota?.remaining!!, it.quota?.used!!, it.quota?.total!!, UserQuotaState.fromValue(it.quota?.state!!))

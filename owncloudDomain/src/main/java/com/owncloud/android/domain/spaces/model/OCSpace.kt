@@ -4,7 +4,7 @@
  * @author Abel García de Prada
  * @author Juan Carlos Garrote Gascón
  *
- * Copyright (C) 2022 ownCloud GmbH.
+ * Copyright (C) 2024 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -23,7 +23,7 @@ package com.owncloud.android.domain.spaces.model
 
 data class OCSpace(
     val accountName: String,
-    val driveAlias: String,
+    val driveAlias: String?,
     val driveType: String,
     val id: String,
     val lastModifiedDateTime: String?,
@@ -31,7 +31,7 @@ data class OCSpace(
     val owner: SpaceOwner?,
     val quota: SpaceQuota?,
     val root: SpaceRoot,
-    val webUrl: String,
+    val webUrl: String?,
     val description: String?,
     val special: List<SpaceSpecial>?,
 ) {
@@ -79,7 +79,7 @@ data class SpaceSpecial(
     val eTag: String,
     val file: SpaceFile,
     val id: String,
-    val lastModifiedDateTime: String,
+    val lastModifiedDateTime: String?,
     val name: String,
     val size: Int,
     val specialFolder: SpaceSpecialFolder,

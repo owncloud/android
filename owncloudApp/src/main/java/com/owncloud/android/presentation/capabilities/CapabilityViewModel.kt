@@ -3,7 +3,9 @@
  *
  * @author David González Verdugo
  * @author Abel García de Prada
- * Copyright (C) 2020 ownCloud GmbH.
+ * @author Juan Carlos Garrote Gascón
+ *
+ * Copyright (C) 2024 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -25,11 +27,14 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
 import com.owncloud.android.domain.capabilities.model.OCCapability
 import com.owncloud.android.domain.capabilities.usecases.GetCapabilitiesAsLiveDataUseCase
+import com.owncloud.android.domain.capabilities.usecases.GetStoredCapabilitiesUseCase
 import com.owncloud.android.domain.capabilities.usecases.RefreshCapabilitiesFromServerAsyncUseCase
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.ViewModelExt.runUseCaseWithResultAndUseCachedData
 import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 
 /**
  * View Model to keep a reference to the capability repository and an up-to-date capability
@@ -38,6 +43,7 @@ class CapabilityViewModel(
     private val accountName: String,
     getCapabilitiesAsLiveDataUseCase: GetCapabilitiesAsLiveDataUseCase,
     private val refreshCapabilitiesFromServerAsyncUseCase: RefreshCapabilitiesFromServerAsyncUseCase,
+    private val getStoredCapabilitiesUseCase: GetStoredCapabilitiesUseCase,
     private val coroutineDispatcherProvider: CoroutinesDispatcherProvider
 ) : ViewModel() {
 
@@ -67,4 +73,11 @@ class CapabilityViewModel(
             accountName = accountName
         )
     )
+
+    fun checkMultiPersonal(): Boolean = runBlocking(CoroutinesDispatcherProvider().io) {
+        val capabilities = withContext(CoroutinesDispatcherProvider().io) {
+            getStoredCapabilitiesUseCase(GetStoredCapabilitiesUseCase.Params(accountName))
+        }
+        capabilities?.spaces?.hasMultiplePersonalSpaces == true
+    }
 }
