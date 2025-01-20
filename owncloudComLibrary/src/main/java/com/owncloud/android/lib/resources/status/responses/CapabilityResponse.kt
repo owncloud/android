@@ -29,7 +29,10 @@
 package com.owncloud.android.lib.resources.status.responses
 
 import com.owncloud.android.lib.resources.status.RemoteCapability
-import com.owncloud.android.lib.resources.status.RemoteCapability.*
+import com.owncloud.android.lib.resources.status.RemoteCapability.CapabilityBooleanType
+import com.owncloud.android.lib.resources.status.RemoteCapability.RemoteAppProviders
+import com.owncloud.android.lib.resources.status.RemoteCapability.RemotePasswordPolicy
+import com.owncloud.android.lib.resources.status.RemoteCapability.RemoteSpaces
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
