@@ -310,7 +310,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
         sizeHint: Point?,
         signal: CancellationSignal?
     ): AssetFileDescriptor {
-        // TODO: Show thumbnail for spaces
+        // To do: Show thumbnail for spaces
         val file = getFileByIdOrException(documentId.toInt())
 
         val realFile = File(file.storagePath)

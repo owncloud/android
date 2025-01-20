@@ -76,7 +76,7 @@ data class RemoteFile(
     var sharedWithSharee: Boolean = false,
 ) : Parcelable {
 
-    // TODO: Quotas not used. Use or remove them.
+    // To do: Quotas not used. Use or remove them.
     init {
         require(
             !(remotePath.isEmpty() || !remotePath.startsWith(File.separator))

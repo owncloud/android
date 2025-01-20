@@ -203,7 +203,7 @@ class OCFileRepository(
                 Timber.i("There was an error: $e")
             }
         }
-        // TODO: Retrieving the root folders should return a non nullable. If they don't exist yet, they are created and returned. Remove nullability
+        // To do: Retrieving the root folders should return a non nullable. If they don't exist yet, they are created and returned. Remove nullability
         val personalRootFolder = localFileDataSource.getFileByRemotePath(remotePath = ROOT_PATH, owner = owner, spaceId = personalSpace?.root?.id)
         return personalRootFolder!!
     }
@@ -402,7 +402,7 @@ class OCFileRepository(
                             if (remoteFolder.isAvailableOffline) {
                                 availableOfflineStatus = AVAILABLE_OFFLINE_PARENT
                             }
-                            // FIXME: What about renames? Need to fix storage path
+                            // Fix: What about renames? Need to fix storage path
                         })
                 }
             }

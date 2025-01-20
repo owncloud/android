@@ -27,7 +27,7 @@ data class OIDCServerConfiguration(
     val endSessionEndpoint: String?,
     val issuer: String,
     val registrationEndpoint: String?,
-    val responseTypesSupported: List<String>?, // TODO: provisional, remove nullability ASAP
+    val responseTypesSupported: List<String>?, // To do: provisional, remove nullability ASAP
     val scopesSupported: List<String>?,
     val tokenEndpoint: String,
     val tokenEndpointAuthMethodsSupported: List<String>?,

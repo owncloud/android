@@ -154,7 +154,7 @@ class OCLocalFileDataSource(
     }
 
     override fun saveFilesInFolderAndReturnTheFilesThatChanged(listOfFiles: List<OCFile>, folder: OCFile): List<OCFile> {
-        // TODO: If it is root, add 0 as parent Id
+        // To do: If it is root, add 0 as parent Id
         val folderContent = fileDao.insertFilesInFolderAndReturnTheFilesThatChanged(
             folder = folder.toEntity(),
             folderContent = listOfFiles.map { it.toEntity() }

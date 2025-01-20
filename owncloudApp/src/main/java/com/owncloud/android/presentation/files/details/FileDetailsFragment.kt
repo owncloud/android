@@ -559,7 +559,7 @@ class FileDetailsFragment : FileFragment() {
         requireActivity().invalidateOptionsMenu()
     }
 
-    // TODO: Move navigation to a common place.
+    // To do: Move navigation to a common place.
     private fun navigateToPreviewOrOpenFile(fileWaitingToPreview: OCFile) {
         val fileDisplayActivity = requireActivity() as FileDisplayActivity
         when {
