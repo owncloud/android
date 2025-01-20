@@ -174,11 +174,11 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, EnableBiom
     }
 
     private fun inflatePasscodeTxtLine() {
-        val layout_code = findViewById<LinearLayout>(R.id.layout_code)
+        val layoutCode = findViewById<LinearLayout>(R.id.layout_code)
         val numberOfPasscodeDigits = (passCodeViewModel.getPassCode()?.length ?: passCodeViewModel.getNumberOfPassCodeDigits())
         for (i in 0 until numberOfPasscodeDigits) {
-            val txt = layoutInflater.inflate(R.layout.passcode_edit_text, layout_code, false) as EditText
-            layout_code.addView(txt)
+            val txt = layoutInflater.inflate(R.layout.passcode_edit_text, layoutCode, false) as EditText
+            layoutCode.addView(txt)
             passCodeEditTexts[i] = txt
         }
         passCodeEditTexts.first()?.requestFocus()

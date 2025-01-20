@@ -50,7 +50,7 @@ class RenameFileDialogFragment : DialogFragment(), DialogInterface.OnClickListen
     private var targetFile: OCFile? = null
     private val filesViewModel: FileOperationsViewModel by sharedViewModel()
     private var isButtonEnabled = true
-    private val MAX_FILENAME_LENGTH = 223
+    private val maxFilenameLength = 223
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         if (savedInstanceState != null) {
             isButtonEnabled = savedInstanceState.getBoolean(IS_BUTTON_ENABLED_FLAG_KEY)
@@ -105,10 +105,10 @@ class RenameFileDialogFragment : DialogFragment(), DialogInterface.OnClickListen
                 if (text.isNullOrBlank()) {
                     okButton.isEnabled = false
                     error = getString(R.string.uploader_upload_text_dialog_filename_error_empty)
-                } else if (text.length > MAX_FILENAME_LENGTH) {
+                } else if (text.length > maxFilenameLength) {
                     error = String.format(
                         getString(R.string.uploader_upload_text_dialog_filename_error_length_max),
-                        MAX_FILENAME_LENGTH
+                        maxFilenameLength
                     )
                 } else if (forbiddenChars.any { text.contains(it) }) {
                     error = getString(R.string.filename_forbidden_characters)
