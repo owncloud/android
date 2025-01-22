@@ -194,7 +194,7 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
     }
 
     private fun insert(db: SQLiteDatabase, uri: Uri, values: ContentValues?): Uri {
-        when (uriMatcher.match(uri)) {
+        return when (uriMatcher.match(uri)) {
             ROOT_DIRECTORY, SINGLE_FILE -> {
                 val remotePath = values?.getAsString(ProviderTableMeta.FILE_PATH)
                 val accountName = values?.getAsString(ProviderTableMeta.FILE_ACCOUNT_OWNER)
@@ -230,7 +230,7 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                 val shareId = db.insert(ProviderTableMeta.OCSHARES_TABLE_NAME, null, values)
 
                 if (shareId <= 0) throw SQLException("ERROR $uri")
-                return ContentUris.withAppendedId(ProviderTableMeta.CONTENT_URI_SHARE, shareId)
+                ContentUris.withAppendedId(ProviderTableMeta.CONTENT_URI_SHARE, shareId)
 
             }
 
@@ -238,7 +238,7 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                 val capabilityId = db.insert(ProviderTableMeta.CAPABILITIES_TABLE_NAME, null, values)
 
                 if (capabilityId <= 0) throw SQLException("ERROR $uri")
-                return ContentUris.withAppendedId(ProviderTableMeta.CONTENT_URI_CAPABILITIES, capabilityId)
+                ContentUris.withAppendedId(ProviderTableMeta.CONTENT_URI_CAPABILITIES, capabilityId)
             }
 
             UPLOADS -> {
@@ -246,7 +246,7 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
 
                 if (uploadId <= 0) throw SQLException("ERROR $uri")
                 trimSuccessfulUploads(db)
-                return ContentUris.withAppendedId(ProviderTableMeta.CONTENT_URI_UPLOADS, uploadId)
+                ContentUris.withAppendedId(ProviderTableMeta.CONTENT_URI_UPLOADS, uploadId)
             }
 
             CAMERA_UPLOADS_SYNC -> {
@@ -256,7 +256,7 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                 )
                 if (cameraUploadId <= 0) throw SQLException("ERROR $uri")
 
-                return ContentUris.withAppendedId(ProviderTableMeta.CONTENT_URI_CAMERA_UPLOADS_SYNC, cameraUploadId)
+                ContentUris.withAppendedId(ProviderTableMeta.CONTENT_URI_CAMERA_UPLOADS_SYNC, cameraUploadId)
             }
             QUOTAS -> {
                 val quotaId = db.insert(
@@ -265,7 +265,7 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                 )
 
                 if (quotaId <= 0) throw SQLException("ERROR $uri")
-                return ContentUris.withAppendedId(ProviderTableMeta.CONTENT_URI_QUOTAS, quotaId)
+                ContentUris.withAppendedId(ProviderTableMeta.CONTENT_URI_QUOTAS, quotaId)
             }
             else -> throw IllegalArgumentException("Unknown uri id: $uri")
         }
@@ -414,18 +414,18 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
         if (selection != null && selectionArgs == null) {
             throw IllegalArgumentException("Selection not allowed, use parameterized queries")
         }
-        when (uriMatcher.match(uri)) {
-            DIRECTORY -> return 0 //updateFolderSize(db, selectionArgs[0]);
-            SHARES -> return db.update(ProviderTableMeta.OCSHARES_TABLE_NAME, values, selection, selectionArgs)
-            CAPABILITIES -> return db.update(ProviderTableMeta.CAPABILITIES_TABLE_NAME, values, selection, selectionArgs)
+        return when (uriMatcher.match(uri)) {
+            DIRECTORY -> 0 //updateFolderSize(db, selectionArgs[0]);
+            SHARES -> db.update(ProviderTableMeta.OCSHARES_TABLE_NAME, values, selection, selectionArgs)
+            CAPABILITIES -> db.update(ProviderTableMeta.CAPABILITIES_TABLE_NAME, values, selection, selectionArgs)
             UPLOADS -> {
                 val ret = db.update(ProviderTableMeta.UPLOADS_TABLE_NAME, values, selection, selectionArgs)
                 trimSuccessfulUploads(db)
-                return ret
+                ret
             }
-            CAMERA_UPLOADS_SYNC -> return db.update(ProviderTableMeta.CAMERA_UPLOADS_SYNC_TABLE_NAME, values, selection, selectionArgs)
-            QUOTAS -> return db.update(ProviderTableMeta.USER_QUOTAS_TABLE_NAME, values, selection, selectionArgs)
-            else -> return db.update(
+            CAMERA_UPLOADS_SYNC -> db.update(ProviderTableMeta.CAMERA_UPLOADS_SYNC_TABLE_NAME, values, selection, selectionArgs)
+            QUOTAS -> db.update(ProviderTableMeta.USER_QUOTAS_TABLE_NAME, values, selection, selectionArgs)
+            else -> db.update(
                 ProviderTableMeta.FILE_TABLE_NAME, values, selection, selectionArgs
             )
         }

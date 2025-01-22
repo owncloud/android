@@ -1230,19 +1230,19 @@ class MainFileListFragment : Fragment(),
             }
         }
 
-        when (menuId) {
+        return when (menuId) {
             R.id.action_share_file -> {
                 fileActions?.onShareFileClicked(singleFile)
                 fileListAdapter.clearSelection()
                 updateActionModeAfterTogglingSelected()
-                return true
+                true
             }
 
             R.id.action_open_file_with -> {
                 fileActions?.openFile(singleFile)
                 fileListAdapter.clearSelection()
                 updateActionModeAfterTogglingSelected()
-                return true
+                true
             }
 
             R.id.action_rename_file -> {
@@ -1250,19 +1250,19 @@ class MainFileListFragment : Fragment(),
                 dialog.show(requireActivity().supportFragmentManager, FRAGMENT_TAG_RENAME_FILE)
                 fileListAdapter.clearSelection()
                 updateActionModeAfterTogglingSelected()
-                return true
+                true
             }
 
             R.id.action_see_details -> {
                 fileListAdapter.clearSelection()
                 updateActionModeAfterTogglingSelected()
                 fileActions?.showDetails(singleFile)
-                return true
+                true
             }
 
             R.id.action_sync_file -> {
                 syncFiles(listOf(singleFile))
-                return true
+                true
             }
 
             R.id.action_send_file -> {
@@ -1273,7 +1273,7 @@ class MainFileListFragment : Fragment(),
                 } else {
                     fileActions?.sendDownloadedFile(singleFile)
                 }
-                return true
+                true
             }
 
             R.id.action_set_available_offline -> {
@@ -1289,46 +1289,49 @@ class MainFileListFragment : Fragment(),
                 } else {
                     fileOperationsViewModel.performOperation(FileOperation.SynchronizeFileOperation(singleFile, singleFile.owner))
                 }
-                return true
+                true
             }
 
             R.id.action_unset_available_offline -> {
                 fileOperationsViewModel.performOperation(FileOperation.UnsetFilesAsAvailableOffline(listOf(singleFile)))
-                return true
+                true
+            }
+
+            else -> {
+                false
             }
         }
-        return false
     }
 
     private fun onCheckedFilesActionChosen(menuId: Int?, checkedFiles: ArrayList<OCFile>): Boolean {
-        when (menuId) {
+        return when (menuId) {
             R.id.file_action_select_all -> {
                 fileListAdapter.selectAll()
                 updateActionModeAfterTogglingSelected()
-                return true
+                true
             }
 
             R.id.action_select_inverse -> {
                 fileListAdapter.selectInverse()
                 updateActionModeAfterTogglingSelected()
-                return true
+                true
             }
 
             R.id.action_remove_file -> {
                 filesToRemove = checkedFiles
                 fileOperationsViewModel.showRemoveDialog(filesToRemove)
-                return true
+                true
             }
 
             R.id.action_download_file,
             R.id.action_sync_file -> {
                 syncFiles(checkedFiles)
-                return true
+                true
             }
 
             R.id.action_cancel_sync -> {
                 fileActions?.cancelFileTransference(checkedFiles)
-                return true
+                true
             }
 
             R.id.action_set_available_offline -> {
@@ -1340,16 +1343,17 @@ class MainFileListFragment : Fragment(),
                         fileOperationsViewModel.performOperation(FileOperation.SynchronizeFileOperation(ocFile, ocFile.owner))
                     }
                 }
-                return true
+                true
             }
 
             R.id.action_unset_available_offline -> {
                 fileOperationsViewModel.performOperation(FileOperation.UnsetFilesAsAvailableOffline(checkedFiles))
-                return true
+                true
             }
 
             R.id.action_send_file -> {
                 requireActivity().sendDownloadedFilesByShareSheet(checkedFiles)
+                true
             }
 
             R.id.action_move -> {
@@ -1359,7 +1363,7 @@ class MainFileListFragment : Fragment(),
                 requireActivity().startActivityForResult(action, FileDisplayActivity.REQUEST_CODE__MOVE_FILES)
                 fileListAdapter.clearSelection()
                 updateActionModeAfterTogglingSelected()
-                return true
+                true
             }
 
             R.id.action_copy -> {
@@ -1369,10 +1373,13 @@ class MainFileListFragment : Fragment(),
                 requireActivity().startActivityForResult(action, FileDisplayActivity.REQUEST_CODE__COPY_FILES)
                 fileListAdapter.clearSelection()
                 updateActionModeAfterTogglingSelected()
-                return true
+                true
+            }
+
+            else -> {
+                false
             }
         }
-        return false
     }
 
     /**

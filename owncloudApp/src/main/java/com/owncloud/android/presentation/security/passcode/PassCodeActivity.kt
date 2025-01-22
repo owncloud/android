@@ -416,17 +416,17 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, EnableBiom
     }
 
     private fun getPasscodeAction(action: String?): PasscodeAction {
-        when (action) {
+        return when (action) {
             ACTION_REMOVE -> {
-                return PasscodeAction.REMOVE
+                PasscodeAction.REMOVE
             }
 
             ACTION_CREATE -> {
-                return PasscodeAction.CREATE
+                PasscodeAction.CREATE
             }
 
             else -> {
-                return PasscodeAction.CHECK
+                PasscodeAction.CHECK
             }
         }
     }

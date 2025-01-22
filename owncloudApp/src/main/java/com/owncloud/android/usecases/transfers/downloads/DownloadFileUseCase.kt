@@ -50,13 +50,13 @@ class DownloadFileUseCase(
         val ocFile = params.file
         val accountName = params.accountName
 
-        if (ocFile.id == null) return null
-
-        if (isDownloadAlreadyEnqueued(accountName, ocFile)) {
-            return null
+        return if (ocFile.id == null) {
+            null
+        } else if (isDownloadAlreadyEnqueued(accountName, ocFile)) {
+            null
+        } else {
+            enqueueNewDownload(ocFile, accountName)
         }
-
-        return enqueueNewDownload(ocFile, accountName)
     }
 
     private fun isDownloadAlreadyEnqueued(accountName: String, file: OCFile): Boolean {

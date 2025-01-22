@@ -387,9 +387,9 @@ class FileListAdapter(
     }
 
     private fun generateFooterText(filesCount: Int, foldersCount: Int): String {
-        when {
+        return when {
             filesCount <= 0 -> {
-                return when {
+                when {
                     foldersCount <= 0 -> {
                         ""
                     }
@@ -405,7 +405,7 @@ class FileListAdapter(
             }
 
             filesCount == 1 -> {
-                return when {
+                 when {
                     foldersCount <= 0 -> {
                         context.getString(R.string.file_list__footer__file)
                     }
@@ -421,7 +421,7 @@ class FileListAdapter(
             }
 
             else -> {    // filesCount > 1
-                return when {
+                when {
                     foldersCount <= 0 -> {
                         context.getString(R.string.file_list__footer__files, filesCount)
                     }

@@ -464,33 +464,37 @@ class FileDisplayActivity : FileActivity(),
         val secondFragment = supportFragmentManager.findFragmentByTag(TAG_SECOND_FRAGMENT) as FileFragment?
 
         // Return second fragment if it has been already chosen
-        if (secondFragment != null) return secondFragment
+        return if (secondFragment != null) {
+            secondFragment
 
         // Return null if we receive a folder. This way, second fragment will be cleared. We should move this logic out of here.
-        if (file.isFolder) return null
+        } else if (file.isFolder) {
+            null
 
         // Otherwise, decide which fragment should be shown.
-        return when {
-            PreviewAudioFragment.canBePreviewed(file) -> {
-                val startPlaybackPosition = intent.getIntExtra(PreviewVideoActivity.EXTRA_PLAY_POSITION, 0)
-                val autoplay = intent.getBooleanExtra(PreviewVideoActivity.EXTRA_AUTOPLAY, true)
-                PreviewAudioFragment.newInstance(
-                    file,
-                    account,
-                    startPlaybackPosition,
-                    autoplay
-                )
-            }
+        } else {
+            when {
+                PreviewAudioFragment.canBePreviewed(file) -> {
+                    val startPlaybackPosition = intent.getIntExtra(PreviewVideoActivity.EXTRA_PLAY_POSITION, 0)
+                    val autoplay = intent.getBooleanExtra(PreviewVideoActivity.EXTRA_AUTOPLAY, true)
+                    PreviewAudioFragment.newInstance(
+                        file,
+                        account,
+                        startPlaybackPosition,
+                        autoplay
+                    )
+                }
 
-            PreviewTextFragment.canBePreviewed(file) -> {
-                PreviewTextFragment.newInstance(
-                    file,
-                    account
-                )
-            }
+                PreviewTextFragment.canBePreviewed(file) -> {
+                    PreviewTextFragment.newInstance(
+                        file,
+                        account
+                    )
+                }
 
-            else -> {
-                FileDetailsFragment.newInstance(file, account, false)
+                else -> {
+                    FileDetailsFragment.newInstance(file, account, false)
+                }
             }
         }
     }

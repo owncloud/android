@@ -55,7 +55,7 @@ class OCLocalFileDataSource(
         fileDao.getFileByOwnerAndRemotePath(owner, remotePath, spaceId)?.let { return it.toModel() }
 
         // If root folder do not exists, create and return it.
-        if (remotePath == ROOT_PATH) {
+        return if (remotePath == ROOT_PATH) {
             val rootFolder = OCFile(
                 parentId = ROOT_PARENT_ID,
                 owner = owner,
@@ -66,10 +66,11 @@ class OCLocalFileDataSource(
                 spaceId = spaceId,
                 permissions = "CK",
             )
-            fileDao.mergeRemoteAndLocalFile(rootFolder.toEntity()).also { return getFileById(it) }
+            val idFile = fileDao.mergeRemoteAndLocalFile(rootFolder.toEntity())
+            getFileById(idFile)
+        } else {
+            null
         }
-
-        return null
     }
 
     override fun getFileByRemoteId(remoteId: String): OCFile? =
