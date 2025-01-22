@@ -817,7 +817,7 @@ style:
   RedundantVisibilityModifierRule:
     active: true
   ReturnCount:
-    active: true
+    active: false
     max: 2
     excludedFunctions: ['equals']
     excludeLabeled: false
