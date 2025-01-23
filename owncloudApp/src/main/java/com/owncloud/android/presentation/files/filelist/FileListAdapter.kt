@@ -386,8 +386,8 @@ class FileListAdapter(
         }
     }
 
-    private fun generateFooterText(filesCount: Int, foldersCount: Int): String {
-        return when {
+    private fun generateFooterText(filesCount: Int, foldersCount: Int): String =
+        when {
             filesCount <= 0 -> {
                 when {
                     foldersCount <= 0 -> {
@@ -438,7 +438,6 @@ class FileListAdapter(
                 }
             }
         }
-    }
 
     interface FileListAdapterListener {
         fun onItemClick(ocFileWithSyncInfo: OCFileWithSyncInfo, position: Int)

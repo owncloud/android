@@ -63,8 +63,8 @@ open class MoveRemoteFileOperation(
      *
      * @param client Client object to communicate with the remote ownCloud server.
      */
-    override fun run(client: OwnCloudClient): RemoteOperationResult<Unit> {
-        return if (targetRemotePath == sourceRemotePath) {
+    override fun run(client: OwnCloudClient): RemoteOperationResult<Unit> =
+        if (targetRemotePath == sourceRemotePath) {
             // nothing to do!
             RemoteOperationResult(ResultCode.OK)
         } else if (targetRemotePath.startsWith(sourceRemotePath)) {
@@ -115,7 +115,6 @@ open class MoveRemoteFileOperation(
             }
             result
         }
-    }
 
     /**
      * For standard moves, we will use [OwnCloudClient.getUserFilesWebDavUri].

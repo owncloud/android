@@ -415,8 +415,8 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, EnableBiom
         finish()
     }
 
-    private fun getPasscodeAction(action: String?): PasscodeAction {
-        return when (action) {
+    private fun getPasscodeAction(action: String?): PasscodeAction =
+        when (action) {
             ACTION_REMOVE -> {
                 PasscodeAction.REMOVE
             }
@@ -429,7 +429,6 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, EnableBiom
                 PasscodeAction.CHECK
             }
         }
-    }
 
     override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean =
          when (keyCode) {

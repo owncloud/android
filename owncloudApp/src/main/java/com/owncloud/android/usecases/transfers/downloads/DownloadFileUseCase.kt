@@ -50,12 +50,12 @@ class DownloadFileUseCase(
         val ocFile = params.file
         val accountName = params.accountName
 
-        return if (ocFile.id == null) {
-            null
-        } else if (isDownloadAlreadyEnqueued(accountName, ocFile)) {
-            null
-        } else {
-            enqueueNewDownload(ocFile, accountName)
+        return ocFile.id?.let {
+            if (isDownloadAlreadyEnqueued(accountName, ocFile)) {
+                null
+            } else {
+                enqueueNewDownload(ocFile, accountName)
+            }
         }
     }
 

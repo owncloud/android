@@ -193,8 +193,8 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
         return newUri
     }
 
-    private fun insert(db: SQLiteDatabase, uri: Uri, values: ContentValues?): Uri {
-        return when (uriMatcher.match(uri)) {
+    private fun insert(db: SQLiteDatabase, uri: Uri, values: ContentValues?): Uri =
+        when (uriMatcher.match(uri)) {
             ROOT_DIRECTORY, SINGLE_FILE -> {
                 val remotePath = values?.getAsString(ProviderTableMeta.FILE_PATH)
                 val accountName = values?.getAsString(ProviderTableMeta.FILE_ACCOUNT_OWNER)
@@ -211,7 +211,7 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                 val doubleCheck = query(uri, projection, where, whereArgs, null)
                 // ugly patch; serious refactorization is needed to reduce work in
                 // FileDataStorageManager and bring it to FileContentProvider
-                return if (!doubleCheck.moveToFirst()) {
+                if (!doubleCheck.moveToFirst()) {
                     doubleCheck.close()
                     val fileId = db.insert(ProviderTableMeta.FILE_TABLE_NAME, null, values)
                     if (fileId <= 0) throw SQLException("ERROR $uri")
@@ -269,8 +269,6 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
             }
             else -> throw IllegalArgumentException("Unknown uri id: $uri")
         }
-
-    }
 
     override fun onCreate(): Boolean {
         dbHelper = DataBaseHelper(context)

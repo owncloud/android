@@ -49,11 +49,11 @@ internal class StatusRequester {
             (baseUrl.startsWith(HTTPS_SCHEME) &&
                     !redirectedUrl.startsWith(HTTPS_SCHEME))
 
-    fun updateLocationWithRedirectPath(oldLocation: String, redirectedLocation: String): String {
+    fun updateLocationWithRedirectPath(oldLocation: String, redirectedLocation: String): String =
         /** Redirection with different endpoint.
          * When asking for server.com/status.php and redirected to different.one/, we need to ask different.one/status.php
          */
-        return if (redirectedLocation.endsWith('/')) {
+        if (redirectedLocation.endsWith('/')) {
             redirectedLocation.trimEnd('/') + OwnCloudClient.STATUS_PATH
         } else if (!redirectedLocation.startsWith("/")) {
                 redirectedLocation
@@ -61,7 +61,6 @@ internal class StatusRequester {
             val oldLocationURL = URL(oldLocation)
             URL(oldLocationURL.protocol, oldLocationURL.host, oldLocationURL.port, redirectedLocation).toString()
         }
-    }
 
     private fun getGetMethod(url: String): GetMethod =
         GetMethod(URL(url)).apply {

@@ -1303,8 +1303,8 @@ class MainFileListFragment : Fragment(),
         }
     }
 
-    private fun onCheckedFilesActionChosen(menuId: Int?, checkedFiles: ArrayList<OCFile>): Boolean {
-        return when (menuId) {
+    private fun onCheckedFilesActionChosen(menuId: Int?, checkedFiles: ArrayList<OCFile>): Boolean =
+        when (menuId) {
             R.id.file_action_select_all -> {
                 fileListAdapter.selectAll()
                 updateActionModeAfterTogglingSelected()
@@ -1380,7 +1380,6 @@ class MainFileListFragment : Fragment(),
                 false
             }
         }
-    }
 
     /**
      * Update or remove the actionMode after applying any change to the selected items.
