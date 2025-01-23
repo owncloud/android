@@ -180,12 +180,14 @@ open class FolderPickerActivity : FileActivity(),
         }
         // If current file is root folder
         else if (currentDirDisplayed.parentId == OCFile.ROOT_PARENT_ID) {
-            // If we are not in COPY mode, or if we are in COPY mode and spaces are not allowed, close the activity
-            if (pickerMode != PickerMode.COPY || (pickerMode == PickerMode.COPY && currentDirDisplayed.spaceId == null)) {
+            // If we are not in COPY or CAMERA_FOLDER mode, or if we are in COPY or CAMERA_FOLDER mode and spaces are not allowed, close the activity
+            if ((pickerMode != PickerMode.COPY && pickerMode != PickerMode.CAMERA_FOLDER) ||
+                (pickerMode == PickerMode.COPY && currentDirDisplayed.spaceId == null) ||
+                (pickerMode == PickerMode.CAMERA_FOLDER && currentDirDisplayed.spaceId == null)) {
                 finish()
                 return
             }
-            // If we are in COPY mode and inside a space, navigate back to the spaces list
+            // If we are in COPY or CAMERA_FOLDER mode and inside a space, navigate back to the spaces list
             if (mainFileListFragment?.getCurrentSpace()?.isProject == true || mainFileListFragment?.getCurrentSpace()?.isPersonal == true) {
                 file = null
                 initAndShowListOfSpaces()
@@ -309,12 +311,13 @@ open class FolderPickerActivity : FileActivity(),
 
     private fun updateToolbar(chosenFileFromParam: OCFile?, space: OCSpace? = null) {
         val chosenFile = chosenFileFromParam ?: file // If no file is passed, current file decides
-        val isRootFromPersonalInCopyMode =
-            chosenFile != null && chosenFile.remotePath == OCFile.ROOT_PATH && space?.isProject == false && pickerMode == PickerMode.COPY
+        val isRootFromPersonalInCopyOrCameraFolderMode =
+            chosenFile != null && chosenFile.remotePath == OCFile.ROOT_PATH && space?.isProject == false &&
+                    (pickerMode == PickerMode.COPY || pickerMode == PickerMode.CAMERA_FOLDER)
         val isRootFromPersonal = chosenFile == null || (chosenFile.remotePath == OCFile.ROOT_PATH && (space == null || !space.isProject))
         val isRootFromProject = space?.isProject == true && chosenFile.remotePath == OCFile.ROOT_PATH
 
-        if (isRootFromPersonalInCopyMode) {
+        if (isRootFromPersonalInCopyOrCameraFolderMode) {
             updateStandardToolbar(
                 title = getString(R.string.default_display_name_for_root_folder),
                 displayHomeAsUpEnabled = true,
@@ -329,8 +332,8 @@ open class FolderPickerActivity : FileActivity(),
         } else if (isRootFromProject) {
             updateStandardToolbar(
                 title = space!!.name,
-                displayHomeAsUpEnabled = pickerMode == PickerMode.COPY,
-                homeButtonEnabled = pickerMode == PickerMode.COPY
+                displayHomeAsUpEnabled = pickerMode == PickerMode.COPY || pickerMode == PickerMode.CAMERA_FOLDER,
+                homeButtonEnabled = pickerMode == PickerMode.COPY || pickerMode == PickerMode.CAMERA_FOLDER
             )
         } else {
             updateStandardToolbar(title = chosenFile.fileName, displayHomeAsUpEnabled = true, homeButtonEnabled = true)

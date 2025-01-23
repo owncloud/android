@@ -1,0 +1,7 @@
+Bugfix: Navigation in automatic uploads folder picker
+
+The button in the toolbar for going up when choosing an upload path has been added
+when needed, since there were some cases in which it didn't appear.
+
+https://github.com/owncloud/android/issues/4340
+https://github.com/owncloud/android/pull/4535

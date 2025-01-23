@@ -34,6 +34,7 @@ ownCloud admins and users.
 
 ## Summary
 
+* Bugfix - Navigation in automatic uploads folder picker: [#4340](https://github.com/owncloud/android/issues/4340)
 * Change - Replace auto-uploads with automatic uploads: [#4252](https://github.com/owncloud/android/issues/4252)
 * Enhancement - Unit tests for repository classes - Part 2: [#4233](https://github.com/owncloud/android/issues/4233)
 * Enhancement - Unit tests for repository classes - Part 3: [#4234](https://github.com/owncloud/android/issues/4234)
@@ -47,6 +48,14 @@ ownCloud admins and users.
 * Enhancement - Technical improvements for user quota: [#4521](https://github.com/owncloud/android/issues/4521)
 
 ## Details
+
+* Bugfix - Navigation in automatic uploads folder picker: [#4340](https://github.com/owncloud/android/issues/4340)
+
+   The button in the toolbar for going up when choosing an upload path has been
+   added when needed, since there were some cases in which it didn't appear.
+
+   https://github.com/owncloud/android/issues/4340
+   https://github.com/owncloud/android/pull/4535
 
 * Change - Replace auto-uploads with automatic uploads: [#4252](https://github.com/owncloud/android/issues/4252)
 
