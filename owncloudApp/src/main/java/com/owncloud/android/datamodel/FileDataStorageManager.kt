@@ -80,7 +80,7 @@ class FileDataStorageManager(
         result
     }
 
-    // To do: New_arch: Remove this and call usecase inside FilesViewModel
+    // To do: New_arch. Remove this and call usecase inside FilesViewModel
     fun getFileById(id: Long): OCFile? = runBlocking(CoroutinesDispatcherProvider().io) {
         val getFileByIdUseCase: GetFileByIdUseCase by inject()
 
@@ -100,7 +100,7 @@ class FileDataStorageManager(
             listOf()
         }
 
-    // New_arch: Remove this and call usecase inside FilesViewModel
+    // To do: New_arch. Remove this and call usecase inside FilesViewModel
     fun getFolderImages(folder: OCFile?): List<OCFile> = runBlocking(CoroutinesDispatcherProvider().io) {
         val getFolderImagesUseCase: GetFolderImagesUseCase by inject()
 
@@ -111,7 +111,7 @@ class FileDataStorageManager(
         result ?: listOf()
     }
 
-    // New_arch: Remove this and call usecase inside FilesViewModel
+    // To do: New_arch. Remove this and call usecase inside FilesViewModel
     private fun getFolderContent(parentId: Long): List<OCFile> = runBlocking(CoroutinesDispatcherProvider().io) {
         val getFolderContentUseCase: GetFolderContentUseCase by inject()
 
