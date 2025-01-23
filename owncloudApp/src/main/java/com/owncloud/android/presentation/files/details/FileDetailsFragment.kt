@@ -585,11 +585,11 @@ class FileDetailsFragment : FileFragment() {
     }
 
     override fun updateViewForSyncInProgress() {
-        TODO("Not yet implemented")
+        // Not yet implemented
     }
 
     override fun updateViewForSyncOff() {
-        TODO("Not yet implemented")
+        // Not yet implemented
     }
 
     override fun onFileMetadataChanged(updatedFile: OCFile?) {
@@ -597,11 +597,11 @@ class FileDetailsFragment : FileFragment() {
     }
 
     override fun onFileMetadataChanged() {
-        TODO("Not yet implemented")
+        // Not yet implemented
     }
 
     override fun onFileContentChanged() {
-        TODO("Not yet implemented")
+        // Not yet implemented
     }
 
     companion object {

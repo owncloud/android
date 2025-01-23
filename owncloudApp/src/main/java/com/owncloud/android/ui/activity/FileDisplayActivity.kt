@@ -1351,8 +1351,8 @@ class FileDisplayActivity : FileActivity(),
                     }
 
                     is SynchronizeFileUseCase.SyncType.UploadEnqueued -> showSnackMessage(getString(R.string.upload_enqueued_msg))
-
-                    null -> TODO()
+                    null -> { // Nothing to do
+                    }
                 }
             }
 
