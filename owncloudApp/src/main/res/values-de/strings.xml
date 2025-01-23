@@ -77,6 +77,7 @@
   <string name="prefs_camera_video_upload_path_title">Pfad für Video-Upload</string>
   <string name="prefs_camera_video_upload_on_wifi">Videos nur über WLAN hochladen</string>
   <string name="prefs_camera_video_upload_on_charging">Videos nur hochladen, wenn Ihr Gerät geladen wird</string>
+  <string name="prefs_automatic_uploads_not_available_users_light">Automatisches hochladen ist für den eingeschränkten Benutzer nicht verfügbar</string>
   <string name="prefs_subsection_advanced">Fortgeschritten</string>
   <string name="prefs_subsection_notifications">Benachrichtigungen verwalten</string>
   <string name="prefs_show_hidden_files">Versteckte Dateien anzeigen</string>
@@ -161,6 +162,7 @@
   <string name="file_list_empty_title_available_offline">Keine Offline-Dateien vorhanden</string>
   <string name="file_list_empty_title_shared_by_links">Keine geteilten Links</string>
   <string name="file_list_empty_subtitle_all_files">Lade Inhalte hoch oder synchronisiere mit Deinen Geräten!</string>
+  <string name="light_users_subtitle">Persönlicher Space ist nicht verfügbar</string>
   <string name="shares_list_empty_title">Keine Freigaben</string>
   <string name="shares_list_empty_subtitle">Du arbeitest nicht mit anderen zusammen an deren Ressourcen.</string>
   <string name="spaces_list_empty_subtitle">Sie haben keinen Zugriff auf einen Space!</string>
