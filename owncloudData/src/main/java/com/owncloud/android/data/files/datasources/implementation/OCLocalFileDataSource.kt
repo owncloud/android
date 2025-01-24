@@ -220,6 +220,16 @@ class OCLocalFileDataSource(
         fileDao.updateSyncStatusForFile(fileId, null)
     }
 
+    @VisibleForTesting
+    fun OCFileAndFileSync.toModel(): OCFileWithSyncInfo =
+        OCFileWithSyncInfo(
+            file = file.toModel(),
+            uploadWorkerUuid = fileSync?.uploadWorkerUuid,
+            downloadWorkerUuid = fileSync?.downloadWorkerUuid,
+            isSynchronizing = fileSync?.isSynchronizing == true,
+            space = space?.toModel(),
+        )
+
     companion object {
         @VisibleForTesting
         fun OCFileEntity.toModel(): OCFile =
@@ -279,14 +289,4 @@ class OCLocalFileDataSource(
                 spaceId = spaceId,
             ).apply { this@toEntity.id?.let { modelId -> this.id = modelId } }
     }
-
-    @VisibleForTesting
-    fun OCFileAndFileSync.toModel(): OCFileWithSyncInfo =
-        OCFileWithSyncInfo(
-            file = file.toModel(),
-            uploadWorkerUuid = fileSync?.uploadWorkerUuid,
-            downloadWorkerUuid = fileSync?.downloadWorkerUuid,
-            isSynchronizing = fileSync?.isSynchronizing == true,
-            space = space?.toModel(),
-        )
 }

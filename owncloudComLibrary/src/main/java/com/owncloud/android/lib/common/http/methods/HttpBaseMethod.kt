@@ -53,6 +53,14 @@ abstract class HttpBaseMethod constructor(url: URL) {
     var readTimeoutUnit: TimeUnit? = null
         private set
 
+    val statusCode: Int
+        get() = response.code
+    val statusMessage: String
+        get() = response.message
+
+    open val isAborted: Boolean
+        get() = call?.isCanceled() ?: false
+
     init {
         request = Request.Builder()
             .url(httpUrl)
@@ -118,11 +126,6 @@ abstract class HttpBaseMethod constructor(url: URL) {
     /****************
      *** Response ***
      ****************/
-    val statusCode: Int
-        get() = response.code
-
-    val statusMessage: String
-        get() = response.message
 
     // Headers
     open fun getResponseHeaders(): Headers? =
@@ -171,9 +174,6 @@ abstract class HttpBaseMethod constructor(url: URL) {
     open fun abort() {
         call?.cancel()
     }
-
-    open val isAborted: Boolean
-        get() = call?.isCanceled() ?: false
 
     //////////////////////////////
     //         For override

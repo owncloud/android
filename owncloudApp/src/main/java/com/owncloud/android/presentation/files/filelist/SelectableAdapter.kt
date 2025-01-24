@@ -28,6 +28,13 @@ abstract class SelectableAdapter<VH : RecyclerView.ViewHolder?> :
     private val selectedItems: SparseBooleanArray = SparseBooleanArray()
 
     /**
+     * Count the selected items
+     * @return Selected items count
+     */
+    val selectedItemCount: Int
+        get() = selectedItems.size()
+
+    /**
      * Indicates if the item at position position is selected
      * @param position Position of the item to check
      * @return true if the item is selected, false otherwise
@@ -55,13 +62,6 @@ abstract class SelectableAdapter<VH : RecyclerView.ViewHolder?> :
         selectedItems.clear()
         notifyDataSetChanged()
     }
-
-    /**
-     * Count the selected items
-     * @return Selected items count
-     */
-    val selectedItemCount: Int
-        get() = selectedItems.size()
 
     /**
      * Indicates the list of selected items

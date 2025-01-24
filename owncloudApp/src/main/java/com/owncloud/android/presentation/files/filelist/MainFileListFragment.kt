@@ -189,6 +189,129 @@ class MainFileListFragment : Fragment(),
     private var succeededTransfers: List<OCTransfer>? = null
     private var numberOfUploadsRefreshed: Int = 0
 
+    private val actionModeCallback: ActionMode.Callback = object : ActionMode.Callback {
+
+        override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
+            setDrawerStatus(enabled = false)
+            actionMode = mode
+
+            requireActivity().findViewById<View>(R.id.owncloud_app_bar).isFocusableInTouchMode = false
+
+            val inflater = requireActivity().menuInflater
+            inflater.inflate(R.menu.file_actions_menu, menu)
+            this@MainFileListFragment.menu = menu
+
+            mode?.invalidate()
+
+            // Set gray color
+            val window = activity?.window
+            statusBarColor = window?.statusBarColor ?: -1
+
+            // Hide FAB in multi selection mode
+            toggleFabVisibility(false)
+            fileActions?.setBottomBarVisibility(false)
+
+            // Hide sort options view in multi-selection mode
+            binding.optionsLayout.visibility = View.GONE
+
+            return true
+        }
+
+        /**
+         * Updates available action in menu depending on current selection.
+         */
+        override fun onPrepareActionMode(mode: ActionMode?, menu: Menu?): Boolean {
+            val checkedFilesWithSyncInfo = fileListAdapter.getCheckedItems()
+            val checkedCount = checkedFilesWithSyncInfo.size
+            val title = resources.getQuantityString(
+                R.plurals.items_selected_count,
+                checkedCount,
+                checkedCount
+            )
+            mode?.title = title
+
+            checkedFiles = checkedFilesWithSyncInfo.map { it.file }
+
+            val checkedFilesSync = checkedFilesWithSyncInfo.map {
+                OCFileSyncInfo(
+                    fileId = it.file.id!!,
+                    uploadWorkerUuid = it.uploadWorkerUuid,
+                    downloadWorkerUuid = it.downloadWorkerUuid,
+                    isSynchronizing = it.isSynchronizing
+                )
+            }
+
+            val displaySelectAll = checkedCount != fileListAdapter.itemCount - 1 // -1 because one of them is the footer :S
+            mainFileListViewModel.filterMenuOptions(
+                checkedFiles, checkedFilesSync,
+                displaySelectAll, isMultiselection = true
+            )
+
+            if (checkedFiles.size == 1) {
+                mainFileListViewModel.getAppRegistryForMimeType(checkedFiles.first().mimeType, isMultiselection = true)
+            } else {
+                menu?.let {
+                    openInWebProviders.forEach { (_, menuItemId) ->
+                        it.removeItem(menuItemId)
+                    }
+                    openInWebProviders = emptyMap()
+                }
+            }
+            setRolesAccessibilityToMenuItems()
+
+            return true
+        }
+
+        private fun setRolesAccessibilityToMenuItems() {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                val roleAccessibilityDescription = getString(R.string.button_role_accessibility)
+                menu?.apply {
+                    findItem(R.id.file_action_select_all)?.contentDescription =
+                        "${getString(R.string.actionbar_select_all)} $roleAccessibilityDescription"
+                    findItem(R.id.action_select_inverse)?.contentDescription =
+                        "${getString(R.string.actionbar_select_inverse)} $roleAccessibilityDescription"
+                    findItem(R.id.action_open_file_with)?.contentDescription =
+                        "${getString(R.string.actionbar_open_with)} $roleAccessibilityDescription"
+                    findItem(R.id.action_rename_file)?.contentDescription = "${getString(R.string.common_rename)} $roleAccessibilityDescription"
+                    findItem(R.id.action_move)?.contentDescription = "${getString(R.string.actionbar_move)} $roleAccessibilityDescription"
+                    findItem(R.id.action_copy)?.contentDescription = "${getString(R.string.copy)} $roleAccessibilityDescription"
+                    findItem(R.id.action_send_file)?.contentDescription =
+                        "${getString(R.string.actionbar_send_file)} $roleAccessibilityDescription"
+                    findItem(R.id.action_set_available_offline)?.contentDescription =
+                        "${getString(R.string.set_available_offline)} $roleAccessibilityDescription"
+                    findItem(R.id.action_unset_available_offline)?.contentDescription =
+                        "${getString(R.string.unset_available_offline)} $roleAccessibilityDescription"
+                    findItem(R.id.action_see_details)?.contentDescription =
+                        "${getString(R.string.actionbar_see_details)} $roleAccessibilityDescription"
+                    findItem(R.id.action_remove_file)?.contentDescription = "${getString(R.string.common_remove)} $roleAccessibilityDescription"
+                }
+            }
+        }
+
+        override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean =
+            onFileActionChosen(item?.itemId)
+
+        override fun onDestroyActionMode(mode: ActionMode?) {
+            setDrawerStatus(enabled = true)
+            actionMode = null
+
+            requireActivity().findViewById<View>(R.id.owncloud_app_bar).isFocusableInTouchMode = true
+
+            // reset to previous color
+            requireActivity().window.statusBarColor = statusBarColor!!
+
+            // show or hide FAB on multi selection mode exit
+            showOrHideFab(mainFileListViewModel.fileListOption.value, mainFileListViewModel.currentFolderDisplayed.value)
+
+            fileActions?.setBottomBarVisibility(true)
+
+            // Show sort options view when multi-selection mode finish
+            binding.optionsLayout.visibility = View.VISIBLE
+
+            fileListAdapter.clearSelection()
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -1439,129 +1562,6 @@ class MainFileListFragment : Fragment(),
             listOf(file), listOf(fileSync),
             displaySelectAll = false, isMultiselection = false
         )
-    }
-
-    private val actionModeCallback: ActionMode.Callback = object : ActionMode.Callback {
-
-        override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
-            setDrawerStatus(enabled = false)
-            actionMode = mode
-
-            requireActivity().findViewById<View>(R.id.owncloud_app_bar).isFocusableInTouchMode = false
-
-            val inflater = requireActivity().menuInflater
-            inflater.inflate(R.menu.file_actions_menu, menu)
-            this@MainFileListFragment.menu = menu
-
-            mode?.invalidate()
-
-            // Set gray color
-            val window = activity?.window
-            statusBarColor = window?.statusBarColor ?: -1
-
-            // Hide FAB in multi selection mode
-            toggleFabVisibility(false)
-            fileActions?.setBottomBarVisibility(false)
-
-            // Hide sort options view in multi-selection mode
-            binding.optionsLayout.visibility = View.GONE
-
-            return true
-        }
-
-        /**
-         * Updates available action in menu depending on current selection.
-         */
-        override fun onPrepareActionMode(mode: ActionMode?, menu: Menu?): Boolean {
-            val checkedFilesWithSyncInfo = fileListAdapter.getCheckedItems()
-            val checkedCount = checkedFilesWithSyncInfo.size
-            val title = resources.getQuantityString(
-                R.plurals.items_selected_count,
-                checkedCount,
-                checkedCount
-            )
-            mode?.title = title
-
-            checkedFiles = checkedFilesWithSyncInfo.map { it.file }
-
-            val checkedFilesSync = checkedFilesWithSyncInfo.map {
-                OCFileSyncInfo(
-                    fileId = it.file.id!!,
-                    uploadWorkerUuid = it.uploadWorkerUuid,
-                    downloadWorkerUuid = it.downloadWorkerUuid,
-                    isSynchronizing = it.isSynchronizing
-                )
-            }
-
-            val displaySelectAll = checkedCount != fileListAdapter.itemCount - 1 // -1 because one of them is the footer :S
-            mainFileListViewModel.filterMenuOptions(
-                checkedFiles, checkedFilesSync,
-                displaySelectAll, isMultiselection = true
-            )
-
-            if (checkedFiles.size == 1) {
-                mainFileListViewModel.getAppRegistryForMimeType(checkedFiles.first().mimeType, isMultiselection = true)
-            } else {
-                menu?.let {
-                    openInWebProviders.forEach { (_, menuItemId) ->
-                        it.removeItem(menuItemId)
-                    }
-                    openInWebProviders = emptyMap()
-                }
-            }
-            setRolesAccessibilityToMenuItems()
-
-            return true
-        }
-
-        private fun setRolesAccessibilityToMenuItems() {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                val roleAccessibilityDescription = getString(R.string.button_role_accessibility)
-                menu?.apply {
-                    findItem(R.id.file_action_select_all)?.contentDescription =
-                        "${getString(R.string.actionbar_select_all)} $roleAccessibilityDescription"
-                    findItem(R.id.action_select_inverse)?.contentDescription =
-                        "${getString(R.string.actionbar_select_inverse)} $roleAccessibilityDescription"
-                    findItem(R.id.action_open_file_with)?.contentDescription =
-                        "${getString(R.string.actionbar_open_with)} $roleAccessibilityDescription"
-                    findItem(R.id.action_rename_file)?.contentDescription = "${getString(R.string.common_rename)} $roleAccessibilityDescription"
-                    findItem(R.id.action_move)?.contentDescription = "${getString(R.string.actionbar_move)} $roleAccessibilityDescription"
-                    findItem(R.id.action_copy)?.contentDescription = "${getString(R.string.copy)} $roleAccessibilityDescription"
-                    findItem(R.id.action_send_file)?.contentDescription =
-                        "${getString(R.string.actionbar_send_file)} $roleAccessibilityDescription"
-                    findItem(R.id.action_set_available_offline)?.contentDescription =
-                        "${getString(R.string.set_available_offline)} $roleAccessibilityDescription"
-                    findItem(R.id.action_unset_available_offline)?.contentDescription =
-                        "${getString(R.string.unset_available_offline)} $roleAccessibilityDescription"
-                    findItem(R.id.action_see_details)?.contentDescription =
-                        "${getString(R.string.actionbar_see_details)} $roleAccessibilityDescription"
-                    findItem(R.id.action_remove_file)?.contentDescription = "${getString(R.string.common_remove)} $roleAccessibilityDescription"
-                }
-            }
-        }
-
-        override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean =
-            onFileActionChosen(item?.itemId)
-
-        override fun onDestroyActionMode(mode: ActionMode?) {
-            setDrawerStatus(enabled = true)
-            actionMode = null
-
-            requireActivity().findViewById<View>(R.id.owncloud_app_bar).isFocusableInTouchMode = true
-
-            // reset to previous color
-            requireActivity().window.statusBarColor = statusBarColor!!
-
-            // show or hide FAB on multi selection mode exit
-            showOrHideFab(mainFileListViewModel.fileListOption.value, mainFileListViewModel.currentFolderDisplayed.value)
-
-            fileActions?.setBottomBarVisibility(true)
-
-            // Show sort options view when multi-selection mode finish
-            binding.optionsLayout.visibility = View.VISIBLE
-
-            fileListAdapter.clearSelection()
-        }
     }
 
     private fun syncFiles(files: List<OCFile>) {

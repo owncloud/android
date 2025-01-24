@@ -89,6 +89,13 @@ class PreviewImageActivity : FileActivity(),
     private var localBroadcastManager: LocalBroadcastManager? = null
     private var fullScreenAnchorView: View? = null
 
+    var mHideSystemUiHandler: Handler = object : Handler() {
+        override fun handleMessage(msg: Message) {
+            hideSystemUI(fullScreenAnchorView)
+            showActionBar(false)
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         requestWindowFeature(Window.FEATURE_ACTION_BAR_OVERLAY)
         super.onCreate(savedInstanceState)
@@ -227,13 +234,6 @@ class PreviewImageActivity : FileActivity(),
         // created, to briefly hint to the user that UI controls
         // are available
         delayedHide()
-    }
-
-    var mHideSystemUiHandler: Handler = object : Handler() {
-        override fun handleMessage(msg: Message) {
-            hideSystemUI(fullScreenAnchorView)
-            showActionBar(false)
-        }
     }
 
     private fun delayedHide(delayMillis: Int = INITIAL_HIDE_DELAY) {

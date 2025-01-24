@@ -47,6 +47,11 @@ class PropfindMethod(
     var root: Response?
         private set
 
+    init {
+        members = arrayListOf()
+        this.root = null
+    }
+
     @Throws(IOException::class, DavException::class)
     public override fun onDavExecute(davResource: DavOCResource): Int {
         davResource.propfind(
@@ -64,10 +69,5 @@ class PropfindMethod(
                 response = callBackResponse
             })
         return statusCode
-    }
-
-    init {
-        members = arrayListOf()
-        this.root = null
     }
 }

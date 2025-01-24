@@ -44,6 +44,13 @@ abstract class DavMethod protected constructor(url: URL) : HttpBaseMethod(url) {
     override lateinit var response: Response
     private var davResource: DavOCResource? = null
 
+    //////////////////////////////
+    //         Getter
+    //////////////////////////////
+
+    override val isAborted: Boolean
+        get() = davResource?.isCallAborted() ?: false
+
     override fun abort() {
         davResource?.cancelCall()
     }
@@ -84,13 +91,4 @@ abstract class DavMethod protected constructor(url: URL) : HttpBaseMethod(url) {
             }
             httpException.code
         }
-
-    //////////////////////////////
-    //         Getter
-    //////////////////////////////
-
-
-    override val isAborted: Boolean
-        get() = davResource?.isCallAborted() ?: false
-
 }
