@@ -68,6 +68,9 @@ class OCSpacesRepository(
     override fun getPersonalAndProjectSpacesForAccount(accountName: String) =
         localSpacesDataSource.getPersonalAndProjectSpacesForAccount(accountName)
 
+    override fun getPersonalAndSharesAndProjectSpacesForAccount(accountName: String) =
+        localSpacesDataSource.getPersonalAndSharesAndProjectSpacesForAccount(accountName)
+
     override fun getSpaceWithSpecialsByIdForAccount(spaceId: String?, accountName: String) =
         localSpacesDataSource.getSpaceWithSpecialsByIdForAccount(spaceId, accountName)
 

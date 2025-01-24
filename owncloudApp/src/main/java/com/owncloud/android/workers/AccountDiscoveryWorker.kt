@@ -29,7 +29,8 @@ import com.owncloud.android.domain.capabilities.usecases.GetStoredCapabilitiesUs
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.files.model.OCFile.Companion.ROOT_PATH
 import com.owncloud.android.domain.files.usecases.GetFileByRemotePathUseCase
-import com.owncloud.android.domain.spaces.usecases.GetPersonalAndProjectSpacesForAccountUseCase
+import com.owncloud.android.domain.spaces.model.OCSpace.Companion.SPACE_ID_SHARES
+import com.owncloud.android.domain.spaces.usecases.GetPersonalAndSharesAndProjectSpacesForAccountUseCase
 import com.owncloud.android.domain.spaces.usecases.RefreshSpacesFromServerAsyncUseCase
 import com.owncloud.android.presentation.authentication.AccountUtils
 import com.owncloud.android.usecases.synchronization.SynchronizeFolderUseCase
@@ -47,7 +48,7 @@ class AccountDiscoveryWorker(
 
     private val getStoredCapabilitiesUseCase: GetStoredCapabilitiesUseCase by inject()
     private val refreshSpacesFromServerAsyncUseCase: RefreshSpacesFromServerAsyncUseCase by inject()
-    private val getPersonalAndProjectSpacesForAccountUseCase: GetPersonalAndProjectSpacesForAccountUseCase by inject()
+    private val getPersonalAndSharesAndProjectSpacesForAccountUseCase: GetPersonalAndSharesAndProjectSpacesForAccountUseCase by inject()
     private val getFileByRemotePathUseCase: GetFileByRemotePathUseCase by inject()
     private val synchronizeFolderUseCase: SynchronizeFolderUseCase by inject()
 
@@ -74,7 +75,7 @@ class AccountDiscoveryWorker(
 
             // 2.2 Account does support spaces
             refreshSpacesFromServerAsyncUseCase(RefreshSpacesFromServerAsyncUseCase.Params(accountName))
-            val spaces = getPersonalAndProjectSpacesForAccountUseCase(GetPersonalAndProjectSpacesForAccountUseCase.Params(accountName))
+            val spaces = getPersonalAndSharesAndProjectSpacesForAccountUseCase(GetPersonalAndSharesAndProjectSpacesForAccountUseCase.Params(accountName))
 
             // First we discover the root of the personal space since it is the first thing seen after login
             val personalSpace = spaces.firstOrNull { it.isPersonal }
@@ -86,7 +87,17 @@ class AccountDiscoveryWorker(
                 }
             }
 
-            // Then we discover the root of the rest of spaces
+            // Then we discover the root of the shares space since it is accessible in just 1 click
+            val sharesSpace = spaces.firstOrNull { it.id == SPACE_ID_SHARES}
+            sharesSpace?.let { space ->
+                val rootFolderForSpace =
+                    getFileByRemotePathUseCase(GetFileByRemotePathUseCase.Params(accountName, ROOT_PATH, space.root.id)).getDataOrNull()
+                rootFolderForSpace?.let {
+                    discoverRootFolder(it)
+                }
+            }
+
+            // And then we discover the root of the rest of spaces, which are accessible in 2 clicks
             val spacesWithoutPersonal = spaces.filterNot { it.isPersonal }
             spacesWithoutPersonal.forEach { space ->
                 // Create the root file for each space
