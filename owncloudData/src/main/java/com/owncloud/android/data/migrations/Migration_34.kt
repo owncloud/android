@@ -17,6 +17,9 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
+
+@file:Suppress("MatchingDeclarationName")
+
 package com.owncloud.android.data.migrations
 
 import androidx.room.migration.Migration
