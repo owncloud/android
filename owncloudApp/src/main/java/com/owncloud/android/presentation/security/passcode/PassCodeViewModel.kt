@@ -33,6 +33,7 @@ import com.owncloud.android.presentation.security.PREFERENCE_LAST_UNLOCK_TIMESTA
 import com.owncloud.android.presentation.security.biometric.BiometricActivity
 import com.owncloud.android.presentation.settings.security.SettingsSecurityFragment.Companion.PREFERENCE_LOCK_ATTEMPTS
 import com.owncloud.android.providers.ContextProvider
+import java.util.Locale
 import java.util.concurrent.TimeUnit
 import kotlin.math.max
 import kotlin.math.pow
@@ -209,7 +210,8 @@ class PassCodeViewModel(
                     else TimeUnit.MINUTES.convert(millisUntilFinished.plus(1000), TimeUnit.MILLISECONDS)
                 val seconds = TimeUnit.SECONDS.convert(millisUntilFinished.plus(1000), TimeUnit.MILLISECONDS).rem(60)
                 val timeString =
-                    if (hours > 0) String.format("%02d:%02d:%02d", hours, minutes, seconds) else String.format("%02d:%02d", minutes, seconds)
+                    if (hours > 0) String.format(Locale.US, "%02d:%02d:%02d", hours, minutes, seconds)
+                    else String.format(Locale.US, "%02d:%02d", minutes, seconds)
                 _getTimeToUnlockLiveData.postValue(Event(timeString))
             }
 

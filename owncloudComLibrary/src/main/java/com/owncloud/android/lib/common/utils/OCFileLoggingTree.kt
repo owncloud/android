@@ -90,6 +90,7 @@ class OCFileLoggingTree(
     override fun createStackElementTag(element: StackTraceElement): String {
         if (newLogcat) {
             method = String.format(
+                Locale.US,
                 "%s.%s()",
                 // method is fully qualified only when class differs on filename otherwise it can be cropped on long lambda expressions
                 super.createStackElementTag(element)?.replaceFirst(element.fileName.takeWhile { it != '.' }, ""),
@@ -97,6 +98,7 @@ class OCFileLoggingTree(
             )
 
             codeIdentifier = String.format(
+                Locale.US,
                 "(%s:%d)",
                 element.fileName,
                 element.lineNumber // format ensures line numbers have at least 3 places to align consecutive output from the same file
@@ -104,6 +106,7 @@ class OCFileLoggingTree(
             return "(${element.fileName}:${element.lineNumber})"
         } else
             return String.format(
+                Locale.US,
                 "(%s:%d) %s.%s()",
                 element.fileName,
                 element.lineNumber, // format ensures line numbers have at least 3 places to align consecutive output from the same file
