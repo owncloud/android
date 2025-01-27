@@ -100,21 +100,6 @@ abstract class OwncloudDatabase : RoomDatabase() {
         @Volatile
         private var INSTANCE: OwncloudDatabase? = null
 
-        val ALL_MIGRATIONS = arrayOf(
-            MIGRATION_27_28,
-            MIGRATION_28_29,
-            MIGRATION_29_30,
-            MIGRATION_30_31,
-            MIGRATION_31_32,
-            MIGRATION_32_33,
-            MIGRATION_33_34,
-            MIGRATION_34_35,
-            MIGRATION_35_36,
-            MIGRATION_37_38,
-            MIGRATION_41_42,
-            MIGRATION_42_43,
-        )
-
         fun getDatabase(
             context: Context
         ): OwncloudDatabase =
@@ -126,7 +111,19 @@ abstract class OwncloudDatabase : RoomDatabase() {
                     OwncloudDatabase::class.java,
                     ProviderMeta.NEW_DB_NAME
                 )
-                    .addMigrations(*ALL_MIGRATIONS)
+                    .addMigrations(
+                        MIGRATION_27_28,
+                        MIGRATION_28_29,
+                        MIGRATION_29_30,
+                        MIGRATION_30_31,
+                        MIGRATION_31_32,
+                        MIGRATION_32_33,
+                        MIGRATION_33_34,
+                        MIGRATION_34_35,
+                        MIGRATION_35_36,
+                        MIGRATION_37_38,
+                        MIGRATION_41_42,
+                        MIGRATION_42_43)
                     .build()
                 INSTANCE = instance
                 instance
