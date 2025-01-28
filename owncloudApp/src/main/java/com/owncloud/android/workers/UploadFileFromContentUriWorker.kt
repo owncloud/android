@@ -268,8 +268,8 @@ class UploadFileFromContentUriWorker(
             lastModifiedTimestamp = lastModified,
             requiredEtag = null,
             spaceWebDavUrl = spaceWebDavUrl,
-        ).also {
-            it.addDataTransferProgressListener(this)
+        ).apply {
+            addDataTransferProgressListener(this@UploadFileFromContentUriWorker)
         }
 
         executeRemoteOperation { uploadFileOperation.execute(client) }
@@ -293,8 +293,8 @@ class UploadFileFromContentUriWorker(
             mimeType = mimeType,
             lastModifiedTimestamp = lastModified,
             requiredEtag = null,
-        ).also {
-            it.addDataTransferProgressListener(this)
+        ).apply {
+            addDataTransferProgressListener(this@UploadFileFromContentUriWorker)
         }
 
         executeRemoteOperation { uploadFileOperation.execute(client) }

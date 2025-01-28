@@ -165,8 +165,8 @@ class DownloadFileWorker(
             ocFile.remotePath,
             temporalFolderPath,
             spaceWebDavUrl,
-        ).also {
-            it.addDatatransferProgressListener(this)
+        ).apply {
+            addDatatransferProgressListener(this@DownloadFileWorker)
         }
         val client = getClientForThisDownload()
 

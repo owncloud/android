@@ -247,8 +247,8 @@ class UploadFileFromFileSystemWorker(
             lastModifiedTimestamp = lastModified,
             requiredEtag = eTagInConflict,
             spaceWebDavUrl = spaceWebDavUrl,
-        ).also {
-            it.addDataTransferProgressListener(this)
+        ).apply {
+            addDataTransferProgressListener(this@UploadFileFromFileSystemWorker)
         }
 
         val result = executeRemoteOperation { uploadFileOperation.execute(client) }
@@ -276,8 +276,8 @@ class UploadFileFromFileSystemWorker(
             mimeType = mimetype,
             lastModifiedTimestamp = lastModified,
             requiredEtag = eTagInConflict,
-        ).also {
-            it.addDataTransferProgressListener(this)
+        ).apply {
+            addDataTransferProgressListener(this@UploadFileFromFileSystemWorker)
         }
 
         val result = executeRemoteOperation { uploadFileOperation.execute(client) }
