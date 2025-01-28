@@ -54,9 +54,8 @@ class RetryFailedUploadsForAccountUseCase(
         }
     }
 
-    private fun isContentUri(context: Context, upload: OCTransfer): Boolean {
-        return DocumentFile.isDocumentUri(context, Uri.parse(upload.localPath))
-    }
+    private fun isContentUri(context: Context, upload: OCTransfer): Boolean =
+        DocumentFile.isDocumentUri(context, Uri.parse(upload.localPath))
 
     data class Params(
         val accountName: String

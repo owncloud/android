@@ -35,7 +35,5 @@ class OCContextProvider(private val context: Context) : ContextProvider {
 
     override fun getContext(): Context = context
 
-    override fun isConnected(): Boolean {
-        return ConnectivityUtils.isAppConnected(context)
-    }
+    override fun isConnected(): Boolean = ConnectivityUtils.isAppConnected(context)
 }

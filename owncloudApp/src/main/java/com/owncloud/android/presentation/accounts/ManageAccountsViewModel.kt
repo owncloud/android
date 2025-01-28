@@ -66,13 +66,11 @@ class ManageAccountsViewModel(
         }
     }
 
-    fun getLoggedAccounts(): Array<Account> {
-        return accountProvider.getLoggedAccounts()
-    }
+    fun getLoggedAccounts(): Array<Account> =
+        accountProvider.getLoggedAccounts()
 
-    fun getCurrentAccount(): Account? {
-        return accountProvider.getCurrentOwnCloudAccount()
-    }
+    fun getCurrentAccount(): Account? =
+        accountProvider.getCurrentOwnCloudAccount()
 
     fun cleanAccountLocalStorage(accountName: String) {
         runUseCaseWithResult(
@@ -84,10 +82,9 @@ class ManageAccountsViewModel(
         )
     }
 
-    fun hasAutomaticUploadsAttached(accountName: String): Boolean {
-        return accountName == automaticUploadsConfiguration?.pictureUploadsConfiguration?.accountName ||
+    fun hasAutomaticUploadsAttached(accountName: String): Boolean =
+        accountName == automaticUploadsConfiguration?.pictureUploadsConfiguration?.accountName ||
                 accountName == automaticUploadsConfiguration?.videoUploadsConfiguration?.accountName
-    }
 
     fun checkUserLight(accountName: String): Boolean = runBlocking(CoroutinesDispatcherProvider().io) {
         val quota = withContext(CoroutinesDispatcherProvider().io) {

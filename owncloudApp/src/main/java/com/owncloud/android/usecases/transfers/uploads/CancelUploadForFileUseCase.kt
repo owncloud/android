@@ -55,7 +55,7 @@ class CancelUploadForFileUseCase(
             workManager.getWorkInfoByTags(listOf(uploadForFile.id.toString(), file.owner))
 
         workersToCancel.forEach {
-            // TODO: We need to check if the work is cancelled before finishing.
+            // To do: We need to check if the work is cancelled before finishing.
             //  Otherwise, the database would be updated by the worker.
             //  It should be a way to check within the worker that a cancellation has been triggered.
             //  In that case, we would update the database there.

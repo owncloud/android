@@ -25,7 +25,7 @@ import com.owncloud.android.domain.sharing.shares.ShareRepository
 class DeleteShareAsyncUseCase(
     private val shareRepository: ShareRepository
 ) : BaseUseCaseWithResult<Unit, DeleteShareAsyncUseCase.Params>() {
-    override fun run(params: Params): Unit =
+    override fun run(params: Params) =
         shareRepository.deleteShare(
             remoteId = params.remoteId,
             accountName = params.accountName,

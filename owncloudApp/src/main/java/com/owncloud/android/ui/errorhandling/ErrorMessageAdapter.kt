@@ -49,29 +49,23 @@ class ErrorMessageAdapter {
 
     private class Formatter(val resources: Resources) {
 
-        fun format(resId: Int): String {
-            return resources.getString(resId)
-        }
+        fun format(resId: Int): String =
+            resources.getString(resId)
 
-        fun format(resId: Int, m1: String?): String {
-            return String.format(resources.getString(resId), m1)
-        }
+        fun format(resId: Int, m1: String?): String =
+            String.format(resources.getString(resId), m1)
 
-        fun format(resId: Int, m1: Int): String {
-            return String.format(resources.getString(resId), resources.getString(m1))
-        }
+        fun format(resId: Int, m1: Int): String =
+            String.format(resources.getString(resId), resources.getString(m1))
 
-        fun format(resId: Int, m1: String, m2: String): String {
-            return String.format(resources.getString(resId), m1, m2)
-        }
+        fun format(resId: Int, m1: String, m2: String): String =
+            String.format(resources.getString(resId), m1, m2)
 
-        fun format(resId: Int, m1: String?, m2: Int): String {
-            return String.format(resources.getString(resId), m1, resources.getString(m2))
-        }
+        fun format(resId: Int, m1: String?, m2: Int): String =
+            String.format(resources.getString(resId), m1, resources.getString(m2))
 
-        fun forbidden(resId1: Int): String {
-            return String.format(resources.getString(R.string.forbidden_permissions), resources.getString(resId1))
-        }
+        fun forbidden(resId1: Int): String =
+            String.format(resources.getString(R.string.forbidden_permissions), resources.getString(resId1))
     }
 
     companion object {
@@ -85,12 +79,10 @@ class ErrorMessageAdapter {
 
             if (throwable == null) {
                 return when (transferOperation) {
-                    is Download -> {
-                        formatter.format(
-                            R.string.downloader_download_succeeded_content,
-                            File(transferOperation.downloadPath).name
-                        )
-                    }
+                    is Download -> formatter.format(
+                        R.string.downloader_download_succeeded_content,
+                        File(transferOperation.downloadPath).name
+                    )
                     is TransferOperation.Upload -> formatter.format(
                         R.string.uploader_upload_succeeded_content_single,
                         transferOperation.fileName
@@ -102,9 +94,7 @@ class ErrorMessageAdapter {
                         R.string.downloader_download_failed_content,
                         File(transferOperation.downloadPath).name
                     )
-                    is TransferOperation.Upload -> {
-                        getMessageForFailedUpload(formatter, throwable, transferOperation)
-                    }
+                    is TransferOperation.Upload -> getMessageForFailedUpload(formatter, throwable, transferOperation)
                 }
                 return throwable.parseError(genericMessage, resources, true).toString()
             }
@@ -114,8 +104,8 @@ class ErrorMessageAdapter {
             formatter: Formatter,
             throwable: Throwable,
             transferOperation: TransferOperation.Upload
-        ): String {
-            return when (throwable) {
+        ): String =
+            when (throwable) {
                 is LocalStorageFullException -> formatter.format(
                     R.string.error__upload__local_file_not_copied,
                     transferOperation.fileName, R.string.app_name
@@ -124,26 +114,19 @@ class ErrorMessageAdapter {
                     R.string.error__upload__local_file_not_copied,
                     transferOperation.fileName, R.string.app_name
                 )
-                is ForbiddenException -> {
-                    formatter.format(
-                        R.string.forbidden_permissions,
-                        R.string.uploader_upload_forbidden_permissions
-                    )
-                }
-                is InvalidCharacterException -> {
-                    formatter.format(
-                        R.string.filename_forbidden_characters_from_server
-                    )
-                }
-                is QuotaExceededException ->
-                    formatter.format(R.string.failed_upload_quota_exceeded_text)
-                is FileNotFoundException -> {
-                    formatter.format(R.string.uploads_view_upload_status_failed_folder_error)
-                }
-                else -> formatter.format(R.string.uploader_upload_failed_content_single, transferOperation.fileName)
+                is ForbiddenException -> formatter.format(
+                    R.string.forbidden_permissions,
+                    R.string.uploader_upload_forbidden_permissions
+                )
+                is InvalidCharacterException -> formatter.format(R.string.filename_forbidden_characters_from_server)
+                is QuotaExceededException -> formatter.format(R.string.failed_upload_quota_exceeded_text)
+                is FileNotFoundException -> formatter.format(R.string.uploads_view_upload_status_failed_folder_error)
+                else -> formatter.format(
+                    R.string.uploader_upload_failed_content_single,
+                    transferOperation.fileName
+                )
 
             }
-        }
 
         /**
          * Return an internationalized user message corresponding to an operation result
@@ -156,35 +139,30 @@ class ErrorMessageAdapter {
          */
         fun getResultMessage(
             result: RemoteOperationResult<*>,
-            operation: RemoteOperation<*>?,
             resources: Resources
         ): String {
             val formatter = Formatter(resources)
 
             return when (result.code) {
-                ResultCode.FORBIDDEN -> {
-                    formatter.format(
-                        R.string.filename_forbidden_characters_from_server
-                    )
-                }
+                ResultCode.FORBIDDEN ->
+                    formatter.format(R.string.filename_forbidden_characters_from_server)
                 ResultCode.INVALID_CHARACTER_DETECT_IN_SERVER ->
                     formatter.format(R.string.filename_forbidden_characters_from_server)
                 ResultCode.QUOTA_EXCEEDED ->
                     formatter.format(R.string.failed_upload_quota_exceeded_text)
-                ResultCode.FILE_NOT_FOUND -> {
+                ResultCode.FILE_NOT_FOUND ->
                     formatter.format(R.string.rename_local_fail_msg)
-                }
                 ResultCode.INVALID_LOCAL_FILE_NAME ->
                     formatter.format(R.string.rename_local_fail_msg)
                 ResultCode.INVALID_CHARACTER_IN_NAME ->
                     formatter.format(R.string.filename_forbidden_characters)
-                ResultCode.INVALID_OVERWRITE -> {
+                ResultCode.INVALID_OVERWRITE ->
                     formatter.format(R.string.move_file_error)
-                }
-                ResultCode.CONFLICT -> formatter.format(R.string.move_file_error)
+                ResultCode.CONFLICT ->
+                    formatter.format(R.string.move_file_error)
                 ResultCode.INVALID_COPY_INTO_DESCENDANT ->
                     formatter.format(R.string.copy_file_invalid_into_descendent)
-                else -> getCommonMessageForResult(operation, result, resources)
+                else -> getCommonMessageForResult(result, resources)
             }
         }
 
@@ -197,7 +175,6 @@ class ErrorMessageAdapter {
          * @return User message corresponding to 'result'.
          */
         private fun getCommonMessageForResult(
-            operation: RemoteOperation<*>?,
             result: RemoteOperationResult<*>,
             res: Resources
         ): String {
@@ -226,7 +203,7 @@ class ErrorMessageAdapter {
                 ResultCode.ACCOUNT_NOT_THE_SAME -> formatter.format(R.string.auth_account_not_the_same)
                 ResultCode.OK_REDIRECT_TO_NON_SECURE_CONNECTION -> formatter.format(R.string.auth_redirect_non_secure_connection_title)
                 else -> if (result.httpPhrase != null && result.httpPhrase.isNotEmpty())
-                    result.httpPhrase else getGenericErrorMessageForOperation(operation, result, res)
+                    result.httpPhrase else getGenericErrorMessageForOperation(result, res)
             }
         }
 
@@ -238,7 +215,6 @@ class ErrorMessageAdapter {
          * @return User message corresponding to a generic error of 'operation'.
          */
         private fun getGenericErrorMessageForOperation(
-            operation: RemoteOperation<*>?,
             result: RemoteOperationResult<*>,
             res: Resources
         ): String {

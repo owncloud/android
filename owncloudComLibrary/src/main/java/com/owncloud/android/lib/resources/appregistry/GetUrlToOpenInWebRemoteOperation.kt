@@ -46,8 +46,8 @@ class GetUrlToOpenInWebRemoteOperation(
     private val appName: String,
 ) : RemoteOperation<String>() {
 
-    override fun run(client: OwnCloudClient): RemoteOperationResult<String> {
-        return try {
+    override fun run(client: OwnCloudClient): RemoteOperationResult<String> =
+        try {
 
             val openInWebRequestBody = OpenInWebParams(fileId, appName).toRequestBody()
 
@@ -75,7 +75,6 @@ class GetUrlToOpenInWebRemoteOperation(
             Timber.e(e, "Open in web for file: $fileId failed")
             result
         }
-    }
 
     private fun isSuccess(status: Int) = status == HttpConstants.HTTP_OK
 

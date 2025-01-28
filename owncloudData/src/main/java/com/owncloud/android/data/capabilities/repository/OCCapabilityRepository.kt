@@ -35,9 +35,8 @@ class OCCapabilityRepository(
     private val appRegistryRepository: AppRegistryRepository,
 ) : CapabilityRepository {
 
-    override fun getCapabilitiesAsLiveData(accountName: String): LiveData<OCCapability?> {
-        return localCapabilitiesDataSource.getCapabilitiesForAccountAsLiveData(accountName)
-    }
+    override fun getCapabilitiesAsLiveData(accountName: String): LiveData<OCCapability?> =
+        localCapabilitiesDataSource.getCapabilitiesForAccountAsLiveData(accountName)
 
     override fun getStoredCapabilities(
         accountName: String

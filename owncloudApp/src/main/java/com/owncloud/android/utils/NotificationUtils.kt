@@ -49,12 +49,11 @@ object NotificationUtils {
     const val pendingIntentFlags = PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
 
     @JvmStatic
-    fun newNotificationBuilder(context: Context, channelId: String): NotificationCompat.Builder {
-        return NotificationCompat.Builder(context, channelId).apply {
+    fun newNotificationBuilder(context: Context, channelId: String): NotificationCompat.Builder =
+         NotificationCompat.Builder(context, channelId).apply {
             color = ContextCompat.getColor(context, R.color.primary)
             setSmallIcon(R.drawable.notification_icon)
         }
-    }
 
     fun createBasicNotification(
         context: Context,
@@ -157,7 +156,7 @@ object NotificationUtils {
      * @param account        account which the file in conflict belongs to
      */
     @JvmStatic
-    fun notifyConflict(fileInConflict: OCFile, account: Account?, context: Context) {
+    fun notifyConflict(fileInConflict: OCFile, context: Context) {
         val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val notificationBuilder = newNotificationBuilder(context, FILE_SYNC_CONFLICT_NOTIFICATION_CHANNEL_ID)
         notificationBuilder

@@ -44,7 +44,7 @@ import com.owncloud.android.R
 import com.owncloud.android.databinding.PasscodelockBinding
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.showBiometricDialog
-import com.owncloud.android.presentation.documentsprovider.DocumentsProviderUtils.Companion.notifyDocumentsProviderRoots
+import com.owncloud.android.presentation.documentsprovider.DocumentsProviderUtils.notifyDocumentsProviderRoots
 import com.owncloud.android.presentation.security.biometric.BiometricStatus
 import com.owncloud.android.presentation.security.biometric.BiometricViewModel
 import com.owncloud.android.presentation.security.biometric.EnableBiometrics
@@ -174,11 +174,11 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, EnableBiom
     }
 
     private fun inflatePasscodeTxtLine() {
-        val layout_code = findViewById<LinearLayout>(R.id.layout_code)
+        val layoutCode = findViewById<LinearLayout>(R.id.layout_code)
         val numberOfPasscodeDigits = (passCodeViewModel.getPassCode()?.length ?: passCodeViewModel.getNumberOfPassCodeDigits())
         for (i in 0 until numberOfPasscodeDigits) {
-            val txt = layoutInflater.inflate(R.layout.passcode_edit_text, layout_code, false) as EditText
-            layout_code.addView(txt)
+            val txt = layoutInflater.inflate(R.layout.passcode_edit_text, layoutCode, false) as EditText
+            layoutCode.addView(txt)
             passCodeEditTexts[i] = txt
         }
         passCodeEditTexts.first()?.requestFocus()
@@ -215,9 +215,10 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, EnableBiom
                 }
 
                 PasscodeAction.REMOVE -> {
-                    when (status.type) {
-                        PasscodeType.OK -> actionRemoveOk()
-                        else -> actionRemoveError()
+                    if (status.type == PasscodeType.OK) {
+                        actionRemoveOk()
+                    } else {
+                        actionRemoveError()
                     }
                 }
 
@@ -414,24 +415,23 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, EnableBiom
         finish()
     }
 
-    private fun getPasscodeAction(action: String?): PasscodeAction {
+    private fun getPasscodeAction(action: String?): PasscodeAction =
         when (action) {
             ACTION_REMOVE -> {
-                return PasscodeAction.REMOVE
+                PasscodeAction.REMOVE
             }
 
             ACTION_CREATE -> {
-                return PasscodeAction.CREATE
+                PasscodeAction.CREATE
             }
 
             else -> {
-                return PasscodeAction.CHECK
+                PasscodeAction.CHECK
             }
         }
-    }
 
-    override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {
-        return when (keyCode) {
+    override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean =
+         when (keyCode) {
 
             in KeyEvent.KEYCODE_0..KeyEvent.KEYCODE_9 -> {
                 val number = keyCode - KeyEvent.KEYCODE_0
@@ -451,9 +451,10 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, EnableBiom
                 true
             }
 
-            else -> super.onKeyUp(keyCode, event)
+            else -> {
+                super.onKeyUp(keyCode, event)
+            }
         }
-    }
 
     companion object {
         const val ACTION_CREATE = "ACTION_REQUEST_WITH_RESULT"

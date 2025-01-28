@@ -71,6 +71,26 @@ class ShareViewModel(
 
     private var capabilities: OCCapability? = null
 
+    private val _shareDeletionStatus = MediatorLiveData<Event<UIResult<Unit>>>()
+    val shareDeletionStatus: LiveData<Event<UIResult<Unit>>> = _shareDeletionStatus
+
+    private val _privateShareCreationStatus = MediatorLiveData<Event<UIResult<Unit>>>()
+    val privateShareCreationStatus: LiveData<Event<UIResult<Unit>>> = _privateShareCreationStatus
+
+    private val _privateShare = MediatorLiveData<Event<UIResult<OCShare>>>()
+    val privateShare: LiveData<Event<UIResult<OCShare>>> = _privateShare
+
+    private val _privateShareEditionStatus = MediatorLiveData<Event<UIResult<Unit>>>()
+    val privateShareEditionStatus: LiveData<Event<UIResult<Unit>>> = _privateShareEditionStatus
+
+    private val _publicShareCreationStatus = MediatorLiveData<Event<UIResult<Unit>>>()
+    val publicShareCreationStatus: LiveData<Event<UIResult<Unit>>> = _publicShareCreationStatus
+
+    private val _publicShareEditionStatus = MediatorLiveData<Event<UIResult<Unit>>>()
+    val publicShareEditionStatus: LiveData<Event<UIResult<Unit>>> = _publicShareEditionStatus
+
+
+
     init {
         _shares.addSource(sharesLiveData) { shares ->
             _shares.postValue(Event(UIResult.Success(shares)))
@@ -98,9 +118,6 @@ class ShareViewModel(
         )
     )
 
-    private val _shareDeletionStatus = MediatorLiveData<Event<UIResult<Unit>>>()
-    val shareDeletionStatus: LiveData<Event<UIResult<Unit>>> = _shareDeletionStatus
-
     fun deleteShare(
         remoteId: String
     ) = runUseCaseWithResult(
@@ -120,9 +137,6 @@ class ShareViewModel(
     /******************************************************************************************************
      ******************************************* PRIVATE SHARES *******************************************
      ******************************************************************************************************/
-
-    private val _privateShareCreationStatus = MediatorLiveData<Event<UIResult<Unit>>>()
-    val privateShareCreationStatus: LiveData<Event<UIResult<Unit>>> = _privateShareCreationStatus
 
     fun insertPrivateShare(
         filePath: String,
@@ -145,9 +159,6 @@ class ShareViewModel(
         postSuccessWithData = false
     )
 
-    private val _privateShare = MediatorLiveData<Event<UIResult<OCShare>>>()
-    val privateShare: LiveData<Event<UIResult<OCShare>>> = _privateShare
-
     // Used to get a specific private share after updating it
     fun refreshPrivateShare(
         remoteId: String
@@ -160,9 +171,6 @@ class ShareViewModel(
             _privateShare.postValue(Event(UIResult.Success(privateShare)))
         }
     }
-
-    private val _privateShareEditionStatus = MediatorLiveData<Event<UIResult<Unit>>>()
-    val privateShareEditionStatus: LiveData<Event<UIResult<Unit>>> = _privateShareEditionStatus
 
     fun updatePrivateShare(
         remoteId: String,
@@ -184,9 +192,6 @@ class ShareViewModel(
     /******************************************************************************************************
      ******************************************* PUBLIC SHARES ********************************************
      ******************************************************************************************************/
-
-    private val _publicShareCreationStatus = MediatorLiveData<Event<UIResult<Unit>>>()
-    val publicShareCreationStatus: LiveData<Event<UIResult<Unit>>> = _publicShareCreationStatus
 
     fun insertPublicShare(
         filePath: String,
@@ -210,9 +215,6 @@ class ShareViewModel(
         ),
         postSuccessWithData = false
     )
-
-    private val _publicShareEditionStatus = MediatorLiveData<Event<UIResult<Unit>>>()
-    val publicShareEditionStatus: LiveData<Event<UIResult<Unit>>> = _publicShareEditionStatus
 
     fun updatePublicShare(
         remoteId: String,

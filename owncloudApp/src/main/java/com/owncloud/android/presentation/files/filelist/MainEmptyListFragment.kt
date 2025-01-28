@@ -29,7 +29,6 @@ import android.widget.TextView
 import com.owncloud.android.R
 import com.owncloud.android.databinding.MainEmptyListFragmentBinding
 
-
 class MainEmptyListFragment : Fragment() {
 
     private var _binding: MainEmptyListFragmentBinding? = null

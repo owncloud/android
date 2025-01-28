@@ -41,9 +41,8 @@ class RemoveLocallyFilesWithLastUsageOlderThanGivenTimeWorker(
 ), KoinComponent {
 
     private val removeLocallyFilesWithLastUsageOlderThanGivenTimeUseCase: RemoveLocallyFilesWithLastUsageOlderThanGivenTimeUseCase by inject()
-    override suspend fun doWork(): Result {
-
-        return try {
+    override suspend fun doWork(): Result =
+        try {
             removeLocallyFilesWithLastUsageOlderThanGivenTimeUseCase(
                 RemoveLocallyFilesWithLastUsageOlderThanGivenTimeUseCase.Params(
                     idFilePreviewing = filePreviewing(),
@@ -53,17 +52,15 @@ class RemoveLocallyFilesWithLastUsageOlderThanGivenTimeWorker(
         } catch (exception: Exception) {
             Result.failure()
         }
-    }
 
-    private fun filePreviewing(): String? {
-        return when {
+    private fun filePreviewing(): String? =
+        when {
             PreviewVideoActivity.isOpen -> PreviewVideoActivity.currentFilePreviewing?.remoteId
             PreviewTextFragment.isOpen -> PreviewTextFragment.currentFilePreviewing?.remoteId
             PreviewImageFragment.isOpen -> PreviewImageFragment.currentFilePreviewing?.remoteId
             PreviewAudioFragment.isOpen -> PreviewAudioFragment.currentFilePreviewing?.remoteId
             else -> null
         }
-    }
 
     companion object {
         const val DELETE_FILES_OLDER_GIVEN_TIME_WORKER = "DELETE_FILES_OLDER_GIVEN_TIME_WORKER"

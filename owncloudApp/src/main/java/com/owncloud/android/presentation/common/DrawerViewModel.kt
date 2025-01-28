@@ -67,13 +67,11 @@ class DrawerViewModel(
         )
     }
 
-    fun getAccounts(context: Context): List<Account> {
-        return AccountUtils.getAccounts(context).asList()
-    }
+    fun getAccounts(context: Context): List<Account> =
+        AccountUtils.getAccounts(context).asList()
 
-    fun getUsernameOfAccount(accountName: String): String {
-        return AccountUtils.getUsernameOfAccount(accountName)
-    }
+    fun getUsernameOfAccount(accountName: String): String =
+        AccountUtils.getUsernameOfAccount(accountName)
 
     fun getFeedbackMail() = contextProvider.getString(R.string.mail_feedback)
 

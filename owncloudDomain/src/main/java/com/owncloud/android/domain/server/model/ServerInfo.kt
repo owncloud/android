@@ -36,9 +36,8 @@ sealed class ServerInfo(
         return true
     }
 
-    override fun hashCode(): Int {
-        return javaClass.hashCode()
-    }
+    override fun hashCode(): Int =
+        javaClass.hashCode()
 
     class OIDCServer(
         ownCloudVersion: String,
@@ -51,9 +50,8 @@ sealed class ServerInfo(
             return super.equals(other)
         }
 
-        override fun hashCode(): Int {
-            return javaClass.hashCode()
-        }
+        override fun hashCode(): Int =
+            javaClass.hashCode()
     }
 
     class OAuth2Server(

@@ -54,13 +54,12 @@ class OCShareRepository(
         )
     }
 
-    override fun updatePrivateShare(remoteId: String, permissions: Int, accountName: String) {
-        return updateShare(
+    override fun updatePrivateShare(remoteId: String, permissions: Int, accountName: String) =
+        updateShare(
             remoteId = remoteId,
             permissions = permissions,
             accountName = accountName
         )
-    }
 
     /******************************************************************************************************
      ******************************************* PUBLIC SHARES ********************************************
@@ -92,8 +91,8 @@ class OCShareRepository(
         expirationDateInMillis: Long,
         permissions: Int,
         accountName: String
-    ) {
-        return updateShare(
+    ) =
+        updateShare(
             remoteId,
             permissions,
             name,
@@ -101,14 +100,13 @@ class OCShareRepository(
             expirationDateInMillis,
             accountName
         )
-    }
 
     /******************************************************************************************************
      *********************************************** COMMON ***********************************************
      ******************************************************************************************************/
 
-    override fun getSharesAsLiveData(filePath: String, accountName: String): LiveData<List<OCShare>> {
-        return localShareDataSource.getSharesAsLiveData(
+    override fun getSharesAsLiveData(filePath: String, accountName: String): LiveData<List<OCShare>> =
+        localShareDataSource.getSharesAsLiveData(
             filePath, accountName, listOf(
                 ShareType.PUBLIC_LINK,
                 ShareType.USER,
@@ -116,7 +114,6 @@ class OCShareRepository(
                 ShareType.FEDERATED
             )
         )
-    }
 
     override fun getShareAsLiveData(remoteId: String): LiveData<OCShare> =
         localShareDataSource.getShareAsLiveData(remoteId)

@@ -156,8 +156,7 @@ class RemoveFilesDialogFragment : DialogFragment() {
          */
         @JvmStatic
         @JvmName("newInstanceForSingleFile")
-        fun newInstance(file: OCFile): RemoveFilesDialogFragment {
-            return newInstance(files = arrayListOf(file), isAvailableLocallyAndNotAvailableOffline = file.isAvailableLocally)
-        }
+        fun newInstance(file: OCFile): RemoveFilesDialogFragment =
+            newInstance(files = arrayListOf(file), isAvailableLocallyAndNotAvailableOffline = file.isAvailableLocally)
     }
 }

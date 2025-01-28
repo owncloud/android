@@ -62,7 +62,6 @@ class UploadFileFromContentUriOperation(
         }
     }
 
-    fun isSuccess(status: Int): Boolean {
-        return status.isOneOf(HttpConstants.HTTP_OK, HttpConstants.HTTP_CREATED, HttpConstants.HTTP_NO_CONTENT)
-    }
+    fun isSuccess(status: Int): Boolean =
+        status.isOneOf(HttpConstants.HTTP_OK, HttpConstants.HTTP_CREATED, HttpConstants.HTTP_NO_CONTENT)
 }

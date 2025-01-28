@@ -62,8 +62,8 @@ data class OCShareEntity(
     @PrimaryKey(autoGenerate = true) var id: Int = 0
 
     companion object {
-        fun fromContentValues(values: ContentValues): OCShareEntity {
-            return OCShareEntity(
+        fun fromContentValues(values: ContentValues): OCShareEntity =
+            OCShareEntity(
                 values.getAsInteger(ProviderTableMeta.OCSHARES_SHARE_TYPE),
                 values.getAsString(ProviderTableMeta.OCSHARES_SHARE_WITH),
                 values.getAsString(ProviderTableMeta.OCSHARES_PATH),
@@ -79,6 +79,5 @@ data class OCShareEntity(
                 values.getAsString(ProviderTableMeta.OCSHARES_NAME),
                 values.getAsString(ProviderTableMeta.OCSHARES_URL)
             )
-        }
     }
 }

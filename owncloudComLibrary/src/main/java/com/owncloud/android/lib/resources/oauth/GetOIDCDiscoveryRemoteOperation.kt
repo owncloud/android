@@ -60,7 +60,7 @@ class GetOIDCDiscoveryRemoteOperation : RemoteOperation<OIDCDiscoveryResponse>()
 
             val responseBody = getMethod.getResponseBodyAsString()
 
-            if (status == HttpConstants.HTTP_OK && responseBody != null) {
+            return if (status == HttpConstants.HTTP_OK && responseBody != null) {
                 Timber.d("Successful response $responseBody")
 
                 // Parse the response
@@ -69,19 +69,17 @@ class GetOIDCDiscoveryRemoteOperation : RemoteOperation<OIDCDiscoveryResponse>()
                 val oidcDiscoveryResponse: OIDCDiscoveryResponse? = jsonAdapter.fromJson(responseBody)
                 Timber.d("Get OIDC Discovery completed and parsed to [$oidcDiscoveryResponse]")
 
-                return RemoteOperationResult<OIDCDiscoveryResponse>(RemoteOperationResult.ResultCode.OK).apply {
+                RemoteOperationResult<OIDCDiscoveryResponse>(RemoteOperationResult.ResultCode.OK).apply {
                     data = oidcDiscoveryResponse
                 }
 
             } else {
                 Timber.e("Failed response while getting OIDC server discovery from the server status code: $status; response message: $responseBody")
-
-                return RemoteOperationResult<OIDCDiscoveryResponse>(getMethod)
+                RemoteOperationResult<OIDCDiscoveryResponse>(getMethod)
             }
 
         } catch (e: Exception) {
             Timber.e(e, "Exception while getting OIDC server discovery")
-
             return RemoteOperationResult<OIDCDiscoveryResponse>(e)
         }
     }

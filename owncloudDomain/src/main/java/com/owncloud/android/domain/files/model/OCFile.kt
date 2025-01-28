@@ -63,17 +63,6 @@ data class OCFile(
     val fileName: String
         get() = File(remotePath).name.let { it.ifBlank { ROOT_PATH } }
 
-    @Deprecated("Do not use this constructor. Remove it as soon as possible")
-    constructor(remotePath: String, mimeType: String, parentId: Long?, owner: String, spaceId: String? = null) : this(
-        remotePath = remotePath,
-        mimeType = mimeType,
-        parentId = parentId,
-        owner = owner,
-        spaceId = spaceId,
-        modificationTimestamp = 0,
-        length = 0
-    )
-
     /**
      * Use this to find out if this file is a folder.
      *
@@ -149,15 +138,6 @@ data class OCFile(
         get() = permissions?.contains(char = 'R', ignoreCase = true) ?: false
 
     /**
-     * get remote path of parent file
-     * @return remote path
-     */
-    fun getParentRemotePath(): String {
-        val parentPath: String = File(remotePath).parent ?: throw IllegalArgumentException("Parent path is null")
-        return if (parentPath.endsWith("$PATH_SEPARATOR")) parentPath else "$parentPath$PATH_SEPARATOR"
-    }
-
-    /**
      * Use this to check if this file is available locally
      *
      * @return true if it is
@@ -198,6 +178,26 @@ data class OCFile(
             }?.let { storagePath ->
                 File(storagePath).lastModified()
             } ?: 0
+
+    @Deprecated("Do not use this constructor. Remove it as soon as possible")
+    constructor(remotePath: String, mimeType: String, parentId: Long?, owner: String, spaceId: String? = null) : this(
+        remotePath = remotePath,
+        mimeType = mimeType,
+        parentId = parentId,
+        owner = owner,
+        spaceId = spaceId,
+        modificationTimestamp = 0,
+        length = 0
+    )
+
+    /**
+     * get remote path of parent file
+     * @return remote path
+     */
+    fun getParentRemotePath(): String {
+        val parentPath: String = File(remotePath).parent ?: throw IllegalArgumentException("Parent path is null")
+        return if (parentPath.endsWith("$PATH_SEPARATOR")) parentPath else "$parentPath$PATH_SEPARATOR"
+    }
 
     fun copyLocalPropertiesFrom(sourceFile: OCFile) {
         parentId = sourceFile.parentId

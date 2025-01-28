@@ -116,7 +116,9 @@ class GetRemoteUserQuotaOperation : RemoteOperation<RemoteQuota>() {
             val roundedRelativeQuota = if (totalQuota > 0) {
                 val relativeQuota = (quotaUsed * 100).toDouble() / totalQuota
                 (relativeQuota * 100).roundToLong() / 100.0
-            } else 0.0
+            } else {
+                0.0
+            }
 
             RemoteQuota(quotaAvailable, quotaUsed, totalQuota, roundedRelativeQuota)
         }

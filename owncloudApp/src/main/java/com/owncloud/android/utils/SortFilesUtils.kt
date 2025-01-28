@@ -26,13 +26,12 @@ class SortFilesUtils {
         listOfFiles: List<OCFile>,
         sortTypeValue: Int,
         ascending: Boolean,
-    ): List<OCFile> {
-        return when (SortType.fromPreference(sortTypeValue)) {
+    ): List<OCFile> =
+        when (SortType.fromPreference(sortTypeValue)) {
             SortType.SORT_TYPE_BY_NAME -> sortByName(listOfFiles, ascending)
             SortType.SORT_TYPE_BY_SIZE -> sortBySize(listOfFiles, ascending)
             SortType.SORT_TYPE_BY_DATE -> sortByDate(listOfFiles, ascending)
         }
-    }
 
     private fun sortByName(listOfFiles: List<OCFile>, ascending: Boolean): List<OCFile> {
         val newListOfFiles =
@@ -43,13 +42,11 @@ class SortFilesUtils {
         return newListOfFiles.sortedByDescending { it.isFolder }
     }
 
-    private fun sortBySize(listOfFiles: List<OCFile>, ascending: Boolean): List<OCFile> {
-        return if (ascending) listOfFiles.sortedBy { it.length }
+    private fun sortBySize(listOfFiles: List<OCFile>, ascending: Boolean): List<OCFile> =
+        if (ascending) listOfFiles.sortedBy { it.length }
         else listOfFiles.sortedByDescending { it.length }
-    }
 
-    private fun sortByDate(listOfFiles: List<OCFile>, ascending: Boolean): List<OCFile> {
-        return if (ascending) listOfFiles.sortedBy { it.modificationTimestamp }
+    private fun sortByDate(listOfFiles: List<OCFile>, ascending: Boolean): List<OCFile> =
+        if (ascending) listOfFiles.sortedBy { it.modificationTimestamp }
         else listOfFiles.sortedByDescending { it.modificationTimestamp }
-    }
 }

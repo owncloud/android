@@ -62,6 +62,8 @@ class DownloadRemoteFileOperation(
     var etag: String = ""
         private set
 
+    private val tmpPath: String = localFolderPath + remotePath
+
     override fun run(client: OwnCloudClient): RemoteOperationResult<Unit> {
         // download will be performed to a temporal file, then moved to the final location
         val tmpFile = File(tmpPath)
@@ -178,8 +180,6 @@ class DownloadRemoteFileOperation(
     }
 
     private fun isSuccess(status: Int) = status == HttpConstants.HTTP_OK
-
-    private val tmpPath: String = localFolderPath + remotePath
 
     fun addDatatransferProgressListener(listener: OnDatatransferProgressListener) {
         synchronized(dataTransferListeners) { dataTransferListeners.add(listener) }

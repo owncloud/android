@@ -76,9 +76,8 @@ object PatternManager {
         else false
     }
 
-    fun isPatternEnabled(): Boolean {
-        return preferencesProvider.getBoolean(PatternActivity.PREFERENCE_SET_PATTERN, false)
-    }
+    fun isPatternEnabled(): Boolean =
+        preferencesProvider.getBoolean(PatternActivity.PREFERENCE_SET_PATTERN, false)
 
     private fun askUserForPattern(activity: Activity) {
         val i = Intent(appContext, PatternActivity::class.java).apply {

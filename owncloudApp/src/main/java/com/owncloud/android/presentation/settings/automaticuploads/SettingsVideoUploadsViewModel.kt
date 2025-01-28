@@ -213,13 +213,12 @@ class SettingsVideoUploadsViewModel(
             Timber.d("Video uploads configuration updated. New configuration: $it")
         }
 
-    private fun handleSpaceName(spaceName: String?): String? {
-        return if (videoUploadsSpace?.isPersonal == true) {
+    private fun handleSpaceName(spaceName: String?): String? =
+        if (videoUploadsSpace?.isPersonal == true) {
             contextProvider.getString(R.string.bottom_nav_personal)
         } else {
             spaceName
         }
-    }
 
     fun getUploadPathString(): String {
 

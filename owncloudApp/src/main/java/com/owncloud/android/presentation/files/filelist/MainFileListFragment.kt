@@ -189,6 +189,129 @@ class MainFileListFragment : Fragment(),
     private var succeededTransfers: List<OCTransfer>? = null
     private var numberOfUploadsRefreshed: Int = 0
 
+    private val actionModeCallback: ActionMode.Callback = object : ActionMode.Callback {
+
+        override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
+            setDrawerStatus(enabled = false)
+            actionMode = mode
+
+            requireActivity().findViewById<View>(R.id.owncloud_app_bar).isFocusableInTouchMode = false
+
+            val inflater = requireActivity().menuInflater
+            inflater.inflate(R.menu.file_actions_menu, menu)
+            this@MainFileListFragment.menu = menu
+
+            mode?.invalidate()
+
+            // Set gray color
+            val window = activity?.window
+            statusBarColor = window?.statusBarColor ?: -1
+
+            // Hide FAB in multi selection mode
+            toggleFabVisibility(false)
+            fileActions?.setBottomBarVisibility(false)
+
+            // Hide sort options view in multi-selection mode
+            binding.optionsLayout.visibility = View.GONE
+
+            return true
+        }
+
+        /**
+         * Updates available action in menu depending on current selection.
+         */
+        override fun onPrepareActionMode(mode: ActionMode?, menu: Menu?): Boolean {
+            val checkedFilesWithSyncInfo = fileListAdapter.getCheckedItems()
+            val checkedCount = checkedFilesWithSyncInfo.size
+            val title = resources.getQuantityString(
+                R.plurals.items_selected_count,
+                checkedCount,
+                checkedCount
+            )
+            mode?.title = title
+
+            checkedFiles = checkedFilesWithSyncInfo.map { it.file }
+
+            val checkedFilesSync = checkedFilesWithSyncInfo.map {
+                OCFileSyncInfo(
+                    fileId = it.file.id!!,
+                    uploadWorkerUuid = it.uploadWorkerUuid,
+                    downloadWorkerUuid = it.downloadWorkerUuid,
+                    isSynchronizing = it.isSynchronizing
+                )
+            }
+
+            val displaySelectAll = checkedCount != fileListAdapter.itemCount - 1 // -1 because one of them is the footer :S
+            mainFileListViewModel.filterMenuOptions(
+                checkedFiles, checkedFilesSync,
+                displaySelectAll, isMultiselection = true
+            )
+
+            if (checkedFiles.size == 1) {
+                mainFileListViewModel.getAppRegistryForMimeType(checkedFiles.first().mimeType, isMultiselection = true)
+            } else {
+                menu?.let {
+                    openInWebProviders.forEach { (_, menuItemId) ->
+                        it.removeItem(menuItemId)
+                    }
+                    openInWebProviders = emptyMap()
+                }
+            }
+            setRolesAccessibilityToMenuItems()
+
+            return true
+        }
+
+        private fun setRolesAccessibilityToMenuItems() {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                val roleAccessibilityDescription = getString(R.string.button_role_accessibility)
+                menu?.apply {
+                    findItem(R.id.file_action_select_all)?.contentDescription =
+                        "${getString(R.string.actionbar_select_all)} $roleAccessibilityDescription"
+                    findItem(R.id.action_select_inverse)?.contentDescription =
+                        "${getString(R.string.actionbar_select_inverse)} $roleAccessibilityDescription"
+                    findItem(R.id.action_open_file_with)?.contentDescription =
+                        "${getString(R.string.actionbar_open_with)} $roleAccessibilityDescription"
+                    findItem(R.id.action_rename_file)?.contentDescription = "${getString(R.string.common_rename)} $roleAccessibilityDescription"
+                    findItem(R.id.action_move)?.contentDescription = "${getString(R.string.actionbar_move)} $roleAccessibilityDescription"
+                    findItem(R.id.action_copy)?.contentDescription = "${getString(R.string.copy)} $roleAccessibilityDescription"
+                    findItem(R.id.action_send_file)?.contentDescription =
+                        "${getString(R.string.actionbar_send_file)} $roleAccessibilityDescription"
+                    findItem(R.id.action_set_available_offline)?.contentDescription =
+                        "${getString(R.string.set_available_offline)} $roleAccessibilityDescription"
+                    findItem(R.id.action_unset_available_offline)?.contentDescription =
+                        "${getString(R.string.unset_available_offline)} $roleAccessibilityDescription"
+                    findItem(R.id.action_see_details)?.contentDescription =
+                        "${getString(R.string.actionbar_see_details)} $roleAccessibilityDescription"
+                    findItem(R.id.action_remove_file)?.contentDescription = "${getString(R.string.common_remove)} $roleAccessibilityDescription"
+                }
+            }
+        }
+
+        override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean =
+            onFileActionChosen(item?.itemId)
+
+        override fun onDestroyActionMode(mode: ActionMode?) {
+            setDrawerStatus(enabled = true)
+            actionMode = null
+
+            requireActivity().findViewById<View>(R.id.owncloud_app_bar).isFocusableInTouchMode = true
+
+            // reset to previous color
+            requireActivity().window.statusBarColor = statusBarColor!!
+
+            // show or hide FAB on multi selection mode exit
+            showOrHideFab(mainFileListViewModel.fileListOption.value, mainFileListViewModel.currentFolderDisplayed.value)
+
+            fileActions?.setBottomBarVisibility(true)
+
+            // Show sort options view when multi-selection mode finish
+            binding.optionsLayout.visibility = View.VISIBLE
+
+            fileListAdapter.clearSelection()
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -323,6 +446,50 @@ class MainFileListFragment : Fragment(),
     private fun subscribeToViewModels() {
         /* MainFileListViewModel observables */
         // Observe the current folder displayed
+        observeCurrentFolderDisplayed()
+
+        // Observe the current space to update the toolbar
+        // We can't rely exclusively on the [currentFolderDisplayed] because sometimes retrieving the space takes more time
+        observeSpace()
+
+        // Observe the list of app registries that allow creating new files
+        observeAppRegistryToCreateFiles()
+
+        // Observe the open in web action to trigger browser
+        observeOpenInWebFlow()
+
+        // Observe the menu filtered options in multiselection
+        observeMenuOptions()
+
+        // Observe the app registry in multiselection
+        observeAppRegistryMimeType()
+
+        // Observe the menu filtered options for a single file
+        observeMenuOptionsSingleFile()
+
+        // Observe the app registry for a single file
+        observeAppRegistryMimeTypeSingleFile()
+
+        // Observe the file list UI state
+        observeFileListUiState()
+
+        /* FileOperationsViewModel observables */
+        // Observe the refresh folder operation
+        observeRefreshFolder()
+
+        // Observe the create file with app provider operation
+        observeCreateFileWithAppProvider()
+
+        // Observe the check if file is local and not available offline operation
+        observeCheckIfFileIsLocalAndNotAvailableOffline()
+
+        /* TransfersViewModel observables */
+        // Observe transfers
+        observeTransfers()
+
+    }
+
+    private fun observeCurrentFolderDisplayed() {
         collectLatestLifecycleFlow(mainFileListViewModel.currentFolderDisplayed) { currentFolderDisplayed: OCFile ->
             fileActions?.onCurrentFolderUpdated(currentFolderDisplayed, mainFileListViewModel.getSpace())
             val fileListOption = mainFileListViewModel.fileListOption.value
@@ -345,22 +512,23 @@ class MainFileListFragment : Fragment(),
             numberOfUploadsRefreshed = 0
             hideRefreshFab()
         }
+    }
 
-        // Observe the current space to update the toolbar
-        // We can't rely exclusively on the [currentFolderDisplayed] because sometimes retrieving the space takes more time
+    private fun observeSpace() {
         collectLatestLifecycleFlow(mainFileListViewModel.space) { currentSpace: OCSpace? ->
             currentSpace?.let {
                 fileActions?.onCurrentFolderUpdated(mainFileListViewModel.getFile(), currentSpace)
             }
         }
-
-        // Observe the list of app registries that allow creating new files
+    }
+    private fun observeAppRegistryToCreateFiles() {
         collectLatestLifecycleFlow(mainFileListViewModel.appRegistryToCreateFiles) { listAppRegistry ->
             binding.fabNewfile.isVisible = listAppRegistry.isNotEmpty()
             registerFabNewFileListener(listAppRegistry)
         }
+    }
 
-        // Observe the open in web action to trigger browser
+    private fun observeOpenInWebFlow() {
         collectLatestLifecycleFlow(mainFileListViewModel.openInWebFlow) {
             if (it != null) {
                 val uiResult = it.peekContent()
@@ -375,7 +543,8 @@ class MainFileListFragment : Fragment(),
                     // Mimetypes not supported via open in web, send 500
                     if (uiResult.error is InstanceNotConfiguredException) {
                         val message =
-                            getString(R.string.open_in_web_error_generic) + " " + getString(R.string.error_reason) + " " + getString(R.string.open_in_web_error_not_supported)
+                            getString(R.string.open_in_web_error_generic) + " " + getString(R.string.error_reason) +
+                                    " " + getString(R.string.open_in_web_error_not_supported)
                         this.showMessageInSnackbar(message, Snackbar.LENGTH_LONG)
                     } else if (uiResult.error is TooEarlyException) {
                         this.showMessageInSnackbar(getString(R.string.open_in_web_error_too_early), Snackbar.LENGTH_LONG)
@@ -390,8 +559,9 @@ class MainFileListFragment : Fragment(),
                 currentDefaultApplication = null
             }
         }
+    }
 
-        // Observe the menu filtered options in multiselection
+    private fun observeMenuOptions() {
         collectLatestLifecycleFlow(mainFileListViewModel.menuOptions) { menuOptions ->
             val hasWritePermission = if (checkedFiles.size == 1) {
                 checkedFiles.first().hasWritePermission
@@ -400,16 +570,18 @@ class MainFileListFragment : Fragment(),
             }
             menu?.filterMenuOptions(menuOptions, hasWritePermission)
         }
+    }
 
-        // Observe the app registry in multiselection
+    private fun observeAppRegistryMimeType() {
         collectLatestLifecycleFlow(mainFileListViewModel.appRegistryMimeType) { appRegistryMimeType ->
             val appProviders = appRegistryMimeType?.appProviders
             menu?.let {
                 openInWebProviders = addOpenInWebMenuOptions(it, openInWebProviders, appProviders)
             }
         }
+    }
 
-        // Observe the menu filtered options for a single file
+    private fun observeMenuOptionsSingleFile() {
         collectLatestLifecycleFlow(mainFileListViewModel.menuOptionsSingleFile) { menuOptions ->
             fileSingleFile?.let { file ->
                 val fileOptionsBottomSheetSingleFile = layoutInflater.inflate(R.layout.file_options_bottom_sheet_fragment, null)
@@ -436,21 +608,19 @@ class MainFileListFragment : Fragment(),
                         if (thumbnail != null) {
                             thumbnailBottomSheet.setImageBitmap(thumbnail)
                         }
-                        if (file.needsToUpdateThumbnail) {
+                        if (file.needsToUpdateThumbnail && ThumbnailsCacheManager.cancelPotentialThumbnailWork(file, thumbnailBottomSheet)) {
                             // generate new Thumbnail
-                            if (ThumbnailsCacheManager.cancelPotentialThumbnailWork(file, thumbnailBottomSheet)) {
-                                val task = ThumbnailsCacheManager.ThumbnailGenerationTask(
-                                    thumbnailBottomSheet,
-                                    AccountUtils.getCurrentOwnCloudAccount(requireContext())
-                                )
-                                val asyncDrawable = ThumbnailsCacheManager.AsyncThumbnailDrawable(resources, thumbnail, task)
+                            val task = ThumbnailsCacheManager.ThumbnailGenerationTask(
+                                thumbnailBottomSheet,
+                                AccountUtils.getCurrentOwnCloudAccount(requireContext())
+                            )
+                            val asyncDrawable = ThumbnailsCacheManager.AsyncThumbnailDrawable(resources, thumbnail, task)
 
-                                // If drawable is not visible, do not update it.
-                                if (asyncDrawable.minimumHeight > 0 && asyncDrawable.minimumWidth > 0) {
-                                    thumbnailBottomSheet.setImageDrawable(asyncDrawable)
-                                }
-                                task.execute(file)
+                            // If drawable is not visible, do not update it.
+                            if (asyncDrawable.minimumHeight > 0 && asyncDrawable.minimumWidth > 0) {
+                                thumbnailBottomSheet.setImageDrawable(asyncDrawable)
                             }
+                            task.execute(file)
                         }
 
                         if (file.mimeType == "image/png") {
@@ -470,101 +640,7 @@ class MainFileListFragment : Fragment(),
 
                 fileOptionsBottomSheetSingleFileLayout = fileOptionsBottomSheetSingleFile.findViewById(R.id.file_options_bottom_sheet_layout)
                 menuOptions.forEach { menuOption ->
-                    val fileOptionItemView = BottomSheetFragmentItemView(requireContext())
-                    fileOptionItemView.apply {
-                        title = if (menuOption.toResId() == R.id.action_open_file_with && !file.hasWritePermission) {
-                            getString(R.string.actionbar_open_with_read_only)
-                        } else {
-                            getString(menuOption.toStringResId())
-                        }
-                        itemIcon = ResourcesCompat.getDrawable(resources, menuOption.toDrawableResId(), null)
-                        setOnClickListener {
-                            when (menuOption) {
-                                FileMenuOption.SELECT_ALL -> {
-                                    // Not applicable here
-                                }
-
-                                FileMenuOption.SELECT_INVERSE -> {
-                                    // Not applicable here
-                                }
-
-                                FileMenuOption.DOWNLOAD, FileMenuOption.SYNC -> {
-                                    syncFiles(listOf(file))
-                                }
-
-                                FileMenuOption.RENAME -> {
-                                    val dialogRename = RenameFileDialogFragment.newInstance(file)
-                                    dialogRename.show(requireActivity().supportFragmentManager, FRAGMENT_TAG_RENAME_FILE)
-                                }
-
-                                FileMenuOption.MOVE -> {
-                                    val action = Intent(activity, FolderPickerActivity::class.java)
-                                    action.putParcelableArrayListExtra(FolderPickerActivity.EXTRA_FILES, arrayListOf(file))
-                                    action.putExtra(FolderPickerActivity.EXTRA_PICKER_MODE, FolderPickerActivity.PickerMode.MOVE)
-                                    requireActivity().startActivityForResult(action, FileDisplayActivity.REQUEST_CODE__MOVE_FILES)
-                                }
-
-                                FileMenuOption.COPY -> {
-                                    val action = Intent(activity, FolderPickerActivity::class.java)
-                                    action.putParcelableArrayListExtra(FolderPickerActivity.EXTRA_FILES, arrayListOf(file))
-                                    action.putExtra(FolderPickerActivity.EXTRA_PICKER_MODE, FolderPickerActivity.PickerMode.COPY)
-                                    requireActivity().startActivityForResult(action, FileDisplayActivity.REQUEST_CODE__COPY_FILES)
-                                }
-
-                                FileMenuOption.REMOVE -> {
-                                    filesToRemove = listOf(file)
-                                    fileOperationsViewModel.showRemoveDialog(filesToRemove)
-                                }
-
-                                FileMenuOption.OPEN_WITH -> {
-                                    fileActions?.openFile(file)
-                                }
-
-                                FileMenuOption.CANCEL_SYNC -> {
-                                    fileActions?.cancelFileTransference(arrayListOf(file))
-                                }
-
-                                FileMenuOption.SHARE -> {
-                                    fileActions?.onShareFileClicked(file)
-                                }
-
-                                FileMenuOption.DETAILS -> {
-                                    fileActions?.showDetails(file)
-                                }
-
-                                FileMenuOption.SEND -> {
-                                    if (!file.isAvailableLocally) { // Download the file
-                                        Timber.d("${file.remotePath} : File must be downloaded")
-                                        fileActions?.initDownloadForSending(file)
-                                    } else {
-                                        fileActions?.sendDownloadedFile(file)
-                                    }
-                                }
-
-                                FileMenuOption.SET_AV_OFFLINE -> {
-                                    fileOperationsViewModel.performOperation(FileOperation.SetFilesAsAvailableOffline(listOf(file)))
-                                    if (file.isFolder) {
-                                        fileOperationsViewModel.performOperation(
-                                            FileOperation.SynchronizeFolderOperation(
-                                                folderToSync = file,
-                                                accountName = file.owner,
-                                                isActionSetFolderAvailableOfflineOrSynchronize = true,
-                                            )
-                                        )
-                                    } else {
-                                        fileOperationsViewModel.performOperation(FileOperation.SynchronizeFileOperation(file, file.owner))
-                                    }
-                                }
-
-                                FileMenuOption.UNSET_AV_OFFLINE -> {
-                                    fileOperationsViewModel.performOperation(FileOperation.UnsetFilesAsAvailableOffline(listOf(file)))
-                                }
-                            }
-                            dialog.hide()
-                            dialog.dismiss()
-                        }
-                    }
-                    fileOptionsBottomSheetSingleFileLayout!!.addView(fileOptionItemView)
+                    setMenuOption(menuOption, file, dialog)
                 }
                 // Disable drag gesture
                 fileOptionsBottomSheetSingleFileBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
@@ -581,8 +657,107 @@ class MainFileListFragment : Fragment(),
                 mainFileListViewModel.getAppRegistryForMimeType(file.mimeType, isMultiselection = false)
             }
         }
+    }
 
-        // Observe the app registry for a single file
+    private fun setMenuOption(menuOption: FileMenuOption, file: OCFile, dialog: BottomSheetDialog) {
+        val fileOptionItemView = BottomSheetFragmentItemView(requireContext())
+        fileOptionItemView.apply {
+            title = if (menuOption.toResId() == R.id.action_open_file_with && !file.hasWritePermission) {
+                getString(R.string.actionbar_open_with_read_only)
+            } else {
+                getString(menuOption.toStringResId())
+            }
+            itemIcon = ResourcesCompat.getDrawable(resources, menuOption.toDrawableResId(), null)
+            setOnClickListener {
+                when (menuOption) {
+                    FileMenuOption.SELECT_ALL -> {
+                        // Not applicable here
+                    }
+
+                    FileMenuOption.SELECT_INVERSE -> {
+                        // Not applicable here
+                    }
+
+                    FileMenuOption.DOWNLOAD, FileMenuOption.SYNC -> {
+                        syncFiles(listOf(file))
+                    }
+
+                    FileMenuOption.RENAME -> {
+                        val dialogRename = RenameFileDialogFragment.newInstance(file)
+                        dialogRename.show(requireActivity().supportFragmentManager, FRAGMENT_TAG_RENAME_FILE)
+                    }
+
+                    FileMenuOption.MOVE -> {
+                        val action = Intent(activity, FolderPickerActivity::class.java)
+                        action.putParcelableArrayListExtra(FolderPickerActivity.EXTRA_FILES, arrayListOf(file))
+                        action.putExtra(FolderPickerActivity.EXTRA_PICKER_MODE, FolderPickerActivity.PickerMode.MOVE)
+                        requireActivity().startActivityForResult(action, FileDisplayActivity.REQUEST_CODE__MOVE_FILES)
+                    }
+
+                    FileMenuOption.COPY -> {
+                        val action = Intent(activity, FolderPickerActivity::class.java)
+                        action.putParcelableArrayListExtra(FolderPickerActivity.EXTRA_FILES, arrayListOf(file))
+                        action.putExtra(FolderPickerActivity.EXTRA_PICKER_MODE, FolderPickerActivity.PickerMode.COPY)
+                        requireActivity().startActivityForResult(action, FileDisplayActivity.REQUEST_CODE__COPY_FILES)
+                    }
+
+                    FileMenuOption.REMOVE -> {
+                        filesToRemove = listOf(file)
+                        fileOperationsViewModel.showRemoveDialog(filesToRemove)
+                    }
+
+                    FileMenuOption.OPEN_WITH -> {
+                        fileActions?.openFile(file)
+                    }
+
+                    FileMenuOption.CANCEL_SYNC -> {
+                        fileActions?.cancelFileTransference(arrayListOf(file))
+                    }
+
+                    FileMenuOption.SHARE -> {
+                        fileActions?.onShareFileClicked(file)
+                    }
+
+                    FileMenuOption.DETAILS -> {
+                        fileActions?.showDetails(file)
+                    }
+
+                    FileMenuOption.SEND -> {
+                        if (!file.isAvailableLocally) { // Download the file
+                            Timber.d("${file.remotePath} : File must be downloaded")
+                            fileActions?.initDownloadForSending(file)
+                        } else {
+                            fileActions?.sendDownloadedFile(file)
+                        }
+                    }
+
+                    FileMenuOption.SET_AV_OFFLINE -> {
+                        fileOperationsViewModel.performOperation(FileOperation.SetFilesAsAvailableOffline(listOf(file)))
+                        if (file.isFolder) {
+                            fileOperationsViewModel.performOperation(
+                                FileOperation.SynchronizeFolderOperation(
+                                    folderToSync = file,
+                                    accountName = file.owner,
+                                    isActionSetFolderAvailableOfflineOrSynchronize = true,
+                                )
+                            )
+                        } else {
+                            fileOperationsViewModel.performOperation(FileOperation.SynchronizeFileOperation(file, file.owner))
+                        }
+                    }
+
+                    FileMenuOption.UNSET_AV_OFFLINE -> {
+                        fileOperationsViewModel.performOperation(FileOperation.UnsetFilesAsAvailableOffline(listOf(file)))
+                    }
+                }
+                dialog.hide()
+                dialog.dismiss()
+            }
+        }
+        fileOptionsBottomSheetSingleFileLayout!!.addView(fileOptionItemView)
+    }
+
+    private fun observeAppRegistryMimeTypeSingleFile() {
         collectLatestLifecycleFlow(mainFileListViewModel.appRegistryMimeTypeSingleFile) { appRegistryMimeType ->
             fileSingleFile?.let { file ->
                 val appProviders = appRegistryMimeType?.appProviders
@@ -608,8 +783,18 @@ class MainFileListFragment : Fragment(),
             }
             fileSingleFile = null
         }
+    }
 
-        // Observe the file list UI state
+    private suspend fun getDrawableFromUrl(context: Context, url: String): Drawable? =
+        withContext(Dispatchers.IO) {
+            Glide.with(context)
+                .load(url)
+                .fitCenter()
+                .submit()
+                .get()
+        }
+
+    private fun observeFileListUiState() {
         collectLatestLifecycleFlow(mainFileListViewModel.fileListUiState) { fileListUiState ->
             if (fileListUiState !is MainFileListViewModel.FileListUiState.Success) return@collectLatestLifecycleFlow
 
@@ -644,9 +829,9 @@ class MainFileListFragment : Fragment(),
 
             actionMode?.invalidate()
         }
+    }
 
-        /* FileOperationsViewModel observables */
-        // Observe the refresh folder operation
+    private fun observeRefreshFolder() {
         fileOperationsViewModel.refreshFolderLiveData.observe(viewLifecycleOwner) {
             binding.syncProgressBar.isIndeterminate = it.peekContent().isLoading
             binding.swipeRefreshMainFileList.isRefreshing = it.peekContent().isLoading
@@ -656,8 +841,9 @@ class MainFileListFragment : Fragment(),
 
             hideRefreshFab()
         }
+    }
 
-        // Observe the create file with app provider operation
+    private fun observeCreateFileWithAppProvider() {
         collectLatestLifecycleFlow(fileOperationsViewModel.createFileWithAppProviderFlow) {
             val uiResult = it?.peekContent()
             if (uiResult is UIResult.Error) {
@@ -674,11 +860,15 @@ class MainFileListFragment : Fragment(),
                 }
             }
         }
+    }
 
+    private fun observeCheckIfFileIsLocalAndNotAvailableOffline() {
         collectLatestLifecycleFlow(fileOperationsViewModel.checkIfFileIsLocalAndNotAvailableOfflineSharedFlow) {
             val fileActivity = (requireActivity() as FileActivity)
             when (it) {
-                is UIResult.Loading -> fileActivity.showLoadingDialog(R.string.common_loading)
+                is UIResult.Loading -> {
+                    fileActivity.showLoadingDialog(R.string.common_loading)
+                }
                 is UIResult.Success -> {
                     fileActivity.dismissLoadingDialog()
                     it.data?.let { result -> onShowRemoveDialog(filesToRemove, result) }
@@ -689,20 +879,6 @@ class MainFileListFragment : Fragment(),
                     showMessageInSnackbar(resources.getString(R.string.common_error_unknown))
                 }
             }
-        }
-
-        /* TransfersViewModel observables */
-        observeTransfers()
-
-    }
-
-    private suspend fun getDrawableFromUrl(context: Context, url: String): Drawable? {
-        return withContext(Dispatchers.IO) {
-            Glide.with(context)
-                .load(url)
-                .fitCenter()
-                .submit()
-                .get()
         }
     }
 
@@ -835,7 +1011,8 @@ class MainFileListFragment : Fragment(),
      * @param newFileListOption new file list option to enable.
      */
     private fun showOrHideFab(newFileListOption: FileListOption, currentFolder: OCFile) {
-        if (!newFileListOption.isAllFiles() || isPickingAFolder() || (!currentFolder.hasAddFilePermission && !currentFolder.hasAddSubdirectoriesPermission)) {
+        if (!newFileListOption.isAllFiles() || isPickingAFolder() ||
+            (!currentFolder.hasAddFilePermission && !currentFolder.hasAddSubdirectoriesPermission)) {
             toggleFabVisibility(false)
         } else {
             toggleFabVisibility(true)
@@ -881,7 +1058,8 @@ class MainFileListFragment : Fragment(),
                 fabNewfile.isFocusable = isFabExpanded()
                 fabNewshortcut.isFocusable = isFabExpanded()
                 if (fabMain.isExpanded) {
-                    binding.fabMain.findViewById<AddFloatingActionButton>(com.getbase.floatingactionbutton.R.id.fab_expand_menu_button).contentDescription = getString(R.string.content_description_add_new_content_expanded)
+                    binding.fabMain.findViewById<AddFloatingActionButton>(com.getbase.floatingactionbutton.R.id.fab_expand_menu_button)
+                        .contentDescription = getString(R.string.content_description_add_new_content_expanded)
                 } else {
                     setFabMainContentDescription()
                 }
@@ -1134,13 +1312,11 @@ class MainFileListFragment : Fragment(),
      *
      * @return The currently viewed OCFile
      */
-    fun getCurrentFile(): OCFile {
-        return mainFileListViewModel.getFile()
-    }
+    fun getCurrentFile(): OCFile =
+        mainFileListViewModel.getFile()
 
-    fun getCurrentSpace(): OCSpace? {
-        return mainFileListViewModel.getSpace()
-    }
+    fun getCurrentSpace(): OCSpace? =
+        mainFileListViewModel.getSpace()
 
     private fun setDrawerStatus(enabled: Boolean) {
         (activity as FileActivity).setDrawerLockMode(if (enabled) DrawerLayout.LOCK_MODE_UNLOCKED else DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
@@ -1154,119 +1330,133 @@ class MainFileListFragment : Fragment(),
      */
     @SuppressLint("UseRequireInsteadOfGet")
     private fun onFileActionChosen(menuId: Int?): Boolean {
+        var handled: Boolean
         val checkedFilesWithSyncInfo = fileListAdapter.getCheckedItems() as ArrayList<OCFileWithSyncInfo>
 
         if (checkedFilesWithSyncInfo.isEmpty()) {
             return false
         } else if (checkedFilesWithSyncInfo.size == 1) {
-            /// action only possible on a single file
+            /// Action possible on a single file
             val singleFile = checkedFilesWithSyncInfo.first().file
-
-            openInWebProviders.forEach { (openInWebProviderName, menuItemId) ->
-                if (menuItemId == menuId) {
-                    mainFileListViewModel.openInWeb(singleFile.remoteId!!, openInWebProviderName)
-                    return true
-                }
-            }
-
-            when (menuId) {
-                R.id.action_share_file -> {
-                    fileActions?.onShareFileClicked(singleFile)
-                    fileListAdapter.clearSelection()
-                    updateActionModeAfterTogglingSelected()
-                    return true
-                }
-
-                R.id.action_open_file_with -> {
-                    fileActions?.openFile(singleFile)
-                    fileListAdapter.clearSelection()
-                    updateActionModeAfterTogglingSelected()
-                    return true
-                }
-
-                R.id.action_rename_file -> {
-                    val dialog = RenameFileDialogFragment.newInstance(singleFile)
-                    dialog.show(requireActivity().supportFragmentManager, FRAGMENT_TAG_RENAME_FILE)
-                    fileListAdapter.clearSelection()
-                    updateActionModeAfterTogglingSelected()
-                    return true
-                }
-
-                R.id.action_see_details -> {
-                    fileListAdapter.clearSelection()
-                    updateActionModeAfterTogglingSelected()
-                    fileActions?.showDetails(singleFile)
-                    return true
-                }
-
-                R.id.action_sync_file -> {
-                    syncFiles(listOf(singleFile))
-                    return true
-                }
-
-                R.id.action_send_file -> {
-                    //Obtain the file
-                    if (!singleFile.isAvailableLocally) { // Download the file
-                        Timber.d("%s : File must be downloaded", singleFile.remotePath)
-                        fileActions?.initDownloadForSending(singleFile)
-                    } else {
-                        fileActions?.sendDownloadedFile(singleFile)
-                    }
-                    return true
-                }
-
-                R.id.action_set_available_offline -> {
-                    fileOperationsViewModel.performOperation(FileOperation.SetFilesAsAvailableOffline(listOf(singleFile)))
-                    if (singleFile.isFolder) {
-                        fileOperationsViewModel.performOperation(
-                            FileOperation.SynchronizeFolderOperation(
-                                folderToSync = singleFile,
-                                accountName = singleFile.owner,
-                                isActionSetFolderAvailableOfflineOrSynchronize = true,
-                            )
-                        )
-                    } else {
-                        fileOperationsViewModel.performOperation(FileOperation.SynchronizeFileOperation(singleFile, singleFile.owner))
-                    }
-                    return true
-                }
-
-                R.id.action_unset_available_offline -> {
-                    fileOperationsViewModel.performOperation(FileOperation.UnsetFilesAsAvailableOffline(listOf(singleFile)))
-                }
-            }
+            handled = onSingleFileActionChosen(menuId, singleFile)
         }
 
         /// Actions possible on a batch of files
         val checkedFiles = checkedFilesWithSyncInfo.map { it.file } as ArrayList<OCFile>
+        handled = onCheckedFilesActionChosen(menuId, checkedFiles)
+        return handled
+    }
+
+    private fun onSingleFileActionChosen(menuId: Int?, singleFile: OCFile): Boolean {
+        openInWebProviders.forEach { (openInWebProviderName, menuItemId) ->
+            if (menuItemId == menuId) {
+                mainFileListViewModel.openInWeb(singleFile.remoteId!!, openInWebProviderName)
+                return true
+            }
+        }
+
+        return when (menuId) {
+            R.id.action_share_file -> {
+                fileActions?.onShareFileClicked(singleFile)
+                fileListAdapter.clearSelection()
+                updateActionModeAfterTogglingSelected()
+                true
+            }
+
+            R.id.action_open_file_with -> {
+                fileActions?.openFile(singleFile)
+                fileListAdapter.clearSelection()
+                updateActionModeAfterTogglingSelected()
+                true
+            }
+
+            R.id.action_rename_file -> {
+                val dialog = RenameFileDialogFragment.newInstance(singleFile)
+                dialog.show(requireActivity().supportFragmentManager, FRAGMENT_TAG_RENAME_FILE)
+                fileListAdapter.clearSelection()
+                updateActionModeAfterTogglingSelected()
+                true
+            }
+
+            R.id.action_see_details -> {
+                fileListAdapter.clearSelection()
+                updateActionModeAfterTogglingSelected()
+                fileActions?.showDetails(singleFile)
+                true
+            }
+
+            R.id.action_sync_file -> {
+                syncFiles(listOf(singleFile))
+                true
+            }
+
+            R.id.action_send_file -> {
+                //Obtain the file
+                if (!singleFile.isAvailableLocally) { // Download the file
+                    Timber.d("%s : File must be downloaded", singleFile.remotePath)
+                    fileActions?.initDownloadForSending(singleFile)
+                } else {
+                    fileActions?.sendDownloadedFile(singleFile)
+                }
+                true
+            }
+
+            R.id.action_set_available_offline -> {
+                fileOperationsViewModel.performOperation(FileOperation.SetFilesAsAvailableOffline(listOf(singleFile)))
+                if (singleFile.isFolder) {
+                    fileOperationsViewModel.performOperation(
+                        FileOperation.SynchronizeFolderOperation(
+                            folderToSync = singleFile,
+                            accountName = singleFile.owner,
+                            isActionSetFolderAvailableOfflineOrSynchronize = true,
+                        )
+                    )
+                } else {
+                    fileOperationsViewModel.performOperation(FileOperation.SynchronizeFileOperation(singleFile, singleFile.owner))
+                }
+                true
+            }
+
+            R.id.action_unset_available_offline -> {
+                fileOperationsViewModel.performOperation(FileOperation.UnsetFilesAsAvailableOffline(listOf(singleFile)))
+                true
+            }
+
+            else -> {
+                false
+            }
+        }
+    }
+
+    private fun onCheckedFilesActionChosen(menuId: Int?, checkedFiles: ArrayList<OCFile>): Boolean =
         when (menuId) {
             R.id.file_action_select_all -> {
                 fileListAdapter.selectAll()
                 updateActionModeAfterTogglingSelected()
-                return true
+                true
             }
 
             R.id.action_select_inverse -> {
                 fileListAdapter.selectInverse()
                 updateActionModeAfterTogglingSelected()
-                return true
+                true
             }
 
             R.id.action_remove_file -> {
                 filesToRemove = checkedFiles
                 fileOperationsViewModel.showRemoveDialog(filesToRemove)
-                return true
+                true
             }
 
             R.id.action_download_file,
             R.id.action_sync_file -> {
                 syncFiles(checkedFiles)
-                return true
+                true
             }
 
             R.id.action_cancel_sync -> {
                 fileActions?.cancelFileTransference(checkedFiles)
-                return true
+                true
             }
 
             R.id.action_set_available_offline -> {
@@ -1278,16 +1468,17 @@ class MainFileListFragment : Fragment(),
                         fileOperationsViewModel.performOperation(FileOperation.SynchronizeFileOperation(ocFile, ocFile.owner))
                     }
                 }
-                return true
+                true
             }
 
             R.id.action_unset_available_offline -> {
                 fileOperationsViewModel.performOperation(FileOperation.UnsetFilesAsAvailableOffline(checkedFiles))
-                return true
+                true
             }
 
             R.id.action_send_file -> {
                 requireActivity().sendDownloadedFilesByShareSheet(checkedFiles)
+                true
             }
 
             R.id.action_move -> {
@@ -1297,7 +1488,7 @@ class MainFileListFragment : Fragment(),
                 requireActivity().startActivityForResult(action, FileDisplayActivity.REQUEST_CODE__MOVE_FILES)
                 fileListAdapter.clearSelection()
                 updateActionModeAfterTogglingSelected()
-                return true
+                true
             }
 
             R.id.action_copy -> {
@@ -1307,12 +1498,13 @@ class MainFileListFragment : Fragment(),
                 requireActivity().startActivityForResult(action, FileDisplayActivity.REQUEST_CODE__COPY_FILES)
                 fileListAdapter.clearSelection()
                 updateActionModeAfterTogglingSelected()
-                return true
+                true
+            }
+
+            else -> {
+                false
             }
         }
-
-        return false
-    }
 
     /**
      * Update or remove the actionMode after applying any change to the selected items.
@@ -1374,123 +1566,6 @@ class MainFileListFragment : Fragment(),
         )
     }
 
-    private val actionModeCallback: ActionMode.Callback = object : ActionMode.Callback {
-
-        override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
-            setDrawerStatus(enabled = false)
-            actionMode = mode
-
-            requireActivity().findViewById<View>(R.id.owncloud_app_bar).isFocusableInTouchMode = false
-
-            val inflater = requireActivity().menuInflater
-            inflater.inflate(R.menu.file_actions_menu, menu)
-            this@MainFileListFragment.menu = menu
-
-            mode?.invalidate()
-
-            // Set gray color
-            val window = activity?.window
-            statusBarColor = window?.statusBarColor ?: -1
-
-            // Hide FAB in multi selection mode
-            toggleFabVisibility(false)
-            fileActions?.setBottomBarVisibility(false)
-
-            // Hide sort options view in multi-selection mode
-            binding.optionsLayout.visibility = View.GONE
-
-            return true
-        }
-
-        /**
-         * Updates available action in menu depending on current selection.
-         */
-        override fun onPrepareActionMode(mode: ActionMode?, menu: Menu?): Boolean {
-            val checkedFilesWithSyncInfo = fileListAdapter.getCheckedItems()
-            val checkedCount = checkedFilesWithSyncInfo.size
-            val title = resources.getQuantityString(
-                R.plurals.items_selected_count,
-                checkedCount,
-                checkedCount
-            )
-            mode?.title = title
-
-            checkedFiles = checkedFilesWithSyncInfo.map { it.file }
-
-            val checkedFilesSync = checkedFilesWithSyncInfo.map {
-                OCFileSyncInfo(
-                    fileId = it.file.id!!,
-                    uploadWorkerUuid = it.uploadWorkerUuid,
-                    downloadWorkerUuid = it.downloadWorkerUuid,
-                    isSynchronizing = it.isSynchronizing
-                )
-            }
-
-            val displaySelectAll = checkedCount != fileListAdapter.itemCount - 1 // -1 because one of them is the footer :S
-            mainFileListViewModel.filterMenuOptions(
-                checkedFiles, checkedFilesSync,
-                displaySelectAll, isMultiselection = true
-            )
-
-            if (checkedFiles.size == 1) {
-                mainFileListViewModel.getAppRegistryForMimeType(checkedFiles.first().mimeType, isMultiselection = true)
-            } else {
-                menu?.let {
-                    openInWebProviders.forEach { (_, menuItemId) ->
-                        it.removeItem(menuItemId)
-                    }
-                    openInWebProviders = emptyMap()
-                }
-            }
-            setRolesAccessibilityToMenuItems()
-
-            return true
-        }
-
-        private fun setRolesAccessibilityToMenuItems() {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                val roleAccessibilityDescription = getString(R.string.button_role_accessibility)
-                menu?.apply {
-                    findItem(R.id.file_action_select_all)?.contentDescription = "${getString(R.string.actionbar_select_all)} $roleAccessibilityDescription"
-                    findItem(R.id.action_select_inverse)?.contentDescription = "${getString(R.string.actionbar_select_inverse)} $roleAccessibilityDescription"
-                    findItem(R.id.action_open_file_with)?.contentDescription = "${getString(R.string.actionbar_open_with)} $roleAccessibilityDescription"
-                    findItem(R.id.action_rename_file)?.contentDescription = "${getString(R.string.common_rename)} $roleAccessibilityDescription"
-                    findItem(R.id.action_move)?.contentDescription = "${getString(R.string.actionbar_move)} $roleAccessibilityDescription"
-                    findItem(R.id.action_copy)?.contentDescription = "${getString(R.string.copy)} $roleAccessibilityDescription"
-                    findItem(R.id.action_send_file)?.contentDescription = "${getString(R.string.actionbar_send_file)} $roleAccessibilityDescription"
-                    findItem(R.id.action_set_available_offline)?.contentDescription = "${getString(R.string.set_available_offline)} $roleAccessibilityDescription"
-                    findItem(R.id.action_unset_available_offline)?.contentDescription = "${getString(R.string.unset_available_offline)} $roleAccessibilityDescription"
-                    findItem(R.id.action_see_details)?.contentDescription = "${getString(R.string.actionbar_see_details)} $roleAccessibilityDescription"
-                    findItem(R.id.action_remove_file)?.contentDescription = "${getString(R.string.common_remove)} $roleAccessibilityDescription"
-                }
-            }
-        }
-
-        override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
-            return onFileActionChosen(item?.itemId)
-        }
-
-        override fun onDestroyActionMode(mode: ActionMode?) {
-            setDrawerStatus(enabled = true)
-            actionMode = null
-
-            requireActivity().findViewById<View>(R.id.owncloud_app_bar).isFocusableInTouchMode = true
-
-            // reset to previous color
-            requireActivity().window.statusBarColor = statusBarColor!!
-
-            // show or hide FAB on multi selection mode exit
-            showOrHideFab(mainFileListViewModel.fileListOption.value, mainFileListViewModel.currentFolderDisplayed.value)
-
-            fileActions?.setBottomBarVisibility(true)
-
-            // Show sort options view when multi-selection mode finish
-            binding.optionsLayout.visibility = View.VISIBLE
-
-            fileListAdapter.clearSelection()
-        }
-    }
-
     private fun syncFiles(files: List<OCFile>) {
         for (file in files) {
             if (file.isFolder) {
@@ -1547,7 +1622,6 @@ class MainFileListFragment : Fragment(),
         private const val DIALOG_CREATE_FOLDER = "DIALOG_CREATE_FOLDER"
         private const val DIALOG_CREATE_SHORTCUT = "DIALOG_CREATE_SHORTCUT"
 
-        private const val TAG_SECOND_FRAGMENT = "SECOND_FRAGMENT"
         private const val FILE_DOCXF_EXTENSION = "docxf"
 
         @JvmStatic

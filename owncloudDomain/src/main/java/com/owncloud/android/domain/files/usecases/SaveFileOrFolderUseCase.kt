@@ -26,7 +26,7 @@ import com.owncloud.android.domain.files.model.OCFile
 class SaveFileOrFolderUseCase(
     private val fileRepository: FileRepository
 ) : BaseUseCaseWithResult<Unit, SaveFileOrFolderUseCase.Params>() {
-    override fun run(params: Params): Unit = fileRepository.saveFile(params.fileToSave)
+    override fun run(params: Params) = fileRepository.saveFile(params.fileToSave)
 
     data class Params(val fileToSave: OCFile)
 }

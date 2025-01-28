@@ -21,6 +21,7 @@ buildscript {
 plugins {
     alias libs.plugins.sonarqube
     alias libs.plugins.ksp apply false
+    alias libs.plugins.detekt
 }
 
 allprojects {
@@ -37,6 +38,7 @@ subprojects {
     apply plugin: "com.google.devtools.ksp"
     apply plugin: "org.jlleitschuh.gradle.ktlint"
     apply plugin: "org.sonarqube"
+    apply plugin: "io.gitlab.arturbosch.detekt"
 }
 
 sonarqube {

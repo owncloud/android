@@ -52,14 +52,15 @@ class FileDataStorageManager(
             getFileByPathAndAccount(remotePath, account.name, spaceId)
         }
 
-    private fun getFileByPathAndAccount(remotePath: String, accountName: String, spaceId: String? = null): OCFile? = runBlocking(CoroutinesDispatcherProvider().io) {
-        val getFileByRemotePathUseCase: GetFileByRemotePathUseCase by inject()
+    private fun getFileByPathAndAccount(remotePath: String, accountName: String, spaceId: String? = null): OCFile? =
+        runBlocking(CoroutinesDispatcherProvider().io) {
+            val getFileByRemotePathUseCase: GetFileByRemotePathUseCase by inject()
 
-        val result = withContext(CoroutineScope(CoroutinesDispatcherProvider().io).coroutineContext) {
-            getFileByRemotePathUseCase(GetFileByRemotePathUseCase.Params(accountName, remotePath, spaceId))
-        }.getDataOrNull()
-        result
-    }
+            val result = withContext(CoroutineScope(CoroutinesDispatcherProvider().io).coroutineContext) {
+                getFileByRemotePathUseCase(GetFileByRemotePathUseCase.Params(accountName, remotePath, spaceId))
+            }.getDataOrNull()
+            result
+        }
 
     fun getRootPersonalFolder() = runBlocking(CoroutinesDispatcherProvider().io) {
         val getPersonalRootFolderForAccountUseCase: GetPersonalRootFolderForAccountUseCase by inject()
@@ -79,7 +80,7 @@ class FileDataStorageManager(
         result
     }
 
-    // TODO: New_arch: Remove this and call usecase inside FilesViewModel
+    // To do: New_arch. Remove this and call usecase inside FilesViewModel
     fun getFileById(id: Long): OCFile? = runBlocking(CoroutinesDispatcherProvider().io) {
         val getFileByIdUseCase: GetFileByIdUseCase by inject()
 
@@ -91,27 +92,26 @@ class FileDataStorageManager(
 
     fun fileExists(path: String): Boolean = getFileByPath(path) != null
 
-    fun getFolderContent(f: OCFile?): List<OCFile> {
-        return if (f != null && f.isFolder && f.id != -1L) {
-            // TODO: Remove !!
+    fun getFolderContent(f: OCFile?): List<OCFile> =
+        if (f != null && f.isFolder && f.id != -1L) {
+            // To do: Remove !!
             getFolderContent(f.id!!)
         } else {
             listOf()
         }
-    }
 
-    // TODO: New_arch: Remove this and call usecase inside FilesViewModel
+    // To do: New_arch. Remove this and call usecase inside FilesViewModel
     fun getFolderImages(folder: OCFile?): List<OCFile> = runBlocking(CoroutinesDispatcherProvider().io) {
         val getFolderImagesUseCase: GetFolderImagesUseCase by inject()
 
         val result = withContext(CoroutineScope(CoroutinesDispatcherProvider().io).coroutineContext) {
-            // TODO: Remove !!
+            // To do: Remove !!
             getFolderImagesUseCase(GetFolderImagesUseCase.Params(folderId = folder!!.id!!))
         }.getDataOrNull()
         result ?: listOf()
     }
 
-    // TODO: New_arch: Remove this and call usecase inside FilesViewModel
+    // To do: New_arch. Remove this and call usecase inside FilesViewModel
     private fun getFolderContent(parentId: Long): List<OCFile> = runBlocking(CoroutinesDispatcherProvider().io) {
         val getFolderContentUseCase: GetFolderContentUseCase by inject()
 

@@ -62,7 +62,7 @@ class SortOptionsView @JvmOverloads constructor(
     var sortTypeSelected: SortType = SortType.SORT_TYPE_BY_NAME
         set(sortType) {
             if (field == sortType) {
-                // TODO: Should be changed directly, not here.
+                // To do: Should be changed directly, not here.
                 sortOrderSelected = sortOrderSelected.getOppositeSortOrder()
             }
             binding.sortTypeTitle.text = context.getText(sortType.toStringRes())

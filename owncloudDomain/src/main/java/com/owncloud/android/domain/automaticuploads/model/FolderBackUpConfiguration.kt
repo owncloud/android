@@ -50,23 +50,21 @@ enum class UploadBehavior {
     MOVE, COPY;
 
     @Deprecated("Legacy Local Behavior. Remove asap")
-    fun toLegacyLocalBehavior(): Int {
-        return when (this) {
+    fun toLegacyLocalBehavior(): Int =
+        when (this) {
             MOVE -> LEGACY_LOCAL_BEHAVIOUR_MOVE
             COPY -> LEGACY_LOCAL_BEHAVIOUR_COPY
         }
-    }
 
     companion object {
         private const val LEGACY_LOCAL_BEHAVIOUR_COPY = 0
         private const val LEGACY_LOCAL_BEHAVIOUR_MOVE = 1
 
-        fun fromString(string: String): UploadBehavior {
-            return if (string.equals("MOVE", ignoreCase = true)) {
+        fun fromString(string: String): UploadBehavior =
+            if (string.equals("MOVE", ignoreCase = true)) {
                 MOVE
             } else {
                 COPY
             }
-        }
     }
 }

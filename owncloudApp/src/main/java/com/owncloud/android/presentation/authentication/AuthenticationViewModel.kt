@@ -79,6 +79,27 @@ class AuthenticationViewModel(
     private val _legacyWebfingerHost = MediatorLiveData<Event<UIResult<String>>>()
     val legacyWebfingerHost: LiveData<Event<UIResult<String>>> = _legacyWebfingerHost
 
+    private val _serverInfo = MediatorLiveData<Event<UIResult<ServerInfo>>>()
+    val serverInfo: LiveData<Event<UIResult<ServerInfo>>> = _serverInfo
+
+    private val _loginResult = MediatorLiveData<Event<UIResult<String>>>()
+    val loginResult: LiveData<Event<UIResult<String>>> = _loginResult
+
+    private val _supportsOAuth2 = MediatorLiveData<Event<UIResult<Boolean>>>()
+    val supportsOAuth2: LiveData<Event<UIResult<Boolean>>> = _supportsOAuth2
+
+    private val _baseUrl = MediatorLiveData<Event<UIResult<String>>>()
+    val baseUrl: LiveData<Event<UIResult<String>>> = _baseUrl
+
+    private val _registerClient = MediatorLiveData<Event<UIResult<ClientRegistrationInfo>>>()
+    val registerClient: LiveData<Event<UIResult<ClientRegistrationInfo>>> = _registerClient
+
+    private val _requestToken = MediatorLiveData<Event<UIResult<TokenResponse>>>()
+    val requestToken: LiveData<Event<UIResult<TokenResponse>>> = _requestToken
+
+    private val _accountDiscovery = MediatorLiveData<Event<UIResult<Unit>>>()
+    val accountDiscovery: LiveData<Event<UIResult<Unit>>> = _accountDiscovery
+
     var launchedFromDeepLink = false
 
     fun getLegacyWebfingerHost(
@@ -93,9 +114,6 @@ class AuthenticationViewModel(
             useCaseParams = GetOwnCloudInstanceFromWebFingerUseCase.Params(server = webfingerLookupServer, resource = webfingerUsername)
         )
     }
-
-    private val _serverInfo = MediatorLiveData<Event<UIResult<ServerInfo>>>()
-    val serverInfo: LiveData<Event<UIResult<ServerInfo>>> = _serverInfo
 
     fun getServerInfo(
         serverUrl: String,
@@ -114,9 +132,6 @@ class AuthenticationViewModel(
             )
         )
     }
-
-    private val _loginResult = MediatorLiveData<Event<UIResult<String>>>()
-    val loginResult: LiveData<Event<UIResult<String>>> = _loginResult
 
     fun loginBasic(
         username: String,
@@ -190,9 +205,6 @@ class AuthenticationViewModel(
         }
     }
 
-    private val _supportsOAuth2 = MediatorLiveData<Event<UIResult<Boolean>>>()
-    val supportsOAuth2: LiveData<Event<UIResult<Boolean>>> = _supportsOAuth2
-
     fun supportsOAuth2(
         accountName: String
     ) = runUseCaseWithResult(
@@ -205,9 +217,6 @@ class AuthenticationViewModel(
         )
     )
 
-    private val _baseUrl = MediatorLiveData<Event<UIResult<String>>>()
-    val baseUrl: LiveData<Event<UIResult<String>>> = _baseUrl
-
     fun getBaseUrl(
         accountName: String
     ) = runUseCaseWithResult(
@@ -219,9 +228,6 @@ class AuthenticationViewModel(
             accountName = accountName
         )
     )
-
-    private val _registerClient = MediatorLiveData<Event<UIResult<ClientRegistrationInfo>>>()
-    val registerClient: LiveData<Event<UIResult<ClientRegistrationInfo>>> = _registerClient
 
     fun registerClient(
         registrationEndpoint: String
@@ -240,9 +246,6 @@ class AuthenticationViewModel(
         )
     }
 
-    private val _requestToken = MediatorLiveData<Event<UIResult<TokenResponse>>>()
-    val requestToken: LiveData<Event<UIResult<TokenResponse>>> = _requestToken
-
     fun requestToken(
         tokenRequest: TokenRequest
     ) = runUseCaseWithResult(
@@ -252,9 +255,6 @@ class AuthenticationViewModel(
         useCase = requestTokenUseCase,
         useCaseParams = RequestTokenUseCase.Params(tokenRequest = tokenRequest)
     )
-
-    private val _accountDiscovery = MediatorLiveData<Event<UIResult<Unit>>>()
-    val accountDiscovery: LiveData<Event<UIResult<Unit>>> = _accountDiscovery
 
     fun discoverAccount(accountName: String, discoveryNeeded: Boolean = false) {
         Timber.d("Account Discovery for account: $accountName needed: $discoveryNeeded")

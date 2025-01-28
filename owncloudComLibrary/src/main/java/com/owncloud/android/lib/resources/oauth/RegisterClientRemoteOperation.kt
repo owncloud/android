@@ -56,7 +56,7 @@ class RegisterClientRemoteOperation(
 
             val responseBody = postMethod.getResponseBodyAsString()
 
-            if (status == HttpConstants.HTTP_CREATED && responseBody != null) {
+            return if (status == HttpConstants.HTTP_CREATED && responseBody != null) {
                 Timber.d("Successful response $responseBody")
 
                 // Parse the response
@@ -66,13 +66,13 @@ class RegisterClientRemoteOperation(
                 val clientRegistrationResponse: ClientRegistrationResponse? = jsonAdapter.fromJson(responseBody)
                 Timber.d("Client registered and parsed to $clientRegistrationResponse")
 
-                return RemoteOperationResult<ClientRegistrationResponse>(RemoteOperationResult.ResultCode.OK).apply {
+                RemoteOperationResult<ClientRegistrationResponse>(RemoteOperationResult.ResultCode.OK).apply {
                     data = clientRegistrationResponse
                 }
 
             } else {
                 Timber.e("Failed response while registering a new client. Status code: $status; response message: $responseBody")
-                return RemoteOperationResult<ClientRegistrationResponse>(postMethod)
+                RemoteOperationResult<ClientRegistrationResponse>(postMethod)
             }
 
         } catch (e: Exception) {

@@ -62,8 +62,8 @@ class OCLocalAppRegistryDataSource(
         appRegistryDao.deleteAppRegistryForAccount(accountName)
     }
 
-    private fun AppRegistry.toEntities(accountName: String): List<AppRegistryEntity> {
-        return mimetypes.map { appRegistryMimeTypes ->
+    private fun AppRegistry.toEntities(accountName: String): List<AppRegistryEntity> =
+        mimetypes.map { appRegistryMimeTypes ->
             AppRegistryEntity(
                 accountName = accountName,
                 mimeType = appRegistryMimeTypes.mimeType,
@@ -76,7 +76,6 @@ class OCLocalAppRegistryDataSource(
                 defaultApplication = appRegistryMimeTypes.defaultApplication,
             )
         }
-    }
 
     private fun AppRegistryEntity.toModel(): AppRegistryMimeType =
         AppRegistryMimeType(

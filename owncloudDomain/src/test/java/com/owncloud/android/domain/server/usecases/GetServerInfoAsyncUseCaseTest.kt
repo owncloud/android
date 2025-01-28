@@ -78,6 +78,7 @@ class GetServerInfoAsyncUseCaseTest {
         verify(exactly = 1) { repository.getServerInfo(useCaseParams.serverPath, false, false) }
     }
 
+    @Suppress("MaxLineLength")
     @Test
     fun `Should throw SSLErrorException when secureConnectionEnforced is true and ServerInfoRepository returns ServerInfo with isSecureConnection returning false`() {
         every { repository.getServerInfo(useCaseParams.serverPath, false, false) } returns OC_INSECURE_SERVER_INFO_BASIC_AUTH
@@ -90,6 +91,7 @@ class GetServerInfoAsyncUseCaseTest {
         verify(exactly = 1) { repository.getServerInfo(useCaseParams.serverPath, false, false) }
     }
 
+    @Suppress("MaxLineLength")
     @Test
     fun `Should work correctly when secureConnectionEnforced is true and ServerInfoRepository returns ServerInfo with isSecureConnection returning true`() {
         every { repository.getServerInfo(useCaseParams.serverPath, false, false) } returns OC_SECURE_SERVER_INFO_BASIC_AUTH

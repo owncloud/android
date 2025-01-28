@@ -366,13 +366,12 @@ open class FolderPickerActivity : FileActivity(),
         MOVE, COPY, CAMERA_FOLDER;
 
         @StringRes
-        fun toStringRes(): Int {
-            return when (this) {
+        fun toStringRes(): Int =
+            when (this) {
                 MOVE -> R.string.folder_picker_move_here_button_text
                 COPY -> R.string.folder_picker_copy_here_button_text
                 CAMERA_FOLDER -> R.string.folder_picker_choose_button_text
             }
-        }
     }
 
     companion object {

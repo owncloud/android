@@ -26,7 +26,7 @@ class EditPrivateShareAsyncUseCase(
     private val shareRepository: ShareRepository
 ) : BaseUseCaseWithResult<Unit, EditPrivateShareAsyncUseCase.Params>() {
 
-    override fun run(params: Params): Unit =
+    override fun run(params: Params) =
         shareRepository.updatePrivateShare(
             params.remoteId,
             params.permissions,

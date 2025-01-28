@@ -27,14 +27,16 @@ sealed class UseCaseResult<out T> {
     val isError get() = this is Error
 
     fun getDataOrNull(): T? =
-        when (this) {
-            is Success -> data
-            else -> null
+        if (this is Success) {
+            data
+        } else {
+            null
         }
 
     fun getThrowableOrNull(): Throwable? =
-        when (this) {
-            is Error -> throwable
-            else -> null
+        if (this is Error) {
+            throwable
+        } else {
+            null
         }
 }

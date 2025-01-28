@@ -190,7 +190,9 @@ class PreviewVideoActivity : FileActivity(), Player.Listener, OnPrepareVideoPlay
                     showErrorInSnackbar(R.string.remove_fail_msg, uiResult.getThrowableOrNull())
                 }
 
-                is UIResult.Loading -> showLoadingDialog(R.string.wait_a_moment)
+                is UIResult.Loading -> {
+                    showLoadingDialog(R.string.wait_a_moment)
+                }
                 is UIResult.Success -> {
 
                     // Refresh the spaces and update the quota
@@ -354,18 +356,22 @@ class PreviewVideoActivity : FileActivity(), Player.Listener, OnPrepareVideoPlay
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val roleAccessibilityDescription = getString(R.string.button_role_accessibility)
             menu.apply {
-                menu.findItem(R.id.action_open_file_with)?.contentDescription = "${getString(R.string.actionbar_open_with)} $roleAccessibilityDescription"
+                menu.findItem(R.id.action_open_file_with)?.contentDescription =
+                    "${getString(R.string.actionbar_open_with)} $roleAccessibilityDescription"
                 menu.findItem(R.id.action_send_file)?.contentDescription = "${getString(R.string.actionbar_send_file)} $roleAccessibilityDescription"
-                menu.findItem(R.id.action_set_available_offline)?.contentDescription = "${getString(R.string.set_available_offline)} $roleAccessibilityDescription"
-                menu.findItem(R.id.action_unset_available_offline)?.contentDescription = "${getString(R.string.unset_available_offline)} $roleAccessibilityDescription"
-                menu.findItem(R.id.action_see_details)?.contentDescription = "${getString(R.string.actionbar_see_details)} $roleAccessibilityDescription"
+                menu.findItem(R.id.action_set_available_offline)?.contentDescription =
+                    "${getString(R.string.set_available_offline)} $roleAccessibilityDescription"
+                menu.findItem(R.id.action_unset_available_offline)?.contentDescription =
+                    "${getString(R.string.unset_available_offline)} $roleAccessibilityDescription"
+                menu.findItem(R.id.action_see_details)?.contentDescription =
+                    "${getString(R.string.actionbar_see_details)} $roleAccessibilityDescription"
                 menu.findItem(R.id.action_remove_file)?.contentDescription = "${getString(R.string.common_remove)} $roleAccessibilityDescription"
             }
         }
     }
 
-    override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-        return when (menuItem.itemId) {
+    override fun onMenuItemSelected(menuItem: MenuItem): Boolean =
+        when (menuItem.itemId) {
             R.id.action_share_file -> {
                 fileOperationsHelper.showShareFile(file)
                 true
@@ -436,12 +442,10 @@ class PreviewVideoActivity : FileActivity(), Player.Listener, OnPrepareVideoPlay
                 false
             }
         }
-    }
 
     // The main_menu won't be displayed
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        return false
-    }
+    override fun onCreateOptionsMenu(menu: Menu): Boolean =
+        false
 
     companion object {
         const val EXTRA_FILE = "FILE"
@@ -466,8 +470,7 @@ class PreviewVideoActivity : FileActivity(), Player.Listener, OnPrepareVideoPlay
          * @param file File to test if can be previewed.
          * @return 'True' if the file can be handled by the fragment.
          */
-        fun canBePreviewed(file: OCFile?): Boolean {
-            return file != null && file.isVideo
-        }
+        fun canBePreviewed(file: OCFile?): Boolean =
+            file != null && file.isVideo
     }
 }

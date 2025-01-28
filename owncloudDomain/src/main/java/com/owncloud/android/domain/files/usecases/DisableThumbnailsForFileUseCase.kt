@@ -25,7 +25,7 @@ class DisableThumbnailsForFileUseCase(
     private val fileRepository: FileRepository
 ) : BaseUseCaseWithResult<Unit, DisableThumbnailsForFileUseCase.Params>() {
 
-    override fun run(params: Params): Unit =
+    override fun run(params: Params) =
         fileRepository.disableThumbnailsForFile(params.fileId)
 
     data class Params(val fileId: Long)

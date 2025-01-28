@@ -136,14 +136,7 @@ class LogInterceptor : Interceptor {
                     LogResponse(
                         Response(
                             headers = logHeaders(response.headers),
-                            body = if (responseBody == null) {
-                                null
-                            } else {
-                                Body(
-                                    data = responseBody,
-                                    length = bodyLength,
-                                )
-                            },
+                            body = responseBody?.let { Body(data = responseBody, length = bodyLength) },
                             info = ResponseInfo(
                                 id = requestId,
                                 method = request.method,
@@ -163,15 +156,14 @@ class LogInterceptor : Interceptor {
         )
     }
 
-    private fun getResponseBodyString(contentType: MediaType?, contentLength: Int, responseBody: String): String? {
-        return if (contentType?.isLoggable() == true) {
+    private fun getResponseBodyString(contentType: MediaType?, contentLength: Int, responseBody: String): String? =
+        if (contentType?.isLoggable() == true) {
             responseBody
         } else if (contentLength > 0) {
             "$BINARY_OMITTED $contentLength $BYTES"
         } else {
             null
         }
-    }
 
     private fun getDurationString(millis: Long): String {
         var auxMillis = millis

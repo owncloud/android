@@ -99,8 +99,7 @@ class ReleaseNotesActivity : AppCompatActivity() {
                     (context is FileDisplayActivity || context is LoginActivity)
         }
 
-        private fun firstRunAfterUpdate(): Boolean {
-            return MainApp.getLastSeenVersionCode() != versionCode
-        }
+        private fun firstRunAfterUpdate(): Boolean =
+            MainApp.getLastSeenVersionCode() != versionCode
     }
 }

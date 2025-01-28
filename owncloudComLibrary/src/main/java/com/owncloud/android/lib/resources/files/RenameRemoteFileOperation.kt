@@ -66,37 +66,35 @@ class RenameRemoteFileOperation(
 
     override fun run(client: OwnCloudClient): RemoteOperationResult<Unit> {
         var result: RemoteOperationResult<Unit>
-        try {
+        return try {
             if (newName == oldName) {
-                return RemoteOperationResult<Unit>(ResultCode.OK)
-            }
-
-            if (targetPathIsUsed(client)) {
-                return RemoteOperationResult<Unit>(ResultCode.INVALID_OVERWRITE)
-            }
-
-            val moveMethod: MoveMethod = MoveMethod(
-                url = URL((spaceWebDavUrl ?: client.userFilesWebDavUri.toString()) + WebdavUtils.encodePath(oldRemotePath)),
-                destinationUrl = (spaceWebDavUrl ?: client.userFilesWebDavUri.toString()) + WebdavUtils.encodePath(newRemotePath),
-            ).apply {
-                setReadTimeout(RENAME_READ_TIMEOUT, TimeUnit.MILLISECONDS)
-                setConnectionTimeout(RENAME_CONNECTION_TIMEOUT, TimeUnit.MILLISECONDS)
-            }
-            val status = client.executeHttpMethod(moveMethod)
-
-            result = if (isSuccess(status)) {
                 RemoteOperationResult<Unit>(ResultCode.OK)
+            } else if (targetPathIsUsed(client)) {
+                RemoteOperationResult<Unit>(ResultCode.INVALID_OVERWRITE)
             } else {
-                RemoteOperationResult<Unit>(moveMethod)
-            }
+                val moveMethod: MoveMethod = MoveMethod(
+                    url = URL((spaceWebDavUrl ?: client.userFilesWebDavUri.toString()) + WebdavUtils.encodePath(oldRemotePath)),
+                    destinationUrl = (spaceWebDavUrl ?: client.userFilesWebDavUri.toString()) + WebdavUtils.encodePath(newRemotePath),
+                ).apply {
+                    setReadTimeout(RENAME_READ_TIMEOUT, TimeUnit.MILLISECONDS)
+                    setConnectionTimeout(RENAME_CONNECTION_TIMEOUT, TimeUnit.MILLISECONDS)
+                }
+                val status = client.executeHttpMethod(moveMethod)
 
-            Timber.i("Rename $oldRemotePath to $newRemotePath - HTTP status code: $status")
-            client.exhaustResponse(moveMethod.getResponseBodyAsStream())
-            return result
+                result = if (isSuccess(status)) {
+                    RemoteOperationResult<Unit>(ResultCode.OK)
+                } else {
+                    RemoteOperationResult<Unit>(moveMethod)
+                }
+
+                Timber.i("Rename $oldRemotePath to $newRemotePath - HTTP status code: $status")
+                client.exhaustResponse(moveMethod.getResponseBodyAsStream())
+                result
+            }
         } catch (exception: Exception) {
             result = RemoteOperationResult<Unit>(exception)
             Timber.e(exception, "Rename $oldRemotePath to $newName: ${result.logMessage}")
-            return result
+            result
         }
     }
 

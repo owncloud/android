@@ -53,13 +53,14 @@ class GetServerInfoAsyncUseCase(
     /**
      * In case the user introduces a server url without prefix, we will try to connect to https
      */
-    private fun normalizeProtocolPrefix(url: String): String {
-        return if (!url.lowercase(Locale.getDefault()).startsWith(HTTP_PREFIX) &&
+    private fun normalizeProtocolPrefix(url: String): String =
+        if (!url.lowercase(Locale.getDefault()).startsWith(HTTP_PREFIX) &&
             !url.lowercase(Locale.getDefault()).startsWith(HTTPS_PREFIX)
         ) {
-            return "$HTTPS_PREFIX$url"
-        } else url
-    }
+            "$HTTPS_PREFIX$url"
+        } else {
+            url
+        }
 
     companion object {
         const val TRAILING_SLASH = '/'

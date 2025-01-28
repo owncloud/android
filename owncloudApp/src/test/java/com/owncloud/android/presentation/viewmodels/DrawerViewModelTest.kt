@@ -47,8 +47,6 @@ class DrawerViewModelTest : ViewModelTest() {
 
     private lateinit var contextProvider: ContextProvider
 
-    private val commonException = Exception()
-
     @Before
     fun setUp() {
         contextProvider = mockk()

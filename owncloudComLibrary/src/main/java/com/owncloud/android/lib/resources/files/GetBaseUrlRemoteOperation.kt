@@ -40,8 +40,8 @@ import java.util.concurrent.TimeUnit
  */
 
 class GetBaseUrlRemoteOperation : RemoteOperation<String?>() {
-    override fun run(client: OwnCloudClient): RemoteOperationResult<String?> {
-        return try {
+    override fun run(client: OwnCloudClient): RemoteOperationResult<String?> =
+        try {
             val stringUrl = client.baseFilesWebDavUri.toString()
 
             val propFindMethod = PropfindMethod(URL(stringUrl), 0, DavUtils.allPropSet).apply {
@@ -64,7 +64,6 @@ class GetBaseUrlRemoteOperation : RemoteOperation<String?>() {
             Timber.e(e, "Could not get actuall (or redirected) base URL from base url (/).")
             RemoteOperationResult<String?>(e)
         }
-    }
 
     private fun isSuccess(status: Int) = status == HttpConstants.HTTP_OK || status == HttpConstants.HTTP_MULTI_STATUS
 

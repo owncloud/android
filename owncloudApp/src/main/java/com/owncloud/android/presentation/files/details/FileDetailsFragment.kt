@@ -149,7 +149,8 @@ class FileDetailsFragment : FileFragment() {
                 // Mimetypes not supported via open in web, send 500
                 if (uiResult.error is InstanceNotConfiguredException) {
                     val message =
-                        getString(R.string.open_in_web_error_generic) + " " + getString(R.string.error_reason) + " " + getString(R.string.open_in_web_error_not_supported)
+                        getString(R.string.open_in_web_error_generic) + " " + getString(R.string.error_reason) +
+                                " " + getString(R.string.open_in_web_error_not_supported)
                     this.showMessageInSnackbar(message, Snackbar.LENGTH_LONG)
                 } else if (uiResult.error is TooEarlyException) {
                     this.showMessageInSnackbar(getString(R.string.open_in_web_error_too_early), Snackbar.LENGTH_LONG)
@@ -184,23 +185,33 @@ class FileDetailsFragment : FileFragment() {
                 }
 
                 is UIResult.Loading -> {}
-                is UIResult.Success -> when (uiResult.data) {
-                    SynchronizeFileUseCase.SyncType.AlreadySynchronized -> showMessageInSnackbar(getString(R.string.sync_file_nothing_to_do_msg))
-                    is SynchronizeFileUseCase.SyncType.ConflictDetected -> {
-                        val showConflictActivityIntent = Intent(requireActivity(), ConflictsResolveActivity::class.java)
-                        showConflictActivityIntent.putExtra(ConflictsResolveActivity.EXTRA_FILE, file)
-                        startActivity(showConflictActivityIntent)
+                is UIResult.Success -> {
+                    when (uiResult.data) {
+                        SynchronizeFileUseCase.SyncType.AlreadySynchronized -> {
+                            showMessageInSnackbar(getString(R.string.sync_file_nothing_to_do_msg))
+                        }
+                        is SynchronizeFileUseCase.SyncType.ConflictDetected -> {
+                            val showConflictActivityIntent = Intent(requireActivity(), ConflictsResolveActivity::class.java)
+                            showConflictActivityIntent.putExtra(ConflictsResolveActivity.EXTRA_FILE, file)
+                            startActivity(showConflictActivityIntent)
+                        }
+
+                        is SynchronizeFileUseCase.SyncType.DownloadEnqueued -> {
+                            fileDetailsViewModel.startListeningToWorkInfo(uiResult.data.workerId)
+                        }
+
+                        SynchronizeFileUseCase.SyncType.FileNotFound -> {
+                            showMessageInSnackbar(getString(R.string.sync_file_not_found_msg))
+                        }
+
+                        is SynchronizeFileUseCase.SyncType.UploadEnqueued -> {
+                            fileDetailsViewModel.startListeningToWorkInfo(uiResult.data.workerId)
+                        }
+
+                        null -> {
+                            showMessageInSnackbar(getString(R.string.common_error_unknown))
+                        }
                     }
-
-                    is SynchronizeFileUseCase.SyncType.DownloadEnqueued -> {
-                        fileDetailsViewModel.startListeningToWorkInfo(uiResult.data.workerId)
-                    }
-
-                    SynchronizeFileUseCase.SyncType.FileNotFound -> showMessageInSnackbar(getString(R.string.sync_file_not_found_msg))
-
-                    is SynchronizeFileUseCase.SyncType.UploadEnqueued -> fileDetailsViewModel.startListeningToWorkInfo(uiResult.data.workerId)
-
-                    null -> showMessageInSnackbar(getString(R.string.common_error_unknown))
                 }
             }
         })
@@ -322,7 +333,9 @@ class FileDetailsFragment : FileFragment() {
                 true
             }
 
-            else -> super.onOptionsItemSelected(item)
+            else -> {
+                super.onOptionsItemSelected(item)
+            }
         }
     }
 
@@ -558,7 +571,7 @@ class FileDetailsFragment : FileFragment() {
         requireActivity().invalidateOptionsMenu()
     }
 
-    // TODO: Move navigation to a common place.
+    // To do: Move navigation to a common place.
     private fun navigateToPreviewOrOpenFile(fileWaitingToPreview: OCFile) {
         val fileDisplayActivity = requireActivity() as FileDisplayActivity
         when {
@@ -578,17 +591,19 @@ class FileDetailsFragment : FileFragment() {
                 fileDisplayActivity.startTextPreview(fileWaitingToPreview)
             }
 
-            else -> fileDisplayActivity.openOCFile(fileWaitingToPreview)
+            else -> {
+                fileDisplayActivity.openOCFile(fileWaitingToPreview)
+            }
         }
         fileOperationsViewModel.setLastUsageFile(fileWaitingToPreview)
     }
 
     override fun updateViewForSyncInProgress() {
-        TODO("Not yet implemented")
+        // Not yet implemented
     }
 
     override fun updateViewForSyncOff() {
-        TODO("Not yet implemented")
+        // Not yet implemented
     }
 
     override fun onFileMetadataChanged(updatedFile: OCFile?) {
@@ -596,11 +611,11 @@ class FileDetailsFragment : FileFragment() {
     }
 
     override fun onFileMetadataChanged() {
-        TODO("Not yet implemented")
+        // Not yet implemented
     }
 
     override fun onFileContentChanged() {
-        TODO("Not yet implemented")
+        // Not yet implemented
     }
 
     companion object {

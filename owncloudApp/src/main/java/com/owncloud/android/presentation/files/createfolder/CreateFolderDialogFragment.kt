@@ -44,7 +44,7 @@ class CreateFolderDialogFragment : DialogFragment() {
     private lateinit var parentFolder: OCFile
     private lateinit var createFolderListener: CreateFolderListener
     private var isButtonEnabled: Boolean = false
-    private val MAX_FILENAME_LENGTH = 223
+    private val maxFilenameLength = 223
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
 
@@ -101,10 +101,10 @@ class CreateFolderDialogFragment : DialogFragment() {
             if (text.isNullOrBlank()) {
                 okButton.isEnabled = false
                 error = getString(R.string.uploader_upload_text_dialog_filename_error_empty)
-            } else if (text.length > MAX_FILENAME_LENGTH) {
+            } else if (text.length > maxFilenameLength) {
                 error = String.format(
                     getString(R.string.uploader_upload_text_dialog_filename_error_length_max),
-                    MAX_FILENAME_LENGTH
+                    maxFilenameLength
                 )
             } else if (forbiddenChars.any { text.contains(it) }) {
                 error = getString(R.string.filename_forbidden_characters)
@@ -146,11 +146,10 @@ class CreateFolderDialogFragment : DialogFragment() {
          * @return Dialog ready to show.
          */
         @JvmStatic
-        fun newInstance(parent: OCFile, listener: CreateFolderListener): CreateFolderDialogFragment {
-            return CreateFolderDialogFragment().apply {
+        fun newInstance(parent: OCFile, listener: CreateFolderListener): CreateFolderDialogFragment =
+            CreateFolderDialogFragment().apply {
                 createFolderListener = listener
                 parentFolder = parent
             }
-        }
     }
 }

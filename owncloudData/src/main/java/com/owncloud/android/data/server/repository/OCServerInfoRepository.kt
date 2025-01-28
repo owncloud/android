@@ -49,8 +49,8 @@ class OCServerInfoRepository(
 
         val serverInfo = remoteServerInfoDataSource.getServerInfo(path, enforceOIDC)
 
-        if (serverInfo is ServerInfo.BasicServer) {
-            return serverInfo
+        return if (serverInfo is ServerInfo.BasicServer) {
+            serverInfo
         } else {
             // Could be OAuth or OpenID Connect
             val openIDConnectServerConfiguration = try {
@@ -60,7 +60,7 @@ class OCServerInfoRepository(
                 null
             }
 
-            return if (openIDConnectServerConfiguration != null) {
+            if (openIDConnectServerConfiguration != null) {
                 ServerInfo.OIDCServer(
                     ownCloudVersion = serverInfo.ownCloudVersion,
                     baseUrl = serverInfo.baseUrl,

@@ -69,8 +69,9 @@ class PassCodeViewModelTest : ViewModelTest() {
     ) {
         every { contextProvider.getInt(R.integer.passcode_digits) } returns passcodeDigits   //getNumberOfPassCodeDigits()
         every { preferencesProvider.getString(PREFERENCE_PASSCODE, any()) } returns passcode  //getPassCode()
-        for (i in 0..4)
+        for (i in 0..4) {
             every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + i, null) } returns passcodeD  //loadPinFromOldFormatIfPossible()
+        }
         every { preferencesProvider.getInt(PREFERENCE_LOCK_ATTEMPTS, any()) } returns lockAttempts    //getNumberOfAttempts()
         every { preferencesProvider.getLong(PREFERENCE_LAST_UNLOCK_ATTEMPT_TIMESTAMP, any()) } returns lastUnlockAttempt   //getTimeToUnlockLeft()
     }

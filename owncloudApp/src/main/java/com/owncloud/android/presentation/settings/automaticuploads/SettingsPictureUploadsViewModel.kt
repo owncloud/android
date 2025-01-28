@@ -212,13 +212,12 @@ class SettingsPictureUploadsViewModel(
         Timber.d("Picture uploads configuration updated. New configuration: $it")
     }
 
-    private fun handleSpaceName(spaceName: String?): String? {
-        return if (pictureUploadsSpace?.isPersonal == true) {
+    private fun handleSpaceName(spaceName: String?): String? =
+        if (pictureUploadsSpace?.isPersonal == true) {
             contextProvider.getString(R.string.bottom_nav_personal)
         } else {
             spaceName
         }
-    }
 
     fun getUploadPathString(): String {
 

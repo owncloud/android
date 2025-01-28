@@ -30,8 +30,8 @@ import com.owncloud.android.domain.transfers.model.TransferResult
 import com.owncloud.android.domain.transfers.model.TransferStatus
 
 @StringRes
-fun OCTransfer.statusToStringRes(): Int {
-     return when (status) {
+fun OCTransfer.statusToStringRes(): Int =
+    when (status) {
          TransferStatus.TRANSFER_IN_PROGRESS -> R.string.uploader_upload_in_progress_ticker
          TransferStatus.TRANSFER_SUCCEEDED -> R.string.uploads_view_upload_status_succeeded
          TransferStatus.TRANSFER_QUEUED -> R.string.uploads_view_upload_status_queued
@@ -63,8 +63,6 @@ fun OCTransfer.statusToStringRes(): Int {
              null -> R.string.uploads_view_upload_status_unknown_fail
          }
     }
-}
 
-fun OCTransfer.isContentUri(context: Context): Boolean {
-    return DocumentFile.isDocumentUri(context, Uri.parse(localPath))
-}
+fun OCTransfer.isContentUri(context: Context): Boolean =
+    DocumentFile.isDocumentUri(context, Uri.parse(localPath))

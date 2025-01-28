@@ -105,7 +105,7 @@ class ConnectionValidator(
     private fun isOwnCloudStatusOk(client: OwnCloudClient): Boolean {
         val reply = getOwnCloudStatus(client)
         // dont check status code. It currently relais on the broken redirect code of the owncloud client
-        // TODO: Use okhttp redirect and add this check again
+        // To do: Use okhttp redirect and add this check again
         // return reply.httpCode == HttpConstants.HTTP_OK &&
         return !reply.isException &&
                 reply.data != null

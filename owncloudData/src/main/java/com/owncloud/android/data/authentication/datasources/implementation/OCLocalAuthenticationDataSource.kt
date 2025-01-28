@@ -224,9 +224,8 @@ class OCLocalAuthenticationDataSource(
         return null
     }
 
-    private fun getAccounts(): Array<Account> {
-        return accountManager.getAccountsByType(accountType)
-    }
+    private fun getAccounts(): Array<Account> =
+        accountManager.getAccountsByType(accountType)
 
     private fun getCurrentAccount(): Account? {
         val ocAccounts = getAccounts()

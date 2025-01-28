@@ -83,11 +83,10 @@ class OwnCloudVersion(version: String) : Comparable<OwnCloudVersion>, Parcelable
         return versionToString
     }
 
-    override fun compareTo(other: OwnCloudVersion): Int {
-        return if (other.mVersion == mVersion)
+    override fun compareTo(other: OwnCloudVersion): Int =
+        if (other.mVersion == mVersion)
             0
         else if (other.mVersion < mVersion) 1 else -1
-    }
 
     private fun parseVersion(version: String) {
         try {
@@ -122,9 +121,8 @@ class OwnCloudVersion(version: String) : Comparable<OwnCloudVersion>, Parcelable
         return versionValue
     }
 
-    override fun describeContents(): Int {
-        return super.hashCode()
-    }
+    override fun describeContents(): Int =
+        super.hashCode()
 
     override fun writeToParcel(dest: Parcel, flags: Int) {
         dest.writeInt(mVersion)

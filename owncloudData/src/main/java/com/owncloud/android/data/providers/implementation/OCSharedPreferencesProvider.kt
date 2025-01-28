@@ -28,7 +28,7 @@ class OCSharedPreferencesProvider(
     context: Context
 ) : SharedPreferencesProvider {
 
-    // TODO: Move to Androidx Preferences or DataStore
+    // To do: Move to Androidx Preferences or DataStore
     private val sharedPreferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
     private val editor = sharedPreferences.edit()
 

@@ -28,7 +28,6 @@ import com.owncloud.android.lib.resources.spaces.GetRemoteSpacesOperation
 import com.owncloud.android.lib.resources.spaces.responses.SpaceResponse
 
 class OCSpacesService(override val client: OwnCloudClient) : SpacesService {
-    override fun getSpaces(): RemoteOperationResult<List<SpaceResponse>> {
-        return GetRemoteSpacesOperation().execute(client)
-    }
+    override fun getSpaces(): RemoteOperationResult<List<SpaceResponse>> =
+        GetRemoteSpacesOperation().execute(client)
 }

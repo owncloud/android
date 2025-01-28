@@ -47,7 +47,7 @@ import com.owncloud.android.presentation.sharing.sharees.SearchShareesFragment
 import com.owncloud.android.presentation.sharing.sharees.UsersAndGroupsSearchProvider
 import com.owncloud.android.presentation.sharing.shares.PublicShareDialogFragment
 import com.owncloud.android.ui.activity.FileActivity
-import com.owncloud.android.ui.utils.showDialogFragment
+import com.owncloud.android.extensions.showDialogFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import timber.log.Timber
@@ -125,7 +125,9 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
                     data?.authority
                 )
             }
-            else -> Timber.e("Unexpected intent $intent")
+            else -> {
+                Timber.e("Unexpected intent $intent")
+            }
         }
     }
 
@@ -294,11 +296,10 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         var retval = true
-        when (item.itemId) {
-            android.R.id.home -> if (!supportFragmentManager.popBackStackImmediate()) {
-                finish()
-            }
-            else -> retval = super.onOptionsItemSelected(item)
+        if (item.itemId == android.R.id.home && !supportFragmentManager.popBackStackImmediate()) {
+            finish()
+        } else {
+            retval = super.onOptionsItemSelected(item)
         }
         return retval
     }
@@ -312,21 +313,18 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
     }
 
     // The main_menu won't be displayed
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        return false
-    }
+    override fun onCreateOptionsMenu(menu: Menu): Boolean =
+        false
 
-    override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {
-        return when (keyCode) {
-            KeyEvent.KEYCODE_DPAD_DOWN -> {
-                if (findViewById<View>(R.id.owncloud_app_bar).hasFocus()) {
-                    findViewById<View>(R.id.share_fragment_container).requestFocus()
-                }
-                true
+    override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean =
+        if (keyCode == KeyEvent.KEYCODE_DPAD_DOWN) {
+            if (findViewById<View>(R.id.owncloud_app_bar).hasFocus()) {
+                findViewById<View>(R.id.share_fragment_container).requestFocus()
             }
-            else -> super.onKeyUp(keyCode, event)
+            true
+        } else {
+            super.onKeyUp(keyCode, event)
         }
-    }
 
     companion object {
         const val TAG_SHARE_FRAGMENT = "SHARE_FRAGMENT"

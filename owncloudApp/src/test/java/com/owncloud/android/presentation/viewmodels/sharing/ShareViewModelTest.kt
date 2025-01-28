@@ -99,7 +99,7 @@ class ShareViewModelTest {
     fun setUp() {
         ocContextProvider = mockk(relaxed = true)
 
-        //TODO: Add tests when is not connected
+        // To do: Add tests when is not connected
         every { ocContextProvider.isConnected() } returns true
 
         Dispatchers.setMain(testCoroutineDispatcher)
