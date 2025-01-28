@@ -68,3 +68,12 @@ val OC_CAPABILITY_WITH_FILES_APP_PROVIDERS = OC_CAPABILITY.copy(
         newUrl = "/new-url",
     )
 )
+
+val OC_CAPABILITY_WITH_MULTIPERSONAL_ENABLED = OC_CAPABILITY.copy(
+    spaces = OCCapability.Spaces(
+        enabled = true,
+        projects = true,
+        shareJail = null,
+        hasMultiplePersonalSpaces = true
+    )
+)
