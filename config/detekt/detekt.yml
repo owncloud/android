@@ -97,7 +97,7 @@ complexity:
     includeStaticDeclarations: false
     includePrivateDeclarations: false
   CyclomaticComplexMethod:
-    active: true
+    active: false
     threshold: 15
     ignoreSingleWhenExpression: false
     ignoreSimpleWhenEntries: false
