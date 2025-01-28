@@ -112,7 +112,9 @@ class MdmProvider(
 
         return if (isMdmFlavor()) {
             preferencesProvider.getString(key = mdmKey, defaultValue = setupValue) ?: throw IllegalStateException("Key $stringKey is not supported")
-        } else setupValue
+        } else {
+            setupValue
+        }
     }
 
     fun getBrandingBoolean(

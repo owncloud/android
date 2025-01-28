@@ -802,7 +802,9 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
                     setResult(Activity.RESULT_CANCELED)
                     goToUrl(url = getString(R.string.welcome_link_url))
                 }
-            } else isVisible = false
+            } else {
+                isVisible = false
+            }
         }
 
         val legacyWebfingerLookupServer = mdmProvider.getBrandingString(NO_MDM_RESTRICTION_YET, R.string.webfinger_lookup_server)

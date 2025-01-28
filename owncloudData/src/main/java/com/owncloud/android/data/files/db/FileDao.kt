@@ -485,7 +485,9 @@ interface FileDao {
             AVAILABLE_OFFLINE_PARENT.ordinal
         } else if (currentFileAvailableOfflineStatus == AVAILABLE_OFFLINE.ordinal) {
             AVAILABLE_OFFLINE.ordinal
-        } else NOT_AVAILABLE_OFFLINE.ordinal
+        } else {
+            NOT_AVAILABLE_OFFLINE.ordinal
+        }
 
     companion object {
 

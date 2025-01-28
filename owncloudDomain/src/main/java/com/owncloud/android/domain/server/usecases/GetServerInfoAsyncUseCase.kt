@@ -58,7 +58,9 @@ class GetServerInfoAsyncUseCase(
             !url.lowercase(Locale.getDefault()).startsWith(HTTPS_PREFIX)
         ) {
             "$HTTPS_PREFIX$url"
-        } else url
+        } else {
+            url
+        }
 
     companion object {
         const val TRAILING_SLASH = '/'

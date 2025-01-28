@@ -59,7 +59,7 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
 
     private val enablePasscodeLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode != Activity.RESULT_OK) return@registerForActivityResult
+            if (result.resultCode != Activity.RESULT_OK) { return@registerForActivityResult }
             else {
                 prefPasscode?.isChecked = true
                 prefBiometric?.isChecked = securityViewModel.getBiometricsState()
@@ -71,7 +71,7 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
 
     private val disablePasscodeLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode != Activity.RESULT_OK) return@registerForActivityResult
+            if (result.resultCode != Activity.RESULT_OK) { return@registerForActivityResult }
             else {
                 prefPasscode?.isChecked = false
 
@@ -83,7 +83,7 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
 
     private val enablePatternLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode != Activity.RESULT_OK) return@registerForActivityResult
+            if (result.resultCode != Activity.RESULT_OK) { return@registerForActivityResult }
             else {
                 prefPattern?.isChecked = true
                 prefBiometric?.isChecked = securityViewModel.getBiometricsState()
@@ -95,7 +95,7 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
 
     private val disablePatternLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode != Activity.RESULT_OK) return@registerForActivityResult
+            if (result.resultCode != Activity.RESULT_OK) { return@registerForActivityResult }
             else {
                 prefPattern?.isChecked = false
 

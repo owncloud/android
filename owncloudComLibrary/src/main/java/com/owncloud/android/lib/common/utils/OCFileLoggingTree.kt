@@ -104,7 +104,7 @@ class OCFileLoggingTree(
                 element.lineNumber // format ensures line numbers have at least 3 places to align consecutive output from the same file
             )
             return "(${element.fileName}:${element.lineNumber})"
-        } else
+        } else {
             return String.format(
                 Locale.US,
                 "(%s:%d) %s.%s()",
@@ -114,6 +114,8 @@ class OCFileLoggingTree(
                 super.createStackElementTag(element)?.replaceFirst(element.fileName.takeWhile { it != '.' }, ""),
                 element.methodName
             )
+        }
+
     }
 
     @SuppressLint("LogNotTimber")

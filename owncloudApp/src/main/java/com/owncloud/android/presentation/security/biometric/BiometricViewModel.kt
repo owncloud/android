@@ -149,7 +149,9 @@ class BiometricViewModel(
     fun isBiometricLockAvailable(): Boolean =
         if (!BiometricManager.isHardwareDetected()) { // Biometric not supported
             false
-        } else BiometricManager.hasEnrolledBiometric() // Biometric not enrolled
+        } else {
+            BiometricManager.hasEnrolledBiometric() // Biometric not enrolled
+        }
 
     companion object {
         private const val ANDROID_KEY_STORE = "AndroidKeyStore"

@@ -148,7 +148,9 @@ class PublicShareDialogFragment : DialogFragment() {
                 capabilities?.filesSharingPublicExpireDateDays!!
             )
                 .time
-        } else -1
+        } else {
+            -1
+        }
 
     private val capabilityViewModel: CapabilityViewModel by viewModel {
         parametersOf(

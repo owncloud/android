@@ -227,14 +227,18 @@ class MainFileListViewModel(
                         parentDir =
                             if (fileById != null && (!fileById.sharedByLink || fileById.sharedWithSharee != true) && fileById.spaceId == null) {
                                 getFileByRemotePathUseCase(GetFileByRemotePathUseCase.Params(fileById.owner, ROOT_PATH)).getDataOrNull()
-                            } else fileById
+                            } else {
+                                fileById
+                            }
                     }
 
                     FileListOption.AV_OFFLINE -> {
                         val fileById = fileByIdResult.getDataOrNull()
                         parentDir = if (fileById != null && (!fileById.isAvailableOffline)) {
                             getFileByRemotePathUseCase(GetFileByRemotePathUseCase.Params(fileById.owner, ROOT_PATH)).getDataOrNull()
-                        } else fileById
+                        } else {
+                            fileById
+                        }
                     }
 
                     FileListOption.SPACES_LIST -> {
