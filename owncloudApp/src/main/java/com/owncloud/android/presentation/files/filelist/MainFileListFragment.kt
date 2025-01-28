@@ -866,7 +866,9 @@ class MainFileListFragment : Fragment(),
         collectLatestLifecycleFlow(fileOperationsViewModel.checkIfFileIsLocalAndNotAvailableOfflineSharedFlow) {
             val fileActivity = (requireActivity() as FileActivity)
             when (it) {
-                is UIResult.Loading -> fileActivity.showLoadingDialog(R.string.common_loading)
+                is UIResult.Loading -> {
+                    fileActivity.showLoadingDialog(R.string.common_loading)
+                }
                 is UIResult.Success -> {
                     fileActivity.dismissLoadingDialog()
                     it.data?.let { result -> onShowRemoveDialog(filesToRemove, result) }

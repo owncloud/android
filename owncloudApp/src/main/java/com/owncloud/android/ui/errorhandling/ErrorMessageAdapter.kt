@@ -79,12 +79,10 @@ class ErrorMessageAdapter {
 
             if (throwable == null) {
                 return when (transferOperation) {
-                    is Download -> {
-                        formatter.format(
-                            R.string.downloader_download_succeeded_content,
-                            File(transferOperation.downloadPath).name
-                        )
-                    }
+                    is Download -> formatter.format(
+                        R.string.downloader_download_succeeded_content,
+                        File(transferOperation.downloadPath).name
+                    )
                     is TransferOperation.Upload -> formatter.format(
                         R.string.uploader_upload_succeeded_content_single,
                         transferOperation.fileName
@@ -96,9 +94,7 @@ class ErrorMessageAdapter {
                         R.string.downloader_download_failed_content,
                         File(transferOperation.downloadPath).name
                     )
-                    is TransferOperation.Upload -> {
-                        getMessageForFailedUpload(formatter, throwable, transferOperation)
-                    }
+                    is TransferOperation.Upload -> getMessageForFailedUpload(formatter, throwable, transferOperation)
                 }
                 return throwable.parseError(genericMessage, resources, true).toString()
             }
@@ -118,23 +114,17 @@ class ErrorMessageAdapter {
                     R.string.error__upload__local_file_not_copied,
                     transferOperation.fileName, R.string.app_name
                 )
-                is ForbiddenException -> {
-                    formatter.format(
-                        R.string.forbidden_permissions,
-                        R.string.uploader_upload_forbidden_permissions
-                    )
-                }
-                is InvalidCharacterException -> {
-                    formatter.format(
-                        R.string.filename_forbidden_characters_from_server
-                    )
-                }
-                is QuotaExceededException ->
-                    formatter.format(R.string.failed_upload_quota_exceeded_text)
-                is FileNotFoundException -> {
-                    formatter.format(R.string.uploads_view_upload_status_failed_folder_error)
-                }
-                else -> formatter.format(R.string.uploader_upload_failed_content_single, transferOperation.fileName)
+                is ForbiddenException -> formatter.format(
+                    R.string.forbidden_permissions,
+                    R.string.uploader_upload_forbidden_permissions
+                )
+                is InvalidCharacterException -> formatter.format(R.string.filename_forbidden_characters_from_server)
+                is QuotaExceededException -> formatter.format(R.string.failed_upload_quota_exceeded_text)
+                is FileNotFoundException -> formatter.format(R.string.uploads_view_upload_status_failed_folder_error)
+                else -> formatter.format(
+                    R.string.uploader_upload_failed_content_single,
+                    transferOperation.fileName
+                )
 
             }
 
@@ -154,26 +144,22 @@ class ErrorMessageAdapter {
             val formatter = Formatter(resources)
 
             return when (result.code) {
-                ResultCode.FORBIDDEN -> {
-                    formatter.format(
-                        R.string.filename_forbidden_characters_from_server
-                    )
-                }
+                ResultCode.FORBIDDEN ->
+                    formatter.format(R.string.filename_forbidden_characters_from_server)
                 ResultCode.INVALID_CHARACTER_DETECT_IN_SERVER ->
                     formatter.format(R.string.filename_forbidden_characters_from_server)
                 ResultCode.QUOTA_EXCEEDED ->
                     formatter.format(R.string.failed_upload_quota_exceeded_text)
-                ResultCode.FILE_NOT_FOUND -> {
+                ResultCode.FILE_NOT_FOUND ->
                     formatter.format(R.string.rename_local_fail_msg)
-                }
                 ResultCode.INVALID_LOCAL_FILE_NAME ->
                     formatter.format(R.string.rename_local_fail_msg)
                 ResultCode.INVALID_CHARACTER_IN_NAME ->
                     formatter.format(R.string.filename_forbidden_characters)
-                ResultCode.INVALID_OVERWRITE -> {
+                ResultCode.INVALID_OVERWRITE ->
                     formatter.format(R.string.move_file_error)
-                }
-                ResultCode.CONFLICT -> formatter.format(R.string.move_file_error)
+                ResultCode.CONFLICT ->
+                    formatter.format(R.string.move_file_error)
                 ResultCode.INVALID_COPY_INTO_DESCENDANT ->
                     formatter.format(R.string.copy_file_invalid_into_descendent)
                 else -> getCommonMessageForResult(result, resources)

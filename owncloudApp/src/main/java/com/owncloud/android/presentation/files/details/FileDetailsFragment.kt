@@ -185,23 +185,33 @@ class FileDetailsFragment : FileFragment() {
                 }
 
                 is UIResult.Loading -> {}
-                is UIResult.Success -> when (uiResult.data) {
-                    SynchronizeFileUseCase.SyncType.AlreadySynchronized -> showMessageInSnackbar(getString(R.string.sync_file_nothing_to_do_msg))
-                    is SynchronizeFileUseCase.SyncType.ConflictDetected -> {
-                        val showConflictActivityIntent = Intent(requireActivity(), ConflictsResolveActivity::class.java)
-                        showConflictActivityIntent.putExtra(ConflictsResolveActivity.EXTRA_FILE, file)
-                        startActivity(showConflictActivityIntent)
+                is UIResult.Success -> {
+                    when (uiResult.data) {
+                        SynchronizeFileUseCase.SyncType.AlreadySynchronized -> {
+                            showMessageInSnackbar(getString(R.string.sync_file_nothing_to_do_msg))
+                        }
+                        is SynchronizeFileUseCase.SyncType.ConflictDetected -> {
+                            val showConflictActivityIntent = Intent(requireActivity(), ConflictsResolveActivity::class.java)
+                            showConflictActivityIntent.putExtra(ConflictsResolveActivity.EXTRA_FILE, file)
+                            startActivity(showConflictActivityIntent)
+                        }
+
+                        is SynchronizeFileUseCase.SyncType.DownloadEnqueued -> {
+                            fileDetailsViewModel.startListeningToWorkInfo(uiResult.data.workerId)
+                        }
+
+                        SynchronizeFileUseCase.SyncType.FileNotFound -> {
+                            showMessageInSnackbar(getString(R.string.sync_file_not_found_msg))
+                        }
+
+                        is SynchronizeFileUseCase.SyncType.UploadEnqueued -> {
+                            fileDetailsViewModel.startListeningToWorkInfo(uiResult.data.workerId)
+                        }
+
+                        null -> {
+                            showMessageInSnackbar(getString(R.string.common_error_unknown))
+                        }
                     }
-
-                    is SynchronizeFileUseCase.SyncType.DownloadEnqueued -> {
-                        fileDetailsViewModel.startListeningToWorkInfo(uiResult.data.workerId)
-                    }
-
-                    SynchronizeFileUseCase.SyncType.FileNotFound -> showMessageInSnackbar(getString(R.string.sync_file_not_found_msg))
-
-                    is SynchronizeFileUseCase.SyncType.UploadEnqueued -> fileDetailsViewModel.startListeningToWorkInfo(uiResult.data.workerId)
-
-                    null -> showMessageInSnackbar(getString(R.string.common_error_unknown))
                 }
             }
         })
@@ -323,7 +333,9 @@ class FileDetailsFragment : FileFragment() {
                 true
             }
 
-            else -> super.onOptionsItemSelected(item)
+            else -> {
+                super.onOptionsItemSelected(item)
+            }
         }
     }
 
@@ -579,7 +591,9 @@ class FileDetailsFragment : FileFragment() {
                 fileDisplayActivity.startTextPreview(fileWaitingToPreview)
             }
 
-            else -> fileDisplayActivity.openOCFile(fileWaitingToPreview)
+            else -> {
+                fileDisplayActivity.openOCFile(fileWaitingToPreview)
+            }
         }
         fileOperationsViewModel.setLastUsageFile(fileWaitingToPreview)
     }

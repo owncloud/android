@@ -451,7 +451,9 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, EnableBiom
                 true
             }
 
-            else -> super.onKeyUp(keyCode, event)
+            else -> {
+                super.onKeyUp(keyCode, event)
+            }
         }
 
     companion object {

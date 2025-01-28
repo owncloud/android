@@ -160,14 +160,13 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                                 "", whereArgs
                 )
             }
-            ROOT_DIRECTORY ->
-                count = db.delete(ProviderTableMeta.FILE_TABLE_NAME, where, whereArgs)
-            SHARES -> count = db.delete(ProviderTableMeta.OCSHARES_TABLE_NAME, where, whereArgs)
-            CAPABILITIES -> count = db.delete(ProviderTableMeta.CAPABILITIES_TABLE_NAME, where, whereArgs)
-            UPLOADS -> count = db.delete(ProviderTableMeta.UPLOADS_TABLE_NAME, where, whereArgs)
-            CAMERA_UPLOADS_SYNC -> count = db.delete(ProviderTableMeta.CAMERA_UPLOADS_SYNC_TABLE_NAME, where, whereArgs)
-            QUOTAS -> count = db.delete(ProviderTableMeta.USER_QUOTAS_TABLE_NAME, where, whereArgs)
-            else -> throw IllegalArgumentException("Unknown uri: $uri")
+            ROOT_DIRECTORY -> { count = db.delete(ProviderTableMeta.FILE_TABLE_NAME, where, whereArgs) }
+            SHARES -> { count = db.delete(ProviderTableMeta.OCSHARES_TABLE_NAME, where, whereArgs) }
+            CAPABILITIES -> { count = db.delete(ProviderTableMeta.CAPABILITIES_TABLE_NAME, where, whereArgs) }
+            UPLOADS -> { count = db.delete(ProviderTableMeta.UPLOADS_TABLE_NAME, where, whereArgs) }
+            CAMERA_UPLOADS_SYNC -> { count = db.delete(ProviderTableMeta.CAMERA_UPLOADS_SYNC_TABLE_NAME, where, whereArgs) }
+            QUOTAS -> { count = db.delete(ProviderTableMeta.USER_QUOTAS_TABLE_NAME, where, whereArgs) }
+            else -> { throw IllegalArgumentException("Unknown uri: $uri") }
         }
         return count
     }
@@ -267,7 +266,9 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                 if (quotaId <= 0) throw SQLException("ERROR $uri")
                 ContentUris.withAppendedId(ProviderTableMeta.CONTENT_URI_QUOTAS, quotaId)
             }
-            else -> throw IllegalArgumentException("Unknown uri id: $uri")
+            else -> {
+                throw IllegalArgumentException("Unknown uri id: $uri")
+            }
         }
 
     override fun onCreate(): Boolean {
@@ -315,7 +316,9 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
         sqlQuery.tables = ProviderTableMeta.FILE_TABLE_NAME
 
         when (uriMatcher.match(uri)) {
-            ROOT_DIRECTORY -> sqlQuery.projectionMap = fileProjectionMap
+            ROOT_DIRECTORY -> {
+                sqlQuery.projectionMap = fileProjectionMap
+            }
             DIRECTORY -> {
                 val folderId = uri.pathSegments[1]
                 sqlQuery.appendWhere(
@@ -364,7 +367,9 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                 }
                 sqlQuery.projectionMap = quotaProjectionMap
             }
-            else -> throw IllegalArgumentException("Unknown uri id: $uri")
+            else -> {
+                throw IllegalArgumentException("Unknown uri id: $uri")
+            }
         }
 
         val order: String? = if (TextUtils.isEmpty(sortOrder)) {
@@ -413,19 +418,29 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
             throw IllegalArgumentException("Selection not allowed, use parameterized queries")
         }
         return when (uriMatcher.match(uri)) {
-            DIRECTORY -> 0 //updateFolderSize(db, selectionArgs[0]);
-            SHARES -> db.update(ProviderTableMeta.OCSHARES_TABLE_NAME, values, selection, selectionArgs)
-            CAPABILITIES -> db.update(ProviderTableMeta.CAPABILITIES_TABLE_NAME, values, selection, selectionArgs)
+            DIRECTORY -> {
+                0 //updateFolderSize(db, selectionArgs[0]);
+            }
+            SHARES -> {
+                db.update(ProviderTableMeta.OCSHARES_TABLE_NAME, values, selection, selectionArgs)
+            }
+            CAPABILITIES -> {
+                db.update(ProviderTableMeta.CAPABILITIES_TABLE_NAME, values, selection, selectionArgs)
+            }
             UPLOADS -> {
                 val ret = db.update(ProviderTableMeta.UPLOADS_TABLE_NAME, values, selection, selectionArgs)
                 trimSuccessfulUploads(db)
                 ret
             }
-            CAMERA_UPLOADS_SYNC -> db.update(ProviderTableMeta.CAMERA_UPLOADS_SYNC_TABLE_NAME, values, selection, selectionArgs)
-            QUOTAS -> db.update(ProviderTableMeta.USER_QUOTAS_TABLE_NAME, values, selection, selectionArgs)
-            else -> db.update(
-                ProviderTableMeta.FILE_TABLE_NAME, values, selection, selectionArgs
-            )
+            CAMERA_UPLOADS_SYNC -> {
+                db.update(ProviderTableMeta.CAMERA_UPLOADS_SYNC_TABLE_NAME, values, selection, selectionArgs)
+            }
+            QUOTAS -> {
+                db.update(ProviderTableMeta.USER_QUOTAS_TABLE_NAME, values, selection, selectionArgs)
+            }
+            else -> {
+                db.update(ProviderTableMeta.FILE_TABLE_NAME, values, selection, selectionArgs)
+            }
         }
     }
 

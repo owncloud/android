@@ -125,7 +125,9 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
                     data?.authority
                 )
             }
-            else -> Timber.e("Unexpected intent $intent")
+            else -> {
+                Timber.e("Unexpected intent $intent")
+            }
         }
     }
 

@@ -189,10 +189,10 @@ abstract class DrawerActivity : ToolbarActivity() {
                     val settingsIntent = Intent(applicationContext, SettingsActivity::class.java)
                     startActivity(settingsIntent)
                 }
-                R.id.drawer_menu_feedback -> openFeedback()
-                R.id.drawer_menu_help -> openHelp()
-                R.id.drawer_menu_privacy_policy -> openPrivacyPolicy()
-                else -> Timber.i("Unknown drawer menu item clicked: %s", menuItem.title)
+                R.id.drawer_menu_feedback -> { openFeedback() }
+                R.id.drawer_menu_help -> { openHelp() }
+                R.id.drawer_menu_privacy_policy -> { openPrivacyPolicy() }
+                else -> { Timber.i("Unknown drawer menu item clicked: %s", menuItem.title) }
             }
             true
         }
@@ -316,8 +316,8 @@ abstract class DrawerActivity : ToolbarActivity() {
                             }
                         }
                     }
-                    is UIResult.Loading -> getAccountQuotaText()?.text = getString(R.string.drawer_loading_quota)
-                    is UIResult.Error -> getAccountQuotaText()?.text = getString(R.string.drawer_unavailable_used_storage)
+                    is UIResult.Loading -> { getAccountQuotaText()?.text = getString(R.string.drawer_loading_quota) }
+                    is UIResult.Error -> { getAccountQuotaText()?.text = getString(R.string.drawer_unavailable_used_storage) }
                 }
             }
         }

@@ -259,7 +259,9 @@ class PreviewImageFragment : FileFragment() {
                 true
             }
 
-            else -> super.onOptionsItemSelected(item)
+            else -> {
+                super.onOptionsItemSelected(item)
+            }
         }
 
     private fun seeDetails() {

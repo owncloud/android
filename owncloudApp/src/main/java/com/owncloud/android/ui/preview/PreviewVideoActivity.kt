@@ -190,7 +190,9 @@ class PreviewVideoActivity : FileActivity(), Player.Listener, OnPrepareVideoPlay
                     showErrorInSnackbar(R.string.remove_fail_msg, uiResult.getThrowableOrNull())
                 }
 
-                is UIResult.Loading -> showLoadingDialog(R.string.wait_a_moment)
+                is UIResult.Loading -> {
+                    showLoadingDialog(R.string.wait_a_moment)
+                }
                 is UIResult.Success -> {
 
                     // Refresh the spaces and update the quota

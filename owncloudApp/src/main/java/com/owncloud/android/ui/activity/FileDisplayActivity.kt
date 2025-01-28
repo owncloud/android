@@ -1350,7 +1350,9 @@ class FileDisplayActivity : FileActivity(),
                         /** Nothing to do atm. If we are in details view, go back to file list */
                     }
 
-                    is SynchronizeFileUseCase.SyncType.UploadEnqueued -> showSnackMessage(getString(R.string.upload_enqueued_msg))
+                    is SynchronizeFileUseCase.SyncType.UploadEnqueued -> {
+                        showSnackMessage(getString(R.string.upload_enqueued_msg))
+                    }
                     null -> { /* Nothing to do */ }
                 }
             }

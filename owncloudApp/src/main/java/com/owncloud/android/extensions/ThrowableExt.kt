@@ -71,14 +71,11 @@ fun Throwable.parseError(
             is CopyIntoDescendantException -> resources.getString(R.string.copy_file_invalid_into_descendent)
             is CopyIntoSameFolderException -> resources.getString(R.string.copy_file_invalid_overwrite)
             is FileAlreadyExistsException -> resources.getString(R.string.file_already_exists)
-            is FileNameException -> {
-                val stringId = when (this.type) {
+            is FileNameException -> resources.getString(when (this.type) {
                     FileNameException.FileNameExceptionType.FILE_NAME_EMPTY -> R.string.filename_empty
                     FileNameException.FileNameExceptionType.FILE_NAME_FORBIDDEN_CHARACTERS -> R.string.filename_forbidden_characters_from_server
                     FileNameException.FileNameExceptionType.FILE_NAME_TOO_LONG -> R.string.filename_too_long
-                }
-                resources.getString(stringId)
-            }
+            })
             is FileNotFoundException -> resources.getString(R.string.common_not_found)
             is ForbiddenException -> resources.getString(R.string.uploads_view_upload_status_failed_permission_error)
             is IncorrectAddressException -> resources.getString(R.string.auth_incorrect_address_title)
