@@ -21,6 +21,7 @@ package com.owncloud.android.testutil
 import com.owncloud.android.domain.user.model.UserAvatar
 import com.owncloud.android.domain.user.model.UserInfo
 import com.owncloud.android.domain.user.model.UserQuota
+import com.owncloud.android.domain.user.model.UserQuotaState
 
 val OC_USER_INFO = UserInfo(
     id = "admin",
@@ -34,6 +35,26 @@ val OC_USER_QUOTA = UserQuota(
     available = 200_000,
     total = 280_000,
     state = null
+)
+
+val OC_USER_QUOTA_WITHOUT_PERSONAL = UserQuota(
+    accountName = OC_ACCOUNT_NAME,
+    used = 0,
+    available = -4L,
+    total = 0,
+    state = UserQuotaState.NORMAL
+)
+
+val OC_USER_QUOTA_UNLIMITED = UserQuota(
+    accountName = OC_ACCOUNT_NAME,
+    used = 5_000,
+    available = -3L,
+    total = 0,
+    state = UserQuotaState.NORMAL
+)
+
+val OC_USER_QUOTA_LIMITED = OC_USER_QUOTA.copy(
+    state = UserQuotaState.NORMAL
 )
 
 val OC_USER_AVATAR = UserAvatar(
