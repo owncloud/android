@@ -73,7 +73,7 @@ import com.owncloud.android.presentation.authentication.AccountUtils.getAccounts
 import com.owncloud.android.presentation.authentication.AccountUtils.getUsernameOfAccount
 import com.owncloud.android.presentation.authentication.oauth.OAuthUtils
 import com.owncloud.android.presentation.common.UIResult
-import com.owncloud.android.presentation.documentsprovider.DocumentsProviderUtils.Companion.notifyDocumentsProviderRoots
+import com.owncloud.android.presentation.documentsprovider.DocumentsProviderUtils.notifyDocumentsProviderRoots
 import com.owncloud.android.presentation.security.LockType
 import com.owncloud.android.presentation.security.SecurityEnforced
 import com.owncloud.android.presentation.settings.SettingsActivity

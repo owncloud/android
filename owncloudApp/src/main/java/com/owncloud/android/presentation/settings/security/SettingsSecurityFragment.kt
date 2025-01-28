@@ -34,7 +34,7 @@ import androidx.preference.PreferenceScreen
 import com.owncloud.android.R
 import com.owncloud.android.extensions.avoidScreenshotsIfNeeded
 import com.owncloud.android.extensions.showMessageInSnackbar
-import com.owncloud.android.presentation.documentsprovider.DocumentsProviderUtils.Companion.notifyDocumentsProviderRoots
+import com.owncloud.android.presentation.documentsprovider.DocumentsProviderUtils.notifyDocumentsProviderRoots
 import com.owncloud.android.presentation.security.LockTimeout
 import com.owncloud.android.presentation.security.PREFERENCE_LOCK_TIMEOUT
 import com.owncloud.android.presentation.security.biometric.BiometricActivity

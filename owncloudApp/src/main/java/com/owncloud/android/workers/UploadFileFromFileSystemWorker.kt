@@ -57,7 +57,7 @@ import com.owncloud.android.lib.resources.files.chunks.ChunkedUploadFromFileSyst
 import com.owncloud.android.lib.resources.files.services.implementation.OCChunkService
 import com.owncloud.android.presentation.authentication.AccountUtils
 import com.owncloud.android.utils.NotificationUtils
-import com.owncloud.android.utils.RemoteFileUtils.Companion.getAvailableRemotePath
+import com.owncloud.android.utils.RemoteFileUtils.getAvailableRemotePath
 import com.owncloud.android.utils.SecurityUtils
 import com.owncloud.android.utils.UPLOAD_NOTIFICATION_CHANNEL_ID
 import kotlinx.coroutines.CoroutineScope

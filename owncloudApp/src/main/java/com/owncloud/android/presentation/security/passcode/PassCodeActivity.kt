@@ -44,7 +44,7 @@ import com.owncloud.android.R
 import com.owncloud.android.databinding.PasscodelockBinding
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.showBiometricDialog
-import com.owncloud.android.presentation.documentsprovider.DocumentsProviderUtils.Companion.notifyDocumentsProviderRoots
+import com.owncloud.android.presentation.documentsprovider.DocumentsProviderUtils.notifyDocumentsProviderRoots
 import com.owncloud.android.presentation.security.biometric.BiometricStatus
 import com.owncloud.android.presentation.security.biometric.BiometricViewModel
 import com.owncloud.android.presentation.security.biometric.EnableBiometrics
