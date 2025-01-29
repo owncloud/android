@@ -172,7 +172,7 @@ class UploadFileFromContentUriWorker(
         val documentFile = DocumentFile.fromSingleUri(appContext, contentUri)
         if (documentFile?.canRead() != true) {
             // Permissions not granted. Throw an exception to ask for them.
-            throw Throwable("Cannot read the file")
+            throw LocalFileNotFoundException()
         }
     }
 
