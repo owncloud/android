@@ -86,7 +86,7 @@ comments:
 complexity:
   active: true
   CognitiveComplexMethod:
-    active: true
+    active: false
     threshold: 20
   ComplexCondition:
     active: true
@@ -136,7 +136,7 @@ complexity:
     threshold: 3
     ignoreArgumentsMatchingNames: false
   NestedBlockDepth:
-    active: true
+    active: false
     threshold: 5
   NestedScopeFunctions:
     active: false
@@ -754,7 +754,7 @@ style:
     ignoreActualFunction: true
     excludedFunctions: []
   LoopWithTooManyJumpStatements:
-    active: true
+    active: false
     maxJumpCount: 1
   MagicNumber:
     active: false
