@@ -126,12 +126,13 @@ class AvatarManager : KoinComponent {
                         Timber.d("User avatar saved into cache -> %s", imageKey)
                         return BitmapUtils.bitmapToCircularBitmapDrawable(appContext.resources, bitmap)
                     }
-                } catch (t: Throwable) {
+                } catch (t: OutOfMemoryError) {
                     // the app should never break due to a problem with avatars
                     Timber.e(t, "Generation of avatar for $imageKey failed")
-                    if (t is OutOfMemoryError) {
-                        System.gc()
-                    }
+                    System.gc()
+                    null
+                } catch (t: Throwable) {
+                    Timber.e(t, "Generation of avatar for $imageKey failed")
                     null
                 }
             }

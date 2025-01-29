@@ -67,27 +67,26 @@ abstract class DavMethod protected constructor(url: URL) : HttpBaseMethod(url) {
             )
 
             onDavExecute(davResource!!)
-        } catch (httpException: HttpException) {
+        } catch (httpException: RedirectException) {
             // Modify responses with information gathered from exceptions
-            if (httpException is RedirectException) {
-                response = Response.Builder()
-                    .header(
-                        HttpConstants.LOCATION_HEADER, httpException.redirectLocation
-                    )
-                    .code(httpException.code)
-                    .request(request)
-                    .message(httpException.message ?: "")
-                    .protocol(Protocol.HTTP_1_1)
+            response = Response.Builder()
+                .header(
+                    HttpConstants.LOCATION_HEADER, httpException.redirectLocation
+                )
+                .code(httpException.code)
+                .request(request)
+                .message(httpException.message ?: "")
+                .protocol(Protocol.HTTP_1_1)
+                .build()
+            httpException.code
+        } catch (httpException: HttpException) {
+            // The check below should be included in okhttp library, method ResponseBody.create(
+            // TODO check most recent versions of okhttp to see if this is already fixed and try to update if so
+            if (response.body?.contentType() != null) {
+                val responseBody = (httpException.responseBody ?: "").toResponseBody(response.body?.contentType())
+                response = response.newBuilder()
+                    .body(responseBody)
                     .build()
-            } else {
-                // The check below should be included in okhttp library, method ResponseBody.create(
-                // TODO check most recent versions of okhttp to see if this is already fixed and try to update if so
-                if (response.body?.contentType() != null) {
-                    val responseBody = (httpException.responseBody ?: "").toResponseBody(response.body?.contentType())
-                    response = response.newBuilder()
-                        .body(responseBody)
-                        .build()
-                }
             }
             httpException.code
         }
