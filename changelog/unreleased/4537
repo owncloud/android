@@ -1,0 +1,7 @@
+Enhancement: Unit tests for repository classes - Part 4
+
+Unit tests for OCSpacesRepository, OCTransferRepository,
+OCUserRepository and OCWebFingerRepository classes have been completed.
+
+https://github.com/owncloud/android/issues/4235
+https://github.com/owncloud/android/pull/4537
