@@ -147,7 +147,7 @@ class TransfersAdapter(
                         DisplayUtils.convertIdn(account.name.substring(account.name.lastIndexOf("@") + 1), false)
                 uploadAccount.text = accountName
             } catch (e: Exception) {
-                Timber.w("Couldn't get display name for account, using old style")
+                Timber.w(e, "Couldn't get display name for account, using old style")
                 uploadAccount.text = transferItem.transfer.accountName
             }
 

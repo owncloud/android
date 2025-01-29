@@ -53,6 +53,7 @@ class SynchronizeFileUseCase(
                     spaceId = fileToSynchronize.spaceId
                 )
             } catch (exception: FileNotFoundException) {
+                Timber.i(exception, "File does not exist anymore in remote")
                 // 1.1 File does not exist anymore in remote
                 val localFile = fileToSynchronize.id?.let { fileRepository.getFileById(it) }
                 // If it still exists locally, but file has different path, another operation could have been done simultaneously

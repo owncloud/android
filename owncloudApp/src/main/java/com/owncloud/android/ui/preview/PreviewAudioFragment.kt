@@ -180,6 +180,7 @@ class PreviewAudioFragment : FileFragment() {
                 imagePreview?.setImageResource(R.drawable.ic_place_holder_music_cover_art)
             }
         } catch (t: Throwable) {
+            Timber.i(t, "Couldn't extract cover art, setting default image instead")
             imagePreview?.setImageResource(R.drawable.ic_place_holder_music_cover_art)
         }
     }

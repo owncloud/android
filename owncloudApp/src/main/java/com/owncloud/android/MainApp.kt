@@ -345,6 +345,7 @@ class MainApp : Application() {
                     val longVersionCode: Long = PackageInfoCompat.getLongVersionCode(pInfo)
                     longVersionCode.toInt()
                 } catch (e: PackageManager.NameNotFoundException) {
+                    Timber.w(e, "Version code not found, using 0 as fallback")
                     0
                 }
 

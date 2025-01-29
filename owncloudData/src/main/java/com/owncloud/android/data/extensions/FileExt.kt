@@ -20,6 +20,7 @@
 
 package com.owncloud.android.data.extensions
 
+import timber.log.Timber
 import java.io.File
 import java.io.IOException
 
@@ -86,6 +87,7 @@ fun File.moveRecursively(
                             src.delete()
                         }
                     } catch (e: IOException) {
+                        Timber.e(e, "An error occurred while trying to move the file")
                         src.delete()
                         dstFile.delete()
                     }
@@ -96,6 +98,7 @@ fun File.moveRecursively(
         return true
 
     } catch (e: TerminateException) {
+        Timber.e(e, "The process terminated unexpectedly")
         return false
     }
 }

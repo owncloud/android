@@ -610,6 +610,7 @@ class PublicShareDialogFragment : DialogFragment() {
         try {
             listener = activity as ShareFragmentListener?
         } catch (e: IllegalStateException) {
+            Timber.e(e, "The activity attached doesn't implement OnShareFragmentInteractionListener")
             throw IllegalStateException(activity?.toString() + " must implement OnShareFragmentInteractionListener")
         }
     }

@@ -46,8 +46,10 @@ class OldLogsCollectorWorker(
             removeOldLogs(logsFiles)
             Result.success()
         } catch (ioException: IOException) {
+            Timber.e(ioException, "An error occurred trying to access the file")
             Result.failure()
         } catch (securityException: SecurityException) {
+            Timber.e(securityException, "A security violation was produced")
             Result.failure()
         }
     }

@@ -447,7 +447,7 @@ class OCFileRepository(
                         spaceWebDavUrl = spaceWebDavUrl,
                     )
                 } catch (fileNotFoundException: FileNotFoundException) {
-                    Timber.i("File ${ocFile.fileName} was not found in server. Let's remove it from local storage")
+                    Timber.i(fileNotFoundException, "File ${ocFile.fileName} was not found in server. Let's remove it from local storage")
                 }
             }
             ocFile.etagInConflict?.let {

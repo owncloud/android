@@ -27,6 +27,7 @@ package com.owncloud.android.lib.resources.status
 
 import android.os.Parcel
 import android.os.Parcelable
+import timber.log.Timber
 
 class OwnCloudVersion(version: String) : Comparable<OwnCloudVersion>, Parcelable {
 
@@ -94,6 +95,7 @@ class OwnCloudVersion(version: String) : Comparable<OwnCloudVersion>, Parcelable
             isVersionValid = true
 
         } catch (e: Exception) {
+            Timber.w(e, "Version is invalid")
             isVersionValid = false
             // if invalid, the instance will respond as if server is 8.1, minimum with capabilities API,
             // and "dead" : https://github.com/owncloud/core/wiki/Maintenance-and-Release-Schedule

@@ -170,6 +170,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
                     }
                 }
             } catch (e: IOException) {
+                Timber.e(e, "Couldn't open document")
                 throw FileNotFoundException("Failed to open document with id $documentId and mode $mode")
             }
         }

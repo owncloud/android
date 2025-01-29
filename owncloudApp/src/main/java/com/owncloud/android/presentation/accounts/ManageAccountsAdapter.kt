@@ -84,7 +84,7 @@ class ManageAccountsAdapter(
                     holder.binding.name.text = oca.displayName
                 } catch (e: Exception) {
                     Timber.w(
-                        "Account not found right after being read :\\ ; using account name instead of display name"
+                        e, "Account not found right after being read :\\ ; using account name instead of display name"
                     )
                     holder.binding.name.text = AccountUtils.getUsernameOfAccount(account.name)
                 }

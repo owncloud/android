@@ -284,6 +284,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
         try {
             listener = context as ShareFragmentListener?
         } catch (e: ClassCastException) {
+            Timber.e(e, "The activity attached doesn't implement OnShareFragmentInteractionListener")
             throw ClassCastException(activity.toString() + " must implement OnShareFragmentInteractionListener")
         }
     }

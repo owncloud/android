@@ -190,6 +190,7 @@ class SearchShareesFragment : Fragment(),
         try {
             listener = activity as ShareFragmentListener?
         } catch (e: ClassCastException) {
+            Timber.e(e, "The activity attached doesn't implement OnFragmentInteractionListener")
             throw ClassCastException(requireActivity().toString() + " must implement OnFragmentInteractionListener")
         }
     }

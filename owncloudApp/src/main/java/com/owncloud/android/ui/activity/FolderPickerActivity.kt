@@ -351,6 +351,7 @@ open class FolderPickerActivity : FileActivity(),
         val currentDir = try {
             getCurrentFolder()
         } catch (e: NullPointerException) {
+            Timber.i(e, "Couldn't retrieve current folder, so using file property")
             file
         }
 
