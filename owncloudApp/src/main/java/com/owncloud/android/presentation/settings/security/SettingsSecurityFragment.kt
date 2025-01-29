@@ -59,8 +59,9 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
 
     private val enablePasscodeLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode != Activity.RESULT_OK) { return@registerForActivityResult }
-            else {
+            if (result.resultCode != Activity.RESULT_OK) {
+                return@registerForActivityResult
+            } else {
                 prefPasscode?.isChecked = true
                 prefBiometric?.isChecked = securityViewModel.getBiometricsState()
 
@@ -71,8 +72,9 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
 
     private val disablePasscodeLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode != Activity.RESULT_OK) { return@registerForActivityResult }
-            else {
+            if (result.resultCode != Activity.RESULT_OK) {
+                return@registerForActivityResult
+            } else {
                 prefPasscode?.isChecked = false
 
                 // Do not allow to use biometric lock, lock delay nor access from document provider since Passcode lock has been disabled
@@ -83,8 +85,9 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
 
     private val enablePatternLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode != Activity.RESULT_OK) { return@registerForActivityResult }
-            else {
+            if (result.resultCode != Activity.RESULT_OK) {
+                return@registerForActivityResult
+            } else {
                 prefPattern?.isChecked = true
                 prefBiometric?.isChecked = securityViewModel.getBiometricsState()
 
@@ -95,8 +98,9 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
 
     private val disablePatternLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode != Activity.RESULT_OK) { return@registerForActivityResult }
-            else {
+            if (result.resultCode != Activity.RESULT_OK) {
+                return@registerForActivityResult
+            } else {
                 prefPattern?.isChecked = false
 
                 // Do not allow to use biometric lock, lock delay nor access from document provider since Pattern lock has been disabled

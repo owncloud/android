@@ -49,8 +49,9 @@ fun File.moveRecursively(
                 val relPath = src.toRelativeString(this)
                 val dstFile = File(target, relPath)
                 if (dstFile.exists() && !(src.isDirectory && dstFile.isDirectory)) {
-                    val stillExists = if (!overwrite) { true }
-                    else {
+                    val stillExists = if (!overwrite) {
+                        true
+                    } else {
                         if (dstFile.isDirectory)
                             !dstFile.deleteRecursively()
                         else
