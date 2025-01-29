@@ -179,7 +179,6 @@ class LogsListActivity : AppCompatActivity() {
                 }
             }
         } catch (e: IOException) {
-            e.printStackTrace()
             Timber.e(e, "There was a problem to download the file to Downloads folder.")
         }
     }
