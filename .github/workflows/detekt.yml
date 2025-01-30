@@ -1,37 +1,18 @@
-# This is a basic workflow that is manually triggered
-
 name: Detekt 
 
 # Controls when the action will run. Workflow runs when manually triggered using the UI
 # or API.
 on:
-  workflow_dispatch:
-    # Inputs the workflow accepts.
-    inputs:
-      name:
-        # Friendly description to be shown in the UI instead of 'name'
-        description: 'Detekt'
-        # Default value if no value is explicitly provided
-        default: 'World'
-        # Input has to be provided for the workflow to run
-        required: true
-        # The data type of the input
-        type: string
   
-  push:
-    branches:
-      - feature/detekt
-      - feature/run_actions_parallel
   pull_request:
     branches:
-      - "master" 
+      - "*"
     paths:
       - ".github/workflows/detekt.yml"
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "greet"
-  owncloudApp:
+  Detekt:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
    
@@ -47,82 +28,5 @@ jobs:
     # See: https://github.com/gradle/actions/blob/main/setup-gradle/README.md
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@v4
-    - name: module owncloudApp
-      run: ./gradlew detekt
-
-  owncloudDomain:
-    # The type of runner that the job will run on
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@v4
-    - name: Set up JDK 17
-      uses: actions/setup-java@v4
-      with:
-        java-version: '17'
-        distribution: 'temurin'
-
-    # Configure Gradle for optimal use in GitHub Actions, including caching of downloaded dependencies.
-    # See: https://github.com/gradle/actions/blob/main/setup-gradle/README.md
-    - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@v4
-    - name: module owncloudDomain
-      run: ./gradlew owncloudDomain:detekt
-
-  owncloudData:
-    # The type of runner that the job will run on
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@v4
-    - name: Set up JDK 17
-      uses: actions/setup-java@v4
-      with:
-        java-version: '17'
-        distribution: 'temurin'
-
-    # Configure Gradle for optimal use in GitHub Actions, including caching of downloaded dependencies.
-    # See: https://github.com/gradle/actions/blob/main/setup-gradle/README.md
-    - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@v4
-    - name: module owncloudData
-      run: ./gradlew owncloudData:detekt
-
-  owncloudComLibrary:
-    # The type of runner that the job will run on
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@v4
-    - name: Set up JDK 17
-      uses: actions/setup-java@v4
-      with:
-        java-version: '17'
-        distribution: 'temurin'
-
-    # Configure Gradle for optimal use in GitHub Actions, including caching of downloaded dependencies.
-    # See: https://github.com/gradle/actions/blob/main/setup-gradle/README.md
-    - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@v4
-    - name: module owncloudComLibrary
-      run: ./gradlew owncloudComLibrary:detekt
-
-
-  owncloudTestUtil:
-    # The type of runner that the job will run on
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@v4
-    - name: Set up JDK 17
-      uses: actions/setup-java@v4
-      with:
-        java-version: '17'
-        distribution: 'temurin'
-
-    # Configure Gradle for optimal use in GitHub Actions, including caching of downloaded dependencies.
-    # See: https://github.com/gradle/actions/blob/main/setup-gradle/README.md
-    - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@v4
-    - name: module owncloudTestUtil
-      run: ./gradlew owncloudTestUtil:detekt
+    - name: detekt execution
+      run: ./gradlew detekt; ./gradlew owncloudDomain:detekt; ./gradlew owncloudData:detekt; ./gradlew owncloudComLibrary:detekt; ./gradlew owncloudTestUtil:detekt
