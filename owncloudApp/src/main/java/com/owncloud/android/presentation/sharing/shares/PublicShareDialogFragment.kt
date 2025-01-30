@@ -873,10 +873,7 @@ class PublicShareDialogFragment : DialogFragment() {
         }
 
         // Set password label when opening the dialog
-        if (binding.shareViaLinkEditPermissionReadOnly.isChecked &&
-            capabilities?.filesSharingPublicPasswordEnforcedReadOnly == CapabilityBooleanType.TRUE ||
-            binding.shareViaLinkEditPermissionReadAndWrite.isChecked &&
-            capabilities?.filesSharingPublicPasswordEnforcedReadWrite == CapabilityBooleanType.TRUE ||
+        if (isReadOnlyPermission() || isReadAndWritePermission() ||
             binding.shareViaLinkEditPermissionUploadFiles.isChecked &&
             capabilities?.filesSharingPublicPasswordEnforcedUploadOnly == CapabilityBooleanType.TRUE) {
             setPasswordEnforced()
@@ -934,6 +931,12 @@ class PublicShareDialogFragment : DialogFragment() {
             }
         }
     }
+
+    private fun isReadOnlyPermission() = binding.shareViaLinkEditPermissionReadOnly.isChecked &&
+                capabilities?.filesSharingPublicPasswordEnforcedReadOnly == CapabilityBooleanType.TRUE
+
+    private fun isReadAndWritePermission() = binding.shareViaLinkEditPermissionReadAndWrite.isChecked &&
+            capabilities?.filesSharingPublicPasswordEnforcedReadWrite == CapabilityBooleanType.TRUE
 
     private fun setPasswordNotEnforced() {
         binding.shareViaLinkPasswordLabel.text = getString(R.string.share_via_link_password_label)

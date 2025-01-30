@@ -181,7 +181,7 @@ open class FolderPickerActivity : FileActivity(),
         // If current file is root folder
         else if (currentDirDisplayed.parentId == OCFile.ROOT_PARENT_ID) {
             // If we are not in COPY or CAMERA_FOLDER mode, or if we are in COPY or CAMERA_FOLDER mode and spaces are not allowed, close the activity
-            if ((pickerMode != PickerMode.COPY && pickerMode != PickerMode.CAMERA_FOLDER) ||
+            if (pickerModeIsNotCopyAndCameraFolder() ||
                 (pickerMode == PickerMode.COPY && currentDirDisplayed.spaceId == null) ||
                 (pickerMode == PickerMode.CAMERA_FOLDER && currentDirDisplayed.spaceId == null)) {
                 finish()
@@ -240,6 +240,8 @@ open class FolderPickerActivity : FileActivity(),
     override fun showDetails(file: OCFile) {
         // Nothing to do. Details can't be opened here.
     }
+
+    private fun pickerModeIsNotCopyAndCameraFolder() = pickerMode != PickerMode.COPY && pickerMode != PickerMode.CAMERA_FOLDER
 
     private fun initAndShowListOfFilesFragment(spaceId: String? = null) {
         val safeInitialFolder = if (file == null) {

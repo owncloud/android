@@ -80,6 +80,11 @@ class FilterFileMenuOptionsUseCase(
         val shareWithUsersAllowed = params.shareWithUsersAllowed
         val sendAllowed = params.sendAllowed
 
+        val noSyncAndPreviewing = !isAnyFileSynchronizing && !isAnyFileVideoPreviewing
+        val noSyncAndStreaming = !isAnyFileSynchronizing && !isAnyFileVideoStreaming
+        val shareViaLinkOrWithUsersAllowed = shareViaLinkAllowed || shareWithUsersAllowed
+        val noFilesDownloadedOrIsSingleFile = allFilesDownloaded(files) || isSingleFile(files)
+
         // Select all
         if (displaySelectAll) {
             optionsToShow.add(FileMenuOption.SELECT_ALL)
@@ -89,7 +94,7 @@ class FilterFileMenuOptionsUseCase(
             optionsToShow.add(FileMenuOption.SELECT_INVERSE)
         }
         // Share
-        if (!onlyAvailableOfflineFiles && (shareViaLinkAllowed || shareWithUsersAllowed) && resharingAllowed &&
+        if (!onlyAvailableOfflineFiles && shareViaLinkOrWithUsersAllowed && resharingAllowed &&
             isPersonalSpace && hasResharePermission) {
             optionsToShow.add(FileMenuOption.SHARE)
         }
@@ -98,7 +103,7 @@ class FilterFileMenuOptionsUseCase(
             optionsToShow.add(FileMenuOption.OPEN_WITH)
         }
         // Download
-        if (!isAnyFileSynchronizing && !isAnyFileVideoPreviewing && !onlyAvailableOfflineFiles && !onlySharedByLinkFiles &&
+        if (noSyncAndPreviewing && !onlyAvailableOfflineFiles && !onlySharedByLinkFiles &&
             !anyFolder(files) && !anyFileDownloaded(files)) {
             optionsToShow.add(FileMenuOption.DOWNLOAD)
         }
@@ -112,22 +117,22 @@ class FilterFileMenuOptionsUseCase(
             optionsToShow.add(FileMenuOption.CANCEL_SYNC)
         }
         // Rename
-        if (!isAnyFileSynchronizing && !isAnyFileVideoPreviewing && !onlyAvailableOfflineFiles && !onlySharedByLinkFiles &&
+        if (noSyncAndPreviewing && !onlyAvailableOfflineFiles && !onlySharedByLinkFiles &&
             hasRenamePermission) {
             optionsToShow.add(FileMenuOption.RENAME)
         }
         // Move
-        if (!isAnyFileSynchronizing && !isAnyFileVideoPreviewing && !onlyAvailableOfflineFiles && !onlySharedByLinkFiles &&
+        if (noSyncAndPreviewing && !onlyAvailableOfflineFiles && !onlySharedByLinkFiles &&
             hasMovePermission) {
             optionsToShow.add(FileMenuOption.MOVE)
         }
         // Copy
-        if (!isAnyFileSynchronizing && !isAnyFileVideoPreviewing && !onlyAvailableOfflineFiles && !onlySharedByLinkFiles) {
+        if (noSyncAndPreviewing && !onlyAvailableOfflineFiles && !onlySharedByLinkFiles) {
             optionsToShow.add(FileMenuOption.COPY)
         }
         // Send
-        if (!isAnyFileSynchronizing && !isAnyFileVideoStreaming && !onlyAvailableOfflineFiles && !anyFolder(files) &&
-            (allFilesDownloaded(files) || isSingleFile(files)) && sendAllowed) {
+        if (noSyncAndStreaming && !onlyAvailableOfflineFiles && !anyFolder(files) &&
+            noFilesDownloadedOrIsSingleFile && sendAllowed) {
             optionsToShow.add(FileMenuOption.SEND)
         }
         // Set as available offline
