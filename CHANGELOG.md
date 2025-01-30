@@ -44,6 +44,7 @@ ownCloud admins and users.
 * Enhancement - Added text labels for BottomNavigationView: [#4484](https://github.com/owncloud/android/issues/4484)
 * Enhancement - OCIS Light Users: [#4490](https://github.com/owncloud/android/issues/4490)
 * Enhancement - Enforce OIDC auth flow via branding: [#4500](https://github.com/owncloud/android/issues/4500)
+* Enhancement - Detekt: static code analyzer: [#4506](https://github.com/owncloud/android/issues/4506)
 * Enhancement - Multi-Personal (1st round): [#4514](https://github.com/owncloud/android/issues/4514)
 * Enhancement - Technical improvements for user quota: [#4521](https://github.com/owncloud/android/issues/4521)
 
@@ -134,6 +135,14 @@ ownCloud admins and users.
 
    https://github.com/owncloud/android/issues/4500
    https://github.com/owncloud/android/pull/4516
+
+* Enhancement - Detekt: static code analyzer: [#4506](https://github.com/owncloud/android/issues/4506)
+
+   The Kotlin static code analyzer Detekt has been introduced with the agreed
+   rules, and the left code smells have been fixed throughout the whole code.
+
+   https://github.com/owncloud/android/issues/4506
+   https://github.com/owncloud/android/pull/4487
 
 * Enhancement - Multi-Personal (1st round): [#4514](https://github.com/owncloud/android/issues/4514)
 
