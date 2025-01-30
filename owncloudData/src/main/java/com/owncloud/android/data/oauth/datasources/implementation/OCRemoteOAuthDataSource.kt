@@ -85,16 +85,16 @@ class OCRemoteOAuthDataSource(
      **************************************************************************************************************/
     private fun OIDCDiscoveryResponse.toModel(): OIDCServerConfiguration =
         OIDCServerConfiguration(
-            authorizationEndpoint = this.authorization_endpoint,
-            checkSessionIframe = this.check_session_iframe,
-            endSessionEndpoint = this.end_session_endpoint,
+            authorizationEndpoint = this.authorizationEndpoint,
+            checkSessionIframe = this.checkSessionIframe,
+            endSessionEndpoint = this.endSessionEndpoint,
             issuer = this.issuer,
-            registrationEndpoint = this.registration_endpoint,
-            responseTypesSupported = this.response_types_supported,
-            scopesSupported = this.scopes_supported,
-            tokenEndpoint = this.token_endpoint,
-            tokenEndpointAuthMethodsSupported = this.token_endpoint_auth_methods_supported,
-            userInfoEndpoint = this.userinfo_endpoint
+            registrationEndpoint = this.registrationEndpoint,
+            responseTypesSupported = this.responseTypesSupported,
+            scopesSupported = this.scopesSupported,
+            tokenEndpoint = this.tokenEndpoint,
+            tokenEndpointAuthMethodsSupported = this.tokenEndpointAuthMethodsSupported,
+            userInfoEndpoint = this.userinfoEndpoint
         )
 
     private fun TokenRequest.toParams(): TokenRequestParams =
