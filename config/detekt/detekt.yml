@@ -596,7 +596,7 @@ potential-bugs:
   CastNullableToNonNullableType:
     active: true
   CastToNullableType:
-    active: true
+    active: false
   Deprecation:
     active: false
   DontDowncastCollectionTypes:
