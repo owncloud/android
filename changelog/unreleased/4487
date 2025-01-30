@@ -1,0 +1,7 @@
+Enhancement: Detekt: static code analyzer
+
+The Kotlin static code analyzer Detekt has been introduced with the agreed rules, and
+the left code smells have been fixed throughout the whole code.
+
+https://github.com/owncloud/android/issues/4506
+https://github.com/owncloud/android/pull/4487
