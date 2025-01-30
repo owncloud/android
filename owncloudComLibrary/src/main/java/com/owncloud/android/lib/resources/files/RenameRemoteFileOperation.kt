@@ -54,7 +54,7 @@ class RenameRemoteFileOperation(
     private var newRemotePath: String
 
     init {
-        var parent = (File(oldRemotePath)).parent ?: throw IllegalArgumentException()
+        var parent = (File(oldRemotePath)).parent ?: throw IllegalArgumentException("Parent path is null")
         if (!parent.endsWith(File.separator)) {
             parent = parent.plus(File.separator)
         }

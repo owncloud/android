@@ -589,7 +589,8 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
                 Timber.e("OAuth request to get authorization code failed. Error: [$authorizationError]." +
                         " Error description: [$authorizationErrorDescription]")
                 val authorizationException =
-                    if (authorizationError == "access_denied") UnauthorizedException() else Throwable()
+                    if (authorizationError == "access_denied") UnauthorizedException() else Throwable("An unknown authorization error has " +
+                            "occurred")
                 updateOAuthStatusIconAndText(authorizationException)
             }
         }

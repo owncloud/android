@@ -163,7 +163,8 @@ class AuthenticationViewModel(
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
             _loginResult.postValue(Event(UIResult.Loading()))
 
-            val serverInfo = serverInfo.value?.peekContent()?.getStoredData() ?: throw java.lang.IllegalArgumentException()
+            val serverInfo = serverInfo.value?.peekContent()?.getStoredData() ?: throw java.lang.IllegalArgumentException("Server info value cannot" +
+                    " be null")
 
             // Authenticated WebFinger needed only for account creations. Logged accounts already know their instances.
             if (updateAccountWithUsername == null) {
