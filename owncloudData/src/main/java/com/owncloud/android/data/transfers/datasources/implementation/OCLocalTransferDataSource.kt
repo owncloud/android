@@ -36,9 +36,8 @@ import kotlinx.coroutines.flow.map
 class OCLocalTransferDataSource(
     private val transferDao: TransferDao
 ) : LocalTransferDataSource {
-    override fun saveTransfer(transfer: OCTransfer): Long {
-        return transferDao.insertOrReplace(transfer.toEntity())
-    }
+    override fun saveTransfer(transfer: OCTransfer): Long =
+        transferDao.insertOrReplace(transfer.toEntity())
 
     override fun updateTransfer(transfer: OCTransfer) {
         transferDao.insertOrReplace(transfer.toEntity())
@@ -85,18 +84,16 @@ class OCLocalTransferDataSource(
         transferDao.deleteTransfersWithAccountName(accountName)
     }
 
-    override fun getTransferById(id: Long): OCTransfer? {
-        return transferDao.getTransferWithId(id)?.toModel()
-    }
+    override fun getTransferById(id: Long): OCTransfer? =
+        transferDao.getTransferWithId(id)?.toModel()
 
-    override fun getAllTransfers(): List<OCTransfer> {
-        return transferDao.getAllTransfers().map { transferEntity ->
+    override fun getAllTransfers(): List<OCTransfer> =
+        transferDao.getAllTransfers().map { transferEntity ->
             transferEntity.toModel()
         }
-    }
 
-    override fun getAllTransfersAsStream(): Flow<List<OCTransfer>> {
-        return transferDao.getAllTransfersAsStream().map { transferEntitiesList ->
+    override fun getAllTransfersAsStream(): Flow<List<OCTransfer>> =
+        transferDao.getAllTransfersAsStream().map { transferEntitiesList ->
             val transfers = transferEntitiesList.map { transferEntity ->
                 transferEntity.toModel()
             }
@@ -117,29 +114,24 @@ class OCLocalTransferDataSource(
             }
             newTransfersList
         }
-    }
 
-    override fun getLastTransferFor(remotePath: String, accountName: String): OCTransfer? {
-        return transferDao.getLastTransferWithRemotePathAndAccountName(remotePath, accountName)?.toModel()
-    }
+    override fun getLastTransferFor(remotePath: String, accountName: String): OCTransfer? =
+        transferDao.getLastTransferWithRemotePathAndAccountName(remotePath, accountName)?.toModel()
 
-    override fun getCurrentAndPendingTransfers(): List<OCTransfer> {
-        return transferDao.getTransfersWithStatus(
+    override fun getCurrentAndPendingTransfers(): List<OCTransfer> =
+        transferDao.getTransfersWithStatus(
             listOf(TransferStatus.TRANSFER_IN_PROGRESS.value, TransferStatus.TRANSFER_QUEUED.value)
         ).map { it.toModel() }
-    }
 
-    override fun getFailedTransfers(): List<OCTransfer> {
-        return transferDao.getTransfersWithStatus(
+    override fun getFailedTransfers(): List<OCTransfer> =
+        transferDao.getTransfersWithStatus(
             listOf(TransferStatus.TRANSFER_FAILED.value)
         ).map { it.toModel() }
-    }
 
-    override fun getFinishedTransfers(): List<OCTransfer> {
-        return transferDao.getTransfersWithStatus(
+    override fun getFinishedTransfers(): List<OCTransfer> =
+        transferDao.getTransfersWithStatus(
             listOf(TransferStatus.TRANSFER_SUCCEEDED.value)
         ).map { it.toModel() }
-    }
 
     override fun clearFailedTransfers() {
         transferDao.deleteTransfersWithStatus(TransferStatus.TRANSFER_FAILED.value)

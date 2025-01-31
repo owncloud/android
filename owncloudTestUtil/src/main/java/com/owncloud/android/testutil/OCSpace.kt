@@ -55,7 +55,8 @@ val OC_SPACE_SPECIAL_README = SpaceSpecial(
     specialFolder = SpaceSpecialFolder(
         name = "readme"
     ),
-    webDavUrl = "https://server.com/dav/spaces/8871f4f3-fc6f-4a66-8bed-62f175f76f38$0aa0e03c-ec36-498c-bb9f-857315568199%210aa0e03c-ec36-498c-bb9f-857315568199/.space/readme.md"
+    webDavUrl = "https://server.com/dav/spaces/8871f4f3-fc6f-4a66-8bed-62f175f76f38$" +
+            "0aa0e03c-ec36-498c-bb9f-857315568199%210aa0e03c-ec36-498c-bb9f-857315568199/.space/readme.md"
 )
 
 val OC_SPACE_SPECIAL_IMAGE = SpaceSpecial(
@@ -70,7 +71,8 @@ val OC_SPACE_SPECIAL_IMAGE = SpaceSpecial(
     specialFolder = SpaceSpecialFolder(
         name = "image"
     ),
-    webDavUrl = "https://server.com/dav/spaces/8871f4f3-fc6f-4a66-8bed-62f175f76f38$0aa0e03c-ec36-498c-bb9f-857315568199%210aa0e03c-ec36-498c-bb9f-857315568199/.space/image.jpg"
+    webDavUrl = "https://server.com/dav/spaces/8871f4f3-fc6f-4a66-8bed-62f175f76f38$" +
+            "0aa0e03c-ec36-498c-bb9f-857315568199%210aa0e03c-ec36-498c-bb9f-857315568199/.space/image.jpg"
 )
 
 val OC_SPACE_PROJECT_WITH_IMAGE = OCSpace(

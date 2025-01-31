@@ -41,9 +41,7 @@ class WebFingerResponseTest {
     companion object {
         private const val RESOURCES_PATH =
             "src/test/responses/com.owncloud.android.lib.resources.webfinger.responses"
-        private const val EXAMPLE_RESPONSE_JSON = "$RESOURCES_PATH/simple_response.json"
         private const val TOO_MUCH_INFORMATION_JSON = "$RESOURCES_PATH/to_much_information_response.json"
         private const val BROKEN_JSON = "$RESOURCES_PATH/broken_response.json"
-        private const val NOT_CONTAINING_RELEVANT_INFORMATION_JSON = "$RESOURCES_PATH/not_containing_relevant_info_response.json"
     }
 }

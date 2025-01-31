@@ -339,15 +339,15 @@ class MainApp : Application() {
             get() = appContext.resources.getString(R.string.account_type)
 
         val versionCode: Int
-            get() {
-                return try {
+            get() =
+                try {
                     val pInfo: PackageInfo = appContext.packageManager.getPackageInfo(appContext.packageName, 0)
                     val longVersionCode: Long = PackageInfoCompat.getLongVersionCode(pInfo)
                     longVersionCode.toInt()
                 } catch (e: PackageManager.NameNotFoundException) {
+                    Timber.w(e, "Version code not found, using 0 as fallback")
                     0
                 }
-            }
 
         val authority: String
             get() = appContext.resources.getString(R.string.authority)

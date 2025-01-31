@@ -89,4 +89,8 @@ dependencies {
     androidTestImplementation libs.androidx.test.runner
     androidTestImplementation libs.kotlinx.coroutines.test
     androidTestImplementation(libs.mockk.android) { exclude module: "objenesis" }
+
+    // Detekt
+    detektPlugins libs.detekt.formatting
+    detektPlugins libs.detekt.libraries
 }

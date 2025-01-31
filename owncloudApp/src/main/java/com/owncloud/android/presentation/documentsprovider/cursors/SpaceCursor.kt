@@ -42,7 +42,9 @@ class SpaceCursor(projection: Array<String>?) : MatrixCursor(projection ?: DEFAU
     fun addSpace(space: OCSpace, rootFolder: OCFile, context: Context?) {
         val flags = if (rootFolder.hasAddFilePermission && rootFolder.hasAddSubdirectoriesPermission) {
             Document.FLAG_DIR_SUPPORTS_CREATE
-        } else 0
+        } else {
+            0
+        }
 
         val name = if (space.isPersonal) context?.getString(R.string.bottom_nav_personal) else space.name
 

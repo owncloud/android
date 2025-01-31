@@ -127,50 +127,52 @@ class DocumentsStorageProvider : DocumentsProvider() {
 
         val fileToOpen = File(ocFile.storagePath)
 
-        if (!isWrite) return ParcelFileDescriptor.open(fileToOpen, accessMode)
-
-        val handler = Handler(MainApp.appContext.mainLooper)
-        // Attach a close listener if the document is opened in write mode.
-        try {
-            return ParcelFileDescriptor.open(fileToOpen, accessMode, handler) {
-                // Update the file with the cloud server. The client is done writing.
-                Timber.d("A file with id $documentId has been closed! Time to synchronize it with server.")
-                // If only needs to upload that file
-                if (uploadOnly) {
-                    ocFile.length = fileToOpen.length()
-                    val uploadFilesUseCase: UploadFilesFromSystemUseCase by inject()
-                    val uploadFilesUseCaseParams = UploadFilesFromSystemUseCase.Params(
-                        accountName = ocFile.owner,
-                        listOfLocalPaths = listOf(fileToOpen.path),
-                        uploadFolderPath = ocFile.remotePath.substringBeforeLast(PATH_SEPARATOR).plus(PATH_SEPARATOR),
-                        spaceId = ocFile.spaceId,
-                    )
-                    CoroutineScope(Dispatchers.IO).launch {
-                        uploadFilesUseCase(uploadFilesUseCaseParams)
-                    }
-                } else {
-                    Thread {
-                        val synchronizeFileUseCase: SynchronizeFileUseCase by inject()
-                        val result = synchronizeFileUseCase(
-                            SynchronizeFileUseCase.Params(
-                                fileToSynchronize = ocFile,
-                            )
+        return if (!isWrite) {
+            ParcelFileDescriptor.open(fileToOpen, accessMode)
+        } else {
+            val handler = Handler(MainApp.appContext.mainLooper)
+            // Attach a close listener if the document is opened in write mode.
+            try {
+                ParcelFileDescriptor.open(fileToOpen, accessMode, handler) {
+                    // Update the file with the cloud server. The client is done writing.
+                    Timber.d("A file with id $documentId has been closed! Time to synchronize it with server.")
+                    // If only needs to upload that file
+                    if (uploadOnly) {
+                        ocFile.length = fileToOpen.length()
+                        val uploadFilesUseCase: UploadFilesFromSystemUseCase by inject()
+                        val uploadFilesUseCaseParams = UploadFilesFromSystemUseCase.Params(
+                            accountName = ocFile.owner,
+                            listOfLocalPaths = listOf(fileToOpen.path),
+                            uploadFolderPath = ocFile.remotePath.substringBeforeLast(PATH_SEPARATOR).plus(PATH_SEPARATOR),
+                            spaceId = ocFile.spaceId,
                         )
-                        Timber.d("Synced ${ocFile.remotePath} from ${ocFile.owner} with result: $result")
-                        if (result.getDataOrNull() is SynchronizeFileUseCase.SyncType.ConflictDetected) {
-                            context?.let {
-                                NotificationUtils.notifyConflict(
-                                    fileInConflict = ocFile,
-                                    account = AccountUtils.getOwnCloudAccountByName(it, ocFile.owner),
-                                    context = it
-                                )
-                            }
+                        CoroutineScope(Dispatchers.IO).launch {
+                            uploadFilesUseCase(uploadFilesUseCaseParams)
                         }
-                    }.start()
+                    } else {
+                        Thread {
+                            val synchronizeFileUseCase: SynchronizeFileUseCase by inject()
+                            val result = synchronizeFileUseCase(
+                                SynchronizeFileUseCase.Params(
+                                    fileToSynchronize = ocFile,
+                                )
+                            )
+                            Timber.d("Synced ${ocFile.remotePath} from ${ocFile.owner} with result: $result")
+                            if (result.getDataOrNull() is SynchronizeFileUseCase.SyncType.ConflictDetected) {
+                                context?.let {
+                                    NotificationUtils.notifyConflict(
+                                        fileInConflict = ocFile,
+                                        context = it
+                                    )
+                                }
+                            }
+                        }.start()
+                    }
                 }
+            } catch (e: IOException) {
+                Timber.e(e, "Couldn't open document")
+                throw FileNotFoundException("Failed to open document with id $documentId and mode $mode")
             }
-        } catch (e: IOException) {
-            throw FileNotFoundException("Failed to open document with id $documentId and mode $mode")
         }
     }
 
@@ -288,22 +290,22 @@ class DocumentsStorageProvider : DocumentsProvider() {
         // If access from document provider is not allowed, return empty cursor
         val preferences: SharedPreferencesProvider by inject()
         val lockAccessFromDocumentProvider = preferences.getBoolean(PREFERENCE_LOCK_ACCESS_FROM_DOCUMENT_PROVIDER, false)
-        if (lockAccessFromDocumentProvider && accounts.isNotEmpty()) {
-            return result.apply { addProtectedRoot(contextApp) }
-        }
-
-        for (account in accounts) {
-            val getStoredCapabilitiesUseCase: GetStoredCapabilitiesUseCase by inject()
-            val capabilities = getStoredCapabilitiesUseCase(
-                GetStoredCapabilitiesUseCase.Params(
-                    accountName = account.name
+        return if (lockAccessFromDocumentProvider && accounts.isNotEmpty()) {
+            result.apply { addProtectedRoot(contextApp) }
+        } else {
+            for (account in accounts) {
+                val getStoredCapabilitiesUseCase: GetStoredCapabilitiesUseCase by inject()
+                val capabilities = getStoredCapabilitiesUseCase(
+                    GetStoredCapabilitiesUseCase.Params(
+                        accountName = account.name
+                    )
                 )
-            )
-            val spacesFeatureAllowedForAccount = AccountUtils.isSpacesFeatureAllowedForAccount(contextApp, account, capabilities)
+                val spacesFeatureAllowedForAccount = AccountUtils.isSpacesFeatureAllowedForAccount(contextApp, account, capabilities)
 
-            result.addRoot(account, contextApp, spacesFeatureAllowedForAccount)
+                result.addRoot(account, contextApp, spacesFeatureAllowedForAccount)
+            }
+            result
         }
-        return result
     }
 
     override fun openDocumentThumbnail(
@@ -311,7 +313,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
         sizeHint: Point?,
         signal: CancellationSignal?
     ): AssetFileDescriptor {
-        // TODO: Show thumbnail for spaces
+        // To do: Show thumbnail for spaces
         val file = getFileByIdOrException(documentId.toInt())
 
         val realFile = File(file.storagePath)

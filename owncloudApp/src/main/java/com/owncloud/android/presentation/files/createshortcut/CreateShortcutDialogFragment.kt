@@ -138,11 +138,10 @@ class CreateShortcutDialogFragment : DialogFragment() {
 
     companion object {
 
-        fun newInstance(parentFolder: OCFile, listener: CreateShortcutListener): CreateShortcutDialogFragment {
-            return CreateShortcutDialogFragment().apply {
+        fun newInstance(parentFolder: OCFile, listener: CreateShortcutListener): CreateShortcutDialogFragment =
+            CreateShortcutDialogFragment().apply {
                 createShortcutListener = listener
                 this.parentFolder = parentFolder
             }
-        }
     }
 }

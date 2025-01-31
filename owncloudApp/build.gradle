@@ -85,6 +85,10 @@ dependencies {
     debugImplementation libs.androidx.fragment.testing
     debugImplementation libs.androidx.test.monitor
     debugImplementation libs.stetho
+
+    // Detekt
+    detektPlugins libs.detekt.formatting
+    detektPlugins libs.detekt.libraries
 }
 
 android {

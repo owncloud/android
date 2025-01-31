@@ -31,6 +31,7 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCo
 import com.owncloud.android.lib.resources.status.HttpScheme.HTTPS_PREFIX
 import com.owncloud.android.lib.resources.status.HttpScheme.HTTP_PREFIX
 import org.json.JSONException
+import timber.log.Timber
 
 /**
  * Checks if the server is valid
@@ -63,6 +64,7 @@ class GetRemoteStatusOperation : RemoteOperation<RemoteServerInfo>() {
             updateClientBaseUrl(client, result.data.baseUrl)
             return result
         } catch (e: JSONException) {
+            Timber.e(e, "JSON is not correct")
             RemoteOperationResult(ResultCode.INSTANCE_NOT_CONFIGURED)
         } catch (e: Exception) {
             RemoteOperationResult(e)

@@ -51,9 +51,8 @@ class ChunkFromFileRequestBody(
         require(chunkSize > 0) { "Chunk size must be greater than zero" }
     }
 
-    override fun contentLength(): Long {
-        return chunkSize.coerceAtMost(channel.size() - channel.position())
-    }
+    override fun contentLength(): Long =
+        chunkSize.coerceAtMost(channel.size() - channel.position())
 
     override fun writeTo(sink: BufferedSink) {
         var readCount: Int

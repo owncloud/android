@@ -76,7 +76,7 @@ data class RemoteFile(
     var sharedWithSharee: Boolean = false,
 ) : Parcelable {
 
-    // TODO: Quotas not used. Use or remove them.
+    // To do: Quotas not used. Use or remove them.
     init {
         require(
             !(remotePath.isEmpty() || !remotePath.startsWith(File.separator))
@@ -182,12 +182,11 @@ data class RemoteFile(
             return absoluteDavPath.replace(pathToOc + davFilesPath, "")
         }
 
-        private fun getPropertiesEvenIfPostProcessing(response: Response): List<Property> {
-            return if (response.isSuccess())
+        private fun getPropertiesEvenIfPostProcessing(response: Response): List<Property> =
+            if (response.isSuccess())
                 response.propstat.filter { propStat -> propStat.isSuccessOrPostProcessing() }.map { it.properties }.flatten()
             else
                 emptyList()
-        }
 
         private fun PropStat.isSuccessOrPostProcessing() = (status.code / 100 == 2 || status.code == HttpConstants.HTTP_TOO_EARLY)
     }

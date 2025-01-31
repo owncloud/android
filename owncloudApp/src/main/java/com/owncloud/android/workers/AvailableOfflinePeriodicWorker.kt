@@ -42,9 +42,8 @@ class AvailableOfflinePeriodicWorker(
     private val synchronizeFileUseCase: SynchronizeFileUseCase by inject()
     private val synchronizeFolderUseCase: SynchronizeFolderUseCase by inject()
 
-    override suspend fun doWork(): Result {
-
-        return try {
+    override suspend fun doWork(): Result =
+        try {
             val availableOfflineFiles = getFilesAvailableOfflineFromEveryAccountUseCase(Unit)
             Timber.i("Available offline files that needs to be synced: ${availableOfflineFiles.size}")
 
@@ -52,9 +51,9 @@ class AvailableOfflinePeriodicWorker(
 
             Result.success()
         } catch (exception: Exception) {
+            Timber.e(exception, "Sync of available offline files failed")
             Result.failure()
         }
-    }
 
     private fun syncAvailableOfflineFiles(availableOfflineFiles: List<OCFile>) {
         availableOfflineFiles.forEach {

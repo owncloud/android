@@ -46,17 +46,16 @@ class PreviewFormatTextFragmentStateAdapter(
 
     override fun getItemCount(): Int = 2
 
-    override fun createFragment(position: Int): Fragment {
-        return when (position) {
-            0 -> PreviewFormatTextFragment.newInstance(text, mimeType)
-            else -> PreviewFormatTextFragment.newInstance(text)
+    override fun createFragment(position: Int): Fragment =
+        if (position == 0) {
+            PreviewFormatTextFragment.newInstance(text, mimeType)
+        } else {
+            PreviewFormatTextFragment.newInstance(text)
         }
-    }
 
     class PreviewFormatTextFragment : Fragment() {
-        override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-            return inflater.inflate(R.layout.preview_format_text_fragment, container, false)
-        }
+        override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
+            inflater.inflate(R.layout.preview_format_text_fragment, container, false)
 
         override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
             super.onViewCreated(view, savedInstanceState)

@@ -59,7 +59,7 @@ import com.owncloud.android.lib.resources.files.chunks.ChunkedUploadFromFileSyst
 import com.owncloud.android.lib.resources.files.services.implementation.OCChunkService
 import com.owncloud.android.presentation.authentication.AccountUtils
 import com.owncloud.android.utils.NotificationUtils
-import com.owncloud.android.utils.RemoteFileUtils.Companion.getAvailableRemotePath
+import com.owncloud.android.utils.RemoteFileUtils.getAvailableRemotePath
 import com.owncloud.android.utils.SecurityUtils
 import com.owncloud.android.utils.UPLOAD_NOTIFICATION_CHANNEL_ID
 import kotlinx.coroutines.CoroutineScope
@@ -149,8 +149,8 @@ class UploadFileFromContentUriWorker(
         return true
     }
 
-    private fun retrieveUploadInfoFromDatabase(): OCTransfer? {
-        return transferRepository.getTransferById(uploadIdInStorageManager).also {
+    private fun retrieveUploadInfoFromDatabase(): OCTransfer? =
+        transferRepository.getTransferById(uploadIdInStorageManager).also {
             if (it != null) {
                 Timber.d("Upload with id ($uploadIdInStorageManager) has been found in database.")
                 Timber.d("Upload info: $it")
@@ -159,7 +159,6 @@ class UploadFileFromContentUriWorker(
                 Timber.w("$uploadPath won't be uploaded")
             }
         }
-    }
 
     private fun checkDocumentFileExists() {
         val documentFile = DocumentFile.fromSingleUri(appContext, contentUri)
@@ -173,17 +172,15 @@ class UploadFileFromContentUriWorker(
         val documentFile = DocumentFile.fromSingleUri(appContext, contentUri)
         if (documentFile?.canRead() != true) {
             // Permissions not granted. Throw an exception to ask for them.
-            throw Throwable("Cannot read the file")
+            throw LocalFileNotFoundException()
         }
     }
 
     private fun copyFileToLocalStorage() {
         val cacheFile = File(cachePath)
         val cacheDir = cacheFile.parentFile
-        if (cacheDir != null) {
-            if (!cacheDir.exists()) {
-                cacheDir.mkdirs()
-            }
+        if (cacheDir != null && !cacheDir.exists()) {
+            cacheDir.mkdirs()
         }
         cacheFile.createNewFile()
 
@@ -271,8 +268,8 @@ class UploadFileFromContentUriWorker(
             lastModifiedTimestamp = lastModified,
             requiredEtag = null,
             spaceWebDavUrl = spaceWebDavUrl,
-        ).also {
-            it.addDataTransferProgressListener(this)
+        ).apply {
+            addDataTransferProgressListener(this@UploadFileFromContentUriWorker)
         }
 
         executeRemoteOperation { uploadFileOperation.execute(client) }
@@ -296,8 +293,8 @@ class UploadFileFromContentUriWorker(
             mimeType = mimeType,
             lastModifiedTimestamp = lastModified,
             requiredEtag = null,
-        ).also {
-            it.addDataTransferProgressListener(this)
+        ).apply {
+            addDataTransferProgressListener(this@UploadFileFromContentUriWorker)
         }
 
         executeRemoteOperation { uploadFileOperation.execute(client) }
@@ -326,13 +323,12 @@ class UploadFileFromContentUriWorker(
         )
     }
 
-    private fun getUploadStatusForThrowable(throwable: Throwable?): TransferStatus {
-        return if (throwable == null) {
+    private fun getUploadStatusForThrowable(throwable: Throwable?): TransferStatus =
+        if (throwable == null) {
             TransferStatus.TRANSFER_SUCCEEDED
         } else {
             TransferStatus.TRANSFER_FAILED
         }
-    }
 
     private fun showNotification(throwable: Throwable) {
         // check credentials error

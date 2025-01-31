@@ -69,7 +69,7 @@ class ReadRemoteFolderOperation(
 
             val status = client.executeHttpMethod(propfindMethod)
 
-            if (isSuccess(status)) {
+            return if (isSuccess(status)) {
                 val mFolderAndFiles = ArrayList<RemoteFile>()
 
                 val remoteFolder = RemoteFile.getRemoteFileFromDav(
@@ -92,12 +92,12 @@ class ReadRemoteFolderOperation(
                 }
 
                 // Result of the operation
-                return RemoteOperationResult<ArrayList<RemoteFile>>(ResultCode.OK).apply {
+                RemoteOperationResult<ArrayList<RemoteFile>>(ResultCode.OK).apply {
                     data = mFolderAndFiles
                     Timber.i("Synchronized $remotePath with ${mFolderAndFiles.size} files. - HTTP status code: $status")
                 }
             } else { // synchronization failed
-                return RemoteOperationResult<ArrayList<RemoteFile>>(propfindMethod).also {
+                RemoteOperationResult<ArrayList<RemoteFile>>(propfindMethod).also {
                     Timber.w("Synchronized $remotePath ${it.logMessage}")
                 }
             }

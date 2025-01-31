@@ -55,7 +55,7 @@ class OCLocalFileDataSource(
         fileDao.getFileByOwnerAndRemotePath(owner, remotePath, spaceId)?.let { return it.toModel() }
 
         // If root folder do not exists, create and return it.
-        if (remotePath == ROOT_PATH) {
+        return if (remotePath == ROOT_PATH) {
             val rootFolder = OCFile(
                 parentId = ROOT_PARENT_ID,
                 owner = owner,
@@ -66,10 +66,11 @@ class OCLocalFileDataSource(
                 spaceId = spaceId,
                 permissions = "CK",
             )
-            fileDao.mergeRemoteAndLocalFile(rootFolder.toEntity()).also { return getFileById(it) }
+            val idFile = fileDao.mergeRemoteAndLocalFile(rootFolder.toEntity())
+            getFileById(idFile)
+        } else {
+            null
         }
-
-        return null
     }
 
     override fun getFileByRemoteId(remoteId: String): OCFile? =
@@ -154,7 +155,7 @@ class OCLocalFileDataSource(
     }
 
     override fun saveFilesInFolderAndReturnTheFilesThatChanged(listOfFiles: List<OCFile>, folder: OCFile): List<OCFile> {
-        // TODO: If it is root, add 0 as parent Id
+        // To do: If it is root, add 0 as parent Id
         val folderContent = fileDao.insertFilesInFolderAndReturnTheFilesThatChanged(
             folder = folder.toEntity(),
             folderContent = listOfFiles.map { it.toEntity() }
@@ -208,7 +209,7 @@ class OCLocalFileDataSource(
     }
 
     override fun saveUploadWorkerUuid(fileId: Long, workerUuid: UUID) {
-        TODO("Not yet implemented")
+        // Not yet implemented
     }
 
     override fun saveDownloadWorkerUuid(fileId: Long, workerUuid: UUID) {
@@ -218,6 +219,16 @@ class OCLocalFileDataSource(
     override fun cleanWorkersUuid(fileId: Long) {
         fileDao.updateSyncStatusForFile(fileId, null)
     }
+
+    @VisibleForTesting
+    fun OCFileAndFileSync.toModel(): OCFileWithSyncInfo =
+        OCFileWithSyncInfo(
+            file = file.toModel(),
+            uploadWorkerUuid = fileSync?.uploadWorkerUuid,
+            downloadWorkerUuid = fileSync?.downloadWorkerUuid,
+            isSynchronizing = fileSync?.isSynchronizing == true,
+            space = space?.toModel(),
+        )
 
     companion object {
         @VisibleForTesting
@@ -278,14 +289,4 @@ class OCLocalFileDataSource(
                 spaceId = spaceId,
             ).apply { this@toEntity.id?.let { modelId -> this.id = modelId } }
     }
-
-    @VisibleForTesting
-    fun OCFileAndFileSync.toModel(): OCFileWithSyncInfo =
-        OCFileWithSyncInfo(
-            file = file.toModel(),
-            uploadWorkerUuid = fileSync?.uploadWorkerUuid,
-            downloadWorkerUuid = fileSync?.downloadWorkerUuid,
-            isSynchronizing = fileSync?.isSynchronizing == true,
-            space = space?.toModel(),
-        )
 }

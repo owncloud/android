@@ -189,10 +189,10 @@ abstract class DrawerActivity : ToolbarActivity() {
                     val settingsIntent = Intent(applicationContext, SettingsActivity::class.java)
                     startActivity(settingsIntent)
                 }
-                R.id.drawer_menu_feedback -> openFeedback()
-                R.id.drawer_menu_help -> openHelp()
-                R.id.drawer_menu_privacy_policy -> openPrivacyPolicy()
-                else -> Timber.i("Unknown drawer menu item clicked: %s", menuItem.title)
+                R.id.drawer_menu_feedback -> { openFeedback() }
+                R.id.drawer_menu_help -> { openHelp() }
+                R.id.drawer_menu_privacy_policy -> { openPrivacyPolicy() }
+                else -> { Timber.i("Unknown drawer menu item clicked: %s", menuItem.title) }
             }
             true
         }
@@ -316,8 +316,8 @@ abstract class DrawerActivity : ToolbarActivity() {
                             }
                         }
                     }
-                    is UIResult.Loading -> getAccountQuotaText()?.text = getString(R.string.drawer_loading_quota)
-                    is UIResult.Error -> getAccountQuotaText()?.text = getString(R.string.drawer_unavailable_used_storage)
+                    is UIResult.Loading -> { getAccountQuotaText()?.text = getString(R.string.drawer_loading_quota) }
+                    is UIResult.Error -> { getAccountQuotaText()?.text = getString(R.string.drawer_unavailable_used_storage) }
                 }
             }
         }
@@ -446,7 +446,7 @@ abstract class DrawerActivity : ToolbarActivity() {
                 val ocAccount = OwnCloudAccount(account, this)
                 getDrawerUserName()?.text = ocAccount.displayName
             } catch (e: Exception) {
-                Timber.w("Couldn't read display name of account; using account name instead")
+                Timber.w(e, "Couldn't read display name of account; using account name instead")
                 getDrawerUserName()?.text = drawerViewModel.getUsernameOfAccount(account.name)
             }
 
@@ -588,9 +588,8 @@ abstract class DrawerActivity : ToolbarActivity() {
      * @param id the view's id
      * @return The view if found or `null` otherwise.
      */
-    private fun findNavigationViewChildById(id: Int): View {
-        return (findViewById<View>(R.id.nav_view) as NavigationView).getHeaderView(0).findViewById(id)
-    }
+    private fun findNavigationViewChildById(id: Int): View =
+        (findViewById<View>(R.id.nav_view) as NavigationView).getHeaderView(0).findViewById(id)
 
     /**
      * Adds other listeners to react on changes of the drawer layout.
@@ -613,7 +612,6 @@ abstract class DrawerActivity : ToolbarActivity() {
         const val TALK_MOBILE_URL = "https://talk.owncloud.com/channel/mobile"
         const val GITHUB_URL = "https://github.com/owncloud/android/issues/new/choose"
         const val SURVEY_URL = "https://owncloud.com/android-app-feedback"
-        private const val KEY_IS_ACCOUNT_CHOOSER_ACTIVE = "IS_ACCOUNT_CHOOSER_ACTIVE"
         private const val KEY_CHECKED_MENU_ITEM = "CHECKED_MENU_ITEM"
     }
 }

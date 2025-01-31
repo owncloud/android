@@ -68,6 +68,7 @@ class RemoveShareDialogFragment : ConfirmationDialogFragment(), ConfirmationDial
         try {
             listener = activity as ShareFragmentListener?
         } catch (e: IllegalStateException) {
+            Timber.e(e, "The activity attached doesn't implement OnShareFragmentInteractionListener")
             throw IllegalStateException(requireActivity().toString() + " must implement OnShareFragmentInteractionListener")
         }
     }

@@ -88,6 +88,7 @@ class AutomaticUploadsWorker(
                         checkSourcePathIsAValidUriOrThrowException(pictureUploadsConfiguration.sourcePath)
                         syncFolder(pictureUploadsConfiguration)
                     } catch (illegalArgumentException: IllegalArgumentException) {
+                        Timber.e(illegalArgumentException, "Source path for picture uploads is not valid")
                         showNotificationToUpdateUri(SyncType.PICTURE_UPLOADS)
                         return Result.failure()
                     }
@@ -97,6 +98,7 @@ class AutomaticUploadsWorker(
                         checkSourcePathIsAValidUriOrThrowException(videoUploadsConfiguration.sourcePath)
                         syncFolder(videoUploadsConfiguration)
                     } catch (illegalArgumentException: IllegalArgumentException) {
+                        Timber.e(illegalArgumentException, "Source path for video uploads is not valid")
                         showNotificationToUpdateUri(SyncType.VIDEO_UPLOADS)
                         return Result.failure()
                     }

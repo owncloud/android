@@ -26,7 +26,7 @@ import com.owncloud.android.domain.transfers.TransferRepository
 class ClearSuccessfulTransfersUseCase(
     private val transferRepository: TransferRepository,
 ) : BaseUseCase<Unit, Unit>() {
-    override fun run(params: Unit): Unit =
+    override fun run(params: Unit) =
         transferRepository.clearSuccessfulTransfers()
 
 }

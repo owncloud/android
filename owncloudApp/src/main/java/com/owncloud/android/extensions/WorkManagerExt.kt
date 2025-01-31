@@ -41,16 +41,14 @@ fun WorkManager.getWorkInfoByTags(tags: List<String>): List<WorkInfo> =
 /**
  * Get a list of WorkInfo of running workers that matches EVERY tag.
  */
-fun WorkManager.getRunningWorkInfosByTags(tags: List<String>): List<WorkInfo> {
-    return getWorkInfos(buildWorkQuery(tags = tags, states = listOf(WorkInfo.State.RUNNING))).get().filter { it.tags.containsAll(tags) }
-}
+fun WorkManager.getRunningWorkInfosByTags(tags: List<String>): List<WorkInfo> =
+    getWorkInfos(buildWorkQuery(tags = tags, states = listOf(WorkInfo.State.RUNNING))).get().filter { it.tags.containsAll(tags) }
 
 /**
  * Get a list of WorkInfo of running workers as LiveData that matches at least one of the tags.
  */
-fun WorkManager.getRunningWorkInfosLiveData(tags: List<String>): LiveData<List<WorkInfo>> {
-    return getWorkInfosLiveData(buildWorkQuery(tags = tags, states = listOf(WorkInfo.State.RUNNING)))
-}
+fun WorkManager.getRunningWorkInfosLiveData(tags: List<String>): LiveData<List<WorkInfo>> =
+     getWorkInfosLiveData(buildWorkQuery(tags = tags, states = listOf(WorkInfo.State.RUNNING)))
 
 /**
  * Check if a download is pending. It could be enqueued, downloading or blocked.
@@ -61,16 +59,6 @@ fun WorkManager.getRunningWorkInfosLiveData(tags: List<String>): LiveData<List<W
  */
 fun WorkManager.isDownloadPending(account: Account, file: OCFile): Boolean =
     this.getWorkInfoByTags(getTagsForDownload(file, account.name)).any { !it.state.isFinished }
-
-/**
- * Check if an upload is pending. It could be enqueued, uploading or blocked.
- * @param account - Owner of the file
- * @param file - File to check whether it is pending.
- *
- * @return true if the download is pending.
- */
-fun WorkManager.isUploadPending(account: Account, file: OCFile): Boolean = false
-// TODO: Uploads work different from downloads. So that, this one will be different.
 
 fun getTagsForDownload(file: OCFile, accountName: String) =
     listOf(TRANSFER_TAG_DOWNLOAD, file.id.toString(), accountName)

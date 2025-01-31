@@ -108,7 +108,12 @@ class OCLocalTransferDataSourceTest {
         ocLocalTransferDataSource.updateTransferWhenFinished(OC_TRANSFER.id!!, TransferStatus.TRANSFER_SUCCEEDED, timestamp, TransferResult.UPLOADED)
 
         verify(exactly = 1) {
-            transferDao.updateTransferWhenFinished(OC_TRANSFER.id!!, TransferStatus.TRANSFER_SUCCEEDED.value, timestamp, TransferResult.UPLOADED.value)
+            transferDao.updateTransferWhenFinished(
+                OC_TRANSFER.id!!,
+                TransferStatus.TRANSFER_SUCCEEDED.value,
+                timestamp,
+                TransferResult.UPLOADED.value
+            )
         }
     }
 

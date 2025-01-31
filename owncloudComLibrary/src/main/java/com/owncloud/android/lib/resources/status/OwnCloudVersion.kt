@@ -27,6 +27,7 @@ package com.owncloud.android.lib.resources.status
 
 import android.os.Parcel
 import android.os.Parcelable
+import timber.log.Timber
 
 class OwnCloudVersion(version: String) : Comparable<OwnCloudVersion>, Parcelable {
 
@@ -83,11 +84,10 @@ class OwnCloudVersion(version: String) : Comparable<OwnCloudVersion>, Parcelable
         return versionToString
     }
 
-    override fun compareTo(other: OwnCloudVersion): Int {
-        return if (other.mVersion == mVersion)
+    override fun compareTo(other: OwnCloudVersion): Int =
+        if (other.mVersion == mVersion)
             0
         else if (other.mVersion < mVersion) 1 else -1
-    }
 
     private fun parseVersion(version: String) {
         try {
@@ -95,6 +95,7 @@ class OwnCloudVersion(version: String) : Comparable<OwnCloudVersion>, Parcelable
             isVersionValid = true
 
         } catch (e: Exception) {
+            Timber.w(e, "Version is invalid")
             isVersionValid = false
             // if invalid, the instance will respond as if server is 8.1, minimum with capabilities API,
             // and "dead" : https://github.com/owncloud/core/wiki/Maintenance-and-Release-Schedule
@@ -122,9 +123,8 @@ class OwnCloudVersion(version: String) : Comparable<OwnCloudVersion>, Parcelable
         return versionValue
     }
 
-    override fun describeContents(): Int {
-        return super.hashCode()
-    }
+    override fun describeContents(): Int =
+        super.hashCode()
 
     override fun writeToParcel(dest: Parcel, flags: Int) {
         dest.writeInt(mVersion)

@@ -181,7 +181,7 @@ open class FolderPickerActivity : FileActivity(),
         // If current file is root folder
         else if (currentDirDisplayed.parentId == OCFile.ROOT_PARENT_ID) {
             // If we are not in COPY or CAMERA_FOLDER mode, or if we are in COPY or CAMERA_FOLDER mode and spaces are not allowed, close the activity
-            if ((pickerMode != PickerMode.COPY && pickerMode != PickerMode.CAMERA_FOLDER) ||
+            if (pickerModeIsNotCopyAndCameraFolder() ||
                 (pickerMode == PickerMode.COPY && currentDirDisplayed.spaceId == null) ||
                 (pickerMode == PickerMode.CAMERA_FOLDER && currentDirDisplayed.spaceId == null)) {
                 finish()
@@ -240,6 +240,8 @@ open class FolderPickerActivity : FileActivity(),
     override fun showDetails(file: OCFile) {
         // Nothing to do. Details can't be opened here.
     }
+
+    private fun pickerModeIsNotCopyAndCameraFolder() = pickerMode != PickerMode.COPY && pickerMode != PickerMode.CAMERA_FOLDER
 
     private fun initAndShowListOfFilesFragment(spaceId: String? = null) {
         val safeInitialFolder = if (file == null) {
@@ -351,6 +353,7 @@ open class FolderPickerActivity : FileActivity(),
         val currentDir = try {
             getCurrentFolder()
         } catch (e: NullPointerException) {
+            Timber.i(e, "Couldn't retrieve current folder, so using file property")
             file
         }
 
@@ -366,13 +369,12 @@ open class FolderPickerActivity : FileActivity(),
         MOVE, COPY, CAMERA_FOLDER;
 
         @StringRes
-        fun toStringRes(): Int {
-            return when (this) {
+        fun toStringRes(): Int =
+            when (this) {
                 MOVE -> R.string.folder_picker_move_here_button_text
                 COPY -> R.string.folder_picker_copy_here_button_text
                 CAMERA_FOLDER -> R.string.folder_picker_choose_button_text
             }
-        }
     }
 
     companion object {

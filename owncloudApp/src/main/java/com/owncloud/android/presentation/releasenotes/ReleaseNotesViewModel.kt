@@ -31,17 +31,15 @@ class ReleaseNotesViewModel(
     private val contextProvider: ContextProvider
 ) : ViewModel() {
 
-    fun getReleaseNotes(): List<ReleaseNote> {
-        return releaseNotesList
-    }
+    fun getReleaseNotes(): List<ReleaseNote> =
+        releaseNotesList
 
     fun updateVersionCode() {
         preferencesProvider.putInt(MainApp.PREFERENCE_KEY_LAST_SEEN_VERSION_CODE, versionCode)
     }
 
-    fun shouldWhatsNewSectionBeVisible(): Boolean {
-        return contextProvider.getBoolean(R.bool.release_notes_enabled) && getReleaseNotes().isNotEmpty()
-    }
+    fun shouldWhatsNewSectionBeVisible(): Boolean =
+        contextProvider.getBoolean(R.bool.release_notes_enabled) && getReleaseNotes().isNotEmpty()
 
     companion object {
         val releaseNotesList = listOf(

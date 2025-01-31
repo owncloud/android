@@ -28,11 +28,11 @@ enum class LockType {
     PASSCODE, PATTERN;
 
     companion object {
-        fun parseFromInteger(value: Int): LockType {
-            return when (value) {
-                0 -> PASSCODE
-                else -> PATTERN
+        fun parseFromInteger(value: Int): LockType =
+            if (value == 0) {
+                PASSCODE
+            } else {
+                PATTERN
             }
-        }
     }
 }

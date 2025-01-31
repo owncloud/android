@@ -92,11 +92,9 @@ private fun <T> handleRemoteOperationResult(
     when (remoteOperationResult.code) {
         RemoteOperationResult.ResultCode.WRONG_CONNECTION -> throw NoConnectionWithServerException()
         RemoteOperationResult.ResultCode.NO_NETWORK_CONNECTION -> throw NoNetworkConnectionException()
-        RemoteOperationResult.ResultCode.TIMEOUT -> {
+        RemoteOperationResult.ResultCode.TIMEOUT ->
             if (remoteOperationResult.exception is SocketTimeoutException) throw ServerResponseTimeoutException()
             else throw ServerConnectionTimeoutException()
-        }
-
         RemoteOperationResult.ResultCode.HOST_NOT_AVAILABLE -> throw ServerNotReachableException()
         RemoteOperationResult.ResultCode.SERVICE_UNAVAILABLE -> throw ServiceUnavailableException()
         RemoteOperationResult.ResultCode.SSL_RECOVERABLE_PEER_UNVERIFIED -> throw remoteOperationResult.exception as CertificateCombinedException
@@ -145,6 +143,6 @@ private fun <T> handleRemoteOperationResult(
         RemoteOperationResult.ResultCode.TOO_EARLY -> throw TooEarlyException()
         RemoteOperationResult.ResultCode.NETWORK_ERROR -> throw NetworkErrorException()
         RemoteOperationResult.ResultCode.RESOURCE_LOCKED -> throw ResourceLockedException()
-        else -> throw Exception()
+        else -> throw Exception("An unknown error has occurred")
     }
 }

@@ -34,7 +34,7 @@ import androidx.preference.PreferenceScreen
 import com.owncloud.android.R
 import com.owncloud.android.extensions.avoidScreenshotsIfNeeded
 import com.owncloud.android.extensions.showMessageInSnackbar
-import com.owncloud.android.presentation.documentsprovider.DocumentsProviderUtils.Companion.notifyDocumentsProviderRoots
+import com.owncloud.android.presentation.documentsprovider.DocumentsProviderUtils.notifyDocumentsProviderRoots
 import com.owncloud.android.presentation.security.LockTimeout
 import com.owncloud.android.presentation.security.PREFERENCE_LOCK_TIMEOUT
 import com.owncloud.android.presentation.security.biometric.BiometricActivity
@@ -59,8 +59,9 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
 
     private val enablePasscodeLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode != Activity.RESULT_OK) return@registerForActivityResult
-            else {
+            if (result.resultCode != Activity.RESULT_OK) {
+                return@registerForActivityResult
+            } else {
                 prefPasscode?.isChecked = true
                 prefBiometric?.isChecked = securityViewModel.getBiometricsState()
 
@@ -71,8 +72,9 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
 
     private val disablePasscodeLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode != Activity.RESULT_OK) return@registerForActivityResult
-            else {
+            if (result.resultCode != Activity.RESULT_OK) {
+                return@registerForActivityResult
+            } else {
                 prefPasscode?.isChecked = false
 
                 // Do not allow to use biometric lock, lock delay nor access from document provider since Passcode lock has been disabled
@@ -83,8 +85,9 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
 
     private val enablePatternLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode != Activity.RESULT_OK) return@registerForActivityResult
-            else {
+            if (result.resultCode != Activity.RESULT_OK) {
+                return@registerForActivityResult
+            } else {
                 prefPattern?.isChecked = true
                 prefBiometric?.isChecked = securityViewModel.getBiometricsState()
 
@@ -95,8 +98,9 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
 
     private val disablePatternLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode != Activity.RESULT_OK) return@registerForActivityResult
-            else {
+            if (result.resultCode != Activity.RESULT_OK) {
+                return@registerForActivityResult
+            } else {
                 prefPattern?.isChecked = false
 
                 // Do not allow to use biometric lock, lock delay nor access from document provider since Pattern lock has been disabled
@@ -107,7 +111,6 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.settings_security, rootKey)
-
         screenSecurity = findPreference(SCREEN_SECURITY)
         prefPasscode = findPreference(PassCodeActivity.PREFERENCE_SET_PASSCODE)
         prefPattern = findPreference(PatternActivity.PREFERENCE_SET_PATTERN)
@@ -172,9 +175,8 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
             if (!BiometricManager.isHardwareDetected()) { // Biometric not supported
                 screenSecurity?.removePreferenceFromScreen(prefBiometric)
             } else {
-                if (prefPasscode?.isChecked == false && prefPattern?.isChecked == false) { // Disable biometric lock if Passcode or Pattern locks are disabled
-                    disableBiometric()
-                }
+                // Disable biometric lock if Passcode or Pattern locks are disabled
+                if (prefPasscode?.isChecked == false && prefPattern?.isChecked == false) { disableBiometric() }
 
                 prefBiometric?.setOnPreferenceChangeListener { _: Preference?, newValue: Any ->
                     val incomingValue = newValue as Boolean
@@ -190,9 +192,7 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
         }
 
         // Lock application
-        if (prefPasscode?.isChecked == false && prefPattern?.isChecked == false) {
-            prefLockApplication?.isEnabled = false
-        }
+        if (prefPasscode?.isChecked == false && prefPattern?.isChecked == false) { prefLockApplication?.isEnabled = false }
 
         // Lock access from document provider
         prefLockAccessDocumentProvider?.setOnPreferenceChangeListener { _: Preference?, newValue: Any ->

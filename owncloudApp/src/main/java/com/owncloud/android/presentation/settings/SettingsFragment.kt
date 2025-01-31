@@ -131,12 +131,11 @@ class SettingsFragment : PreferenceFragmentCompat() {
         private const val SUBSECTION_VIDEO_UPLOADS = "video_uploads_subsection"
         private const val SUBSECTION_MORE = "more_subsection"
         private const val SUBSECTION_NOTIFICATIONS = "notifications_subsection"
+        private const val SUBSECTION_WHATSNEW = "whatsNew"
 
         // Remove preference with nullability check
         fun PreferenceScreen?.removePreferenceFromScreen(preference: Preference?) {
             preference?.let { this?.removePreference(it) }
         }
-
-        private const val SUBSECTION_WHATSNEW = "whatsNew"
     }
 }

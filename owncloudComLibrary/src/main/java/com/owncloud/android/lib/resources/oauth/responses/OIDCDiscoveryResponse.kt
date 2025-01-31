@@ -26,18 +26,28 @@
  */
 package com.owncloud.android.lib.resources.oauth.responses
 
+import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class OIDCDiscoveryResponse(
-    val authorization_endpoint: String,
-    val check_session_iframe: String?,
-    val end_session_endpoint: String?,
+    @Json(name = "authorization_endpoint")
+    val authorizationEndpoint: String,
+    @Json(name = "check_session_iframe")
+    val checkSessionIframe: String?,
+    @Json(name = "end_session_endpoint")
+    val endSessionEndpoint: String?,
     val issuer: String,
-    val registration_endpoint: String?,
-    val response_types_supported: List<String>?, // TODO: provisional, remove nullability ASAP
-    val scopes_supported: List<String>?,
-    val token_endpoint: String,
-    val token_endpoint_auth_methods_supported: List<String>?,
-    val userinfo_endpoint: String?,
+    @Json(name = "registration_endpoint")
+    val registrationEndpoint: String?,
+    @Json(name = "response_types_supported")
+    val responseTypesSupported: List<String>?, // To do: provisional, remove nullability ASAP
+    @Json(name = "scopes_supported")
+    val scopesSupported: List<String>?,
+    @Json(name = "token_endpoint")
+    val tokenEndpoint: String,
+    @Json(name = "token_endpoint_auth_methods_supported")
+    val tokenEndpointAuthMethodsSupported: List<String>?,
+    @Json(name = "userinfo_endpoint")
+    val userinfoEndpoint: String?,
 )

@@ -230,6 +230,7 @@ fun Activity.openFileWithIntent(intentForSavedMimeType: Intent, intentForGuessed
                 )
             )
         } catch (anfe: ActivityNotFoundException) {
+            Timber.i(anfe, "No app found for file type")
             showMessageInSnackbar(
                 message = this.getString(
                     R.string.file_list_no_app_for_file_type

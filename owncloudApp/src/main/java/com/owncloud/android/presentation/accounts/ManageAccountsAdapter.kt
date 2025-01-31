@@ -84,7 +84,7 @@ class ManageAccountsAdapter(
                     holder.binding.name.text = oca.displayName
                 } catch (e: Exception) {
                     Timber.w(
-                        "Account not found right after being read :\\ ; using account name instead of display name"
+                        e, "Account not found right after being read :\\ ; using account name instead of display name"
                     )
                     holder.binding.name.text = AccountUtils.getUsernameOfAccount(account.name)
                 }
@@ -212,12 +212,11 @@ class ManageAccountsAdapter(
         val binding = AccountActionBinding.bind(itemView)
     }
 
-    override fun getItemViewType(position: Int): Int {
-        return when (getItem(position)) {
+    override fun getItemViewType(position: Int): Int =
+        when (getItem(position)) {
             is AccountRecyclerItem.AccountItem -> AccountManagementRecyclerItemViewType.ITEM_VIEW_ACCOUNT.ordinal
             is AccountRecyclerItem.NewAccount -> AccountManagementRecyclerItemViewType.ITEM_VIEW_ADD.ordinal
         }
-    }
 
     enum class AccountManagementRecyclerItemViewType {
         ITEM_VIEW_ACCOUNT, ITEM_VIEW_ADD

@@ -203,7 +203,7 @@ class OCFileRepository(
                 Timber.i("There was an error: $e")
             }
         }
-        // TODO: Retrieving the root folders should return a non nullable. If they don't exist yet, they are created and returned. Remove nullability
+        // To do: Retrieving the root folders should return a non nullable. If they don't exist yet, they are created and returned. Remove nullability
         val personalRootFolder = localFileDataSource.getFileByRemotePath(remotePath = ROOT_PATH, owner = owner, spaceId = personalSpace?.root?.id)
         return personalRootFolder!!
     }
@@ -396,12 +396,13 @@ class OCFileRepository(
                             // DO NOT update etag till contents are synced.
                             etag = localChildToSync.etag
                             needsToUpdateThumbnail =
-                                (!remoteChild.isFolder && remoteChild.modificationTimestamp != localChildToSync.modificationTimestamp) || localChildToSync.needsToUpdateThumbnail
+                                (!remoteChild.isFolder && remoteChild.modificationTimestamp != localChildToSync.modificationTimestamp) ||
+                                        localChildToSync.needsToUpdateThumbnail
                             // Probably not needed, if the child was already in the database, the av offline status should be also there
                             if (remoteFolder.isAvailableOffline) {
                                 availableOfflineStatus = AVAILABLE_OFFLINE_PARENT
                             }
-                            // FIXME: What about renames? Need to fix storage path
+                            // Fix: What about renames? Need to fix storage path
                         })
                 }
             }
@@ -446,7 +447,7 @@ class OCFileRepository(
                         spaceWebDavUrl = spaceWebDavUrl,
                     )
                 } catch (fileNotFoundException: FileNotFoundException) {
-                    Timber.i("File ${ocFile.fileName} was not found in server. Let's remove it from local storage")
+                    Timber.i(fileNotFoundException, "File ${ocFile.fileName} was not found in server. Let's remove it from local storage")
                 }
             }
             ocFile.etagInConflict?.let {
@@ -584,7 +585,8 @@ class OCFileRepository(
 
         // 1. Remove folder content recursively
         folderContent.forEach { file ->
-            if (!(onlyFromLocalStorage && file.isAvailableOffline)) { // The condition will not be met when onlyFromLocalStorage is true and the file is of type available offline
+            // The condition will not be met when onlyFromLocalStorage is true and the file is of type available offline
+            if (!(onlyFromLocalStorage && file.isAvailableOffline)) {
                 if (file.isFolder) {
                     deleteLocalFolderRecursively(ocFile = file, onlyFromLocalStorage = onlyFromLocalStorage)
                 } else {

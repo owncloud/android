@@ -53,11 +53,7 @@ import com.owncloud.android.presentation.authentication.EXTRA_ACCOUNT
 import com.owncloud.android.presentation.authentication.EXTRA_ACTION
 import com.owncloud.android.presentation.authentication.LoginActivity
 import com.owncloud.android.presentation.transfers.TransferOperation.Download
-import com.owncloud.android.ui.activity.FileActivity
-import com.owncloud.android.ui.activity.FileDisplayActivity
 import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter
-import com.owncloud.android.ui.preview.PreviewImageActivity
-import com.owncloud.android.ui.preview.PreviewImageFragment.Companion.canBePreviewed
 import com.owncloud.android.utils.DOWNLOAD_NOTIFICATION_CHANNEL_ID
 import com.owncloud.android.utils.DOWNLOAD_NOTIFICATION_ID_DEFAULT
 import com.owncloud.android.utils.FileStorageUtils
@@ -169,8 +165,8 @@ class DownloadFileWorker(
             ocFile.remotePath,
             temporalFolderPath,
             spaceWebDavUrl,
-        ).also {
-            it.addDatatransferProgressListener(this)
+        ).apply {
+            addDatatransferProgressListener(this@DownloadFileWorker)
         }
         val client = getClientForThisDownload()
 
@@ -306,27 +302,6 @@ class DownloadFileWorker(
             System.currentTimeMillis().toInt(),
             updateCredentialsIntent,
             PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_IMMUTABLE
-        )
-    }
-
-    private fun composePendingIntentToPreviewFile(): PendingIntent {
-        /// includes a pending intent in the notification showing the details view of the file
-        val showDetailsIntent: Intent =
-            if (canBePreviewed(ocFile)) {
-                Intent(appContext, PreviewImageActivity::class.java)
-            } else {
-                Intent(appContext, FileDisplayActivity::class.java)
-            }.apply {
-                putExtra(FileActivity.EXTRA_FILE, ocFile)
-                putExtra(FileActivity.EXTRA_ACCOUNT, account)
-                flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-            }
-
-        return PendingIntent.getActivity(
-            appContext,
-            System.currentTimeMillis().toInt(),
-            showDetailsIntent,
-            PendingIntent.FLAG_IMMUTABLE
         )
     }
 

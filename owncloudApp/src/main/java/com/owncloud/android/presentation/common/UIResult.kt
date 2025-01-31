@@ -37,9 +37,10 @@ sealed class UIResult<out T> {
         }
 
     fun getThrowableOrNull(): Throwable? =
-        when (this) {
-            is Error -> error
-            else -> null
+        if (this is Error) {
+            error
+        } else {
+            null
         }
 }
 

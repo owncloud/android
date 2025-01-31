@@ -89,6 +89,13 @@ class PreviewImageActivity : FileActivity(),
     private var localBroadcastManager: LocalBroadcastManager? = null
     private var fullScreenAnchorView: View? = null
 
+    var mHideSystemUiHandler: Handler = object : Handler() {
+        override fun handleMessage(msg: Message) {
+            hideSystemUI(fullScreenAnchorView)
+            showActionBar(false)
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         requestWindowFeature(Window.FEATURE_ACTION_BAR_OVERLAY)
         super.onCreate(savedInstanceState)
@@ -146,7 +153,9 @@ class PreviewImageActivity : FileActivity(),
                     showErrorInSnackbar(R.string.remove_fail_msg, uiResult.getThrowableOrNull())
                 }
 
-                is UIResult.Loading -> showLoadingDialog(R.string.wait_a_moment)
+                is UIResult.Loading -> {
+                    showLoadingDialog(R.string.wait_a_moment)
+                }
                 is UIResult.Success -> {
 
                     // Refresh the spaces and update the quota
@@ -229,13 +238,6 @@ class PreviewImageActivity : FileActivity(),
         delayedHide()
     }
 
-    var mHideSystemUiHandler: Handler = object : Handler() {
-        override fun handleMessage(msg: Message) {
-            hideSystemUI(fullScreenAnchorView)
-            showActionBar(false)
-        }
-    }
-
     private fun delayedHide(delayMillis: Int = INITIAL_HIDE_DELAY) {
         mHideSystemUiHandler.removeMessages(0)
         mHideSystemUiHandler.sendEmptyMessageDelayed(0, delayMillis.toLong())
@@ -252,19 +254,17 @@ class PreviewImageActivity : FileActivity(),
         }
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            android.R.id.home -> {
-                if (isDrawerOpen()) {
-                    closeDrawer()
-                } else {
-                    backToDisplayActivity()
-                }
-                true
+    override fun onOptionsItemSelected(item: MenuItem): Boolean =
+        if (item.itemId == android.R.id.home) {
+            if (isDrawerOpen()) {
+                closeDrawer()
+            } else {
+                backToDisplayActivity()
             }
-            else -> super.onOptionsItemSelected(item)
+            true
+        } else {
+            super.onOptionsItemSelected(item)
         }
-    }
 
     override fun onResume() {
         super.onResume()
@@ -406,19 +406,16 @@ class PreviewImageActivity : FileActivity(),
     }
 
     // The main_menu won't be displayed
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        return false
-    }
+    override fun onCreateOptionsMenu(menu: Menu): Boolean =
+        false
 
-    override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {
-        return when (keyCode) {
-            KeyEvent.KEYCODE_TAB -> {
-                showSystemUI(fullScreenAnchorView)
-                true
-            }
-            else -> super.onKeyUp(keyCode, event)
+    override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean =
+        if (keyCode == KeyEvent.KEYCODE_TAB) {
+            showSystemUI(fullScreenAnchorView)
+            true
+        } else {
+            super.onKeyUp(keyCode, event)
         }
-    }
 
     companion object {
         private const val INITIAL_HIDE_DELAY = 0 // immediate hide

@@ -45,4 +45,8 @@ dependencies {
     testImplementation libs.junit4
     testImplementation libs.kotlinx.coroutines.test
     testImplementation libs.mockk
+
+    // Detekt
+    detektPlugins libs.detekt.formatting
+    detektPlugins libs.detekt.libraries
 }

@@ -17,6 +17,9 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
+
+@file:Suppress("MatchingDeclarationName")
+
 package com.owncloud.android.data.migrations
 
 import androidx.room.migration.Migration
@@ -31,7 +34,9 @@ import java.io.File
 
 val MIGRATION_33_34 = object : Migration(33, 34) {
     override fun migrate(database: SupportSQLiteDatabase) {
-        database.execSQL("CREATE TABLE IF NOT EXISTS `$FOLDER_BACKUP_TABLE_NAME` (`accountName` TEXT NOT NULL, `behavior` TEXT NOT NULL, `sourcePath` TEXT NOT NULL, `uploadPath` TEXT NOT NULL, `wifiOnly` INTEGER NOT NULL, `name` TEXT NOT NULL, `lastSyncTimestamp` INTEGER NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)")
+        database.execSQL("CREATE TABLE IF NOT EXISTS `$FOLDER_BACKUP_TABLE_NAME` (`accountName` TEXT NOT NULL, `behavior` TEXT NOT NULL," +
+                " `sourcePath` TEXT NOT NULL, `uploadPath` TEXT NOT NULL, `wifiOnly` INTEGER NOT NULL, `name` TEXT NOT NULL," +
+                " `lastSyncTimestamp` INTEGER NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)")
     }
 }
 
@@ -79,9 +84,8 @@ class CameraUploadsMigrationToRoom(val sharedPreferencesProvider: SharedPreferen
         return if (uploadPath!!.endsWith(File.separator)) uploadPath else uploadPath + File.separator
     }
 
-    private fun getSourcePathForPreference(keyPreference: String): String {
-        return sharedPreferencesProvider.getString(keyPreference, null) ?: ""
-    }
+    private fun getSourcePathForPreference(keyPreference: String): String =
+        sharedPreferencesProvider.getString(keyPreference, null) ?: ""
 
     private fun getBehaviorForPreference(keyPreference: String): UploadBehavior {
         val storedBehaviour = sharedPreferencesProvider.getString(keyPreference, null) ?: return UploadBehavior.COPY

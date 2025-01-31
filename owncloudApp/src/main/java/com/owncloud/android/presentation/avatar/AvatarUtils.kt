@@ -56,7 +56,7 @@ class AvatarUtils : KoinComponent {
         fetchIfNotCached: Boolean = false,
         displayRadius: Float
     ) {
-        //TODO: Tech debt: Move this to a viewModel and use its viewModelScope instead
+        // Tech debt: Move this to a viewModel and use its viewModelScope instead
         CoroutineScope(Dispatchers.IO).launch {
             val drawable = avatarManager.getAvatarForAccount(
                 account = account,

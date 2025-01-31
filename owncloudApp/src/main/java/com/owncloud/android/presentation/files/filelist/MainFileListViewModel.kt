@@ -67,6 +67,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -177,13 +178,11 @@ class MainFileListViewModel(
         }
     }
 
-    fun getFile(): OCFile {
-        return currentFolderDisplayed.value
-    }
+    fun getFile(): OCFile =
+        currentFolderDisplayed.value
 
-    fun getSpace(): OCSpace? {
-        return space.value
-    }
+    fun getSpace(): OCSpace? =
+        space.value
 
     fun setGridModeAsPreferred() {
         savePreferredLayoutManager(true)
@@ -199,15 +198,14 @@ class MainFileListViewModel(
 
     fun isGridModeSetAsPreferred() = sharedPreferencesProvider.getBoolean(RECYCLER_VIEW_PREFERRED, false)
 
-    private fun sortList(filesWithSyncInfo: List<OCFileWithSyncInfo>, sortTypeAndOrder: Pair<SortType, SortOrder>): List<OCFileWithSyncInfo> {
-        return sortFilesWithSyncInfoUseCase(
+    private fun sortList(filesWithSyncInfo: List<OCFileWithSyncInfo>, sortTypeAndOrder: Pair<SortType, SortOrder>): List<OCFileWithSyncInfo> =
+        sortFilesWithSyncInfoUseCase(
             SortFilesWithSyncInfoUseCase.Params(
                 listOfFiles = filesWithSyncInfo,
                 sortType = SortTypeDomain.fromPreferences(sortTypeAndOrder.first.ordinal),
                 ascending = sortTypeAndOrder.second == SortOrder.SORT_ORDER_ASCENDING
             )
         )
-    }
 
     fun manageBrowseUp() {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
@@ -226,16 +224,21 @@ class MainFileListViewModel(
 
                     FileListOption.SHARED_BY_LINK -> {
                         val fileById = fileByIdResult.getDataOrNull()
-                        parentDir = if (fileById != null && (!fileById.sharedByLink || fileById.sharedWithSharee != true) && fileById.spaceId == null) {
-                            getFileByRemotePathUseCase(GetFileByRemotePathUseCase.Params(fileById.owner, ROOT_PATH)).getDataOrNull()
-                        } else fileById
+                        parentDir =
+                            if (fileById != null && (!fileById.sharedByLink || fileById.sharedWithSharee != true) && fileById.spaceId == null) {
+                                getFileByRemotePathUseCase(GetFileByRemotePathUseCase.Params(fileById.owner, ROOT_PATH)).getDataOrNull()
+                            } else {
+                                fileById
+                            }
                     }
 
                     FileListOption.AV_OFFLINE -> {
                         val fileById = fileByIdResult.getDataOrNull()
                         parentDir = if (fileById != null && (!fileById.isAvailableOffline)) {
                             getFileByRemotePathUseCase(GetFileByRemotePathUseCase.Params(fileById.owner, ROOT_PATH)).getDataOrNull()
-                        } else fileById
+                        } else {
+                            fileById
+                        }
                     }
 
                     FileListOption.SPACES_LIST -> {
@@ -370,7 +373,7 @@ class MainFileListViewModel(
             FileListOption.ALL_FILES -> retrieveFlowForAllFiles(currentFolderDisplayed, currentFolderDisplayed.owner)
             FileListOption.SHARED_BY_LINK -> retrieveFlowForShareByLink(currentFolderDisplayed, currentFolderDisplayed.owner)
             FileListOption.AV_OFFLINE -> retrieveFlowForAvailableOffline(currentFolderDisplayed, currentFolderDisplayed.owner)
-            FileListOption.SPACES_LIST -> TODO()
+            FileListOption.SPACES_LIST -> flowOf()
         }.toFileListUiState(
             currentFolderDisplayed,
             fileListOption,

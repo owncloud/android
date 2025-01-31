@@ -49,6 +49,12 @@ class OAuthViewModel(
     private val _oidcDiscovery = MediatorLiveData<Event<UIResult<OIDCServerConfiguration>>>()
     val oidcDiscovery: LiveData<Event<UIResult<OIDCServerConfiguration>>> = _oidcDiscovery
 
+    private val _registerClient = MediatorLiveData<Event<UIResult<ClientRegistrationInfo>>>()
+    val registerClient: LiveData<Event<UIResult<ClientRegistrationInfo>>> = _registerClient
+
+    private val _requestToken = MediatorLiveData<Event<UIResult<TokenResponse>>>()
+    val requestToken: LiveData<Event<UIResult<TokenResponse>>> = _requestToken
+
     fun getOIDCServerConfiguration(
         serverUrl: String
     ) = runUseCaseWithResult(
@@ -58,9 +64,6 @@ class OAuthViewModel(
         useCase = getOIDCDiscoveryUseCase,
         useCaseParams = OIDCDiscoveryUseCase.Params(baseUrl = serverUrl)
     )
-
-    private val _registerClient = MediatorLiveData<Event<UIResult<ClientRegistrationInfo>>>()
-    val registerClient: LiveData<Event<UIResult<ClientRegistrationInfo>>> = _registerClient
 
     fun registerClient(
         registrationEndpoint: String
@@ -78,9 +81,6 @@ class OAuthViewModel(
             useCaseParams = RegisterClientUseCase.Params(registrationRequest)
         )
     }
-
-    private val _requestToken = MediatorLiveData<Event<UIResult<TokenResponse>>>()
-    val requestToken: LiveData<Event<UIResult<TokenResponse>>> = _requestToken
 
     fun requestToken(
         tokenRequest: TokenRequest

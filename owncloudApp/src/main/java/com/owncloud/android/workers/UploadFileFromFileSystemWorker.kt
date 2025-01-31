@@ -57,7 +57,7 @@ import com.owncloud.android.lib.resources.files.chunks.ChunkedUploadFromFileSyst
 import com.owncloud.android.lib.resources.files.services.implementation.OCChunkService
 import com.owncloud.android.presentation.authentication.AccountUtils
 import com.owncloud.android.utils.NotificationUtils
-import com.owncloud.android.utils.RemoteFileUtils.Companion.getAvailableRemotePath
+import com.owncloud.android.utils.RemoteFileUtils.getAvailableRemotePath
 import com.owncloud.android.utils.SecurityUtils
 import com.owncloud.android.utils.UPLOAD_NOTIFICATION_CHANNEL_ID
 import kotlinx.coroutines.CoroutineScope
@@ -147,8 +147,8 @@ class UploadFileFromFileSystemWorker(
         return true
     }
 
-    private fun retrieveUploadInfoFromDatabase(): OCTransfer? {
-        return transferRepository.getTransferById(uploadIdInStorageManager).also {
+    private fun retrieveUploadInfoFromDatabase(): OCTransfer? =
+        transferRepository.getTransferById(uploadIdInStorageManager).also {
             if (it != null) {
                 Timber.d("Upload with id ($uploadIdInStorageManager) has been found in database.")
                 Timber.d("Upload info: $it")
@@ -157,7 +157,6 @@ class UploadFileFromFileSystemWorker(
                 Timber.w("$uploadPath won't be uploaded")
             }
         }
-    }
 
     private fun checkPermissionsToReadDocumentAreGranted() {
         val fileInFileSystem = File(fileSystemPath)
@@ -248,8 +247,8 @@ class UploadFileFromFileSystemWorker(
             lastModifiedTimestamp = lastModified,
             requiredEtag = eTagInConflict,
             spaceWebDavUrl = spaceWebDavUrl,
-        ).also {
-            it.addDataTransferProgressListener(this)
+        ).apply {
+            addDataTransferProgressListener(this@UploadFileFromFileSystemWorker)
         }
 
         val result = executeRemoteOperation { uploadFileOperation.execute(client) }
@@ -277,8 +276,8 @@ class UploadFileFromFileSystemWorker(
             mimeType = mimetype,
             lastModifiedTimestamp = lastModified,
             requiredEtag = eTagInConflict,
-        ).also {
-            it.addDataTransferProgressListener(this)
+        ).apply {
+            addDataTransferProgressListener(this@UploadFileFromFileSystemWorker)
         }
 
         val result = executeRemoteOperation { uploadFileOperation.execute(client) }
@@ -312,13 +311,12 @@ class UploadFileFromFileSystemWorker(
         )
     }
 
-    private fun getUploadStatusForThrowable(throwable: Throwable?): TransferStatus {
-        return if (throwable == null) {
+    private fun getUploadStatusForThrowable(throwable: Throwable?): TransferStatus =
+        if (throwable == null) {
             TransferStatus.TRANSFER_SUCCEEDED
         } else {
             TransferStatus.TRANSFER_FAILED
         }
-    }
 
     /**
      * Update the database with latest details about this file.

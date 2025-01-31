@@ -119,14 +119,13 @@ class WorkManagerProvider(
         WorkManager.getInstance(context).enqueue(removeLocallyFilesWithLastUsageOlderThanGivenTimeWorker)
     }
 
-    fun getRunningUploadsWorkInfosLiveData(): LiveData<List<WorkInfo>> {
-        return WorkManager.getInstance(context).getRunningWorkInfosLiveData(
+    fun getRunningUploadsWorkInfosLiveData(): LiveData<List<WorkInfo>> =
+        WorkManager.getInstance(context).getRunningWorkInfosLiveData(
             listOf(
                 UploadFileFromContentUriWorker::class.java.name,
                 UploadFileFromFileSystemWorker::class.java.name
             )
         )
-    }
 
     fun cancelAllWorkByTag(tag: String) = WorkManager.getInstance(context).cancelAllWorkByTag(tag)
 

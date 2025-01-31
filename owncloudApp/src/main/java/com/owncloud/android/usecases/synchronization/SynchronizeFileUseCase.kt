@@ -53,6 +53,7 @@ class SynchronizeFileUseCase(
                     spaceId = fileToSynchronize.spaceId
                 )
             } catch (exception: FileNotFoundException) {
+                Timber.i(exception, "File does not exist anymore in remote")
                 // 1.1 File does not exist anymore in remote
                 val localFile = fileToSynchronize.id?.let { fileRepository.getFileById(it) }
                 // If it still exists locally, but file has different path, another operation could have been done simultaneously
@@ -65,63 +66,63 @@ class SynchronizeFileUseCase(
             }
 
             // 2. File not downloaded -> Download it
-            if (!fileToSynchronize.isAvailableLocally) {
+            return if (!fileToSynchronize.isAvailableLocally) {
                 Timber.i("File ${fileToSynchronize.fileName} is not downloaded. Let's download it")
                 val uuid = requestForDownload(accountName = accountName, ocFile = fileToSynchronize)
-                return SyncType.DownloadEnqueued(uuid)
-            }
-
-            // 3. Check if file has changed locally
-            val changedLocally = fileToSynchronize.localModificationTimestamp > fileToSynchronize.lastSyncDateForData!!
-            Timber.i("Local file modification timestamp :${fileToSynchronize.localModificationTimestamp} and last sync date for data :${fileToSynchronize.lastSyncDateForData}")
-            Timber.i("So it has changed locally: $changedLocally")
-
-            // 4. Check if file has changed remotely
-            val changedRemotely = serverFile.etag != fileToSynchronize.etag
-            Timber.i("Local etag :${fileToSynchronize.etag} and remote etag :${serverFile.etag}")
-            Timber.i("So it has changed remotely: $changedRemotely")
-
-            if (changedLocally && changedRemotely) {
-                // 5.1 File has changed locally and remotely. We got a conflict, save the conflict.
-                Timber.i("File ${fileToSynchronize.fileName} has changed locally and remotely. We got a conflict with etag: ${serverFile.etag}")
-                if (fileToSynchronize.etagInConflict == null) {
-                    saveConflictUseCase(
-                        SaveConflictUseCase.Params(
-                            fileId = fileToSynchronize.id!!,
-                            eTagInConflict = serverFile.etag!!
-                        )
-                    )
-                }
-                return SyncType.ConflictDetected(serverFile.etag!!)
-            } else if (changedRemotely) {
-                // 5.2 File has changed ONLY remotely -> download new version
-                Timber.i("File ${fileToSynchronize.fileName} has changed remotely. Let's download the new version")
-                val uuid = requestForDownload(accountName, fileToSynchronize)
-                return SyncType.DownloadEnqueued(uuid)
-            } else if (changedLocally) {
-                // 5.3 File has change ONLY locally -> upload new version
-                Timber.i("File ${fileToSynchronize.fileName} has changed locally. Let's upload the new version")
-                val uuid = requestForUpload(accountName, fileToSynchronize, fileToSynchronize.etag!!)
-                return SyncType.UploadEnqueued(uuid)
+                SyncType.DownloadEnqueued(uuid)
             } else {
-                // 5.4 File has not change locally not remotely -> do nothing
-                Timber.i("File ${fileToSynchronize.fileName} is already synchronized. Nothing to do here")
-                return SyncType.AlreadySynchronized
+                // 3. Check if file has changed locally
+                val changedLocally = fileToSynchronize.localModificationTimestamp > fileToSynchronize.lastSyncDateForData!!
+                Timber.i("Local file modification timestamp :${fileToSynchronize.localModificationTimestamp}" +
+                        " and last sync date for data :${fileToSynchronize.lastSyncDateForData}")
+                Timber.i("So it has changed locally: $changedLocally")
+
+                // 4. Check if file has changed remotely
+                val changedRemotely = serverFile.etag != fileToSynchronize.etag
+                Timber.i("Local etag :${fileToSynchronize.etag} and remote etag :${serverFile.etag}")
+                Timber.i("So it has changed remotely: $changedRemotely")
+
+                if (changedLocally && changedRemotely) {
+                    // 5.1 File has changed locally and remotely. We got a conflict, save the conflict.
+                    Timber.i("File ${fileToSynchronize.fileName} has changed locally and remotely. We got a conflict with etag: ${serverFile.etag}")
+                    if (fileToSynchronize.etagInConflict == null) {
+                        saveConflictUseCase(
+                            SaveConflictUseCase.Params(
+                                fileId = fileToSynchronize.id!!,
+                                eTagInConflict = serverFile.etag!!
+                            )
+                        )
+                    }
+                    SyncType.ConflictDetected(serverFile.etag!!)
+                } else if (changedRemotely) {
+                    // 5.2 File has changed ONLY remotely -> download new version
+                    Timber.i("File ${fileToSynchronize.fileName} has changed remotely. Let's download the new version")
+                    val uuid = requestForDownload(accountName, fileToSynchronize)
+                    SyncType.DownloadEnqueued(uuid)
+                } else if (changedLocally) {
+                    // 5.3 File has change ONLY locally -> upload new version
+                    Timber.i("File ${fileToSynchronize.fileName} has changed locally. Let's upload the new version")
+                    val uuid = requestForUpload(accountName, fileToSynchronize)
+                    SyncType.UploadEnqueued(uuid)
+                } else {
+                    // 5.4 File has not change locally not remotely -> do nothing
+                    Timber.i("File ${fileToSynchronize.fileName} is already synchronized. Nothing to do here")
+                    SyncType.AlreadySynchronized
+                }
             }
         }
     }
 
-    private fun requestForDownload(accountName: String, ocFile: OCFile): UUID? {
-        return downloadFileUseCase(
+    private fun requestForDownload(accountName: String, ocFile: OCFile): UUID? =
+        downloadFileUseCase(
             DownloadFileUseCase.Params(
                 accountName = accountName,
                 file = ocFile
             )
         )
-    }
 
-    private fun requestForUpload(accountName: String, ocFile: OCFile, etagInConflict: String): UUID? {
-        return uploadFileInConflictUseCase(
+    private fun requestForUpload(accountName: String, ocFile: OCFile): UUID? =
+        uploadFileInConflictUseCase(
             UploadFileInConflictUseCase.Params(
                 accountName = accountName,
                 localPath = ocFile.storagePath!!,
@@ -129,7 +130,6 @@ class SynchronizeFileUseCase(
                 spaceId = ocFile.spaceId,
             )
         )
-    }
 
     data class Params(
         val fileToSynchronize: OCFile,

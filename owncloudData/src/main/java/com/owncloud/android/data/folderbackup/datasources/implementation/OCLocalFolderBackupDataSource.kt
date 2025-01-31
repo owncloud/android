@@ -61,6 +61,19 @@ class OCLocalFolderBackupDataSource(
      ************************************************* Mappers ****************************************************
      **************************************************************************************************************/
 
+    private fun FolderBackUpConfiguration.toEntity(): FolderBackUpEntity =
+        FolderBackUpEntity(
+            accountName = accountName,
+            behavior = behavior.toString(),
+            sourcePath = sourcePath,
+            uploadPath = uploadPath,
+            wifiOnly = wifiOnly,
+            chargingOnly = chargingOnly,
+            name = name,
+            lastSyncTimestamp = lastSyncTimestamp,
+            spaceId = spaceId,
+        )
+
     companion object {
         @VisibleForTesting
         fun FolderBackUpEntity.toModel() =
@@ -76,18 +89,4 @@ class OCLocalFolderBackupDataSource(
                 spaceId = spaceId,
             )
     }
-
-
-    private fun FolderBackUpConfiguration.toEntity(): FolderBackUpEntity =
-        FolderBackUpEntity(
-            accountName = accountName,
-            behavior = behavior.toString(),
-            sourcePath = sourcePath,
-            uploadPath = uploadPath,
-            wifiOnly = wifiOnly,
-            chargingOnly = chargingOnly,
-            name = name,
-            lastSyncTimestamp = lastSyncTimestamp,
-            spaceId = spaceId,
-        )
 }

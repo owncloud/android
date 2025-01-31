@@ -32,9 +32,8 @@ class SettingsAdvancedViewModel(
     private val workManagerProvider: WorkManagerProvider,
 ) : ViewModel() {
 
-    fun isHiddenFilesShown(): Boolean {
-        return preferencesProvider.getBoolean(PREF_SHOW_HIDDEN_FILES, false)
-    }
+    fun isHiddenFilesShown(): Boolean =
+        preferencesProvider.getBoolean(PREF_SHOW_HIDDEN_FILES, false)
 
     fun setShowHiddenFiles(hide: Boolean) {
         preferencesProvider.putBoolean(PREF_SHOW_HIDDEN_FILES, hide)

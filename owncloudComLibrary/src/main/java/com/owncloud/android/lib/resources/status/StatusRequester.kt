@@ -49,26 +49,24 @@ internal class StatusRequester {
             (baseUrl.startsWith(HTTPS_SCHEME) &&
                     !redirectedUrl.startsWith(HTTPS_SCHEME))
 
-    fun updateLocationWithRedirectPath(oldLocation: String, redirectedLocation: String): String {
+    fun updateLocationWithRedirectPath(oldLocation: String, redirectedLocation: String): String =
         /** Redirection with different endpoint.
          * When asking for server.com/status.php and redirected to different.one/, we need to ask different.one/status.php
          */
         if (redirectedLocation.endsWith('/')) {
-            return redirectedLocation.trimEnd('/') + OwnCloudClient.STATUS_PATH
+            redirectedLocation.trimEnd('/') + OwnCloudClient.STATUS_PATH
+        } else if (!redirectedLocation.startsWith("/")) {
+                redirectedLocation
+        } else {
+            val oldLocationURL = URL(oldLocation)
+            URL(oldLocationURL.protocol, oldLocationURL.host, oldLocationURL.port, redirectedLocation).toString()
         }
 
-        if (!redirectedLocation.startsWith("/"))
-            return redirectedLocation
-        val oldLocationURL = URL(oldLocation)
-        return URL(oldLocationURL.protocol, oldLocationURL.host, oldLocationURL.port, redirectedLocation).toString()
-    }
-
-    private fun getGetMethod(url: String): GetMethod {
-        return GetMethod(URL(url)).apply {
+    private fun getGetMethod(url: String): GetMethod =
+        GetMethod(URL(url)).apply {
             setReadTimeout(TRY_CONNECTION_TIMEOUT, TimeUnit.SECONDS)
             setConnectionTimeout(TRY_CONNECTION_TIMEOUT, TimeUnit.SECONDS)
         }
-    }
 
     data class RequestResult(
         val getMethod: GetMethod,
@@ -93,33 +91,33 @@ internal class StatusRequester {
         requestResult: RequestResult,
         baseUrl: String
     ): RemoteOperationResult<RemoteServerInfo> {
-        if (!requestResult.status.isSuccess())
-            return RemoteOperationResult(requestResult.getMethod)
-
         val respJSON = JSONObject(requestResult.getMethod.getResponseBodyAsString())
-        if (!respJSON.getBoolean(NODE_INSTALLED))
-            return RemoteOperationResult(RemoteOperationResult.ResultCode.INSTANCE_NOT_CONFIGURED)
+        return if (!requestResult.status.isSuccess()) {
+            RemoteOperationResult(requestResult.getMethod)
+        } else if (!respJSON.getBoolean(NODE_INSTALLED)) {
+            RemoteOperationResult(RemoteOperationResult.ResultCode.INSTANCE_NOT_CONFIGURED)
+        } else {
+            val ocVersion = OwnCloudVersion(respJSON.getString(NODE_VERSION))
+            // the version object will be returned even if the version is invalid, no error code;
+            // every app will decide how to act if (ocVersion.isVersionValid() == false)
+            val result: RemoteOperationResult<RemoteServerInfo> =
+                if (baseUrl.startsWith(HTTPS_SCHEME)) RemoteOperationResult(RemoteOperationResult.ResultCode.OK_SSL)
+                else RemoteOperationResult(RemoteOperationResult.ResultCode.OK_NO_SSL)
+            val finalUrl = URL(requestResult.lastLocation)
+            val finalBaseUrl = URL(
+                finalUrl.protocol,
+                finalUrl.host,
+                finalUrl.port,
+                finalUrl.file.dropLastWhile { it != '/' }.trimEnd('/')
+            )
 
-        val ocVersion = OwnCloudVersion(respJSON.getString(NODE_VERSION))
-        // the version object will be returned even if the version is invalid, no error code;
-        // every app will decide how to act if (ocVersion.isVersionValid() == false)
-        val result: RemoteOperationResult<RemoteServerInfo> =
-            if (baseUrl.startsWith(HTTPS_SCHEME)) RemoteOperationResult(RemoteOperationResult.ResultCode.OK_SSL)
-            else RemoteOperationResult(RemoteOperationResult.ResultCode.OK_NO_SSL)
-        val finalUrl = URL(requestResult.lastLocation)
-        val finalBaseUrl = URL(
-            finalUrl.protocol,
-            finalUrl.host,
-            finalUrl.port,
-            finalUrl.file.dropLastWhile { it != '/' }.trimEnd('/')
-        )
-
-        result.data = RemoteServerInfo(
-            ownCloudVersion = ocVersion,
-            baseUrl = finalBaseUrl.toString(),
-            isSecureConnection = finalBaseUrl.protocol.startsWith(HTTPS_SCHEME)
-        )
-        return result
+            result.data = RemoteServerInfo(
+                ownCloudVersion = ocVersion,
+                baseUrl = finalBaseUrl.toString(),
+                isSecureConnection = finalBaseUrl.protocol.startsWith(HTTPS_SCHEME)
+            )
+            result
+        }
     }
 
     companion object {

@@ -62,19 +62,18 @@ sealed class LocalStorageProvider(private val rootFolderName: String) {
         accountName: String,
         remotePath: String,
         spaceId: String?,
-    ): String {
-        return if (spaceId != null) {
+    ): String =
+        if (spaceId != null) {
             getAccountDirectoryPath(accountName) + File.separator + spaceId + File.separator + remotePath
         } else {
             getAccountDirectoryPath(accountName) + remotePath
         }
-    }
 
     /**
      * Get expected remote path for a file creation, rename, move etc
      */
     fun getExpectedRemotePath(remotePath: String, newName: String, isFolder: Boolean): String {
-        var parent = (File(remotePath)).parent ?: throw IllegalArgumentException()
+        var parent = (File(remotePath)).parent ?: throw IllegalArgumentException("Parent path is null")
         parent = if (parent.endsWith(File.separator)) parent else parent + File.separator
         var newRemotePath = parent + newName
         if (isFolder) {

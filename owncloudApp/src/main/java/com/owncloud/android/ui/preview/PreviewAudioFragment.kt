@@ -180,6 +180,7 @@ class PreviewAudioFragment : FileFragment() {
                 imagePreview?.setImageResource(R.drawable.ic_place_holder_music_cover_art)
             }
         } catch (t: Throwable) {
+            Timber.i(t, "Couldn't extract cover art, setting default image instead")
             imagePreview?.setImageResource(R.drawable.ic_place_holder_music_cover_art)
         }
     }
@@ -259,15 +260,16 @@ class PreviewAudioFragment : FileFragment() {
 
     private fun setRolesAccessibilityToMenuItems(menu: Menu) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            menu.findItem(R.id.action_see_details)?.contentDescription = "${getString(R.string.actionbar_see_details)} ${getString(R.string.button_role_accessibility)}"
+            menu.findItem(R.id.action_see_details)?.contentDescription =
+                "${getString(R.string.actionbar_see_details)} ${getString(R.string.button_role_accessibility)}"
         }
     }
 
     /**
      * {@inheritDoc}
      */
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean =
+        when (item.itemId) {
             R.id.action_share_file -> {
                 mContainerActivity.fileOperationsHelper.showShareFile(file)
                 true
@@ -311,9 +313,10 @@ class PreviewAudioFragment : FileFragment() {
                 true
             }
 
-            else -> super.onOptionsItemSelected(item)
+            else -> {
+                super.onOptionsItemSelected(item)
+            }
         }
-    }
 
     private fun seeDetails() {
         mContainerActivity.showDetails(file)

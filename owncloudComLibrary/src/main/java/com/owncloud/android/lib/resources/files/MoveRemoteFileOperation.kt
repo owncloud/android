@@ -63,61 +63,58 @@ open class MoveRemoteFileOperation(
      *
      * @param client Client object to communicate with the remote ownCloud server.
      */
-    override fun run(client: OwnCloudClient): RemoteOperationResult<Unit> {
+    override fun run(client: OwnCloudClient): RemoteOperationResult<Unit> =
         if (targetRemotePath == sourceRemotePath) {
             // nothing to do!
-            return RemoteOperationResult(ResultCode.OK)
-        }
+            RemoteOperationResult(ResultCode.OK)
+        } else if (targetRemotePath.startsWith(sourceRemotePath)) {
+            RemoteOperationResult(ResultCode.INVALID_MOVE_INTO_DESCENDANT)
+        } else {
+            /// perform remote operation
+            var result: RemoteOperationResult<Unit>
+            try {
+                // After finishing a chunked upload, we have to move the resulting file from uploads folder to files one,
+                // so this uri has to be customizable
+                val srcWebDavUri = getSrcWebDavUriForClient(client)
+                val moveMethod = MoveMethod(
+                    url = URL((spaceWebDavUrl ?: srcWebDavUri.toString()) + WebdavUtils.encodePath(sourceRemotePath)),
+                    destinationUrl = (spaceWebDavUrl ?: client.userFilesWebDavUri.toString()) + WebdavUtils.encodePath(targetRemotePath),
+                    forceOverride = forceOverride,
+                ).apply {
+                    addRequestHeaders(this)
+                    setReadTimeout(MOVE_READ_TIMEOUT, TimeUnit.SECONDS)
+                    setConnectionTimeout(MOVE_CONNECTION_TIMEOUT, TimeUnit.SECONDS)
+                }
 
-        if (targetRemotePath.startsWith(sourceRemotePath)) {
-            return RemoteOperationResult(ResultCode.INVALID_MOVE_INTO_DESCENDANT)
-        }
+                val status = client.executeHttpMethod(moveMethod)
 
-        /// perform remote operation
-        var result: RemoteOperationResult<Unit>
-        try {
-            // After finishing a chunked upload, we have to move the resulting file from uploads folder to files one,
-            // so this uri has to be customizable
-            val srcWebDavUri = getSrcWebDavUriForClient(client)
-            val moveMethod = MoveMethod(
-                url = URL((spaceWebDavUrl ?: srcWebDavUri.toString()) + WebdavUtils.encodePath(sourceRemotePath)),
-                destinationUrl = (spaceWebDavUrl ?: client.userFilesWebDavUri.toString()) + WebdavUtils.encodePath(targetRemotePath),
-                forceOverride = forceOverride,
-            ).apply {
-                addRequestHeaders(this)
-                setReadTimeout(MOVE_READ_TIMEOUT, TimeUnit.SECONDS)
-                setConnectionTimeout(MOVE_CONNECTION_TIMEOUT, TimeUnit.SECONDS)
+                when {
+                    isSuccess(status) -> {
+                        result = RemoteOperationResult<Unit>(ResultCode.OK)
+                    }
+
+                    isPreconditionFailed(status) -> {
+                        result = RemoteOperationResult<Unit>(ResultCode.INVALID_OVERWRITE)
+                        client.exhaustResponse(moveMethod.getResponseBodyAsStream())
+
+                        /// for other errors that could be explicitly handled, check first:
+                        /// http://www.webdav.org/specs/rfc4918.html#rfc.section.9.9.4
+                    }
+
+                    else -> {
+                        result = RemoteOperationResult<Unit>(moveMethod)
+                        client.exhaustResponse(moveMethod.getResponseBodyAsStream())
+                    }
+                }
+
+                Timber.i("Move $sourceRemotePath to $targetRemotePath - HTTP status code: $status")
+            } catch (e: Exception) {
+                result = RemoteOperationResult<Unit>(e)
+                Timber.e(e, "Move $sourceRemotePath to $targetRemotePath: ${result.logMessage}")
+
             }
-
-            val status = client.executeHttpMethod(moveMethod)
-
-            when {
-                isSuccess(status) -> {
-                    result = RemoteOperationResult<Unit>(ResultCode.OK)
-                }
-
-                isPreconditionFailed(status) -> {
-                    result = RemoteOperationResult<Unit>(ResultCode.INVALID_OVERWRITE)
-                    client.exhaustResponse(moveMethod.getResponseBodyAsStream())
-
-                    /// for other errors that could be explicitly handled, check first:
-                    /// http://www.webdav.org/specs/rfc4918.html#rfc.section.9.9.4
-                }
-
-                else -> {
-                    result = RemoteOperationResult<Unit>(moveMethod)
-                    client.exhaustResponse(moveMethod.getResponseBodyAsStream())
-                }
-            }
-
-            Timber.i("Move $sourceRemotePath to $targetRemotePath - HTTP status code: $status")
-        } catch (e: Exception) {
-            result = RemoteOperationResult<Unit>(e)
-            Timber.e(e, "Move $sourceRemotePath to $targetRemotePath: ${result.logMessage}")
-
+            result
         }
-        return result
-    }
 
     /**
      * For standard moves, we will use [OwnCloudClient.getUserFilesWebDavUri].

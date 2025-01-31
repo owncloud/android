@@ -84,10 +84,9 @@ class ConflictsResolveDialogFragment : DialogFragment() {
     }
 
     companion object {
-        fun newInstance(onConflictDecisionMadeListener: OnConflictDecisionMadeListener): ConflictsResolveDialogFragment {
-            return ConflictsResolveDialogFragment().apply {
+        fun newInstance(onConflictDecisionMadeListener: OnConflictDecisionMadeListener): ConflictsResolveDialogFragment =
+            ConflictsResolveDialogFragment().apply {
                 listener = onConflictDecisionMadeListener
             }
-        }
     }
 }

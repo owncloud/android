@@ -30,6 +30,7 @@ import com.owncloud.android.ui.preview.PreviewVideoActivity
 import com.owncloud.android.usecases.files.RemoveLocallyFilesWithLastUsageOlderThanGivenTimeUseCase
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
 class RemoveLocallyFilesWithLastUsageOlderThanGivenTimeWorker(
@@ -41,9 +42,8 @@ class RemoveLocallyFilesWithLastUsageOlderThanGivenTimeWorker(
 ), KoinComponent {
 
     private val removeLocallyFilesWithLastUsageOlderThanGivenTimeUseCase: RemoveLocallyFilesWithLastUsageOlderThanGivenTimeUseCase by inject()
-    override suspend fun doWork(): Result {
-
-        return try {
+    override suspend fun doWork(): Result =
+        try {
             removeLocallyFilesWithLastUsageOlderThanGivenTimeUseCase(
                 RemoveLocallyFilesWithLastUsageOlderThanGivenTimeUseCase.Params(
                     idFilePreviewing = filePreviewing(),
@@ -51,19 +51,18 @@ class RemoveLocallyFilesWithLastUsageOlderThanGivenTimeWorker(
             )
             Result.success()
         } catch (exception: Exception) {
+            Timber.e(exception, "An error occurred when trying to remove local files")
             Result.failure()
         }
-    }
 
-    private fun filePreviewing(): String? {
-        return when {
+    private fun filePreviewing(): String? =
+        when {
             PreviewVideoActivity.isOpen -> PreviewVideoActivity.currentFilePreviewing?.remoteId
             PreviewTextFragment.isOpen -> PreviewTextFragment.currentFilePreviewing?.remoteId
             PreviewImageFragment.isOpen -> PreviewImageFragment.currentFilePreviewing?.remoteId
             PreviewAudioFragment.isOpen -> PreviewAudioFragment.currentFilePreviewing?.remoteId
             else -> null
         }
-    }
 
     companion object {
         const val DELETE_FILES_OLDER_GIVEN_TIME_WORKER = "DELETE_FILES_OLDER_GIVEN_TIME_WORKER"

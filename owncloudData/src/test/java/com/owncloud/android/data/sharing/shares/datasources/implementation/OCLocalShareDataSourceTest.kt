@@ -45,6 +45,36 @@ class OCLocalShareDataSourceTest {
     private lateinit var ocLocalSharesDataSource: OCLocalShareDataSource
     private val ocSharesDao = mockk<OCShareDao>(relaxUnitFun = true)
 
+    private val privateShares = listOf(
+        OC_PRIVATE_SHARE.copy(
+            path = "/Docs/doc1.doc",
+            shareWith = "username",
+            sharedWithDisplayName = "Sophie"
+        ).toEntity(),
+        OC_PRIVATE_SHARE.copy(
+            path = "/Docs/doc1.doc",
+            shareWith = "user.name",
+            sharedWithDisplayName = "Nicole"
+        ).toEntity()
+    )
+
+    private val privateShareTypes = listOf(ShareType.USER, ShareType.GROUP, ShareType.FEDERATED)
+
+    private val publicShares = listOf(
+        OC_PUBLIC_SHARE.copy(
+            path = "/Photos/",
+            isFolder = true,
+            name = "Photos link",
+            shareLink = "http://server:port/s/1"
+        ).toEntity(),
+        OC_PUBLIC_SHARE.copy(
+            path = "/Photos/",
+            isFolder = true,
+            name = "Photos link 2",
+            shareLink = "http://server:port/s/2"
+        ).toEntity()
+    )
+
     @Rule
     @JvmField
     val instantExecutorRule = InstantTaskExecutorRule()
@@ -61,21 +91,6 @@ class OCLocalShareDataSourceTest {
     /******************************************************************************************************
      ******************************************* PRIVATE SHARES *******************************************
      ******************************************************************************************************/
-
-    private val privateShares = listOf(
-        OC_PRIVATE_SHARE.copy(
-            path = "/Docs/doc1.doc",
-            shareWith = "username",
-            sharedWithDisplayName = "Sophie"
-        ).toEntity(),
-        OC_PRIVATE_SHARE.copy(
-            path = "/Docs/doc1.doc",
-            shareWith = "user.name",
-            sharedWithDisplayName = "Nicole"
-        ).toEntity()
-    )
-
-    private val privateShareTypes = listOf(ShareType.USER, ShareType.GROUP, ShareType.FEDERATED)
 
     @Test
     fun `getSharesAsLiveData returns a LiveData of a list of OCShare when read local private shares`() {
@@ -181,21 +196,6 @@ class OCLocalShareDataSourceTest {
     /******************************************************************************************************
      ******************************************* PUBLIC SHARES ********************************************
      ******************************************************************************************************/
-
-    private val publicShares = listOf(
-        OC_PUBLIC_SHARE.copy(
-            path = "/Photos/",
-            isFolder = true,
-            name = "Photos link",
-            shareLink = "http://server:port/s/1"
-        ).toEntity(),
-        OC_PUBLIC_SHARE.copy(
-            path = "/Photos/",
-            isFolder = true,
-            name = "Photos link 2",
-            shareLink = "http://server:port/s/2"
-        ).toEntity()
-    )
 
     @Test
     fun `getSharesAsLiveData returns a LiveData of a list of OCShare when read local public shares`() {

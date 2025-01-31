@@ -60,7 +60,7 @@ class TokenRequestRemoteOperation(
 
             val responseBody = postMethod.getResponseBodyAsString()
 
-            if (status == HTTP_OK && responseBody != null) {
+            return if (status == HTTP_OK && responseBody != null) {
                 Timber.d("Successful response $responseBody")
 
                 // Parse the response
@@ -69,13 +69,13 @@ class TokenRequestRemoteOperation(
                 val tokenResponse: TokenResponse? = jsonAdapter.fromJson(responseBody)
                 Timber.d("Get tokens completed and parsed to $tokenResponse")
 
-                return RemoteOperationResult<TokenResponse>(RemoteOperationResult.ResultCode.OK).apply {
+                RemoteOperationResult<TokenResponse>(RemoteOperationResult.ResultCode.OK).apply {
                     data = tokenResponse
                 }
 
             } else {
                 Timber.e("Failed response while getting tokens from the server status code: $status; response message: $responseBody")
-                return RemoteOperationResult<TokenResponse>(postMethod)
+                RemoteOperationResult<TokenResponse>(postMethod)
             }
 
         } catch (e: Exception) {

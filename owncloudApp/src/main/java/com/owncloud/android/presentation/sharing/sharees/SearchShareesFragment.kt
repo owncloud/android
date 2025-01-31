@@ -132,9 +132,8 @@ class SearchShareesFragment : Fragment(),
                 // a user / group will be picked only if selected in the list of suggestions
             }
 
-            override fun onQueryTextChange(newText: String): Boolean {
-                return false   // let it for the parent listener in the hierarchy / default behaviour
-            }
+            override fun onQueryTextChange(newText: String): Boolean =
+                false   // let it for the parent listener in the hierarchy / default behaviour
         })
     }
 
@@ -191,6 +190,7 @@ class SearchShareesFragment : Fragment(),
         try {
             listener = activity as ShareFragmentListener?
         } catch (e: ClassCastException) {
+            Timber.e(e, "The activity attached doesn't implement OnFragmentInteractionListener")
             throw ClassCastException(requireActivity().toString() + " must implement OnFragmentInteractionListener")
         }
     }

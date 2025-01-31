@@ -54,9 +54,8 @@ class ContentUriRequestBody(
         return contentType.toMediaTypeOrNull()
     }
 
-    override fun contentLength(): Long {
-        return fileSize
-    }
+    override fun contentLength(): Long =
+        fileSize
 
     override fun writeTo(sink: BufferedSink) {
         val inputStream = contentResolver.openInputStream(contentUri)

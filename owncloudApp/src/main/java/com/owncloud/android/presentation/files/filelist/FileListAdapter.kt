@@ -85,8 +85,8 @@ class FileListAdapter(
         diffResult.dispatchUpdatesTo(this)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return when (viewType) {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder =
+        when (viewType) {
             ViewType.LIST_ITEM.ordinal -> {
                 val binding = ItemFileListBinding.inflate(LayoutInflater.from(parent.context), parent, false)
                 binding.root.apply {
@@ -123,7 +123,6 @@ class FileListAdapter(
                 FooterViewHolder(binding)
             }
         }
-    }
 
     override fun getItemCount(): Int = files.size
 
@@ -131,9 +130,9 @@ class FileListAdapter(
 
     private fun isFooter(position: Int) = position == files.size.minus(1)
 
-    override fun getItemViewType(position: Int): Int {
+    override fun getItemViewType(position: Int): Int =
 
-        return if (isFooter(position)) {
+        if (isFooter(position)) {
             ViewType.FOOTER.ordinal
         } else {
             when {
@@ -150,7 +149,6 @@ class FileListAdapter(
                 }
             }
         }
-    }
 
     fun getCheckedItems(): List<OCFileWithSyncInfo> {
         val checkedItems = mutableListOf<OCFileWithSyncInfo>()
@@ -188,11 +186,7 @@ class FileListAdapter(
             val fileIcon = holder.itemView.findViewById<ImageView>(R.id.thumbnail).apply {
                 tag = file.id
             }
-            val thumbnail: Bitmap? = if (file.remoteId != null) {
-                ThumbnailsCacheManager.getBitmapFromDiskCache(file.remoteId)
-            } else {
-                null
-            }
+            val thumbnail: Bitmap? = file.remoteId?.let { ThumbnailsCacheManager.getBitmapFromDiskCache(file.remoteId) }
 
             holder.itemView.findViewById<LinearLayout>(R.id.ListItemLayout)?.apply {
                 contentDescription = "LinearLayout-$name"
@@ -207,71 +201,7 @@ class FileListAdapter(
             holder.itemView.findViewById<ImageView>(R.id.shared_via_users_icon).isVisible =
                 file.sharedWithSharee == true || file.isSharedWithMe
 
-            when (viewType) {
-                ViewType.LIST_ITEM.ordinal -> {
-                    val view = holder as ListViewHolder
-                    view.binding.let {
-                        it.fileListConstraintLayout.filterTouchesWhenObscured = PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(context)
-                        it.Filename.text = file.fileName
-                        it.fileListSize.text = DisplayUtils.bytesToHumanReadable(file.length, context, true)
-                        it.fileListLastMod.text = DisplayUtils.getRelativeTimestamp(context, file.modificationTimestamp)
-                        it.threeDotMenu.isVisible = getCheckedItems().isEmpty()
-                        it.threeDotMenu.contentDescription = context.getString(R.string.content_description_file_operations, file.fileName)
-                        if (fileListOption.isAvailableOffline() || (fileListOption.isSharedByLink() && fileWithSyncInfo.space == null)) {
-                            it.spacePathLine.path.apply {
-                                text = file.getParentRemotePath()
-                                isVisible = true
-                            }
-                            fileWithSyncInfo.space?.let { space ->
-                                it.spacePathLine.spaceIcon.isVisible = true
-                                it.spacePathLine.spaceName.isVisible = true
-                                if (space.isPersonal) {
-                                    it.spacePathLine.spaceIcon.setImageResource(R.drawable.ic_folder)
-                                    it.spacePathLine.spaceName.setText(R.string.bottom_nav_personal)
-                                } else {
-                                    it.spacePathLine.spaceName.text = space.name
-                                }
-                            }
-                        } else {
-                            it.spacePathLine.path.isVisible = false
-                            it.spacePathLine.spaceIcon.isVisible = false
-                            it.spacePathLine.spaceName.isVisible = false
-                        }
-                        it.threeDotMenu.setOnClickListener {
-                            listener.onThreeDotButtonClick(fileWithSyncInfo = fileWithSyncInfo)
-                        }
-                    }
-                }
-
-                ViewType.GRID_ITEM.ordinal -> {
-                    // Filename
-                    val view = holder as GridViewHolder
-                    view.binding.Filename.text = file.fileName
-                }
-
-                ViewType.GRID_IMAGE.ordinal -> {
-                    val view = holder as GridImageViewHolder
-                    val layoutParams = fileIcon.layoutParams as ViewGroup.MarginLayoutParams
-
-                    if (thumbnail == null) {
-                        view.binding.Filename.text = file.fileName
-                        // Reset layout params values default
-                        manageGridLayoutParams(
-                            layoutParams = layoutParams,
-                            marginVertical = 0,
-                            height = context.resources.getDimensionPixelSize(R.dimen.item_file_grid_height),
-                            width = context.resources.getDimensionPixelSize(R.dimen.item_file_grid_width),
-                        )
-                    } else {
-                        manageGridLayoutParams(
-                            layoutParams = layoutParams,
-                            marginVertical = context.resources.getDimensionPixelSize(R.dimen.item_file_image_grid_margin),
-                            height = ViewGroup.LayoutParams.MATCH_PARENT,
-                            width = ViewGroup.LayoutParams.MATCH_PARENT,
-                        )
-                    }
-                }
-            }
+            setSpecificViewHolder(viewType, holder, fileWithSyncInfo, thumbnail)
 
             setIconPinAccordingToFilesLocalState(holder.itemView.findViewById(R.id.localFileIndicator), fileWithSyncInfo)
 
@@ -311,18 +241,16 @@ class FileListAdapter(
                 if (thumbnail != null) {
                     fileIcon.setImageBitmap(thumbnail)
                 }
-                if (file.needsToUpdateThumbnail) {
+                if (file.needsToUpdateThumbnail && ThumbnailsCacheManager.cancelPotentialThumbnailWork(file, fileIcon)) {
                     // generate new Thumbnail
-                    if (ThumbnailsCacheManager.cancelPotentialThumbnailWork(file, fileIcon)) {
-                        val task = ThumbnailsCacheManager.ThumbnailGenerationTask(fileIcon, account)
-                        val asyncDrawable = ThumbnailsCacheManager.AsyncThumbnailDrawable(context.resources, thumbnail, task)
+                    val task = ThumbnailsCacheManager.ThumbnailGenerationTask(fileIcon, account)
+                    val asyncDrawable = ThumbnailsCacheManager.AsyncThumbnailDrawable(context.resources, thumbnail, task)
 
-                        // If drawable is not visible, do not update it.
-                        if (asyncDrawable.minimumHeight > 0 && asyncDrawable.minimumWidth > 0) {
-                            fileIcon.setImageDrawable(asyncDrawable)
-                        }
-                        task.execute(file)
+                    // If drawable is not visible, do not update it.
+                    if (asyncDrawable.minimumHeight > 0 && asyncDrawable.minimumWidth > 0) {
+                        fileIcon.setImageDrawable(asyncDrawable)
                     }
+                    task.execute(file)
                 }
 
                 if (file.mimeType == "image/png") {
@@ -338,6 +266,77 @@ class FileListAdapter(
                     isFullSpan = true
                 }
                 view.binding.footerText.text = file.text
+            }
+        }
+    }
+
+    private fun setSpecificViewHolder(viewType: Int, holder: RecyclerView.ViewHolder, fileWithSyncInfo: OCFileWithSyncInfo, thumbnail: Bitmap?) {
+        val file = fileWithSyncInfo.file
+
+        when (viewType) {
+            ViewType.LIST_ITEM.ordinal -> {
+                val view = holder as ListViewHolder
+                view.binding.let {
+                    it.fileListConstraintLayout.filterTouchesWhenObscured = PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(context)
+                    it.Filename.text = file.fileName
+                    it.fileListSize.text = DisplayUtils.bytesToHumanReadable(file.length, context, true)
+                    it.fileListLastMod.text = DisplayUtils.getRelativeTimestamp(context, file.modificationTimestamp)
+                    it.threeDotMenu.isVisible = getCheckedItems().isEmpty()
+                    it.threeDotMenu.contentDescription = context.getString(R.string.content_description_file_operations, file.fileName)
+                    if (fileListOption.isAvailableOffline() || (fileListOption.isSharedByLink() && fileWithSyncInfo.space == null)) {
+                        it.spacePathLine.path.apply {
+                            text = file.getParentRemotePath()
+                            isVisible = true
+                        }
+                        fileWithSyncInfo.space?.let { space ->
+                            it.spacePathLine.spaceIcon.isVisible = true
+                            it.spacePathLine.spaceName.isVisible = true
+                            if (space.isPersonal) {
+                                it.spacePathLine.spaceIcon.setImageResource(R.drawable.ic_folder)
+                                it.spacePathLine.spaceName.setText(R.string.bottom_nav_personal)
+                            } else {
+                                it.spacePathLine.spaceName.text = space.name
+                            }
+                        }
+                    } else {
+                        it.spacePathLine.path.isVisible = false
+                        it.spacePathLine.spaceIcon.isVisible = false
+                        it.spacePathLine.spaceName.isVisible = false
+                    }
+                    it.threeDotMenu.setOnClickListener {
+                        listener.onThreeDotButtonClick(fileWithSyncInfo = fileWithSyncInfo)
+                    }
+                }
+            }
+
+            ViewType.GRID_ITEM.ordinal -> {
+                // Filename
+                val view = holder as GridViewHolder
+                view.binding.Filename.text = file.fileName
+            }
+
+            ViewType.GRID_IMAGE.ordinal -> {
+                val view = holder as GridImageViewHolder
+                val fileIcon = holder.itemView.findViewById<ImageView>(R.id.thumbnail)
+                val layoutParams = fileIcon.layoutParams as ViewGroup.MarginLayoutParams
+
+                if (thumbnail == null) {
+                    view.binding.Filename.text = file.fileName
+                    // Reset layout params values default
+                    manageGridLayoutParams(
+                        layoutParams = layoutParams,
+                        marginVertical = 0,
+                        height = context.resources.getDimensionPixelSize(R.dimen.item_file_grid_height),
+                        width = context.resources.getDimensionPixelSize(R.dimen.item_file_grid_width),
+                    )
+                } else {
+                    manageGridLayoutParams(
+                        layoutParams = layoutParams,
+                        marginVertical = context.resources.getDimensionPixelSize(R.dimen.item_file_image_grid_margin),
+                        height = ViewGroup.LayoutParams.MATCH_PARENT,
+                        width = ViewGroup.LayoutParams.MATCH_PARENT,
+                    )
+                }
             }
         }
     }
@@ -387,10 +386,10 @@ class FileListAdapter(
         }
     }
 
-    private fun generateFooterText(filesCount: Int, foldersCount: Int): String {
+    private fun generateFooterText(filesCount: Int, foldersCount: Int): String =
         when {
             filesCount <= 0 -> {
-                return when {
+                when {
                     foldersCount <= 0 -> {
                         ""
                     }
@@ -406,7 +405,7 @@ class FileListAdapter(
             }
 
             filesCount == 1 -> {
-                return when {
+                 when {
                     foldersCount <= 0 -> {
                         context.getString(R.string.file_list__footer__file)
                     }
@@ -422,7 +421,7 @@ class FileListAdapter(
             }
 
             else -> {    // filesCount > 1
-                return when {
+                when {
                     foldersCount <= 0 -> {
                         context.getString(R.string.file_list__footer__files, filesCount)
                     }
@@ -439,7 +438,6 @@ class FileListAdapter(
                 }
             }
         }
-    }
 
     interface FileListAdapterListener {
         fun onItemClick(ocFileWithSyncInfo: OCFileWithSyncInfo, position: Int)

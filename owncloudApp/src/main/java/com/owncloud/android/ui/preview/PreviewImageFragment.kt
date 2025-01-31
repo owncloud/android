@@ -206,15 +206,16 @@ class PreviewImageFragment : FileFragment() {
 
     private fun setRolesAccessibilityToMenuItems(menu: Menu) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            menu.findItem(R.id.action_see_details)?.contentDescription = "${getString(R.string.actionbar_see_details)} ${getString(R.string.button_role_accessibility)}"
+            menu.findItem(R.id.action_see_details)?.contentDescription =
+                "${getString(R.string.actionbar_see_details)} ${getString(R.string.button_role_accessibility)}"
         }
     }
 
     /**
      * {@inheritDoc}
      */
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean =
+        when (item.itemId) {
             R.id.action_share_file -> {
                 mContainerActivity.fileOperationsHelper.showShareFile(file)
                 true
@@ -258,9 +259,10 @@ class PreviewImageFragment : FileFragment() {
                 true
             }
 
-            else -> super.onOptionsItemSelected(item)
+            else -> {
+                super.onOptionsItemSelected(item)
+            }
         }
-    }
 
     private fun seeDetails() {
         mContainerActivity.showDetails(file)
@@ -344,9 +346,8 @@ class PreviewImageFragment : FileFragment() {
 
     private fun isSVGFile(file: OCFile): Boolean = file.mimeType == MIME_SVG
 
-    private fun getBackgroundColor(file: OCFile): Int {
-        return if (isSVGFile(file)) Color.WHITE else Color.BLACK
-    }
+    private fun getBackgroundColor(file: OCFile): Int =
+        if (isSVGFile(file)) Color.WHITE else Color.BLACK
 
     /**
      * Finishes the preview
@@ -392,8 +393,7 @@ class PreviewImageFragment : FileFragment() {
          * @return 'True' if the file can be handled by the fragment.
          */
         @JvmStatic
-        fun canBePreviewed(file: OCFile?): Boolean {
-            return file != null && file.isImage
-        }
+        fun canBePreviewed(file: OCFile?): Boolean =
+            file != null && file.isImage
     }
 }
