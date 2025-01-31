@@ -684,8 +684,6 @@
   <string name="release_notes_4_5_0_subtitle_feedback_in_previews">Lisatud on võrguühenduseta failide saadavuse tagasiside kõikidesse eelvaadetesse ning valikute menüüd uuendatakse vastavalt faili staatusele</string>
   <string name="release_notes_4_5_0_title_quota_improvements">Täiustused salvestusmahu kasutuse kuvamisel</string>
   <string name="release_notes_4_5_0_subtitle_quota_improvements">Salvestusmahu kasutust värskendatakse faili- ja värskendustoimingutes tihti ning on lisaks menüüle saadaval ka kontode halduse vaates</string>
-  <string name="release_notes_4_5_0_title_light_users">ownCloud Infinite Scale serveri \"light\" kasutajad</string>
-  <string name="release_notes_4_5_0_subtitle_light_users">ownCloud Infinite Scale serveri \"light\" kasutajad (kasutajad ilma personaalse ruumita) on nüüd rakenduse poolt toetatud</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Ava veebis</string>
   <string name="ic_action_open_with_web">Ava %1$s (veebis)</string>
