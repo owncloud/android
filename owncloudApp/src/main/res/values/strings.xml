@@ -740,8 +740,8 @@
     <string name="release_notes_4_5_0_subtitle_feedback_in_previews">Added feedback when (un)setting av. offline in all previews and updated options menu depending on file status</string>
     <string name="release_notes_4_5_0_title_quota_improvements">Improvements in storage occupation display</string>
     <string name="release_notes_4_5_0_subtitle_quota_improvements">Storage occupation refreshed frequently in file and refresh operations and available in accounts manager view, besides of drawer menu</string>
-    <string name="release_notes_4_5_0_title_light_users">ownCloud Infinite Scale servers users light</string>
-    <string name="release_notes_4_5_0_subtitle_light_users">ownCloud Infinite Scale servers users light (users without personal space) are now supported in the app</string>
+    <string name="release_notes_4_5_0_title_light_users">Infinite Scale Users Light</string>
+    <string name="release_notes_4_5_0_subtitle_light_users">Infinite Scale Users Light (users without personal space) are now supported in the app</string>
 
 
     <!-- Open in web -->

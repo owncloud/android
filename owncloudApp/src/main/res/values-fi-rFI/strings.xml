@@ -681,8 +681,6 @@
   <string name="release_notes_bugfixes_title">Pieniä bugikorjauksia</string>
   <string name="release_notes_bugfixes_subtitle">Joitain bugeja korjattu sovelluksen käyttökokemuksen parantamiseksi</string>
   <string name="release_notes_4_5_0_title_quota_improvements">Parannuksia tallennusmediasta varatun tilan näyttämisessä</string>
-  <string name="release_notes_4_5_0_title_light_users">ownCloud Infinite Scale-palvelimen kevytkäyttäjät</string>
-  <string name="release_notes_4_5_0_subtitle_light_users">ownCloud Infinite Scale-palvelimen kevytkäyttäjät (so. käyttäjät ilman henkilökohtaista tallennustilaa) on nyt tuettu sovelluksessa</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Avoinna verkossa</string>
   <string name="ic_action_open_with_web">Avoinna %1$s (web)</string>
