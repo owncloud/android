@@ -38,6 +38,7 @@ ownCloud admins and users.
 * Change - Replace auto-uploads with automatic uploads: [#4252](https://github.com/owncloud/android/issues/4252)
 * Enhancement - Unit tests for repository classes - Part 2: [#4233](https://github.com/owncloud/android/issues/4233)
 * Enhancement - Unit tests for repository classes - Part 3: [#4234](https://github.com/owncloud/android/issues/4234)
+* Enhancement - Unit tests for repository classes - Part 4: [#4235](https://github.com/owncloud/android/issues/4235)
 * Enhancement - Add status message when (un)setting av. offline from preview: [#4382](https://github.com/owncloud/android/issues/4382)
 * Enhancement - Quota improvements from GraphAPI: [#4411](https://github.com/owncloud/android/issues/4411)
 * Enhancement - Upgraded AGP version to 8.7.2: [#4478](https://github.com/owncloud/android/issues/4478)
@@ -81,6 +82,14 @@ ownCloud admins and users.
 
    https://github.com/owncloud/android/issues/4234
    https://github.com/owncloud/android/pull/4523
+
+* Enhancement - Unit tests for repository classes - Part 4: [#4235](https://github.com/owncloud/android/issues/4235)
+
+   Unit tests for OCSpacesRepository, OCTransferRepository, OCUserRepository and
+   OCWebFingerRepository classes have been completed.
+
+   https://github.com/owncloud/android/issues/4235
+   https://github.com/owncloud/android/pull/4537
 
 * Enhancement - Add status message when (un)setting av. offline from preview: [#4382](https://github.com/owncloud/android/issues/4382)
 

@@ -128,6 +128,24 @@ val OC_SPACE_PERSONAL = OC_SPACE_PROJECT_WITH_IMAGE.copy(
     special = null
 )
 
+val OC_SPACE_PERSONAL_WITH_UNLIMITED_QUOTA = OC_SPACE_PERSONAL.copy(
+    quota = SpaceQuota(
+        remaining = 0,
+        state = "normal",
+        total = 0,
+        used = 5_000
+    )
+)
+
+val OC_SPACE_PERSONAL_WITH_LIMITED_QUOTA = OC_SPACE_PERSONAL.copy(
+    quota = SpaceQuota(
+        remaining = 200_000,
+        state = "normal",
+        total = 280_000,
+        used = 80_000
+    )
+)
+
 val OC_SPACE_SHARES = OCSpace(
     accountName = OC_ACCOUNT_NAME,
     driveAlias = "virtual/shares",
