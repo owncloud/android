@@ -2,7 +2,9 @@
  * ownCloud Android client application
  *
  * @author Abel García de Prada
- * Copyright (C) 2020 ownCloud GmbH.
+ * @author Jorge Aguado Recio
+ *
+ * Copyright (C) 2025 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -16,6 +18,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package com.owncloud.android.testutil
 
 import com.owncloud.android.domain.user.model.UserAvatar
@@ -31,24 +34,24 @@ val OC_USER_INFO = UserInfo(
 
 val OC_USER_QUOTA = UserQuota(
     accountName = OC_ACCOUNT_NAME,
-    used = 80_000,
     available = 200_000,
+    used = 80_000,
     total = 280_000,
     state = null
 )
 
 val OC_USER_QUOTA_WITHOUT_PERSONAL = UserQuota(
     accountName = OC_ACCOUNT_NAME,
-    used = 0,
     available = -4L,
+    used = 0,
     total = 0,
     state = UserQuotaState.NORMAL
 )
 
 val OC_USER_QUOTA_UNLIMITED = UserQuota(
     accountName = OC_ACCOUNT_NAME,
-    used = 5_000,
     available = -3L,
+    used = 5_000,
     total = 0,
     state = UserQuotaState.NORMAL
 )

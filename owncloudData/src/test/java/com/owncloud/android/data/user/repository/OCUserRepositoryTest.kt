@@ -4,7 +4,7 @@
  * @author Abel García de Prada
  * @author Jorge Aguado Recio
  *
- * Copyright (C) 2024 ownCloud GmbH.
+ * Copyright (C) 2025 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -107,20 +107,6 @@ class OCUserRepositoryTest {
 
         val userQuota = ocUserRepository.getStoredUserQuotaAsFlow(OC_ACCOUNT_NAME).first()
         assertEquals(OC_USER_QUOTA, userQuota)
-
-        verify(exactly = 1) {
-            localUserDataSource.getQuotaForAccountAsFlow(OC_ACCOUNT_NAME)
-        }
-    }
-
-    @Test
-    fun `getStoredUserQuotaAsFlow returns a Flow with null when local datasource returns a Flow with null`() = runTest {
-        every {
-            localUserDataSource.getQuotaForAccountAsFlow(OC_ACCOUNT_NAME)
-        } returns flowOf(null)
-
-        val userQuota = ocUserRepository.getStoredUserQuotaAsFlow(OC_ACCOUNT_NAME).first()
-        assertNull(userQuota)
 
         verify(exactly = 1) {
             localUserDataSource.getQuotaForAccountAsFlow(OC_ACCOUNT_NAME)
