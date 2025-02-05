@@ -3,7 +3,7 @@
  *
  * @author Jorge Aguado Recio
  *
- * Copyright (C) 2024 ownCloud GmbH.
+ * Copyright (C) 2025 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -67,7 +67,7 @@ class OCTransferRepositoryTest {
     }
 
     @Test
-    fun `updateTransferStatusToInProgressById updates a transfer in progress by its id correctly`() {
+    fun `updateTransferStatusToInProgressById changes transfer status correctly`() {
         ocTransferRepository.updateTransferStatusToInProgressById(OC_TRANSFER.id!!)
 
         verify(exactly = 1) {
@@ -76,7 +76,7 @@ class OCTransferRepositoryTest {
     }
 
     @Test
-    fun `updateTransferStatusToEnqueuedById updates a transfer in queue by its id correctly`() {
+    fun `updateTransferStatusToEnqueuedById changes transfer status correctly`() {
         ocTransferRepository.updateTransferStatusToEnqueuedById(OC_TRANSFER.id!!)
 
         verify(exactly = 1) {
@@ -103,7 +103,7 @@ class OCTransferRepositoryTest {
     }
 
     @Test
-    fun `updateTransferWhenFinished updates a finished transfer correctly `() {
+    fun `updateTransferWhenFinished changes transfer status correctly`() {
         ocTransferRepository.updateTransferWhenFinished(OC_TRANSFER.id!!, OC_FINISHED_TRANSFER.status, 1_000, TransferResult.UPLOADED)
 
         verify(exactly = 1) {
@@ -112,7 +112,7 @@ class OCTransferRepositoryTest {
     }
 
     @Test
-    fun `updateTransferStorageDirectoryInLocalPath updates transfer directory correctly`() {
+    fun `updateTransferStorageDirectoryInLocalPath updates transfer storage directory correctly`() {
         val oldDirectory = "/oldDirectory/path"
         val newDirectory = "/newDirectory/path"
 
@@ -124,7 +124,7 @@ class OCTransferRepositoryTest {
     }
 
     @Test
-    fun `deleteTransferById removes a transfer by its id correctly `() {
+    fun `deleteTransferById removes a transfer correctly`() {
         ocTransferRepository.deleteTransferById(OC_TRANSFER.id!!)
 
         verify(exactly = 1) {
@@ -142,7 +142,7 @@ class OCTransferRepositoryTest {
     }
 
     @Test
-    fun `getTransferById returns an OCTransfer by its id`() {
+    fun `getTransferById returns a OCTransfer`() {
         every {
             localTransferDataSource.getTransferById(OC_TRANSFER.id!!)
         } returns OC_TRANSFER
@@ -198,7 +198,7 @@ class OCTransferRepositoryTest {
     }
 
     @Test
-    fun `getLastTransferFor returns the last OCTransfer`() {
+    fun `getLastTransferFor returns a OCTransfer`() {
         every {
             localTransferDataSource.getLastTransferFor(OC_TRANSFER.remotePath, OC_ACCOUNT_NAME)
         } returns OC_TRANSFER
@@ -226,7 +226,7 @@ class OCTransferRepositoryTest {
     }
 
     @Test
-    fun `getCurrentAndPendingTransfers returns a list of pending and in progress OCTransfer`() {
+    fun `getCurrentAndPendingTransfers returns a list of OCTransfer`() {
         every {
             localTransferDataSource.getCurrentAndPendingTransfers()
         } returns listOf(OC_TRANSFER, OC_PENDING_TRANSFER)
@@ -240,7 +240,7 @@ class OCTransferRepositoryTest {
     }
 
     @Test
-    fun `getFailedTransfers returns a list of failed OCTransfer`() {
+    fun `getFailedTransfers returns a list of OCTransfer`() {
         every {
             localTransferDataSource.getFailedTransfers()
         } returns listOf(OC_FAILED_TRANSFER)
@@ -254,7 +254,7 @@ class OCTransferRepositoryTest {
     }
 
     @Test
-    fun `getFinishedTransfers returns a list of finished OCTransfer`() {
+    fun `getFinishedTransfers returns a list of OCTransfer`() {
         every {
             localTransferDataSource.getFinishedTransfers()
         } returns listOf(OC_FINISHED_TRANSFER)
