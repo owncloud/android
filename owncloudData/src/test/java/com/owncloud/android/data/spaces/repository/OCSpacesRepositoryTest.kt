@@ -3,7 +3,7 @@
  *
  * @author Jorge Aguado Recio
  *
- * Copyright (C) 2024 ownCloud GmbH.
+ * Copyright (C) 2025 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -221,14 +221,14 @@ class OCSpacesRepositoryTest {
     @Test
     fun `getSpaceByIdForAccount returns an OCSpace`() {
         every {
-            localSpacesDataSource.getSpaceByIdForAccount(OC_SPACE_PROJECT_WITH_IMAGE.id, OC_ACCOUNT_NAME)
-        } returns OC_SPACE_PROJECT_WITH_IMAGE
+            localSpacesDataSource.getSpaceByIdForAccount(OC_SPACE_PERSONAL.id, OC_ACCOUNT_NAME)
+        } returns OC_SPACE_PERSONAL
 
-        val space = ocSpacesRepository.getSpaceByIdForAccount(OC_SPACE_PROJECT_WITH_IMAGE.id, OC_ACCOUNT_NAME)
-        assertEquals(OC_SPACE_PROJECT_WITH_IMAGE, space)
+        val space = ocSpacesRepository.getSpaceByIdForAccount(OC_SPACE_PERSONAL.id, OC_ACCOUNT_NAME)
+        assertEquals(OC_SPACE_PERSONAL, space)
 
         verify(exactly = 1) {
-            localSpacesDataSource.getSpaceByIdForAccount(OC_SPACE_PROJECT_WITH_IMAGE.id, OC_ACCOUNT_NAME)
+            localSpacesDataSource.getSpaceByIdForAccount(OC_SPACE_PERSONAL.id, OC_ACCOUNT_NAME)
         }
     }
 
