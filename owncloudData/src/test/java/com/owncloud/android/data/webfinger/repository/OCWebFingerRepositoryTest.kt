@@ -3,7 +3,7 @@
  *
  * @author Jorge Aguado Recio
  *
- * Copyright (C) 2024 ownCloud GmbH.
+ * Copyright (C) 2025 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -40,18 +40,20 @@ class OCWebFingerRepositoryTest {
 
     @Test
     fun `getInstancesFromWebFinger returns a list of String of webfinger url`() {
+        val webFingerResource = "admin"
+
         every {
             remoteWebFingerDatasource.getInstancesFromWebFinger(
                 OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl,
                 WebFingerRel.OIDC_ISSUER_DISCOVERY,
-                OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl
+                webFingerResource
             )
         } returns listOf(webFingerInstance)
 
         val webFingerResult = ocWebFingerRepository.getInstancesFromWebFinger(
             OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl,
             WebFingerRel.OIDC_ISSUER_DISCOVERY,
-            OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl
+            webFingerResource
         )
         assertEquals(listOf(webFingerInstance), webFingerResult)
 
@@ -59,18 +61,20 @@ class OCWebFingerRepositoryTest {
             remoteWebFingerDatasource.getInstancesFromWebFinger(
                 OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl,
                 WebFingerRel.OIDC_ISSUER_DISCOVERY,
-                OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl
+                webFingerResource
             )
         }
     }
 
     @Test
     fun `getInstancesFromAuthenticatedWebFinger returns a list of String of webfinger url`() {
+        val webFingerAuthenticatedResource = "acct:me@demo.owncloud.com"
+
         every {
             remoteWebFingerDatasource.getInstancesFromAuthenticatedWebFinger(
                 OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl,
                 WebFingerRel.OIDC_ISSUER_DISCOVERY,
-                OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl,
+                webFingerAuthenticatedResource,
                 OC_ACCOUNT_ID,
                 OC_ACCESS_TOKEN
             )
@@ -79,7 +83,7 @@ class OCWebFingerRepositoryTest {
         val webFingerResult = ocWebFingerRepository.getInstancesFromAuthenticatedWebFinger(
             OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl,
             WebFingerRel.OIDC_ISSUER_DISCOVERY,
-            OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl,
+            webFingerAuthenticatedResource,
             OC_ACCOUNT_ID,
             OC_ACCESS_TOKEN
         )
@@ -89,7 +93,7 @@ class OCWebFingerRepositoryTest {
             remoteWebFingerDatasource.getInstancesFromAuthenticatedWebFinger(
                 OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl,
                 WebFingerRel.OIDC_ISSUER_DISCOVERY,
-                OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl,
+                webFingerAuthenticatedResource,
                 OC_ACCOUNT_ID,
                 OC_ACCESS_TOKEN
             )
