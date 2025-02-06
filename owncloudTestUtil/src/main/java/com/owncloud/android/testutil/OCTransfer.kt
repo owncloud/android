@@ -37,3 +37,15 @@ val OC_TRANSFER = OCTransfer(
     createdBy = UploadEnqueuedBy.ENQUEUED_BY_USER,
     sourcePath = "/source/path",
 )
+
+val OC_FINISHED_TRANSFER = OC_TRANSFER.copy(
+    status = TransferStatus.TRANSFER_SUCCEEDED
+)
+
+val OC_FAILED_TRANSFER = OC_TRANSFER.copy(
+    status = TransferStatus.TRANSFER_FAILED
+)
+
+val OC_PENDING_TRANSFER = OC_TRANSFER.copy(
+    status = TransferStatus.TRANSFER_QUEUED
+)
