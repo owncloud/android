@@ -242,6 +242,8 @@ class FileDisplayActivity : FileActivity(),
 
         /// USER INTERFACE
 
+        // Comment for testing
+
         // Inflate and set the layout view
         binding = ActivityMainBinding.inflate(layoutInflater)
         val view = binding.root
