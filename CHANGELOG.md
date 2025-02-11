@@ -34,6 +34,7 @@ ownCloud admins and users.
 
 ## Summary
 
+* Bugfix - Crash from Google Play Store: [#4333](https://github.com/owncloud/android/issues/4333)
 * Bugfix - Navigation in automatic uploads folder picker: [#4340](https://github.com/owncloud/android/issues/4340)
 * Change - Replace auto-uploads with automatic uploads: [#4252](https://github.com/owncloud/android/issues/4252)
 * Enhancement - Unit tests for repository classes - Part 2: [#4233](https://github.com/owncloud/android/issues/4233)
@@ -50,6 +51,15 @@ ownCloud admins and users.
 * Enhancement - Technical improvements for user quota: [#4521](https://github.com/owncloud/android/issues/4521)
 
 ## Details
+
+* Bugfix - Crash from Google Play Store: [#4333](https://github.com/owncloud/android/issues/4333)
+
+   The androidx-appcompat version has been upgraded from 1.5.1 to 1.6.1 in order to
+   fix one crash reported by Play Console which is related to the
+   FileDataStorageManager constructor
+
+   https://github.com/owncloud/android/issues/4333
+   https://github.com/owncloud/android/pull/4542
 
 * Bugfix - Navigation in automatic uploads folder picker: [#4340](https://github.com/owncloud/android/issues/4340)
 
