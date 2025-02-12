@@ -1,0 +1,7 @@
+Bugfix: Downloading non-previewable files in details view leads to empty list
+
+The error that led to an empty file list after downloading a file in details view,
+due to the bottom sheet "Open with", has been fixed.
+
+https://github.com/owncloud/android/issues/4428
+https://github.com/owncloud/android/pull/4548
