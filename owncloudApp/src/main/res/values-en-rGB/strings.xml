@@ -756,9 +756,6 @@
   <string name="create_shortcut_dialog_url_extension">.url</string>
   <string name="open_shortcut_description">This shortcut points to:</string>
   <string name="open_shortcut_title">Open link</string>
-  <string name="feedback_dialog_description">Improve the app with your feedback</string>
-  <string name="feedback_dialog_get_in_contact_title">Get in contact</string>
-  <string name="feedback_dialog_get_in_contact_description"><![CDATA[ Ask for help in our <a href="%1$s"><b>forum</b></a>, <a href="%2$s"><b>chat with us</b></a> or contribute on <a href="%3$s"><b>GitHub</b></a>]]></string>
   <string name="link_role_accessibility">Link</string>
   <string name="button_role_accessibility">Button</string>
   <string name="folder_picker_label">Folder picker</string>

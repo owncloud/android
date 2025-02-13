@@ -29,14 +29,11 @@ import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_NO_HISTORY
 import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
-import android.graphics.Typeface
 import android.net.Uri
 import android.text.method.LinkMovementMethod
 import android.util.TypedValue
-import android.view.ContextThemeWrapper
 import android.view.inputmethod.InputMethodManager
 import android.webkit.MimeTypeMap
-import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
@@ -77,8 +74,6 @@ import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import timber.log.Timber
 import java.io.File
-
-const val FRAGMENT_TAG_CHOOSER_DIALOG = "CHOOSER_DIALOG"
 
 fun Activity.showErrorInSnackbar(genericErrorMessageId: Int, throwable: Throwable?) =
     throwable?.let {
@@ -361,33 +356,10 @@ fun Activity.openFeedbackDialog() {
         getString(
             R.string.feedback_dialog_get_in_contact_description,
             DrawerActivity.CENTRAL_URL,
-            DrawerActivity.TALK_MOBILE_URL,
             DrawerActivity.GITHUB_URL
         ).trimIndent()
     val spannableString = HtmlCompat.fromHtml(getInContactDescription, HtmlCompat.FROM_HTML_MODE_LEGACY)
 
-    val descriptionSurvey = TextView(this).apply {
-        text = getString(R.string.feedback_dialog_description)
-        setPadding(0, 0, 0, 64)
-        setTextColor(getColor(android.R.color.black))
-        setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
-
-    }
-    val button = Button(ContextThemeWrapper(this, R.style.Button_Primary), null, 0).apply {
-        text = getString(R.string.prefs_send_feedback)
-        setOnClickListener {
-            goToUrl(DrawerActivity.SURVEY_URL)
-        }
-    }
-
-    val getInContactTitle = TextView(this).apply {
-        text = getString(R.string.feedback_dialog_get_in_contact_title)
-        setPadding(0, 64, 0, 0)
-        setTextColor(getColor(android.R.color.black))
-        setTypeface(typeface, Typeface.BOLD)
-        setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
-
-    }
     val getInContactDescriptionTextView = TextView(this).apply {
         text = spannableString
         setTextColor(getColor(android.R.color.black))
@@ -398,9 +370,6 @@ fun Activity.openFeedbackDialog() {
     val layout = LinearLayout(this).apply {
         orientation = LinearLayout.VERTICAL
         setPadding(64, 16, 64, 16)
-        addView(descriptionSurvey)
-        addView(button)
-        addView(getInContactTitle)
         addView(getInContactDescriptionTextView)
     }
     val builder = AlertDialog.Builder(this)

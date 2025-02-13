@@ -758,9 +758,6 @@
   <string name="create_shortcut_dialog_url_extension">.url</string>
   <string name="open_shortcut_description">See otsetee viitab:</string>
   <string name="open_shortcut_title">Ava link</string>
-  <string name="feedback_dialog_description">Aita rakendust parandada oma tagasisidega</string>
-  <string name="feedback_dialog_get_in_contact_title">Võta ühendust</string>
-  <string name="feedback_dialog_get_in_contact_description"><![CDATA[ Küsi abi <a href="%1$s"><b>foorumist</b></a>, <a href="%2$s"><b>vestle meiega</b></a> või panusta <a href="%3$s"><b>GitHub\'is</b></a>]]></string>
   <string name="link_role_accessibility">Link</string>
   <string name="button_role_accessibility">Nupp</string>
   <string name="folder_picker_label">Kausta valija</string>

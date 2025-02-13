@@ -609,9 +609,7 @@ abstract class DrawerActivity : ToolbarActivity() {
 
     companion object {
         const val CENTRAL_URL = "https://central.owncloud.org/"
-        const val TALK_MOBILE_URL = "https://talk.owncloud.com/channel/mobile"
         const val GITHUB_URL = "https://github.com/owncloud/android/issues/new/choose"
-        const val SURVEY_URL = "https://owncloud.com/android-app-feedback"
         private const val KEY_CHECKED_MENU_ITEM = "CHECKED_MENU_ITEM"
     }
 }

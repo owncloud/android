@@ -736,9 +736,6 @@
   <string name="create_shortcut_dialog_url_extension">.url</string>
   <string name="open_shortcut_description">이 바로가기는 여기로 향합니다: </string>
   <string name="open_shortcut_title">링크 열기</string>
-  <string name="feedback_dialog_description">당신의 피드백과 함께 앱이 성장합니다.</string>
-  <string name="feedback_dialog_get_in_contact_title">연락하기</string>
-  <string name="feedback_dialog_get_in_contact_description"><![CDATA[ 우리 <a href="%1$s"><b>포럼</b></a>에서 도움을 요청하거나, <a href="%2$s"><b>우리와 채팅</b></a> 하거나, <a href="%3$s"><b>깃허브</b></a>에 기여해보세요.]]></string>
   <string name="link_role_accessibility">링크</string>
   <string name="pattern_label">패턴</string>
   <string name="image_preview_label">사진 미리 보기</string>

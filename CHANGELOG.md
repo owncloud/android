@@ -38,6 +38,7 @@ ownCloud admins and users.
 * Bugfix - Navigation in automatic uploads folder picker: [#4340](https://github.com/owncloud/android/issues/4340)
 * Bugfix - Downloading non-previewable files in details view leads to empty list: [#4428](https://github.com/owncloud/android/issues/4428)
 * Change - Replace auto-uploads with automatic uploads: [#4252](https://github.com/owncloud/android/issues/4252)
+* Change - Removed survey and chat from feedback: [#4540](https://github.com/owncloud/android/issues/4540)
 * Enhancement - Unit tests for repository classes - Part 2: [#4233](https://github.com/owncloud/android/issues/4233)
 * Enhancement - Unit tests for repository classes - Part 3: [#4234](https://github.com/owncloud/android/issues/4234)
 * Enhancement - Unit tests for repository classes - Part 4: [#4235](https://github.com/owncloud/android/issues/4235)
@@ -85,6 +86,14 @@ ownCloud admins and users.
 
    https://github.com/owncloud/android/issues/4252
    https://github.com/owncloud/android/pull/4492
+
+* Change - Removed survey and chat from feedback: [#4540](https://github.com/owncloud/android/issues/4540)
+
+   Survey and chat have been removed from the feedback dialog due to they are not
+   maintained anymore or they have low traffic.
+
+   https://github.com/owncloud/android/issues/4540
+   https://github.com/owncloud/android/pull/4549
 
 * Enhancement - Unit tests for repository classes - Part 2: [#4233](https://github.com/owncloud/android/issues/4233)
 

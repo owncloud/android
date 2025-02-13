@@ -335,7 +335,6 @@ class SettingsMoreFragmentTest {
         onView(withText(R.string.prefs_send_feedback)).perform(click())
 
         onView(withText(R.string.drawer_feedback)).check(ViewAssertions.matches(isDisplayed()))
-        onView(withText(R.string.feedback_dialog_description)).check(ViewAssertions.matches(isDisplayed()))
     }
 
     @Test
