@@ -749,10 +749,7 @@
   <string name="create_shortcut_dialog_url_extension">.url</string>
   <string name="open_shortcut_description">Этот ярлык указывает на:</string>
   <string name="open_shortcut_title">Открыть ссылку</string>
-  <string name="feedback_dialog_description">Улучшите приложение с помощью ваших отзывов</string>
-  <string name="feedback_dialog_get_in_contact_title">Свяжитесь с нами</string>
-  <string name="feedback_dialog_get_in_contact_description"><![CDATA[Попросите помощи в нашем <a href="%1$s"><b> форуме </b></a>, <a href="%2$s"><b>чат с нами</b></a> или внесите свой вклад в <a href="%3$s"><b>GitHub</b></a>]]></string>
-  <string name="link_role_accessibility">Ссылка</string>
+    <string name="link_role_accessibility">Ссылка</string>
   <string name="button_role_accessibility">Кнопка</string>
   <string name="folder_picker_label">Выбор папки</string>
   <string name="passcode_label">Пароль</string>
