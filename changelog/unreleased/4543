@@ -1,0 +1,8 @@
+Bugfix: Crash from Google Play Store
+
+The androidx-appcompat version has been upgraded from 1.5.1 to 1.6.1
+in order to fix one crash reported by Play Console which is related to
+the FileDataStorageManager constructor
+
+https://github.com/owncloud/android/issues/4333
+https://github.com/owncloud/android/pull/4542
