@@ -36,6 +36,7 @@ ownCloud admins and users.
 
 * Bugfix - Crash from Google Play Store: [#4333](https://github.com/owncloud/android/issues/4333)
 * Bugfix - Navigation in automatic uploads folder picker: [#4340](https://github.com/owncloud/android/issues/4340)
+* Bugfix - Downloading non-previewable files in details view leads to empty list: [#4428](https://github.com/owncloud/android/issues/4428)
 * Change - Replace auto-uploads with automatic uploads: [#4252](https://github.com/owncloud/android/issues/4252)
 * Enhancement - Unit tests for repository classes - Part 2: [#4233](https://github.com/owncloud/android/issues/4233)
 * Enhancement - Unit tests for repository classes - Part 3: [#4234](https://github.com/owncloud/android/issues/4234)
@@ -68,6 +69,14 @@ ownCloud admins and users.
 
    https://github.com/owncloud/android/issues/4340
    https://github.com/owncloud/android/pull/4535
+
+* Bugfix - Downloading non-previewable files in details view leads to empty list: [#4428](https://github.com/owncloud/android/issues/4428)
+
+   The error that led to an empty file list after downloading a file in details
+   view, due to the bottom sheet "Open with", has been fixed.
+
+   https://github.com/owncloud/android/issues/4428
+   https://github.com/owncloud/android/pull/4548
 
 * Change - Replace auto-uploads with automatic uploads: [#4252](https://github.com/owncloud/android/issues/4252)
 

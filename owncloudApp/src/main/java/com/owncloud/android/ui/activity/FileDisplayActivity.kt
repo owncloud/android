@@ -808,10 +808,12 @@ class FileDisplayActivity : FileActivity(),
             setCheckedItemAtBottomBar(getMenuItemForFileListOption(fileListOption))
         }
 
-        mainFileListFragment?.updateFileListOption(fileListOption, file)
+        if (secondFragment == null) {
+            mainFileListFragment?.updateFileListOption(fileListOption, file)
 
-        // refresh list of files
-        refreshListOfFilesFragment()
+            // refresh list of files
+            refreshListOfFilesFragment()
+        }
 
         // Listen for sync messages
         val syncIntentFilter = IntentFilter(FileSyncAdapter.EVENT_FULL_SYNC_START)
