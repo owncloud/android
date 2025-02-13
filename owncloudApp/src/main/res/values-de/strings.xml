@@ -756,7 +756,7 @@
   <string name="create_shortcut_dialog_url_extension">.url</string>
   <string name="open_shortcut_description">Diese Verknüpfung verweist auf:</string>
   <string name="open_shortcut_title">Link öffnen</string>
-    <string name="link_role_accessibility">Link</string>
+  <string name="link_role_accessibility">Link</string>
   <string name="button_role_accessibility">Schaltfläche</string>
   <string name="folder_picker_label">Ordnerauswahl</string>
   <string name="passcode_label">PIN-Sperre</string>

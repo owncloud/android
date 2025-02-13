@@ -689,7 +689,7 @@ Póngase en contacto con su administrador</string>
   <string name="create_shortcut_dialog_url_extension">.url</string>
   <string name="open_shortcut_description">Este acceso directo apunta a: </string>
   <string name="open_shortcut_title">Abrir enlace</string>
-    <string name="link_role_accessibility">Enlace</string>
+  <string name="link_role_accessibility">Enlace</string>
   <string name="button_role_accessibility">Botón</string>
   <string name="pattern_label">Patrón</string>
   <string name="image_preview_label">Previsualización de imagen</string>

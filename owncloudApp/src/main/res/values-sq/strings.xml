@@ -748,7 +748,7 @@
   <string name="create_shortcut_dialog_url_extension">.url</string>
   <string name="open_shortcut_description">Kjo shkurtore shpie te:</string>
   <string name="open_shortcut_title">Hap lidhje</string>
-    <string name="link_role_accessibility">Lidhje</string>
+  <string name="link_role_accessibility">Lidhje</string>
   <string name="button_role_accessibility">Buton</string>
   <string name="folder_picker_label">Zgjedhës dosjeje</string>
   <string name="passcode_label">Kodkalim</string>

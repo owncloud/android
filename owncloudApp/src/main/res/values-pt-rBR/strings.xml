@@ -754,7 +754,7 @@
   <string name="create_shortcut_dialog_url_extension">.url</string>
   <string name="open_shortcut_description">Este atalho aponta para:</string>
   <string name="open_shortcut_title">Link aberto</string>
-    <string name="link_role_accessibility">Linque</string>
+  <string name="link_role_accessibility">Linque</string>
   <string name="button_role_accessibility">Botão</string>
   <string name="folder_picker_label">Selecionador de pastas</string>
   <string name="passcode_label">Senha</string>

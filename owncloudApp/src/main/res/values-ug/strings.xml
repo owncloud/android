@@ -610,7 +610,7 @@
   <string name="create_shortcut_dialog_url_information">URL چوقۇم https: // ياكى http: // دىن باشلىنىشى كېرەك ، شۇنداق بولغاندا ئۇنى تور كۆرگۈچتە ئاچقىلى بولىدۇ</string>
   <string name="open_shortcut_description">بۇ تېزلەتمە:</string>
   <string name="open_shortcut_title">ئۇلانمىنى ئېچىڭ</string>
-    <string name="link_role_accessibility">ئۇلىنىش</string>
+  <string name="link_role_accessibility">ئۇلىنىش</string>
   <string name="button_role_accessibility">Button</string>
   <string name="folder_picker_label">ھۆججەت قىسقۇچ</string>
   <string name="passcode_label">مەخپىي نومۇر</string>
