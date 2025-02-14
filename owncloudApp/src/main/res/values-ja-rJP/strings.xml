@@ -755,9 +755,6 @@
   <string name="create_shortcut_dialog_url_extension">.url</string>
   <string name="open_shortcut_description">このショートカットは次のファイルにリンクされています: </string>
   <string name="open_shortcut_title">リンクを開く</string>
-  <string name="feedback_dialog_description">あなたの意見を送信してアプリを改善</string>
-  <string name="feedback_dialog_get_in_contact_title">問い合わせる</string>
-  <string name="feedback_dialog_get_in_contact_description"><![CDATA[私たちの<a href="%1$s"><b>フォーラム</b></a>、<a href="%2$s"><b>ライブチャット</b></a>でヘルプを受けるか、<a href="%3$s"><b>GitHub</b></a>で開発に貢献する ]]></string>
   <string name="link_role_accessibility">リンク</string>
   <string name="button_role_accessibility">ボタン</string>
   <string name="folder_picker_label">フォルダピッカー</string>

@@ -756,9 +756,6 @@
   <string name="create_shortcut_dialog_url_extension">.url</string>
   <string name="open_shortcut_description">Diese Verknüpfung verweist auf:</string>
   <string name="open_shortcut_title">Link öffnen</string>
-  <string name="feedback_dialog_description">Verbessern Sie die App durch Ihr Feedback</string>
-  <string name="feedback_dialog_get_in_contact_title">In Kontakt treten</string>
-  <string name="feedback_dialog_get_in_contact_description"><![CDATA[ Fragen Sie nach Hilfe in unserem <a href="%1$s"><b>Forum</b></a>, <a href="%2$s"><b>chatten Sie mit uns</b></a> oder machen Sie einen Beitrag auf <a href="%3$s"><b>GitHub</b></a>]]></string>
   <string name="link_role_accessibility">Link</string>
   <string name="button_role_accessibility">Schaltfläche</string>
   <string name="folder_picker_label">Ordnerauswahl</string>
