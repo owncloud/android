@@ -4,6 +4,7 @@ name: Detekt
 # or API.
 on:
   
+  push:
   pull_request:
     branches:
       - "*"
