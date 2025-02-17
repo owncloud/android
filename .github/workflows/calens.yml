@@ -10,7 +10,7 @@ on:
     - technical/*
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   build:
@@ -19,7 +19,10 @@ jobs:
     runs-on: ubuntu-22.04
     name: Generate Calens Changelog
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
       - name: Run Calens Docker
         uses: addnab/docker-run-action@v3
         with:
