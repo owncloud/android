@@ -3,8 +3,6 @@ name: Detekt
 # Controls when the action will run. Workflow runs when manually triggered using the UI
 # or API.
 on:
-  
-  push:
   pull_request:
     branches:
       - "*"
