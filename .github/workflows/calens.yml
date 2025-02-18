@@ -23,12 +23,10 @@ jobs:
         uses: actions/checkout@v4
         with:
           persist-credentials: false
-      - name: Run Calens Docker
-        uses: addnab/docker-run-action@v3
+      - name: Calens
+        uses: actionhippie/calens@v1
         with:
-          options: -v ${{github.workspace}}:/workspace -w /workspace
-          image: toolhippie/calens:latest
-          run: calens >| CHANGELOG.md
+          target: CHANGELOG.md
       - name: Commit files
         uses: GuillaumeFalourd/git-commit-push@v1.3
         with:
