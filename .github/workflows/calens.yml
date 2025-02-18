@@ -15,19 +15,22 @@ permissions:
 jobs:
   build:
     permissions:
-      contents: write  # for stefanzweifel/git-auto-commit-action to push code in repo
+      contents: write
     runs-on: ubuntu-22.04
     name: Generate Calens Changelog
     steps:
-      - uses: actions/checkout@v4
-      - name: Run Calens Docker
-        uses: addnab/docker-run-action@v3
+      - name: Checkout
+        uses: actions/checkout@v4
         with:
-          options: -v ${{github.workspace}}:/workspace -w /workspace
-          image: toolhippie/calens:latest
-          run: calens >| CHANGELOG.md
+          persist-credentials: false
+      - name: Run Calens
+        uses: actionhippie/calens@v1
+        with:
+          target: CHANGELOG.md
       - name: Commit files
-        uses: stefanzweifel/git-auto-commit-action@v5
+        uses: GuillaumeFalourd/git-commit-push@v1.3
         with:
+          email: devops@owncloud.com
+          name: ownClouders
           commit_message: "docs: calens changelog updated"
-          file_pattern: CHANGELOG.md
+          access_token: ${{ secrets.GH_PAT }}
