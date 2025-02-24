@@ -1,0 +1,7 @@
+Bugfix: Ensure folder size updates automatically after file replacement
+
+The folder size has been updated automatically after replacing a file during a move operation,
+eliminating the need for a manual refresh.
+
+https://github.com/owncloud/android/issues/4505
+https://github.com/owncloud/android/pull/4553

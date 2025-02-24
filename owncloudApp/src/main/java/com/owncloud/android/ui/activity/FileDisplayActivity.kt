@@ -1053,6 +1053,15 @@ class FileDisplayActivity : FileActivity(),
 
             is UIResult.Success -> {
                 dismissLoadingDialog()
+                // auto refresh
+                file?.let {
+                    fileOperationsViewModel.performOperation(
+                        FileOperation.RefreshFolderOperation(
+                            folderToRefresh = it,
+                            shouldSyncContents = false // Ensure metadata is updated on callBack
+                        )
+                    )
+                }
                 val replace = mutableListOf<Boolean?>()
                 uiResult.data?.let {
                     showConflictDecisionDialog(uiResult = uiResult, data = it, replace = replace) { data, replace ->
@@ -1092,6 +1101,15 @@ class FileDisplayActivity : FileActivity(),
 
             is UIResult.Success -> {
                 dismissLoadingDialog()
+                // auto refresh
+                file?.let {
+                    fileOperationsViewModel.performOperation(
+                        FileOperation.RefreshFolderOperation(
+                            folderToRefresh = it,
+                            shouldSyncContents = false // Ensure metadata is updated on callBack
+                        )
+                    )
+                }
                 val replace = mutableListOf<Boolean?>()
                 uiResult.data?.let {
                     showConflictDecisionDialog(uiResult = uiResult, data = it, replace = replace) { data, replace ->
