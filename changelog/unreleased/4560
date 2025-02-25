@@ -1,0 +1,7 @@
+Change: Removed survey and chat from feedback
+
+Survey and chat have been removed from the feedback dialog due to they are
+not maintained anymore or they have low traffic.
+
+https://github.com/owncloud/android/issues/4540
+https://github.com/owncloud/android/pull/4549
