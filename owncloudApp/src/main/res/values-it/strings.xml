@@ -43,7 +43,7 @@
   <string name="prefs_manage_accounts">Gestisci account</string>
   <string name="prefs_passcode">Blocco con codice di sicurezza</string>
   <string name="prefs_biometric">Blocco biometrico</string>
-  <string name="prefs_biometric_summary">Abilita il blocco con pasword o la sequenza di blocco per attivare questa opzione.</string>
+  <string name="prefs_biometric_summary">Abilita il blocco con password o la sequenza di blocco per attivare questa opzione.</string>
   <string name="prefs_lock_application">Blocca applicazione</string>
   <string name="prefs_lock_application_entries_immediately">Immediatamente</string>
   <string name="prefs_lock_application_entries_1minute">Dopo 1 minuto</string>
