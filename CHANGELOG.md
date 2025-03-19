@@ -1,6 +1,6 @@
 # Table of Contents
 
-* [Changelog for unreleased](#changelog-for-owncloud-android-client-unreleased-unreleased)
+* [Changelog for 4.5.0](#changelog-for-owncloud-android-client-450-2025-03-24)
 * [Changelog for 4.4.1](#changelog-for-owncloud-android-client-441-2024-10-30)
 * [Changelog for 4.4.0](#changelog-for-owncloud-android-client-440-2024-09-30)
 * [Changelog for 4.3.1](#changelog-for-owncloud-android-client-431-2024-07-22)
@@ -25,18 +25,19 @@
 * [Changelog for 2.18.1](#changelog-for-owncloud-android-client-2181-2021-07-20)
 * [Changelog for 2.18.0](#changelog-for-owncloud-android-client-2180-2021-05-24)
 * [Changelog for 2.17 versions and below](#changelog-for-217-versions-and-below)
-# Changelog for ownCloud Android Client [unreleased] (UNRELEASED)
+# Changelog for ownCloud Android Client [4.5.0] (2025-03-24)
 
-The following sections list the changes in ownCloud Android Client unreleased relevant to
+The following sections list the changes in ownCloud Android Client 4.5.0 relevant to
 ownCloud admins and users.
 
-[unreleased]: https://github.com/owncloud/android/compare/v4.4.1...master
+[4.5.0]: https://github.com/owncloud/android/compare/v4.4.1...v4.5.0
 
 ## Summary
 
 * Bugfix - Crash from Google Play Store: [#4333](https://github.com/owncloud/android/issues/4333)
 * Bugfix - Navigation in automatic uploads folder picker: [#4340](https://github.com/owncloud/android/issues/4340)
 * Bugfix - Downloading non-previewable files in details view leads to empty list: [#4428](https://github.com/owncloud/android/issues/4428)
+* Bugfix - Ensure folder size updates automatically after file replacement: [#4505](https://github.com/owncloud/android/issues/4505)
 * Change - Replace auto-uploads with automatic uploads: [#4252](https://github.com/owncloud/android/issues/4252)
 * Change - Removed survey and chat from feedback: [#4540](https://github.com/owncloud/android/issues/4540)
 * Enhancement - Unit tests for repository classes - Part 2: [#4233](https://github.com/owncloud/android/issues/4233)
@@ -78,6 +79,14 @@ ownCloud admins and users.
 
    https://github.com/owncloud/android/issues/4428
    https://github.com/owncloud/android/pull/4548
+
+* Bugfix - Ensure folder size updates automatically after file replacement: [#4505](https://github.com/owncloud/android/issues/4505)
+
+   The folder size has been updated automatically after replacing a file during a
+   move operation, eliminating the need for a manual refresh.
+
+   https://github.com/owncloud/android/issues/4505
+   https://github.com/owncloud/android/pull/4553
 
 * Change - Replace auto-uploads with automatic uploads: [#4252](https://github.com/owncloud/android/issues/4252)
 
