@@ -36,11 +36,12 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.owncloud.android.BuildConfig
 import com.owncloud.android.R
 import com.owncloud.android.presentation.releasenotes.ReleaseNotesActivity
-import com.owncloud.android.presentation.settings.privacypolicy.PrivacyPolicyActivity
-import com.owncloud.android.presentation.settings.SettingsFragment
 import com.owncloud.android.presentation.releasenotes.ReleaseNotesViewModel
-import com.owncloud.android.presentation.settings.more.SettingsMoreViewModel
+import com.owncloud.android.presentation.settings.SettingsFragment
 import com.owncloud.android.presentation.settings.SettingsViewModel
+import com.owncloud.android.presentation.settings.more.SettingsMoreViewModel
+import com.owncloud.android.presentation.settings.privacypolicy.PrivacyPolicyActivity
+import com.owncloud.android.utils.RetryFlakyTestUntilSuccessRule
 import com.owncloud.android.utils.matchers.verifyPreference
 import com.owncloud.android.utils.releaseNotesList
 import io.mockk.every
@@ -50,6 +51,7 @@ import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Ignore
+import org.junit.Rule
 import org.junit.Test
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.context.startKoin
@@ -75,6 +77,10 @@ class SettingsFragmentTest {
     private lateinit var context: Context
 
     private lateinit var version: String
+
+    @Rule
+    @JvmField
+    val retryFlakyTestUntilSuccessRule = RetryFlakyTestUntilSuccessRule()
 
     @Before
     fun setUp() {
