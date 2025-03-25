@@ -754,6 +754,4 @@
   <string name="audio_preview_label">Audiovorschau</string>
   <string name="details_label">Details</string>
   <string name="text_preview_label">Textvorschau</string>
-  <string name="release_notes_title_enhanced_bottom_nav_bar">Textbeschriftungen wurden zur unteren Leiste hinzugefügt</string>
-  <string name="release_notes_subtitle_bottom_nav_bar">Textbeschriftungen wurden hinzugefügt, und der Standard-Aktivitätsindikator wird verwendet, um zu zeigen, welcher Bereich in der unteren Leiste ausgewählt ist</string>
 </resources>

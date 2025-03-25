@@ -679,10 +679,6 @@
   <string name="release_notes_icon">リリースノートのアイコン</string>
   <string name="release_notes_bugfixes_title">軽微なバグ修正</string>
   <string name="release_notes_bugfixes_subtitle">アプリの使い心地を向上するため、いくつかのバグを修正しました</string>
-  <string name="release_notes_4_5_0_title_feedback_in_previews">すべてのプレビューでオフラインAV視聴設定(解除)時のフィードバック</string>
-  <string name="release_notes_4_5_0_subtitle_feedback_in_previews">すべてのプレビューで、AVオフライン視聴の設定(または解除)する際のフィードバックを追加し、ファイルのステータスに応じてオプションメニューを更新しました</string>
-  <string name="release_notes_4_5_0_title_quota_improvements">ストレージ占有表示の改善</string>
-  <string name="release_notes_4_5_0_subtitle_quota_improvements">ストレージの占有状況は、ファイルおよび更新操作で頻繁に更新され、ドロワーメニューのほかに、アカウント管理表示でも利用できます。</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Webで開く</string>
   <string name="ic_action_open_with_web">%1$s(Web) で開く</string>
@@ -769,6 +765,4 @@
   <string name="audio_preview_label">音声プレビュー</string>
   <string name="details_label">詳細</string>
   <string name="text_preview_label">文章プレビュー</string>
-  <string name="release_notes_title_enhanced_bottom_nav_bar">下部バーにテキストラベルを追加しました</string>
-  <string name="release_notes_subtitle_bottom_nav_bar">テキストラベルが追加され、標準の選択状態表示を使用して、どの項目が選択されているかが下部バーに表示されるようになりました</string>
 </resources>
