@@ -161,6 +161,7 @@
   <string name="file_list_empty_title_available_offline">Nenhum arquivo off-line disponível</string>
   <string name="file_list_empty_title_shared_by_links">Nenhum link compartilhado</string>
   <string name="file_list_empty_subtitle_all_files">Carregue algum conteúdo ou sincronize com seus dispositivos!</string>
+  <string name="light_users_subtitle">Espaço pessoal não está disponível</string>
   <string name="shares_list_empty_title">Sem compartilhamentos</string>
   <string name="shares_list_empty_subtitle">Você não está colaborando com os recursos de outras pessoas.</string>
   <string name="spaces_list_empty_subtitle">You don\'t have access to any space!</string>
@@ -682,6 +683,7 @@
   <string name="release_notes_4_5_0_subtitle_feedback_in_previews">Adicionado feedback ao (des)configurar o av. offline em todas as visualizações e menu de opções atualizado dependendo do status do arquivo</string>
   <string name="release_notes_4_5_0_title_quota_improvements">Melhorias no painel de ocupação do armazenamento</string>
   <string name="release_notes_4_5_0_subtitle_quota_improvements">A ocupação do armazenamento é atualizada com frequência nas operações de arquivo e atualização e está disponível na visualização do gerenciador de contas, além do menu da gaveta</string>
+  <string name="release_notes_4_5_0_subtitle_light_users">Infinite Scale Users Light (usuários sem espaço pessoal) agora são suportados no aplicativo</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Abrir na web</string>
   <string name="ic_action_open_with_web">Abrir em%1$s (web)</string>

@@ -684,6 +684,8 @@
   <string name="release_notes_4_5_0_subtitle_feedback_in_previews">Feedback hinzugefügt, wenn (de)aktivieren für offline verfügbar in allen Vorschauen, und Optionsmenü abhängig von Dateistatus aktualisiert</string>
   <string name="release_notes_4_5_0_title_quota_improvements">Verbesserungen bei der Anzeige der Speicherbelegung</string>
   <string name="release_notes_4_5_0_subtitle_quota_improvements">Die Speicherbelegung wird bei Datei- und Aktualisierungsvorgängen häufig aktualisiert und ist neben dem Schubladenmenü auch in der kontenmanager Ansicht verfügbar.</string>
+  <string name="release_notes_4_5_0_title_light_users">Infinite Scale Eingeschränkter Benutzer</string>
+  <string name="release_notes_4_5_0_subtitle_light_users">Infinite Scale Eingeschränkte Benutzer (Benutzer ohne persönlichen Space) sind nun in dieser App unterstützt</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Öffnen im Webbrowser</string>
   <string name="ic_action_open_with_web">Öffnen in %1$s (web)</string>
@@ -756,6 +758,7 @@
   <string name="create_shortcut_dialog_url_extension">.url</string>
   <string name="open_shortcut_description">Diese Verknüpfung verweist auf:</string>
   <string name="open_shortcut_title">Link öffnen</string>
+  <string name="feedback_dialog_get_in_contact_description"><![CDATA[ Fragen Sie für Hilfe in unserem <a href="%1$s"><b>Forum</b></a> oder machen Sie einen Beitrag in unserem <a href="%2$s"><b>GitHub repo</b></a>]]></string>
   <string name="link_role_accessibility">Link</string>
   <string name="button_role_accessibility">Schaltfläche</string>
   <string name="folder_picker_label">Ordnerauswahl</string>
