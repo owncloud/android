@@ -675,8 +675,6 @@
   <string name="release_notes_icon">Иконка к примечанию релиза</string>
   <string name="release_notes_bugfixes_title">Незначительные исправления ошибок</string>
   <string name="release_notes_bugfixes_subtitle">Некоторые ошибки были исправлены для улучшения работы приложения</string>
-  <string name="release_notes_4_5_0_title_feedback_in_previews">Обратная связь при установке/снятии оффлайн-доступа во всех предварительных просмотрах</string>
-  <string name="release_notes_4_5_0_subtitle_feedback_in_previews">Добавлена обратная связь при установке/снятии оффлайн-доступа во всех предварительных просмотрах и обновлено меню опций в зависимости от статуса файла</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Открыть в браузере</string>
   <string name="ic_action_open_with_web">Открыть в %1$s (веб)</string>

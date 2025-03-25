@@ -680,7 +680,6 @@
   <string name="release_notes_icon">Julkaisutiedotteen ikoni</string>
   <string name="release_notes_bugfixes_title">Pieniä bugikorjauksia</string>
   <string name="release_notes_bugfixes_subtitle">Joitain bugeja korjattu sovelluksen käyttökokemuksen parantamiseksi</string>
-  <string name="release_notes_4_5_0_title_quota_improvements">Parannuksia tallennusmediasta varatun tilan näyttämisessä</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Avoinna verkossa</string>
   <string name="ic_action_open_with_web">Avoinna %1$s (web)</string>
@@ -767,5 +766,4 @@
   <string name="audio_preview_label">Äänen esikuuntelu</string>
   <string name="details_label">Tiedot</string>
   <string name="text_preview_label">Tekstin esikatselu</string>
-  <string name="release_notes_title_enhanced_bottom_nav_bar">Lisätty tekstietiketit alapalkkiin</string>
 </resources>
