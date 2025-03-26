@@ -64,6 +64,11 @@ class ReleaseNotesViewModel(
                 type = ReleaseNoteType.ENHANCEMENT
             ),
             ReleaseNote(
+                title = R.string.release_notes_4_5_1_title_strange_behaviour_apps_provider,
+                subtitle = R.string.release_notes_4_5_1_subtitle_strange_behaviour_apps_provider,
+                type = ReleaseNoteType.BUGFIX
+            ),
+            ReleaseNote(
                 title = R.string.release_notes_bugfixes_title,
                 subtitle = R.string.release_notes_bugfixes_subtitle,
                 type = ReleaseNoteType.BUGFIX
