@@ -1167,7 +1167,8 @@ class MainFileListFragment : Fragment(),
                 }
                 setOnClickListener {
                     showFilenameTextDialog(appRegistry.ext)
-                    currentDefaultApplication = appRegistry.defaultApplication
+                    currentDefaultApplication = appRegistry.appProviders.find { it.productName == appRegistry.defaultApplication}?.name
+                        ?: appRegistry.defaultApplication
                     dialog.hide()
                 }
             }

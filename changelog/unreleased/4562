@@ -1,0 +1,7 @@
+Bugfix: Confusing behaviour when creating new files using apps provider
+
+The error that appeared when creating a new file using the apps provider has been fixed.
+Now, the custom tab is opened correctly with the file content.
+
+https://github.com/owncloud/android/issues/4560
+https://github.com/owncloud/android/pull/4562

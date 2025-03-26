@@ -75,6 +75,7 @@ class OCRemoteAppRegistryDataSource(
                     appProviders = appRegistryMimeTypeResponse.appProviders.map { appRegistryProviderResponse ->
                         AppRegistryProvider(
                             name = appRegistryProviderResponse.name,
+                            productName = appRegistryProviderResponse.productName,
                             icon = appRegistryProviderResponse.icon
                         )
                     },

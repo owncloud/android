@@ -742,7 +742,8 @@
     <string name="release_notes_4_5_0_subtitle_quota_improvements">Storage occupation refreshed frequently in file and refresh operations and available in accounts manager view, besides of drawer menu</string>
     <string name="release_notes_4_5_0_title_light_users">Infinite Scale Users Light</string>
     <string name="release_notes_4_5_0_subtitle_light_users">Infinite Scale Users Light (users without personal space) are now supported in the app</string>
-
+    <string name="release_notes_4_5_1_title_strange_behaviour_apps_provider">Fix for files creation via app providers</string>
+    <string name="release_notes_4_5_1_subtitle_strange_behaviour_apps_provider">Files are now opened correctly when they are created using app providers</string>
 
     <!-- Open in web -->
     <string name="ic_action_open_in_web">Open in web</string>
