@@ -36,5 +36,6 @@ data class AppRegistryMimeType(
 
 data class AppRegistryProvider(
     val name: String,
+    val productName: String,
     val icon: String,
 )
