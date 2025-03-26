@@ -1,5 +1,6 @@
 # Table of Contents
 
+* [Changelog for unreleased](#changelog-for-owncloud-android-client-unreleased-unreleased)
 * [Changelog for 4.5.0](#changelog-for-owncloud-android-client-450-2025-03-24)
 * [Changelog for 4.4.1](#changelog-for-owncloud-android-client-441-2024-10-30)
 * [Changelog for 4.4.0](#changelog-for-owncloud-android-client-440-2024-09-30)
@@ -25,6 +26,27 @@
 * [Changelog for 2.18.1](#changelog-for-owncloud-android-client-2181-2021-07-20)
 * [Changelog for 2.18.0](#changelog-for-owncloud-android-client-2180-2021-05-24)
 * [Changelog for 2.17 versions and below](#changelog-for-217-versions-and-below)
+# Changelog for ownCloud Android Client [unreleased] (UNRELEASED)
+
+The following sections list the changes in ownCloud Android Client unreleased relevant to
+ownCloud admins and users.
+
+[unreleased]: https://github.com/owncloud/android/compare/v4.5.0...master
+
+## Summary
+
+* Bugfix - Confusing behaviour when creating new files using apps provider: [#4560](https://github.com/owncloud/android/issues/4560)
+
+## Details
+
+* Bugfix - Confusing behaviour when creating new files using apps provider: [#4560](https://github.com/owncloud/android/issues/4560)
+
+   The error that appeared when creating a new file using the apps provider has
+   been fixed. Now, the custom tab is opened correctly with the file content.
+
+   https://github.com/owncloud/android/issues/4560
+   https://github.com/owncloud/android/pull/4562
+
 # Changelog for ownCloud Android Client [4.5.0] (2025-03-24)
 
 The following sections list the changes in ownCloud Android Client 4.5.0 relevant to
