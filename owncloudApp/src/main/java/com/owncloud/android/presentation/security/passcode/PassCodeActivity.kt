@@ -10,9 +10,10 @@
  * @author Juan Carlos Garrote Gascón
  * @author David Crespo Ríos
  * @author  Aitor Ballesteros Pavón
+ * @author Jorge Aguado Recio
  *
  * Copyright (C) 2011 Bartek Przybylski
- * Copyright (C) 2024 ownCloud GmbH.
+ * Copyright (C) 2025 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -44,6 +45,7 @@ import com.owncloud.android.R
 import com.owncloud.android.databinding.PasscodelockBinding
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.showBiometricDialog
+import com.owncloud.android.extensions.showMessageInSnackbar
 import com.owncloud.android.presentation.documentsprovider.DocumentsProviderUtils.notifyDocumentsProviderRoots
 import com.owncloud.android.presentation.security.biometric.BiometricStatus
 import com.owncloud.android.presentation.security.biometric.BiometricViewModel
@@ -93,6 +95,10 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, EnableBiom
         } // else, let it go, or taking screenshots & testing will not be possible
 
         setContentView(binding.root)
+
+        if (intent.getBooleanExtra(BIOMETRIC_HAS_FAILED, false)) {
+            showMessageInSnackbar(message = getString(R.string.biometric_not_available))
+        }
 
         numberOfPasscodeDigits = passCodeViewModel.getPassCode()?.length ?: passCodeViewModel.getNumberOfPassCodeDigits()
         passCodeEditTexts = arrayOfNulls(numberOfPasscodeDigits)
@@ -473,6 +479,8 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, EnableBiom
         const val PASSCODE_MIN_LENGTH = 4
 
         private const val NUM_ATTEMPTS_WITHOUT_TIMER = 3
+
+        private const val BIOMETRIC_HAS_FAILED = "BIOMETRIC_HAS_FAILED"
 
     }
 }

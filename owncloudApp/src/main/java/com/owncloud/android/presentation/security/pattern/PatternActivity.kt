@@ -6,7 +6,9 @@
  * @author David González Verdugo
  * @author Abel García de Prada
  * @author Juan Carlos Garrote Gascón
- * Copyright (C) 2021 ownCloud GmbH.
+ * @author Jorge Aguado Recio
+ *
+ * Copyright (C) 2025 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -40,6 +42,7 @@ import com.owncloud.android.R
 import com.owncloud.android.data.providers.implementation.OCSharedPreferencesProvider
 import com.owncloud.android.databinding.ActivityPatternLockBinding
 import com.owncloud.android.extensions.showBiometricDialog
+import com.owncloud.android.extensions.showMessageInSnackbar
 import com.owncloud.android.presentation.documentsprovider.DocumentsProviderUtils.notifyDocumentsProviderRoots
 import com.owncloud.android.presentation.security.PREFERENCE_LAST_UNLOCK_TIMESTAMP
 import com.owncloud.android.presentation.security.biometric.BiometricStatus
@@ -75,6 +78,10 @@ class PatternActivity : AppCompatActivity(), EnableBiometrics {
         _binding = ActivityPatternLockBinding.inflate(layoutInflater)
 
         setContentView(binding.root)
+
+        if (intent.getBooleanExtra(BIOMETRIC_HAS_FAILED, false)) {
+            showMessageInSnackbar(message = getString(R.string.biometric_not_available))
+        }
 
         binding.patternLockView.clearPattern()
 
@@ -354,5 +361,6 @@ class PatternActivity : AppCompatActivity(), EnableBiometrics {
         private const val KEY_PATTERN_STRING = "PATTERN_STRING"
         private const val PATTERN_HEADER_VIEW_TEXT = "PATTERN_HEADER_VIEW_TEXT"
         private const val PATTERN_EXP_VIEW_STATE = "PATTERN_EXP_VIEW_STATE"
+        private const val BIOMETRIC_HAS_FAILED = "BIOMETRIC_HAS_FAILED"
     }
 }
