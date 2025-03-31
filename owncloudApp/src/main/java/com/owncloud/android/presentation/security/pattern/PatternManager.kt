@@ -2,8 +2,9 @@
  * ownCloud Android client application
  *
  * @author Juan Carlos Garrote Gascón
+ * @author Jorge Aguado Recio
  *
- * Copyright (C) 2023 ownCloud GmbH.
+ * Copyright (C) 2025 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -39,6 +40,8 @@ object PatternManager {
     private val exemptOfPatternActivities: MutableSet<Class<*>> = mutableSetOf(PatternActivity::class.java)
     private val visibleActivities: MutableSet<Class<*>> = mutableSetOf()
     private val preferencesProvider = OCSharedPreferencesProvider(appContext)
+
+    private const val BIOMETRIC_HAS_FAILED = "BIOMETRIC_HAS_FAILED"
 
     fun onActivityStarted(activity: Activity) {
         if (!exemptOfPatternActivities.contains(activity.javaClass) && patternShouldBeRequested()) {
@@ -79,15 +82,21 @@ object PatternManager {
     fun isPatternEnabled(): Boolean =
         preferencesProvider.getBoolean(PatternActivity.PREFERENCE_SET_PATTERN, false)
 
-    private fun askUserForPattern(activity: Activity) {
+    private fun askUserForPattern(activity: Activity, biometricHasFailed: Boolean = false) {
         val i = Intent(appContext, PatternActivity::class.java).apply {
             action = PatternActivity.ACTION_CHECK
             flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT or Intent.FLAG_ACTIVITY_SINGLE_TOP
+            putExtra(BIOMETRIC_HAS_FAILED, biometricHasFailed)
         }
         activity.startActivity(i)
     }
 
-    fun onBiometricCancelled(activity: Activity) {
-        askUserForPattern(activity)
+    fun onBiometricCancelled(activity: Activity, biometricCanceledManually: Boolean = false) {
+        if (biometricCanceledManually) {
+            askUserForPattern(activity)
+        } else {
+            // Biometric unlock has failed
+            askUserForPattern(activity, true)
+        }
     }
 }

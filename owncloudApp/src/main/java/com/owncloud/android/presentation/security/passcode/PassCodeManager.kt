@@ -2,8 +2,9 @@
  * ownCloud Android client application
  *
  * @author Juan Carlos Garrote Gascón
+ * @author Jorge Aguado Recio
  *
- * Copyright (C) 2023 ownCloud GmbH.
+ * Copyright (C) 2025 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -39,6 +40,8 @@ object PassCodeManager {
     private val exemptOfPasscodeActivities: MutableSet<Class<*>> = mutableSetOf(PassCodeActivity::class.java)
     private val visibleActivities: MutableSet<Class<*>> = mutableSetOf()
     private val preferencesProvider = OCSharedPreferencesProvider(appContext)
+
+    private const val BIOMETRIC_HAS_FAILED = "BIOMETRIC_HAS_FAILED"
 
     fun onActivityStarted(activity: Activity) {
         if (!exemptOfPasscodeActivities.contains(activity.javaClass) && passCodeShouldBeRequested()) {
@@ -86,15 +89,21 @@ object PassCodeManager {
     fun isPassCodeEnabled(): Boolean =
         preferencesProvider.getBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false)
 
-    private fun askUserForPasscode(activity: Activity) {
+    private fun askUserForPasscode(activity: Activity, biometricHasFailed: Boolean = false) {
         val i = Intent(appContext, PassCodeActivity::class.java).apply {
             action = PassCodeActivity.ACTION_CHECK
             flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT or Intent.FLAG_ACTIVITY_SINGLE_TOP
+            putExtra(BIOMETRIC_HAS_FAILED, biometricHasFailed)
         }
         activity.startActivity(i)
     }
 
-    fun onBiometricCancelled(activity: Activity) {
-        askUserForPasscode(activity)
+    fun onBiometricCancelled(activity: Activity, biometricCanceledManually: Boolean = false) {
+        if (biometricCanceledManually) {
+            askUserForPasscode(activity)
+        } else {
+            // Biometric unlock has failed
+            askUserForPasscode(activity, true)
+        }
     }
 }

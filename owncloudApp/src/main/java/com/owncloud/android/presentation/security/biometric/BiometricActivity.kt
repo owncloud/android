@@ -3,8 +3,9 @@
  *
  * @author David González Verdugo
  * @author Juan Carlos Garrote Gascón
+ * @author Jorge Aguado Recio
  *
- * Copyright (C) 2023 ownCloud GmbH.
+ * Copyright (C) 2025 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -82,7 +83,7 @@ class BiometricActivity : AppCompatActivity() {
                 override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
                     super.onAuthenticationError(errorCode, errString)
                     Timber.e("onAuthenticationError ($errorCode): $errString")
-                    authError()
+                    authError(errorCode == 13) // ErrorCode 13: Canceled
                 }
 
                 override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
@@ -110,14 +111,19 @@ class BiometricActivity : AppCompatActivity() {
             })
 
         // Displays the "log in" prompt.
-        biometricPrompt.authenticate(promptInfo, cryptoObject)
+        try {
+            biometricPrompt.authenticate(promptInfo, cryptoObject)
+        } catch (e: Exception) {
+            Timber.e(e, "cryptoObject property has not been initialized correctly")
+            authError()
+        }
     }
 
-    private fun authError() {
+    private fun authError(biometricCanceledManually: Boolean = false) {
         if (PassCodeManager.isPassCodeEnabled()) {
-            PassCodeManager.onBiometricCancelled(this)
+            PassCodeManager.onBiometricCancelled(this, biometricCanceledManually)
         } else if (PatternManager.isPatternEnabled()) {
-            PatternManager.onBiometricCancelled(this)
+            PatternManager.onBiometricCancelled(this, biometricCanceledManually)
         }
 
         finish()
