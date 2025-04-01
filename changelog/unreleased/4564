@@ -1,0 +1,7 @@
+Bugfix: App crashes at start when biometrics fail
+
+The crash that happened when biometrics failed due to a system error has been handled.
+In this case, an error is shown and pattern or passcode unlock are used instead of biometrics.
+
+https://github.com/owncloud/enterprise/issues/7134
+https://github.com/owncloud/android/pull/4564
