@@ -480,7 +480,7 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, EnableBiom
 
         private const val NUM_ATTEMPTS_WITHOUT_TIMER = 3
 
-        private const val BIOMETRIC_HAS_FAILED = "BIOMETRIC_HAS_FAILED"
+        const val BIOMETRIC_HAS_FAILED = "BIOMETRIC_HAS_FAILED"
 
     }
 }

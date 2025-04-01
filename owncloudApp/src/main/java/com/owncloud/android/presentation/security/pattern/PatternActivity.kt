@@ -361,6 +361,6 @@ class PatternActivity : AppCompatActivity(), EnableBiometrics {
         private const val KEY_PATTERN_STRING = "PATTERN_STRING"
         private const val PATTERN_HEADER_VIEW_TEXT = "PATTERN_HEADER_VIEW_TEXT"
         private const val PATTERN_EXP_VIEW_STATE = "PATTERN_EXP_VIEW_STATE"
-        private const val BIOMETRIC_HAS_FAILED = "BIOMETRIC_HAS_FAILED"
+        const val BIOMETRIC_HAS_FAILED = "BIOMETRIC_HAS_FAILED"
     }
 }

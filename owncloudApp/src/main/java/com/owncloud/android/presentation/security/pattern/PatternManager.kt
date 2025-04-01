@@ -41,8 +41,6 @@ object PatternManager {
     private val visibleActivities: MutableSet<Class<*>> = mutableSetOf()
     private val preferencesProvider = OCSharedPreferencesProvider(appContext)
 
-    private const val BIOMETRIC_HAS_FAILED = "BIOMETRIC_HAS_FAILED"
-
     fun onActivityStarted(activity: Activity) {
         if (!exemptOfPatternActivities.contains(activity.javaClass) && patternShouldBeRequested()) {
 
@@ -86,7 +84,7 @@ object PatternManager {
         val i = Intent(appContext, PatternActivity::class.java).apply {
             action = PatternActivity.ACTION_CHECK
             flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT or Intent.FLAG_ACTIVITY_SINGLE_TOP
-            putExtra(BIOMETRIC_HAS_FAILED, biometricHasFailed)
+            putExtra(PatternActivity.BIOMETRIC_HAS_FAILED, biometricHasFailed)
         }
         activity.startActivity(i)
     }

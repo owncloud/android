@@ -41,7 +41,6 @@ object PassCodeManager {
     private val visibleActivities: MutableSet<Class<*>> = mutableSetOf()
     private val preferencesProvider = OCSharedPreferencesProvider(appContext)
 
-    private const val BIOMETRIC_HAS_FAILED = "BIOMETRIC_HAS_FAILED"
 
     fun onActivityStarted(activity: Activity) {
         if (!exemptOfPasscodeActivities.contains(activity.javaClass) && passCodeShouldBeRequested()) {
@@ -93,7 +92,7 @@ object PassCodeManager {
         val i = Intent(appContext, PassCodeActivity::class.java).apply {
             action = PassCodeActivity.ACTION_CHECK
             flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT or Intent.FLAG_ACTIVITY_SINGLE_TOP
-            putExtra(BIOMETRIC_HAS_FAILED, biometricHasFailed)
+            putExtra(PassCodeActivity.BIOMETRIC_HAS_FAILED, biometricHasFailed)
         }
         activity.startActivity(i)
     }
