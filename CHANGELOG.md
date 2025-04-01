@@ -36,6 +36,7 @@ ownCloud admins and users.
 ## Summary
 
 * Bugfix - Confusing behaviour when creating new files using apps provider: [#4560](https://github.com/owncloud/android/issues/4560)
+* Bugfix - App crashes at start when biometrics fail: [#7134](https://github.com/owncloud/enterprise/issues/7134)
 
 ## Details
 
@@ -46,6 +47,15 @@ ownCloud admins and users.
 
    https://github.com/owncloud/android/issues/4560
    https://github.com/owncloud/android/pull/4562
+
+* Bugfix - App crashes at start when biometrics fail: [#7134](https://github.com/owncloud/enterprise/issues/7134)
+
+   The crash that happened when biometrics failed due to a system error has been
+   handled. In this case, an error is shown and pattern or passcode unlock are used
+   instead of biometrics.
+
+   https://github.com/owncloud/enterprise/issues/7134
+   https://github.com/owncloud/android/pull/4564
 
 # Changelog for ownCloud Android Client [4.5.0] (2025-03-24)
 
