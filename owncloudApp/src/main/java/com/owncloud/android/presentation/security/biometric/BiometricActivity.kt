@@ -67,7 +67,7 @@ class BiometricActivity : AppCompatActivity() {
         if (biometricManager.canAuthenticate(BIOMETRIC_WEAK) == BiometricManager.BIOMETRIC_SUCCESS) {
             showBiometricPrompt()
         } else {
-            authError()
+            authError(biometricHasFailed = true)
         }
     }
 
@@ -83,13 +83,13 @@ class BiometricActivity : AppCompatActivity() {
                 override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
                     super.onAuthenticationError(errorCode, errString)
                     Timber.e("onAuthenticationError ($errorCode): $errString")
-                    authError(errorCode == 13) // ErrorCode 13: Canceled
+                    authError(biometricHasFailed = errorCode != BiometricPrompt.ERROR_NEGATIVE_BUTTON)
                 }
 
                 override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
                     super.onAuthenticationSucceeded(result)
                     if (result.cryptoObject?.cipher != cryptoObject.cipher) {
-                        authError()
+                        authError(biometricHasFailed = true)
                     } else {
                         if (biometricViewModel.shouldAskForNewPassCode()) {
                             biometricViewModel.removePassCode()
@@ -115,15 +115,15 @@ class BiometricActivity : AppCompatActivity() {
             biometricPrompt.authenticate(promptInfo, cryptoObject)
         } catch (e: Exception) {
             Timber.e(e, "cryptoObject property has not been initialized correctly")
-            authError()
+            authError(biometricHasFailed = true)
         }
     }
 
-    private fun authError(biometricCanceledManually: Boolean = false) {
+    private fun authError(biometricHasFailed: Boolean) {
         if (PassCodeManager.isPassCodeEnabled()) {
-            PassCodeManager.onBiometricCancelled(this, biometricCanceledManually)
+            PassCodeManager.onBiometricCancelled(this, biometricHasFailed)
         } else if (PatternManager.isPatternEnabled()) {
-            PatternManager.onBiometricCancelled(this, biometricCanceledManually)
+            PatternManager.onBiometricCancelled(this, biometricHasFailed)
         }
 
         finish()

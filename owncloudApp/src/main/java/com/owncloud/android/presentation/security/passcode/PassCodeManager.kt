@@ -41,7 +41,6 @@ object PassCodeManager {
     private val visibleActivities: MutableSet<Class<*>> = mutableSetOf()
     private val preferencesProvider = OCSharedPreferencesProvider(appContext)
 
-
     fun onActivityStarted(activity: Activity) {
         if (!exemptOfPasscodeActivities.contains(activity.javaClass) && passCodeShouldBeRequested()) {
 
@@ -54,7 +53,7 @@ object PassCodeManager {
                 return
             }
 
-            askUserForPasscode(activity)
+            askUserForPasscode(activity = activity, biometricHasFailed = false)
         } else if (preferencesProvider.getBoolean(PassCodeActivity.PREFERENCE_MIGRATION_REQUIRED, false)) {
             val intent = Intent(appContext, PassCodeActivity::class.java).apply {
                 action = PassCodeActivity.ACTION_CREATE
@@ -88,7 +87,7 @@ object PassCodeManager {
     fun isPassCodeEnabled(): Boolean =
         preferencesProvider.getBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false)
 
-    private fun askUserForPasscode(activity: Activity, biometricHasFailed: Boolean = false) {
+    private fun askUserForPasscode(activity: Activity, biometricHasFailed: Boolean) {
         val i = Intent(appContext, PassCodeActivity::class.java).apply {
             action = PassCodeActivity.ACTION_CHECK
             flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT or Intent.FLAG_ACTIVITY_SINGLE_TOP
@@ -97,12 +96,7 @@ object PassCodeManager {
         activity.startActivity(i)
     }
 
-    fun onBiometricCancelled(activity: Activity, biometricCanceledManually: Boolean = false) {
-        if (biometricCanceledManually) {
-            askUserForPasscode(activity)
-        } else {
-            // Biometric unlock has failed
-            askUserForPasscode(activity, true)
-        }
+    fun onBiometricCancelled(activity: Activity, biometricHasFailed: Boolean) {
+        askUserForPasscode(activity, biometricHasFailed)
     }
 }

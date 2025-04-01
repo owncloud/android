@@ -53,7 +53,7 @@ object PatternManager {
                 return
             }
 
-            askUserForPattern(activity)
+            askUserForPattern(activity = activity, biometricHasFailed = false)
         }
 
         visibleActivities.add(activity.javaClass)
@@ -80,7 +80,7 @@ object PatternManager {
     fun isPatternEnabled(): Boolean =
         preferencesProvider.getBoolean(PatternActivity.PREFERENCE_SET_PATTERN, false)
 
-    private fun askUserForPattern(activity: Activity, biometricHasFailed: Boolean = false) {
+    private fun askUserForPattern(activity: Activity, biometricHasFailed: Boolean) {
         val i = Intent(appContext, PatternActivity::class.java).apply {
             action = PatternActivity.ACTION_CHECK
             flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT or Intent.FLAG_ACTIVITY_SINGLE_TOP
@@ -89,12 +89,7 @@ object PatternManager {
         activity.startActivity(i)
     }
 
-    fun onBiometricCancelled(activity: Activity, biometricCanceledManually: Boolean = false) {
-        if (biometricCanceledManually) {
-            askUserForPattern(activity)
-        } else {
-            // Biometric unlock has failed
-            askUserForPattern(activity, true)
-        }
+    fun onBiometricCancelled(activity: Activity, biometricHasFailed: Boolean) {
+        askUserForPattern(activity, biometricHasFailed)
     }
 }
