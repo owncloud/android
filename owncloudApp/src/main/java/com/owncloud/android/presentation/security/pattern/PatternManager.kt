@@ -2,8 +2,9 @@
  * ownCloud Android client application
  *
  * @author Juan Carlos Garrote Gascón
+ * @author Jorge Aguado Recio
  *
- * Copyright (C) 2023 ownCloud GmbH.
+ * Copyright (C) 2025 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -52,7 +53,7 @@ object PatternManager {
                 return
             }
 
-            askUserForPattern(activity)
+            askUserForPattern(activity = activity, biometricHasFailed = false)
         }
 
         visibleActivities.add(activity.javaClass)
@@ -79,15 +80,16 @@ object PatternManager {
     fun isPatternEnabled(): Boolean =
         preferencesProvider.getBoolean(PatternActivity.PREFERENCE_SET_PATTERN, false)
 
-    private fun askUserForPattern(activity: Activity) {
+    private fun askUserForPattern(activity: Activity, biometricHasFailed: Boolean) {
         val i = Intent(appContext, PatternActivity::class.java).apply {
             action = PatternActivity.ACTION_CHECK
             flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT or Intent.FLAG_ACTIVITY_SINGLE_TOP
+            putExtra(PatternActivity.BIOMETRIC_HAS_FAILED, biometricHasFailed)
         }
         activity.startActivity(i)
     }
 
-    fun onBiometricCancelled(activity: Activity) {
-        askUserForPattern(activity)
+    fun onBiometricCancelled(activity: Activity, biometricHasFailed: Boolean) {
+        askUserForPattern(activity, biometricHasFailed)
     }
 }

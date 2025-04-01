@@ -3,8 +3,9 @@
  *
  * @author David González Verdugo
  * @author Juan Carlos Garrote Gascón
+ * @author Jorge Aguado Recio
  *
- * Copyright (C) 2023 ownCloud GmbH.
+ * Copyright (C) 2025 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -66,7 +67,7 @@ class BiometricActivity : AppCompatActivity() {
         if (biometricManager.canAuthenticate(BIOMETRIC_WEAK) == BiometricManager.BIOMETRIC_SUCCESS) {
             showBiometricPrompt()
         } else {
-            authError()
+            authError(biometricHasFailed = true)
         }
     }
 
@@ -82,13 +83,13 @@ class BiometricActivity : AppCompatActivity() {
                 override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
                     super.onAuthenticationError(errorCode, errString)
                     Timber.e("onAuthenticationError ($errorCode): $errString")
-                    authError()
+                    authError(biometricHasFailed = errorCode != BiometricPrompt.ERROR_NEGATIVE_BUTTON)
                 }
 
                 override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
                     super.onAuthenticationSucceeded(result)
                     if (result.cryptoObject?.cipher != cryptoObject.cipher) {
-                        authError()
+                        authError(biometricHasFailed = true)
                     } else {
                         if (biometricViewModel.shouldAskForNewPassCode()) {
                             biometricViewModel.removePassCode()
@@ -110,14 +111,19 @@ class BiometricActivity : AppCompatActivity() {
             })
 
         // Displays the "log in" prompt.
-        biometricPrompt.authenticate(promptInfo, cryptoObject)
+        try {
+            biometricPrompt.authenticate(promptInfo, cryptoObject)
+        } catch (e: Exception) {
+            Timber.e(e, "cryptoObject property has not been initialized correctly")
+            authError(biometricHasFailed = true)
+        }
     }
 
-    private fun authError() {
+    private fun authError(biometricHasFailed: Boolean) {
         if (PassCodeManager.isPassCodeEnabled()) {
-            PassCodeManager.onBiometricCancelled(this)
+            PassCodeManager.onBiometricCancelled(this, biometricHasFailed)
         } else if (PatternManager.isPatternEnabled()) {
-            PatternManager.onBiometricCancelled(this)
+            PatternManager.onBiometricCancelled(this, biometricHasFailed)
         }
 
         finish()

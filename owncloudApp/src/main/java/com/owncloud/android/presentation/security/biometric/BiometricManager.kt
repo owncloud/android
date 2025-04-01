@@ -60,11 +60,11 @@ object BiometricManager {
                 activity.startActivity(i)
             } else if (isPassCodeEnabled()) {
                 // Cancel biometric lock and use passcode unlock method
-                PassCodeManager.onBiometricCancelled(activity)
+                PassCodeManager.onBiometricCancelled(activity = activity, biometricHasFailed = false)
                 visibleActivities.add(activity.javaClass)
             } else if (isPatternEnabled()) {
                 // Cancel biometric lock and use pattern unlock method
-                PatternManager.onBiometricCancelled(activity)
+                PatternManager.onBiometricCancelled(activity = activity, biometricHasFailed = false)
                 visibleActivities.add(activity.javaClass)
             }
 

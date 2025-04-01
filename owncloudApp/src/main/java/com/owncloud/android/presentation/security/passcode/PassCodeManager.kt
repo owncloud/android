@@ -2,8 +2,9 @@
  * ownCloud Android client application
  *
  * @author Juan Carlos Garrote Gascón
+ * @author Jorge Aguado Recio
  *
- * Copyright (C) 2023 ownCloud GmbH.
+ * Copyright (C) 2025 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -52,7 +53,7 @@ object PassCodeManager {
                 return
             }
 
-            askUserForPasscode(activity)
+            askUserForPasscode(activity = activity, biometricHasFailed = false)
         } else if (preferencesProvider.getBoolean(PassCodeActivity.PREFERENCE_MIGRATION_REQUIRED, false)) {
             val intent = Intent(appContext, PassCodeActivity::class.java).apply {
                 action = PassCodeActivity.ACTION_CREATE
@@ -86,15 +87,16 @@ object PassCodeManager {
     fun isPassCodeEnabled(): Boolean =
         preferencesProvider.getBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false)
 
-    private fun askUserForPasscode(activity: Activity) {
+    private fun askUserForPasscode(activity: Activity, biometricHasFailed: Boolean) {
         val i = Intent(appContext, PassCodeActivity::class.java).apply {
             action = PassCodeActivity.ACTION_CHECK
             flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT or Intent.FLAG_ACTIVITY_SINGLE_TOP
+            putExtra(PassCodeActivity.BIOMETRIC_HAS_FAILED, biometricHasFailed)
         }
         activity.startActivity(i)
     }
 
-    fun onBiometricCancelled(activity: Activity) {
-        askUserForPasscode(activity)
+    fun onBiometricCancelled(activity: Activity, biometricHasFailed: Boolean) {
+        askUserForPasscode(activity, biometricHasFailed)
     }
 }
