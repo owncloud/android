@@ -1,0 +1,6 @@
+Change: Replace dav4android location
+
+dav4android location has been moved from GitLab to GitHub.
+
+https://github.com/owncloud/android/issues/4536
+https://github.com/owncloud/android/pull/4558
