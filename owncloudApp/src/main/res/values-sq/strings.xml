@@ -677,9 +677,6 @@
   <string name="release_notes_icon">Ikonë shënimesh hedhjeje në qarkullim</string>
   <string name="release_notes_bugfixes_title">Ndreqje të metash të vockla</string>
   <string name="release_notes_bugfixes_subtitle">U ndreqën disa të meta, për të përmirësuar punimin te aplikacioni</string>
-  <string name="release_notes_4_5_0_title_quota_improvements">Përmirësime në shfaqjen e hapësirës së zënë</string>
-  <string name="release_notes_4_5_1_title_strange_behaviour_apps_provider">Ndreqje për krijim kartelash përmes furnizuesish aplikacionesh</string>
-  <string name="release_notes_4_5_1_subtitle_strange_behaviour_apps_provider">Kartelat tanimë hapen saktë, kur janë krijuar duke përdorur furnizues (shërbime) aplikacionesh</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Hape në web</string>
   <string name="ic_action_open_with_web">Hape në %1$s (web)</string>
@@ -767,6 +764,4 @@
   <string name="audio_preview_label">Paradëgjim audioje</string>
   <string name="details_label">Hollësi</string>
   <string name="text_preview_label">Paraparje teksti</string>
-  <string name="release_notes_title_enhanced_bottom_nav_bar">U shtuan etiketa tekst te shtylla në fund</string>
-  <string name="release_notes_subtitle_bottom_nav_bar">U shtuan etiketa tekst dhe treguesi parazgjedhje për gjendje aktive përdoret për të treguar se cila ndarje është përzgjedhur te shtylla në fund</string>
 </resources>

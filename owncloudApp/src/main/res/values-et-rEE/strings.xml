@@ -680,14 +680,6 @@
   <string name="release_notes_icon">Väljalasketeavituse ikoon</string>
   <string name="release_notes_bugfixes_title">Väiksemad veaparandused</string>
   <string name="release_notes_bugfixes_subtitle">Mõned vead parandati, et täiustada rakenduse kasutajakogemust</string>
-  <string name="release_notes_4_5_0_title_feedback_in_previews">Tagasiside kõikides eelvaadetes, kui võrguühenduseta failide saadavust muudetakse</string>
-  <string name="release_notes_4_5_0_subtitle_feedback_in_previews">Lisatud on võrguühenduseta failide saadavuse tagasiside kõikidesse eelvaadetesse ning valikute menüüd uuendatakse vastavalt faili staatusele</string>
-  <string name="release_notes_4_5_0_title_quota_improvements">Täiustused salvestusmahu kasutuse kuvamisel</string>
-  <string name="release_notes_4_5_0_subtitle_quota_improvements">Salvestusmahu kasutust värskendatakse faili- ja värskendustoimingutes tihti ning on lisaks menüüle saadaval ka kontode halduse vaates</string>
-  <string name="release_notes_4_5_0_title_light_users">Infinite Scale serveri \"light\" kasutajad</string>
-  <string name="release_notes_4_5_0_subtitle_light_users">Infinite Scale serveri \"light\" kasutajad (kasutajad ilma personaalse ruumita) on nüüd rakenduse poolt toetatud</string>
-  <string name="release_notes_4_5_1_title_strange_behaviour_apps_provider">Prandus failide loomisel erinevate rakenduste pakkujate poolt</string>
-  <string name="release_notes_4_5_1_subtitle_strange_behaviour_apps_provider">Eri rakenduse pakkujate poolt loodud faile avatakse nüüd korrektselt</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Ava veebis</string>
   <string name="ic_action_open_with_web">Ava %1$s (veebis)</string>
@@ -775,6 +767,4 @@
   <string name="audio_preview_label">Audio eelvaade</string>
   <string name="details_label">Üksikasjad</string>
   <string name="text_preview_label">Teksti eelvaade</string>
-  <string name="release_notes_title_enhanced_bottom_nav_bar">Alumisele ribale on lisatud tekstisildid</string>
-  <string name="release_notes_subtitle_bottom_nav_bar">Alumisele ribale on lisatud tekstisildid ning näidatakse vaikimisi aktiivset valitud sektsiooni</string>
 </resources>
