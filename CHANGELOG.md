@@ -37,6 +37,7 @@ ownCloud admins and users.
 ## Summary
 
 * Change - Bump target SDK to 35: [#4529](https://github.com/owncloud/android/issues/4529)
+* Change - Replace dav4android location: [#4536](https://github.com/owncloud/android/issues/4536)
 
 ## Details
 
@@ -47,6 +48,13 @@ ownCloud admins and users.
 
    https://github.com/owncloud/android/issues/4529
    https://github.com/owncloud/android/pull/4556
+
+* Change - Replace dav4android location: [#4536](https://github.com/owncloud/android/issues/4536)
+
+   Dav4android location has been moved from GitLab to GitHub.
+
+   https://github.com/owncloud/android/issues/4536
+   https://github.com/owncloud/android/pull/4558
 
 # Changelog for ownCloud Android Client [4.5.1] (2025-04-03)
 

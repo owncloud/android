@@ -6,7 +6,7 @@ apply plugin: 'kotlin-parcelize'
 dependencies {
     api 'com.squareup.okhttp3:okhttp:4.9.2'
     implementation libs.kotlin.stdlib
-    api 'com.gitlab.ownclouders:dav4android:oc_support_2.1.5'
+    api 'com.github.owncloud:dav4android:oc_support_2.1.5'
 
     // Androidx
     implementation libs.androidx.core.ktx
