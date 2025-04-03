@@ -680,12 +680,6 @@
   <string name="release_notes_icon">Icon für Veröffentlichungsnotizen</string>
   <string name="release_notes_bugfixes_title">Geringfügige Fehler behoben</string>
   <string name="release_notes_bugfixes_subtitle">Einige Fehler wurden behoben, um die Benutzung der App zu verbessern.</string>
-  <string name="release_notes_4_5_0_title_feedback_in_previews">Feedback wenn (de)aktivieren für offline verfügbar in allen Vorschauen.</string>
-  <string name="release_notes_4_5_0_subtitle_feedback_in_previews">Feedback hinzugefügt, wenn (de)aktivieren für offline verfügbar in allen Vorschauen, und Optionsmenü abhängig von Dateistatus aktualisiert</string>
-  <string name="release_notes_4_5_0_title_quota_improvements">Verbesserungen bei der Anzeige der Speicherbelegung</string>
-  <string name="release_notes_4_5_0_subtitle_quota_improvements">Die Speicherbelegung wird bei Datei- und Aktualisierungsvorgängen häufig aktualisiert und ist neben dem Schubladenmenü auch in der kontenmanager Ansicht verfügbar.</string>
-  <string name="release_notes_4_5_0_title_light_users">Infinite Scale Eingeschränkter Benutzer</string>
-  <string name="release_notes_4_5_0_subtitle_light_users">Infinite Scale Eingeschränkte Benutzer (Benutzer ohne persönlichen Space) sind nun in dieser App unterstützt</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Öffnen im Webbrowser</string>
   <string name="ic_action_open_with_web">Öffnen in %1$s (web)</string>
@@ -773,6 +767,4 @@
   <string name="audio_preview_label">Audiovorschau</string>
   <string name="details_label">Details</string>
   <string name="text_preview_label">Textvorschau</string>
-  <string name="release_notes_title_enhanced_bottom_nav_bar">Textbeschriftungen wurden in der unteren Leiste hinzugefügt</string>
-  <string name="release_notes_subtitle_bottom_nav_bar">Es wurden Textbeschriftungen hinzugefügt. Der standardmäßige Aktiv-Indikator zeigt in der unteren Leiste an welcher Abschnitt ausgewählt ist.</string>
 </resources>

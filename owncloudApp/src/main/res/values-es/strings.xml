@@ -681,12 +681,6 @@ Póngase en contacto con su administrador</string>
   <string name="release_notes_icon">Icono notas de lanzamiento</string>
   <string name="release_notes_bugfixes_title">Solución de problemas</string>
   <string name="release_notes_bugfixes_subtitle">Algunos errores se solucionaron para mejorar la experiencia en la app</string>
-  <string name="release_notes_4_5_0_title_feedback_in_previews">Mensaje de estado cuando se utiliza la funcionalidad \"disponible offline\" en todas las previsualizaciones.</string>
-  <string name="release_notes_4_5_0_subtitle_feedback_in_previews">Añadido un mensaje de estado cuando se utiliza la funcionalidad \"disponible offline\" y se actualizan las opciones del menú dependiendo del estado del fichero.</string>
-  <string name="release_notes_4_5_0_title_quota_improvements">Mejoras en la visualización de la ocupación de espacio de almacenamiento.</string>
-  <string name="release_notes_4_5_0_subtitle_quota_improvements">Información sobre la ocupación de almacenamiento actualizada con mayor frecuencia, disponible en el gestor de cuentas además del menú lateral.</string>
-  <string name="release_notes_4_5_0_title_light_users">Usuarios Light en Infinite Scale</string>
-  <string name="release_notes_4_5_0_subtitle_light_users">Usuarios Light en Infinite Scale (usuarios sin espacio personal) soportados en la app.</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Abrir en web</string>
   <string name="ic_action_open_with_web">Open in %1$s (web)</string>
@@ -775,6 +769,4 @@ Póngase en contacto con su administrador</string>
   <string name="audio_preview_label">Previsualización de audio</string>
   <string name="details_label">Detalles</string>
   <string name="text_preview_label">Previsualización de texto</string>
-  <string name="release_notes_title_enhanced_bottom_nav_bar">Añadidas etiquetas de texto en la barra inferior</string>
-  <string name="release_notes_subtitle_bottom_nav_bar">Etiquetas de texto fueron añadidas, además de un indicador de texto para mostrar cual es la sección seleccionada de la barra inferior</string>
 </resources>
