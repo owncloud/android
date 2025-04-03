@@ -364,7 +364,7 @@ class MainApp : Application() {
             get() {
                 val appString = appContext.resources.getString(R.string.user_agent)
                 val packageName = appContext.packageName
-                var version = ""
+                var version: String? = ""
 
                 val pInfo: PackageInfo?
                 try {
