@@ -1,0 +1,6 @@
+Bugfix: Add bottom margin for used quota in account dialog
+
+Added bottom margin to the container holding used quota view when multi account is disabled
+
+https://github.com/owncloud/android/issues/4566
+https://github.com/owncloud/android/pull/4567
