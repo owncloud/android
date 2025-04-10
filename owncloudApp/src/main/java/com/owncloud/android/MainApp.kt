@@ -8,8 +8,9 @@
  * @author David Crespo Ríos
  * @author Juan Carlos Garrote Gascón
  * @author Aitor Ballesteros Pavón
+ * @author Jorge Aguado Recio
  *
- * Copyright (C) 2024 ownCloud GmbH.
+ * Copyright (C) 2025 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -260,11 +261,11 @@ class MainApp : Application() {
     }
 
     /**
-     * Screenshots allowed in debug mode. Devs and tests <3
+     * Screenshots allowed in debug or QA mode. Devs and tests <3
      * Otherwise, depends on branding.
      */
     private fun areScreenshotsAllowed(): Boolean {
-        if (BuildConfig.DEBUG) return true
+        if (BuildConfig.DEBUG || BuildConfig.FLAVOR == QA_FLAVOR) return true
 
         val mdmProvider = MdmProvider(applicationContext)
         return mdmProvider.getBrandingBoolean(CONFIGURATION_ALLOW_SCREENSHOTS, R.bool.allow_screenshots)
@@ -320,6 +321,7 @@ class MainApp : Application() {
 
     companion object {
         const val MDM_FLAVOR = "mdm"
+        const val QA_FLAVOR = "qa"
 
         lateinit var appContext: Context
             private set

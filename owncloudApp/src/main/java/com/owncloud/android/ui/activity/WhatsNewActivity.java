@@ -4,8 +4,10 @@
  * @author Brtosz Przybylski
  * @author Christian Schabesberger
  * @author David Crespo Ríos
+ * @author Jorge Aguado Recio
+ *
  * Copyright (C) 2020 Bartosz Przybylski
- * Copyright (C) 2022 ownCloud GmbH.
+ * Copyright (C) 2025 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -73,7 +75,7 @@ public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPa
     }
 
     static private boolean shouldShow(Context context) {
-        return context.getResources().getBoolean(R.bool.wizard_enabled) && !BuildConfig.DEBUG
+        return context.getResources().getBoolean(R.bool.wizard_enabled) && !BuildConfig.DEBUG && !BuildConfig.FLAVOR.equals(MainApp.QA_FLAVOR)
                 && context instanceof LoginActivity; // When it is LoginActivity to start it only once
     }
 
