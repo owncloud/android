@@ -36,10 +36,19 @@ ownCloud admins and users.
 
 ## Summary
 
+* Bugfix - Add bottom margin for used quota in account dialog: [#4566](https://github.com/owncloud/android/issues/4566)
 * Change - Bump target SDK to 35: [#4529](https://github.com/owncloud/android/issues/4529)
 * Change - Replace dav4android location: [#4536](https://github.com/owncloud/android/issues/4536)
 
 ## Details
+
+* Bugfix - Add bottom margin for used quota in account dialog: [#4566](https://github.com/owncloud/android/issues/4566)
+
+   Added bottom margin to the container holding used quota view when multi account
+   is disabled
+
+   https://github.com/owncloud/android/issues/4566
+   https://github.com/owncloud/android/pull/4567
 
 * Change - Bump target SDK to 35: [#4529](https://github.com/owncloud/android/issues/4529)
 
