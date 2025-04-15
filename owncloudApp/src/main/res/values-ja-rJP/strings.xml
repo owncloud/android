@@ -729,17 +729,10 @@
   <string name="content_description_image_previewed">画像をプレビューしています</string>
   <string name="content_description_add_public_link">公開リンクを追加</string>
   <string name="content_description_get_private_link">限定公開リンクを取得</string>
-  <string name="content_description_get_public_link">公開リンクを取得</string>
-  <string name="content_description_delete_public_link">公開リンクを削除</string>
-  <string name="content_description_get_edit_public_link">公開リンクを編集</string>
-  <string name="content_description_remove_account">アカウント削除</string>
   <string name="content_description_add_new_content">新しいコンテンツを追加</string>
   <string name="content_description_add_new_content_expanded">新しいコンテンツを追加</string>
-  <string name="content_description_clean_account_storage">アカウントのデータをクリーンアップ</string>
   <string name="content_description_logo">ロゴ&lt;br&gt;</string>
   <string name="content_description_add_share">共有を追加</string>
-  <string name="content_description_edit_share">共有を編集</string>
-  <string name="content_description_delete_share">共有を削除</string>
   <string name="content_description_file_operations">%1$s個の操作</string>
   <string name="content_description_sort_by_name_ascending">%1$s昇順で並べ替え</string>
   <string name="content_description_sort_by_name_descending">%1$s降順で並べ替え</string>

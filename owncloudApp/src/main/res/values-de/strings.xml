@@ -730,17 +730,10 @@
   <string name="content_description_image_previewed">Vorschaubild angesehen</string>
   <string name="content_description_add_public_link">Öffentlichen Link hinzufügen</string>
   <string name="content_description_get_private_link">Privaten Link erhalten</string>
-  <string name="content_description_get_public_link">Öffentlichen Link erhalten</string>
-  <string name="content_description_delete_public_link">Öffentlichen Link löschen</string>
-  <string name="content_description_get_edit_public_link">Öffentlichen Link bearbeiten</string>
-  <string name="content_description_remove_account">Benutzerkonto löschen</string>
   <string name="content_description_add_new_content">Neuen Inhalt erstellen</string>
   <string name="content_description_add_new_content_expanded">Neue Inhalte erweitert hinzufügen</string>
-  <string name="content_description_clean_account_storage">Benutzer Speicher bereinigen</string>
   <string name="content_description_logo">Logo</string>
   <string name="content_description_add_share">Teilen hinzufügen</string>
-  <string name="content_description_edit_share">Teilen bearbeiten</string>
-  <string name="content_description_delete_share">Teilen löschen</string>
   <string name="content_description_file_operations">%1$s Operationen</string>
   <string name="content_description_sort_by_name_ascending"> %1$s aufsteigend sortieren</string>
   <string name="content_description_sort_by_name_descending"> %1$s absteigend sortieren</string>

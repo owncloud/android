@@ -717,16 +717,9 @@
   <string name="content_description_image_previewed">사진 미리보기</string>
   <string name="content_description_add_public_link">공개 링크 추가</string>
   <string name="content_description_get_private_link">비공개 링크 얻기</string>
-  <string name="content_description_get_public_link">공개 링크 얻기</string>
-  <string name="content_description_delete_public_link">공개 링크 삭제</string>
-  <string name="content_description_get_edit_public_link">공개 링크 수정</string>
-  <string name="content_description_remove_account">계정 삭제</string>
   <string name="content_description_add_new_content">새 콘텐츠 추가</string>
-  <string name="content_description_clean_account_storage">계정 저장소 삭제</string>
   <string name="content_description_logo">로고</string>
   <string name="content_description_add_share">공유 추가</string>
-  <string name="content_description_edit_share">공유 수정</string>
-  <string name="content_description_delete_share">공유 삭제</string>
   <string name="content_description_file_operations">%1$s 작동</string>
   <string name="content_description_create_new_folder">새 폴더 만들기</string>
   <string name="create_shortcut_dialog_title">바로가기 만들기</string>

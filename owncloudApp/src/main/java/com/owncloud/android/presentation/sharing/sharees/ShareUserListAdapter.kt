@@ -82,11 +82,17 @@ class ShareUserListAdapter(
 
             /// bind listener to edit privileges
             val editShareButton = view.findViewById<ImageView>(R.id.editShareButton)
-            editShareButton.setOnClickListener { listener.editShare(shares[position]) }
+            editShareButton.apply {
+                setOnClickListener { listener.editShare(shares[position]) }
+                contentDescription = context.getString(R.string.content_description_edit_share, name)
+            }
 
             /// bind listener to unshare
             val unshareButton = view.findViewById<ImageView>(R.id.unshareButton)
-            unshareButton.setOnClickListener { listener.unshareButtonPressed(shares[position]) }
+            unshareButton.apply {
+                setOnClickListener { listener.unshareButtonPressed(shares[position]) }
+                contentDescription = context.getString(R.string.content_description_delete_share, name)
+            }
 
         }
         return view

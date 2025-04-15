@@ -90,7 +90,8 @@ class ManageAccountsAdapter(
                 }
                 holder.binding.name.tag = account.name
 
-                holder.binding.account.text = DisplayUtils.convertIdn(account.name, false)
+                val accountText = DisplayUtils.convertIdn(account.name, false)
+                holder.binding.account.text = accountText
 
                 updateQuota(
                     quotaText = holder.binding.manageAccountsQuotaText,
@@ -124,11 +125,13 @@ class ManageAccountsAdapter(
                 holder.binding.cleanAccountLocalStorageButton.apply {
                     setImageResource(R.drawable.ic_clean_account)
                     setOnClickListener { accountListener.cleanAccountLocalStorage(account) }
+                    contentDescription = holder.itemView.context.getString(R.string.content_description_clean_account_storage, accountText)
                 }
                 /// bind listener to remove account
                 holder.binding.removeButton.apply {
                     setImageResource(R.drawable.ic_action_delete_grey)
                     setOnClickListener { accountListener.removeAccount(account) }
+                    contentDescription = holder.itemView.context.getString(R.string.content_description_remove_account, accountText)
                 }
 
                 ///bind listener to switchAccount

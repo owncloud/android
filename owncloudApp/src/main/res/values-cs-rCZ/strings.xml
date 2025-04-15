@@ -583,12 +583,7 @@ správce systému.</string>
   <string name="content_description_manage_accounts">Spravovat účty</string>
   <string name="content_description_search">Hledat</string>
   <string name="content_description_add_public_link">Přidat veřejný odkaz</string>
-  <string name="content_description_get_public_link">Získat veřejný odkaz</string>
-  <string name="content_description_delete_public_link">Odstranit veřejný odkaz</string>
-  <string name="content_description_get_edit_public_link">Upravit veřejný odkaz</string>
-  <string name="content_description_remove_account">Odebrat účet</string>
   <string name="content_description_logo">Logo</string>
-  <string name="content_description_delete_share">Zrušit sdílení</string>
   <string name="content_description_create_new_folder">Vytvořit novou složku</string>
   <string name="create_shortcut_dialog_url">URL</string>
   <string name="open_shortcut_title">Otevřít odkaz</string>

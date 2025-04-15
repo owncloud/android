@@ -28,6 +28,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import com.owncloud.android.R
 import com.owncloud.android.databinding.SharePublicLinkItemBinding
 import com.owncloud.android.domain.sharing.shares.model.OCShare
 import com.owncloud.android.utils.PreferenceUtils
@@ -64,16 +65,26 @@ class SharePublicLinkListAdapter(
             val share = publicLinks[position]
 
             // If there's no name, set the token as name
-            binding.publicLinkName.text = if (share.name.isNullOrEmpty()) share.token else share.name
+            val linkName = if (share.name.isNullOrEmpty()) share.token else share.name
+            binding.publicLinkName.text = linkName
 
             // bind listener to get link
-            binding.getPublicLinkButton.setOnClickListener { listener.copyOrSendPublicLink(publicLinks[position]) }
+            binding.getPublicLinkButton.apply {
+                setOnClickListener { listener.copyOrSendPublicLink(publicLinks[position]) }
+                contentDescription = mContext.getString(R.string.content_description_get_public_link, linkName)
+            }
 
             // bind listener to delete
-            binding.deletePublicLinkButton.setOnClickListener { listener.removeShare(publicLinks[position]) }
+            binding.deletePublicLinkButton.apply {
+                setOnClickListener { listener.removeShare(publicLinks[position]) }
+                contentDescription = mContext.getString(R.string.content_description_delete_public_link, linkName)
+            }
 
             // bind listener to edit
-            binding.editPublicLinkButton.setOnClickListener { listener.editPublicShare(publicLinks[position]) }
+            binding.editPublicLinkButton.apply {
+                setOnClickListener { listener.editPublicShare(publicLinks[position]) }
+                contentDescription = mContext.getString(R.string.content_description_edit_public_link, linkName)
+            }
         }
 
         return binding.root

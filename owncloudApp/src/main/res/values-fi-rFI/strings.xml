@@ -730,17 +730,10 @@
   <string name="content_description_image_previewed">Esikatseltava kuva</string>
   <string name="content_description_add_public_link">Lisää julkinen linkki</string>
   <string name="content_description_get_private_link">Hanki yksityinen linkki</string>
-  <string name="content_description_get_public_link">Hanki julkinen linkki</string>
-  <string name="content_description_delete_public_link">Poista julkinen linkki</string>
-  <string name="content_description_get_edit_public_link">Muokkaa julkista linkkiä</string>
-  <string name="content_description_remove_account">Poista tili</string>
   <string name="content_description_add_new_content">Lisää uutta sisältöä</string>
   <string name="content_description_add_new_content_expanded">Lisää uutta sisältöä laajennettu</string>
-  <string name="content_description_clean_account_storage">Siivoa tilin tallennuskohdetta</string>
   <string name="content_description_logo">Logo</string>
   <string name="content_description_add_share">Lisää jako</string>
-  <string name="content_description_edit_share">Muokkaa jakoa</string>
-  <string name="content_description_delete_share">Poista jako</string>
   <string name="content_description_file_operations">%1$s operaatiota</string>
   <string name="content_description_sort_by_name_ascending">Järjestä %1$s mukaan nousevasti</string>
   <string name="content_description_sort_by_name_descending">Järjestä %1$s mukaan laskevasti</string>

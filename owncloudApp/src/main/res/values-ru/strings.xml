@@ -725,17 +725,10 @@
   <string name="content_description_image_previewed">Предварительный просмотр изображений</string>
   <string name="content_description_add_public_link">Добавить публичную ссылку</string>
   <string name="content_description_get_private_link">Получить приватную ссылку</string>
-  <string name="content_description_get_public_link">Получить публичную ссылку</string>
-  <string name="content_description_delete_public_link">Удалить общедоступную ссылку</string>
-  <string name="content_description_get_edit_public_link">Редактировать публичную ссылку</string>
-  <string name="content_description_remove_account">Удалить аккаунт</string>
   <string name="content_description_add_new_content">Добавить новый контент</string>
   <string name="content_description_add_new_content_expanded">Добавить новый контент, развернутый</string>
-  <string name="content_description_clean_account_storage">Чистое хранилище учетных записей</string>
   <string name="content_description_logo">Лого</string>
   <string name="content_description_add_share">Добавить долю</string>
-  <string name="content_description_edit_share">Редактировать Поделиться</string>
-  <string name="content_description_delete_share">Удалить долю</string>
   <string name="content_description_file_operations">%1$s  операции</string>
   <string name="content_description_sort_by_name_ascending">Сортировать %1$s по возрастанию</string>
   <string name="content_description_sort_by_name_descending">Сортировать %1$s по убыванию</string>
