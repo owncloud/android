@@ -12,7 +12,7 @@
  * @author Jorge Aguado Recio
  *
  * Copyright (C) 2012  Bartek Przybylski
- * Copyright (C) 2024 ownCloud GmbH.
+ * Copyright (C) 2025 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -46,6 +46,7 @@ import androidx.core.net.toUri
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import com.owncloud.android.BuildConfig
+import com.owncloud.android.MainApp
 import com.owncloud.android.MainApp.Companion.accountType
 import com.owncloud.android.R
 import com.owncloud.android.data.authentication.KEY_USER_ID
@@ -372,13 +373,14 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
     }
 
     private fun checkServerType(serverInfo: ServerInfo) {
+        if (BuildConfig.FLAVOR == MainApp.QA_FLAVOR) {
+            handleBasicAuth()
+            return
+        }
+
         when (serverInfo) {
             is ServerInfo.BasicServer -> {
-                authTokenType = BASIC_TOKEN_TYPE
-                oidcSupported = false
-                showOrHideBasicAuthFields(shouldBeVisible = true)
-                binding.accountUsername.doAfterTextChanged { updateLoginButtonVisibility() }
-                binding.accountPassword.doAfterTextChanged { updateLoginButtonVisibility() }
+                handleBasicAuth()
             }
 
             is ServerInfo.OAuth2Server -> {
@@ -414,6 +416,14 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
                 }
             }
         }
+    }
+
+    private fun handleBasicAuth() {
+        authTokenType = BASIC_TOKEN_TYPE
+        oidcSupported = false
+        showOrHideBasicAuthFields(shouldBeVisible = true)
+        binding.accountUsername.doAfterTextChanged { updateLoginButtonVisibility() }
+        binding.accountPassword.doAfterTextChanged { updateLoginButtonVisibility() }
     }
 
     private fun getServerInfoIsLoading() {

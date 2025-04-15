@@ -2,7 +2,9 @@
  * ownCloud Android client application
  *
  * @author David Crespo Ríos
- * Copyright (C) 2022 ownCloud GmbH.
+ * @author Jorge Aguado Recio
+ *
+ * Copyright (C) 2025 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -93,6 +95,7 @@ class ReleaseNotesActivity : AppCompatActivity() {
 
         private fun shouldShow(context: Context): Boolean {
             val showReleaseNotes = context.resources.getBoolean(R.bool.release_notes_enabled) && !BuildConfig.DEBUG
+                    && BuildConfig.FLAVOR != MainApp.QA_FLAVOR
 
             return firstRunAfterUpdate() && showReleaseNotes &&
                     ReleaseNotesViewModel.releaseNotesList.isNotEmpty() &&

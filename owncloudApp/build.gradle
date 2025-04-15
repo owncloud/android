@@ -160,6 +160,9 @@ android {
         mdm {
             dimension "management"
         }
+        qa {
+            dimension "management"
+        }
     }
 
     applicationVariants.all { variant ->
