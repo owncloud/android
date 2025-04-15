@@ -4,8 +4,9 @@
  * @author David González Verdugo
  * @author Abel García de Prada
  * @author Juan Carlos Garrote Gascón
+ * @author Jorge Aguado Recio
  *
- * Copyright (C) 2023 ownCloud GmbH.
+ * Copyright (C) 2025 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -23,6 +24,8 @@
 package com.owncloud.android.dependecyinjection
 
 import android.accounts.AccountManager
+import com.owncloud.android.BuildConfig
+import com.owncloud.android.MainApp
 import com.owncloud.android.MainApp.Companion.accountType
 import com.owncloud.android.MainApp.Companion.dataFolder
 import com.owncloud.android.data.OwncloudDatabase
@@ -43,6 +46,7 @@ import com.owncloud.android.data.sharing.shares.datasources.implementation.OCLoc
 import com.owncloud.android.data.spaces.datasources.LocalSpacesDataSource
 import com.owncloud.android.data.spaces.datasources.implementation.OCLocalSpacesDataSource
 import com.owncloud.android.data.providers.LocalStorageProvider
+import com.owncloud.android.data.providers.QaStorageProvider
 import com.owncloud.android.data.providers.ScopedStorageProvider
 import com.owncloud.android.data.transfers.datasources.LocalTransferDataSource
 import com.owncloud.android.data.transfers.datasources.implementation.OCLocalTransferDataSource
@@ -67,7 +71,13 @@ val localDataSourceModule = module {
     single { OwncloudDatabase.getDatabase(androidContext()).userDao() }
 
     singleOf(::OCSharedPreferencesProvider) bind SharedPreferencesProvider::class
-    single<LocalStorageProvider> { ScopedStorageProvider(dataFolder, androidContext()) }
+    single<LocalStorageProvider> {
+        if (BuildConfig.FLAVOR == MainApp.QA_FLAVOR) {
+            QaStorageProvider(dataFolder)
+        } else {
+            ScopedStorageProvider(dataFolder, androidContext())
+        }
+    }
 
     factory<LocalAuthenticationDataSource> { OCLocalAuthenticationDataSource(androidContext(), get(), get(), accountType) }
     factoryOf(::OCLocalFolderBackupDataSource) bind LocalFolderBackupDataSource::class
