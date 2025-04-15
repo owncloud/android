@@ -122,9 +122,7 @@ class AutomaticUploadsWorker(
         WorkManager.getInstance(appContext).cancelUniqueWork(AUTOMATIC_UPLOADS_WORKER)
     }
 
-    private fun syncFolder(folderBackUpConfiguration: FolderBackUpConfiguration?) {
-        if (folderBackUpConfiguration == null) return
-
+    private fun syncFolder(folderBackUpConfiguration: FolderBackUpConfiguration) {
         val syncType = when {
             folderBackUpConfiguration.isPictureUploads -> SyncType.PICTURE_UPLOADS
             folderBackUpConfiguration.isVideoUploads -> SyncType.VIDEO_UPLOADS
@@ -133,6 +131,7 @@ class AutomaticUploadsWorker(
         }
 
         val currentTimestamp = System.currentTimeMillis()
+        updateTimestamp(folderBackUpConfiguration, syncType, currentTimestamp)
 
         val localPicturesDocumentFiles: List<DocumentFile> = getFilesReadyToUpload(
             syncType = syncType,
@@ -166,7 +165,6 @@ class AutomaticUploadsWorker(
                 chargingOnly = folderBackUpConfiguration.chargingOnly
             )
         }
-        updateTimestamp(folderBackUpConfiguration, syncType, currentTimestamp)
     }
 
     private fun showNotification(
