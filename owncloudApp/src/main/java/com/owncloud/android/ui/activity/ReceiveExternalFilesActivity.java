@@ -13,7 +13,7 @@
  * @author Jorge Aguado Recio
  *
  * Copyright (C) 2012  Bartek Przybylski
- * Copyright (C) 2024 ownCloud GmbH.
+ * Copyright (C) 2025 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -250,6 +250,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
                     OCFile rootSpaceFolder = bundle.getParcelable(SpacesListFragment.BUNDLE_KEY_CLICK_SPACE);
                     mFile = rootSpaceFolder;
                     currentSpaceId = mFile.getSpaceId();
+                    startSyncFolderOperation(mFile);
                     showListOfFiles();
                     updateDirectoryList();
                     showRetainerFragment();
