@@ -48,8 +48,7 @@
             android:padding="14dp"
             android:src="@drawable/copy_link"
             android:scaleType="centerCrop"
-            android:background="@color/transparent"
-            android:contentDescription="@string/content_description_get_public_link" />
+            android:background="@color/transparent" />
 
         <ImageButton
             android:id="@+id/deletePublicLinkButton"
@@ -59,8 +58,7 @@
             android:padding="14dp"
             android:src="@drawable/ic_action_delete_grey"
             android:scaleType="centerCrop"
-            android:background="@color/transparent"
-            android:contentDescription="@string/content_description_delete_public_link" />
+            android:background="@color/transparent" />
 
         <ImageButton
             android:id="@+id/editPublicLinkButton"
@@ -69,8 +67,7 @@
             android:layout_gravity="center_vertical"
             android:padding="14dp"
             android:src="@drawable/ic_lead_pencil_grey"
-            android:background="@color/transparent"
-            android:contentDescription="@string/content_description_get_edit_public_link" />
+            android:background="@color/transparent" />
 
     </LinearLayout>
 

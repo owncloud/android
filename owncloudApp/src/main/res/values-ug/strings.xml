@@ -594,14 +594,9 @@
   <string name="content_description_image_previewed">رەسىم ئالدىن كۆرۈلدى</string>
   <string name="content_description_add_public_link">ئاممىۋى ئۇلىنىش قوشۇڭ</string>
   <string name="content_description_get_private_link">شەخسىي ئۇلىنىشقا ئېرىشىڭ</string>
-  <string name="content_description_get_public_link">ئاممىۋى ئۇلىنىشقا ئېرىشىڭ</string>
-  <string name="content_description_delete_public_link">ئاممىۋى ئۇلىنىشنى ئۆچۈرۈڭ</string>
-  <string name="content_description_remove_account">ھېساباتنى ئۆچۈرۈڭ</string>
   <string name="content_description_add_new_content">يېڭى مەزمۇن قوشۇڭ</string>
   <string name="content_description_add_new_content_expanded">كېڭەيتىلگەن يېڭى مەزمۇن قوشۇڭ</string>
-  <string name="content_description_clean_account_storage">ھېسابات ساقلاشنى پاكىزلاش</string>
   <string name="content_description_add_share">ئورتاقلىشىش</string>
-  <string name="content_description_delete_share">ھەمبەھىرنى ئۆچۈرۈڭ</string>
   <string name="content_description_file_operations">% 1 $ s مەشغۇلات</string>
   <string name="content_description_sort_by_name_ascending">% 1 $ s ئۆرلەش بويىچە تەرتىپلەڭ</string>
   <string name="content_description_sort_by_name_descending">تۆۋەنلەش نىسبىتى% 1 $ s</string>

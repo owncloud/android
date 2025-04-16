@@ -590,7 +590,6 @@ Téléchargez-le ici : %2$s</string>
   <string name="content_description_menu">Menu</string>
   <string name="content_description_manage_accounts">Gérer les comptes</string>
   <string name="content_description_search">Rechercher</string>
-  <string name="content_description_remove_account">Supprimer le compte</string>
   <string name="content_description_create_new_folder">Créer un nouveau dossier</string>
   <string name="create_shortcut_dialog_url">URL</string>
   <string name="open_shortcut_title">Ouvrir le lien</string>

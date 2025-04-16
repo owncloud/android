@@ -730,17 +730,10 @@
   <string name="content_description_image_previewed">Image previewed</string>
   <string name="content_description_add_public_link">Add public link</string>
   <string name="content_description_get_private_link">Get private link</string>
-  <string name="content_description_get_public_link">Get public link</string>
-  <string name="content_description_delete_public_link">Delete public link</string>
-  <string name="content_description_get_edit_public_link">Edit public link</string>
-  <string name="content_description_remove_account">Remove account</string>
   <string name="content_description_add_new_content">Add new content</string>
   <string name="content_description_add_new_content_expanded">Add new content expanded</string>
-  <string name="content_description_clean_account_storage">Clean account storage</string>
   <string name="content_description_logo">Logo</string>
   <string name="content_description_add_share">Add share</string>
-  <string name="content_description_edit_share">Edit share</string>
-  <string name="content_description_delete_share">Delete share</string>
   <string name="content_description_file_operations">%1$s operations</string>
   <string name="content_description_sort_by_name_ascending">Sort by %1$s ascending</string>
   <string name="content_description_sort_by_name_descending">Sort by %1$s descending</string>

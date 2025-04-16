@@ -1,0 +1,6 @@
+Enhancement: Accessibility reports in 4.5.1
+
+Some content descriptions that were missing have been added to provide a better accessibility experience.
+
+https://github.com/owncloud/android/issues/4568
+https://github.com/owncloud/android/pull/4573
