@@ -313,6 +313,7 @@
   <string name="biometric_prompt_title">Conexão biométrica</string>
   <string name="biometric_prompt_subtitle">Faça login usando sua credencial biométrica.</string>
   <string name="biometric_dialog_title">Deseja ativar adicionalmente a segurança biométrica?</string>
+  <string name="biometric_not_available">O desbloqueio biométrico não está disponível porque o sistema não disponibilizou</string>
   <string name="media_notif_ticker">%1$s reprodutor de música</string>
   <string name="media_state_playing">%1$s (reproduzindo)</string>
   <string name="media_state_loading">%1$s (carregando)</string>
