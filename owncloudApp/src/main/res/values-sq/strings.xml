@@ -727,10 +727,17 @@
   <string name="content_description_image_previewed">U parapa figura</string>
   <string name="content_description_add_public_link">Shtoni lidhje publike</string>
   <string name="content_description_get_private_link">Merrni lidhje private</string>
+  <string name="content_description_get_public_link">Merrni lidhje publike për %1$s</string>
+  <string name="content_description_delete_public_link">Fshini lidhje publike për %1$s</string>
+  <string name="content_description_edit_public_link">Përpunoni lidhje publike për %1$s</string>
+  <string name="content_description_remove_account">Hiqe llogarinë %1$s</string>
   <string name="content_description_add_new_content">Shtoni lëndë të re</string>
   <string name="content_description_add_new_content_expanded">Zgjerim i mekanizmit për shtim lënde të re</string>
+  <string name="content_description_clean_account_storage">Spastro depozitë llogarie për %1$s</string>
   <string name="content_description_logo">Stemë</string>
   <string name="content_description_add_share">Shtoni pjesë</string>
+  <string name="content_description_edit_share">Përpunoni pjesë me %1$s</string>
+  <string name="content_description_delete_share">Fshini pjesë me %1$s</string>
   <string name="content_description_file_operations">%1$s veprime</string>
   <string name="content_description_sort_by_name_ascending">Renditi sipas %1$s në rend rritës</string>
   <string name="content_description_sort_by_name_descending">Renditi në rend rritës sipas %1$s</string>
