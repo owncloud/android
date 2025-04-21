@@ -1,0 +1,7 @@
+Bugfix: Content in Spaces not shown from third-party apps
+
+The root of the spaces has been synchronized before displaying
+the file list when a file is shared from a third-party app.
+
+https://github.com/owncloud/android/issues/4522
+https://github.com/owncloud/android/pull/4574
