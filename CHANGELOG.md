@@ -40,6 +40,7 @@ ownCloud admins and users.
 * Bugfix - Add bottom margin for used quota in account dialog: [#4566](https://github.com/owncloud/android/issues/4566)
 * Change - Bump target SDK to 35: [#4529](https://github.com/owncloud/android/issues/4529)
 * Change - Replace dav4android location: [#4536](https://github.com/owncloud/android/issues/4536)
+* Change - Modify biometrics fail source string: [#4572](https://github.com/owncloud/android/issues/4572)
 * Enhancement - Accessibility reports in 4.5.1: [#4568](https://github.com/owncloud/android/issues/4568)
 
 ## Details
@@ -74,6 +75,14 @@ ownCloud admins and users.
 
    https://github.com/owncloud/android/issues/4536
    https://github.com/owncloud/android/pull/4558
+
+* Change - Modify biometrics fail source string: [#4572](https://github.com/owncloud/android/issues/4572)
+
+   The string that appears when biometric unlocking is not available has been
+   changed in order to make it clearer.
+
+   https://github.com/owncloud/android/issues/4572
+   https://github.com/owncloud/android/pull/4578
 
 * Enhancement - Accessibility reports in 4.5.1: [#4568](https://github.com/owncloud/android/issues/4568)
 

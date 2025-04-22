@@ -1,0 +1,7 @@
+Change: Modify biometrics fail source string
+
+The string that appears when biometric unlocking is not
+available has been changed in order to make it clearer.
+
+https://github.com/owncloud/android/issues/4572
+https://github.com/owncloud/android/pull/4578
