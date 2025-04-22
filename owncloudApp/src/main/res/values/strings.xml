@@ -731,6 +731,8 @@
     <string name="error_webfinger_username_empty">Username empty</string>
 
     <!-- Release Notes -->
+    <string name="release_notes_4_6_0_title_shares_space_docs_provider">Shares space in Android native file explorer</string>
+    <string name="release_notes_4_6_0_subtitle_shares_space_docs_provider">Shares space now appears all together with the other spaces in Documents Provider in Infinite Scale accounts</string>
     <string name="release_notes_header">New in %1$s</string>
     <string name="release_notes_footer">Thank you for using %1$s.\n&#10084;</string>
     <string name="release_notes_proceed">Proceed</string>
