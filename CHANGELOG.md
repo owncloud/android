@@ -41,6 +41,7 @@ ownCloud admins and users.
 * Change - Bump target SDK to 35: [#4529](https://github.com/owncloud/android/issues/4529)
 * Change - Replace dav4android location: [#4536](https://github.com/owncloud/android/issues/4536)
 * Change - Modify biometrics fail source string: [#4572](https://github.com/owncloud/android/issues/4572)
+* Enhancement - QA variant: [#3791](https://github.com/owncloud/android/issues/3791)
 * Enhancement - Accessibility reports in 4.5.1: [#4568](https://github.com/owncloud/android/issues/4568)
 
 ## Details
@@ -83,6 +84,13 @@ ownCloud admins and users.
 
    https://github.com/owncloud/android/issues/4572
    https://github.com/owncloud/android/pull/4578
+
+* Enhancement - QA variant: [#3791](https://github.com/owncloud/android/issues/3791)
+
+   A new flavor for QA has been created in order to make automatic tests easier.
+
+   https://github.com/owncloud/android/issues/3791
+   https://github.com/owncloud/android/pull/4569
 
 * Enhancement - Accessibility reports in 4.5.1: [#4568](https://github.com/owncloud/android/issues/4568)
 

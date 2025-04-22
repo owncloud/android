@@ -1,0 +1,6 @@
+Enhancement: QA variant
+
+A new flavor for QA has been created in order to make automatic tests easier.
+
+https://github.com/owncloud/android/issues/3791
+https://github.com/owncloud/android/pull/4569
