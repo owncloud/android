@@ -313,6 +313,7 @@
   <string name="biometric_prompt_title">Conexão biométrica</string>
   <string name="biometric_prompt_subtitle">Faça login usando sua credencial biométrica.</string>
   <string name="biometric_dialog_title">Deseja ativar adicionalmente a segurança biométrica?</string>
+  <string name="biometric_not_available">O desbloqueio biométrico não está disponível porque o sistema não conseguiu fornecê-lo</string>
   <string name="media_notif_ticker">%1$s reprodutor de música</string>
   <string name="media_state_playing">%1$s (reproduzindo)</string>
   <string name="media_state_loading">%1$s (carregando)</string>
@@ -730,10 +731,17 @@
   <string name="content_description_image_previewed">Imagem visualizada</string>
   <string name="content_description_add_public_link">Adicionar link público</string>
   <string name="content_description_get_private_link">Obtenha link privado</string>
+  <string name="content_description_get_public_link">Obter link público para %1$s</string>
+  <string name="content_description_delete_public_link">Excluir link público para %1$s</string>
+  <string name="content_description_edit_public_link">Editar link público para %1$s</string>
+  <string name="content_description_remove_account">Remover conta%1$s</string>
   <string name="content_description_add_new_content">Adicione novo conteúdo</string>
   <string name="content_description_add_new_content_expanded">Adicionar novo conteúdo expandido</string>
+  <string name="content_description_clean_account_storage">Limpar armazenamento de conta para%1$s</string>
   <string name="content_description_logo">Logo</string>
   <string name="content_description_add_share">Adicionar compartilhamento</string>
+  <string name="content_description_edit_share">Editar compartilhar com %1$s</string>
+  <string name="content_description_delete_share">Excluir compartilhar com %1$s</string>
   <string name="content_description_file_operations">%1$s operações</string>
   <string name="content_description_sort_by_name_ascending">Classificar por %1$s crescente</string>
   <string name="content_description_sort_by_name_descending">Classificar por %1$s decrescente</string>
