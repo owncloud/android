@@ -54,7 +54,9 @@ import com.owncloud.android.domain.files.usecases.GetFolderContentUseCase
 import com.owncloud.android.domain.files.usecases.MoveFileUseCase
 import com.owncloud.android.domain.files.usecases.RemoveFileUseCase
 import com.owncloud.android.domain.files.usecases.RenameFileUseCase
+import com.owncloud.android.domain.spaces.model.OCSpace.Companion.SPACE_ID_SHARES
 import com.owncloud.android.domain.spaces.usecases.GetPersonalAndProjectSpacesForAccountUseCase
+import com.owncloud.android.domain.spaces.usecases.GetSpaceByIdForAccountUseCase
 import com.owncloud.android.domain.spaces.usecases.RefreshSpacesFromServerAsyncUseCase
 import com.owncloud.android.presentation.authentication.AccountUtils
 import com.owncloud.android.presentation.documentsprovider.cursors.FileCursor
@@ -194,6 +196,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
             resultCursor = SpaceCursor(projection)
 
             val getPersonalAndProjectSpacesForAccountUseCase: GetPersonalAndProjectSpacesForAccountUseCase by inject()
+            val getSpaceByIdForAccountUseCase: GetSpaceByIdForAccountUseCase by inject()
             val getFileByRemotePathUseCase: GetFileByRemotePathUseCase by inject()
 
             getPersonalAndProjectSpacesForAccountUseCase(
@@ -213,6 +216,24 @@ class DocumentsStorageProvider : DocumentsProvider() {
                     }
                 }
             }
+
+            getSpaceByIdForAccountUseCase(
+                GetSpaceByIdForAccountUseCase.Params(
+                    accountName = parentDocumentId,
+                    spaceId = SPACE_ID_SHARES,
+                )
+            )?.let { sharesSpace ->
+                getFileByRemotePathUseCase(
+                    GetFileByRemotePathUseCase.Params(
+                        owner = sharesSpace.accountName,
+                        remotePath = ROOT_PATH,
+                        spaceId = sharesSpace.id,
+                    )
+                ).getDataOrNull()?.let { rootFolder ->
+                    resultCursor.addSpace(sharesSpace, rootFolder, context)
+                }
+            }
+
 
             /**
              * This will start syncing the spaces. User will only see this after updating his view with a

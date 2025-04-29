@@ -1,0 +1,7 @@
+Enhancement: Shares space in Android native file explorer
+
+The Shares space has been added to the spaces list shown in the Documents Provider, the Android
+native file explorer.
+
+https://github.com/owncloud/android/issues/4515
+https://github.com/owncloud/android/pull/4579

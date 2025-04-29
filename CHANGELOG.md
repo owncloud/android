@@ -42,6 +42,7 @@ ownCloud admins and users.
 * Change - Replace dav4android location: [#4536](https://github.com/owncloud/android/issues/4536)
 * Change - Modify biometrics fail source string: [#4572](https://github.com/owncloud/android/issues/4572)
 * Enhancement - QA variant: [#3791](https://github.com/owncloud/android/issues/3791)
+* Enhancement - Shares space in Android native file explorer: [#4515](https://github.com/owncloud/android/issues/4515)
 * Enhancement - Accessibility reports in 4.5.1: [#4568](https://github.com/owncloud/android/issues/4568)
 
 ## Details
@@ -91,6 +92,14 @@ ownCloud admins and users.
 
    https://github.com/owncloud/android/issues/3791
    https://github.com/owncloud/android/pull/4569
+
+* Enhancement - Shares space in Android native file explorer: [#4515](https://github.com/owncloud/android/issues/4515)
+
+   The Shares space has been added to the spaces list shown in the Documents
+   Provider, the Android native file explorer.
+
+   https://github.com/owncloud/android/issues/4515
+   https://github.com/owncloud/android/pull/4579
 
 * Enhancement - Accessibility reports in 4.5.1: [#4568](https://github.com/owncloud/android/issues/4568)
 
