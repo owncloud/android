@@ -36,6 +36,7 @@ ownCloud admins and users.
 
 ## Summary
 
+* Bugfix - Side menu collapses info in landscape: [#4513](https://github.com/owncloud/android/issues/4513)
 * Bugfix - Content in Spaces not shown from third-party apps: [#4522](https://github.com/owncloud/android/issues/4522)
 * Bugfix - Add bottom margin for used quota in account dialog: [#4566](https://github.com/owncloud/android/issues/4566)
 * Change - Bump target SDK to 35: [#4529](https://github.com/owncloud/android/issues/4529)
@@ -46,6 +47,14 @@ ownCloud admins and users.
 * Enhancement - Accessibility reports in 4.5.1: [#4568](https://github.com/owncloud/android/issues/4568)
 
 ## Details
+
+* Bugfix - Side menu collapses info in landscape: [#4513](https://github.com/owncloud/android/issues/4513)
+
+   Two empty and visual items have been added to prevent the drawer from collapsing
+   in landscape mode.
+
+   https://github.com/owncloud/android/issues/4513
+   https://github.com/owncloud/android/pull/4580
 
 * Bugfix - Content in Spaces not shown from third-party apps: [#4522](https://github.com/owncloud/android/issues/4522)
 

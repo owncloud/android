@@ -1,0 +1,6 @@
+Bugfix: Side menu collapses info in landscape
+
+Two empty and visual items have been added to prevent the drawer from collapsing in landscape mode.
+
+https://github.com/owncloud/android/issues/4513
+https://github.com/owncloud/android/pull/4580
