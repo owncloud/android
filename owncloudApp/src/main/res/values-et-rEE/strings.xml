@@ -313,6 +313,7 @@
   <string name="biometric_prompt_title">Biomeetriline sisselogimine</string>
   <string name="biometric_prompt_subtitle">Kasuta biomeetrilist sisselogimist.</string>
   <string name="biometric_dialog_title">Kas sa tahad täiendavalt aktiveerida biomeetrilise turvalisuse?</string>
+  <string name="biometric_not_available">Biomeetriline lahtilukustamine ei ole saadaval, sest süsteem ei saa seda pakkuda</string>
   <string name="media_notif_ticker">%1$s muusika mängija</string>
   <string name="media_state_playing">%1$s (mängib)</string>
   <string name="media_state_loading">%1$s (laeb)</string>
@@ -674,6 +675,8 @@
   <string name="global_proceed">Jätka</string>
   <string name="error_webfinger_username_empty">Kasutajanimi on tühi</string>
   <!--Release Notes-->
+  <string name="release_notes_4_6_0_title_shares_space_docs_provider">Jagamiste ruum on saadaval läbi Androidi süsteemse failihalduri</string>
+  <string name="release_notes_4_6_0_subtitle_shares_space_docs_provider">Jagamiste ruum on nüüd saadaval koos kõigi teiste ruumidega dokumentide pakkujas Infinite Scale kontodel</string>
   <string name="release_notes_header">Uut %1$sis</string>
   <string name="release_notes_footer">Aitäh, et kasutad %1$si.\n❤</string>
   <string name="release_notes_proceed">Jätka</string>

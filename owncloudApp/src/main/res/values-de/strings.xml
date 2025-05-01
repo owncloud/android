@@ -313,6 +313,7 @@
   <string name="biometric_prompt_title">Biometrisches Einloggen</string>
   <string name="biometric_prompt_subtitle">Anmeldung mit biometrischem Merkmal</string>
   <string name="biometric_dialog_title">Möchten Sie die biometrische Sicherheit zusätzlich aktivieren?</string>
+  <string name="biometric_not_available">Die biometrische Entsperrung ist nicht verfügbar, da das System sie nicht bereitstellen konnte.</string>
   <string name="media_notif_ticker">%1$s Musik Player</string>
   <string name="media_state_playing">%1$s (playing)</string>
   <string name="media_state_loading">%1$s (loading)</string>
@@ -674,6 +675,8 @@
   <string name="global_proceed">Fortfahren</string>
   <string name="error_webfinger_username_empty">Der Benutzername ist leer</string>
   <!--Release Notes-->
+  <string name="release_notes_4_6_0_title_shares_space_docs_provider">Gemeinsamer Speicherplatz im nativen Android-Dateiexplorer</string>
+  <string name="release_notes_4_6_0_subtitle_shares_space_docs_provider">Der Freigabebereich wird jetzt zusammen mit den anderen Bereichen im Dokumentenanbieter in Infinite Scale-Konten angezeigt</string>
   <string name="release_notes_header">Neu in %1$s</string>
   <string name="release_notes_footer">Vielen Dank für die Verwendung von %1$s.\n</string>
   <string name="release_notes_proceed">Fortfahren</string>
@@ -730,10 +733,17 @@
   <string name="content_description_image_previewed">Vorschaubild angesehen</string>
   <string name="content_description_add_public_link">Öffentlichen Link hinzufügen</string>
   <string name="content_description_get_private_link">Privaten Link erhalten</string>
+  <string name="content_description_get_public_link">Öffentlichen Link für %1$s abrufen </string>
+  <string name="content_description_delete_public_link">Öffentlichen Link für %1$s löschen</string>
+  <string name="content_description_edit_public_link">Öffentlichen Link für %1$s bearbeiten</string>
+  <string name="content_description_remove_account">Konto entfernen %1$s</string>
   <string name="content_description_add_new_content">Neuen Inhalt erstellen</string>
   <string name="content_description_add_new_content_expanded">Neue Inhalte erweitert hinzufügen</string>
+  <string name="content_description_clean_account_storage">Speicher für Konto %1$s bereinigen</string>
   <string name="content_description_logo">Logo</string>
   <string name="content_description_add_share">Teilen hinzufügen</string>
+  <string name="content_description_edit_share">Freigabe mit %1$s bearbeiten</string>
+  <string name="content_description_delete_share">Freigabe mit %1$s löschen</string>
   <string name="content_description_file_operations">%1$s Operationen</string>
   <string name="content_description_sort_by_name_ascending"> %1$s aufsteigend sortieren</string>
   <string name="content_description_sort_by_name_descending"> %1$s absteigend sortieren</string>

@@ -313,6 +313,7 @@
   <string name="biometric_prompt_title">Inicio de sesión biométrico</string>
   <string name="biometric_prompt_subtitle">Login usando credenciales biométricas</string>
   <string name="biometric_dialog_title">¿Desea activar de manera adicional la seguridad biométrica?</string>
+  <string name="biometric_not_available">El desbloqueo biométrico no está disponible porque el sistema no pudo proveerlo</string>
   <string name="media_notif_ticker">Reproductor de música %1$s</string>
   <string name="media_state_playing">%1$s (reproduciendo)</string>
   <string name="media_state_loading">%1$s (cargando)</string>
@@ -675,6 +676,8 @@ Póngase en contacto con su administrador</string>
   <string name="global_proceed">Proceder</string>
   <string name="error_webfinger_username_empty">Nombre de usuario vacío</string>
   <!--Release Notes-->
+  <string name="release_notes_4_6_0_title_shares_space_docs_provider">Space \"compartir\" en el explorador de ficheros nativo de Android</string>
+  <string name="release_notes_4_6_0_subtitle_shares_space_docs_provider">Space \"compartir\" aparece ahora junto como otros spaces de las cuentas Infinite Scale en apps con soporte a Documents Provider</string>
   <string name="release_notes_header">Nuevo en %1$s</string>
   <string name="release_notes_footer">Gracias por usar %1$s.\n❤</string>
   <string name="release_notes_proceed">Proceder</string>
@@ -731,11 +734,18 @@ Póngase en contacto con su administrador</string>
   <string name="content_description_image_previewed">Imagen previsualizada</string>
   <string name="content_description_add_public_link">Añadir enlace público</string>
   <string name="content_description_get_private_link">Obtener enlace privado</string>
+  <string name="content_description_get_public_link">Obtener enlace público para %1$s</string>
+  <string name="content_description_delete_public_link">Eliminar enlace público para %1$s</string>
+  <string name="content_description_edit_public_link">Editar enlace público para %1$s</string>
+  <string name="content_description_remove_account">Eliminar cuenta %1$s</string>
   <string name="content_description_add_new_content">Añadir nuevo contenido</string>
   <string name="content_description_add_new_content_expanded">Se ha producido un error al configurar el bloqueo mediante contraseña.
 </string>
+  <string name="content_description_clean_account_storage">Limpiar almacenamiento en cuenta para %1$s</string>
   <string name="content_description_logo">Logo</string>
   <string name="content_description_add_share">Añadir compartición</string>
+  <string name="content_description_edit_share">Editar compartición con %1$s</string>
+  <string name="content_description_delete_share">Eliminar compartición con %1$s</string>
   <string name="content_description_file_operations">%1$s operaciones</string>
   <string name="content_description_sort_by_name_ascending">Ordenar por %1$s ascendente</string>
   <string name="content_description_sort_by_name_descending">Ordenar ascendente por %1$s</string>
