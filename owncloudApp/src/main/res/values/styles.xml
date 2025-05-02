@@ -16,7 +16,7 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
-<resources xmlns:android="http://schemas.android.com/apk/res/android">
+<resources xmlns:tools="http://schemas.android.com/tools" xmlns:android="http://schemas.android.com/apk/res/android">
 
     <style name="Animations" />
 
@@ -45,11 +45,13 @@
 
         <!-- style for search view -->
         <item name="searchViewStyle">@style/ownCloud.SearchView</item>
+        <item name="android:windowOptOutEdgeToEdgeEnforcement" tools:targetApi="35">true</item>
     </style>
 
     <!-- Splash Screen -->
     <style name="Theme.ownCloud.Splash">
         <item name="android:windowBackground">@drawable/splash_screen</item>
+        <item name="android:windowOptOutEdgeToEdgeEnforcement" tools:targetApi="35">true</item>
     </style>
 
     <!-- Extends Theme.ownCloud to remove legacy ActionBar from the window and add, via layouts, a Toolbar -->
@@ -58,18 +60,21 @@
         <item name="windowActionBar">false</item>
         <!-- (status/nav)BarColor are set by the Activity, not the system -->
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:windowOptOutEdgeToEdgeEnforcement" tools:targetApi="35">true</item>
     </style>
 
     <!-- Extends Theme.ownCloud.Toolbar for Drawer activities including Drawer -->
     <style name="Theme.ownCloud.Toolbar.Drawer">
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:windowAnimationStyle">@null</item>
+        <item name="android:windowOptOutEdgeToEdgeEnforcement" tools:targetApi="35">true</item>
     </style>
 
     <!-- Extends Theme.ownCloud to make LEGACY ActionBar both OVERLAY and TRANSPARENT -->
     <style name="Theme.ownCloud.Overlay">
         <item name="windowActionBarOverlay">true</item>
         <item name="actionBarTheme">@style/ownCloud.Appbar.Transparent</item>
+        <item name="android:windowOptOutEdgeToEdgeEnforcement" tools:targetApi="35">true</item>
     </style>
 
     <!-- Extends Theme.ownCloud for video in full screen mode -->
@@ -78,6 +83,7 @@
         <item name="android:windowLayoutInDisplayCutoutMode">never</item>
         <item name="actionBarTheme">@style/ownCloud.Appbar.Transparent</item>
         <item name="android:windowBackground">@android:color/background_dark</item>
+        <item name="android:windowOptOutEdgeToEdgeEnforcement" tools:targetApi="35">true</item>
     </style>
 
     <!-- DIALOG THEMES: styles for DIALOGs -->
@@ -89,11 +95,13 @@
         <item name="searchViewStyle">@style/ownCloud.SearchView</item>
         <item name="buttonBarButtonStyle">@style/Theme.ownCloud.Dialog.ButtonBar.Button</item>
         <item name="buttonBarStyle">@style/Theme.ownCloud.Dialog.ButtonBar</item>
+        <item name="android:windowOptOutEdgeToEdgeEnforcement" tools:targetApi="35">true</item>
     </style>
 
     <!-- USED IN SHAREACTIVITY!! !! -->
     <style name="Theme.ownCloud.AlertDialog.NoTitle">
         <item name="windowNoTitle">true</item>
+        <item name="android:windowOptOutEdgeToEdgeEnforcement" tools:targetApi="35">true</item>
     </style>
 
     <!-- APP BAR styles -->
@@ -105,6 +113,7 @@
     <style name="ownCloud.Appbar" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
         <item name="colorPrimary">@color/actionbar_start_color</item>
         <item name="toolbarNavigationButtonStyle">@style/Toolbar.Button.Navigation.Tinted</item>
+        <item name="android:windowOptOutEdgeToEdgeEnforcement" tools:targetApi="35">true</item>
     </style>
 
     <style name="Toolbar.Button.Navigation.Tinted" parent="Widget.AppCompat.Toolbar.Button.Navigation">
@@ -114,6 +123,7 @@
     <!-- Transparent style for the app bar -->
     <style name="ownCloud.Appbar.Transparent" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
         <item name="colorPrimary">@color/owncloud_blue_transparent</item>
+        <item name="android:windowOptOutEdgeToEdgeEnforcement" tools:targetApi="35">true</item>
     </style>
 
     <!-- MORE styles -->
@@ -279,6 +289,7 @@
         <!-- properties for action mode -->
         <item name="windowActionModeOverlay">true</item>
         <item name="actionModeBackground">@color/action_mode_background</item>
+        <item name="android:windowOptOutEdgeToEdgeEnforcement" tools:targetApi="35">true</item>
     </style>
 
     <style name="Button.Authenticator" parent="Widget.AppCompat.Button.Colored">
@@ -295,6 +306,7 @@
     <style name="Theme.ownCloud.Authenticator.EditText" parent="Theme.ownCloud.Authenticator">
         <item name="colorControlNormal">@color/login_text_color</item>
         <item name="colorControlActivated">@color/login_text_color</item>
+        <item name="android:windowOptOutEdgeToEdgeEnforcement" tools:targetApi="35">true</item>
     </style>
 
     <!-- SortBottomSheetFragment -->
@@ -302,5 +314,6 @@
 
     <style name="Theme.ownCloud.SortBottomSheetFragment.Item">
         <item name="android:textAppearance">@style/TextAppearance.OwnCloud.SortBottomSheetFragment.Item</item>
+        <item name="android:windowOptOutEdgeToEdgeEnforcement" tools:targetApi="35">true</item>
     </style>
 </resources>
