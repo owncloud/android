@@ -133,12 +133,16 @@ class AutomaticUploadsWorker(
         val currentTimestamp = System.currentTimeMillis()
         updateTimestamp(folderBackUpConfiguration, syncType, currentTimestamp)
 
+        Timber.i("Timestamp updated correctly. Current timestamp: ${Date(currentTimestamp)}")
+
         val localPicturesDocumentFiles: List<DocumentFile> = getFilesReadyToUpload(
             syncType = syncType,
             sourcePath = folderBackUpConfiguration.sourcePath,
             lastSyncTimestamp = folderBackUpConfiguration.lastSyncTimestamp,
             currentTimestamp = currentTimestamp,
         )
+
+        Timber.i("The search for files to upload has finished")
 
         showNotification(syncType, localPicturesDocumentFiles.size)
 
@@ -165,6 +169,8 @@ class AutomaticUploadsWorker(
                 chargingOnly = folderBackUpConfiguration.chargingOnly
             )
         }
+
+        Timber.i("Folder synchronization has finished")
     }
 
     private fun showNotification(
@@ -242,8 +248,16 @@ class AutomaticUploadsWorker(
         currentTimestamp: Long,
     ): List<DocumentFile> {
         val sourceUri: Uri = sourcePath.toUri()
+
+        Timber.i ("Source uri is: $sourceUri")
+
         val documentTree = DocumentFile.fromTreeUri(applicationContext, sourceUri)
+
+        Timber.i ("Document tree is: $documentTree")
+
         val arrayOfLocalFiles = documentTree?.listFiles() ?: arrayOf()
+
+        Timber.i("The search of local files has finished. Now, all files are going to be filtered")
 
         val filteredList: List<DocumentFile> = arrayOfLocalFiles
             .sortedBy { it.lastModified() }
