@@ -52,7 +52,7 @@ class WorkManagerProvider(
             .build()
 
         WorkManager.getInstance(context)
-            .enqueueUniquePeriodicWork(AutomaticUploadsWorker.AUTOMATIC_UPLOADS_WORKER, ExistingPeriodicWorkPolicy.KEEP, automaticUploadsWorker)
+            .enqueueUniquePeriodicWork(AutomaticUploadsWorker.AUTOMATIC_UPLOADS_WORKER, ExistingPeriodicWorkPolicy.UPDATE, automaticUploadsWorker)
     }
 
     fun enqueueOldLogsCollectorWorker() {
