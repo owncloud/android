@@ -39,6 +39,7 @@ ownCloud admins and users.
 * Bugfix - Side menu collapses info in landscape: [#4513](https://github.com/owncloud/android/issues/4513)
 * Bugfix - Content in Spaces not shown from third-party apps: [#4522](https://github.com/owncloud/android/issues/4522)
 * Bugfix - Add bottom margin for used quota in account dialog: [#4566](https://github.com/owncloud/android/issues/4566)
+* Bugfix - Infinite edges in Android 15: [#4576](https://github.com/owncloud/android/issues/4576)
 * Change - Bump target SDK to 35: [#4529](https://github.com/owncloud/android/issues/4529)
 * Change - Replace dav4android location: [#4536](https://github.com/owncloud/android/issues/4536)
 * Change - Modify biometrics fail source string: [#4572](https://github.com/owncloud/android/issues/4572)
@@ -71,6 +72,14 @@ ownCloud admins and users.
 
    https://github.com/owncloud/android/issues/4566
    https://github.com/owncloud/android/pull/4567
+
+* Bugfix - Infinite edges in Android 15: [#4576](https://github.com/owncloud/android/issues/4576)
+
+   Infinite edges feature, enabled by default starting from Android 15, has been
+   disabled in the app.
+
+   https://github.com/owncloud/android/issues/4576
+   https://github.com/owncloud/android/pull/4581
 
 * Change - Bump target SDK to 35: [#4529](https://github.com/owncloud/android/issues/4529)
 
