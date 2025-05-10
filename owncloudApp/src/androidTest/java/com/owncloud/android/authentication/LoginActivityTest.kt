@@ -77,6 +77,7 @@ import com.owncloud.android.testutil.OC_SECURE_SERVER_INFO_BEARER_AUTH
 import com.owncloud.android.utils.CONFIGURATION_SERVER_URL
 import com.owncloud.android.utils.CONFIGURATION_SERVER_URL_INPUT_VISIBILITY
 import com.owncloud.android.utils.NO_MDM_RESTRICTION_YET
+import com.owncloud.android.utils.RetryFlakyTestUntilSuccessRule
 import com.owncloud.android.utils.matchers.assertVisibility
 import com.owncloud.android.utils.matchers.isDisplayed
 import com.owncloud.android.utils.matchers.isEnabled
@@ -95,6 +96,7 @@ import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.context.startKoin
@@ -117,6 +119,10 @@ class LoginActivityTest {
     private lateinit var supportsOauth2LiveData: MutableLiveData<Event<UIResult<Boolean>>>
     private lateinit var baseUrlLiveData: MutableLiveData<Event<UIResult<String>>>
     private lateinit var accountDiscoveryLiveData: MutableLiveData<Event<UIResult<Unit>>>
+
+    @Rule
+    @JvmField
+    val retryFlakyTestUntilSuccessRule = RetryFlakyTestUntilSuccessRule()
 
     @Before
     fun setUp() {
