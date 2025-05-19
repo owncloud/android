@@ -23,6 +23,7 @@ package com.owncloud.android.workers
 
 import android.content.Context
 import android.net.Uri
+import android.os.Build
 import androidx.core.net.toUri
 import androidx.documentfile.provider.DocumentFile
 import androidx.work.CoroutineWorker
@@ -50,6 +51,7 @@ import org.koin.core.component.inject
 import timber.log.Timber
 import java.io.File
 import java.util.Date
+import java.util.concurrent.CancellationException
 import java.util.concurrent.TimeUnit
 
 class AutomaticUploadsWorker(
@@ -75,41 +77,50 @@ class AutomaticUploadsWorker(
     private val transferRepository: TransferRepository by inject()
 
     override suspend fun doWork(): Result {
-        Timber.i("Starting AutomaticUploadsWorker with UUID ${this.id}")
-        when (val useCaseResult = getAutomaticUploadsConfigurationUseCase(Unit)) {
-            is UseCaseResult.Success -> {
-                val cameraUploadsConfiguration = useCaseResult.data
-                if (cameraUploadsConfiguration == null || cameraUploadsConfiguration.areAutomaticUploadsDisabled()) {
-                    cancelWorker()
-                    return Result.success()
-                }
-                cameraUploadsConfiguration.pictureUploadsConfiguration?.let { pictureUploadsConfiguration ->
-                    try {
-                        checkSourcePathIsAValidUriOrThrowException(pictureUploadsConfiguration.sourcePath)
-                        syncFolder(pictureUploadsConfiguration)
-                    } catch (illegalArgumentException: IllegalArgumentException) {
-                        Timber.e(illegalArgumentException, "Source path for picture uploads is not valid")
-                        showNotificationToUpdateUri(SyncType.PICTURE_UPLOADS)
-                        return Result.failure()
+        try {
+            Timber.i("Starting AutomaticUploadsWorker with UUID ${this.id}")
+            when (val useCaseResult = getAutomaticUploadsConfigurationUseCase(Unit)) {
+                is UseCaseResult.Success -> {
+                    val cameraUploadsConfiguration = useCaseResult.data
+                    if (cameraUploadsConfiguration == null || cameraUploadsConfiguration.areAutomaticUploadsDisabled()) {
+                        cancelWorker()
+                        return Result.success()
+                    }
+                    cameraUploadsConfiguration.pictureUploadsConfiguration?.let { pictureUploadsConfiguration ->
+                        try {
+                            checkSourcePathIsAValidUriOrThrowException(pictureUploadsConfiguration.sourcePath)
+                            syncFolder(pictureUploadsConfiguration)
+                        } catch (illegalArgumentException: IllegalArgumentException) {
+                            Timber.e(illegalArgumentException, "Source path for picture uploads is not valid")
+                            showNotificationToUpdateUri(SyncType.PICTURE_UPLOADS)
+                            return Result.failure()
+                        }
+                    }
+                    cameraUploadsConfiguration.videoUploadsConfiguration?.let { videoUploadsConfiguration ->
+                        try {
+                            checkSourcePathIsAValidUriOrThrowException(videoUploadsConfiguration.sourcePath)
+                            syncFolder(videoUploadsConfiguration)
+                        } catch (illegalArgumentException: IllegalArgumentException) {
+                            Timber.e(illegalArgumentException, "Source path for video uploads is not valid")
+                            showNotificationToUpdateUri(SyncType.VIDEO_UPLOADS)
+                            return Result.failure()
+                        }
                     }
                 }
-                cameraUploadsConfiguration.videoUploadsConfiguration?.let { videoUploadsConfiguration ->
-                    try {
-                        checkSourcePathIsAValidUriOrThrowException(videoUploadsConfiguration.sourcePath)
-                        syncFolder(videoUploadsConfiguration)
-                    } catch (illegalArgumentException: IllegalArgumentException) {
-                        Timber.e(illegalArgumentException, "Source path for video uploads is not valid")
-                        showNotificationToUpdateUri(SyncType.VIDEO_UPLOADS)
-                        return Result.failure()
-                    }
+                is UseCaseResult.Error -> {
+                    Timber.e(useCaseResult.throwable, "Worker ${useCaseResult.throwable}")
                 }
             }
-            is UseCaseResult.Error -> {
-                Timber.e(useCaseResult.throwable, "Worker ${useCaseResult.throwable}")
+            Timber.i("Finishing CameraUploadsWorker with UUID ${this.id}")
+            return Result.success()
+        } catch (e: CancellationException) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                Timber.i("AutomaticUploadsWorker with UUID ${this.id} was cancelled. Error: $stopReason")
+            } else {
+                Timber.i("AutomaticUploadsWorker with UUID ${this.id} was cancelled.")
             }
+            return Result.failure()
         }
-        Timber.i("Finishing CameraUploadsWorker with UUID ${this.id}")
-        return Result.success()
     }
 
     @Throws(IllegalArgumentException::class)
