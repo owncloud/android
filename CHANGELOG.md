@@ -36,6 +36,7 @@ ownCloud admins and users.
 
 ## Summary
 
+* Bugfix - Token request with Bearer returns error: [#4080](https://github.com/owncloud/android/issues/4080)
 * Bugfix - Side menu collapses info in landscape: [#4513](https://github.com/owncloud/android/issues/4513)
 * Bugfix - Content in Spaces not shown from third-party apps: [#4522](https://github.com/owncloud/android/issues/4522)
 * Bugfix - Add bottom margin for used quota in account dialog: [#4566](https://github.com/owncloud/android/issues/4566)
@@ -48,6 +49,15 @@ ownCloud admins and users.
 * Enhancement - Accessibility reports in 4.5.1: [#4568](https://github.com/owncloud/android/issues/4568)
 
 ## Details
+
+* Bugfix - Token request with Bearer returns error: [#4080](https://github.com/owncloud/android/issues/4080)
+
+   A new condition has been added into the network client to check if there is an
+   authorization header in the network request before adding it. This allows having
+   more than one logged account on the same server.
+
+   https://github.com/owncloud/android/issues/4080
+   https://github.com/owncloud/android/pull/4586
 
 * Bugfix - Side menu collapses info in landscape: [#4513](https://github.com/owncloud/android/issues/4513)
 
