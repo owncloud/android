@@ -131,7 +131,8 @@ public class OwnCloudClient extends HttpClient {
             method.setRequestHeader(HttpConstants.USER_AGENT_HEADER, SingleSessionManager.getUserAgent());
             method.setRequestHeader(HttpConstants.ACCEPT_LANGUAGE_HEADER, Locale.getDefault().getLanguage());
             method.setRequestHeader(HttpConstants.ACCEPT_ENCODING_HEADER, HttpConstants.ACCEPT_ENCODING_IDENTITY);
-            if (mCredentials.getHeaderAuth() != null && !mCredentials.getHeaderAuth().isEmpty()) {
+            if (mCredentials.getHeaderAuth() != null && !mCredentials.getHeaderAuth().isEmpty()
+                    && method.getRequest().header(AUTHORIZATION_HEADER) == null) {
                 method.setRequestHeader(AUTHORIZATION_HEADER, mCredentials.getHeaderAuth());
             }
 
