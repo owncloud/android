@@ -1,0 +1,7 @@
+Bugfix: Token request with Bearer returns error
+
+A new condition has been added into the network client to check if there is an authorization header
+in the network request before adding it. This allows having more than one logged account on the same server.
+
+https://github.com/owncloud/android/issues/4080
+https://github.com/owncloud/android/pull/4586
