@@ -31,28 +31,28 @@
         app:key="notifications_subsection"
         app:title="@string/prefs_subsection_notifications" />
 
-    <Preference
-        app:allowDividerAbove="true"
-        app:fragment="com.owncloud.android.presentation.settings.logging.SettingsLogsFragment"
-        app:icon="@drawable/ic_logs"
-        app:key="logging_subsection"
-        app:summary="@string/prefs_subsection_logging_summary"
-        app:title="@string/prefs_subsection_logging" />
+<!--    <Preference-->
+<!--        app:allowDividerAbove="true"-->
+<!--        app:fragment="com.owncloud.android.presentation.settings.logging.SettingsLogsFragment"-->
+<!--        app:icon="@drawable/ic_logs"-->
+<!--        app:key="logging_subsection"-->
+<!--        app:summary="@string/prefs_subsection_logging_summary"-->
+<!--        app:title="@string/prefs_subsection_logging" />-->
 
-    <Preference
-        app:allowDividerAbove="true"
-        app:fragment="com.owncloud.android.presentation.settings.automaticuploads.SettingsPictureUploadsFragment"
-        app:icon="@drawable/ic_picture_uploads"
-        app:key="picture_uploads_subsection"
-        app:summary="@string/prefs_subsection_picture_uploads_summary"
-        app:title="@string/prefs_subsection_picture_uploads" />
+<!--    <Preference-->
+<!--        app:allowDividerAbove="true"-->
+<!--        app:fragment="com.owncloud.android.presentation.settings.automaticuploads.SettingsPictureUploadsFragment"-->
+<!--        app:icon="@drawable/ic_picture_uploads"-->
+<!--        app:key="picture_uploads_subsection"-->
+<!--        app:summary="@string/prefs_subsection_picture_uploads_summary"-->
+<!--        app:title="@string/prefs_subsection_picture_uploads" />-->
 
-    <Preference
-        app:fragment="com.owncloud.android.presentation.settings.automaticuploads.SettingsVideoUploadsFragment"
-        app:icon="@drawable/ic_video_uploads"
-        app:key="video_uploads_subsection"
-        app:summary="@string/prefs_subsection_video_uploads_summary"
-        app:title="@string/prefs_subsection_video_uploads" />
+<!--    <Preference-->
+<!--        app:fragment="com.owncloud.android.presentation.settings.automaticuploads.SettingsVideoUploadsFragment"-->
+<!--        app:icon="@drawable/ic_video_uploads"-->
+<!--        app:key="video_uploads_subsection"-->
+<!--        app:summary="@string/prefs_subsection_video_uploads_summary"-->
+<!--        app:title="@string/prefs_subsection_video_uploads" />-->
 
     <Preference
         app:allowDividerAbove="true"
@@ -61,27 +61,27 @@
         app:key="advanced_subsection"
         app:title="@string/prefs_subsection_advanced" />
 
-    <Preference
-        app:allowDividerAbove="true"
-        app:fragment="com.owncloud.android.presentation.settings.more.SettingsMoreFragment"
-        app:icon="@drawable/ic_more"
-        app:key="more_subsection"
-        app:summary="@string/prefs_subsection_more_summary"
-        app:title="@string/prefs_subsection_more" />
+<!--    <Preference-->
+<!--        app:allowDividerAbove="true"-->
+<!--        app:fragment="com.owncloud.android.presentation.settings.more.SettingsMoreFragment"-->
+<!--        app:icon="@drawable/ic_more"-->
+<!--        app:key="more_subsection"-->
+<!--        app:summary="@string/prefs_subsection_more_summary"-->
+<!--        app:title="@string/prefs_subsection_more" />-->
 
-    <Preference
-        app:allowDividerAbove="true"
-        app:icon="@drawable/ic_privacy_policy"
-        app:iconSpaceReserved="false"
-        app:key="privacyPolicy"
-        app:title="@string/prefs_privacy_policy" />
+<!--    <Preference-->
+<!--        app:allowDividerAbove="true"-->
+<!--        app:icon="@drawable/ic_privacy_policy"-->
+<!--        app:iconSpaceReserved="false"-->
+<!--        app:key="privacyPolicy"-->
+<!--        app:title="@string/prefs_privacy_policy" />-->
 
-    <Preference
-        app:allowDividerAbove="true"
-        app:icon="@drawable/ic_settings_whats_new"
-        app:iconSpaceReserved="false"
-        app:key="whatsNew"
-        app:title="@string/prefs_subsection_whatsnew" />
+<!--    <Preference-->
+<!--        app:allowDividerAbove="true"-->
+<!--        app:icon="@drawable/ic_settings_whats_new"-->
+<!--        app:iconSpaceReserved="false"-->
+<!--        app:key="whatsNew"-->
+<!--        app:title="@string/prefs_subsection_whatsnew" />-->
 
     <Preference
         app:allowDividerAbove="true"

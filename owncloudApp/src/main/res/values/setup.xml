@@ -59,7 +59,7 @@
     <color name="action_mode_status_bar_background">@color/actionbar_start_color</color>
 
     <!-- Multiaccount support -->
-    <bool name="multiaccount_support">true</bool>
+    <bool name="multiaccount_support">false</bool>
 
     <!-- Help, imprint and feedback -->
     <bool name="help_enabled">true</bool>
