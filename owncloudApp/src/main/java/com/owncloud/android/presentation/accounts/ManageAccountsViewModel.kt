@@ -94,9 +94,7 @@ class ManageAccountsViewModel(
     }
 
     fun hasEnoughQuota(accountName: String): Boolean = runBlocking(CoroutinesDispatcherProvider().io) {
-        val quota =  withContext(CoroutinesDispatcherProvider().io) {
-            getStoredQuotaUseCase(GetStoredQuotaUseCase.Params(accountName))
-        }
+        val quota = getStoredQuotaUseCase(GetStoredQuotaUseCase.Params(accountName))
         quota.getDataOrNull()?.available != 0L
     }
 }
