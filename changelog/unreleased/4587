@@ -1,0 +1,6 @@
+Bugfix: No message when uploading a file with no quota
+
+A message has been added in the file list when uploading a file (from file system, camera or shortcut) without available quota
+
+https://github.com/owncloud/android/issues/4582
+https://github.com/owncloud/android/pull/4587
