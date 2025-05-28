@@ -3,12 +3,12 @@
 
     <!-- App name and other strings-->
     <string name="app_name" formatted="false">ownCloud</string>
-    <string name="account_type" formatted="false">owncloud</string>    <!-- better if was a domain name; but changing it now would require migrate accounts when the app is updated -->
-    <string name="authority" formatted="false">org.owncloud</string>
-    <string name="document_provider_authority" formatted="false">org.owncloud.documents</string>
-    <string name="file_provider_authority" formatted="false">org.owncloud.files</string>
-    <string name="search_suggest_authority" formatted="false">org.owncloud.search.users_and_groups</string>
-    <string name="search_suggest_intent_action" formatted="false">org.owncloud.search.users_and_groups.action.SHARE_WITH</string>
+    <string name="account_type" formatted="false">com.seagate.owncloud</string>    <!-- better if was a domain name; but changing it now would require migrate accounts when the app is updated -->
+    <string name="authority" formatted="false">com.seagate.owncloud</string>
+    <string name="document_provider_authority" formatted="false">com.seagate.owncloud.documents</string>
+    <string name="file_provider_authority" formatted="false">com.seagate.owncloud.files</string>
+    <string name="search_suggest_authority" formatted="false">com.seagate.owncloud.search.users_and_groups</string>
+    <string name="search_suggest_intent_action" formatted="false">com.seagate.owncloud.search.users_and_groups.action.SHARE_WITH</string>
     <string name="db_file" formatted="false">owncloud.db</string>
     <string name="db_name" formatted="false">ownCloud</string>
     <string name="data_folder" formatted="false">owncloud</string>
@@ -59,7 +59,7 @@
     <color name="action_mode_status_bar_background">@color/actionbar_start_color</color>
 
     <!-- Multiaccount support -->
-    <bool name="multiaccount_support">true</bool>
+    <bool name="multiaccount_support">false</bool>
 
     <!-- Help, imprint and feedback -->
     <bool name="help_enabled">true</bool>
