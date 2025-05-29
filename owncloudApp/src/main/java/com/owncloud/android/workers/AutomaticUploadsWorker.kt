@@ -3,8 +3,9 @@
  *
  * @author Abel García de Prada
  * @author Juan Carlos Garrote Gascón
+ * @author Jorge Aguado Recio
  *
- * Copyright (C) 2022 ownCloud GmbH.
+ * Copyright (C) 2025 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -246,10 +247,13 @@ class AutomaticUploadsWorker(
         val arrayOfLocalFiles = documentTree?.listFiles() ?: arrayOf()
 
         val filteredList: List<DocumentFile> = arrayOfLocalFiles
+            .asSequence()
+            .filter {
+                it.lastModified() in lastSyncTimestamp..<currentTimestamp &&
+                        MimetypeIconUtil.getBestMimeTypeByFilename(it.name).startsWith(syncType.prefixForType)
+            }
             .sortedBy { it.lastModified() }
-            .filter { it.lastModified() >= lastSyncTimestamp }
-            .filter { it.lastModified() < currentTimestamp }
-            .filter { MimetypeIconUtil.getBestMimeTypeByFilename(it.name).startsWith(syncType.prefixForType) }
+            .toList()
 
         Timber.i("Last sync ${syncType.name}: ${Date(lastSyncTimestamp)}")
         Timber.i("CurrentTimestamp ${Date(currentTimestamp)}")
