@@ -53,6 +53,7 @@ public class OwnCloudClient extends HttpClient {
     public static final String WEBDAV_FILES_PATH_4_0 = "/remote.php/dav/files/";
     public static final String STATUS_PATH = "/status.php";
     private static final String WEBDAV_UPLOADS_PATH_4_0 = "/remote.php/dav/uploads/";
+    private static final String KONNECT_V1_TOKEN_PATH = "/konnect/v1/token";
     private static final int MAX_RETRY_COUNT = 2;
 
     private static int sIntanceCounter = 0;
@@ -131,7 +132,8 @@ public class OwnCloudClient extends HttpClient {
             method.setRequestHeader(HttpConstants.USER_AGENT_HEADER, SingleSessionManager.getUserAgent());
             method.setRequestHeader(HttpConstants.ACCEPT_LANGUAGE_HEADER, Locale.getDefault().getLanguage());
             method.setRequestHeader(HttpConstants.ACCEPT_ENCODING_HEADER, HttpConstants.ACCEPT_ENCODING_IDENTITY);
-            if (mCredentials.getHeaderAuth() != null && !mCredentials.getHeaderAuth().isEmpty()) {
+            if (mCredentials.getHeaderAuth() != null && !mCredentials.getHeaderAuth().isEmpty()
+                    && !method.getHttpUrl().encodedPath().equals(KONNECT_V1_TOKEN_PATH)) {
                 method.setRequestHeader(AUTHORIZATION_HEADER, mCredentials.getHeaderAuth());
             }
 
