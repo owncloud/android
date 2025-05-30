@@ -1,0 +1,21 @@
+default_platform(:android)
+
+platform :android do
+
+  desc "Build mdmPreprod Release APK"
+  lane :build_mdm_preprod do
+    gradle(
+      task: "assemble",
+      build_type: "mdmPreprodRelease"
+    )
+  end
+
+  desc "Build mdmProd Release APK"
+  lane :build_mdm_prod do
+    gradle(
+      task: "assemble",
+      build_type: "mdmProdRelease"
+    )
+  end
+
+end
