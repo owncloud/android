@@ -2,20 +2,30 @@ default_platform(:android)
 
 platform :android do
 
-  desc "Build mdmPreprod Release APK"
-  lane :build_mdm_preprod do
-    gradle(
-      task: "assemble",
-      build_type: "mdmPreprodRelease"
-    )
-  end
+  desc "Build mdm APK"
+  lane :build_mdm_apk do
+      gradle(
+        task: "assemble",
+        build_type: "mdmPreprodRelease"
+      )
 
-  desc "Build mdmProd Release APK"
-  lane :build_mdm_prod do
-    gradle(
-      task: "assemble",
-      build_type: "mdmProdRelease"
-    )
-  end
+      gradle(
+        task: "assemble",
+        build_type: "mdmProdRelease"
+      )
+    end
+
+  desc "Build mdm AAB"
+  lane :build_mdm_aab do
+      gradle(
+        task: "bundle",
+        build_type: "mdmPreprodRelease"
+      )
+
+      gradle(
+        task: "bundle",
+        build_type: "mdmProdRelease"
+      )
+    end
 
 end
