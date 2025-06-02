@@ -153,7 +153,8 @@ android {
         }
     }
 
-    flavorDimensions "management"
+    flavorDimensions "management", "env"
+
     productFlavors {
         original {
             dimension "management"
@@ -163,6 +164,15 @@ android {
         }
         qa {
             dimension "management"
+        }
+
+        prod {
+            dimension "env"
+        }
+        preprod {
+            dimension "env"
+            applicationIdSuffix ".preprod"
+            versionNameSuffix "-preprod"
         }
     }
 
