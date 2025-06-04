@@ -367,8 +367,6 @@
   <string name="placeholder_timestamp">2012/05/18 12:23 ÖS</string>
   <string name="placeholder_media_time">12:23:45</string>
   <string name="confirmation_disable_camera_uploads_title">Onayla</string>
-  <string name="proper_pics_folder_warning_camera_upload">Lütfen seçtiğiniz klasörün kameranın çektiği resimleri kaydettiği klasör olduğundan emin olun. Aksi taktirde özellik resimlerinizi algılayamaz. Resimlerin çekildikten en az 15 dakika sonra yüklendiğini aklınızda tutun.</string>
-  <string name="proper_videos_folder_warning_camera_upload">Lütfen seçtiğiniz klasörün kameranın çektiği videoları kaydettiği klasör olduğundan emin olun. Aksi taktirde özellik videolarınızı algılayamaz. Videoların çekildikten en az 15 dakika sonra yüklendiğini aklınızda tutun.</string>
   <string name="conflict_title">Çakışan dosya</string>
   <string name="conflict_message">Hangi dosyaları saklamak istiyorsunuz? Her ikisini de saklamayı seçerseniz yerel dosyanın adına bir sayı eklenecek.</string>
   <string name="conflict_keep_both">İkisini de koru</string>
