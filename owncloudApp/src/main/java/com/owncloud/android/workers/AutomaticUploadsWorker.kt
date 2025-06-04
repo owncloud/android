@@ -250,7 +250,8 @@ class AutomaticUploadsWorker(
             .asSequence()
             .filter {
                 it.lastModified() in lastSyncTimestamp..<currentTimestamp &&
-                        MimetypeIconUtil.getBestMimeTypeByFilename(it.name).startsWith(syncType.prefixForType)
+                        MimetypeIconUtil.getBestMimeTypeByFilename(it.name).startsWith(syncType.prefixForType) &&
+                        !it.name.orEmpty().startsWith(".")
             }
             .sortedBy { it.lastModified() }
             .toList()
