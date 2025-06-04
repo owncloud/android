@@ -54,6 +54,7 @@ public class OwnCloudClient extends HttpClient {
     public static final String STATUS_PATH = "/status.php";
     private static final String WEBDAV_UPLOADS_PATH_4_0 = "/remote.php/dav/uploads/";
     private static final String KONNECT_V1_TOKEN_PATH = "/konnect/v1/token";
+    public static final String KWDAV_PATH = "/kwdav";
     private static final int MAX_RETRY_COUNT = 2;
 
     private static int sIntanceCounter = 0;
