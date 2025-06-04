@@ -76,11 +76,17 @@ internal class StatusRequester {
 
     fun request(baseLocation: String, client: OwnCloudClient): RequestResult {
         val currentLocation = baseLocation + OwnCloudClient.STATUS_PATH
+        val fallbackLocation = baseLocation + OwnCloudClient.KWDAV_PATH + OwnCloudClient.STATUS_PATH
         var status: Int
-        val getMethod = getGetMethod(currentLocation)
+        var getMethod = getGetMethod(currentLocation)
 
         getMethod.followPermanentRedirects = true
         status = client.executeHttpMethod(getMethod)
+
+        if (status != HttpConstants.HTTP_OK) {
+            getMethod = getGetMethod(fallbackLocation).apply { followPermanentRedirects = true }
+            status = client.executeHttpMethod(getMethod)
+        }
 
         return RequestResult(getMethod, status, getMethod.getFinalUrl().toString())
     }
