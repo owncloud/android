@@ -55,6 +55,8 @@ public class OwnCloudClient extends HttpClient {
     private static final String WEBDAV_UPLOADS_PATH_4_0 = "/remote.php/dav/uploads/";
     private static final String KONNECT_V1_TOKEN_PATH = "/konnect/v1/token";
     public static final String KWDAV_PATH = "/kwdav";
+    private static final String WELL_KNOWN_PATH = "/.well-known";
+    private static final String OAUTH_TOKEN_PATH = "/oauth/token";
     private static final int MAX_RETRY_COUNT = 2;
 
     private static int sIntanceCounter = 0;
@@ -138,6 +140,13 @@ public class OwnCloudClient extends HttpClient {
             if (mCredentials.getHeaderAuth() != null && !mCredentials.getHeaderAuth().isEmpty()
                     && !method.getHttpUrl().encodedPath().equals(KONNECT_V1_TOKEN_PATH)) {
                 method.setRequestHeader(AUTHORIZATION_HEADER, mCredentials.getHeaderAuth());
+            }
+
+            HttpUrl originalUrl = method.getHttpUrl();
+            String encodedPath = originalUrl.encodedPath();
+            if (mIsKiteworksServer && !encodedPath.startsWith(WELL_KNOWN_PATH) && !encodedPath.equals(OAUTH_TOKEN_PATH)) {
+                HttpUrl newUrl = originalUrl.newBuilder().encodedPath(KWDAV_PATH + encodedPath).build();
+                method.setUrl(newUrl);
             }
 
             status = method.execute(this);

@@ -84,6 +84,7 @@ abstract class HttpBaseMethod constructor(url: URL) {
     }
 
     open fun setUrl(url: HttpUrl) {
+        httpUrl = url
         request = request.newBuilder()
             .url(url)
             .build()
