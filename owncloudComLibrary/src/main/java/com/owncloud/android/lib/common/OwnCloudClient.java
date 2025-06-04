@@ -75,6 +75,8 @@ public class OwnCloudClient extends HttpClient {
 
     private boolean mFollowRedirects = false;
 
+    private boolean mIsKiteworksServer = false;
+
     public OwnCloudClient(Uri baseUri,
                           ConnectionValidator connectionValidator,
                           boolean synchronizeRequests,
@@ -254,5 +256,9 @@ public class OwnCloudClient extends HttpClient {
 
     public void setFollowRedirects(boolean followRedirects) {
         this.mFollowRedirects = followRedirects;
+    }
+
+    public void setIsKiteworksServer (boolean isKiteworksServer) {
+        this.mIsKiteworksServer = isKiteworksServer;
     }
 }
