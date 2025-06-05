@@ -362,8 +362,6 @@
   <string name="confirmation_disable_camera_uploads_title">Megerősítés</string>
   <string name="confirmation_disable_pictures_upload_message">Biztos letiltja ezt a funkciót? A függőben lévő képek nem lesznek feltöltve</string>
   <string name="confirmation_disable_videos_upload_message">Biztos letiltja ezt a funkciót? A függőben lévő videók nem lesznek feltöltve</string>
-  <string name="proper_pics_folder_warning_camera_upload">Ellenőrizze, hogy a kijelölt mappa megegyezik azzal, ahová a kamera a képeket menti. Ellenkező esetben ez a funkció nem lesz képes felismerni a képeket. Tartsa észben, hogy a képek legalább 15 perccel az elkészülés után kerülnek feltöltésre.</string>
-  <string name="proper_videos_folder_warning_camera_upload">Ellenőrizze, hogy a kijelölt mappa megegyezik azzal, ahová a kamera a videókat menti. Ellenkező esetben ez a funkció nem lesz képes felismerni a videókat. Tartsa észben, hogy a videók legalább 15 perccel az elkészülés után kerülnek feltöltésre.</string>
   <string name="conflict_description">A következő fájlban konfliktus található %1$s, érintsd meg, hogy megold</string>
   <string name="conflict_message">Mely fájlokat tartja meg? Ha mindkét verziót kiválasztja, akkor a helyi fájl nevéhez hozzá lesz adva egy szám.</string>
   <string name="conflict_keep_both">Mindkettő megtartása</string>

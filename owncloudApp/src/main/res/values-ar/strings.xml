@@ -356,8 +356,6 @@
   <string name="confirmation_disable_camera_uploads_title">تأكيد</string>
   <string name="confirmation_disable_pictures_upload_message">هل أنت متأكد أنك ترغب في تعطيل هذه الميزة؟ لن يتم تحميل الصور المعلقة</string>
   <string name="confirmation_disable_videos_upload_message">هل أنت متأكد أنك ترغب في تعطيل هذه الميزة؟ لن يتم تحميل مقاطع الفيديو المعلقة</string>
-  <string name="proper_pics_folder_warning_camera_upload">يُرجى التأكد من أن المجلد المحدد هو المكان الذي تحفظ فيه الكاميرا التي تستخدمها الصور الملتقطة. وإلا لن تتمكن الميزة من العثور على صورك. يُرجى مراعاة أن عملية تحميل الصور ستتم في غضون 15 دقيقة على الأقل من التقاطها.</string>
-  <string name="proper_videos_folder_warning_camera_upload">يُرجى التأكد من أن المجلد المحدد هو المكان الذي تحفظ فيه الكاميرا التي تستخدمها مقاطع الفيديو المسجلة. وإلا لن تتمكن الميزة من العثور على مقاطع الفيديو. يُرجى مراعاة أن عملية تحميل مقاطع الفيديو ستتم في غضون 15 دقيقة على الأقل من تسجيلها.</string>
   <string name="conflict_description">حدث تعارض في ملف %1$s، انقر لحل هذه المشكلة</string>
   <string name="conflict_message">ما الملفات التي ترغب في حفظها؟ إن حددت كلا الإصدارَين، فستتم إضافة رقم إلى اسم الملف المحلي.</string>
   <string name="conflict_keep_both">احتفظ بالإصدارين</string>

@@ -443,8 +443,6 @@
   <string name="confirmation_disable_camera_uploads_title">Bestätigen</string>
   <string name="confirmation_disable_pictures_upload_message">Soll dieses Feature wirklich deaktiviert werden? Die Bilder in der Warteschlange werden dann nicht hochgeladen.</string>
   <string name="confirmation_disable_videos_upload_message">Soll dieses Feature wirklich deaktiviert werden? Die Videos in der Warteschlange werden dann nicht hochgeladen.</string>
-  <string name="proper_pics_folder_warning_camera_upload">Bitte stelle sicher, dass sich der ausgewählte Ordner an der Stelle befindet, an der die von Ihnen verwendete Kamera die aufgenommenen Bilder speichert. Andernfalls kann die Funktion Ihre Bilder nicht erkennen. Beachte, dass die Bilder innerhalb von mindestens 15 Minuten nach der Aufnahme hochgeladen werden.</string>
-  <string name="proper_videos_folder_warning_camera_upload">Bitte stelle sicher, dass sich der ausgewählte Ordner an der Stelle befindet, an der die von Ihnen verwendete Kamera die aufgenommenen Videos speichert. Andernfalls kann die Funktion Ihre Videos nicht erkennen. Beachte, dass Videos innerhalb von mindestens 15 Minuten nach der Aufnahme hochgeladen werden.</string>
   <string name="conflict_title">Dateikonflikt</string>
   <string name="conflict_description">Ein Konflikt ist in der Datei %1$s aufgetreten. Hier tippen, um das Problem zu lösen.</string>
   <string name="conflict_message">Welche Datei möchtest du behalten? Wenn du beide Versionen auswählst, wird der lokalen Datei eine Zahl am Ende Ihres Dateiname angehangen.</string>

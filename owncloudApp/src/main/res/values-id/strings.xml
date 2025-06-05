@@ -346,8 +346,6 @@
   <string name="confirmation_disable_camera_uploads_title">Memastikan</string>
   <string name="confirmation_disable_pictures_upload_message">Anda yakin ingin menonaktifkan fitur ini? Gambar yang tertunda tidak akan diunggah</string>
   <string name="confirmation_disable_videos_upload_message">Anda yakin ingin menonaktifkan feature ini? Video yang tertunda tidak akan diunggah</string>
-  <string name="proper_pics_folder_warning_camera_upload">Mohon pastikan folder yang dipilih adalah tempat dimana kamera Anda menyimpan gambar-gambar yang diambil. Jika tidak, feature ini tidak akan bisa mendeteksi gambar-gambar anda. Ingat bahwa gambar akan diunggah setidaknya 15 menit setelah diambil.</string>
-  <string name="proper_videos_folder_warning_camera_upload">Mohon pastikan folder yang dipilih adalah tempat kamera anda menyimpan video yang direkam. Jika tidak, feature ini tidak akan dapat mendeteksi video anda. Mohon diingat bahwa video akan diunggah setidaknya 15 menit setelah merekam.</string>
   <string name="conflict_description">Terdapat konflik dalam data %1$s, ketuk untuk menyelesaikan</string>
   <string name="conflict_message">Berkas mana yang ingin Anda simpan? Jika Anda memilih kedua versi, berkas lokal akan memiliki angka yang ditambahkan pada namanya.</string>
   <string name="conflict_keep_both">Biarkan keduannya</string>

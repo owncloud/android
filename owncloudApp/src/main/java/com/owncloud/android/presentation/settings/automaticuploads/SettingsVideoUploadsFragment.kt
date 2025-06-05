@@ -171,7 +171,7 @@ class SettingsVideoUploadsFragment : PreferenceFragmentCompat() {
                 videosViewModel.enableVideoUploads(selectedAccount)
                 showAlertDialog(
                     title = getString(R.string.common_important),
-                    message = getString(R.string.proper_videos_folder_warning_camera_upload)
+                    message = getString(R.string.proper_videos_folder_warning_camera_upload, getString(R.string.app_name))
                 )
                 true
             } else {

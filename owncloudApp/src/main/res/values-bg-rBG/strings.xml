@@ -356,8 +356,6 @@
   <string name="placeholder_timestamp">2012/05/18 12:23 PM</string>
   <string name="placeholder_media_time">12:23:45</string>
   <string name="confirmation_disable_camera_uploads_title">Потвърждаване</string>
-  <string name="proper_pics_folder_warning_camera_upload">Моля уверете се, че избраната папка е мястото където камерата, която използвате запазва направените изображения. В противен случай функцията няма да може да ги открие. Имайте предвид, че изображенията ще бъдат качени най-малко 15 минути след заснемането им.</string>
-  <string name="proper_videos_folder_warning_camera_upload">Моля уверете се, че избраната папка е мястото където камерата, която използвате запазва записаните видеоклипове. В противен случай функцията няма да може да открие вашите видеоклипове. Имайте предвид, че видеоклиповете ще бъдат качени най-малко 15 минути след записването им.</string>
   <string name="conflict_title">Файл в конфликт</string>
   <string name="conflict_message">Кои файлове искате да запазите? Ако изберете и двете версии, локалния файл ще има числа добавени към името си.</string>
   <string name="conflict_keep_both">Запазване и на двата</string>
