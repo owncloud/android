@@ -15,6 +15,9 @@ local.properties
 *.jks
 *.keystore
 
+# Firebase credentials
+google-services.json
+
 # Mac .DS_Store files
 .DS_Store
 
