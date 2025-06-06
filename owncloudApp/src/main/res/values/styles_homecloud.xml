@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+
+    This separate styles file allows to reduce possible git conflicts with the parent repo
+
+-->
+<resources xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
+    <!-- THEMES: styles for whole APP or individual ACTIVITIES -->
+
+    <!-- General homeCloud app style.
+         To apply directly only on Activities that cannot extend ToolbarActivity;
+         otherwise, prefer Theme.homeCloud.Toolbar -->
+    <style name="Theme.homeCloud" parent="Theme.Material3.Light">
+        <item name="android:windowBackground">@color/background_color</item>
+
+        <!-- theme for the app bar (both for old actionbar and new toolbar) -->
+        <item name="actionBarTheme">@style/homeCloud.Appbar</item>
+
+        <!-- properties for action mode -->
+        <item name="windowActionModeOverlay">true</item>
+        <item name="actionModeBackground">@color/action_mode_background</item>
+
+        <!-- colors, Material Design way -->
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/actionbar_start_color</item>
+        <item name="colorAccent">@color/color_accent</item>
+
+        <!-- default theme for alert dialogs -->
+        <item name="alertDialogTheme">@style/Theme.homeCloud.AlertDialog</item>
+
+        <!-- style for search view -->
+        <item name="searchViewStyle">@style/homeCloud.SearchView</item>
+        <item name="android:windowOptOutEdgeToEdgeEnforcement" tools:targetApi="35">true</item>
+    </style>
+
+    <!-- Splash Screen -->
+    <style name="Theme.homeCloud.Splash">
+        <item name="android:windowBackground">@drawable/splash_screen</item>
+    </style>
+
+    <!-- Extends Theme.homeCloud to remove legacy ActionBar from the window and add, via layouts, a Toolbar -->
+    <style name="Theme.homeCloud.Toolbar">
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <!-- (status/nav)BarColor are set by the Activity, not the system -->
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+    </style>
+
+    <!-- Extends Theme.homeCloud.Toolbar for Drawer activities including Drawer -->
+    <style name="Theme.homeCloud.Toolbar.Drawer">
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowAnimationStyle">@null</item>
+    </style>
+
+    <!-- Extends Theme.homeCloud to make LEGACY ActionBar both OVERLAY and TRANSPARENT -->
+    <style name="Theme.homeCloud.Overlay">
+        <item name="windowActionBarOverlay">true</item>
+        <item name="actionBarTheme">@style/homeCloud.Appbar.Transparent</item>
+    </style>
+
+    <!-- Extends Theme.homeCloud for video in full screen mode -->
+    <style name="Theme.homeCloud.Video">
+        <item name="windowActionBarOverlay">true</item>
+        <item name="android:windowLayoutInDisplayCutoutMode">never</item>
+        <item name="actionBarTheme">@style/homeCloud.Appbar.Transparent</item>
+        <item name="android:windowBackground">@android:color/background_dark</item>
+    </style>
+
+    <!-- DIALOG THEMES: styles for DIALOGs -->
+
+    <!-- DEFAULT (via Theme.homeCloud), and explicitly used ONCE, in Preference "behaviour" for instant uploads - NO MORE, not needed, it's default -->
+    <style name="Theme.homeCloud.AlertDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorAccent">@color/color_accent</item>
+        <item name="android:textColorPrimary">@color/primary</item>
+        <item name="searchViewStyle">@style/homeCloud.SearchView</item>
+        <item name="buttonBarButtonStyle">@style/Theme.homeCloud.Dialog.ButtonBar.Button</item>
+        <item name="buttonBarStyle">@style/Theme.homeCloud.Dialog.ButtonBar</item>
+    </style>
+
+    <!-- USED IN SHAREACTIVITY!! !! -->
+    <style name="Theme.homeCloud.AlertDialog.NoTitle">
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <!-- APP BAR styles -->
+
+    <!-- Regular style for the app bar (both for old actionbar and new toolbar);
+         overrides colorPrimary to allow customization of the app bar color,
+         independent of Material Design guidelines, if desired
+    -->
+    <style name="homeCloud.Appbar" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="colorPrimary">@color/actionbar_start_color</item>
+        <item name="toolbarNavigationButtonStyle">@style/Toolbar.Button.Navigation.Tinted</item>
+    </style>
+
+    <!-- Transparent style for the app bar -->
+    <style name="homeCloud.Appbar.Transparent" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="colorPrimary">@color/owncloud_blue_transparent</item>
+    </style>
+
+    <!-- MORE styles -->
+
+    <style name="homeCloud.SearchView" parent="Widget.AppCompat.SearchView">
+        <!-- Close button icon -->
+        <item name="closeIcon">@drawable/ic_close</item>
+        <!-- Search button icon -->
+        <item name="searchIcon">@drawable/ic_search</item>
+        <!-- Layout for query suggestion rows -->
+        <item name="suggestionRowLayout">@layout/search_suggestion_row</item>>
+    </style>
+
+    <!-- Style for top progress bar -->
+    <style name="Widget.homeCloud.TopProgressBar" parent="@style/Widget.AppCompat.ProgressBar.Horizontal">
+        <!-- for a custom color independent of @color/primary,
+        change value of actionbar_start_color in setup.xml, don't modify here -->
+        <item name="android:background">@color/actionbar_start_color</item>
+        <item name="android:progressDrawable">@drawable/top_progress_bar_determinate</item>
+        <item name="android:indeterminateDrawable">@drawable/top_progress_bar_indeterminate</item>
+    </style>
+
+    <!-- Button Bar hack due to Lollipop bug:
+        https://code.google.com/p/android/issues/detail?id=78302
+    fix see:
+        http://stackoverflow.com/questions/27187353/dialog-buttons-with-long-text-not-wrapping-squeezed-out-material-theme-on-an
+     -->
+    <style name="Theme.homeCloud.Dialog.ButtonBar" parent="@style/Widget.AppCompat.ButtonBar.AlertDialog">
+        <!-- Making sure, the button bar uses parent width and is not restricted in height -->
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:height">@null</item>
+        <item name="android:minHeight">@null</item>
+    </style>
+
+    <style name="Theme.homeCloud.Dialog.ButtonBar.Button" parent="@style/Widget.AppCompat.Button.Borderless.Colored">
+        <!-- Setting the weight as follows should result in equally wide buttons filling the alert dialog width,
+            but instead they span further out of the dialog, breaking in multiple lines though -->
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_weight">1</item>
+        <!-- setting a fixed width as follows results in narrow buttons with line breaks, but of course this is not a solution -->
+        <!-- <item name="android:width">100dp</item> -->
+    </style>
+
+    <!-- Notifications -->
+    <style name="Theme.homeCloud.NotificationText.Title" parent="@android:style/TextAppearance.StatusBar.EventContent.Title">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="Theme.homeCloud.NotificationText.Content" parent="@android:style/TextAppearance.StatusBar.EventContent">
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <!-- Authenticator Activity -->
+    <style name="Theme.homeCloud.Authenticator" parent="Theme.homeCloud">
+        <!-- properties for action mode -->
+        <item name="windowActionModeOverlay">true</item>
+        <item name="actionModeBackground">@color/action_mode_background</item>
+    </style>
+
+    <style name="Theme.homeCloud.Authenticator.EditText" parent="Theme.homeCloud.Authenticator">
+        <item name="colorControlNormal">@color/login_text_color</item>
+        <item name="colorControlActivated">@color/login_text_color</item>
+    </style>
+
+    <!-- SortBottomSheetFragment -->
+    <style name="Theme.homeCloud.SortBottomSheetFragment" />
+
+    <style name="Theme.homeCloud.SortBottomSheetFragment.Item">
+        <item name="android:textAppearance">@style/TextAppearance.OwnCloud.SortBottomSheetFragment.Item</item>
+    </style>
+</resources>
