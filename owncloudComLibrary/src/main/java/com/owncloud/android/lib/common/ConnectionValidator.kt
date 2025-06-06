@@ -83,7 +83,7 @@ class ConnectionValidator(
                         }
                     } else {
                         failCounter++
-                        if (contentReply.httpCode == HttpConstants.HTTP_UNAUTHORIZED) {
+                        if (contentReply.httpCode == HttpConstants.HTTP_UNAUTHORIZED || client.isKiteworksServer) {
                             checkUnauthorizedAccess(client, singleSessionManager, contentReply.httpCode)
                         }
                     }
@@ -129,8 +129,13 @@ class ConnectionValidator(
      * @return 'True' if credentials should and might be invalidated, 'false' if shouldn't or
      * cannot be invalidated with the given arguments.
      */
-    private fun shouldInvalidateAccountCredentials(credentials: OwnCloudCredentials, account: OwnCloudAccount, httpStatusCode: Int): Boolean {
-        var shouldInvalidateAccountCredentials = httpStatusCode == HttpConstants.HTTP_UNAUTHORIZED
+    private fun shouldInvalidateAccountCredentials(
+        credentials: OwnCloudCredentials,
+        account: OwnCloudAccount,
+        httpStatusCode: Int,
+        client: OwnCloudClient
+    ): Boolean {
+        var shouldInvalidateAccountCredentials = httpStatusCode == HttpConstants.HTTP_UNAUTHORIZED || client.isKiteworksServer
         shouldInvalidateAccountCredentials = shouldInvalidateAccountCredentials and  // real credentials
                 (credentials !is OwnCloudAnonymousCredentials)
 
@@ -179,7 +184,7 @@ class ConnectionValidator(
         var credentialsWereRefreshed = false
         val account = client.account
         val credentials = account.credentials
-        if (shouldInvalidateAccountCredentials(credentials, account, status)) {
+        if (shouldInvalidateAccountCredentials(credentials, account, status, client)) {
             invalidateAccountCredentials(account, credentials)
 
             if (credentials.authTokenCanBeRefreshed()) {

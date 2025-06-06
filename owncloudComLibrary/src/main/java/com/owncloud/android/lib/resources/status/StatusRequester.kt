@@ -76,11 +76,17 @@ internal class StatusRequester {
 
     fun request(baseLocation: String, client: OwnCloudClient): RequestResult {
         val currentLocation = baseLocation + OwnCloudClient.STATUS_PATH
+        val fallbackLocation = baseLocation + OwnCloudClient.KWDAV_PATH + OwnCloudClient.STATUS_PATH
         var status: Int
-        val getMethod = getGetMethod(currentLocation)
+        var getMethod = getGetMethod(currentLocation)
 
         getMethod.followPermanentRedirects = true
         status = client.executeHttpMethod(getMethod)
+
+        if (status != HttpConstants.HTTP_OK) {
+            getMethod = getGetMethod(fallbackLocation).apply { followPermanentRedirects = true }
+            status = client.executeHttpMethod(getMethod)
+        }
 
         return RequestResult(getMethod, status, getMethod.getFinalUrl().toString())
     }
@@ -89,7 +95,8 @@ internal class StatusRequester {
 
     fun handleRequestResult(
         requestResult: RequestResult,
-        baseUrl: String
+        baseUrl: String,
+        client: OwnCloudClient
     ): RemoteOperationResult<RemoteServerInfo> {
         val respJSON = JSONObject(requestResult.getMethod.getResponseBodyAsString())
         return if (!requestResult.status.isSuccess()) {
@@ -104,12 +111,18 @@ internal class StatusRequester {
                 if (baseUrl.startsWith(HTTPS_SCHEME)) RemoteOperationResult(RemoteOperationResult.ResultCode.OK_SSL)
                 else RemoteOperationResult(RemoteOperationResult.ResultCode.OK_NO_SSL)
             val finalUrl = URL(requestResult.lastLocation)
+
+            val isKiteworksServer = respJSON.getString(NODE_PRODUCT_NAME) == KITEWORKS_VALUE
+            val file = if (!isKiteworksServer) finalUrl.file.dropLastWhile { it != '/' }.trimEnd('/') else ""
+
             val finalBaseUrl = URL(
                 finalUrl.protocol,
                 finalUrl.host,
                 finalUrl.port,
-                finalUrl.file.dropLastWhile { it != '/' }.trimEnd('/')
+                file
             )
+
+            client.setIsKiteworksServer(isKiteworksServer)
 
             result.data = RemoteServerInfo(
                 ownCloudVersion = ocVersion,
@@ -128,5 +141,7 @@ internal class StatusRequester {
         private const val TRY_CONNECTION_TIMEOUT = 5_000L
         private const val NODE_INSTALLED = "installed"
         private const val NODE_VERSION = "version"
+        private const val NODE_PRODUCT_NAME = "productname"
+        private const val KITEWORKS_VALUE = "kiteworks"
     }
 }
