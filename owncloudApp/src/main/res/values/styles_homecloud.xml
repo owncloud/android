@@ -20,15 +20,23 @@
         <item name="actionModeBackground">@color/action_mode_background</item>
 
         <!-- colors, Material Design way -->
-        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimary">@color/homecloud_primary</item>
         <item name="colorPrimaryDark">@color/actionbar_start_color</item>
         <item name="colorAccent">@color/color_accent</item>
+        <item name="colorSecondaryContainer">@android:color/holo_orange_dark</item> <!-- TODO -->
+        <item name="colorOnSecondaryContainer">@color/homecloud_blue_darken_2</item>
+        <item name="colorOnSurface">?attr/colorPrimary</item>
+        <item name="colorOnSurfaceVariant">?attr/colorPrimary</item>
 
         <!-- default theme for alert dialogs -->
         <item name="alertDialogTheme">@style/Theme.homeCloud.AlertDialog</item>
 
         <!-- style for search view -->
         <item name="searchViewStyle">@style/homeCloud.SearchView</item>
+
+        <!-- Bottom navigation -->
+        <item name="bottomNavigationStyle">@style/Theme.homeCloud.BottomNavigation</item>
+
         <item name="android:windowOptOutEdgeToEdgeEnforcement" tools:targetApi="35">true</item>
     </style>
 
@@ -95,6 +103,16 @@
     <!-- Transparent style for the app bar -->
     <style name="homeCloud.Appbar.Transparent" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
         <item name="colorPrimary">@color/owncloud_blue_transparent</item>
+    </style>
+
+    <style name="Theme.homeCloud.BottomNavigation" parent="Widget.Material3.BottomNavigationView">
+        <item name="backgroundTint">@android:color/white</item>
+        <item name="itemTextAppearanceActiveBoldEnabled">false</item>
+        <item name="itemActiveIndicatorStyle">@style/Theme.homeCloud.BottomNavigation.Indicator</item>
+    </style>
+
+    <style name="Theme.homeCloud.BottomNavigation.Indicator" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
+        <item name="android:color">@color/homecloud_blue_darken_2_24</item>
     </style>
 
     <!-- MORE styles -->
