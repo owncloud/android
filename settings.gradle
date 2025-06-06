@@ -1,1 +1,9 @@
+pluginManagement {
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+
 include ':owncloudApp', ':owncloudDomain', ':owncloudData', ':owncloudComLibrary', ':owncloudTestUtil'
