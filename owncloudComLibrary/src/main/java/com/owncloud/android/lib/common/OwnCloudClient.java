@@ -267,7 +267,11 @@ public class OwnCloudClient extends HttpClient {
         this.mFollowRedirects = followRedirects;
     }
 
-    public void setIsKiteworksServer (boolean isKiteworksServer) {
+    public void setIsKiteworksServer(boolean isKiteworksServer) {
         this.mIsKiteworksServer = isKiteworksServer;
+    }
+
+    public Boolean getIsKiteworksServer() {
+        return mIsKiteworksServer;
     }
 }
