@@ -22,13 +22,16 @@ androidxTestMonitor = "1.6.1"
 androidxTestUiAutomator ="2.2.0"
 androidxWork = "2.8.1"
 coil = "2.2.2"
+crashlytics = "3.0.1"
 detekt = "1.23.3"
 dexopener = "2.0.5"
 disklrucache = "2.0.2"
+firebaseBom = "32.7.0"
 media3 ="1.1.1"
 floatingactionbutton = "1.10.1"
 glide = "4.15.1"
 glideToVectorYou = "v2.0.0"
+googleServices = "4.4.1"
 junit4 = "4.13.2"
 koin = "3.3.3"
 kotlin = "1.9.20"
@@ -87,6 +90,9 @@ dexopener = { group = "com.github.tmurakami", name = "dexopener", version.ref = 
 disklrucache = { group = "com.jakewharton", name = "disklrucache", version.ref = "disklrucache" }
 media3-exoplayer = { group = "androidx.media3", name = "media3-exoplayer", version.ref = "media3" }
 media3-ui = { group = "androidx.media3", name = "media3-ui", version.ref = "media3" }
+firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom" }
+firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics" }
+firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics" }
 floatingactionbutton = { group = "com.getbase", name = "floatingactionbutton", version.ref = "floatingactionbutton" }
 glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }
 glide-vector = { group = "com.github.2coffees1team", name = "GlideToVectorYou", version.ref = "glideToVectorYou" }
@@ -115,6 +121,8 @@ timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "tim
 
 # Dependencies of the included build-logic
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "androidGradlePlugin" }
+crashlytics-gradle = { group = "com.google.firebase", name = "firebase-crashlytics-gradle", version.ref = "crashlytics" }
+google-services-gradle = { group = "com.google.gms", name = "google-services", version.ref = "googleServices" }
 kotlin-gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
 ksp-gradlePlugin = { group = "com.google.devtools.ksp", name = "com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
 ktlint-gradlePlugin = { group = "org.jlleitschuh.gradle", name = "ktlint-gradle", version.ref = "ktlint" }
@@ -128,3 +136,5 @@ kotlin = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 sonarqube = { id = "org.sonarqube", version.ref = "sonarqube" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
+googleServices = { id = "com.google.gms.google-services", version.ref = "googleServices" }
+crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "crashlytics" }
