@@ -1,0 +1,6 @@
+Enhancement: Support for Kiteworks servers without client secret
+
+Support for connecting to Kiteworks servers without requiring client secret has been added to the app.
+
+https://github.com/owncloud/android/issues/4588
+https://github.com/owncloud/android/pull/4589
