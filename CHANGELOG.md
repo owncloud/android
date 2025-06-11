@@ -49,6 +49,7 @@ ownCloud admins and users.
 * Enhancement - QA variant: [#3791](https://github.com/owncloud/android/issues/3791)
 * Enhancement - Shares space in Android native file explorer: [#4515](https://github.com/owncloud/android/issues/4515)
 * Enhancement - Accessibility reports in 4.5.1: [#4568](https://github.com/owncloud/android/issues/4568)
+* Enhancement - Support for Kiteworks servers without client secret: [#4588](https://github.com/owncloud/android/issues/4588)
 
 ## Details
 
@@ -157,6 +158,14 @@ ownCloud admins and users.
 
    https://github.com/owncloud/android/issues/4568
    https://github.com/owncloud/android/pull/4573
+
+* Enhancement - Support for Kiteworks servers without client secret: [#4588](https://github.com/owncloud/android/issues/4588)
+
+   Support for connecting to Kiteworks servers without requiring client secret has
+   been added to the app.
+
+   https://github.com/owncloud/android/issues/4588
+   https://github.com/owncloud/android/pull/4589
 
 # Changelog for ownCloud Android Client [4.5.1] (2025-04-03)
 
