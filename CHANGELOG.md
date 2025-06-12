@@ -42,6 +42,7 @@ ownCloud admins and users.
 * Bugfix - Content in Spaces not shown from third-party apps: [#4522](https://github.com/owncloud/android/issues/4522)
 * Bugfix - Add bottom margin for used quota in account dialog: [#4566](https://github.com/owncloud/android/issues/4566)
 * Bugfix - Infinite edges in Android 15: [#4576](https://github.com/owncloud/android/issues/4576)
+* Bugfix - Crash from Google Play Console in PreviewImageFragment: [#4577](https://github.com/owncloud/android/issues/4577)
 * Bugfix - No message when uploading a file with no quota: [#4582](https://github.com/owncloud/android/issues/4582)
 * Change - Bump target SDK to 35: [#4529](https://github.com/owncloud/android/issues/4529)
 * Change - Replace dav4android location: [#4536](https://github.com/owncloud/android/issues/4536)
@@ -104,6 +105,14 @@ ownCloud admins and users.
 
    https://github.com/owncloud/android/issues/4576
    https://github.com/owncloud/android/pull/4581
+
+* Bugfix - Crash from Google Play Console in PreviewImageFragment: [#4577](https://github.com/owncloud/android/issues/4577)
+
+   In order to prevent app crashes when file variable is null, a nullability check
+   has been added in onPrepareOptionsMenu method from PreviewImageFragment
+
+   https://github.com/owncloud/android/issues/4577
+   https://github.com/owncloud/android/pull/4594
 
 * Bugfix - No message when uploading a file with no quota: [#4582](https://github.com/owncloud/android/issues/4582)
 
