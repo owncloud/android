@@ -13,7 +13,9 @@
         <item name="android:windowBackground">@color/background_color</item>
 
         <!-- theme for the app bar (both for old actionbar and new toolbar) -->
-        <item name="actionBarTheme">@style/homeCloud.Appbar</item>
+        <item name="toolbarStyle">@style/homeCloud.Appbar</item>
+        <item name="actionBarPopupTheme">@style/homeCloud.Appbar.Popup</item>
+        <item name="actionOverflowMenuStyle">@style/homeCloud.Appbar.Popup</item>
 
         <!-- properties for action mode -->
         <item name="windowActionModeOverlay">true</item>
@@ -23,7 +25,7 @@
         <item name="colorPrimary">@color/homecloud_primary</item>
         <item name="colorPrimaryDark">@color/actionbar_start_color</item>
         <item name="colorAccent">@color/color_accent</item>
-        <item name="colorSecondaryContainer">@android:color/holo_orange_dark</item> <!-- TODO -->
+        <item name="colorSecondaryContainer">@android:color/white</item>
         <item name="colorOnSecondaryContainer">@color/homecloud_blue_darken_2</item>
         <item name="colorOnSurface">?attr/colorPrimary</item>
         <item name="colorOnSurfaceVariant">?attr/colorPrimary</item>
@@ -91,13 +93,31 @@
 
     <!-- APP BAR styles -->
 
-    <!-- Regular style for the app bar (both for old actionbar and new toolbar);
-         overrides colorPrimary to allow customization of the app bar color,
-         independent of Material Design guidelines, if desired
-    -->
-    <style name="homeCloud.Appbar" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+    <style name="homeCloud.Appbar" parent="Widget.Material3.Toolbar">
+        <item name="android:background">@color/actionbar_start_color</item>
         <item name="colorPrimary">@color/actionbar_start_color</item>
-        <item name="toolbarNavigationButtonStyle">@style/Toolbar.Button.Navigation.Tinted</item>
+        <item name="titleTextColor">@android:color/white</item>
+        <item name="colorControlNormal">@android:color/white</item>
+        <item name="titleTextAppearance">@style/homeCloud.Toolbar.Title</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="toolbarNavigationButtonStyle">@style/homeCloud.Toolbar.Button.Navigation.Tinted</item>
+    </style>
+
+    <style name="homeCloud.Toolbar.Button.Navigation.Tinted" parent="Widget.AppCompat.Toolbar.Button.Navigation">
+        <item name="tint">@color/white</item>
+    </style>
+
+    <style name="homeCloud.Toolbar.Title" parent="@style/TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:paddingTop">0dp</item>
+        <item name="android:textSize">@dimen/toolbar_title_text_size</item>
+        <item name="android:paddingBottom">0dp</item>
+    </style>
+
+    <style name="homeCloud.Appbar.Popup" parent="ThemeOverlay.Material3.Light">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:paddingTop">0dp</item>
     </style>
 
     <!-- Transparent style for the app bar -->
