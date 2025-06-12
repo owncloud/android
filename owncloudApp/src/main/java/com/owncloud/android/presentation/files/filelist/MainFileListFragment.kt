@@ -798,10 +798,15 @@ class MainFileListFragment : Fragment(),
         collectLatestLifecycleFlow(mainFileListViewModel.fileListUiState) { fileListUiState ->
             if (fileListUiState !is MainFileListViewModel.FileListUiState.Success) return@collectLatestLifecycleFlow
 
+            saveScrollPosition()
+
             fileListAdapter.updateFileList(
                 filesToAdd = fileListUiState.folderContent,
                 fileListOption = fileListUiState.fileListOption,
             )
+
+            restoreScrollPosition()
+
             showOrHideEmptyView(fileListUiState)
 
             binding.spaceHeader.root.apply {
@@ -993,6 +998,38 @@ class MainFileListFragment : Fragment(),
         super.onDestroy()
         _binding = null
     }
+
+    /**
+     * Saves the current scroll position of the RecyclerView by capturing the indices of
+     * the last visible items from the StaggeredGridLayoutManager.
+     *
+     * This position is stored in the ViewModel so it can be restored later,
+     * typically after the adapter data is updated. This ensures continuity
+     * in the user’s scroll experience when navigating between fragments or refreshing data.
+     */
+    private fun saveScrollPosition() {
+        val layoutManager = binding.recyclerViewMainFileList.layoutManager as? StaggeredGridLayoutManager
+        mainFileListViewModel.lastVisibleItemPositions = layoutManager?.findLastVisibleItemPositions(null)
+    }
+
+    /**
+     * Restores the scroll position of the RecyclerView based on the previously
+     * saved positions in the ViewModel. It scrolls to the maximum of the last
+     * visible item positions captured earlier using [saveScrollPosition].
+     *
+     * This method is posted to the queue to ensure it runs after the
+     * RecyclerView has completed its layout pass and the adapter update has been applied.
+     */
+    private fun restoreScrollPosition() {
+        binding.recyclerViewMainFileList.post {
+            mainFileListViewModel.lastVisibleItemPositions?.let { positions ->
+                val maxPosition = positions.maxOrNull() ?: 0
+                binding.recyclerViewMainFileList.scrollToPosition(maxPosition)
+                mainFileListViewModel.lastVisibleItemPositions = null
+            }
+        }
+    }
+
 
     fun updateFileListOption(newFileListOption: FileListOption, file: OCFile) {
         mainFileListViewModel.updateFileListOption(newFileListOption)
