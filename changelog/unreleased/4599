@@ -1,0 +1,7 @@
+Enhancement: SBOM (Software Bill of Materials)
+
+SBOM to be generated in every PR via GitHub Actions with the list of all dependencies used in the code. Tool cyclonedx builds it, artifact is exported to xml and finally converted to html with a xlst template.
+
+https://github.com/owncloud/android/issues/4598
+https://github.com/owncloud/android/pull/4599
+
