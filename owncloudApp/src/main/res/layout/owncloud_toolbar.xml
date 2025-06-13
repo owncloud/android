@@ -20,19 +20,6 @@
     android:theme="@style/homeCloud.Appbar"
     android:focusableInTouchMode="true">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/standard_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="?attr/colorPrimary"
-        android:theme="@style/homeCloud.Appbar"
-        android:visibility="gone"
-        android:focusable="true"
-        android:focusableInTouchMode="false"
-        android:accessibilityHeading="true"
-        app:navigationContentDescription="@string/common_back"
-        app:popupTheme="?attr/actionBarPopupTheme" />
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/root_toolbar"
         android:layout_width="match_parent"
@@ -100,4 +87,16 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/standard_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:accessibilityHeading="true"
+        android:focusable="true"
+        android:focusableInTouchMode="false"
+        android:visibility="gone"
+        app:navigationContentDescription="@string/common_back"
+        app:popupTheme="?attr/actionBarPopupTheme" />
+
 </com.google.android.material.appbar.AppBarLayout>

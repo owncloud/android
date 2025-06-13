@@ -101,10 +101,31 @@
         <item name="titleTextAppearance">@style/homeCloud.Toolbar.Title</item>
         <item name="android:gravity">center_vertical</item>
         <item name="toolbarNavigationButtonStyle">@style/homeCloud.Toolbar.Button.Navigation.Tinted</item>
+        <item name="actionModeStyle">@style/homeCloud.Toolbar.ActionMode</item>
+        <item name="actionModeCloseButtonStyle">@style/homeCloud.Toolbar.ActionMode.Button</item>
+        <item name="actionOverflowButtonStyle">@style/homeCloud.Toolbar.ActionMode.OverflowButton</item>
     </style>
 
     <style name="homeCloud.Toolbar.Button.Navigation.Tinted" parent="Widget.AppCompat.Toolbar.Button.Navigation">
         <item name="tint">@color/white</item>
+    </style>
+
+    <style name="homeCloud.Toolbar.ActionMode" parent="@style/homeCloud.Appbar">
+        <item name="colorControlNormal">@android:color/white</item>
+        <item name="background">@color/primary</item>
+        <item name="titleTextStyle">@style/homeCloud.Toolbar.ActionMode.TitleText</item>
+    </style>
+
+    <style name="homeCloud.Toolbar.ActionMode.Button">
+        <item name="android:tint">@color/white</item>
+    </style>
+
+    <style name="homeCloud.Toolbar.ActionMode.OverflowButton" parent="Widget.AppCompat.Light.ActionButton.Overflow">
+        <item name="android:tint">@color/white</item>
+    </style>
+
+    <style name="homeCloud.Toolbar.ActionMode.TitleText" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textColor">@android:color/white</item>
     </style>
 
     <style name="homeCloud.Toolbar.Title" parent="@style/TextAppearance.Widget.AppCompat.Toolbar.Title">
