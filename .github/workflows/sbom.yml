@@ -1,13 +1,11 @@
 name: SBOM 
 
 on:
-  
+
+  workflow_dispatch:
   pull_request:
     branches:
       - "*"
-  push:
-     branches:
-      - "feature/integrate_sbom"
 
 jobs:
   sbom:

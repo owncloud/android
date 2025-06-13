@@ -131,7 +131,7 @@
             <th style="width: 12%;">Group</th>
             <th style="width: 20%;">Name</th>
             <th style="width: 12%;">Version</th>
-            <th>style="width: 30%;">PURL</th>
+            <th style="width: 30%;">PURL</th>
           </tr>
           <xsl:for-each select="bom:bom/bom:components/bom:component">
             <tr>
