@@ -24,7 +24,7 @@
         <!-- colors, Material Design way -->
         <item name="colorPrimary">@color/homecloud_primary</item>
         <item name="colorPrimaryDark">@color/actionbar_start_color</item>
-        <item name="colorAccent">@color/color_accent</item>
+        <item name="colorAccent">@color/homecloud_color_accent</item>
         <item name="colorSecondaryContainer">@android:color/white</item>
         <item name="colorOnSecondaryContainer">@color/homecloud_blue_darken_2</item>
         <item name="colorOnSurface">?attr/colorPrimary</item>
@@ -79,7 +79,7 @@
 
     <!-- DEFAULT (via Theme.homeCloud), and explicitly used ONCE, in Preference "behaviour" for instant uploads - NO MORE, not needed, it's default -->
     <style name="Theme.homeCloud.AlertDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
-        <item name="colorAccent">@color/color_accent</item>
+        <item name="colorAccent">@color/homecloud_color_accent</item>
         <item name="android:textColorPrimary">@color/primary</item>
         <item name="searchViewStyle">@style/homeCloud.SearchView</item>
         <item name="buttonBarButtonStyle">@style/Theme.homeCloud.Dialog.ButtonBar.Button</item>
