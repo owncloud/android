@@ -113,6 +113,8 @@ android {
 
         buildConfigField "String", gitRemote, "\"" + getGitOriginRemote() + "\""
         buildConfigField "String", commitSHA1, "\"" + getLatestGitHash() + "\""
+
+        setProperty("archivesBaseName", "owncloud_${versionName}")
     }
 
     compileOptions {
