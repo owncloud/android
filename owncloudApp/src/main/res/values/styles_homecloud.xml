@@ -147,7 +147,7 @@
     </style>
 
     <style name="Theme.homeCloud.BottomNavigation" parent="Widget.Material3.BottomNavigationView">
-        <item name="backgroundTint">@android:color/white</item>
+        <item name="backgroundTint">@color/homecloud_bar_background</item>
         <item name="itemTextAppearanceActiveBoldEnabled">false</item>
         <item name="itemActiveIndicatorStyle">@style/Theme.homeCloud.BottomNavigation.Indicator</item>
     </style>
