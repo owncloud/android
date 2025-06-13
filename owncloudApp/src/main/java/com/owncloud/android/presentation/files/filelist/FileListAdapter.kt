@@ -233,7 +233,7 @@ class FileListAdapter(
 
             if (file.isFolder) {
                 // Folder
-                fileIcon.setImageResource(R.drawable.ic_menu_archive)
+                fileIcon.setImageResource(R.drawable.ic_homecloud_folder)
             } else {
                 // Set file icon depending on its mimetype. Ask for thumbnail later.
                 fileIcon.setImageResource(MimetypeIconUtil.getFileTypeIconId(file.mimeType, file.fileName))

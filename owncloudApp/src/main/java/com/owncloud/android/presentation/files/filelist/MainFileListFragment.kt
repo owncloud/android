@@ -599,7 +599,7 @@ class MainFileListFragment : Fragment(),
                 val thumbnailBottomSheet = fileOptionsBottomSheetSingleFile.findViewById<ImageView>(R.id.thumbnail_bottom_sheet)
                 if (file.isFolder) {
                     // Folder
-                    thumbnailBottomSheet.setImageResource(R.drawable.ic_menu_archive)
+                    thumbnailBottomSheet.setImageResource(R.drawable.ic_homecloud_folder)
                 } else {
                     // Set file icon depending on its mimetype. Ask for thumbnail later.
                     thumbnailBottomSheet.setImageResource(MimetypeIconUtil.getFileTypeIconId(file.mimeType, file.fileName))
