@@ -44,6 +44,7 @@ ownCloud admins and users.
 * Bugfix - Infinite edges in Android 15: [#4576](https://github.com/owncloud/android/issues/4576)
 * Bugfix - Crash from Google Play Console in PreviewImageFragment: [#4577](https://github.com/owncloud/android/issues/4577)
 * Bugfix - No message when uploading a file with no quota: [#4582](https://github.com/owncloud/android/issues/4582)
+* Bugfix - Crash from Google Play Console in PreviewImagePagerAdapter: [#4596](https://github.com/owncloud/android/issues/4596)
 * Change - Bump target SDK to 35: [#4529](https://github.com/owncloud/android/issues/4529)
 * Change - Replace dav4android location: [#4536](https://github.com/owncloud/android/issues/4536)
 * Change - Modify biometrics fail source string: [#4572](https://github.com/owncloud/android/issues/4572)
@@ -121,6 +122,15 @@ ownCloud admins and users.
 
    https://github.com/owncloud/android/issues/4582
    https://github.com/owncloud/android/pull/4587
+
+* Bugfix - Crash from Google Play Console in PreviewImagePagerAdapter: [#4596](https://github.com/owncloud/android/issues/4596)
+
+   In order to prevent app crashes, a validation has been added in onPageSelected
+   method from PreviewImageActivity to ensure the image list contains items before
+   using it.
+
+   https://github.com/owncloud/android/issues/4596
+   https://github.com/owncloud/android/pull/4600
 
 * Change - Bump target SDK to 35: [#4529](https://github.com/owncloud/android/issues/4529)
 
