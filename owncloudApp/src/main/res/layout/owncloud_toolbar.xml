@@ -17,7 +17,7 @@
     android:id="@+id/owncloud_app_bar"
     android:layout_width="match_parent"
     android:layout_height="?android:actionBarSize"
-    android:theme="@style/ownCloud.Appbar"
+    android:theme="@style/homeCloud.Appbar"
     android:focusableInTouchMode="true">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -28,11 +28,12 @@
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/root_toolbar_left_icon"
             android:layout_width="wrap_content"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/standard_half_margin"
             android:padding="@dimen/standard_half_padding"
             android:src="@drawable/ic_drawer_icon"
             android:contentDescription="@string/content_description_menu"
+            android:tint="?attr/titleTextColor"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -55,14 +56,14 @@
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/root_toolbar_title"
             android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginStart="@dimen/standard_margin"
+            android:layout_height="match_parent"
             android:layout_marginEnd="@dimen/standard_half_margin"
             android:ellipsize="end"
             android:gravity="center_vertical"
+            android:textAppearance="@style/homeCloud.Toolbar.Title"
             android:maxLines="1"
             android:paddingHorizontal="@dimen/standard_half_padding"
-            android:textColor="@color/white"
+            android:textColor="?attr/titleTextColor"
             android:textSize="@dimen/toolbar_title_text_size"
             android:contentDescription="@string/content_description_search"
             app:drawableEndCompat="@drawable/ic_search"
@@ -91,13 +92,11 @@
         android:id="@+id/standard_toolbar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="?attr/colorPrimary"
-        android:theme="@style/ownCloud.Appbar"
-        android:visibility="gone"
-        android:layout_marginEnd="@dimen/standard_margin"
+        android:accessibilityHeading="true"
         android:focusable="true"
         android:focusableInTouchMode="false"
-        android:accessibilityHeading="true"
+        android:visibility="gone"
         app:navigationContentDescription="@string/common_back"
         app:popupTheme="?attr/actionBarPopupTheme" />
+
 </com.google.android.material.appbar.AppBarLayout>

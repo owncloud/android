@@ -55,12 +55,12 @@
         android:resizeableActivity="true"
         android:supportsPictureInPicture="false"
         android:taskAffinity=""
-        android:theme="@style/Theme.ownCloud.Toolbar">
+        android:theme="@style/Theme.homeCloud.Toolbar">
         <activity
             android:name=".ui.preview.PreviewVideoActivity"
             android:label="@string/video_preview_label"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
-            android:theme="@style/Theme.ownCloud.Video"
+            android:theme="@style/Theme.homeCloud.Video"
             android:exported="false" />
 
         <meta-data
@@ -79,7 +79,7 @@
         <activity
             android:name=".ui.activity.SplashActivity"
             android:exported="true"
-            android:theme="@style/Theme.ownCloud.Splash">
+            android:theme="@style/Theme.homeCloud.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -89,7 +89,7 @@
         <activity
             android:name=".ui.activity.FileDisplayActivity"
             android:configChanges="orientation|screenSize"
-            android:theme="@style/Theme.ownCloud.Toolbar.Drawer"
+            android:theme="@style/Theme.homeCloud.Toolbar.Drawer"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".ui.activity.ReceiveExternalFilesActivity"
@@ -116,7 +116,7 @@
         <activity
             android:name=".ui.preview.PreviewImageActivity"
             android:label="@string/image_preview_label"
-            android:theme="@style/Theme.ownCloud.Overlay" />
+            android:theme="@style/Theme.homeCloud.Overlay" />
 
         <service
             android:name=".presentation.authentication.AccountAuthenticatorService"
@@ -188,10 +188,10 @@
             android:name=".presentation.security.passcode.PassCodeActivity"
             android:label="@string/passcode_label"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.ownCloud" />
+            android:theme="@style/Theme.homeCloud" />
         <activity
             android:name=".presentation.conflicts.ConflictsResolveActivity"
-            android:theme="@style/Theme.ownCloud" />
+            android:theme="@style/Theme.homeCloud" />
         <activity
             android:name=".presentation.logging.LogsListActivity"
             android:label="@string/prefs_log_open_logs_list_view"
@@ -200,7 +200,7 @@
         <activity
             android:name=".ui.activity.UploadListActivity"
             android:label="@string/bottom_nav_uploads"
-            android:theme="@style/Theme.ownCloud.Toolbar.Drawer" />
+            android:theme="@style/Theme.homeCloud.Toolbar.Drawer" />
         <activity
             android:name=".ui.activity.WhatsNewActivity"
             android:label="@string/whats_new_label"
@@ -216,7 +216,7 @@
             android:exported="false"
             android:label="@string/share_dialog_title"
             android:launchMode="singleTop"
-            android:theme="@style/Theme.ownCloud.Toolbar"
+            android:theme="@style/Theme.homeCloud.Toolbar"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
@@ -230,14 +230,14 @@
             android:name=".presentation.security.pattern.PatternActivity"
             android:screenOrientation="portrait"
             android:label="@string/pattern_label"
-            android:theme="@style/Theme.ownCloud" />
+            android:theme="@style/Theme.homeCloud" />
         <activity android:name=".presentation.security.biometric.BiometricActivity" />
         <activity
             android:name=".presentation.authentication.LoginActivity"
             android:exported="true"
             android:label="@string/login_label"
             android:launchMode="singleTask"
-            android:theme="@style/Theme.ownCloud.Toolbar">
+            android:theme="@style/Theme.homeCloud.Toolbar">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
