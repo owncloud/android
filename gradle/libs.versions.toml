@@ -22,6 +22,7 @@ androidxTestMonitor = "1.6.1"
 androidxTestUiAutomator ="2.2.0"
 androidxWork = "2.8.1"
 coil = "2.2.2"
+cyclonedx = "2.3.1"
 detekt = "1.23.3"
 dexopener = "2.0.5"
 disklrucache = "2.0.2"
@@ -128,3 +129,4 @@ kotlin = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 sonarqube = { id = "org.sonarqube", version.ref = "sonarqube" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
+cyclonedx = { id = "org.cyclonedx.bom", version.ref = "cyclonedx" }

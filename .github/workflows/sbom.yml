@@ -1,0 +1,74 @@
+name: SBOM 
+
+permissions:
+  contents: read
+
+on:
+  workflow_dispatch:
+  pull_request:
+
+jobs:
+  sbom:
+    runs-on: ubuntu-latest
+   
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Caches Gradle dependencies to avoid downloading them on every run
+      - name: Cache Gradle dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+            ~/.gradle/wrapper/dists/
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Install xsltproc
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y xsltproc
+
+      # Use --no-daemon to prevent Gradle from running in the background
+      - name: Generate SBOM (CycloneDX)
+        run: ./gradlew --no-daemon cyclonedxBom  
+
+      - name: Convert SBOM to HTML
+        run: xsltproc sbom/cyclonedx-xml-to-html.xslt build/reports/bom.xml > sbom.html
+
+      # Create a specific artifact name using the branch name and timestamp
+      - name: Set artifact name
+        id: vars
+        run: |
+          BRANCH="${GITHUB_HEAD_REF:-${GITHUB_REF_NAME}}"
+          SAFE_BRANCH=$(echo "$BRANCH" | tr '/' '-' | tr '[:upper:]' '[:lower:]')
+          TIMESTAMP=$(date -u +"%Y%m%d-%H%M%S")
+          echo "artifact_name=sbom-${SAFE_BRANCH}-${TIMESTAMP}" >> $GITHUB_OUTPUT
+
+      - name: Rename SBOM XML and HTML files to match artifact name
+        run: |
+          mv sbom.html "${{ steps.vars.outputs.artifact_name }}.html"
+          mv  build/reports/bom.xml "${{ steps.vars.outputs.artifact_name }}.xml"
+          mv  build/reports/bom.json "${{ steps.vars.outputs.artifact_name }}.json"
+
+      - name: ZIP all the files
+        run: |
+          zip "${{ steps.vars.outputs.artifact_name }}.zip" \
+              "${{ steps.vars.outputs.artifact_name }}.html" \
+              "${{ steps.vars.outputs.artifact_name }}.xml" \
+              "${{ steps.vars.outputs.artifact_name }}.json"
+
+      - name: Upload SBOM artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.vars.outputs.artifact_name }}
+          path: ${{ steps.vars.outputs.artifact_name }}.zip
