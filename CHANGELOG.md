@@ -52,6 +52,7 @@ ownCloud admins and users.
 * Enhancement - Shares space in Android native file explorer: [#4515](https://github.com/owncloud/android/issues/4515)
 * Enhancement - Accessibility reports in 4.5.1: [#4568](https://github.com/owncloud/android/issues/4568)
 * Enhancement - Support for Kiteworks servers without client secret: [#4588](https://github.com/owncloud/android/issues/4588)
+* Enhancement - SBOM (Software Bill of Materials): [#4598](https://github.com/owncloud/android/issues/4598)
 
 ## Details
 
@@ -185,6 +186,15 @@ ownCloud admins and users.
 
    https://github.com/owncloud/android/issues/4588
    https://github.com/owncloud/android/pull/4589
+
+* Enhancement - SBOM (Software Bill of Materials): [#4598](https://github.com/owncloud/android/issues/4598)
+
+   SBOM to be generated in every PR via GitHub Actions with the list of all
+   dependencies used in the code. Tool cyclonedx builds it, artifact is exported to
+   xml and finally converted to html with a xlst template.
+
+   https://github.com/owncloud/android/issues/4598
+   https://github.com/owncloud/android/pull/4599
 
 # Changelog for ownCloud Android Client [4.5.1] (2025-04-03)
 
