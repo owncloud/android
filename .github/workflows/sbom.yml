@@ -54,11 +54,21 @@ jobs:
           TIMESTAMP=$(date -u +"%Y%m%d-%H%M%S")
           echo "artifact_name=sbom-${SAFE_BRANCH}-${TIMESTAMP}" >> $GITHUB_OUTPUT
 
-      - name: Rename SBOM HTML file to match artifact name
-        run: mv sbom.html "${{ steps.vars.outputs.artifact_name }}.html"
+      - name: Rename SBOM XML and HTML files to match artifact name
+        run: |
+          mv sbom.html "${{ steps.vars.outputs.artifact_name }}.html"
+          mv  build/reports/bom.xml "${{ steps.vars.outputs.artifact_name }}.xml"
+          mv  build/reports/bom.json "${{ steps.vars.outputs.artifact_name }}.json"
+
+      - name: ZIP all the files
+        run: |
+          zip "${{ steps.vars.outputs.artifact_name }}.zip" \
+              "${{ steps.vars.outputs.artifact_name }}.html" \
+              "${{ steps.vars.outputs.artifact_name }}.xml" \
+              "${{ steps.vars.outputs.artifact_name }}.json"
 
       - name: Upload SBOM artifact
         uses: actions/upload-artifact@v4
         with:
           name: ${{ steps.vars.outputs.artifact_name }}
-          path: ${{ steps.vars.outputs.artifact_name }}.html
+          path: ${{ steps.vars.outputs.artifact_name }}.zip
