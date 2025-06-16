@@ -10,7 +10,7 @@
          To apply directly only on Activities that cannot extend ToolbarActivity;
          otherwise, prefer Theme.homeCloud.Toolbar -->
     <style name="Theme.homeCloud" parent="Theme.Material3.Light">
-        <item name="android:windowBackground">@color/background_color</item>
+        <item name="android:windowBackground">?attr/colorSurface</item>
 
         <!-- theme for the app bar (both for old actionbar and new toolbar) -->
         <item name="toolbarStyle">@style/homeCloud.Appbar</item>
@@ -25,6 +25,7 @@
         <item name="colorPrimary">@color/homecloud_primary</item>
         <item name="colorPrimaryDark">@color/actionbar_start_color</item>
         <item name="colorAccent">@color/homecloud_color_accent</item>
+        <item name="colorSurface">@color/homecloud_surface</item>
         <item name="colorSecondaryContainer">@android:color/white</item>
         <item name="colorOnSecondaryContainer">@color/homecloud_blue_darken_2</item>
         <item name="colorOnSurface">?attr/colorPrimary</item>

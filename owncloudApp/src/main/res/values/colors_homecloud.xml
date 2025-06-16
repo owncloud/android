@@ -2,8 +2,9 @@
 <resources>
     <color name="homecloud_primary">#DD000000</color>
     <color name="homecloud_color_accent">@color/homecloud_blue_lighten_2</color>
+    <color name="homecloud_surface">@color/white</color>
 
-    <color name="homecloud_bar_background">@color/white</color>
+    <color name="homecloud_bar_background">#FFFFFE</color>
 
     <!-- Palette colors. Don't use them directly -->
     <color name="homecloud_blue_darken_2">#FF1976D2</color>

@@ -26,7 +26,6 @@ package com.owncloud.android.presentation.files.filelist
 import android.accounts.Account
 import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -217,17 +216,17 @@ class FileListAdapter(
                     position = position
                 )
             }
-            holder.itemView.setBackgroundColor(Color.WHITE)
+            //holder.itemView.setBackgroundColor(Color.WHITE)
 
             val checkBoxV = holder.itemView.findViewById<ImageView>(R.id.custom_checkbox).apply {
                 isVisible = getCheckedItems().isNotEmpty()
             }
 
             if (isSelected(position)) {
-                holder.itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.selected_item_background))
+                //holder.itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.selected_item_background))
                 checkBoxV.setImageResource(R.drawable.ic_checkbox_marked)
             } else {
-                holder.itemView.setBackgroundColor(Color.WHITE)
+                //holder.itemView.setBackgroundColor(Color.WHITE)
                 checkBoxV.setImageResource(R.drawable.ic_checkbox_blank_outline)
             }
 
