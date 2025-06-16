@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="homecloud_primary">#DD000000</color>
+    <color name="homecloud_primary_dark">@color/homecloud_bar_background</color>
     <color name="homecloud_color_accent">@color/homecloud_blue_lighten_2</color>
     <color name="homecloud_surface">@color/white</color>
 
