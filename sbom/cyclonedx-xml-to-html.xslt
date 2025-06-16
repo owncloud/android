@@ -128,10 +128,11 @@
         <table style="width: 100%;">
           <tr>
             <th style="width: 10%;">Type</th>
-            <th style="width: 12%;">Group</th>
+            <th style="width: 15%;">Group</th>
             <th style="width: 20%;">Name</th>
-            <th style="width: 12%;">Version</th>
-            <th style="width: 30%;">PURL</th>
+            <th style="width: 10%;">Version</th>
+            <th style="width: 10%;">License</th>
+            <th style="width: 35%;">PURL</th>
           </tr>
           <xsl:for-each select="bom:bom/bom:components/bom:component">
             <tr>
@@ -139,6 +140,7 @@
               <td><xsl:value-of select="bom:group"/></td>
               <td><xsl:value-of select="bom:name"/></td>
               <td><xsl:value-of select="bom:version"/></td>
+              <td><xsl:value-of select="bom:licenses/bom:license/bom:id"/></td>
               <td><xsl:value-of select="bom:purl"/></td>
             </tr>
           </xsl:for-each>
