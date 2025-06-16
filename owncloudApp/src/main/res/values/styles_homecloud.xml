@@ -138,7 +138,7 @@
     </style>
 
     <style name="homeCloud.Appbar.Popup" parent="ThemeOverlay.Material3.Light">
-        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textColor">?attr/colorPrimary</item>
         <item name="android:paddingTop">0dp</item>
     </style>
 
@@ -172,7 +172,8 @@
     <style name="Widget.homeCloud.TopProgressBar" parent="@style/Widget.AppCompat.ProgressBar.Horizontal">
         <!-- for a custom color independent of @color/primary,
         change value of actionbar_start_color in setup.xml, don't modify here -->
-        <item name="android:background">@color/actionbar_start_color</item>
+        <item name="android:indeterminateTint">@color/homecloud_bar_background</item>
+        <item name="android:background">@color/homecloud_bar_background</item>
         <item name="android:progressDrawable">@drawable/top_progress_bar_determinate</item>
         <item name="android:indeterminateDrawable">@drawable/top_progress_bar_indeterminate</item>
     </style>
