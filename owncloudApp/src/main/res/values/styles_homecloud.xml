@@ -25,6 +25,7 @@
         <!-- colors, Material Design way -->
         <item name="colorPrimary">@color/homecloud_primary</item>
         <item name="colorPrimaryDark">@color/homecloud_primary_dark</item>
+        <item name="colorOnPrimary">?attr/colorSurface</item>
         <item name="colorAccent">@color/homecloud_color_accent</item>
         <item name="colorSurface">@color/homecloud_surface</item>
         <item name="colorSecondaryContainer">@android:color/white</item>
