@@ -37,6 +37,7 @@
 
         <!-- style for search view -->
         <item name="searchViewStyle">@style/homeCloud.SearchView</item>
+        <item name="android:textColorPrimary">?attr/colorPrimary</item>
 
         <!-- Bottom navigation -->
         <item name="bottomNavigationStyle">@style/Theme.homeCloud.BottomNavigation</item>
@@ -99,6 +100,7 @@
         <item name="android:background">@color/homecloud_bar_background</item>
         <item name="titleTextColor">?attr/colorPrimary</item>
         <item name="colorControlNormal">?attr/colorPrimary</item>
+        <item name="drawableTint">?attr/colorPrimary</item>
         <item name="titleTextAppearance">@style/homeCloud.Toolbar.Title</item>
         <item name="android:gravity">center_vertical</item>
         <item name="toolbarNavigationButtonStyle">@style/homeCloud.Toolbar.Button.Navigation.Tinted</item>
