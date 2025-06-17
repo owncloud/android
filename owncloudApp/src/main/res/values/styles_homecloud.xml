@@ -9,13 +9,14 @@
     <!-- General homeCloud app style.
          To apply directly only on Activities that cannot extend ToolbarActivity;
          otherwise, prefer Theme.homeCloud.Toolbar -->
-    <style name="Theme.homeCloud" parent="Theme.Material3.Light">
-        <item name="android:windowBackground">@color/background_color</item>
+    <style name="Theme.homeCloud" parent="Theme.Material3.DayNight">
+        <item name="android:windowBackground">?attr/colorSurface</item>
 
         <!-- theme for the app bar (both for old actionbar and new toolbar) -->
         <item name="toolbarStyle">@style/homeCloud.Appbar</item>
         <item name="actionBarPopupTheme">@style/homeCloud.Appbar.Popup</item>
         <item name="actionOverflowMenuStyle">@style/homeCloud.Appbar.Popup</item>
+        <item name="android:windowLightStatusBar">true</item>
 
         <!-- properties for action mode -->
         <item name="windowActionModeOverlay">true</item>
@@ -23,18 +24,22 @@
 
         <!-- colors, Material Design way -->
         <item name="colorPrimary">@color/homecloud_primary</item>
-        <item name="colorPrimaryDark">@color/actionbar_start_color</item>
-        <item name="colorAccent">@color/color_accent</item>
+        <item name="colorPrimaryDark">@color/homecloud_primary_dark</item>
+        <item name="colorOnPrimary">?attr/colorSurface</item>
+        <item name="colorAccent">@color/homecloud_color_accent</item>
+        <item name="colorSurface">@color/homecloud_surface</item>
         <item name="colorSecondaryContainer">@android:color/white</item>
         <item name="colorOnSecondaryContainer">@color/homecloud_blue_darken_2</item>
         <item name="colorOnSurface">?attr/colorPrimary</item>
         <item name="colorOnSurfaceVariant">?attr/colorPrimary</item>
+        <item name="android:textColorLink">?attr/colorPrimary</item>
 
         <!-- default theme for alert dialogs -->
         <item name="alertDialogTheme">@style/Theme.homeCloud.AlertDialog</item>
 
         <!-- style for search view -->
         <item name="searchViewStyle">@style/homeCloud.SearchView</item>
+        <item name="android:textColorPrimary">?attr/colorPrimary</item>
 
         <!-- Bottom navigation -->
         <item name="bottomNavigationStyle">@style/Theme.homeCloud.BottomNavigation</item>
@@ -79,11 +84,15 @@
 
     <!-- DEFAULT (via Theme.homeCloud), and explicitly used ONCE, in Preference "behaviour" for instant uploads - NO MORE, not needed, it's default -->
     <style name="Theme.homeCloud.AlertDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
-        <item name="colorAccent">@color/color_accent</item>
-        <item name="android:textColorPrimary">@color/primary</item>
+        <item name="colorPrimary">@color/homecloud_primary</item>
+        <item name="android:textColorPrimary">?attr/colorPrimary</item>
+        <item name="android:textColor">?attr/colorPrimary</item>
         <item name="searchViewStyle">@style/homeCloud.SearchView</item>
         <item name="buttonBarButtonStyle">@style/Theme.homeCloud.Dialog.ButtonBar.Button</item>
         <item name="buttonBarStyle">@style/Theme.homeCloud.Dialog.ButtonBar</item>
+        <item name="buttonBarPositiveButtonStyle">@style/Theme.homeCloud.Dialog.ButtonBar.Button</item>
+        <item name="buttonBarNegativeButtonStyle">@style/Theme.homeCloud.Dialog.ButtonBar.Button</item>
+        <item name="android:windowBackground">@color/homecloud_bar_background</item>
     </style>
 
     <!-- USED IN SHAREACTIVITY!! !! -->
@@ -94,10 +103,10 @@
     <!-- APP BAR styles -->
 
     <style name="homeCloud.Appbar" parent="Widget.Material3.Toolbar">
-        <item name="android:background">@color/actionbar_start_color</item>
-        <item name="colorPrimary">@color/actionbar_start_color</item>
-        <item name="titleTextColor">@android:color/white</item>
-        <item name="colorControlNormal">@android:color/white</item>
+        <item name="android:background">@color/homecloud_bar_background</item>
+        <item name="titleTextColor">?attr/colorPrimary</item>
+        <item name="colorControlNormal">?attr/colorPrimary</item>
+        <item name="drawableTint">?attr/colorPrimary</item>
         <item name="titleTextAppearance">@style/homeCloud.Toolbar.Title</item>
         <item name="android:gravity">center_vertical</item>
         <item name="toolbarNavigationButtonStyle">@style/homeCloud.Toolbar.Button.Navigation.Tinted</item>
@@ -107,25 +116,25 @@
     </style>
 
     <style name="homeCloud.Toolbar.Button.Navigation.Tinted" parent="Widget.AppCompat.Toolbar.Button.Navigation">
-        <item name="tint">@color/white</item>
+        <item name="tint">?attr/colorPrimary</item>
     </style>
 
     <style name="homeCloud.Toolbar.ActionMode" parent="@style/homeCloud.Appbar">
-        <item name="colorControlNormal">@android:color/white</item>
+        <item name="colorControlNormal">?attr/colorPrimary</item>
         <item name="background">@color/primary</item>
         <item name="titleTextStyle">@style/homeCloud.Toolbar.ActionMode.TitleText</item>
     </style>
 
     <style name="homeCloud.Toolbar.ActionMode.Button">
-        <item name="android:tint">@color/white</item>
+        <item name="android:tint">?attr/colorPrimary</item>
     </style>
 
     <style name="homeCloud.Toolbar.ActionMode.OverflowButton" parent="Widget.AppCompat.Light.ActionButton.Overflow">
-        <item name="android:tint">@color/white</item>
+        <item name="android:tint">?attr/colorPrimary</item>
     </style>
 
     <style name="homeCloud.Toolbar.ActionMode.TitleText" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
-        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textColor">?attr/colorPrimary</item>
     </style>
 
     <style name="homeCloud.Toolbar.Title" parent="@style/TextAppearance.Widget.AppCompat.Toolbar.Title">
@@ -137,7 +146,7 @@
     </style>
 
     <style name="homeCloud.Appbar.Popup" parent="ThemeOverlay.Material3.Light">
-        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textColor">?attr/colorPrimary</item>
         <item name="android:paddingTop">0dp</item>
     </style>
 
@@ -147,7 +156,7 @@
     </style>
 
     <style name="Theme.homeCloud.BottomNavigation" parent="Widget.Material3.BottomNavigationView">
-        <item name="backgroundTint">@android:color/white</item>
+        <item name="backgroundTint">@color/homecloud_bar_background</item>
         <item name="itemTextAppearanceActiveBoldEnabled">false</item>
         <item name="itemActiveIndicatorStyle">@style/Theme.homeCloud.BottomNavigation.Indicator</item>
     </style>
@@ -171,7 +180,8 @@
     <style name="Widget.homeCloud.TopProgressBar" parent="@style/Widget.AppCompat.ProgressBar.Horizontal">
         <!-- for a custom color independent of @color/primary,
         change value of actionbar_start_color in setup.xml, don't modify here -->
-        <item name="android:background">@color/actionbar_start_color</item>
+        <item name="android:indeterminateTint">@color/homecloud_bar_background</item>
+        <item name="android:background">@color/homecloud_bar_background</item>
         <item name="android:progressDrawable">@drawable/top_progress_bar_determinate</item>
         <item name="android:indeterminateDrawable">@drawable/top_progress_bar_indeterminate</item>
     </style>
@@ -189,11 +199,12 @@
         <item name="android:minHeight">@null</item>
     </style>
 
-    <style name="Theme.homeCloud.Dialog.ButtonBar.Button" parent="@style/Widget.AppCompat.Button.Borderless.Colored">
+    <style name="Theme.homeCloud.Dialog.ButtonBar.Button" parent="@style/Widget.AppCompat.Button.ButtonBar.AlertDialog">
         <!-- Setting the weight as follows should result in equally wide buttons filling the alert dialog width,
             but instead they span further out of the dialog, breaking in multiple lines though -->
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_weight">1</item>
+        <item name="android:textColor">@color/homecloud_primary</item>
         <!-- setting a fixed width as follows results in narrow buttons with line breaks, but of course this is not a solution -->
         <!-- <item name="android:width">100dp</item> -->
     </style>

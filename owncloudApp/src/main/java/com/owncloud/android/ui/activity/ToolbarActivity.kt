@@ -107,7 +107,7 @@ abstract class ToolbarActivity : BaseActivity() {
             val textSearchView = findViewById<EditText>(androidx.appcompat.R.id.search_src_text)
             val closeButton = findViewById<ImageView>(androidx.appcompat.R.id.search_close_btn)
             textSearchView.setHintTextColor(ContextCompat.getColor(applicationContext, R.color.search_view_hint_text))
-            closeButton.setColorFilter(ContextCompat.getColor(applicationContext, R.color.white))
+            //closeButton.setColorFilter(ContextCompat.getColor(applicationContext, R.color.white))
         }
 
         AccountUtils.getCurrentOwnCloudAccount(baseContext) ?: return
@@ -158,9 +158,9 @@ abstract class ToolbarActivity : BaseActivity() {
 
             maxWidth = Int.MAX_VALUE
 
-            searchButton.setBackgroundColor(getColor(R.color.actionbar_start_color))
+            //searchButton.setBackgroundColor(getColor(R.color.actionbar_start_color))
             searchText.setHintTextColor(getColor(R.color.search_view_hint_text))
-            closeButton.setColorFilter(getColor(R.color.white))
+            //closeButton.setColorFilter(getColor(R.color.white))
             background = getDrawable(R.drawable.rounded_search_view)
             isFocusable = false
         }

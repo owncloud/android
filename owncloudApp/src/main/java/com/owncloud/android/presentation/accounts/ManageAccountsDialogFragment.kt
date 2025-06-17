@@ -25,7 +25,6 @@ import android.accounts.Account
 import android.accounts.AccountManager
 import android.accounts.AccountManagerFuture
 import android.accounts.OperationCanceledException
-import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
@@ -34,6 +33,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ProgressBar
+import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager

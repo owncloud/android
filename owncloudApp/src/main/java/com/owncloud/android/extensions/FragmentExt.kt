@@ -21,12 +21,12 @@
 
 package com.owncloud.android.extensions
 
-import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
 import android.view.Menu
 import android.view.MenuItem.SHOW_AS_ACTION_NEVER
 import android.view.inputmethod.InputMethodManager
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
