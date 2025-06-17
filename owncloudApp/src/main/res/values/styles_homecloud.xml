@@ -9,7 +9,7 @@
     <!-- General homeCloud app style.
          To apply directly only on Activities that cannot extend ToolbarActivity;
          otherwise, prefer Theme.homeCloud.Toolbar -->
-    <style name="Theme.homeCloud" parent="Theme.Material3.Light">
+    <style name="Theme.homeCloud" parent="Theme.Material3.DayNight">
         <item name="android:windowBackground">?attr/colorSurface</item>
 
         <!-- theme for the app bar (both for old actionbar and new toolbar) -->
