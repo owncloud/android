@@ -22,7 +22,6 @@
 package com.owncloud.android.extensions
 
 import android.app.Activity
-import android.app.AlertDialog
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
@@ -37,6 +36,7 @@ import android.webkit.MimeTypeMap
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import androidx.core.text.HtmlCompat
@@ -362,7 +362,7 @@ fun Activity.openFeedbackDialog() {
 
     val getInContactDescriptionTextView = TextView(this).apply {
         text = spannableString
-        setTextColor(getColor(android.R.color.black))
+        setTextColor(getColor(R.color.homecloud_primary))
         setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
         movementMethod = LinkMovementMethod.getInstance()
     }

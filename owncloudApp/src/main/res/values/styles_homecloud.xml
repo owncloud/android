@@ -31,6 +31,7 @@
         <item name="colorOnSecondaryContainer">@color/homecloud_blue_darken_2</item>
         <item name="colorOnSurface">?attr/colorPrimary</item>
         <item name="colorOnSurfaceVariant">?attr/colorPrimary</item>
+        <item name="android:textColorLink">?attr/colorPrimary</item>
 
         <!-- default theme for alert dialogs -->
         <item name="alertDialogTheme">@style/Theme.homeCloud.AlertDialog</item>
@@ -82,11 +83,15 @@
 
     <!-- DEFAULT (via Theme.homeCloud), and explicitly used ONCE, in Preference "behaviour" for instant uploads - NO MORE, not needed, it's default -->
     <style name="Theme.homeCloud.AlertDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
-        <item name="colorAccent">@color/homecloud_color_accent</item>
-        <item name="android:textColorPrimary">@color/primary</item>
+        <item name="colorPrimary">@color/homecloud_primary</item>
+        <item name="android:textColorPrimary">?attr/colorPrimary</item>
+        <item name="android:textColor">?attr/colorPrimary</item>
         <item name="searchViewStyle">@style/homeCloud.SearchView</item>
         <item name="buttonBarButtonStyle">@style/Theme.homeCloud.Dialog.ButtonBar.Button</item>
         <item name="buttonBarStyle">@style/Theme.homeCloud.Dialog.ButtonBar</item>
+        <item name="buttonBarPositiveButtonStyle">@style/Theme.homeCloud.Dialog.ButtonBar.Button</item>
+        <item name="buttonBarNegativeButtonStyle">@style/Theme.homeCloud.Dialog.ButtonBar.Button</item>
+        <item name="android:windowBackground">@color/homecloud_bar_background</item>
     </style>
 
     <!-- USED IN SHAREACTIVITY!! !! -->
@@ -193,11 +198,12 @@
         <item name="android:minHeight">@null</item>
     </style>
 
-    <style name="Theme.homeCloud.Dialog.ButtonBar.Button" parent="@style/Widget.AppCompat.Button.Borderless.Colored">
+    <style name="Theme.homeCloud.Dialog.ButtonBar.Button" parent="@style/Widget.AppCompat.Button.ButtonBar.AlertDialog">
         <!-- Setting the weight as follows should result in equally wide buttons filling the alert dialog width,
             but instead they span further out of the dialog, breaking in multiple lines though -->
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_weight">1</item>
+        <item name="android:textColor">@color/homecloud_primary</item>
         <!-- setting a fixed width as follows results in narrow buttons with line breaks, but of course this is not a solution -->
         <!-- <item name="android:width">100dp</item> -->
     </style>
