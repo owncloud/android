@@ -1,0 +1,7 @@
+Enhancement: Integration of instrumented tests in GitHub Actions
+
+A new workflow has been added to run instrumented tests in GitHub Actions
+in order to have a more consistent CI pipeline in the project.
+
+https://github.com/owncloud/android/issues/4595
+https://github.com/owncloud/android/pull/4602
