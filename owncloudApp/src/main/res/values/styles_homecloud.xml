@@ -44,6 +44,9 @@
         <!-- Bottom navigation -->
         <item name="bottomNavigationStyle">@style/Theme.homeCloud.BottomNavigation</item>
 
+        <!-- Input text style -->
+        <item name="textInputStyle">@style/homeCloud.TextInputLayout.OutlinedBox</item>
+
         <item name="android:windowOptOutEdgeToEdgeEnforcement" tools:targetApi="35">true</item>
     </style>
 
@@ -229,6 +232,22 @@
     <style name="Theme.homeCloud.Authenticator.EditText" parent="Theme.homeCloud.Authenticator">
         <item name="colorControlNormal">@color/login_text_color</item>
         <item name="colorControlActivated">@color/login_text_color</item>
+    </style>
+
+    <!-- Custom TextInputLayout Style -->
+    <style name="homeCloud.TextInputLayout.OutlinedBox" parent="Widget.Material3.TextInputLayout.OutlinedBox">
+        <item name="boxBackgroundColor">@android:color/transparent</item>
+        <item name="boxStrokeColor">@color/selector_input_border</item>
+        <item name="boxStrokeWidth">1dp</item>
+        <item name="boxStrokeWidthFocused">1dp</item>
+        <item name="hintTextColor">@color/homecloud_input_stroke_focused</item>
+        <item name="android:textColorHint">@color/homecloud_input_stroke_focused</item>
+        <item name="shapeAppearance">@style/homeCloud.TextInputLayout.InputShape</item>
+    </style>
+
+    <style name="homeCloud.TextInputLayout.InputShape" parent="ShapeAppearance.Material3.Corner.None">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">16dp</item>
     </style>
 
     <!-- SortBottomSheetFragment -->
