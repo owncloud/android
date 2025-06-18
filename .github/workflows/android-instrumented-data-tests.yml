@@ -1,4 +1,4 @@
-name: Android Instrumented Tests
+name: Android Instrumented Data Tests
 
 permissions:
   contents: read
@@ -8,7 +8,7 @@ on:
 
 jobs:
   instrumented-tests:
-    name: Run Android Instrumented Tests
+    name: Run Android Instrumented Data Tests
     runs-on: ubuntu-latest
 
     steps:
@@ -27,7 +27,7 @@ jobs:
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
 
-      - name: Run Instrumented Tests with emulator
+      - name: Run Instrumented Data Tests with emulator
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 33
