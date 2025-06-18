@@ -52,6 +52,7 @@ ownCloud admins and users.
 * Enhancement - Shares space in Android native file explorer: [#4515](https://github.com/owncloud/android/issues/4515)
 * Enhancement - Accessibility reports in 4.5.1: [#4568](https://github.com/owncloud/android/issues/4568)
 * Enhancement - Support for Kiteworks servers without client secret: [#4588](https://github.com/owncloud/android/issues/4588)
+* Enhancement - Integration of instrumented tests in GitHub Actions: [#4595](https://github.com/owncloud/android/issues/4595)
 * Enhancement - SBOM (Software Bill of Materials): [#4598](https://github.com/owncloud/android/issues/4598)
 
 ## Details
@@ -186,6 +187,14 @@ ownCloud admins and users.
 
    https://github.com/owncloud/android/issues/4588
    https://github.com/owncloud/android/pull/4589
+
+* Enhancement - Integration of instrumented tests in GitHub Actions: [#4595](https://github.com/owncloud/android/issues/4595)
+
+   A new workflow has been added to run instrumented tests in GitHub Actions in
+   order to have a more consistent CI pipeline in the project.
+
+   https://github.com/owncloud/android/issues/4595
+   https://github.com/owncloud/android/pull/4602
 
 * Enhancement - SBOM (Software Bill of Materials): [#4598](https://github.com/owncloud/android/issues/4598)
 
