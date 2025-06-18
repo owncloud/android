@@ -4,6 +4,8 @@
     <color name="homecloud_primary_dark">@color/homecloud_bar_background</color>
     <color name="homecloud_color_accent">@color/homecloud_blue_lighten_2</color>
     <color name="homecloud_surface">#131313</color>
+    <color name="homecloud_input_stroke_focused">@color/homecloud_blue_lighten_2</color>
+    <color name="homecloud_input_stroke_nonfocused">@color/homecloud_border_gray</color>
 
     <color name="homecloud_bar_background">#1F1F1F</color>
 </resources>
