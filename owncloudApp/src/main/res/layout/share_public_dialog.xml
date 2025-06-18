@@ -39,13 +39,20 @@
                     android:textColor="@color/black"
                     android:textSize="15sp" />
 
-                <EditText
-                    android:id="@+id/shareViaLinkNameValue"
+                <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/standard_half_padding"
-                    android:inputType="textNoSuggestions"
-                    android:textSize="15sp" />
+                    android:gravity="clip_horizontal">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/shareViaLinkNameValue"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/standard_half_padding"
+                        android:inputType="textNoSuggestions"
+                        android:textSize="15sp" />
+
+                </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
 
@@ -106,14 +113,21 @@
 
             </RelativeLayout>
 
-            <EditText
-                android:id="@+id/shareViaLinkPasswordValue"
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/standard_half_margin"
-                android:layout_marginRight="@dimen/standard_half_margin"
-                android:inputType="textPassword"
-                android:visibility="gone" />
+                android:gravity="clip_horizontal">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/shareViaLinkPasswordValue"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/standard_half_margin"
+                    android:layout_marginRight="@dimen/standard_half_margin"
+                    android:inputType="textPassword"
+                    android:visibility="gone" />
+
+            </com.google.android.material.textfield.TextInputLayout>
 
             <LinearLayout
                 android:id="@+id/layoutPasswordGeneratorButtons"
