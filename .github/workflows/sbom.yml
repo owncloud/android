@@ -17,7 +17,7 @@ jobs:
 
       # Caches Gradle dependencies to avoid downloading them on every run
       - name: Cache Gradle dependencies
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             ~/.gradle/caches
