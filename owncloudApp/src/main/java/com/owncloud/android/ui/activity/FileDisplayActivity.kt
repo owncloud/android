@@ -493,7 +493,7 @@ class FileDisplayActivity : FileActivity(),
                 }
 
                 else -> {
-                    FileDetailsFragment.newInstance(file, account, false)
+                    FileDetailsFragment.newInstance(file, account, false, isMultiPersonal)
                 }
             }
         }
@@ -1752,7 +1752,8 @@ class FileDisplayActivity : FileActivity(),
         val detailsFragment = FileDetailsFragment.newInstance(
             fileToDetail = ocFile,
             account = account,
-            syncFileAtOpen = syncFileAtOpen
+            syncFileAtOpen = syncFileAtOpen,
+            isMultipersonal = isMultiPersonal
         )
         setSecondFragment(detailsFragment)
     }

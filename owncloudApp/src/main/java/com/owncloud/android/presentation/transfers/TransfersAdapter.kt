@@ -2,8 +2,9 @@
  * ownCloud Android client application
  *
  * @author Juan Carlos Garrote Gascón
+ * @author Jorge Aguado Recio
  *
- * Copyright (C) 2023 ownCloud GmbH.
+ * Copyright (C) 2025 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -55,6 +56,7 @@ class TransfersAdapter(
     val clearFailed: () -> Unit,
     val retryFailed: () -> Unit,
     val clearSuccessful: () -> Unit,
+    private val isMultipersonal: Boolean,
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val transferItemsList = mutableListOf<TransferRecyclerItem>()
@@ -113,7 +115,7 @@ class TransfersAdapter(
             transferItem.space?.let {
                 spacePathLine.spaceName.isVisible = true
                 spacePathLine.spaceIcon.isVisible = true
-                if (it.isPersonal) {
+                if (it.isPersonal && !isMultipersonal) {
                     spacePathLine.spaceIcon.setImageResource(R.drawable.ic_folder)
                     spacePathLine.spaceName.setText(R.string.bottom_nav_personal)
                 } else {
