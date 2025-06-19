@@ -21,7 +21,7 @@
     android:id="@+id/drawer_active_user"
     android:layout_width="match_parent"
     android:layout_height="@dimen/nav_drawer_header_height"
-    android:background="@color/drawer_header_color">
+    android:background="@color/homecloud_drawer_header_background">
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/drawer_header_background"
@@ -53,7 +53,7 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:maxLines="1"
-            android:textColor="@android:color/white"
+            android:textColor="?attr/colorPrimary"
             android:textSize="14sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@id/drawer_username_full"
@@ -67,7 +67,7 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:maxLines="1"
-            android:textColor="@android:color/white"
+            android:textColor="?attr/colorPrimary"
             android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@id/drawer_username"
