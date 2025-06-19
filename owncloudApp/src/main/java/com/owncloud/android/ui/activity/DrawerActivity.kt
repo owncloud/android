@@ -192,6 +192,9 @@ abstract class DrawerActivity : ToolbarActivity() {
                 R.id.drawer_menu_feedback -> { openFeedback() }
                 R.id.drawer_menu_help -> { openHelp() }
                 R.id.drawer_menu_privacy_policy -> { openPrivacyPolicy() }
+                R.id.drawer_menu_sign_out -> {
+                    logout()
+                }
                 else -> { Timber.i("Unknown drawer menu item clicked: %s", menuItem.title) }
             }
             true
@@ -264,6 +267,12 @@ abstract class DrawerActivity : ToolbarActivity() {
 
     private fun openDrawerLink() {
         goToUrl(url = resources.getString(R.string.drawer_link))
+    }
+
+    private fun logout() {
+        AccountUtils.deleteAccounts(this) {
+            swapToDefaultAccount()
+        }
     }
 
     private fun isDrawerLinkEnabled() =
@@ -445,6 +454,9 @@ abstract class DrawerActivity : ToolbarActivity() {
             try {
                 val ocAccount = OwnCloudAccount(account, this)
                 getDrawerUserName()?.text = ocAccount.displayName
+                if (!ocAccount.email.isNullOrBlank()) {
+                    getDrawerUserNameFull()?.text = ocAccount.email
+                }
             } catch (e: Exception) {
                 Timber.w(e, "Couldn't read display name of account; using account name instead")
                 getDrawerUserName()?.text = drawerViewModel.getUsernameOfAccount(account.name)

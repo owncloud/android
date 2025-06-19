@@ -45,6 +45,12 @@
             android:title="@string/prefs_privacy_policy" />
 
         <item
+            android:id="@+id/drawer_menu_sign_out"
+            android:icon="@drawable/ic_sign_out"
+            android:orderInCategory="3"
+            android:title="@string/drawer_menu_sign_out" />
+
+        <item
             android:id="@+id/footer_spacer_1"
             android:checkable="false"
             android:enabled="false"

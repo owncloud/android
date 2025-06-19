@@ -55,6 +55,8 @@ public class OwnCloudAccount {
 
     private Account mSavedAccount;
 
+    private String mEmail;
+
     /**
      * Constructor for already saved OC accounts.
      * <p>
@@ -80,6 +82,7 @@ public class OwnCloudAccount {
         }
         mBaseUri = Uri.parse(AccountUtils.getBaseUrlForAccount(context, mSavedAccount));
         mDisplayName = ama.getUserData(mSavedAccount, AccountUtils.Constants.KEY_DISPLAY_NAME);
+        mEmail = ama.getUserData(mSavedAccount, AccountUtils.Constants.KEY_EMAIL);
     }
 
     /**
@@ -136,6 +139,10 @@ public class OwnCloudAccount {
 
     public Account getSavedAccount() {
         return mSavedAccount;
+    }
+
+    public String getEmail() {
+        return mEmail;
     }
 
     public String getDisplayName() {

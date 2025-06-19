@@ -25,6 +25,7 @@
         <!-- colors, Material Design way -->
         <item name="colorPrimary">@color/homecloud_primary</item>
         <item name="colorPrimaryDark">@color/homecloud_primary_dark</item>
+        <item name="colorSecondary">@color/homecloud_secondary</item>
         <item name="colorOnPrimary">?attr/colorSurface</item>
         <item name="colorAccent">@color/homecloud_color_accent</item>
         <item name="colorSurface">@color/homecloud_surface</item>
@@ -43,6 +44,7 @@
 
         <!-- Bottom navigation -->
         <item name="bottomNavigationStyle">@style/Theme.homeCloud.BottomNavigation</item>
+        <item name="navigationViewStyle">@style/Theme.homeCloud.DrawerNavigation</item>
 
         <!-- Input text style -->
         <item name="textInputStyle">@style/homeCloud.TextInputLayout.OutlinedBox</item>
@@ -162,6 +164,11 @@
         <item name="backgroundTint">@color/homecloud_bar_background</item>
         <item name="itemTextAppearanceActiveBoldEnabled">false</item>
         <item name="itemActiveIndicatorStyle">@style/Theme.homeCloud.BottomNavigation.Indicator</item>
+    </style>
+
+    <style name="Theme.homeCloud.DrawerNavigation" parent="Widget.Material3.NavigationView">
+        <item name="itemHorizontalPadding">16dp</item>
+        <item name="itemIconPadding">32dp</item>
     </style>
 
     <style name="Theme.homeCloud.BottomNavigation.Indicator" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">

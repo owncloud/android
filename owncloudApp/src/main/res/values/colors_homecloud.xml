@@ -2,10 +2,12 @@
 <resources>
     <color name="homecloud_primary">#DD000000</color>
     <color name="homecloud_primary_dark">@color/homecloud_bar_background</color>
+    <color name="homecloud_secondary">#CC000000</color>
     <color name="homecloud_color_accent">@color/homecloud_blue_lighten_2</color>
     <color name="homecloud_surface">@color/white</color>
     <color name="homecloud_input_stroke_focused">@color/homecloud_blue_darken_2</color>
     <color name="homecloud_input_stroke_nonfocused">@color/homecloud_border_gray</color>
+    <color name="homecloud_drawer_header_background">#F0F1F5</color>
 
     <color name="homecloud_bar_background">#FFFFFE</color>
 
