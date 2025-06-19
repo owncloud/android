@@ -454,6 +454,9 @@ abstract class DrawerActivity : ToolbarActivity() {
             try {
                 val ocAccount = OwnCloudAccount(account, this)
                 getDrawerUserName()?.text = ocAccount.displayName
+                if (!ocAccount.email.isNullOrBlank()) {
+                    getDrawerUserNameFull()?.text = ocAccount.email
+                }
             } catch (e: Exception) {
                 Timber.w(e, "Couldn't read display name of account; using account name instead")
                 getDrawerUserName()?.text = drawerViewModel.getUsernameOfAccount(account.name)
