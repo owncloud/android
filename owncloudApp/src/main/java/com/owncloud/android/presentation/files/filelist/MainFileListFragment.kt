@@ -8,7 +8,7 @@
  * @author Jorge Aguado Recio
  * @author Aitor Ballesteros Pavón
  *
- * Copyright (C) 2024 ownCloud GmbH.
+ * Copyright (C) 2025 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -385,6 +385,7 @@ class MainFileListFragment : Fragment(),
             layoutManager = layoutManager,
             isPickerMode = isPickingAFolder(),
             listener = this@MainFileListFragment,
+            isMultiPersonal = isMultiPersonal
         )
 
         binding.recyclerViewMainFileList.adapter = fileListAdapter
