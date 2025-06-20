@@ -17,15 +17,41 @@ platform :android do
 
   desc "Build mdm AAB"
   lane :build_mdm_aab do
-      gradle(
-        task: "bundle",
-        build_type: "mdmPreprodRelease"
-      )
+#       gradle(
+#         task: "bundle",
+#         build_type: "mdmPreprodRelease"
+#       )
 
       gradle(
         task: "bundle",
         build_type: "mdmProdRelease"
       )
     end
+
+  desc "Deploy a new version to the Google Play"
+  lane :deploy do
+      sh("pwd")
+      sh("find ../owncloudApp/build/outputs")
+      aab_path = Dir["../owncloudApp/build/outputs/bundle/*/*.aab"].first
+      aab_path = File.expand_path(aab_path) # use absolute path
+
+       if aab_path.nil?
+          UI.user_error!("AAB file not found in expected path")
+       else
+          UI.message("Found AAB at: #{aab_path}")
+       end
+
+      upload_to_play_store(
+        track: "internal", # or alpha, beta, production
+        aab: aab_path,
+        json_key: "fastlane/play-store-api-key.json",
+        release_status: "draft",
+        skip_upload_metadata: true,
+        skip_upload_images: true,
+        skip_upload_screenshots: true,
+        skip_upload_changelogs: true,
+        package_name: "com.seagate.curator.stxfiles.android"
+      )
+     end
 
 end
