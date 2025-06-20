@@ -5,8 +5,9 @@
  * @author Juan Carlos Garrote Gascón
  * @author Manuel Plazas Palacio
  * @author Aitor Ballesteros Pavón
+ * @author Jorge Aguado Recio
  *
- * Copyright (C) 2024 ownCloud GmbH.
+ * Copyright (C) 2025 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -55,6 +56,7 @@ class FileListAdapter(
     private val isPickerMode: Boolean,
     private val layoutManager: StaggeredGridLayoutManager,
     private val listener: FileListAdapterListener,
+    private val isMultiPersonal: Boolean,
 ) : SelectableAdapter<RecyclerView.ViewHolder>() {
 
     var files = mutableListOf<Any>()
@@ -291,7 +293,7 @@ class FileListAdapter(
                         fileWithSyncInfo.space?.let { space ->
                             it.spacePathLine.spaceIcon.isVisible = true
                             it.spacePathLine.spaceName.isVisible = true
-                            if (space.isPersonal) {
+                            if (space.isPersonal && !isMultiPersonal) {
                                 it.spacePathLine.spaceIcon.setImageResource(R.drawable.ic_folder)
                                 it.spacePathLine.spaceName.setText(R.string.bottom_nav_personal)
                             } else {
