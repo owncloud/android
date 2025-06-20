@@ -104,7 +104,7 @@ android {
     defaultConfig {
         minSdkVersion sdkMinVersion
         targetSdkVersion sdkTargetVersion
-        applicationId "com.seagate.owncloud"
+        applicationId "com.seagate.curator.stxfiles.android"
 
         testInstrumentationRunner "com.owncloud.android.utils.OCTestAndroidJUnitRunner"
 
@@ -115,6 +115,7 @@ android {
         buildConfigField "String", commitSHA1, "\"" + getLatestGitHash() + "\""
 
         setProperty("archivesBaseName", "owncloud_${versionName}")
+        setAppIdResources(delegate, applicationId)
     }
 
     compileOptions {
@@ -176,8 +177,10 @@ android {
         }
         preprod {
             dimension "env"
+            applicationId = "com.seagate.owncloud"
             applicationIdSuffix ".preprod"
             versionNameSuffix "-preprod"
+            setAppIdResources(delegate, applicationId)
         }
     }
 
@@ -206,6 +209,15 @@ android {
 
     namespace "com.owncloud.android"
     testNamespace "com.owncloud.android.test"
+}
+
+static def setAppIdResources(target, appId) {
+    target.resValue "string", "account_type", appId
+    target.resValue "string", "authority", appId
+    target.resValue "string", "document_provider_authority", "${appId}.documents"
+    target.resValue "string", "file_provider_authority", "${appId}.files"
+    target.resValue "string", "search_suggest_authority", "${appId}.search.users_and_groups"
+    target.resValue "string", "search_suggest_intent_action", "${appId}.search.users_and_groups.action.SHARE_WITH"
 }
 
 // Updates output file names of a given variant to format
