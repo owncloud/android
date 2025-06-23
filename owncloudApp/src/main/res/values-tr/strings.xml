@@ -89,7 +89,7 @@
   <string name="prefs_remember_last_upload_location_summary">Son paylaşma yükleme konumunu hatırla</string>
   <string name="prefs_pattern">Desen kilidi</string>
   <string name="prefs_enable_logging">Günlüğü etkinleştir</string>
-  <string name="prefs_enable_logging_summary">Etkinleştirildiğinde, günlükler performansı etkileyebilir ve hassas bilgiler içerebilir. Ancak günlükler, ownCloud sunucularına otomatik olarak gönderilmeye tabi değildir. Günlükleri başkalarıyla paylaşmak yalnızca kullanıcının sorumluluğundadır.</string>
+  <string name="prefs_enable_logging_summary">Etkinleştirildiğinde, günlükler performansı etkileyebilir ve hassas bilgiler içerebilir. Ancak günlükler, Curator Files sunucularına otomatik olarak gönderilmeye tabi değildir. Günlükleri başkalarıyla paylaşmak yalnızca kullanıcının sorumluluğundadır.</string>
   <string name="prefs_send_feedback">Geribildirim yolla</string>
   <string name="prefs_app_version">Uygulama sürümü</string>
   <string name="prefs_app_version_summary">%1$s %2$s sürüm %3$s (%4$s)</string>
@@ -517,7 +517,7 @@
   <string name="welcome_feature_2_title">Dosyaları ve klasörleri paylaş</string>
   <string name="welcome_feature_2_text">Özel veya herkese açık olarak paylaşabilirsiniz</string>
   <string name="welcome_feature_3_title">Çoklu hesap</string>
-  <string name="welcome_feature_3_text">Tüm ownCloud sunucularınınıza bağlanın</string>
+  <string name="welcome_feature_3_text">Tüm Curator Files sunucularınınıza bağlanın</string>
   <string name="welcome_feature_4_title">Kamera yüklemeleri</string>
   <string name="welcome_feature_4_text">Resimleriniz/videolarınız otomatik yüklendi</string>
   <string name="welcome_feature_5_title">Video akışı</string>

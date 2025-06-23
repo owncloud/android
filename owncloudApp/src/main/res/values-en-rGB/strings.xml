@@ -101,7 +101,7 @@
   <string name="prefs_remember_last_upload_location_summary">Remember last share upload location</string>
   <string name="prefs_pattern"> Pattern lock </string>
   <string name="prefs_enable_logging">Enable logging</string>
-  <string name="prefs_enable_logging_summary">When activated, logs may impact performance and include sensitive information. However the logs are not subject to automatic submission to ownCloud servers. Sharing logs with others is sole user responsibility.</string>
+  <string name="prefs_enable_logging_summary">When activated, logs may impact performance and include sensitive information. However the logs are not subject to automatic submission to Curator Files servers. Sharing logs with others is sole user responsibility.</string>
   <string name="prefs_send_feedback">Send feedback</string>
   <string name="prefs_app_version">App version</string>
   <string name="prefs_app_version_summary">%1$s %2$s version %3$s (%4$s)</string>
@@ -641,7 +641,7 @@
   <string name="welcome_feature_2_title">Share files and folders</string>
   <string name="welcome_feature_2_text">You can share privately or publicly</string>
   <string name="welcome_feature_3_title">Multi account</string>
-  <string name="welcome_feature_3_text">Connect to all your ownCloud servers</string>
+  <string name="welcome_feature_3_text">Connect to all your Curator Files servers</string>
   <string name="welcome_feature_4_title">Camera uploads</string>
   <string name="welcome_feature_4_text">Your pictures/videos automatically uploaded</string>
   <string name="welcome_feature_5_title">Video streaming</string>

@@ -85,7 +85,7 @@
   <string name="prefs_remember_last_upload_location_summary">Запомняне на последното място на споделяне и качване</string>
   <string name="prefs_pattern">Схема за заключване</string>
   <string name="prefs_enable_logging">Активиране на воденето на дневник</string>
-  <string name="prefs_enable_logging_summary">Когато се активират, регистрационните файлове може да повлияят на производителността и да включват поверителна информация. Въпреки това тези файлове не подлежат на автоматично изпращане до сървърите на ownCloud. Споделянето им с други е единствено отговорност на потребителя.</string>
+  <string name="prefs_enable_logging_summary">Когато се активират, регистрационните файлове може да повлияят на производителността и да включват поверителна информация. Въпреки това тези файлове не подлежат на автоматично изпращане до сървърите на Curator Files. Споделянето им с други е единствено отговорност на потребителя.</string>
   <string name="prefs_send_feedback">Изпращане на обратна връзка</string>
   <string name="prefs_app_version">Версия на приложението</string>
   <string name="prefs_app_version_summary">%1$s %2$s версия %3$s (%4$s)</string>
@@ -506,7 +506,7 @@
   <string name="welcome_feature_2_title">Споделяне на файлове и папки</string>
   <string name="welcome_feature_2_text">Можете да споделяте поверително или публично</string>
   <string name="welcome_feature_3_title">Множество профили</string>
-  <string name="welcome_feature_3_text">Свържете се с всички свои собствени ownCloud сървъри</string>
+  <string name="welcome_feature_3_text">Свържете се с всички свои собствени Curator Files сървъри</string>
   <string name="welcome_feature_4_title">Качване от камерата</string>
   <string name="welcome_feature_4_text">Вашите изображения/видеоклипове се качват автоматично</string>
   <string name="welcome_feature_5_title">Поточно предаване на видеоклипове</string>

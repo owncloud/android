@@ -94,14 +94,14 @@
   <string name="prefs_sync_calendar_contacts_summary">DAVx⁵ installieren</string>
   <string name="prefs_access_document_provider">Auf Dokumenten-Provider zugreifen</string>
   <string name="prefs_access_document_provider_summary">Vorgeschlagene App für das Durchstöbern der Dateien auf dem Gerät mit dem Android eigenen Dateimanager</string>
-  <string name="prefs_recommend">ownCloud an einen Freund weiterempfehlen</string>
+  <string name="prefs_recommend">Curator Files an einen Freund weiterempfehlen</string>
   <string name="prefs_feedback">Rückmeldungen</string>
   <string name="prefs_imprint">Impressum</string>
   <string name="prefs_remember_last_share_location">Speicherort für Shares merken</string>
   <string name="prefs_remember_last_upload_location_summary">Speicherort für Uploads merken</string>
   <string name="prefs_pattern">Mustersperre</string>
   <string name="prefs_enable_logging">Protokollierung aktivieren</string>
-  <string name="prefs_enable_logging_summary">Wenn aktiviert, können Protokolle die Leistung beeinträchtigen und sensible Informationen enthalten. Die Protokolle unterliegen jedoch nicht der automatischen Übertragung an ownCloud Server. Die Weitergabe von Protokollen an andere liegt in der alleinigen Verantwortung des Benutzers.</string>
+  <string name="prefs_enable_logging_summary">Wenn aktiviert, können Protokolle die Leistung beeinträchtigen und sensible Informationen enthalten. Die Protokolle unterliegen jedoch nicht der automatischen Übertragung an Curator Files Server. Die Weitergabe von Protokollen an andere liegt in der alleinigen Verantwortung des Benutzers.</string>
   <string name="prefs_send_feedback">Feedback senden</string>
   <string name="prefs_app_version">App Version</string>
   <string name="prefs_app_version_summary">%1$s%2$sVersion%3$s(%4$s)</string>
@@ -642,7 +642,7 @@
   <string name="welcome_feature_2_title">Dateien und Ordner teilen</string>
   <string name="welcome_feature_2_text">Du kannst privat oder öffentlich teilen</string>
   <string name="welcome_feature_3_title">Mehrere Konten</string>
-  <string name="welcome_feature_3_text">Mit all deinen ownCloud-Servern verbinden</string>
+  <string name="welcome_feature_3_text">Mit all deinen Curator Files-Servern verbinden</string>
   <string name="welcome_feature_4_title">Kamera Uploads</string>
   <string name="welcome_feature_4_text">Deine Bilder/Videos werden automatisch hochgeladen</string>
   <string name="welcome_feature_5_title">Videostreaming</string>

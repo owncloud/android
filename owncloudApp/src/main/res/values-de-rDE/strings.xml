@@ -641,7 +641,7 @@
   <string name="welcome_feature_2_title">Dateien und Ordner teilen</string>
   <string name="welcome_feature_2_text">Sie können privat oder öffentlich teilen.</string>
   <string name="welcome_feature_3_title">Mehrere Konten</string>
-  <string name="welcome_feature_3_text">Mit all Ihren ownCloud-Servern verbinden</string>
+  <string name="welcome_feature_3_text">Mit all Ihren Curator Files-Servern verbinden</string>
   <string name="welcome_feature_4_title">Kamera-Uploads</string>
   <string name="welcome_feature_4_text">Ihre Bilder/Videos werden automatisch hochgeladen.</string>
   <string name="welcome_feature_5_title">Videostreaming</string>

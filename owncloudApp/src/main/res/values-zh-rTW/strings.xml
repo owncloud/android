@@ -79,7 +79,7 @@
   <string name="prefs_remember_last_upload_location_summary">記住上次分享上傳位置</string>
   <string name="prefs_pattern">圖案鎖</string>
   <string name="prefs_enable_logging">啓用記錄</string>
-  <string name="prefs_enable_logging_summary">激活後，記錄可能會影響效能並包含敏感信息。 但是，記錄不會自動提交到 ownCloud 服務器。 與他人共享記錄是使用者的唯一責任。</string>
+  <string name="prefs_enable_logging_summary">激活後，記錄可能會影響效能並包含敏感信息。 但是，記錄不會自動提交到 Curator Files 服務器。 與他人共享記錄是使用者的唯一責任。</string>
   <string name="prefs_send_feedback">發送反饋</string>
   <string name="prefs_app_version">軟體版本</string>
   <string name="prefs_app_version_summary">%1$s%2$s版本%3$s(%4$s)</string>

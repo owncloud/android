@@ -543,7 +543,7 @@
   <string name="welcome_feature_2_title">Fájlok és alkönyvtárak megosztása</string>
   <string name="welcome_feature_2_text">Megoszthatsz magánban és nyilvánosan</string>
   <string name="welcome_feature_3_title">Többszörös fiók</string>
-  <string name="welcome_feature_3_text">Kapcsolódás valamennyi ownCloud szerverhez</string>
+  <string name="welcome_feature_3_text">Kapcsolódás valamennyi Curator Files szerverhez</string>
   <string name="welcome_feature_4_title">Kamerafeltöltések</string>
   <string name="welcome_feature_4_text">Fényképek/videok automatikusan feltöltve</string>
   <string name="welcome_feature_5_title">Video streaming</string>

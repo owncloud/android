@@ -101,7 +101,7 @@
   <string name="prefs_remember_last_upload_location_summary">Jäta meelde viimase jagamise üleslaadimise asukoht</string>
   <string name="prefs_pattern">Mustri lukk</string>
   <string name="prefs_enable_logging">Luba logimine</string>
-  <string name="prefs_enable_logging_summary">Kui on aktiveeritud, siis logid võivad mõjutada jõudlust ja sisaldada tundlikku infot. Samas, logisid ei saadeta automaatselt ownCloudi serveritesse. Logide jagamine on ainult kasutaja vastutusel.</string>
+  <string name="prefs_enable_logging_summary">Kui on aktiveeritud, siis logid võivad mõjutada jõudlust ja sisaldada tundlikku infot. Samas, logisid ei saadeta automaatselt Curator Files serveritesse. Logide jagamine on ainult kasutaja vastutusel.</string>
   <string name="prefs_send_feedback">Saada tagasisidet</string>
   <string name="prefs_app_version">Rakenduse versioon</string>
   <string name="prefs_app_version_summary">%1$s %2$s versioon %3$s (%4$s)</string>
@@ -642,7 +642,7 @@
   <string name="welcome_feature_2_title">Jaga faile ja kaustasid</string>
   <string name="welcome_feature_2_text">Võid jagada privaatselt või avalikult</string>
   <string name="welcome_feature_3_title">Mitu kontot</string>
-  <string name="welcome_feature_3_text">Ühenda kõigi oma ownCloudi serveritega</string>
+  <string name="welcome_feature_3_text">Ühenda kõigi oma Curator Filesi serveritega</string>
   <string name="welcome_feature_4_title">Kaamera üleslaadimised</string>
   <string name="welcome_feature_4_text">Sinu pildid/videod laeti automaatselt üles</string>
   <string name="welcome_feature_5_title">Video voogedastus</string>

@@ -530,7 +530,7 @@
   <string name="welcome_feature_2_title">Διαμοιρασμός αρχείων και φακέλων</string>
   <string name="welcome_feature_2_text">Μπορείτε να διαμοιραστείτε ιδιωτικά ή δημόσια</string>
   <string name="welcome_feature_3_title">Πολλαπλός λογαριασμός</string>
-  <string name="welcome_feature_3_text">Συνδεθείτε σε όλους τους διακομιστές ownCloud σας</string>
+  <string name="welcome_feature_3_text">Συνδεθείτε σε όλους τους διακομιστές Curator Files σας</string>
   <string name="welcome_feature_4_title">Μεταφορτώσεις κάμερας</string>
   <string name="welcome_feature_4_text">Οι φωτογραφίες  / τα βίντεο σας μεταφορτώθηκαν αυτόματα</string>
   <string name="welcome_feature_5_title">Ροή βίντεο</string>

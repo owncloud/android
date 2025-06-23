@@ -95,7 +95,7 @@
   <string name="prefs_remember_last_upload_location_summary">Mémoriser le dernier emplacement de téléversement</string>
   <string name="prefs_pattern">Verrouillage par motif</string>
   <string name="prefs_enable_logging">Activer la journalisation</string>
-  <string name="prefs_enable_logging_summary">Lorsqu\'ils sont activés, les logs peuvent avoir un impact sur les performances et inclure des informations sensibles. Cependant, les logs ne sont pas soumis automatiquement aux serveurs Owncloud. Partager des logs avec des tiers relève de la seule responsabilité de l\'utilisateur.</string>
+  <string name="prefs_enable_logging_summary">Lorsqu\'ils sont activés, les logs peuvent avoir un impact sur les performances et inclure des informations sensibles. Cependant, les logs ne sont pas soumis automatiquement aux serveurs Curator Files. Partager des logs avec des tiers relève de la seule responsabilité de l\'utilisateur.</string>
   <string name="prefs_send_feedback">Envoyez des commentaires</string>
   <string name="prefs_app_version">Version de l\'application</string>
   <string name="prefs_app_version_summary">%1$s %2$s version %3$s (%4$s)</string>
@@ -547,7 +547,7 @@ Téléchargez-le ici : %2$s</string>
   <string name="welcome_feature_2_title">Partager fichiers et dossiers</string>
   <string name="welcome_feature_2_text">Vous pouvez partager de façon privée ou publique</string>
   <string name="welcome_feature_3_title">Multi-compte</string>
-  <string name="welcome_feature_3_text">Connectez-vous à tous vos serveurs ownCloud</string>
+  <string name="welcome_feature_3_text">Connectez-vous à tous vos serveurs Curator Files</string>
   <string name="welcome_feature_4_title">Téléversements de la caméra</string>
   <string name="welcome_feature_4_text">Vos images/vidéos ont été téléversées automatiquement</string>
   <string name="welcome_feature_5_title">Streaming vidéo</string>
