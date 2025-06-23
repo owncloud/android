@@ -52,7 +52,7 @@
   <string name="prefs_lock_application_entries_5minutes">Через 5 минут</string>
   <string name="prefs_lock_application_entries_30minutes">Через 30 минут</string>
   <string name="prefs_lock_access_from_document_provider">Блокировать доступ к файлам системе</string>
-  <string name="prefs_lock_access_from_document_provider_summary">Блокировка доступа к файлам в аккаунтах ownCloud другим приложениям через стандартный файловый менеджер.</string>
+  <string name="prefs_lock_access_from_document_provider_summary">Блокировка доступа к файлам в аккаунтах Curator Files другим приложениям через стандартный файловый менеджер.</string>
   <string name="prefs_touches_with_other_visible_windows">Разрешить работу под прозрачными окнами других приложений</string>
   <string name="prefs_touches_with_other_visible_windows_summary">Разрешает взаимодействие, когда есть перекрытие другим видимым или прозрачным окном. Это нужно, если вы используете приложения для фильтрации света от экрана. Перекрывающее приложение сможет получать информацию о взаимодействии.</string>
   <string name="confirmation_touches_with_other_windows_title">Вы уверены, что хотите включить эту функцию?</string>
@@ -97,7 +97,7 @@
   <string name="prefs_remember_last_upload_location_summary">Запомнить расположение загрузки последней публикации</string>
   <string name="prefs_pattern">Графический ключ</string>
   <string name="prefs_enable_logging">Включить журналирование</string>
-  <string name="prefs_enable_logging_summary">Активная запись лог файлов может влиять на расход ресурсов. Также они могут содержать конфиденциальную информацию. Обмен лог-файлами подлежит исключительно ответственности пользователя. Автоматическая загрузка лог-файлов на серверы ownCloud исключена.</string>
+  <string name="prefs_enable_logging_summary">Активная запись лог файлов может влиять на расход ресурсов. Также они могут содержать конфиденциальную информацию. Обмен лог-файлами подлежит исключительно ответственности пользователя. Автоматическая загрузка лог-файлов на серверы Curator Files исключена.</string>
   <string name="prefs_send_feedback">Отправить свой отзыв</string>
   <string name="prefs_app_version">Версия приложения</string>
   <string name="prefs_app_version_summary">%1$s %2$s версии %3$s (%4$s)</string>
@@ -636,7 +636,7 @@
   <string name="welcome_feature_2_title">Делитесь файлами и папками</string>
   <string name="welcome_feature_2_text">Вы можете делиться лично или со всеми</string>
   <string name="welcome_feature_3_title">Много учётных записей</string>
-  <string name="welcome_feature_3_text">Подключайтесь ко всем вашим серверам ownCloud</string>
+  <string name="welcome_feature_3_text">Подключайтесь ко всем вашим серверам Curator Files</string>
   <string name="welcome_feature_4_title">Загрузки камеры</string>
   <string name="welcome_feature_4_text">Ваши снимки и видео загружаются автоматически</string>
   <string name="welcome_feature_5_title"> Потоковое видео</string>

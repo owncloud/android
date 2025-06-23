@@ -531,7 +531,7 @@
   <string name="welcome_feature_2_title">Dela filer och mappar</string>
   <string name="welcome_feature_2_text">Du kan dela privat eller publikt</string>
   <string name="welcome_feature_3_title">Multi konto</string>
-  <string name="welcome_feature_3_text">Anslut till alla dina ownCloud servrar</string>
+  <string name="welcome_feature_3_text">Anslut till alla dina Curator Files servrar</string>
   <string name="welcome_feature_4_title">Kamerauppladdningar</string>
   <string name="welcome_feature_4_text">Dina bilder/videor laddades upp automatiskt</string>
   <string name="welcome_feature_5_title">Videoströmmning</string>

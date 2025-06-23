@@ -114,7 +114,7 @@ android {
         buildConfigField "String", gitRemote, "\"" + getGitOriginRemote() + "\""
         buildConfigField "String", commitSHA1, "\"" + getLatestGitHash() + "\""
 
-        setProperty("archivesBaseName", "owncloud_${versionName}")
+        setProperty("archivesBaseName", "CuratorFiles_${versionName}")
         setAppIdResources(delegate, applicationId)
     }
 
@@ -181,6 +181,7 @@ android {
             applicationIdSuffix ".preprod"
             versionNameSuffix "-preprod"
             setAppIdResources(delegate, applicationId)
+            resValue "string", "app_name", "CuratorFiles-preprod"
         }
     }
 
@@ -242,7 +243,7 @@ def setOutputFileName(variant, appName, callerProject) {
     if (appName) {
         newName += appName
     } else {
-        newName += "owncloud"
+        newName += "CuratorFiles"
     }
 
     def versionName = "$variant.mergedFlavor.versionName"

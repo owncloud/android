@@ -482,7 +482,7 @@
   <string name="welcome_feature_1_text">Þú getur afritað, eytt, fært</string>
   <string name="welcome_feature_2_title">Deilt skrám og möppum</string>
   <string name="welcome_feature_2_text">Þú getur deilt persónulega eða opinberlega</string>
-  <string name="welcome_feature_3_text">Tengst við öll ownCloud tölvuskýin þín</string>
+  <string name="welcome_feature_3_text">Tengst við öll Curator Files tölvuskýin þín</string>
   <string name="welcome_feature_4_title">Innsendingar úr myndavél</string>
   <string name="welcome_feature_5_title">Streyming myndskeiða</string>
   <!--Scoped storage migration wizard-->

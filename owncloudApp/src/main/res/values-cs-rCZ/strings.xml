@@ -82,7 +82,7 @@
   <string name="prefs_remember_last_upload_location_summary">Zapamatovat poslední umístění pro nahrání sdílených souborů</string>
   <string name="prefs_pattern">Zámek gestem</string>
   <string name="prefs_enable_logging">Povolit logování</string>
-  <string name="prefs_enable_logging_summary">Při aktivaci může být ovlivněn výkon a logy mohou obsahovat citlivé údaje. Logy se ovšem neposílají automaticky na servery ownCloud. Sdílení logů je jen na vaší osobní zodpovědnosti.</string>
+  <string name="prefs_enable_logging_summary">Při aktivaci může být ovlivněn výkon a logy mohou obsahovat citlivé údaje. Logy se ovšem neposílají automaticky na servery Curator Files. Sdílení logů je jen na vaší osobní zodpovědnosti.</string>
   <string name="prefs_send_feedback">Odeslat názor</string>
   <string name="prefs_app_version">Verze aplikace</string>
   <string name="prefs_app_version_summary">%1$s%2$s verze %3$s (%4$s)</string>
@@ -535,7 +535,7 @@ správce systému.</string>
   <string name="welcome_feature_2_title">Sdílet soubory a složky</string>
   <string name="welcome_feature_2_text">Můžete sdílet soukromě i veřejně</string>
   <string name="welcome_feature_3_title">Multi-účet</string>
-  <string name="welcome_feature_3_text">Připojit ke všem mým serverům ownCloud</string>
+  <string name="welcome_feature_3_text">Připojit ke všem mým serverům Curator Files</string>
   <string name="welcome_feature_4_title">Nahrávání fotoaparátu</string>
   <string name="welcome_feature_4_text">Obrázky/videa se automaticky nahrály</string>
   <string name="welcome_feature_5_title">Přehrávání videa</string>

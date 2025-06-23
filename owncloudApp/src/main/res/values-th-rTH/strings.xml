@@ -85,7 +85,7 @@
   <string name="prefs_remember_last_upload_location_summary">จดจำตำแหน่งล่าสุดที่ใช้ร่วมกัน</string>
   <string name="prefs_pattern">รูปแบบการล็อค</string>
   <string name="prefs_enable_logging">เปิดใช้ระบบบันทึกข้อมูล</string>
-  <string name="prefs_enable_logging_summary">เมื่อเปิดใช้งาน log อาจส่งผลต่อประสิทธิภาพและรวมถึงข้อมูลที่ละเอียดอ่อน อย่างไรก็ตาม log จะไม่ถูกส่งไปยังเซิร์ฟเวอร์ ownCloud โดยอัตโนมัติ การแชร์ log กับผู้อื่นถือเป็นความรับผิดชอบของผู้ใช้แต่เพียงผู้เดียว</string>
+  <string name="prefs_enable_logging_summary">เมื่อเปิดใช้งาน log อาจส่งผลต่อประสิทธิภาพและรวมถึงข้อมูลที่ละเอียดอ่อน อย่างไรก็ตาม log จะไม่ถูกส่งไปยังเซิร์ฟเวอร์ Curator Files โดยอัตโนมัติ การแชร์ log กับผู้อื่นถือเป็นความรับผิดชอบของผู้ใช้แต่เพียงผู้เดียว</string>
   <string name="prefs_send_feedback">ส่งความคิดเห็น</string>
   <string name="prefs_app_version">เวอร์ชันของแอป</string>
   <string name="prefs_app_version_summary">%1$s %2$s เวอร์ชัน %3$s (%4$s)</string>
@@ -555,7 +555,7 @@
   <string name="welcome_feature_2_title">แชร์ไฟล์และโฟลเดอร์</string>
   <string name="welcome_feature_2_text">คุณสามารถแชร์แบบส่วนตัวหรือแบบสาธารณะ</string>
   <string name="welcome_feature_3_title">หลายบัญชี</string>
-  <string name="welcome_feature_3_text">เชื่อมต่อกับเซิร์ฟเวอร์ ownCloud ทั้งหมดของคุณ</string>
+  <string name="welcome_feature_3_text">เชื่อมต่อกับเซิร์ฟเวอร์ Curator Files ทั้งหมดของคุณ</string>
   <string name="welcome_feature_4_title">อัปโหลดจากกล้อง</string>
   <string name="welcome_feature_4_text">รูปภาพ/วิดีโอ ของคุณถูกอัปโหลดโดยอัตโนมัติแล้ว</string>
   <string name="welcome_feature_5_title">กำลังสตรีมวิดีโอ</string>

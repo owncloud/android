@@ -101,7 +101,7 @@
   <string name="prefs_remember_last_upload_location_summary">最後に共有アップロードした場所を記憶する</string>
   <string name="prefs_pattern">パターンロック</string>
   <string name="prefs_enable_logging">ログの有効化</string>
-  <string name="prefs_enable_logging_summary">有効化されると、ログはパフォーマンスに影響を与え、機密情報を含む可能性があります。しかし、ログはownCloudサーバーに自動的に提出されることはありません。ログを他人と共有することは、ユーザー自身の責任となります。</string>
+  <string name="prefs_enable_logging_summary">有効化されると、ログはパフォーマンスに影響を与え、機密情報を含む可能性があります。しかし、ログはCurator Filesサーバーに自動的に提出されることはありません。ログを他人と共有することは、ユーザー自身の責任となります。</string>
   <string name="prefs_send_feedback">フィードバックを送る</string>
   <string name="prefs_app_version">アプリのバージョン</string>
   <string name="prefs_app_version_summary">%1$s%2$sバージョン%3$s (%4$s)</string>
@@ -640,7 +640,7 @@
   <string name="welcome_feature_2_title">ファイルとフォルダーを共有</string>
   <string name="welcome_feature_2_text">一部の人に共有、またはすべてのユーザーに共有できます</string>
   <string name="welcome_feature_3_title">複数アカウント</string>
-  <string name="welcome_feature_3_text">すべてのownCloudのサーバーに接続</string>
+  <string name="welcome_feature_3_text">すべてのCurator Filesのサーバーに接続</string>
   <string name="welcome_feature_4_title">カメラアップロード</string>
   <string name="welcome_feature_4_text">写真や動画は自動的にアップロードされます</string>
   <string name="welcome_feature_5_title">動画のストリーミング</string>

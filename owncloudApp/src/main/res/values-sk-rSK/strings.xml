@@ -449,7 +449,7 @@
   <string name="welcome_feature_2_title">Zdieľanie súborov a Adresárov</string>
   <string name="welcome_feature_2_text">Môžeš zdieľať súkromne alebo verejne.</string>
   <string name="welcome_feature_3_title">Hromadný účet</string>
-  <string name="welcome_feature_3_text">Pripoj sa k všetkým svojim ownCloud Serverom</string>
+  <string name="welcome_feature_3_text">Pripoj sa k všetkým svojim Curator Files Serverom</string>
   <string name="welcome_feature_4_title">Náhrávky z kamery</string>
   <!--Scoped storage migration wizard-->
   <!--Security Enforced-->

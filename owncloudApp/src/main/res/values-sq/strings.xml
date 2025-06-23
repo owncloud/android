@@ -99,7 +99,7 @@
   <string name="prefs_remember_last_upload_location_summary">Mbaj mend vendin e fundit të ngarkimit të pjesës</string>
   <string name="prefs_pattern">Kyçje rregullsie</string>
   <string name="prefs_enable_logging">Aktivizo regjistrimet</string>
-  <string name="prefs_enable_logging_summary">Kur aktivizohen, regjistrat mund të kenë ndikim në funksionim dhe përfshijnë të dhëna rezervat. Sidoqoftë, regjistrat nuk janë subjekt parashtrimi të automatizuar te shërbyesit ownCloud. Ndarja e regjistrave me të tjerë është përgjegjësi vetëm e përdoruesit.</string>
+  <string name="prefs_enable_logging_summary">Kur aktivizohen, regjistrat mund të kenë ndikim në funksionim dhe përfshijnë të dhëna rezervat. Sidoqoftë, regjistrat nuk janë subjekt parashtrimi të automatizuar te shërbyesit Curator Files. Ndarja e regjistrave me të tjerë është përgjegjësi vetëm e përdoruesit.</string>
   <string name="prefs_send_feedback">Dërgoni përshtypje</string>
   <string name="prefs_app_version">Version aplikacioni</string>
   <string name="prefs_app_version_summary">%1$s %2$s version %3$s (%4$s)</string>
@@ -638,7 +638,7 @@
   <string name="welcome_feature_2_title">Ndani me të tjerët kartela dhe dosje</string>
   <string name="welcome_feature_2_text">Mund t\’i ndani privatisht ose publikisht</string>
   <string name="welcome_feature_3_title">Llogari multi</string>
-  <string name="welcome_feature_3_text">Lidhuni te krejt shërbyesit tuaj ownCloud</string>
+  <string name="welcome_feature_3_text">Lidhuni te krejt shërbyesit tuaj Curator Files</string>
   <string name="welcome_feature_4_title">Ngarkime nga kamera</string>
   <string name="welcome_feature_4_text">Fotot/videot tuaja të ngarkuara automatikisht</string>
   <string name="welcome_feature_5_title">Transmetim videosh</string>

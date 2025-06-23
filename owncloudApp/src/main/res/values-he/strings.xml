@@ -83,7 +83,7 @@
   <string name="prefs_remember_last_upload_location_summary">לזכור מיקום שיתוף העלאה אחרון</string>
   <string name="prefs_pattern">נעילה בתבנית</string>
   <string name="prefs_enable_logging">מאפשר התחברות</string>
-  <string name="prefs_enable_logging_summary">כאשר מופעל, יומני תיעוד עלולים להשפיע על הביצועים ולכלול מידע רגיש. עם זאת, היומנים אינם כפופים להגשה אוטומטית לשרתים של ownCloud. שיתוף יומנים עם אחרים הנו באחריות הבלעדית של המשתמש.</string>
+  <string name="prefs_enable_logging_summary">כאשר מופעל, יומני תיעוד עלולים להשפיע על הביצועים ולכלול מידע רגיש. עם זאת, היומנים אינם כפופים להגשה אוטומטית לשרתים של Curator Files. שיתוף יומנים עם אחרים הנו באחריות הבלעדית של המשתמש.</string>
   <string name="prefs_send_feedback">שליחת משוב</string>
   <string name="prefs_app_version">גרסת היישומון</string>
   <string name="pattern_enter_pattern">נא להזין את התבנית שלך</string>
@@ -555,7 +555,7 @@
   <string name="welcome_feature_2_title">שיתוף קבצים ותיקיות</string>
   <string name="welcome_feature_2_text">ניתן לשתף באופן אישי או ציבורי</string>
   <string name="welcome_feature_3_title">חשבון מרובה</string>
-  <string name="welcome_feature_3_text">מתחבר לכל שרתי ה- ownCloud שלך</string>
+  <string name="welcome_feature_3_text">מתחבר לכל שרתי ה- Curator Files שלך</string>
   <string name="welcome_feature_4_title">העלאות מהמצלמה</string>
   <string name="welcome_feature_4_text">התמונות/הסרטונים שלך יועלו אוטומטית</string>
   <string name="welcome_feature_5_title">הזרמת סרטונים</string>

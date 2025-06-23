@@ -47,7 +47,7 @@
   <string name="prefs_touches_with_other_visible_windows">Berührungen mit anderen sichtbaren Fenstern</string>
   <string name="prefs_touches_with_other_visible_windows_summary">Berührungen auch zulassen, wenn die Ansicht von einer anderen App überladen wird. Aktiviere diese Option, um zum Beispiel Lichtfilter-Apps verwenden zu können.</string>
   <string name="confirmation_touches_with_other_windows_title">Willst Du diese Funktion wirklich einschalten?</string>
-  <string name="confirmation_touches_with_other_windows_message">Verwende diese Funktion auf eigene Verantwortung. Eine bösartige Anwendung könnte versuchen deine Touchgesten zu missbrauchen und so Aktionen zu provozieren, die du nicht beabsichtigt hast. ownCloud verbietet solchen Apps normalerweise den Zugriff auf die App.</string>
+  <string name="confirmation_touches_with_other_windows_message">Verwende diese Funktion auf eigene Verantwortung. Eine bösartige Anwendung könnte versuchen deine Touchgesten zu missbrauchen und so Aktionen zu provozieren, die du nicht beabsichtigt hast. Curator Files verbietet solchen Apps normalerweise den Zugriff auf die App.</string>
   <string name="prefs_camera_picture_upload">Bilder</string>
   <string name="prefs_camera_picture_upload_summary">Automatischer Upload von Fotos</string>
   <string name="prefs_camera_picture_upload_path_title">Speicherpfad für hochgeladene Bilder</string>
@@ -66,7 +66,7 @@
   <string name="prefs_help">Hilfe</string>
   <string name="prefs_sync_calendar_contacts">Synchronisiere deine Kontakte, Kalendar und Aufgaben</string>
   <string name="prefs_sync_calendar_contacts_summary">DAVx⁵ installieren</string>
-  <string name="prefs_recommend">ownCloud an einen Freund weiterempfehlen</string>
+  <string name="prefs_recommend">Curator Files an einen Freund weiterempfehlen</string>
   <string name="prefs_feedback">Rückmeldungen</string>
   <string name="prefs_imprint">Impressum</string>
   <string name="prefs_remember_last_share_location">Speicherort für Shares merken</string>
@@ -96,7 +96,7 @@
   <string name="recommend_text">Kennst Du schon %1$s? Ich benutze die App um auch mobil Zugriff auf meinen eigenen Cloud-Server zu haben. \nHier kommst Du direkt zum Download: %2$s</string>
   <string name="error_reason">weil</string>
   <string name="auth_failure_snackbar">Authentifizierung fehlgeschlagen</string>
-  <string name="server_not_supported">Deine Version des ownCloud-Servers ist kleiner als 10.x und wird deshalb leider nicht mehr unterstützt. Bitte aktualisiere deinen Server auf die aktuelle Version.</string>
+  <string name="server_not_supported">Deine Version des Curator Files-Servers ist kleiner als 10.x und wird deshalb leider nicht mehr unterstützt. Bitte aktualisiere deinen Server auf die aktuelle Version.</string>
   <string name="auth_failure_snackbar_action">Konto ändern</string>
   <string name="auth_oauth_failure">Das Zugriffstoken ist abgelaufen oder ungültig geworden. Bitte melde dich erneut an, um wieder Zugriff zu erhalten</string>
   <string name="auth_oauth_failure_snackbar_action">Einloggen</string>
@@ -529,7 +529,7 @@
   <string name="welcome_feature_2_title">Dateien und Ordner teilen</string>
   <string name="welcome_feature_2_text">Du kannst privat oder öffentlich teilen</string>
   <string name="welcome_feature_3_title">Mehrere Konten</string>
-  <string name="welcome_feature_3_text">Mit all deinen ownCloud-Servern verbinden</string>
+  <string name="welcome_feature_3_text">Mit all deinen Curator Files-Servern verbinden</string>
   <string name="welcome_feature_4_title">Kamera Uploads</string>
   <string name="welcome_feature_4_text">Deine Bilder/Videos werden automatisch hochgeladen</string>
   <string name="welcome_feature_5_title">Videostreaming</string>
