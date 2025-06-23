@@ -2,7 +2,7 @@
 <resources>
 
     <!-- App name and other strings-->
-    <string name="app_name" formatted="false">ownCloud</string>
+    <string name="app_name" formatted="false">Curator Files</string>
     
     <!-- Redefined in build.gradle -->
     <string name="account_type" formatted="false">com.seagate.curator.stxfiles.android</string>    <!-- better if was a domain name; but changing it now would require migrate accounts when the app is updated -->
@@ -14,9 +14,9 @@
 
     <string name="db_file" formatted="false">owncloud.db</string>
     <string name="db_name" formatted="false">ownCloud</string>
-    <string name="data_folder" formatted="false">owncloud</string>
-    <string name="log_name" formatted="false">Owncloud_</string>
-    <string name="default_display_name_for_root_folder" formatted="false">ownCloud</string>
+    <string name="data_folder" formatted="false">CuratorFiles</string>
+    <string name="log_name" formatted="false">CuratorFiles_</string>
+    <string name="default_display_name_for_root_folder" formatted="false">Curator Files</string>
     <string name="user_agent">Mozilla/5.0 (Android) ownCloud-android/%1$s</string>
 
     <!-- URLs and flags related -->
