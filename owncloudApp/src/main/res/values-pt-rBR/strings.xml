@@ -101,7 +101,7 @@
   <string name="prefs_remember_last_upload_location_summary">Lembrar do último local de envio de compartilhamento</string>
   <string name="prefs_pattern">Padrão de Bloqueio</string>
   <string name="prefs_enable_logging">Habilitar escrita no Log</string>
-  <string name="prefs_enable_logging_summary">Quando ativado, os registros podem afetar o desempenho e incluir informações confidenciais. No entanto, os logs não estão sujeitos a envio automático aos servidores do OwnCloud. Compartilhar registros com outras pessoas é responsabilidade exclusiva do usuário.</string>
+  <string name="prefs_enable_logging_summary">Quando ativado, os registros podem afetar o desempenho e incluir informações confidenciais. No entanto, os logs não estão sujeitos a envio automático aos servidores do Curator Files. Compartilhar registros com outras pessoas é responsabilidade exclusiva do usuário.</string>
   <string name="prefs_send_feedback">Enviar comentário</string>
   <string name="prefs_app_version">Versão do aplicativo</string>
   <string name="prefs_app_version_summary">%1$s %2$s versão %3$s (%4$s)</string>
@@ -642,7 +642,7 @@
   <string name="welcome_feature_2_title">Compartilhe arquivos e pastas</string>
   <string name="welcome_feature_2_text">Você pode compartilhar de forma privada ou pública</string>
   <string name="welcome_feature_3_title">Multi conta</string>
-  <string name="welcome_feature_3_text">Conecte-se a todos os seus próprios servidores ownCloud</string>
+  <string name="welcome_feature_3_text">Conecte-se a todos os seus próprios servidores Curator Files</string>
   <string name="welcome_feature_4_title">Envios da câmera</string>
   <string name="welcome_feature_4_text">Suas fotos/vídeos carregados automaticamente</string>
   <string name="welcome_feature_5_title">Transmissão de vídeo</string>

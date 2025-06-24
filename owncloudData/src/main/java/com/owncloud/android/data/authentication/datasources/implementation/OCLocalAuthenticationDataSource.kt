@@ -43,6 +43,7 @@ import com.owncloud.android.lib.common.SingleSessionManager
 import com.owncloud.android.lib.common.accounts.AccountUtils
 import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.ACCOUNT_VERSION
 import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.KEY_DISPLAY_NAME
+import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.KEY_EMAIL
 import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.KEY_ID
 import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.KEY_OC_ACCOUNT_VERSION
 import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.KEY_OC_BASE_URL
@@ -196,6 +197,10 @@ class OCLocalAuthenticationDataSource(
 
         accountManager.setUserData(
             newAccount, KEY_DISPLAY_NAME, userInfo.displayName
+        )
+
+        accountManager.setUserData(
+            newAccount, KEY_EMAIL, userInfo.email
         )
 
         accountManager.setUserData(

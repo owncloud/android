@@ -516,7 +516,7 @@
   <string name="welcome_feature_2_title">Comparteix fitxers i carpetes</string>
   <string name="welcome_feature_2_text">Pots compartir privadament o públicament</string>
   <string name="welcome_feature_3_title">Multi compte</string>
-  <string name="welcome_feature_3_text">Connectar a tots els teus servidors Owncloud</string>
+  <string name="welcome_feature_3_text">Connectar a tots els teus servidors Curator Files</string>
   <string name="welcome_feature_4_title">Fotos Càmera</string>
   <string name="welcome_feature_4_text">Fotos i Vídeos carregats automàticament</string>
   <string name="welcome_feature_5_title">Transmissió de vídeo</string>

@@ -95,7 +95,7 @@
   <string name="prefs_remember_last_upload_location_summary">记住上次共享上传的位置</string>
   <string name="prefs_pattern">图案锁</string>
   <string name="prefs_enable_logging">开启日志</string>
-  <string name="prefs_enable_logging_summary">激活后，日志可能会影响性能并包含敏感信息。 但是，日志不会自动提交到 ownCloud 服务器。 与他人共享日志是用户的唯一责任。</string>
+  <string name="prefs_enable_logging_summary">激活后，日志可能会影响性能并包含敏感信息。 但是，日志不会自动提交到 Curator Files 服务器。 与他人共享日志是用户的唯一责任。</string>
   <string name="prefs_send_feedback">发送反馈</string>
   <string name="prefs_app_version">程序版本</string>
   <string name="prefs_app_version_summary">%1$s %2$s 版本 %3$s （%4$s） </string>
@@ -577,7 +577,7 @@
   <string name="welcome_feature_2_title">分享文件和文件夹</string>
   <string name="welcome_feature_2_text">你可以公开或者私密分享</string>
   <string name="welcome_feature_3_title">多账号</string>
-  <string name="welcome_feature_3_text">连接到你所有的ownCloud服务器</string>
+  <string name="welcome_feature_3_text">连接到你所有的Curator Files服务器</string>
   <string name="welcome_feature_4_title">相机上传</string>
   <string name="welcome_feature_4_text">你的照片/视频将会自动上传</string>
   <string name="welcome_feature_5_title">流媒体视频</string>

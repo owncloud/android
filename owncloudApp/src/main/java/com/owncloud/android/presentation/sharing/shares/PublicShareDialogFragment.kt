@@ -316,7 +316,7 @@ class PublicShareDialogFragment : DialogFragment() {
         } else { // Updating an existing public share
             if (!binding.shareViaLinkPasswordSwitch.isChecked) {
                 publicLinkPassword = ""
-            } else if (binding.shareViaLinkPasswordValue.text.isEmpty()) {
+            } else if (binding.shareViaLinkPasswordValue.text.isNullOrEmpty()) {
                 // User has not added a new password, so do not update it
                 publicLinkPassword = null
             }
@@ -360,7 +360,7 @@ class PublicShareDialogFragment : DialogFragment() {
 
     private fun handleNullPasswordPolicy() {
         if (binding.shareViaLinkPasswordSwitch.isChecked) {
-            binding.saveButton.isEnabled = binding.shareViaLinkPasswordValue.text.isNotBlank()
+            binding.saveButton.isEnabled = !binding.shareViaLinkPasswordValue.text.isNullOrBlank()
         }
     }
 

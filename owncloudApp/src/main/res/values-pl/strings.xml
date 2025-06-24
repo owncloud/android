@@ -88,7 +88,7 @@
   <string name="prefs_remember_last_upload_location_summary">Zapamiętaj ostatnią lokalizację wgrywania</string>
   <string name="prefs_pattern">Wzór odblokowania</string>
   <string name="prefs_enable_logging">Włącz historię logowania</string>
-  <string name="prefs_enable_logging_summary">Gdy włączone, dzienniczek może mieć wpływ na wydajność i będzie zawierał wrażliwe informacje. Jakkolwiek, dzienniczek nie jest nigdy automatycznie wysyłany na serwery ownCloud. Udostępnianie dzienniczka innym jest wyłączną odpowiedzialnością użytkownika.</string>
+  <string name="prefs_enable_logging_summary">Gdy włączone, dzienniczek może mieć wpływ na wydajność i będzie zawierał wrażliwe informacje. Jakkolwiek, dzienniczek nie jest nigdy automatycznie wysyłany na serwery Curator Files. Udostępnianie dzienniczka innym jest wyłączną odpowiedzialnością użytkownika.</string>
   <string name="prefs_send_feedback">Wyślij opinię lub sugestię</string>
   <string name="prefs_app_version">Wersja aplikacji</string>
   <string name="prefs_app_version_summary">%1$s %2$s wersja %3$s (%4$s)</string>
@@ -581,7 +581,7 @@
   <string name="welcome_feature_2_title">Udostępnij pliki i foldery</string>
   <string name="welcome_feature_2_text">Możesz udostępniać prywatnie i publicznie</string>
   <string name="welcome_feature_3_title">Konto multi</string>
-  <string name="welcome_feature_3_text">Podłącz do twoich wszystkich serwerów ownCloud</string>
+  <string name="welcome_feature_3_text">Podłącz do twoich wszystkich serwerów Curator Files</string>
   <string name="welcome_feature_4_title">Wrzucanie kamery</string>
   <string name="welcome_feature_4_text">Automatyczne wysyłanie twoich zdjęć oraz wideo </string>
   <string name="welcome_feature_5_title">Wideotransmisja</string>

@@ -81,7 +81,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/drawer_loading_quota"
-        android:textColor="@color/list_item_lastmod_and_filesize_text"
+        android:textColor="?attr/colorSecondary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/account_quota_bar" />
@@ -90,7 +90,7 @@
         android:id="@+id/account_quota_status_text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textColor="@color/list_item_lastmod_and_filesize_text"
+        android:textColor="?attr/colorSecondary"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

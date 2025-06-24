@@ -2,18 +2,21 @@
 <resources>
 
     <!-- App name and other strings-->
-    <string name="app_name" formatted="false">ownCloud</string>
-    <string name="account_type" formatted="false">com.seagate.owncloud</string>    <!-- better if was a domain name; but changing it now would require migrate accounts when the app is updated -->
-    <string name="authority" formatted="false">com.seagate.owncloud</string>
-    <string name="document_provider_authority" formatted="false">com.seagate.owncloud.documents</string>
-    <string name="file_provider_authority" formatted="false">com.seagate.owncloud.files</string>
-    <string name="search_suggest_authority" formatted="false">com.seagate.owncloud.search.users_and_groups</string>
-    <string name="search_suggest_intent_action" formatted="false">com.seagate.owncloud.search.users_and_groups.action.SHARE_WITH</string>
+    <string name="app_name" formatted="false">Curator Files</string>
+    
+    <!-- Redefined in build.gradle -->
+    <string name="account_type" formatted="false">com.seagate.curator.stxfiles.android</string>    <!-- better if was a domain name; but changing it now would require migrate accounts when the app is updated -->
+    <string name="authority" formatted="false">com.seagate.curator.stxfiles.android</string>
+    <string name="document_provider_authority" formatted="false">com.seagate.curator.stxfiles.android.documents</string>
+    <string name="file_provider_authority" formatted="false">com.seagate.curator.stxfiles.android.files</string>
+    <string name="search_suggest_authority" formatted="false">com.seagate.curator.stxfiles.android.search.users_and_groups</string>
+    <string name="search_suggest_intent_action" formatted="false">com.seagate.curator.stxfiles.android.search.users_and_groups.action.SHARE_WITH</string>
+
     <string name="db_file" formatted="false">owncloud.db</string>
     <string name="db_name" formatted="false">ownCloud</string>
-    <string name="data_folder" formatted="false">owncloud</string>
-    <string name="log_name" formatted="false">Owncloud_</string>
-    <string name="default_display_name_for_root_folder" formatted="false">ownCloud</string>
+    <string name="data_folder" formatted="false">CuratorFiles</string>
+    <string name="log_name" formatted="false">CuratorFiles_</string>
+    <string name="default_display_name_for_root_folder" formatted="false">Curator Files</string>
     <string name="user_agent">Mozilla/5.0 (Android) ownCloud-android/%1$s</string>
 
     <!-- URLs and flags related -->
@@ -46,7 +49,7 @@
     <color name="secondary_button_text_color">@color/black</color>
     <color name="drawer_header_color">@color/owncloud_blue_accent</color>
     <color name="spaces_card_background_color">#edf3fa</color>
-    <color name="search_view_background_color">@color/actionbar_start_color</color>
+    <color name="search_view_background_color">@color/homecloud_bar_background</color>
 
     <!-- Splash Screen Background -->
     <color name="splash_background">@color/owncloud_blue</color>
@@ -111,8 +114,8 @@
     <bool name="use_login_background_image">true</bool>
 
     <!-- Drawer menu -->
-    <bool name="use_drawer_background_header">true</bool>
-    <bool name="use_drawer_logo">true</bool>
+    <bool name="use_drawer_background_header">false</bool>
+    <bool name="use_drawer_logo">false</bool>
     <string name="drawer_link_label"></string>
     <string name="drawer_link"></string>
 

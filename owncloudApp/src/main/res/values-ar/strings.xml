@@ -537,7 +537,7 @@
   <string name="welcome_feature_2_title">مشاركة الملفات والمجلدات</string>
   <string name="welcome_feature_2_text">يمكنك المشاركة بشكل خاص أو عام</string>
   <string name="welcome_feature_3_title">حسابات متعددة</string>
-  <string name="welcome_feature_3_text">اتصل بجميع خوادمك على ownCloud</string>
+  <string name="welcome_feature_3_text">اتصل بجميع خوادمك على Curator Files</string>
   <string name="welcome_feature_4_title">تحميلات الكاميرا</string>
   <string name="welcome_feature_4_text">تم تحميل صورك/مقاطع الفيديو تلقائيًا</string>
   <string name="welcome_feature_5_title">بث الفيديو</string>

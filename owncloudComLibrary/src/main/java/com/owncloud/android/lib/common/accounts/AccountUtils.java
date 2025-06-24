@@ -36,7 +36,6 @@ import android.net.Uri;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentials;
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentialsFactory;
-import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 import timber.log.Timber;
 
 import java.io.IOException;
@@ -222,6 +221,10 @@ public class AccountUtils {
          * User's display name
          */
         public static final String KEY_DISPLAY_NAME = "oc_display_name";
+        /**
+         * User's email
+         */
+        public static final String KEY_EMAIL = "oc_email";
 
         public static final int ACCOUNT_VERSION = 1;
     }

@@ -94,7 +94,7 @@
   <string name="prefs_remember_last_upload_location_summary">마지막 공유 업로드 위치 기억하기</string>
   <string name="prefs_pattern">패턴 잠금</string>
   <string name="prefs_enable_logging">로그 활성화</string>
-  <string name="prefs_enable_logging_summary">이 설정을 켜면 로그에 민감한 정보가 포함되며, 성능에 영향을 줄 수 있습니다. 하지만 로그는 자동으로 ownCloud 서버에 제출되지 않습니다. 로그를 다른 사람들과 공유하는 것은 오로지 사용자 책임입니다.</string>
+  <string name="prefs_enable_logging_summary">이 설정을 켜면 로그에 민감한 정보가 포함되며, 성능에 영향을 줄 수 있습니다. 하지만 로그는 자동으로 Curator Files 서버에 제출되지 않습니다. 로그를 다른 사람들과 공유하는 것은 오로지 사용자 책임입니다.</string>
   <string name="prefs_send_feedback">피드백 보내기</string>
   <string name="prefs_app_version">앱 버전</string>
   <string name="prefs_app_version_summary">%1$s%2$s 버전 %3$s (%4$s)</string>
@@ -627,7 +627,7 @@
   <string name="welcome_feature_2_title">파일과 폴더 공유</string>
   <string name="welcome_feature_2_text">비공개 또는 공개 공유하기</string>
   <string name="welcome_feature_3_title">다중 계정</string>
-  <string name="welcome_feature_3_text">내 모든 ownCloud 서버에 연결</string>
+  <string name="welcome_feature_3_text">내 모든 Curator Files 서버에 연결</string>
   <string name="welcome_feature_4_title">카메라 업로드</string>
   <string name="welcome_feature_4_text">내 사진과 동영상 자동으로 업로드</string>
   <string name="welcome_feature_5_title">동영상 스트리밍</string>

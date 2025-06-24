@@ -85,7 +85,7 @@
   <string name="prefs_remember_last_upload_location_summary">Ricorda l\'ultima posizione di caricamento della condivisione</string>
   <string name="prefs_pattern">Blocco con sequenza</string>
   <string name="prefs_enable_logging">Abilita la registrazione</string>
-  <string name="prefs_enable_logging_summary">Se attivati, i log possono influire sulle prestazioni e includere informazioni riservate. Tuttavia i log non sono soggetti all\'invio automatico ai server di ownCloud. La condivisione dei registri con altri è responsabilità esclusiva dell\'utente.</string>
+  <string name="prefs_enable_logging_summary">Se attivati, i log possono influire sulle prestazioni e includere informazioni riservate. Tuttavia i log non sono soggetti all\'invio automatico ai server di Curator Files. La condivisione dei registri con altri è responsabilità esclusiva dell\'utente.</string>
   <string name="prefs_send_feedback">Invia segnalazione</string>
   <string name="prefs_app_version">Versione dell\'app</string>
   <string name="prefs_app_version_summary">%1$s %2$s versione %3$s (%4$s)</string>
@@ -502,7 +502,7 @@
   <string name="welcome_feature_2_title">Condividi files e cartelle</string>
   <string name="welcome_feature_2_text">Puoi condividere privatamente o pubblicamente</string>
   <string name="welcome_feature_3_title">Diversi account</string>
-  <string name="welcome_feature_3_text">Connetti a tutti o tuoi server ownCloud</string>
+  <string name="welcome_feature_3_text">Connetti a tutti o tuoi server Curator Files</string>
   <string name="welcome_feature_4_title">Caricamenti fotocamera</string>
   <string name="welcome_feature_4_text">Le tue foto e video saranno automaticamente inviati al server</string>
   <string name="welcome_feature_5_title">Flusso video</string>

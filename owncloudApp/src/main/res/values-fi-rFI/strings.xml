@@ -641,7 +641,7 @@
   <string name="welcome_feature_2_title">Jaa tiedostoja ja kansioita</string>
   <string name="welcome_feature_2_text">Voit jakaa yksityisesti tai julkisesti</string>
   <string name="welcome_feature_3_title">Monta käyttäjää</string>
-  <string name="welcome_feature_3_text">Yhdistä kaikkiin ownCloud palvelimiisi</string>
+  <string name="welcome_feature_3_text">Yhdistä kaikkiin Curator Files palvelimiisi</string>
   <string name="welcome_feature_4_title">Kameran lähetykset</string>
   <string name="welcome_feature_4_text">Kuvasi/videosi lähetetään automaattisesti</string>
   <string name="welcome_feature_5_title">Videoiden striimaus</string>

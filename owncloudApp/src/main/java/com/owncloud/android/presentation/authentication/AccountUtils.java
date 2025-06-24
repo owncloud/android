@@ -23,9 +23,11 @@ package com.owncloud.android.presentation.authentication;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.accounts.AccountManagerCallback;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.Bundle;
 import android.preference.PreferenceManager;
 
 import com.owncloud.android.MainApp;
@@ -88,6 +90,14 @@ public class AccountUtils {
         Account[] accounts = getAccounts(context);
         for (Account account : accounts) {
             accountManager.removeAccount(account, null, null, null);
+        }
+    }
+
+    public static void deleteAccounts(Context context, AccountManagerCallback<Bundle> callback) {
+        AccountManager accountManager = AccountManager.get(context);
+        Account[] accounts = getAccounts(context);
+        for (Account account : accounts) {
+            accountManager.removeAccount(account, null, callback, null);
         }
     }
 

@@ -73,7 +73,7 @@
   <string name="prefs_remember_last_upload_location_summary">Lembrar a localización do envío da última compartición</string>
   <string name="prefs_pattern">Bloqueo por patrón</string>
   <string name="prefs_enable_logging">Activar o rexistro</string>
-  <string name="prefs_enable_logging_summary">Cando se activa, os rexistros poden impactar no rendemento e incluír información confidencial. Non obstante, os rexistros non están suxeitos a envío automático aos servidores ownCloud. Compartir rexistros con outros é responsabilidade exclusiva do usuario.</string>
+  <string name="prefs_enable_logging_summary">Cando se activa, os rexistros poden impactar no rendemento e incluír información confidencial. Non obstante, os rexistros non están suxeitos a envío automático aos servidores Curator Files. Compartir rexistros con outros é responsabilidade exclusiva do usuario.</string>
   <string name="prefs_send_feedback">Enviar comentarios</string>
   <string name="pattern_enter_pattern">Faga o seu patrón</string>
   <string name="pattern_configure_pattern">Faga o seu patrón</string>
@@ -535,7 +535,7 @@ Descárgueo de aquí: %2$s</string>
   <string name="welcome_feature_2_title">Compartir ficheiros e cartafoles</string>
   <string name="welcome_feature_2_text">Pode compartir privada ou publicamente</string>
   <string name="welcome_feature_3_title">Múltiples contas</string>
-  <string name="welcome_feature_3_text">Conecte con todos os seus servidores do ownCloud</string>
+  <string name="welcome_feature_3_text">Conecte con todos os seus servidores do Curator Files</string>
   <string name="welcome_feature_4_title">Envíos da cámara</string>
   <string name="welcome_feature_4_text">As súas imaxes ou vídeos enviaranse automaticamente</string>
   <string name="welcome_feature_5_title">Fluxo de vídeo</string>
