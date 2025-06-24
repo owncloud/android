@@ -17,6 +17,7 @@ local.properties
 
 # Firebase credentials
 google-services.json
+play-store-api-key.json
 
 # Mac .DS_Store files
 .DS_Store
