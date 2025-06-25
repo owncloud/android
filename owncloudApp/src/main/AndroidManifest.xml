@@ -55,7 +55,8 @@
         android:resizeableActivity="true"
         android:supportsPictureInPicture="false"
         android:taskAffinity=""
-        android:theme="@style/Theme.homeCloud.Toolbar">
+        android:theme="@style/Theme.homeCloud.Toolbar"
+        tools:replace="android:allowBackup">
         <activity
             android:name=".ui.preview.PreviewVideoActivity"
             android:label="@string/video_preview_label"

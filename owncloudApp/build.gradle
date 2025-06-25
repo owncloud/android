@@ -8,10 +8,19 @@ apply plugin: 'com.google.firebase.crashlytics'
 def commitSHA1 = 'COMMIT_SHA1'
 def gitRemote = 'GIT_REMOTE'
 
+repositories {
+    flatDir {
+        dirs 'libs'
+    }
+}
+
 dependencies {
     // Data and domain modules
     implementation project(':owncloudDomain')
     implementation project(':owncloudData')
+
+    // Seagate Telemetry SDK
+    implementation(name: 'telemetry-client-release-1.1.53', ext: 'aar')
 
     // Kotlin
     implementation libs.kotlin.stdlib
