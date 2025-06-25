@@ -248,6 +248,12 @@ class FileDisplayActivity : FileActivity(),
         setContentView(view)
 
         // setup toolbar
+        setupStandardToolbar( // This is a dirty workaround to make selection mode styling work properly
+            title = "",
+            displayHomeAsUpEnabled = false,
+            homeButtonEnabled = false,
+            displayShowTitleEnabled = false
+        )
         setupRootToolbar(
             isSearchEnabled = true,
             title = getString(R.string.default_display_name_for_root_folder),
