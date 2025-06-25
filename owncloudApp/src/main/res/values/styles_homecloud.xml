@@ -16,9 +16,10 @@
         <item name="toolbarStyle">@style/homeCloud.Appbar</item>
         <item name="actionBarPopupTheme">@style/homeCloud.Appbar.Popup</item>
         <item name="actionOverflowMenuStyle">@style/homeCloud.Appbar.Popup</item>
-        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowLightStatusBar">@bool/lightStatusBar</item>
 
         <!-- properties for action mode -->
+        <item name="actionBarSize">56dp</item>
         <item name="windowActionModeOverlay">true</item>
         <item name="actionModeBackground">@color/action_mode_background</item>
 
@@ -126,8 +127,12 @@
 
     <style name="homeCloud.Toolbar.ActionMode" parent="@style/homeCloud.Appbar">
         <item name="colorControlNormal">?attr/colorPrimary</item>
-        <item name="background">@color/primary</item>
+        <item name="background">@color/homecloud_bar_background</item>
         <item name="titleTextStyle">@style/homeCloud.Toolbar.ActionMode.TitleText</item>
+        <item name="android:paddingLeft">4dp</item>
+        <item name="android:paddingStart">4dp</item>
+        <item name="android:paddingRight">0dp</item>
+        <item name="android:paddingEnd">0dp</item>
     </style>
 
     <style name="homeCloud.Toolbar.ActionMode.Button">
