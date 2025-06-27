@@ -366,7 +366,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
-                    <androidx.appcompat.widget.AppCompatButton
+                    <Button
                         android:id="@+id/cancelButton"
                         style="@style/Button.Primary"
                         android:layout_width="match_parent"
@@ -376,7 +376,11 @@
                         android:text="@string/share_cancel_public_link_button"
                         android:theme="@style/Button.Primary" />
 
-                    <androidx.appcompat.widget.AppCompatButton
+                    <Space
+                        android:layout_width="8dp"
+                        android:layout_height="wrap_content"/>
+
+                    <Button
                         android:id="@+id/saveButton"
                         style="@style/Button.Primary"
                         android:layout_width="match_parent"
