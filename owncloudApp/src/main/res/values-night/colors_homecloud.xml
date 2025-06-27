@@ -2,12 +2,19 @@
 <resources>
     <color name="homecloud_primary">#FFFFFF</color>
     <color name="homecloud_primary_dark">@color/homecloud_bar_background</color>
+    <color name="homecloud_primary_inverted">#DD000000</color>
     <color name="homecloud_secondary">#DDFFFFFF</color>
     <color name="homecloud_color_accent">@color/homecloud_blue_lighten_2</color>
     <color name="homecloud_surface">#131313</color>
     <color name="homecloud_input_stroke_focused">@color/homecloud_blue_lighten_2</color>
     <color name="homecloud_input_stroke_nonfocused">@color/homecloud_border_gray</color>
     <color name="homecloud_drawer_header_background">#232323</color>
+
+    <color name="homecloud_button_primary_text">@color/homecloud_primary_inverted</color>
+    <color name="homecloud_button_primary_background">@color/homecloud_blue_lighten_2</color>
+    <color name="homecloud_button_secondary_text">@color/homecloud_blue_lighten_2</color>
+    <color name="homecloud_button_secondary_stroke">@color/homecloud_blue_lighten_2</color>
+    <color name="homecloud_button_borderless_text">@color/homecloud_blue_lighten_2</color>
 
     <color name="homecloud_bar_background">#1F1F1F</color>
 </resources>

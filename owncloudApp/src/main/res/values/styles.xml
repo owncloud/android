@@ -127,22 +127,6 @@
         <item name="suggestionRowLayout">@layout/search_suggestion_row</item>>
     </style>
 
-    <style name="Button.Secondary" parent="Widget.AppCompat.Button.Colored">
-        <item name="colorButtonNormal">@color/secondary_button_background_color</item>
-        <item name="colorAccent">@color/secondary_button_background_color</item>
-        <item name="android:textColor">@color/secondary_button_text_color</item>
-    </style>
-
-    <style name="Button.Primary" parent="Widget.AppCompat.Button.Colored">
-        <item name="colorButtonNormal">@color/primary_button_background_color</item>
-        <item name="colorAccent">@color/primary_button_background_color</item>
-        <item name="android:textColor">@color/primary_button_text_color</item>
-    </style>
-
-    <style name="Button.Borderless" parent="Widget.AppCompat.Button.Borderless">
-        <item name="android:textColor">@color/color_accent</item>
-    </style>
-
     <!-- Style for top progress bar -->
     <style name="Widget.ownCloud.TopProgressBar" parent="@style/Widget.AppCompat.ProgressBar.Horizontal">
         <!-- for a custom color independent of @color/primary,
