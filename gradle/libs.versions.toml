@@ -34,6 +34,7 @@ junit4 = "4.13.2"
 koin = "3.3.3"
 kotlin = "1.9.20"
 kotlinxCoroutines = "1.6.4"
+kover = "0.9.1"
 ksp = "1.9.20-1.0.14"
 ktlint = "11.1.0"
 markwon = "4.6.2"
@@ -130,3 +131,4 @@ ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 sonarqube = { id = "org.sonarqube", version.ref = "sonarqube" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 cyclonedx = { id = "org.cyclonedx.bom", version.ref = "cyclonedx" }
+kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kover" }

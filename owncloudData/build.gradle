@@ -1,6 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'com.google.devtools.ksp'
 apply plugin: 'kotlin-android'
+apply plugin: 'org.jetbrains.kotlinx.kover'
 
 android {
     compileSdkVersion sdkCompileVersion
@@ -93,4 +94,22 @@ dependencies {
     // Detekt
     detektPlugins libs.detekt.formatting
     detektPlugins libs.detekt.libraries
+}
+
+tasks.whenTaskAdded { task ->
+    if (task.name == 'koverReport') {
+        task.xmlReport = true
+        task.htmlReport = true
+        task.excludePackages = [
+                "com.owncloud.android.data.authentication.datasources.implementation.*",
+                "com.owncloud.android.data.extensions.*",
+                "com.owncloud.android.data.files.datasources.*",
+                "com.owncloud.android.data.migrations.*",
+                "com.owncloud.android.data.appregistry.db.*",
+                "com.owncloud.android.data.files.db.*",
+                "com.owncloud.android.data.folderbackup.db.*",
+                "com.owncloud.android.data.transfers.db.*",
+                "com.owncloud.android.data.user.db.*"
+        ]
+    }
 }
