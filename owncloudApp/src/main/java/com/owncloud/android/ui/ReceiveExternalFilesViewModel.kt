@@ -1,7 +1,7 @@
 /**
  * ownCloud Android client application
  *
- * Copyright (C) 2024 ownCloud GmbH.
+ * Copyright (C) 2025 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -44,11 +44,16 @@ class ReceiveExternalFilesViewModel(
     private val _spacesAreAllowed = MutableLiveData<Boolean>()
     val spacesAreAllowed: LiveData<Boolean> = _spacesAreAllowed
 
+    private val _isMultiPersonal = MutableLiveData<Boolean>()
+    val isMultiPersonal: LiveData<Boolean> = _isMultiPersonal
+
     init {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
             val capabilities = getStoredCapabilitiesUseCase(GetStoredCapabilitiesUseCase.Params(accountName))
             val spacesAvailableForAccount = capabilities?.isSpacesAllowed() == true
             _spacesAreAllowed.postValue(spacesAvailableForAccount)
+            val isMultiPersonalCapability = capabilities?.spaces?.hasMultiplePersonalSpaces == true
+            _isMultiPersonal.postValue(isMultiPersonalCapability)
         }
     }
 

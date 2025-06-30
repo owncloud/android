@@ -281,7 +281,12 @@ class FileListAdapter(
                 view.binding.let {
                     it.fileListConstraintLayout.filterTouchesWhenObscured = PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(context)
                     it.Filename.text = file.fileName
-                    it.fileListSize.text = DisplayUtils.bytesToHumanReadable(file.length, context, true)
+                    val isFolderInKw = isMultiPersonal && file.isFolder
+                    it.fileListSize.text = if (isFolderInKw) "" else DisplayUtils.bytesToHumanReadable(file.length, context, true)
+                    it.fileListSeparator.visibility = if (isFolderInKw) View.GONE else View.VISIBLE
+                    it.fileListLastMod.layoutParams = (it.fileListLastMod.layoutParams as ViewGroup.MarginLayoutParams).also {
+                            params -> params.marginStart = if (isFolderInKw) 0 else
+                        context.resources.getDimensionPixelSize(R.dimen.standard_quarter_margin) }
                     it.fileListLastMod.text = DisplayUtils.getRelativeTimestamp(context, file.modificationTimestamp)
                     it.threeDotMenu.isVisible = getCheckedItems().isEmpty()
                     it.threeDotMenu.contentDescription = context.getString(R.string.content_description_file_operations, file.fileName)
