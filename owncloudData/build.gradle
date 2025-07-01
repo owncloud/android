@@ -94,3 +94,17 @@ dependencies {
     detektPlugins libs.detekt.formatting
     detektPlugins libs.detekt.libraries
 }
+
+apply from: rootProject.file("jacoco.gradle")
+
+// Doing after evaluating to ensure all tasks are created
+afterEvaluate {
+    setupJacocoTasks([
+            'com/owncloud/android/data/migrations/**',
+            'com/owncloud/android/data/extensions/**',
+            'com/owncloud/android/data/files/db/**',
+            'com/owncloud/android/data/files/datasources/*.class',
+            'com/owncloud/android/data/authentication/datasources/implementation/**',
+            '**/com/owncloud/android/data/*.class'
+    ])
+}
