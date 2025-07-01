@@ -969,7 +969,9 @@ class FileDisplayActivity : FileActivity(),
         // or it will show the root folder one
         if (intent.action == ACTION_DETAILS && chosenFile?.remotePath == OCFile.ROOT_PATH && secondFragment is FileDetailsFragment) return
 
-        if (chosenFile == null || (chosenFile.remotePath == OCFile.ROOT_PATH && (space == null || isNotProjectSpaceAndMultiPersonalMode(space)))) {
+        if (chosenFile == null || (chosenFile.remotePath == OCFile.ROOT_PATH && (space == null || isNotProjectSpaceAndMultiPersonalMode(space) ||
+                    isMultiPersonalModeInAvailableOffline(space))
+                )) {
             val title =
                 when (fileListOption) {
                     FileListOption.AV_OFFLINE -> getString(R.string.drawer_item_only_available_offline)
@@ -993,7 +995,8 @@ class FileDisplayActivity : FileActivity(),
 
     private fun isNotProjectSpaceAndMultiPersonalMode(space: OCSpace?) = !space!!.isProject && !(space.isPersonal && isMultiPersonal)
 
-
+    private fun isMultiPersonalModeInAvailableOffline(space: OCSpace?) = space!!.isPersonal && isMultiPersonal && fileListOption == FileListOption
+        .AV_OFFLINE
     /**
      * Updates the view associated to the activity after the finish of an operation trying to
      * remove a file.
