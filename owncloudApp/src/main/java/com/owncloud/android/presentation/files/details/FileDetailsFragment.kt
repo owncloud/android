@@ -641,13 +641,13 @@ class FileDetailsFragment : FileFragment() {
          * @param account      An ownCloud account; needed to start downloads
          * @return New fragment with arguments set
          */
-        fun newInstance(fileToDetail: OCFile, account: Account, syncFileAtOpen: Boolean = true, isMultipersonal: Boolean): FileDetailsFragment =
+        fun newInstance(fileToDetail: OCFile, account: Account, syncFileAtOpen: Boolean = true, isMultiPersonal: Boolean): FileDetailsFragment =
             FileDetailsFragment().apply {
                 arguments = Bundle().apply {
                     putParcelable(ARG_FILE, fileToDetail)
                     putParcelable(ARG_ACCOUNT, account)
                     putBoolean(ARG_SYNC_FILE_AT_OPEN, syncFileAtOpen)
-                    putBoolean(ARG_IS_MULTIPERSONAL, isMultipersonal)
+                    putBoolean(ARG_IS_MULTIPERSONAL, isMultiPersonal)
                 }
             }
     }

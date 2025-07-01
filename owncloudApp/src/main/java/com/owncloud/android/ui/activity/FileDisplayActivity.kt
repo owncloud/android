@@ -1756,7 +1756,7 @@ class FileDisplayActivity : FileActivity(),
             fileToDetail = ocFile,
             account = account,
             syncFileAtOpen = syncFileAtOpen,
-            isMultipersonal = isMultiPersonal
+            isMultiPersonal = isMultiPersonal
         )
         setSecondFragment(detailsFragment)
     }
