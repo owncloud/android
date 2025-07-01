@@ -126,14 +126,7 @@ class FileDetailsFragment : FileFragment() {
         super.onViewCreated(view, savedInstanceState)
         isMultiPersonal = requireArguments().getBoolean(ARG_IS_MULTIPERSONAL)
 
-        collectLatestLifecycleFlow(fileDetailsViewModel.currentFile) { ocFileWithSyncInfo: OCFileWithSyncInfo? ->
-            if (ocFileWithSyncInfo != null) {
-                file = ocFileWithSyncInfo.file
-                updateDetails(ocFileWithSyncInfo)
-            } else {
-                requireActivity().onBackPressed()
-            }
-        }
+        observeCurrentFile()
 
         collectLatestLifecycleFlow(fileDetailsViewModel.appRegistryMimeType) { appRegistryMimeType ->
             if (appRegistryMimeType != null) {
@@ -600,6 +593,17 @@ class FileDetailsFragment : FileFragment() {
             }
         }
         fileOperationsViewModel.setLastUsageFile(fileWaitingToPreview)
+    }
+
+    private fun observeCurrentFile() {
+        collectLatestLifecycleFlow(fileDetailsViewModel.currentFile) { ocFileWithSyncInfo: OCFileWithSyncInfo? ->
+            if (ocFileWithSyncInfo != null) {
+                file = ocFileWithSyncInfo.file
+                updateDetails(ocFileWithSyncInfo)
+            } else {
+                requireActivity().onBackPressed()
+            }
+        }
     }
 
     override fun updateViewForSyncInProgress() {
