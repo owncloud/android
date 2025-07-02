@@ -807,7 +807,8 @@ class FileDisplayActivity : FileActivity(),
         Timber.v("onResume() start")
         super.onResume()
 
-        if (mainFileListFragment?.getCurrentSpace()?.isProject == true) {
+        if (mainFileListFragment?.getCurrentSpace()?.isProject == true ||
+            (mainFileListFragment?.getCurrentSpace()?.isPersonal == true && isMultiPersonal)) {
             setCheckedItemAtBottomBar(getMenuItemForFileListOption(FileListOption.SPACES_LIST))
             updateToolbar(null, mainFileListFragment?.getCurrentSpace())
         } else {
