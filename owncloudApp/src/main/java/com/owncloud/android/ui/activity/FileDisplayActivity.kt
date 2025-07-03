@@ -493,7 +493,7 @@ class FileDisplayActivity : FileActivity(),
                 }
 
                 else -> {
-                    FileDetailsFragment.newInstance(file, account, false)
+                    FileDetailsFragment.newInstance(file, account, false, isMultiPersonal)
                 }
             }
         }
@@ -807,7 +807,8 @@ class FileDisplayActivity : FileActivity(),
         Timber.v("onResume() start")
         super.onResume()
 
-        if (mainFileListFragment?.getCurrentSpace()?.isProject == true) {
+        if (mainFileListFragment?.getCurrentSpace()?.isProject == true ||
+            (mainFileListFragment?.getCurrentSpace()?.isPersonal == true && isMultiPersonal)) {
             setCheckedItemAtBottomBar(getMenuItemForFileListOption(FileListOption.SPACES_LIST))
             updateToolbar(null, mainFileListFragment?.getCurrentSpace())
         } else {
@@ -969,7 +970,9 @@ class FileDisplayActivity : FileActivity(),
         // or it will show the root folder one
         if (intent.action == ACTION_DETAILS && chosenFile?.remotePath == OCFile.ROOT_PATH && secondFragment is FileDetailsFragment) return
 
-        if (chosenFile == null || (chosenFile.remotePath == OCFile.ROOT_PATH && (space == null || isNotProjectSpaceAndMultiPersonalMode(space)))) {
+        if (chosenFile == null || (chosenFile.remotePath == OCFile.ROOT_PATH && (space == null || isNotProjectSpaceAndMultiPersonalMode(space) ||
+                    isMultiPersonalModeInAvailableOffline(space))
+                )) {
             val title =
                 when (fileListOption) {
                     FileListOption.AV_OFFLINE -> getString(R.string.drawer_item_only_available_offline)
@@ -993,7 +996,8 @@ class FileDisplayActivity : FileActivity(),
 
     private fun isNotProjectSpaceAndMultiPersonalMode(space: OCSpace?) = !space!!.isProject && !(space.isPersonal && isMultiPersonal)
 
-
+    private fun isMultiPersonalModeInAvailableOffline(space: OCSpace?) = space!!.isPersonal && isMultiPersonal && fileListOption == FileListOption
+        .AV_OFFLINE
     /**
      * Updates the view associated to the activity after the finish of an operation trying to
      * remove a file.
@@ -1752,7 +1756,8 @@ class FileDisplayActivity : FileActivity(),
         val detailsFragment = FileDetailsFragment.newInstance(
             fileToDetail = ocFile,
             account = account,
-            syncFileAtOpen = syncFileAtOpen
+            syncFileAtOpen = syncFileAtOpen,
+            isMultiPersonal = isMultiPersonal
         )
         setSecondFragment(detailsFragment)
     }

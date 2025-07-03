@@ -52,6 +52,7 @@ ownCloud admins and users.
 * Enhancement - Shares space in Android native file explorer: [#4515](https://github.com/owncloud/android/issues/4515)
 * Enhancement - Accessibility reports in 4.5.1: [#4568](https://github.com/owncloud/android/issues/4568)
 * Enhancement - Support for Kiteworks servers without client secret: [#4588](https://github.com/owncloud/android/issues/4588)
+* Enhancement - Polish UI and sync operations over Kiteworks servers: [#4591](https://github.com/owncloud/android/issues/4591)
 * Enhancement - Integration of instrumented tests in GitHub Actions: [#4595](https://github.com/owncloud/android/issues/4595)
 * Enhancement - SBOM (Software Bill of Materials): [#4598](https://github.com/owncloud/android/issues/4598)
 
@@ -187,6 +188,14 @@ ownCloud admins and users.
 
    https://github.com/owncloud/android/issues/4588
    https://github.com/owncloud/android/pull/4589
+
+* Enhancement - Polish UI and sync operations over Kiteworks servers: [#4591](https://github.com/owncloud/android/issues/4591)
+
+   The UI and navigation behaviour after performing a sync operation have been
+   refined for accounts associated with Kiteworks servers.
+
+   https://github.com/owncloud/android/issues/4591
+   https://github.com/owncloud/android/pull/4608
 
 * Enhancement - Integration of instrumented tests in GitHub Actions: [#4595](https://github.com/owncloud/android/issues/4595)
 
