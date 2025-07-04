@@ -208,11 +208,12 @@ ownCloud admins and users.
 * Enhancement - SBOM (Software Bill of Materials): [#4598](https://github.com/owncloud/android/issues/4598)
 
    SBOM to be generated in every PR via GitHub Actions with the list of all
-   dependencies used in the code. Tool cyclonedx builds it, artifact is exported to
-   xml and finally converted to html with a xlst template.
+   dependencies used in the code, powered by cyclonedx. Finally, it is pushed to
+   the repo's root folder .
 
    https://github.com/owncloud/android/issues/4598
    https://github.com/owncloud/android/pull/4599
+   https://github.com/owncloud/android/pull/4621
 
 # Changelog for ownCloud Android Client [4.5.1] (2025-04-03)
 
