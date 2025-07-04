@@ -39,6 +39,9 @@
         <!-- default theme for alert dialogs -->
         <item name="alertDialogTheme">@style/Theme.homeCloud.AlertDialog</item>
 
+        <!-- Bottom sheet -->
+        <item name="bottomSheetDialogTheme">@style/Theme.homeCloud.BottomSheet</item>
+
         <!-- style for search view -->
         <item name="searchViewStyle">@style/homeCloud.SearchView</item>
         <item name="android:textColorPrimary">?attr/colorPrimary</item>
@@ -277,6 +280,20 @@
     </style>
 
     <style name="homeCloud.TextInputLayout.InputShape" parent="ShapeAppearance.Material3.Corner.None">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">16dp</item>
+    </style>
+
+    <style name="Theme.homeCloud.BottomSheet" parent="ThemeOverlay.Material3.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/homeCloud.BottomSheetStyle</item>
+    </style>
+
+    <style name="homeCloud.BottomSheetStyle" parent="Widget.Material3.BottomSheet.Modal">
+        <item name="backgroundTint">@color/homecloud_bar_background</item>
+        <item name="shapeAppearance">@style/homeCloud.BottomSheet.ShapeAppearance</item>
+    </style>
+
+    <style name="homeCloud.BottomSheet.ShapeAppearance" parent="ShapeAppearance.Material3.LargeComponent">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">16dp</item>
     </style>
