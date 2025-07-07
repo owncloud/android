@@ -21,6 +21,29 @@ jobs:
           ssh-key: ${{ secrets.DEPLOYMENT_SSH_KEY_TEST }}
           persist-credentials: false
 
+      - name: Start SSH agent and add key
+        run: |
+          # Create the SSH directory if it doesn't exist
+          mkdir -p ~/.ssh
+
+          # Save the private SSH key from the secret into a file
+          echo "${{ secrets.DEPLOYMENT_SSH_KEY_TEST }}" > ~/.ssh/id_rsa
+
+          # Set correct permissions for the private key
+          chmod 600 ~/.ssh/id_rsa
+
+          # Start the SSH agent in the background
+          eval "$(ssh-agent -s)"
+
+          # Add the private key to the SSH agent
+          ssh-add ~/.ssh/id_rsa
+
+          # Add GitHub's public SSH keys to known_hosts to prevent host verification prompts
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+
+          # Test the SSH connection to GitHub (this will fail gracefully if not successful)
+          ssh -o StrictHostKeyChecking=no -T git@github.com || true
+
       - name: Check SSH push permissions (dry-run)
         run: |
           git remote set-url origin git@github.com:${{ github.repository }}.git
