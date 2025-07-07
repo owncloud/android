@@ -7,11 +7,10 @@
     android:layout_height="wrap_content"
     android:layout_gravity="center">
 
-    <androidx.cardview.widget.CardView
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="@dimen/activity_horizontal_margin"
-        app:cardBackgroundColor="@color/background_color"
         app:cardCornerRadius="@dimen/standard_half_margin"
         app:cardElevation="0dp">
 
@@ -54,6 +53,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
+                android:gravity="end"
                 android:layout_marginBottom="5dp">
 
                 <androidx.appcompat.widget.AppCompatButton
@@ -61,29 +61,26 @@
                     style="@style/Button.Borderless"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_weight="2"
                     android:text="@string/common_no" />
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/dialog_remove_local_only"
                     style="@style/Button.Borderless"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
                     android:text="@string/confirmation_remove_local" />
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/dialog_remove_yes"
                     style="@style/Button.Borderless"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_weight="2"
+                    android:layout_height="wrap_content"
                     android:text="@string/common_yes" />
 
             </LinearLayout>
         </LinearLayout>
 
-    </androidx.cardview.widget.CardView>
+    </FrameLayout>
 
 </LinearLayout>
 

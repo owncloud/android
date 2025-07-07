@@ -1,10 +1,12 @@
 package com.owncloud.android.ui.dialog
 
+import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.owncloud.android.databinding.DialogFileAlreadyExistsBinding
 
 class FileAlreadyExistsDialog : DialogFragment() {
@@ -30,8 +32,8 @@ class FileAlreadyExistsDialog : DialogFragment() {
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        binding = DialogFileAlreadyExistsBinding.inflate(layoutInflater)
         val titleText = arguments?.getString(TITLE_TEXT)
         val descriptionText = arguments?.getString(DESCRIPTION_TEXT)
         val checkboxText = arguments?.getString(CHECKBOX_TEXT)
@@ -49,6 +51,10 @@ class FileAlreadyExistsDialog : DialogFragment() {
         binding.dialogFileAlreadyExistsSkip.setOnClickListener { mListener?.onSkipButtonClick() }
 
         binding.dialogFileAlreadyExistsCheckbox.visibility = if (checkboxVisible == true) { View.VISIBLE } else { View.GONE }
+
+        return MaterialAlertDialogBuilder(requireContext())
+            .setView(binding.root)
+            .create()
     }
 
     companion object {

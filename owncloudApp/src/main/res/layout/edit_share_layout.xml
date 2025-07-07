@@ -110,11 +110,12 @@
                 android:visibility="gone" />
         </LinearLayout>
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/closeButton"
-            style="@style/Button.Primary"
-            android:layout_width="match_parent"
+            style="@style/Button.Borderless"
+            android:layout_width="wrap_content"
             android:layout_height="0dp"
+            android:layout_gravity="end"
             android:layout_weight="1"
             android:contentDescription="sharePublicLinkCloseButton"
             android:text="@string/drawer_close"

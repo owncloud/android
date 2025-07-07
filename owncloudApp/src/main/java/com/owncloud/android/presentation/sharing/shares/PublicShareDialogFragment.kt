@@ -25,6 +25,7 @@
 package com.owncloud.android.presentation.sharing.shares
 
 import android.accounts.Account
+import android.app.Dialog
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
@@ -45,6 +46,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.DialogFragment
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.owncloud.android.MainApp.Companion.appContext
 import com.owncloud.android.R
 import com.owncloud.android.databinding.SharePublicDialogBinding
@@ -186,24 +188,17 @@ class PublicShareDialogFragment : DialogFragment() {
 
     private fun updating(): Boolean = publicShare != null
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = SharePublicDialogBinding.inflate(inflater, container, false)
-        return binding.root.apply {
-            // Allow or disallow touches with other visible windows
-            filterTouchesWhenObscured = PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(context)
-        }
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        _binding = SharePublicDialogBinding.inflate(layoutInflater)
+        binding.root.apply {
+            // Allow or disallow touches with other visible windows
+            filterTouchesWhenObscured = PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(context)
+        }
         // Get and set the values saved previous to the screen rotation, if any
         if (savedInstanceState != null) {
             val expirationDate = savedInstanceState.getString(KEY_EXPIRATION_DATE)
@@ -231,7 +226,12 @@ class PublicShareDialogFragment : DialogFragment() {
             showMessageInSnackbar(getString(R.string.clipboard_text_copied))
         }
 
-        dialog?.avoidScreenshotsIfNeeded()
+        return MaterialAlertDialogBuilder(requireContext())
+            .setView(binding.root)
+            .create()
+            .also {
+                it.avoidScreenshotsIfNeeded()
+            }
     }
 
     private fun initTitleAndLabels() {

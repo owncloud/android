@@ -114,24 +114,23 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/standard_margin"
+                android:gravity="end"
                 android:orientation="horizontal">
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/cancelButton"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    style="?android:attr/borderlessButtonStyle"
+                    style="@style/Button.Borderless"
                     android:text="@android:string/cancel" />
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/createButton"
                     android:enabled="false"
                     android:textColor="@color/grey"
-                    style="?android:attr/borderlessButtonStyle"
-                    android:layout_width="match_parent"
+                    style="@style/Button.Borderless"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:text="@string/share_privilege_can_edit_create" />
 
                 </LinearLayout>

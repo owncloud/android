@@ -33,6 +33,8 @@ import android.webkit.SslErrorHandler;
 import android.widget.Button;
 
 import androidx.fragment.app.DialogFragment;
+
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.owncloud.android.R;
 import com.owncloud.android.extensions.DialogExtKt;
 import com.owncloud.android.lib.common.network.CertificateCombinedException;
@@ -127,11 +129,12 @@ public class SslUntrustedCertDialog extends DialogFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Timber.d("onCreateView, savedInstanceState is %s", savedInstanceState);
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        Timber.d("onCreateDialog, savedInstanceState is %s", savedInstanceState);
+
         // Create a view by inflating desired layout
         if (mView == null) {
-            mView = inflater.inflate(R.layout.ssl_untrusted_cert_layout, container, false);
+            mView = getLayoutInflater().inflate(R.layout.ssl_untrusted_cert_layout, null);
             mView.findViewById(R.id.details_scroll).setVisibility(View.GONE);
             mErrorViewAdapter.updateErrorView(mView);
         } else {
@@ -163,13 +166,9 @@ public class SslUntrustedCertDialog extends DialogFragment {
 
         });
 
-        return mView;
-    }
-
-    @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        Timber.d("onCreateDialog, savedInstanceState is %s", savedInstanceState);
-        final Dialog dialog = super.onCreateDialog(savedInstanceState);
+        final Dialog dialog = new MaterialAlertDialogBuilder(requireContext())
+                .setView(mView)
+                .create();
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         DialogExtKt.avoidScreenshotsIfNeeded(dialog);
         return dialog;

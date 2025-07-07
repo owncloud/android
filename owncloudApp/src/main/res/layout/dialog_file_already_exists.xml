@@ -8,13 +8,12 @@
     android:layout_gravity="center"
     android:layout_margin="10dp">
 
-    <androidx.cardview.widget.CardView
+    <FrameLayout
         android:id="@+id/cardView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:elevation="10dp"
         android:padding="@dimen/activity_horizontal_margin"
-        app:cardBackgroundColor="@color/background_color"
         app:cardCornerRadius="8dp"
         app:cardElevation="0dp">
 
@@ -82,7 +81,7 @@
             </LinearLayout>
         </LinearLayout>
 
-    </androidx.cardview.widget.CardView>
+    </FrameLayout>
 
 </LinearLayout>
 

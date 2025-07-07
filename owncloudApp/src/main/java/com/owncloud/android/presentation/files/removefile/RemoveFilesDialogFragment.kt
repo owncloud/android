@@ -22,12 +22,14 @@
  */
 package com.owncloud.android.presentation.files.removefile
 
+import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.fragment.app.DialogFragment
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.owncloud.android.R
 import com.owncloud.android.databinding.RemoveFilesDialogBinding
 import com.owncloud.android.datamodel.ThumbnailsCacheManager
@@ -50,14 +52,9 @@ class RemoveFilesDialogFragment : DialogFragment() {
 
     private lateinit var targetFiles: List<OCFile>
     private var isAvailableLocallyAndNotAvailableOffline: Boolean = false
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        _binding = RemoveFilesDialogBinding.inflate(inflater, container, false)
-        return binding.root
-    }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        _binding = RemoveFilesDialogBinding.inflate(layoutInflater)
         var containsFolder = false
         var messageStringId: Int
         val messageArguments: String
@@ -115,6 +112,9 @@ class RemoveFilesDialogFragment : DialogFragment() {
 
             dialogRemoveNo.setOnClickListener { dismiss() }
         }
+        return MaterialAlertDialogBuilder(requireContext())
+            .setView(binding.root)
+            .create()
     }
 
     private fun handleThumbnail(files: List<OCFile>, thumbnailImageView: ImageView) {

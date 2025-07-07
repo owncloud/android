@@ -364,14 +364,14 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:gravity="end"
                     android:orientation="horizontal">
 
-                    <Button
+                    <androidx.appcompat.widget.AppCompatButton
                         android:id="@+id/cancelButton"
-                        style="@style/Button.Primary"
-                        android:layout_width="match_parent"
+                        style="@style/Button.Borderless"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:contentDescription="@string/share_cancel_public_link_button"
                         android:text="@string/share_cancel_public_link_button"
                         android:theme="@style/Button.Primary" />
@@ -380,12 +380,11 @@
                         android:layout_width="8dp"
                         android:layout_height="wrap_content"/>
 
-                    <Button
+                    <androidx.appcompat.widget.AppCompatButton
                         android:id="@+id/saveButton"
-                        style="@style/Button.Primary"
-                        android:layout_width="match_parent"
+                        style="@style/Button.Borderless"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:contentDescription="@string/share_confirm_public_link_button"
                         android:text="@string/share_confirm_public_link_button"
                         android:theme="@style/Button.Primary" />
