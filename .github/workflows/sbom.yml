@@ -83,4 +83,3 @@ jobs:
           name: ownClouders
           commit_message: "docs: SBOM updated [skip ci]"
           files: sbom.json
-          access_token: ${{ github.token }}
