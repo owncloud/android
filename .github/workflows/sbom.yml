@@ -14,42 +14,35 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout the full repository history (required to access origin/master)
+
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           ssh-key: ${{ secrets.DEPLOYMENT_SSH_KEY_TEST }}
           persist-credentials: false
 
+      # Start SSH agent and add the SSH key to authenticate Git operations
       - name: Start SSH agent and add key
         run: |
-          # Create the SSH directory if it doesn't exist
           mkdir -p ~/.ssh
-
-          # Save the private SSH key from the secret into a file
           echo "${{ secrets.DEPLOYMENT_SSH_KEY_TEST }}" > ~/.ssh/id_rsa
-
-          # Set correct permissions for the private key
           chmod 600 ~/.ssh/id_rsa
-
           # Start the SSH agent in the background
           eval "$(ssh-agent -s)"
-
           # Add the private key to the SSH agent
           ssh-add ~/.ssh/id_rsa
-
           # Add GitHub's public SSH keys to known_hosts to prevent host verification prompts
           ssh-keyscan github.com >> ~/.ssh/known_hosts
-
           # Test the SSH connection to GitHub (this will fail gracefully if not successful)
           ssh -o StrictHostKeyChecking=no -T git@github.com || true
 
+      # Dry-run push to confirm SSH authentication is working
       - name: Check SSH push permissions (dry-run)
         run: |
           git remote set-url origin git@github.com:${{ github.repository }}.git
           git push --dry-run origin HEAD
 
-      # Cache Gradle dependencies for faster builds
+      # Cache Gradle dependencies to speed up future builds
       - name: Cache Gradle dependencies
         uses: actions/cache@v4
         with:
@@ -61,39 +54,38 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
-      # Set up Java 17 for the Gradle build
+      # Set up Java 17 (required by Gradle and CycloneDX plugin)
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'temurin'
 
-      # Generate the SBOM file using the CycloneDX plugin
+      # Generate the Software Bill of Materials using CycloneDX Gradle plugin
       - name: Generate SBOM (CycloneDX)
-        run: ./gradlew --no-daemon cyclonedxBom  
+        run: ./gradlew --no-daemon cyclonedxBom
 
-      # Move the generated SBOM to the repository root and rename it
+      # Move the generated SBOM to the root and rename it
       - name: Move and rename SBOM to root
         run: mv build/reports/bom.json ./sbom.json
 
-      # Remove non-deterministic fields to ensure meaningful diffs
+      # Clean dynamic fields (serialNumber and timestamp) for meaningful diffs
       - name: Clean serialNumber and timestamp in SBOM
         run: |
           sudo apt-get update && sudo apt-get install -y jq
           jq 'del(.serialNumber, .timestamp)' sbom.json > sbom_clean.json && mv sbom_clean.json sbom.json
 
-      # Fetch the latest state of the master branch for comparison
+      # Fetch the master branch to compare with current SBOM
       - name: Fetch origin/master
-        run: git fetch origin master
+        run: git fetch origin master_fake
 
-      # Extract and clean the SBOM from origin/master for comparison
+      # Extract and clean the SBOM file from origin/master
       - name: Extract clean SBOM from origin/master
         run: |
-          # If sbom.json does not exist on master, create an empty JSON to prevent failure
-          git show origin/master:sbom.json > sbom_master.json || echo '{}' > sbom_master.json
+          git show origin/master_fake:sbom.json > sbom_master.json || echo '{}' > sbom_master.json
           jq 'del(.serialNumber, .timestamp)' sbom_master.json > sbom_master_clean.json
 
-      # Compare the current SBOM with the cleaned version from master
+      # Compare current SBOM with cleaned master version and set output
       - name: Compare current SBOM with master
         id: diff
         run: |
@@ -103,7 +95,7 @@ jobs:
             echo "no_changes=false" >> $GITHUB_OUTPUT
           fi
 
-      # Commit and push the new SBOM only if it differs from master
+      # Commit the file, only if it is different than the existing one
       - name: Commit files
         if: steps.diff.outputs.no_changes == 'false'
         uses: GuillaumeFalourd/git-commit-push@v1.3
