@@ -18,7 +18,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          ssh-key: ${{ secrets.DEPLOYMENT_SSH_KEY }}
+          ssh-key: ${{ secrets.DEPLOYMENT_SSH_KEY_TEST }}
           persist-credentials: false
 
       - name: Check SSH push permissions (dry-run)
