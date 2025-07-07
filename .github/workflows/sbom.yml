@@ -19,6 +19,12 @@ jobs:
         uses: actions/checkout@v4
         with:
           ssh-key: ${{ secrets.DEPLOYMENT_SSH_KEY }}
+          persist-credentials: false
+
+      - name: Check SSH push permissions (dry-run)
+        run: |
+          git remote set-url origin git@github.com:${{ github.repository }}.git
+          git push --dry-run origin HEAD
 
       # Cache Gradle dependencies for faster builds
       - name: Cache Gradle dependencies
