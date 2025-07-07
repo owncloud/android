@@ -38,6 +38,7 @@
 
         <!-- default theme for alert dialogs -->
         <item name="alertDialogTheme">@style/Theme.homeCloud.AlertDialog</item>
+        <item name="materialAlertDialogTheme">@style/Theme.homeCloud.AlertDialog</item>
 
         <!-- Bottom sheet -->
         <item name="bottomSheetDialogTheme">@style/Theme.homeCloud.BottomSheet</item>
@@ -96,16 +97,24 @@
     <!-- DIALOG THEMES: styles for DIALOGs -->
 
     <!-- DEFAULT (via Theme.homeCloud), and explicitly used ONCE, in Preference "behaviour" for instant uploads - NO MORE, not needed, it's default -->
-    <style name="Theme.homeCloud.AlertDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
-        <item name="colorPrimary">@color/homecloud_primary</item>
-        <item name="android:textColorPrimary">?attr/colorPrimary</item>
-        <item name="android:textColor">?attr/colorPrimary</item>
-        <item name="searchViewStyle">@style/homeCloud.SearchView</item>
-        <item name="buttonBarButtonStyle">@style/Theme.homeCloud.Dialog.ButtonBar.Button</item>
-        <item name="buttonBarStyle">@style/Theme.homeCloud.Dialog.ButtonBar</item>
+    <style name="Theme.homeCloud.AlertDialog" parent="ThemeOverlay.Material3.MaterialAlertDialog">
+        <item name="alertDialogStyle">@style/homeCloud.AlertDialog</item>
+        <item name="shapeAppearance">@style/homeCloud.AlertDialog.ShapeAppearance</item>
         <item name="buttonBarPositiveButtonStyle">@style/Theme.homeCloud.Dialog.ButtonBar.Button</item>
         <item name="buttonBarNegativeButtonStyle">@style/Theme.homeCloud.Dialog.ButtonBar.Button</item>
-        <item name="android:windowBackground">@color/homecloud_bar_background</item>
+    </style>
+
+    <style name="Theme.homeCloud.Dialog.ButtonBar.Button" parent="@style/Widget.Material3.Button.TextButton.Dialog">
+        <item name="android:textColor">@color/selector_borderless_button_color</item>
+    </style>
+
+    <style name="homeCloud.AlertDialog" parent="MaterialAlertDialog.Material3">
+        <item name="backgroundTint">@color/homecloud_dialog_background</item>
+    </style>
+
+    <style name="homeCloud.AlertDialog.ShapeAppearance" parent="ShapeAppearance.Material3.LargeComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">16dp</item>
     </style>
 
     <!-- USED IN SHAREACTIVITY!! !! -->
@@ -213,23 +222,6 @@
     fix see:
         http://stackoverflow.com/questions/27187353/dialog-buttons-with-long-text-not-wrapping-squeezed-out-material-theme-on-an
      -->
-    <style name="Theme.homeCloud.Dialog.ButtonBar" parent="@style/Widget.AppCompat.ButtonBar.AlertDialog">
-        <!-- Making sure, the button bar uses parent width and is not restricted in height -->
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:height">@null</item>
-        <item name="android:minHeight">@null</item>
-    </style>
-
-    <style name="Theme.homeCloud.Dialog.ButtonBar.Button" parent="@style/Widget.AppCompat.Button.ButtonBar.AlertDialog">
-        <!-- Setting the weight as follows should result in equally wide buttons filling the alert dialog width,
-            but instead they span further out of the dialog, breaking in multiple lines though -->
-        <item name="android:layout_width">0dp</item>
-        <item name="android:layout_weight">1</item>
-        <item name="android:textColor">@color/homecloud_primary</item>
-        <!-- setting a fixed width as follows results in narrow buttons with line breaks, but of course this is not a solution -->
-        <!-- <item name="android:width">100dp</item> -->
-    </style>
 
     <!-- Notifications -->
     <style name="Theme.homeCloud.NotificationText.Title" parent="@android:style/TextAppearance.StatusBar.EventContent.Title">
@@ -277,7 +269,7 @@
     </style>
 
     <style name="Button.Borderless" parent="Widget.Material3.Button">
-        <item name="android:textColor">@color/homecloud_button_borderless_text</item>
+        <item name="android:textColor">@color/selector_borderless_button_color</item>
     </style>
 
     <style name="homeCloud.TextInputLayout.InputShape" parent="ShapeAppearance.Material3.Corner.None">

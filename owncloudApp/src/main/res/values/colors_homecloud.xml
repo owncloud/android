@@ -18,6 +18,10 @@
     <color name="homecloud_button_secondary_stroke">@color/homecloud_blue_darken_2</color>
     <color name="homecloud_button_borderless_text">@color/homecloud_blue_darken_2</color>
 
+    <color name="homecloud_dialog_background">@color/white</color>
+    <color name="homecloud_dialog_button_disabled">@color/homecloud_blue_darken_2_24</color>
+    <color name="homecloud_dialog_button_enabled">@color/homecloud_blue_darken_2</color>
+
     <!-- Palette colors. Don't use them directly -->
     <color name="homecloud_blue_darken_2">#FF1976D2</color>
     <color name="homecloud_blue_darken_2_24">#3D1976D2</color>
