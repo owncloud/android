@@ -99,6 +99,7 @@ jobs:
         run: |
           if diff -u sbom_master_normalized.json sbom_normalized.json > sbom_diff.txt; then
             echo "no_changes=true" >> $GITHUB_OUTPUT
+            echo "NO Differences found in SBOM"
           else
             echo "no_changes=false" >> $GITHUB_OUTPUT
             echo "Differences found in SBOM:"
