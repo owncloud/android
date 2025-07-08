@@ -40,7 +40,6 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:layout_gravity="center_vertical"
-                    android:textColor="@color/black"
                     android:textSize="@dimen/two_line_primary_text_size"
                     android:layout_marginStart="@dimen/standard_margin"
                     android:layout_marginEnd="@dimen/standard_margin"

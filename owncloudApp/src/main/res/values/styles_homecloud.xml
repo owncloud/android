@@ -34,7 +34,12 @@
         <item name="colorOnSecondaryContainer">@color/homecloud_blue_darken_2</item>
         <item name="colorOnSurface">?attr/colorPrimary</item>
         <item name="colorOnSurfaceVariant">?attr/colorPrimary</item>
+
+        <item name="android:textColorPrimary">?attr/colorPrimary</item>
         <item name="android:textColorLink">?attr/colorPrimary</item>
+        <item name="android:textColorHighlight">?attr/colorAccent</item>
+        <item name="android:textColorSecondary">?attr/colorPrimary</item>
+        <item name="android:textColorTertiary">?attr/colorPrimary</item>
 
         <!-- default theme for alert dialogs -->
         <item name="alertDialogTheme">@style/Theme.homeCloud.AlertDialog</item>
@@ -46,7 +51,6 @@
 
         <!-- style for search view -->
         <item name="searchViewStyle">@style/homeCloud.SearchView</item>
-        <item name="android:textColorPrimary">?attr/colorPrimary</item>
 
         <!-- Bottom navigation -->
         <item name="bottomNavigationStyle">@style/Theme.homeCloud.BottomNavigation</item>

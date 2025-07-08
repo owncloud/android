@@ -37,7 +37,6 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginVertical="@dimen/activity_vertical_margin"
-                android:textColor="@color/black"
                 tools:text="@tools:sample/lorem[8]" />
 
             <CheckBox
