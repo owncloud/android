@@ -1,5 +1,5 @@
 #!/bin/bash
-
+1
 check_license_in_file() {
     if ! head -n 20 $FILE | grep -q "This program is free software: you can redistribute it and/or modify"
     then
