@@ -73,6 +73,7 @@ class BottomSheetFragmentItemView @JvmOverloads constructor(
 
     fun setSelected(iconAdditional: Int) {
         itemAdditionalIcon = ContextCompat.getDrawable(context, iconAdditional)
+        return // no need to change color programmatically
         val selectedColor = ContextCompat.getColor(context, R.color.primary)
         binding.itemIcon.setColorFilter(selectedColor)
         binding.itemTitle.setTextColor(selectedColor)
