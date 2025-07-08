@@ -78,8 +78,10 @@ jobs:
       - name: Prepare normalize script
         run: |
           cat <<'EOF' > normalize-sbom.sh
+          #!/bin/bash
+
           jq -S '
-            del(.serialNumber, .timestamp, .metadata.timestamp, .metadata.authors, .metadata.tools)
+            del(.serialNumber, .timestamp, .metadata.timestamp)
             | .components |= (if type=="array" then sort_by(.["bom-ref"] // "") else . end)
             | .dependencies |= (if type=="array" then sort_by(.ref // "") else . end)
           ' "$1" > "$2"
