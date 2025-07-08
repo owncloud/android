@@ -11,6 +11,7 @@ permissions:
 
 jobs:
   sbom:
+    if: "!contains(github.event.head_commit.message, 'SBOM updated')"
     runs-on: ubuntu-latest
 
     steps:
@@ -27,13 +28,9 @@ jobs:
           mkdir -p ~/.ssh
           echo "${{ secrets.DEPLOYMENT_SSH_KEY_TEST }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-          # Start the SSH agent in the background
           eval "$(ssh-agent -s)"
-          # Add the private key to the SSH agent
           ssh-add ~/.ssh/id_rsa
-          # Add GitHub's public SSH keys to known_hosts to prevent host verification prompts
           ssh-keyscan github.com >> ~/.ssh/known_hosts
-          # Test the SSH connection to GitHub (this will fail gracefully if not successful)
           ssh -o StrictHostKeyChecking=no -T git@github.com || true
 
       # Dry-run push to confirm SSH authentication is working
@@ -69,38 +66,51 @@ jobs:
       - name: Move and rename SBOM to root
         run: mv build/reports/bom.json ./sbom.json
 
-      # Clean dynamic fields (serialNumber and timestamp) for meaningful diffs
-      - name: Clean serialNumber and timestamp in SBOM
-        run: |
-          sudo apt-get update && sudo apt-get install -y jq
-          jq 'del(.serialNumber, .timestamp)' sbom.json > sbom_clean.json && mv sbom_clean.json sbom.json
+      # Install jq (JSON processor) for JSON manipulations
+      - name: Install jq
+        run: sudo apt-get update && sudo apt-get install -y jq
 
       # Fetch the master branch to compare with current SBOM
       - name: Fetch origin/master
         run: git fetch origin master_fake
 
-      # Extract and clean the SBOM file from origin/master
-      - name: Extract clean SBOM from origin/master
+      # Prepare common JQ filter in a script
+      - name: Prepare normalize script
+        run: |
+          cat <<'EOF' > normalize-sbom.sh
+          jq -S '
+            del(.serialNumber, .timestamp, .metadata.timestamp, .metadata.authors, .metadata.tools)
+            | .components |= (if type=="array" then sort_by(.["bom-ref"] // "") else . end)
+            | .dependencies |= (if type=="array" then sort_by(.ref // "") else . end)
+          ' "$1" > "$2"
+          EOF
+          chmod +x normalize-sbom.sh
+
+      # Extract & normalize both SBOMs
+      - name: Extract and normalize both SBOMs
         run: |
           git show origin/master_fake:sbom.json > sbom_master.json || echo '{}' > sbom_master.json
-          jq 'del(.serialNumber, .timestamp)' sbom_master.json > sbom_master_clean.json
+          ./normalize-sbom.sh sbom_master.json sbom_master_normalized.json
+          ./normalize-sbom.sh sbom.json sbom_normalized.json
 
-      # Compare current SBOM with cleaned master version and set output
-      - name: Compare current SBOM with master
-        id: diff
+      # Compare normalized SBOMs
+      - name: Compare SBOMs and show diff
+        id: diff_sbom
         run: |
-          if diff -q sbom.json sbom_master_clean.json; then
+          if diff -u sbom_master_normalized.json sbom_normalized.json > sbom_diff.txt; then
             echo "no_changes=true" >> $GITHUB_OUTPUT
           else
             echo "no_changes=false" >> $GITHUB_OUTPUT
+            echo "Differences found in SBOM:"
+            cat sbom_diff.txt
           fi
 
-      # Commit the file, only if it is different than the existing one
+      # Commit the SBOM file only if it differs from master to avoid unnecessary commits
       - name: Commit files
         if: steps.diff.outputs.no_changes == 'false'
         uses: GuillaumeFalourd/git-commit-push@v1.3
         with:
           email: devops@owncloud.com
           name: ownClouders
-          commit_message: "docs: SBOM updated [skip ci]"
+          commit_message: "docs: SBOM updated"
           files: sbom.json
