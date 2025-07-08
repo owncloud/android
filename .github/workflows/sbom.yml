@@ -11,6 +11,7 @@ permissions:
 
 jobs:
   sbom:
+    if: "!contains(github.event.head_commit.message, 'SBOM updated')"
     runs-on: ubuntu-latest
 
     steps:
@@ -73,21 +74,35 @@ jobs:
       - name: Fetch origin/master
         run: git fetch origin master_fake
 
-      # Extract, clean, and normalize the SBOM file from origin/master
-      - name: Extract and normalize SBOM from origin/master
+      # Prepare common JQ filter in a script
+      - name: Prepare normalize script
+        run: |
+          cat <<'EOF' > normalize-sbom.sh
+          jq -S '
+            del(.serialNumber, .timestamp, .metadata.timestamp, .metadata.authors, .metadata.tools)
+            | .components |= (if type=="array" then sort_by(.["bom-ref"] // "") else . end)
+            | .dependencies |= (if type=="array" then sort_by(.ref // "") else . end)
+          ' "$1" > "$2"
+          EOF
+          chmod +x normalize-sbom.sh
+
+      # Extract & normalize both SBOMs
+      - name: Extract and normalize both SBOMs
         run: |
           git show origin/master_fake:sbom.json > sbom_master.json || echo '{}' > sbom_master.json
-          jq -S 'del(.serialNumber, .timestamp, .metadata.timestamp, .metadata.authors, .metadata.tools)' sbom_master.json > sbom_master_normalized.json
+          ./normalize-sbom.sh sbom_master.json sbom_master_normalized.json
+          ./normalize-sbom.sh sbom.json sbom_normalized.json
 
-      # Normalize current SBOM and compare with normalized master SBOM
-      - name: Compare current SBOM with master
-        id: diff
+      # Compare normalized SBOMs
+      - name: Compare SBOMs and show diff
+        id: diff_sbom
         run: |
-          jq -S 'del(.serialNumber, .timestamp, .metadata.timestamp, .metadata.authors, .metadata.tools)' sbom.json > sbom_normalized.json
-          if diff -q sbom_normalized.json sbom_master_normalized.json; then
+          if diff -u sbom_master_normalized.json sbom_normalized.json > sbom_diff.txt; then
             echo "no_changes=true" >> $GITHUB_OUTPUT
           else
             echo "no_changes=false" >> $GITHUB_OUTPUT
+            echo "Differences found in SBOM:"
+            cat sbom_diff.txt
           fi
 
       # Commit the SBOM file only if it differs from master to avoid unnecessary commits
@@ -97,5 +112,5 @@ jobs:
         with:
           email: devops@owncloud.com
           name: ownClouders
-          commit_message: "docs: SBOM updated [skip ci]"
+          commit_message: "docs: SBOM updated"
           files: sbom.json
