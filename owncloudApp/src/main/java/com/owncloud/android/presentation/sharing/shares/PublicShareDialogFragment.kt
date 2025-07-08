@@ -118,7 +118,7 @@ class PublicShareDialogFragment : DialogFragment() {
         get() = file?.isFolder == true || publicShare?.isFolder == true
 
     private val isPasswordVisible: Boolean
-        get() = view != null && binding.shareViaLinkPasswordValue.inputType and
+        get() = _binding != null && binding.shareViaLinkPasswordValue.inputType and
                 InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD == InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
 
     private// Parse expiration date and convert it to milliseconds
@@ -555,7 +555,7 @@ class PublicShareDialogFragment : DialogFragment() {
      * Toggles the visibility of the password in the field.
      */
     fun onViewPasswordClick() {
-        if (view != null) {
+        if (_binding != null) {
             if (isPasswordVisible) {
                 hidePassword()
             } else {
