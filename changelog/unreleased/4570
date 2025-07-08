@@ -1,0 +1,6 @@
+Feature: Maintain scroll position when user scrolls and navigates in file/folder list
+
+Saves scroll position when user scrolls and navigates in file/folder list
+
+https://github.com/owncloud/android/issues/4528
+https://github.com/owncloud/android/pull/4570
