@@ -41,6 +41,7 @@
 
         <!-- Bottom sheet -->
         <item name="bottomSheetDialogTheme">@style/Theme.homeCloud.BottomSheet</item>
+        <item name="bottomSheetDragHandleStyle">@style/homeCloud.BottomSheetStyle.DragHandle</item>
 
         <!-- style for search view -->
         <item name="searchViewStyle">@style/homeCloud.SearchView</item>
@@ -291,6 +292,17 @@
     <style name="homeCloud.BottomSheetStyle" parent="Widget.Material3.BottomSheet.Modal">
         <item name="backgroundTint">@color/homecloud_bar_background</item>
         <item name="shapeAppearance">@style/homeCloud.BottomSheet.ShapeAppearance</item>
+    </style>
+
+    <style name="homeCloud.BottomSheetStyle.DragHandle" parent="Widget.Material3.BottomSheet.DragHandle">
+        <item name="android:minHeight">16dp</item>
+        <item name="android:paddingBottom">24dp</item>
+        <item name="android:paddingTop">8dp</item>
+        <item name="srcCompat">@drawable/ic_bottom_sheet_drag_handle</item>
+    </style>
+
+    <style name="homeCloud.BottomSheetStyle.Title" parent="TextAppearance.Material3.BodyLarge">
+        <item name="android:textSize">20sp</item>
     </style>
 
     <style name="homeCloud.BottomSheet.ShapeAppearance" parent="ShapeAppearance.Material3.LargeComponent">
