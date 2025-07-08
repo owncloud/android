@@ -83,6 +83,7 @@
             android:src="@drawable/ic_account_circle"
             android:tint="@color/primary"
             android:contentDescription="@string/content_description_manage_accounts"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

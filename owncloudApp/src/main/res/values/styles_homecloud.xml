@@ -16,9 +16,10 @@
         <item name="toolbarStyle">@style/homeCloud.Appbar</item>
         <item name="actionBarPopupTheme">@style/homeCloud.Appbar.Popup</item>
         <item name="actionOverflowMenuStyle">@style/homeCloud.Appbar.Popup</item>
-        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowLightStatusBar">@bool/lightStatusBar</item>
 
         <!-- properties for action mode -->
+        <item name="actionBarSize">56dp</item>
         <item name="windowActionModeOverlay">true</item>
         <item name="actionModeBackground">@color/action_mode_background</item>
 
@@ -38,6 +39,10 @@
         <!-- default theme for alert dialogs -->
         <item name="alertDialogTheme">@style/Theme.homeCloud.AlertDialog</item>
 
+        <!-- Bottom sheet -->
+        <item name="bottomSheetDialogTheme">@style/Theme.homeCloud.BottomSheet</item>
+        <item name="bottomSheetDragHandleStyle">@style/homeCloud.BottomSheetStyle.DragHandle</item>
+
         <!-- style for search view -->
         <item name="searchViewStyle">@style/homeCloud.SearchView</item>
         <item name="android:textColorPrimary">?attr/colorPrimary</item>
@@ -48,6 +53,9 @@
 
         <!-- Input text style -->
         <item name="textInputStyle">@style/homeCloud.TextInputLayout.OutlinedBox</item>
+
+        <!-- Buttons -->
+        <item name="materialButtonStyle">@style/Button.Primary</item>
 
         <item name="android:windowOptOutEdgeToEdgeEnforcement" tools:targetApi="35">true</item>
     </style>
@@ -126,8 +134,12 @@
 
     <style name="homeCloud.Toolbar.ActionMode" parent="@style/homeCloud.Appbar">
         <item name="colorControlNormal">?attr/colorPrimary</item>
-        <item name="background">@color/primary</item>
+        <item name="background">@color/homecloud_bar_background</item>
         <item name="titleTextStyle">@style/homeCloud.Toolbar.ActionMode.TitleText</item>
+        <item name="android:paddingLeft">4dp</item>
+        <item name="android:paddingStart">4dp</item>
+        <item name="android:paddingRight">0dp</item>
+        <item name="android:paddingEnd">0dp</item>
     </style>
 
     <style name="homeCloud.Toolbar.ActionMode.Button">
@@ -252,7 +264,48 @@
         <item name="shapeAppearance">@style/homeCloud.TextInputLayout.InputShape</item>
     </style>
 
+    <style name="Button.Secondary" parent="Widget.Material3.Button.OutlinedButton">
+        <item name="backgroundTint">@android:color/transparent</item>
+        <item name="colorPrimary">@android:color/transparent</item>
+        <item name="strokeColor">@color/homecloud_button_secondary_stroke</item>
+        <item name="colorOnPrimary">@color/homecloud_button_secondary_text</item>
+    </style>
+
+    <style name="Button.Primary" parent="Widget.Material3.Button">
+        <item name="colorPrimary">@color/homecloud_button_primary_background</item>
+        <item name="colorOnPrimary">@color/homecloud_button_primary_text</item>
+    </style>
+
+    <style name="Button.Borderless" parent="Widget.Material3.Button">
+        <item name="android:textColor">@color/homecloud_button_borderless_text</item>
+    </style>
+
     <style name="homeCloud.TextInputLayout.InputShape" parent="ShapeAppearance.Material3.Corner.None">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">16dp</item>
+    </style>
+
+    <style name="Theme.homeCloud.BottomSheet" parent="ThemeOverlay.Material3.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/homeCloud.BottomSheetStyle</item>
+    </style>
+
+    <style name="homeCloud.BottomSheetStyle" parent="Widget.Material3.BottomSheet.Modal">
+        <item name="backgroundTint">@color/homecloud_bar_background</item>
+        <item name="shapeAppearance">@style/homeCloud.BottomSheet.ShapeAppearance</item>
+    </style>
+
+    <style name="homeCloud.BottomSheetStyle.DragHandle" parent="Widget.Material3.BottomSheet.DragHandle">
+        <item name="android:minHeight">16dp</item>
+        <item name="android:paddingBottom">24dp</item>
+        <item name="android:paddingTop">8dp</item>
+        <item name="srcCompat">@drawable/ic_bottom_sheet_drag_handle</item>
+    </style>
+
+    <style name="homeCloud.BottomSheetStyle.Title" parent="TextAppearance.Material3.BodyLarge">
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="homeCloud.BottomSheet.ShapeAppearance" parent="ShapeAppearance.Material3.LargeComponent">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">16dp</item>
     </style>

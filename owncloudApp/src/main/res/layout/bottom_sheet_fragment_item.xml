@@ -11,7 +11,7 @@
         android:id="@+id/item_icon"
         android:layout_width="@dimen/bottom_sheet_fragment_item_icon_size"
         android:layout_height="@dimen/bottom_sheet_fragment_item_icon_size"
-        android:tint="@color/bottom_sheet_fragment_item_color"
+        android:tint="?attr/colorPrimary"
         app:layout_constraintBottom_toBottomOf="@+id/item_title"
         app:layout_constraintEnd_toStartOf="@id/item_title"
         app:layout_constraintStart_toStartOf="parent"
@@ -20,7 +20,6 @@
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/item_title"
-        style="@style/Theme.ownCloud.SortBottomSheetFragment.Item"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/standard_margin"
@@ -36,7 +35,7 @@
         android:layout_width="@dimen/bottom_sheet_fragment_arrow_icon_size"
         android:layout_height="@dimen/bottom_sheet_fragment_arrow_icon_size"
         android:layout_marginStart="@dimen/standard_quarter_margin"
-        android:tint="@color/bottom_sheet_fragment_item_color"
+        android:tint="?attr/colorPrimary"
         app:layout_constraintBottom_toBottomOf="@+id/item_title"
         app:layout_constraintStart_toEndOf="@id/item_title"
         app:layout_constraintTop_toTopOf="@+id/item_title"

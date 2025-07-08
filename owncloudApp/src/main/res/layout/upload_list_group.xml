@@ -35,9 +35,9 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:text="5 Files" />
 
-    <androidx.appcompat.widget.AppCompatButton
+    <Button
         android:id="@+id/uploadListGroupButtonClear"
-        style="@style/Button.Primary"
+        android:theme="@style/Button.Primary"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:visibility="gone"
@@ -47,9 +47,9 @@
         android:text="@string/action_upload_clear"
         tools:visibility="visible" />
 
-    <androidx.appcompat.widget.AppCompatButton
+    <Button
         android:id="@+id/uploadListGroupButtonRetry"
-        style="@style/Button.Primary"
+        android:theme="@style/Button.Primary"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:visibility="gone"

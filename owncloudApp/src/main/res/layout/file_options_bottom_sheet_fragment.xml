@@ -4,8 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/white"
-    android:padding="@dimen/standard_padding">
+    android:paddingHorizontal="@dimen/standard_padding">
+
+    <com.google.android.material.bottomsheet.BottomSheetDragHandleView
+        android:id="@+id/drag_handle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <ImageView
         android:id="@+id/thumbnail_bottom_sheet"
@@ -13,7 +18,7 @@
         android:layout_height="@dimen/file_icon_size_bottom_sheet"
         android:src="@drawable/ic_menu_archive"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/drag_handle" />
 
     <TextView
         android:id="@+id/file_name_bottom_sheet"
@@ -26,7 +31,7 @@
         android:textSize="@dimen/two_line_primary_text_size"
         app:layout_constraintEnd_toStartOf="@id/close_bottom_sheet"
         app:layout_constraintStart_toEndOf="@id/thumbnail_bottom_sheet"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/drag_handle"
         tools:text="File name" />
 
     <TextView

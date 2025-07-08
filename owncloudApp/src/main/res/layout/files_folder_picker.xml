@@ -54,7 +54,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         android:padding="@dimen/standard_half_padding"
         android:orientation="horizontal">
 
-        <androidx.appcompat.widget.AppCompatButton
+        <Button
             android:id="@+id/folder_picker_btn_cancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -62,7 +62,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             android:text="@android:string/cancel"
             android:theme="@style/Button.Secondary" />
 
-        <androidx.appcompat.widget.AppCompatButton
+        <Space
+            android:layout_width="8dp"
+            android:layout_height="wrap_content"/>
+
+        <Button
             android:id="@+id/folder_picker_btn_choose"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
