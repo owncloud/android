@@ -107,7 +107,7 @@ jobs:
 
       # Commit the SBOM file only if it differs from master to avoid unnecessary commits
       - name: Commit files
-        if: steps.diff.outputs.no_changes == 'false'
+        if: steps.diff_sbom.outputs.no_changes == 'false'
         uses: GuillaumeFalourd/git-commit-push@v1.3
         with:
           email: devops@owncloud.com
