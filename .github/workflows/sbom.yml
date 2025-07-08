@@ -4,13 +4,14 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - master_fake
+      - fix/*
 
 permissions:
   contents: write
 
 jobs:
   sbom:
+    # Skip if the job was triggered by the SBOM commit
     if: "!contains(github.event.head_commit.message, 'SBOM updated')"
     runs-on: ubuntu-latest
 
@@ -19,25 +20,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          ssh-key: ${{ secrets.DEPLOYMENT_SSH_KEY_TEST }}
           persist-credentials: false
-
-      # Start SSH agent and add the SSH key to authenticate Git operations
-      - name: Start SSH agent and add key
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.DEPLOYMENT_SSH_KEY_TEST }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          eval "$(ssh-agent -s)"
-          ssh-add ~/.ssh/id_rsa
-          ssh-keyscan github.com >> ~/.ssh/known_hosts
-          ssh -o StrictHostKeyChecking=no -T git@github.com || true
-
-      # Dry-run push to confirm SSH authentication is working
-      - name: Check SSH push permissions (dry-run)
-        run: |
-          git remote set-url origin git@github.com:${{ github.repository }}.git
-          git push --dry-run origin HEAD
 
       # Cache Gradle dependencies to speed up future builds
       - name: Cache Gradle dependencies
@@ -77,6 +60,7 @@ jobs:
       # Prepare common JQ filter in a script
       - name: Prepare normalize script
         run: |
+          # Normalize SBOM JSON by removing non-essential fields and sorting arrays for consistent diff
           cat <<'EOF' > normalize-sbom.sh
           #!/bin/bash
 
@@ -117,3 +101,4 @@ jobs:
           name: ownClouders
           commit_message: "docs: SBOM updated"
           files: sbom.json
+          access_token: ${{ secrets.GH_PAT }}
