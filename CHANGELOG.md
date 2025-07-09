@@ -48,6 +48,7 @@ ownCloud admins and users.
 * Change - Bump target SDK to 35: [#4529](https://github.com/owncloud/android/issues/4529)
 * Change - Replace dav4android location: [#4536](https://github.com/owncloud/android/issues/4536)
 * Change - Modify biometrics fail source string: [#4572](https://github.com/owncloud/android/issues/4572)
+* Change - Update CI badges in README file: [#4623](https://github.com/owncloud/android/issues/4623)
 * Enhancement - QA variant: [#3791](https://github.com/owncloud/android/issues/3791)
 * Enhancement - Shares space in Android native file explorer: [#4515](https://github.com/owncloud/android/issues/4515)
 * Enhancement - Accessibility reports in 4.5.1: [#4568](https://github.com/owncloud/android/issues/4568)
@@ -157,6 +158,13 @@ ownCloud admins and users.
 
    https://github.com/owncloud/android/issues/4572
    https://github.com/owncloud/android/pull/4578
+
+* Change - Update CI badges in README file: [#4623](https://github.com/owncloud/android/issues/4623)
+
+   Bitrise badges in README file have been replaced by GitHub Actions badges.
+
+   https://github.com/owncloud/android/issues/4623
+   https://github.com/owncloud/android/pull/4637
 
 * Enhancement - QA variant: [#3791](https://github.com/owncloud/android/issues/3791)
 
