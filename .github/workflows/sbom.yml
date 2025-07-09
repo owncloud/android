@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-
+      # Checkout the full repository history (required to access origin/master)
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
@@ -66,7 +66,7 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      # Generate the Software Bill of Materials using CycloneDX Gradle plugin
+      # Generate the Software Bill of Materials (SBOM) using CycloneDX Gradle plugin
       - name: Generate SBOM (CycloneDX)
         run: ./gradlew --no-daemon cyclonedxBom
 
