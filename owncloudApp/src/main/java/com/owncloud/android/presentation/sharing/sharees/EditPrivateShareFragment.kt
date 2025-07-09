@@ -25,6 +25,7 @@
 package com.owncloud.android.presentation.sharing.sharees
 
 import android.accounts.Account
+import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -35,6 +36,7 @@ import android.widget.CompoundButton
 import androidx.appcompat.widget.SwitchCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.owncloud.android.R
 import com.owncloud.android.databinding.EditShareLayoutBinding
 import com.owncloud.android.domain.files.model.OCFile
@@ -111,35 +113,26 @@ class EditPrivateShareFragment : DialogFragment() {
         observePrivateShareEdition()
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-
-        _binding = EditShareLayoutBinding.inflate(inflater, container, false)
-        return binding.root.apply {
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        _binding = EditShareLayoutBinding.inflate(layoutInflater)
+        binding.root.apply {
             // Allow or disallow touches with other visible windows
             filterTouchesWhenObscured = PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(context)
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
         binding.editShareTitle.text = resources.getString(R.string.share_with_edit_title, share?.sharedWithDisplayName)
 
         // Setup layout
         refreshUiFromState()
 
         binding.closeButton.setOnClickListener { dismiss() }
+        return MaterialAlertDialogBuilder(requireContext())
+            .setView(binding.root)
+            .create()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onAttach(context: Context) {
@@ -258,7 +251,7 @@ class EditPrivateShareFragment : DialogFragment() {
                                 /// not federated shares -> enable all the subpermisions
                                 for (i in sSubordinateCheckBoxIds.indices) {
                                     //noinspection ConstantConditions, prevented in the method beginning
-                                    subordinate = view!!.findViewById(sSubordinateCheckBoxIds[i])
+                                    subordinate = dialog?.findViewById(sSubordinateCheckBoxIds[i]) ?: return
                                     if (!isFederated) { // TODO delete when iOS is ready
                                         subordinate.visibility = View.VISIBLE
                                     }
@@ -277,7 +270,7 @@ class EditPrivateShareFragment : DialogFragment() {
                         } else {
                             for (i in sSubordinateCheckBoxIds.indices) {
                                 //noinspection ConstantConditions, prevented in the method beginning
-                                subordinate = view!!.findViewById(sSubordinateCheckBoxIds[i])
+                                subordinate = dialog?.findViewById(sSubordinateCheckBoxIds[i]) ?: return
                                 subordinate.visibility = View.GONE
                                 if (subordinate.isChecked) {
                                     toggleDisablingListener(subordinate)
@@ -340,7 +333,7 @@ class EditPrivateShareFragment : DialogFragment() {
                     var i = 0
                     while (allDisabled && i < sSubordinateCheckBoxIds.size) {
                         allDisabled =
-                            allDisabled and (sSubordinateCheckBoxIds[i] == subordinateCheckBoxView.id || !(view?.findViewById<View>(
+                            allDisabled and (sSubordinateCheckBoxIds[i] == subordinateCheckBoxView.id || !(dialog?.findViewById<View>(
                                 sSubordinateCheckBoxIds[i]
                             ) as CheckBox).isChecked)
                         i++
@@ -349,7 +342,7 @@ class EditPrivateShareFragment : DialogFragment() {
                 if (canEditCompound.isChecked && allDisabled) {
                     toggleDisablingListener(canEditCompound)
                     for (i in sSubordinateCheckBoxIds.indices) {
-                        view?.findViewById<View>(sSubordinateCheckBoxIds[i])?.visibility = View.GONE
+                        dialog?.findViewById<View>(sSubordinateCheckBoxIds[i])?.visibility = View.GONE
                     }
                 }
             }

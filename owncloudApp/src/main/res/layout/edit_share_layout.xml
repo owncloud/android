@@ -59,8 +59,7 @@
                 android:layout_marginTop="@dimen/standard_half_margin"
                 android:paddingStart="0dp"
                 android:paddingEnd="0dp"
-                android:text="@string/share_privilege_can_edit"
-                android:textColor="@color/color_accent" />
+                android:text="@string/share_privilege_can_edit" />
 
             <CheckBox
                 android:id="@+id/canEditCreateCheckBox"
@@ -91,8 +90,7 @@
                 android:layout_gravity="start"
                 android:layout_marginTop="@dimen/standard_half_margin"
                 android:paddingLeft="0dp"
-                android:text="@string/share_privilege_can_share"
-                android:textColor="@color/color_accent" />
+                android:text="@string/share_privilege_can_share" />
 
             <TextView
                 android:id="@+id/private_share_error_message"
@@ -105,16 +103,16 @@
                 android:gravity="center_vertical"
                 android:paddingStart="0dp"
                 android:paddingEnd="0dp"
-                android:textColor="@color/secondaryTextColor"
                 android:textSize="13sp"
                 android:visibility="gone" />
         </LinearLayout>
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/closeButton"
-            style="@style/Button.Primary"
-            android:layout_width="match_parent"
+            style="@style/Button.Borderless"
+            android:layout_width="wrap_content"
             android:layout_height="0dp"
+            android:layout_gravity="end"
             android:layout_weight="1"
             android:contentDescription="sharePublicLinkCloseButton"
             android:text="@string/drawer_close"

@@ -38,7 +38,6 @@
     <color name="white_pressed">#f1f1f1</color>
     <color name="half_black">#808080</color>
     <color name="black_semi_transparent">#B2000000</color>
-    <color name="textColor">@color/black</color>
     <color name="drawerMenuTextColor">#000000</color>
     <color name="list_divider_background">#eee</color>
     <color name="filelist_icon_background">#DDDDDD</color>

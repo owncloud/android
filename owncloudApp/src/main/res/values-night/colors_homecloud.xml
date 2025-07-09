@@ -16,5 +16,9 @@
     <color name="homecloud_button_secondary_stroke">@color/homecloud_blue_lighten_2</color>
     <color name="homecloud_button_borderless_text">@color/homecloud_blue_lighten_2</color>
 
+    <color name="homecloud_dialog_background">#1D1E21</color>
+    <color name="homecloud_dialog_button_disabled">@color/homecloud_blue_darken_2_24</color>
+    <color name="homecloud_dialog_button_enabled">@color/homecloud_blue_lighten_2</color>
+
     <color name="homecloud_bar_background">#1F1F1F</color>
 </resources>

@@ -36,7 +36,7 @@
                     android:layout_height="wrap_content"
                     android:padding="@dimen/standard_half_padding"
                     android:text="@string/share_via_link_name_label"
-                    android:textColor="@color/black"
+                    android:textColor="?attr/colorPrimary"
                     android:textSize="15sp" />
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -108,7 +108,7 @@
                     android:paddingRight="@dimen/standard_half_padding"
                     android:paddingTop="@dimen/standard_half_padding"
                     android:text="@string/share_via_link_password_label"
-                    android:textColor="@color/black"
+                    android:textColor="?attr/colorPrimary"
                     android:textSize="15sp" />
 
             </RelativeLayout>
@@ -125,7 +125,7 @@
                     android:layout_marginLeft="@dimen/standard_half_margin"
                     android:layout_marginRight="@dimen/standard_half_margin"
                     android:inputType="textPassword"
-                    android:visibility="gone" />
+                    android:visibility="visible" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -306,7 +306,7 @@
                     android:paddingRight="@dimen/standard_half_padding"
                     android:paddingTop="@dimen/standard_half_padding"
                     android:text="@string/share_via_link_expiration_date_label"
-                    android:textColor="@color/black"
+                    android:textColor="?attr/colorPrimary"
                     android:textSize="15sp"
                     android:focusable="false"/>
 
@@ -364,14 +364,14 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:gravity="end"
                     android:orientation="horizontal">
 
-                    <Button
+                    <androidx.appcompat.widget.AppCompatButton
                         android:id="@+id/cancelButton"
-                        style="@style/Button.Primary"
-                        android:layout_width="match_parent"
+                        style="@style/Button.Borderless"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:contentDescription="@string/share_cancel_public_link_button"
                         android:text="@string/share_cancel_public_link_button"
                         android:theme="@style/Button.Primary" />
@@ -380,12 +380,11 @@
                         android:layout_width="8dp"
                         android:layout_height="wrap_content"/>
 
-                    <Button
+                    <androidx.appcompat.widget.AppCompatButton
                         android:id="@+id/saveButton"
-                        style="@style/Button.Primary"
-                        android:layout_width="match_parent"
+                        style="@style/Button.Borderless"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:contentDescription="@string/share_confirm_public_link_button"
                         android:text="@string/share_confirm_public_link_button"
                         android:theme="@style/Button.Primary" />

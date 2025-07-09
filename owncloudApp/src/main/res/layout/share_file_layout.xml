@@ -51,7 +51,7 @@
                 android:ellipsize="middle"
                 android:singleLine="true"
                 android:text="@string/placeholder_filename"
-                android:textColor="@color/black"
+                android:textColor="?attr/colorPrimary"
                 android:textSize="16sp" />
 
             <TextView
