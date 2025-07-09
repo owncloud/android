@@ -1,0 +1,6 @@
+Change: Update CI badges in README file
+
+Bitrise badges in README file have been replaced by GitHub Actions badges.
+
+https://github.com/owncloud/android/issues/4623
+https://github.com/owncloud/android/pull/4637
