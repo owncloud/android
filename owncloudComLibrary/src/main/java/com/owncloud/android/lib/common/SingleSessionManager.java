@@ -162,6 +162,8 @@ public class SingleSessionManager {
             account.loadCredentials(context);
             client.setCredentials(account.getCredentials());
 
+            client.setIsKiteworksServer(account.getIsKiteworksServer());
+
             if (accountName != null) {
                 mClientsWithKnownUsername.put(accountName, client);
                 Timber.v("new client for account %s", accountName);
