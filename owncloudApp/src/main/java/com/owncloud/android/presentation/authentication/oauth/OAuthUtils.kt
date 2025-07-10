@@ -3,8 +3,9 @@
  *
  * @author David González Verdugo
  * @author Juan Carlos Garrote Gascón
+ * @author Jorge Aguado Recio
  *
- * Copyright (C) 2024 ownCloud GmbH
+ * Copyright (C) 2025 ownCloud GmbH
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -123,11 +124,18 @@ class OAuthUtils {
                 }
             }.build()
 
-        fun buildRedirectUri(context: Context): Uri =
-            Uri.Builder()
+        fun buildRedirectUri(context: Context, isKiteworksServer: Boolean = false): Uri {
+            val path = if (isKiteworksServer) {
+                context.getString(R.string.kiteworks_redirect_uri_path)
+            } else {
+                context.getString(R.string.oauth2_redirect_uri_path)
+            }
+
+            return Uri.Builder()
                 .scheme(context.getString(R.string.oauth2_redirect_uri_scheme))
                 .authority(context.getString(R.string.oauth2_redirect_uri_host))
-                .path(context.getString(R.string.oauth2_redirect_uri_path))
+                .path(path)
                 .build()
+        }
     }
 }
