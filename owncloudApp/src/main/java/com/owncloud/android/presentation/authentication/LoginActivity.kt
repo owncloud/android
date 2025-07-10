@@ -53,6 +53,7 @@ import com.owncloud.android.data.authentication.KEY_USER_ID
 import com.owncloud.android.databinding.AccountSetupBinding
 import com.owncloud.android.domain.authentication.oauth.model.ResponseType
 import com.owncloud.android.domain.authentication.oauth.model.TokenRequest
+import com.owncloud.android.domain.authentication.oauth.model.TokenResponse
 import com.owncloud.android.domain.exceptions.NoNetworkConnectionException
 import com.owncloud.android.domain.exceptions.OwncloudVersionNotSupportedException
 import com.owncloud.android.domain.exceptions.SSLErrorCode
@@ -107,6 +108,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
     private lateinit var serverBaseUrl: String
 
     private var oidcSupported = false
+    private var isKiteworksServer = false
 
     private lateinit var binding: AccountSetupBinding
 
@@ -548,13 +550,16 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         val customTabsBuilder: CustomTabsIntent.Builder = CustomTabsIntent.Builder()
         val customTabsIntent: CustomTabsIntent = customTabsBuilder.build()
 
+        val serverInfo = authenticationViewModel.serverInfo.value?.peekContent()?.getStoredData()
+        isKiteworksServer = serverInfo is ServerInfo.OIDCServer && serverInfo.oidcServerConfiguration.isKiteworksServer
+
         val authorizationEndpointUri = OAuthUtils.buildAuthorizationRequest(
             authorizationEndpoint = authorizationEndpoint,
-            redirectUri = OAuthUtils.buildRedirectUri(applicationContext).toString(),
-            clientId = clientId,
+            redirectUri = OAuthUtils.buildRedirectUri(applicationContext, isKiteworksServer).toString(),
+            clientId = if (isKiteworksServer) getString(R.string.kiteworks_client_id) else clientId,
             responseType = ResponseType.CODE.string,
-            scope = if (oidcSupported) mdmProvider.getBrandingString(CONFIGURATION_OAUTH2_OPEN_ID_SCOPE, R.string.oauth2_openid_scope) else "",
-            prompt = if (oidcSupported) mdmProvider.getBrandingString(CONFIGURATION_OAUTH2_OPEN_ID_PROMPT, R.string.oauth2_openid_prompt) else "",
+            scope = getScope(),
+            prompt = getPrompt(),
             codeChallenge = authenticationViewModel.codeChallenge,
             state = authenticationViewModel.oidcState,
             username = username,
@@ -573,6 +578,33 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
             Timber.e("No Activity found to handle Intent")
         }
     }
+
+    private fun getScope(): String =
+        if (isKiteworksServer) {
+            getString(R.string.kiteworks_openid_scope)
+        } else if (oidcSupported) {
+            mdmProvider.getBrandingString(CONFIGURATION_OAUTH2_OPEN_ID_SCOPE, R.string.oauth2_openid_scope)
+        } else {
+            ""
+        }
+
+    private fun getScopeForLogin(tokenResponse: TokenResponse): String? =
+        if (isKiteworksServer) {
+            getString(R.string.kiteworks_openid_scope)
+        } else if (oidcSupported) {
+            mdmProvider.getBrandingString(CONFIGURATION_OAUTH2_OPEN_ID_SCOPE, R.string.oauth2_openid_scope)
+        } else {
+            tokenResponse.scope
+        }
+
+    private fun getPrompt(): String =
+        if (isKiteworksServer) {
+            getString(R.string.kiteworks_openid_prompt)
+        } else if (oidcSupported) {
+            mdmProvider.getBrandingString(CONFIGURATION_OAUTH2_OPEN_ID_PROMPT, R.string.oauth2_openid_prompt)
+        } else {
+            ""
+        }
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
@@ -618,7 +650,11 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
             OAuthUtils.getClientAuth(clientRegistrationInfo.clientSecret as String, clientRegistrationInfo.clientId)
 
         } else {
-            OAuthUtils.getClientAuth(getString(R.string.oauth2_client_secret), getString(R.string.oauth2_client_id))
+            if (isKiteworksServer) {
+                OAuthUtils.getClientAuth(getString(R.string.kiteworks_client_id), getString(R.string.kiteworks_client_secret))
+            } else {
+                OAuthUtils.getClientAuth(getString(R.string.oauth2_client_secret), getString(R.string.oauth2_client_id))
+            }
         }
 
         // Use oidc discovery one, or build an oauth endpoint using serverBaseUrl + Setup string.
@@ -631,24 +667,27 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         if (serverInfo is ServerInfo.OIDCServer) {
             tokenEndPoint = serverInfo.oidcServerConfiguration.tokenEndpoint
             if (serverInfo.oidcServerConfiguration.isTokenEndpointAuthMethodSupportedClientSecretPost()) {
-                clientId = clientRegistrationInfo?.clientId ?: contextProvider.getString(R.string.oauth2_client_id)
-                clientSecret = clientRegistrationInfo?.clientSecret ?: contextProvider.getString(R.string.oauth2_client_secret)
+                if (isKiteworksServer) {
+                    clientId = contextProvider.getString(R.string.kiteworks_client_id)
+                    clientSecret = contextProvider.getString(R.string.kiteworks_client_secret)
+                } else {
+                    clientId = clientRegistrationInfo?.clientId ?: contextProvider.getString(R.string.oauth2_client_id)
+                    clientSecret = clientRegistrationInfo?.clientSecret ?: contextProvider.getString(R.string.oauth2_client_secret)
+                }
             }
         } else {
             tokenEndPoint = "$serverBaseUrl${File.separator}${contextProvider.getString(R.string.oauth2_url_endpoint_access)}"
         }
 
-        val scope = resources.getString(R.string.oauth2_openid_scope)
-
         val requestToken = TokenRequest.AccessToken(
             baseUrl = serverBaseUrl,
             tokenEndpoint = tokenEndPoint,
             clientAuth = clientAuth,
-            scope = scope,
+            scope = getScope(),
             clientId = clientId,
             clientSecret = clientSecret,
             authorizationCode = authorizationCode,
-            redirectUri = OAuthUtils.buildRedirectUri(applicationContext).toString(),
+            redirectUri = OAuthUtils.buildRedirectUri(applicationContext, isKiteworksServer).toString(),
             codeVerifier = authenticationViewModel.codeVerifier
         )
 
@@ -667,10 +706,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
                         authTokenType = OAUTH_TOKEN_TYPE,
                         accessToken = tokenResponse.accessToken,
                         refreshToken = tokenResponse.refreshToken.orEmpty(),
-                        scope = if (oidcSupported) mdmProvider.getBrandingString(
-                            CONFIGURATION_OAUTH2_OPEN_ID_SCOPE,
-                            R.string.oauth2_openid_scope,
-                        ) else tokenResponse.scope,
+                        scope = getScopeForLogin(tokenResponse),
                         updateAccountWithUsername = if (loginAction != ACTION_CREATE) userAccount?.name else null,
                         clientRegistrationInfo = clientRegistrationInfo
                     )
