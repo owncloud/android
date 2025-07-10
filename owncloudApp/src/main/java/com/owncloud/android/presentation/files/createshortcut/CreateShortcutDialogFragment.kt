@@ -50,6 +50,9 @@ class CreateShortcutDialogFragment : DialogFragment() {
             cancelButton.setOnClickListener {
                 dialog?.dismiss()
             }
+            createButton.apply { // A workaround to avoid adding a new translation string
+                text = text.toString().replaceFirstChar { it.uppercase() }
+            }
         }
         return MaterialAlertDialogBuilder(requireContext())
             .setView(binding.root)
@@ -117,10 +120,8 @@ class CreateShortcutDialogFragment : DialogFragment() {
                     )
                     dialog?.dismiss()
                 }
-                setTextColor(resources.getColor(R.color.primary_button_background_color, null))
             } else {
                 setOnClickListener(null)
-                setTextColor(resources.getColor(R.color.grey, null))
             }
         }
     }
