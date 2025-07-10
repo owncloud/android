@@ -22,6 +22,8 @@
     <color name="homecloud_dialog_button_disabled">@color/homecloud_blue_darken_2_24</color>
     <color name="homecloud_dialog_button_enabled">@color/homecloud_blue_darken_2</color>
 
+    <color name="homecloud_menu_background">@color/white</color>
+
     <!-- Original ownCloud colors override -->
     <color name="textColor">@color/homecloud_primary</color>
 
