@@ -61,6 +61,7 @@ import com.bumptech.glide.Glide
 import com.getbase.floatingactionbutton.AddFloatingActionButton
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
@@ -1188,7 +1189,7 @@ class MainFileListFragment : Fragment(),
         val inputLayout: TextInputLayout = dialogView.findViewById(R.id.inputTextLayout)
         input.requestFocus()
 
-        val builder = AlertDialog.Builder(requireContext()).apply {
+        val builder = MaterialAlertDialogBuilder(requireContext()).apply {
             setView(dialogView)
             setTitle(R.string.uploader_upload_text_dialog_title)
             setCancelable(false)

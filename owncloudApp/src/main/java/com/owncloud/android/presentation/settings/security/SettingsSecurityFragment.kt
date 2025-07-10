@@ -31,6 +31,7 @@ import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceScreen
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.owncloud.android.R
 import com.owncloud.android.extensions.avoidScreenshotsIfNeeded
 import com.owncloud.android.extensions.showMessageInSnackbar
@@ -205,7 +206,7 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
         prefTouchesWithOtherVisibleWindows?.setOnPreferenceChangeListener { _: Preference?, newValue: Any ->
             if (newValue as Boolean) {
                 activity?.let {
-                    AlertDialog.Builder(it)
+                    MaterialAlertDialogBuilder(it)
                         .setTitle(getString(R.string.confirmation_touches_with_other_windows_title))
                         .setMessage(getString(R.string.confirmation_touches_with_other_windows_message))
                         .setNegativeButton(getString(R.string.common_no), null)
