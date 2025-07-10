@@ -55,6 +55,8 @@ public class OwnCloudAccount {
 
     private Account mSavedAccount;
 
+    private Boolean mIsKiteworksServer;
+
     /**
      * Constructor for already saved OC accounts.
      * <p>
@@ -80,6 +82,7 @@ public class OwnCloudAccount {
         }
         mBaseUri = Uri.parse(AccountUtils.getBaseUrlForAccount(context, mSavedAccount));
         mDisplayName = ama.getUserData(mSavedAccount, AccountUtils.Constants.KEY_DISPLAY_NAME);
+        mIsKiteworksServer = Boolean.parseBoolean(ama.getUserData(mSavedAccount, AccountUtils.Constants.KEY_IS_KITEWORKS_SERVER));
     }
 
     /**
@@ -148,5 +151,9 @@ public class OwnCloudAccount {
         } else {
             return null;
         }
+    }
+
+    public Boolean getIsKiteworksServer() {
+        return mIsKiteworksServer;
     }
 }

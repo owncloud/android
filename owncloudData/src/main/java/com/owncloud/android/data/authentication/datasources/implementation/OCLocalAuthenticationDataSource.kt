@@ -2,7 +2,9 @@
  * ownCloud Android client application
  *
  * @author David González Verdugo
- * Copyright (C) 2020 ownCloud GmbH.
+ * @author Jorge Aguado Recio
+ *
+ * Copyright (C) 2025 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -28,6 +30,7 @@ import com.owncloud.android.data.authentication.KEY_CLIENT_REGISTRATION_CLIENT_I
 import com.owncloud.android.data.authentication.KEY_CLIENT_REGISTRATION_CLIENT_SECRET
 import com.owncloud.android.data.authentication.KEY_FEATURE_ALLOWED
 import com.owncloud.android.data.authentication.KEY_FEATURE_SPACES
+import com.owncloud.android.data.authentication.KEY_IS_KITEWORKS_SERVER
 import com.owncloud.android.data.authentication.KEY_OAUTH2_REFRESH_TOKEN
 import com.owncloud.android.data.authentication.KEY_OAUTH2_SCOPE
 import com.owncloud.android.data.authentication.SELECTED_ACCOUNT
@@ -167,6 +170,12 @@ class OCLocalAuthenticationDataSource(
 
             // Only fresh accounts will support spaces
             accountManager.setUserData(newAccount, KEY_FEATURE_SPACES, KEY_FEATURE_ALLOWED)
+
+            if (serverInfo is ServerInfo.OIDCServer && serverInfo.oidcServerConfiguration.isKiteworksServer) {
+                accountManager.setUserData(newAccount, KEY_IS_KITEWORKS_SERVER, "true")
+            } else {
+                accountManager.setUserData(newAccount, KEY_IS_KITEWORKS_SERVER, "false")
+            }
 
             /// add the new account as default in preferences, if there is none already
             val defaultAccount: Account? = getCurrentAccount()

@@ -223,6 +223,8 @@ public class AccountUtils {
          */
         public static final String KEY_DISPLAY_NAME = "oc_display_name";
 
+        public static final String KEY_IS_KITEWORKS_SERVER = "is_kiteworks_server";
+
         public static final int ACCOUNT_VERSION = 1;
     }
 }

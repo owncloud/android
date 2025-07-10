@@ -52,7 +52,7 @@ class OCRemoteAuthenticationDataSource(
         val getBaseUrlRemoteOperation = GetBaseUrlRemoteOperation()
         val rawBaseUrl = executeRemoteOperation { getBaseUrlRemoteOperation.execute(client) }
 
-        val userBaseUri = rawBaseUrl?.replace(WEBDAV_FILES_PATH_4_0, "")
+        val userBaseUri = rawBaseUrl?.takeIf { !client.isKiteworksServer }?.replace(WEBDAV_FILES_PATH_4_0, "")
             ?: client.baseUri.toString()
 
         // Get user info. It is needed to save the account into the account manager
