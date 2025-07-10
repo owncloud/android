@@ -144,7 +144,8 @@ public class OwnCloudClient extends HttpClient {
 
             HttpUrl originalUrl = method.getHttpUrl();
             String encodedPath = originalUrl.encodedPath();
-            if (mIsKiteworksServer && !encodedPath.startsWith(WELL_KNOWN_PATH) && !encodedPath.equals(OAUTH_TOKEN_PATH)) {
+            if (mIsKiteworksServer && !encodedPath.startsWith(WELL_KNOWN_PATH) && !encodedPath.equals(OAUTH_TOKEN_PATH)
+                    && !encodedPath.contains(KWDAV_PATH)) {
                 HttpUrl newUrl = originalUrl.newBuilder().encodedPath(KWDAV_PATH + encodedPath).build();
                 method.setUrl(newUrl);
             }
