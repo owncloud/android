@@ -58,13 +58,13 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AlertDialog.Builder;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.owncloud.android.MainApp;
@@ -389,7 +389,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
 
     @Override
     protected Dialog onCreateDialog(final int id) {
-        final AlertDialog.Builder builder = new Builder(this);
+        final AlertDialog.Builder builder = new MaterialAlertDialogBuilder(this);
         switch (id) {
             case DIALOG_NO_ACCOUNT:
                 builder.setIcon(R.drawable.ic_warning);
@@ -967,7 +967,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
      * Show a dialog where the user can enter a filename for the file he wants to place the text in.
      */
     private void showUploadTextDialog() {
-        final AlertDialog.Builder builder = new Builder(this);
+        final AlertDialog.Builder builder = new MaterialAlertDialogBuilder(this);
 
         final View dialogView = getLayoutInflater().inflate(R.layout.dialog_upload_text, null);
         builder.setView(dialogView);

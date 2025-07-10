@@ -39,6 +39,7 @@ import android.view.WindowManager
 import android.widget.CheckBox
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.pm.PackageInfoCompat
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.owncloud.android.data.providers.implementation.OCSharedPreferencesProvider
 import com.owncloud.android.datamodel.ThumbnailsCacheManager
 import com.owncloud.android.db.PreferenceManager
@@ -144,7 +145,7 @@ class MainApp : Application() {
                                 val checkboxDialog = activity.layoutInflater.inflate(R.layout.checkbox_dialog, null)
                                 val checkbox = checkboxDialog.findViewById<CheckBox>(R.id.checkbox_dialog)
                                 checkbox.setText(R.string.ocis_accounts_warning_checkbox_message)
-                                val builder = AlertDialog.Builder(activity).apply {
+                                val builder = MaterialAlertDialogBuilder(activity).apply {
                                     setView(checkboxDialog)
                                     setTitle(R.string.ocis_accounts_warning_title)
                                     setMessage(R.string.ocis_accounts_warning_message)

@@ -37,6 +37,7 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.owncloud.android.R
 import com.owncloud.android.databinding.LogsListActivityBinding
 import com.owncloud.android.extensions.openFile
@@ -184,7 +185,7 @@ class LogsListActivity : AppCompatActivity() {
     }
 
     private fun showDownloadDialog(fileName: String) {
-        val dialog = AlertDialog.Builder(this)
+        val dialog = MaterialAlertDialogBuilder(this)
             .setTitle(getString(R.string.log_file_downloaded))
             .setIcon(R.drawable.ic_baseline_download_grey)
             .setMessage(getString(R.string.log_file_downloaded_description, fileName))
