@@ -182,7 +182,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
 
         binding.thumbnail.setOnClickListener { checkOcServer() }
 
-        binding.embeddedCheckServerButton.setOnClickListener { checkOcServer() }
+        binding.hostUrlInputLayout.setEndIconOnClickListener { checkOcServer() }
 
         binding.loginButton.setOnClickListener {
             if (AccountTypeUtils.getAuthTokenTypeAccessToken(accountType) != authTokenType) { // Basic
@@ -225,14 +225,6 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
 
     private fun initLiveDataObservers() {
         // LiveData observers
-        authenticationViewModel.legacyWebfingerHost.observe(this) { event ->
-            when (val uiResult = event.peekContent()) {
-                is UIResult.Loading -> getLegacyWebfingerIsLoading()
-                is UIResult.Success -> getLegacyWebfingerIsSuccess(uiResult)
-                is UIResult.Error -> getLegacyWebfingerIsError(uiResult)
-            }
-        }
-
         authenticationViewModel.serverInfo.observe(this) { event ->
             when (val uiResult = event.peekContent()) {
                 is UIResult.Loading -> getServerInfoIsLoading()
@@ -287,38 +279,6 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
                 )
             }
         }
-    }
-
-    private fun getLegacyWebfingerIsLoading() {
-        binding.webfingerStatusText.run {
-            text = getString(R.string.auth_testing_connection)
-            setCompoundDrawablesWithIntrinsicBounds(R.drawable.progress_small, 0, 0, 0)
-            isVisible = true
-        }
-    }
-
-    private fun getLegacyWebfingerIsSuccess(uiResult: UIResult.Success<String>) {
-        val serverUrl = uiResult.data ?: return
-        username = binding.webfingerUsername.text.toString()
-        binding.webfingerLayout.isVisible = false
-        binding.mainLoginLayout.isVisible = true
-        binding.hostUrlInput.setText(serverUrl)
-        checkOcServer()
-    }
-
-    private fun getLegacyWebfingerIsError(uiResult: UIResult.Error<String>) {
-        if (uiResult.error is NoNetworkConnectionException) {
-            binding.webfingerStatusText.run {
-                text = getString(R.string.error_no_network_connection)
-                setCompoundDrawablesWithIntrinsicBounds(R.drawable.no_network, 0, 0, 0)
-            }
-        } else {
-            binding.webfingerStatusText.run {
-                text = uiResult.getThrowableOrNull()?.parseError("", resources, true)
-                setCompoundDrawablesWithIntrinsicBounds(R.drawable.common_error, 0, 0, 0)
-            }
-        }
-        binding.webfingerStatusText.isVisible = true
     }
 
     private fun checkOcServer() {
@@ -802,51 +762,6 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         val url = mdmProvider.getBrandingString(mdmKey = CONFIGURATION_SERVER_URL, stringKey = R.string.server_url)
         if (url.isNotEmpty()) {
             binding.hostUrlInput.setText(url)
-        }
-
-        binding.loginLayout.run {
-            if (contextProvider.getBoolean(R.bool.use_login_background_image)) {
-                binding.loginBackgroundImage.isVisible = true
-            } else {
-                setBackgroundColor(resources.getColor(R.color.login_background_color))
-            }
-        }
-
-        binding.welcomeLink.run {
-            if (contextProvider.getBoolean(R.bool.show_welcome_link)) {
-                isVisible = true
-                text = contextProvider.getString(R.string.login_welcome_text).takeUnless { it.isBlank() }
-                    ?: String.format(contextProvider.getString(R.string.auth_register), contextProvider.getString(R.string.app_name))
-                setOnClickListener {
-                    setResult(RESULT_CANCELED)
-                    goToUrl(url = getString(R.string.welcome_link_url))
-                }
-            } else {
-                isVisible = false
-            }
-        }
-
-        val legacyWebfingerLookupServer = mdmProvider.getBrandingString(NO_MDM_RESTRICTION_YET, R.string.webfinger_lookup_server)
-        val shouldShowLegacyWebfingerFlow = loginAction == ACTION_CREATE && legacyWebfingerLookupServer.isNotBlank()
-        binding.webfingerLayout.isVisible = shouldShowLegacyWebfingerFlow
-        binding.mainLoginLayout.isVisible = !shouldShowLegacyWebfingerFlow
-
-        if (shouldShowLegacyWebfingerFlow) {
-            binding.webfingerButton.setOnClickListener {
-                val webfingerUsername = binding.webfingerUsername.text.toString()
-                if (webfingerUsername.isNotEmpty()) {
-                    authenticationViewModel.getLegacyWebfingerHost(
-                        legacyWebfingerLookupServer,
-                        webfingerUsername
-                    )
-                } else {
-                    binding.webfingerStatusText.run {
-                        text = getString(R.string.error_webfinger_username_empty).also { Timber.d(it) }
-                        setCompoundDrawablesWithIntrinsicBounds(R.drawable.common_error, 0, 0, 0)
-                        isVisible = true
-                    }
-                }
-            }
         }
     }
 

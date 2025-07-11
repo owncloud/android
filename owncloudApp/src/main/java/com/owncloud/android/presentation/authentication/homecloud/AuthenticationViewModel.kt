@@ -76,9 +76,6 @@ class AuthenticationViewModel(
     val codeChallenge: String = OAuthUtils().generateCodeChallenge(codeVerifier)
     val oidcState: String = OAuthUtils().generateRandomState()
 
-    private val _legacyWebfingerHost = MediatorLiveData<Event<UIResult<String>>>()
-    val legacyWebfingerHost: LiveData<Event<UIResult<String>>> = _legacyWebfingerHost
-
     private val _serverInfo = MediatorLiveData<Event<UIResult<ServerInfo>>>()
     val serverInfo: LiveData<Event<UIResult<ServerInfo>>> = _serverInfo
 
@@ -101,19 +98,6 @@ class AuthenticationViewModel(
     val accountDiscovery: LiveData<Event<UIResult<Unit>>> = _accountDiscovery
 
     var launchedFromDeepLink = false
-
-    fun getLegacyWebfingerHost(
-        webfingerLookupServer: String,
-        webfingerUsername: String,
-    ) {
-        runUseCaseWithResult(
-            coroutineDispatcher = coroutinesDispatcherProvider.io,
-            showLoading = true,
-            liveData = _legacyWebfingerHost,
-            useCase = getOwnCloudInstanceFromWebFingerUseCase,
-            useCaseParams = GetOwnCloudInstanceFromWebFingerUseCase.Params(server = webfingerLookupServer, resource = webfingerUsername)
-        )
-    }
 
     fun getServerInfo(
         serverUrl: String,
