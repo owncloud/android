@@ -51,7 +51,7 @@ import com.owncloud.android.presentation.authentication.ACTION_UPDATE_EXPIRED_TO
 import com.owncloud.android.presentation.authentication.AccountUtils
 import com.owncloud.android.presentation.authentication.EXTRA_ACCOUNT
 import com.owncloud.android.presentation.authentication.EXTRA_ACTION
-import com.owncloud.android.presentation.authentication.LoginActivity
+import com.owncloud.android.presentation.authentication.homecloud.LoginActivity
 import com.owncloud.android.presentation.transfers.TransferOperation.Download
 import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter
 import com.owncloud.android.utils.DOWNLOAD_NOTIFICATION_CHANNEL_ID

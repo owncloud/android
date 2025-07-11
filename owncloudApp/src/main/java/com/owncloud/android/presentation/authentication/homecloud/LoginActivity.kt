@@ -27,19 +27,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.presentation.authentication
+package com.owncloud.android.presentation.authentication.homecloud
 
 import android.accounts.Account
 import android.accounts.AccountAuthenticatorResponse
 import android.accounts.AccountManager
-import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.View.INVISIBLE
 import android.view.WindowManager.LayoutParams.FLAG_SECURE
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.net.toUri
@@ -51,7 +49,7 @@ import com.owncloud.android.MainApp
 import com.owncloud.android.MainApp.Companion.accountType
 import com.owncloud.android.R
 import com.owncloud.android.data.authentication.KEY_USER_ID
-import com.owncloud.android.databinding.AccountSetupBinding
+import com.owncloud.android.databinding.AccountSetupHomecloudBinding
 import com.owncloud.android.domain.authentication.oauth.model.ResponseType
 import com.owncloud.android.domain.authentication.oauth.model.TokenRequest
 import com.owncloud.android.domain.exceptions.NoNetworkConnectionException
@@ -71,8 +69,17 @@ import com.owncloud.android.extensions.showMessageInSnackbar
 import com.owncloud.android.lib.common.accounts.AccountTypeUtils
 import com.owncloud.android.lib.common.accounts.AccountUtils
 import com.owncloud.android.lib.common.network.CertificateCombinedException
+import com.owncloud.android.presentation.authentication.ACTION_CREATE
+import com.owncloud.android.presentation.authentication.ACTION_UPDATE_EXPIRED_TOKEN
 import com.owncloud.android.presentation.authentication.AccountUtils.getAccounts
 import com.owncloud.android.presentation.authentication.AccountUtils.getUsernameOfAccount
+import com.owncloud.android.presentation.authentication.homecloud.AuthenticationViewModel
+import com.owncloud.android.presentation.authentication.BASIC_TOKEN_TYPE
+import com.owncloud.android.presentation.authentication.EXTRA_ACCOUNT
+import com.owncloud.android.presentation.authentication.EXTRA_ACTION
+import com.owncloud.android.presentation.authentication.KEY_AUTH_TOKEN_TYPE
+import com.owncloud.android.presentation.authentication.OAUTH_TOKEN_TYPE
+import com.owncloud.android.presentation.authentication.UNTRUSTED_CERT_DIALOG_TAG
 import com.owncloud.android.presentation.authentication.oauth.OAuthUtils
 import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.presentation.documentsprovider.DocumentsProviderUtils.notifyDocumentsProviderRoots
@@ -95,7 +102,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import java.io.File
 
-@Deprecated(message = "Use `homecloud` sub-package")
 class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrustedCertListener, SecurityEnforced {
 
     private val authenticationViewModel by viewModel<AuthenticationViewModel>()
@@ -110,7 +116,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
 
     private var oidcSupported = false
 
-    private lateinit var binding: AccountSetupBinding
+    private lateinit var binding: AccountSetupHomecloudBinding
 
     // For handling AbstractAccountAuthenticator responses
     private var accountAuthenticatorResponse: AccountAuthenticatorResponse? = null
@@ -142,7 +148,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         }
 
         // UI initialization
-        binding = AccountSetupBinding.inflate(layoutInflater)
+        binding = AccountSetupHomecloudBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
 
@@ -478,7 +484,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         intent.putExtra(AccountManager.KEY_ACCOUNT_NAME, accountName)
         intent.putExtra(AccountManager.KEY_ACCOUNT_TYPE, contextProvider.getString(R.string.account_type))
         resultBundle = intent.extras
-        setResult(Activity.RESULT_OK, intent)
+        setResult(RESULT_OK, intent)
 
         authenticationViewModel.discoverAccount(accountName = accountName, discoveryNeeded = loginAction == ACTION_CREATE)
     }
@@ -812,7 +818,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
                 text = contextProvider.getString(R.string.login_welcome_text).takeUnless { it.isBlank() }
                     ?: String.format(contextProvider.getString(R.string.auth_register), contextProvider.getString(R.string.app_name))
                 setOnClickListener {
-                    setResult(Activity.RESULT_CANCELED)
+                    setResult(RESULT_CANCELED)
                     goToUrl(url = getString(R.string.welcome_link_url))
                 }
             } else {

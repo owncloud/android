@@ -20,7 +20,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.presentation.authentication
+package com.owncloud.android.presentation.authentication.homecloud
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
@@ -54,7 +54,6 @@ import com.owncloud.android.providers.WorkManagerProvider
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-@Deprecated(message = "Use `homecloud` sub-package")
 class AuthenticationViewModel(
     private val loginBasicAsyncUseCase: LoginBasicAsyncUseCase,
     private val loginOAuthAsyncUseCase: LoginOAuthAsyncUseCase,
@@ -164,7 +163,7 @@ class AuthenticationViewModel(
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
             _loginResult.postValue(Event(UIResult.Loading()))
 
-            val serverInfo = serverInfo.value?.peekContent()?.getStoredData() ?: throw java.lang.IllegalArgumentException("Server info value cannot" +
+            val serverInfo = serverInfo.value?.peekContent()?.getStoredData() ?: throw IllegalArgumentException("Server info value cannot" +
                     " be null")
 
             // Authenticated WebFinger needed only for account creations. Logged accounts already know their instances.

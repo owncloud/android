@@ -59,7 +59,7 @@ import com.owncloud.android.presentation.authentication.BASIC_TOKEN_TYPE
 import com.owncloud.android.presentation.authentication.EXTRA_ACCOUNT
 import com.owncloud.android.presentation.authentication.EXTRA_ACTION
 import com.owncloud.android.presentation.authentication.KEY_AUTH_TOKEN_TYPE
-import com.owncloud.android.presentation.authentication.LoginActivity
+import com.owncloud.android.presentation.authentication.homecloud.LoginActivity
 import com.owncloud.android.presentation.authentication.OAUTH_TOKEN_TYPE
 import com.owncloud.android.presentation.authentication.oauth.OAuthViewModel
 import com.owncloud.android.presentation.common.UIResult

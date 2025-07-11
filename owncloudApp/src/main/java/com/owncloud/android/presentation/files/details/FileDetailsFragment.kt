@@ -59,7 +59,7 @@ import com.owncloud.android.extensions.showMessageInSnackbar
 import com.owncloud.android.presentation.authentication.ACTION_UPDATE_EXPIRED_TOKEN
 import com.owncloud.android.presentation.authentication.EXTRA_ACCOUNT
 import com.owncloud.android.presentation.authentication.EXTRA_ACTION
-import com.owncloud.android.presentation.authentication.LoginActivity
+import com.owncloud.android.presentation.authentication.homecloud.LoginActivity
 import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.presentation.conflicts.ConflictsResolveActivity
 import com.owncloud.android.presentation.files.details.FileDetailsViewModel.ActionsInDetailsView.NONE
