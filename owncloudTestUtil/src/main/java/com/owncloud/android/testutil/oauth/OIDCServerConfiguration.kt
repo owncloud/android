@@ -2,7 +2,9 @@
  * ownCloud Android client application
  *
  * @author Abel García de Prada
- * Copyright (C) 2021 ownCloud GmbH.
+ * @author Jorge Aguado Recio
+ *
+ * Copyright (C) 2025 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -43,4 +45,8 @@ val OC_OIDC_SERVER_CONFIGURATION = OIDCServerConfiguration(
     tokenEndpoint = "https://owncloud.server/token",
     tokenEndpointAuthMethodsSupported = listOf(),
     userInfoEndpoint = "https://owncloud.server/userinfo"
+)
+
+val OC_OIDC_KITEWORKS_SERVER_CONFIGURATION = OC_OIDC_SERVER_CONFIGURATION.copy(
+    isKiteworksServer = true
 )
