@@ -20,14 +20,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          ssh-key: ${{ secrets.DEPLOYMENT_SSH_KEY }}
+          ssh-key: ${{ secrets.DEPLOYMENT_SSH_KEY_SBOM }}
           persist-credentials: false
 
       # Start SSH agent and add the SSH key to authenticate Git operations
       - name: Start SSH agent and add key
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.DEPLOYMENT_SSH_KEY }}" > ~/.ssh/id_rsa
+          echo "${{ secrets.DEPLOYMENT_SSH_KEY_SBOM }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           # Start the SSH agent
           eval "$(ssh-agent -s)"
