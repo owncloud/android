@@ -118,11 +118,11 @@ jobs:
           fi
 
       # Commit the SBOM file only if it differs from master to avoid unnecessary commits
-      - name: Commit files
+      - name: Commit and push SBOM over SSH
         if: steps.diff_sbom.outputs.no_changes == 'false'
-        uses: GuillaumeFalourd/git-commit-push@v1.3
-        with:
-          email: devops@owncloud.com
-          name: ownClouders
-          commit_message: "docs: SBOM updated"
-          files: sbom.json
+        run: |
+          git config user.email "devops@owncloud.com"
+          git config user.name "ownClouders"
+          git add sbom.json
+          git commit -m "docs: SBOM updated"
+          git push origin master
