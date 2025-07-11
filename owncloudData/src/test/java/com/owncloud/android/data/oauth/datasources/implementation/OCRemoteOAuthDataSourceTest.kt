@@ -2,7 +2,9 @@
  * ownCloud Android client application
  *
  * @author Abel García de Prada
- * Copyright (C) 2021 ownCloud GmbH.
+ * @author Jorge Aguado Recio
+ *
+ * Copyright (C) 2025 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -32,6 +34,7 @@ import com.owncloud.android.lib.resources.oauth.services.OIDCService
 import com.owncloud.android.testutil.OC_SECURE_BASE_URL
 import com.owncloud.android.testutil.oauth.OC_CLIENT_REGISTRATION
 import com.owncloud.android.testutil.oauth.OC_CLIENT_REGISTRATION_REQUEST
+import com.owncloud.android.testutil.oauth.OC_OIDC_KITEWORKS_SERVER_CONFIGURATION
 import com.owncloud.android.testutil.oauth.OC_OIDC_SERVER_CONFIGURATION
 import com.owncloud.android.testutil.oauth.OC_TOKEN_REQUEST_ACCESS
 import com.owncloud.android.testutil.oauth.OC_TOKEN_RESPONSE
@@ -63,7 +66,7 @@ class OCRemoteOAuthDataSourceTest {
     }
 
     @Test
-    fun `performOIDCDiscovery returns a OIDCServerConfiguration`() {
+    fun `performOIDCDiscovery returns a OIDCServerConfiguration when the server is from ownCloud`() {
         val oidcDiscoveryResult: RemoteOperationResult<OIDCDiscoveryResponse> =
             createRemoteOperationResultMock(data = OC_REMOTE_OIDC_DISCOVERY_RESPONSE, isSuccess = true)
 
@@ -71,10 +74,38 @@ class OCRemoteOAuthDataSourceTest {
             oidcService.getOIDCServerDiscovery(ocClientMocked)
         } returns oidcDiscoveryResult
 
+        every {
+            ocClientMocked.isKiteworksServer
+        } returns false
+
         val oidcDiscovery = remoteOAuthDataSource.performOIDCDiscovery(OC_SECURE_BASE_URL)
 
         assertNotNull(oidcDiscovery)
         assertEquals(OC_OIDC_SERVER_CONFIGURATION, oidcDiscovery)
+
+        verify(exactly = 1) {
+            clientManager.getClientForAnonymousCredentials(OC_SECURE_BASE_URL, false)
+            oidcService.getOIDCServerDiscovery(ocClientMocked)
+        }
+    }
+
+    @Test
+    fun `performOIDCDiscovery returns a OIDCServerConfiguration when the server is from Kiteworks`() {
+        val oidcDiscoveryResult: RemoteOperationResult<OIDCDiscoveryResponse> =
+            createRemoteOperationResultMock(data = OC_REMOTE_OIDC_DISCOVERY_RESPONSE, isSuccess = true)
+
+        every {
+            oidcService.getOIDCServerDiscovery(ocClientMocked)
+        } returns oidcDiscoveryResult
+
+        every {
+            ocClientMocked.isKiteworksServer
+        } returns true
+
+        val oidcDiscovery = remoteOAuthDataSource.performOIDCDiscovery(OC_SECURE_BASE_URL)
+
+        assertNotNull(oidcDiscovery)
+        assertEquals(OC_OIDC_KITEWORKS_SERVER_CONFIGURATION, oidcDiscovery)
 
         verify(exactly = 1) {
             clientManager.getClientForAnonymousCredentials(OC_SECURE_BASE_URL, false)

@@ -104,6 +104,12 @@
     <string name="oauth2_client_id">e4rAsNUSIUs0lF4nbv9FmCeUkTlV9GdgTLDH1b5uie7syb90SzEVrbN7HIpmWJeD</string>
     <string name="oauth2_client_secret">dInFYGV33xKzhbRmpqQltYNdfLdJIfJ9L5ISoKhNoT9qZftpdWSP71VrpGR9pmoD</string>
 
+    <string name="kiteworks_client_id">163d022d-f2bf-55a7-9cdb-45507fa21cd5</string>
+    <string name="kiteworks_client_secret"></string>
+    <string name="kiteworks_redirect_uri_path">/</string>
+    <string name="kiteworks_openid_scope"></string>
+    <string name="kiteworks_openid_prompt"></string>
+
     <!-- To enable/disable app rate feature -->
     <bool name="enable_rate_me_feature">true</bool>
 

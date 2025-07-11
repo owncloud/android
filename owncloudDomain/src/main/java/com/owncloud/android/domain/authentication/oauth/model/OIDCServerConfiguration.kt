@@ -3,8 +3,9 @@
  *
  * @author Abel García de Prada
  * @author Juan Carlos Garrote Gascón
+ * @author Jorge Aguado Recio
  *
- * Copyright (C) 2024 ownCloud GmbH.
+ * Copyright (C) 2025 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -32,6 +33,7 @@ data class OIDCServerConfiguration(
     val tokenEndpoint: String,
     val tokenEndpointAuthMethodsSupported: List<String>?,
     val userInfoEndpoint: String?,
+    val isKiteworksServer: Boolean = false,
 ) {
     fun isTokenEndpointAuthMethodSupportedClientSecretPost(): Boolean =
         tokenEndpointAuthMethodsSupported?.any { it == "client_secret_post" } ?: false
