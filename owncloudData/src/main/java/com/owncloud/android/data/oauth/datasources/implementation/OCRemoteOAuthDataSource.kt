@@ -49,13 +49,9 @@ class OCRemoteOAuthDataSource(
             oidcService.getOIDCServerDiscovery(ownCloudClient)
         }
 
-        var serverConfigurationModel = serverConfiguration.toModel()
-
-        if (ownCloudClient.isKiteworksServer) {
-            serverConfigurationModel = serverConfigurationModel.copy(isKiteworksServer = true)
+        return serverConfiguration.toModel().run {
+            if (ownCloudClient.isKiteworksServer) copy(isKiteworksServer = true) else this
         }
-
-        return serverConfigurationModel
     }
 
     override fun performTokenRequest(tokenRequest: TokenRequest): TokenResponse {
