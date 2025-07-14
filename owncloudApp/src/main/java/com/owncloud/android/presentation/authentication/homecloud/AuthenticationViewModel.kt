@@ -56,25 +56,15 @@ import timber.log.Timber
 
 class AuthenticationViewModel(
     private val loginBasicAsyncUseCase: LoginBasicAsyncUseCase,
-    private val loginOAuthAsyncUseCase: LoginOAuthAsyncUseCase,
     private val getServerInfoAsyncUseCase: GetServerInfoAsyncUseCase,
-    private val supportsOAuth2UseCase: SupportsOAuth2UseCase,
     private val getBaseUrlUseCase: GetBaseUrlUseCase,
-    private val getOwnCloudInstancesFromAuthenticatedWebFingerUseCase: GetOwnCloudInstancesFromAuthenticatedWebFingerUseCase,
-    private val getOwnCloudInstanceFromWebFingerUseCase: GetOwnCloudInstanceFromWebFingerUseCase,
     private val refreshCapabilitiesFromServerAsyncUseCase: RefreshCapabilitiesFromServerAsyncUseCase,
     private val getStoredCapabilitiesUseCase: GetStoredCapabilitiesUseCase,
     private val refreshSpacesFromServerAsyncUseCase: RefreshSpacesFromServerAsyncUseCase,
     private val workManagerProvider: WorkManagerProvider,
-    private val requestTokenUseCase: RequestTokenUseCase,
-    private val registerClientUseCase: RegisterClientUseCase,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
     private val contextProvider: ContextProvider,
 ) : ViewModel() {
-
-    val codeVerifier: String = OAuthUtils().generateRandomCodeVerifier()
-    val codeChallenge: String = OAuthUtils().generateCodeChallenge(codeVerifier)
-    val oidcState: String = OAuthUtils().generateRandomState()
 
     private val _serverInfo = MediatorLiveData<Event<UIResult<ServerInfo>>>()
     val serverInfo: LiveData<Event<UIResult<ServerInfo>>> = _serverInfo
@@ -82,17 +72,8 @@ class AuthenticationViewModel(
     private val _loginResult = MediatorLiveData<Event<UIResult<String>>>()
     val loginResult: LiveData<Event<UIResult<String>>> = _loginResult
 
-    private val _supportsOAuth2 = MediatorLiveData<Event<UIResult<Boolean>>>()
-    val supportsOAuth2: LiveData<Event<UIResult<Boolean>>> = _supportsOAuth2
-
     private val _baseUrl = MediatorLiveData<Event<UIResult<String>>>()
     val baseUrl: LiveData<Event<UIResult<String>>> = _baseUrl
-
-    private val _registerClient = MediatorLiveData<Event<UIResult<ClientRegistrationInfo>>>()
-    val registerClient: LiveData<Event<UIResult<ClientRegistrationInfo>>> = _registerClient
-
-    private val _requestToken = MediatorLiveData<Event<UIResult<TokenResponse>>>()
-    val requestToken: LiveData<Event<UIResult<TokenResponse>>> = _requestToken
 
     private val _accountDiscovery = MediatorLiveData<Event<UIResult<Unit>>>()
     val accountDiscovery: LiveData<Event<UIResult<Unit>>> = _accountDiscovery
@@ -134,74 +115,6 @@ class AuthenticationViewModel(
         )
     )
 
-    fun loginOAuth(
-        serverBaseUrl: String,
-        username: String,
-        authTokenType: String,
-        accessToken: String,
-        refreshToken: String,
-        scope: String?,
-        updateAccountWithUsername: String? = null,
-        clientRegistrationInfo: ClientRegistrationInfo?
-    ) {
-        viewModelScope.launch(coroutinesDispatcherProvider.io) {
-            _loginResult.postValue(Event(UIResult.Loading()))
-
-            val serverInfo = serverInfo.value?.peekContent()?.getStoredData() ?: throw IllegalArgumentException("Server info value cannot" +
-                    " be null")
-
-            // Authenticated WebFinger needed only for account creations. Logged accounts already know their instances.
-            if (updateAccountWithUsername == null) {
-                val ownCloudInstancesAvailable = getOwnCloudInstancesFromAuthenticatedWebFingerUseCase(
-                    GetOwnCloudInstancesFromAuthenticatedWebFingerUseCase.Params(
-                        server = serverBaseUrl,
-                        username = username,
-                        accessToken = accessToken,
-                    )
-                )
-                Timber.d("Instances retrieved from authenticated webfinger: $ownCloudInstancesAvailable")
-
-                // Multiple instances are not supported yet. Let's use the first instance we receive for the moment.
-                ownCloudInstancesAvailable.getDataOrNull()?.let {
-                    if (it.isNotEmpty()) {
-                        serverInfo.baseUrl = it.first()
-                    }
-                }
-            }
-
-            val useCaseResult = loginOAuthAsyncUseCase(
-                LoginOAuthAsyncUseCase.Params(
-                    serverInfo = serverInfo,
-                    username = username,
-                    authTokenType = authTokenType,
-                    accessToken = accessToken,
-                    refreshToken = refreshToken,
-                    scope = scope,
-                    updateAccountWithUsername = updateAccountWithUsername,
-                    clientRegistrationInfo = clientRegistrationInfo,
-                )
-            )
-
-            if (useCaseResult.isSuccess) {
-                _loginResult.postValue(Event(UIResult.Success(useCaseResult.getDataOrNull())))
-            } else if (useCaseResult.isError) {
-                _loginResult.postValue(Event(UIResult.Error(error = useCaseResult.getThrowableOrNull())))
-            }
-        }
-    }
-
-    fun supportsOAuth2(
-        accountName: String
-    ) = runUseCaseWithResult(
-        coroutineDispatcher = coroutinesDispatcherProvider.io,
-        requiresConnection = false,
-        liveData = _supportsOAuth2,
-        useCase = supportsOAuth2UseCase,
-        useCaseParams = SupportsOAuth2UseCase.Params(
-            accountName = accountName
-        )
-    )
-
     fun getBaseUrl(
         accountName: String
     ) = runUseCaseWithResult(
@@ -212,33 +125,6 @@ class AuthenticationViewModel(
         useCaseParams = GetBaseUrlUseCase.Params(
             accountName = accountName
         )
-    )
-
-    fun registerClient(
-        registrationEndpoint: String
-    ) {
-        val registrationRequest = OAuthUtils.buildClientRegistrationRequest(
-            registrationEndpoint = registrationEndpoint,
-            MainApp.appContext
-        )
-
-        runUseCaseWithResult(
-            coroutineDispatcher = coroutinesDispatcherProvider.io,
-            showLoading = false,
-            liveData = _registerClient,
-            useCase = registerClientUseCase,
-            useCaseParams = RegisterClientUseCase.Params(registrationRequest)
-        )
-    }
-
-    fun requestToken(
-        tokenRequest: TokenRequest
-    ) = runUseCaseWithResult(
-        coroutineDispatcher = coroutinesDispatcherProvider.io,
-        showLoading = false,
-        liveData = _requestToken,
-        useCase = requestTokenUseCase,
-        useCaseParams = RequestTokenUseCase.Params(tokenRequest = tokenRequest)
     )
 
     fun discoverAccount(accountName: String, discoveryNeeded: Boolean = false) {

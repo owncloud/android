@@ -114,7 +114,6 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
     private var username: String? = null
     private lateinit var serverBaseUrl: String
 
-    private var oidcSupported = false
 
     private lateinit var binding: AccountSetupHomecloudBinding
 
@@ -139,11 +138,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         userAccount = intent.getParcelableExtra(EXTRA_ACCOUNT)
 
         // Get values from savedInstanceState
-        if (savedInstanceState == null) {
-            if (authTokenType == null && userAccount != null) {
-                authenticationViewModel.supportsOAuth2((userAccount as Account).name)
-            }
-        } else {
+        if (savedInstanceState != null) {
             authTokenType = savedInstanceState.getString(KEY_AUTH_TOKEN_TYPE)
         }
 
@@ -258,17 +253,6 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
             }
         }
 
-        authenticationViewModel.supportsOAuth2.observe(this) { event ->
-            when (val uiResult = event.peekContent()) {
-                is UIResult.Loading -> {}
-                is UIResult.Success -> updateAuthTokenTypeAndInstructions(uiResult)
-                is UIResult.Error -> showErrorInToast(
-                    genericErrorMessageId = R.string.supports_oauth2_error,
-                    throwable = uiResult.error
-                )
-            }
-        }
-
         authenticationViewModel.baseUrl.observe(this) { event ->
             when (val uiResult = event.peekContent()) {
                 is UIResult.Loading -> {}
@@ -341,39 +325,9 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
     }
 
     private fun checkServerType(serverInfo: ServerInfo) {
-        if (BuildConfig.FLAVOR == MainApp.QA_FLAVOR) {
-            handleBasicAuth()
-            return
-        }
-
         when (serverInfo) {
             is ServerInfo.BasicServer -> {
                 handleBasicAuth()
-            }
-
-            is ServerInfo.OAuth2Server -> {
-                showOrHideBasicAuthFields(shouldBeVisible = false)
-                authTokenType = OAUTH_TOKEN_TYPE
-                oidcSupported = false
-
-                val oauth2authorizationEndpoint =
-                    Uri.parse("$serverBaseUrl${File.separator}${getString(R.string.oauth2_url_endpoint_auth)}")
-                performGetAuthorizationCodeRequest(oauth2authorizationEndpoint)
-            }
-
-            is ServerInfo.OIDCServer -> {
-                showOrHideBasicAuthFields(shouldBeVisible = false)
-                authTokenType = OAUTH_TOKEN_TYPE
-                oidcSupported = true
-                val registrationEndpoint = serverInfo.oidcServerConfiguration.registrationEndpoint
-                if (registrationEndpoint != null) {
-                    registerClient(
-                        authorizationEndpoint = serverInfo.oidcServerConfiguration.authorizationEndpoint.toUri(),
-                        registrationEndpoint = registrationEndpoint
-                    )
-                } else {
-                    performGetAuthorizationCodeRequest(serverInfo.oidcServerConfiguration.authorizationEndpoint.toUri())
-                }
             }
 
             else -> {
@@ -388,7 +342,6 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
 
     private fun handleBasicAuth() {
         authTokenType = BASIC_TOKEN_TYPE
-        oidcSupported = false
         showOrHideBasicAuthFields(shouldBeVisible = true)
         binding.accountUsername.doAfterTextChanged { updateLoginButtonVisibility() }
         binding.accountPassword.doAfterTextChanged { updateLoginButtonVisibility() }
@@ -474,199 +427,6 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
                     isVisible = true
                     setCompoundDrawablesWithIntrinsicBounds(R.drawable.common_error, 0, 0, 0)
                 }
-            }
-        }
-    }
-
-    /**
-     * Register client if possible.
-     */
-    private fun registerClient(
-        authorizationEndpoint: Uri,
-        registrationEndpoint: String
-    ) {
-        authenticationViewModel.registerClient(registrationEndpoint)
-        authenticationViewModel.registerClient.observe(this) {
-            when (val uiResult = it.peekContent()) {
-                is UIResult.Loading -> {}
-                is UIResult.Success -> {
-                    Timber.d("Client registered: ${it.peekContent().getStoredData()}")
-                    uiResult.data?.let { clientRegistrationInfo ->
-                        performGetAuthorizationCodeRequest(
-                            authorizationEndpoint = authorizationEndpoint,
-                            clientId = clientRegistrationInfo.clientId
-                        )
-                    }
-                }
-
-                is UIResult.Error -> {
-                    Timber.e(uiResult.error, "Client registration failed.")
-                    performGetAuthorizationCodeRequest(authorizationEndpoint)
-                }
-            }
-        }
-    }
-
-    private fun performGetAuthorizationCodeRequest(
-        authorizationEndpoint: Uri,
-        clientId: String = getString(R.string.oauth2_client_id)
-    ) {
-        Timber.d("A browser should be opened now to authenticate this user.")
-
-        val customTabsBuilder: CustomTabsIntent.Builder = CustomTabsIntent.Builder()
-        val customTabsIntent: CustomTabsIntent = customTabsBuilder.build()
-
-        val authorizationEndpointUri = OAuthUtils.buildAuthorizationRequest(
-            authorizationEndpoint = authorizationEndpoint,
-            redirectUri = OAuthUtils.buildRedirectUri(applicationContext).toString(),
-            clientId = clientId,
-            responseType = ResponseType.CODE.string,
-            scope = if (oidcSupported) mdmProvider.getBrandingString(CONFIGURATION_OAUTH2_OPEN_ID_SCOPE, R.string.oauth2_openid_scope) else "",
-            prompt = if (oidcSupported) mdmProvider.getBrandingString(CONFIGURATION_OAUTH2_OPEN_ID_PROMPT, R.string.oauth2_openid_prompt) else "",
-            codeChallenge = authenticationViewModel.codeChallenge,
-            state = authenticationViewModel.oidcState,
-            username = username,
-            sendLoginHintAndUser = mdmProvider.getBrandingBoolean(mdmKey = CONFIGURATION_SEND_LOGIN_HINT_AND_USER,
-                booleanKey = R.bool.send_login_hint_and_user),
-        )
-
-        try {
-            customTabsIntent.launchUrl(
-                this,
-                authorizationEndpointUri
-            )
-        } catch (e: ActivityNotFoundException) {
-            binding.serverStatusText.visibility = INVISIBLE
-            showMessageInSnackbar(message = this.getString(R.string.file_list_no_app_for_perform_action))
-            Timber.e("No Activity found to handle Intent")
-        }
-    }
-
-    override fun onNewIntent(intent: Intent?) {
-        super.onNewIntent(intent)
-        intent?.let {
-            handleGetAuthorizationCodeResponse(it)
-        }
-    }
-
-    private fun handleGetAuthorizationCodeResponse(intent: Intent) {
-        val authorizationCode = intent.data?.getQueryParameter("code")
-        val state = intent.data?.getQueryParameter("state")
-
-        if (state != authenticationViewModel.oidcState) {
-            Timber.e("OAuth request to get authorization code failed. State mismatching, maybe somebody is trying a CSRF attack.")
-            updateOAuthStatusIconAndText(StateMismatchException())
-        } else {
-            if (authorizationCode != null) {
-                Timber.d("Authorization code received [$authorizationCode]. Let's exchange it for access token")
-                exchangeAuthorizationCodeForTokens(authorizationCode)
-            } else {
-                val authorizationError = intent.data?.getQueryParameter("error")
-                val authorizationErrorDescription = intent.data?.getQueryParameter("error_description")
-
-                Timber.e("OAuth request to get authorization code failed. Error: [$authorizationError]." +
-                        " Error description: [$authorizationErrorDescription]")
-                val authorizationException =
-                    if (authorizationError == "access_denied") UnauthorizedException() else Throwable("An unknown authorization error has " +
-                            "occurred")
-                updateOAuthStatusIconAndText(authorizationException)
-            }
-        }
-    }
-
-    /**
-     * OAuth step 2: Exchange the received authorization code for access and refresh tokens
-     */
-    private fun exchangeAuthorizationCodeForTokens(authorizationCode: String) {
-        binding.serverStatusText.text = getString(R.string.auth_getting_authorization)
-
-        val clientRegistrationInfo = authenticationViewModel.registerClient.value?.peekContent()?.getStoredData()
-
-        val clientAuth = if (clientRegistrationInfo?.clientId != null && clientRegistrationInfo.clientSecret != null) {
-            OAuthUtils.getClientAuth(clientRegistrationInfo.clientSecret as String, clientRegistrationInfo.clientId)
-
-        } else {
-            OAuthUtils.getClientAuth(getString(R.string.oauth2_client_secret), getString(R.string.oauth2_client_id))
-        }
-
-        // Use oidc discovery one, or build an oauth endpoint using serverBaseUrl + Setup string.
-        val tokenEndPoint: String
-
-        var clientId: String? = null
-        var clientSecret: String? = null
-
-        val serverInfo = authenticationViewModel.serverInfo.value?.peekContent()?.getStoredData()
-        if (serverInfo is ServerInfo.OIDCServer) {
-            tokenEndPoint = serverInfo.oidcServerConfiguration.tokenEndpoint
-            if (serverInfo.oidcServerConfiguration.isTokenEndpointAuthMethodSupportedClientSecretPost()) {
-                clientId = clientRegistrationInfo?.clientId ?: contextProvider.getString(R.string.oauth2_client_id)
-                clientSecret = clientRegistrationInfo?.clientSecret ?: contextProvider.getString(R.string.oauth2_client_secret)
-            }
-        } else {
-            tokenEndPoint = "$serverBaseUrl${File.separator}${contextProvider.getString(R.string.oauth2_url_endpoint_access)}"
-        }
-
-        val scope = resources.getString(R.string.oauth2_openid_scope)
-
-        val requestToken = TokenRequest.AccessToken(
-            baseUrl = serverBaseUrl,
-            tokenEndpoint = tokenEndPoint,
-            clientAuth = clientAuth,
-            scope = scope,
-            clientId = clientId,
-            clientSecret = clientSecret,
-            authorizationCode = authorizationCode,
-            redirectUri = OAuthUtils.buildRedirectUri(applicationContext).toString(),
-            codeVerifier = authenticationViewModel.codeVerifier
-        )
-
-        authenticationViewModel.requestToken(requestToken)
-
-        authenticationViewModel.requestToken.observe(this) {
-            when (val uiResult = it.peekContent()) {
-                is UIResult.Loading -> {}
-                is UIResult.Success -> {
-                    Timber.d("Tokens received ${uiResult.data}, trying to login, creating account and adding it to account manager")
-                    val tokenResponse = uiResult.data ?: return@observe
-
-                    authenticationViewModel.loginOAuth(
-                        serverBaseUrl = serverBaseUrl,
-                        username = tokenResponse.additionalParameters?.get(KEY_USER_ID).orEmpty(),
-                        authTokenType = OAUTH_TOKEN_TYPE,
-                        accessToken = tokenResponse.accessToken,
-                        refreshToken = tokenResponse.refreshToken.orEmpty(),
-                        scope = if (oidcSupported) mdmProvider.getBrandingString(
-                            CONFIGURATION_OAUTH2_OPEN_ID_SCOPE,
-                            R.string.oauth2_openid_scope,
-                        ) else tokenResponse.scope,
-                        updateAccountWithUsername = if (loginAction != ACTION_CREATE) userAccount?.name else null,
-                        clientRegistrationInfo = clientRegistrationInfo
-                    )
-                }
-
-                is UIResult.Error -> {
-                    Timber.e(uiResult.error, "OAuth request to exchange authorization code for tokens failed")
-                    updateOAuthStatusIconAndText(uiResult.error)
-                }
-            }
-        }
-    }
-
-    private fun updateAuthTokenTypeAndInstructions(uiResult: UIResult<Boolean?>) {
-        val supportsOAuth2 = uiResult.getStoredData()
-        authTokenType = if (supportsOAuth2 != null && supportsOAuth2) OAUTH_TOKEN_TYPE else BASIC_TOKEN_TYPE
-
-        binding.instructionsMessage.run {
-            if (loginAction == ACTION_UPDATE_EXPIRED_TOKEN) {
-                text =
-                    if (AccountTypeUtils.getAuthTokenTypeAccessToken(accountType) == authTokenType) {
-                        getString(R.string.auth_expired_oauth_token_toast)
-                    } else {
-                        getString(R.string.auth_expired_basic_auth_toast)
-                    }
-                isVisible = true
-            } else {
-                isVisible = false
             }
         }
     }
@@ -762,18 +522,6 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         val url = mdmProvider.getBrandingString(mdmKey = CONFIGURATION_SERVER_URL, stringKey = R.string.server_url)
         if (url.isNotEmpty()) {
             binding.hostUrlInput.setText(url)
-        }
-    }
-
-    private fun updateOAuthStatusIconAndText(authorizationException: Throwable?) {
-        binding.serverStatusText.run {
-            setCompoundDrawablesWithIntrinsicBounds(R.drawable.common_error, 0, 0, 0)
-            text =
-                if (authorizationException is UnauthorizedException) {
-                    getString(R.string.auth_oauth_error_access_denied)
-                } else {
-                    getString(R.string.auth_oauth_error)
-                }
         }
     }
 
