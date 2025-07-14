@@ -106,6 +106,8 @@
 
     <string name="kiteworks_client_id">163d022d-f2bf-55a7-9cdb-45507fa21cd5</string>
     <string name="kiteworks_client_secret"></string>
+    <string name="kiteworks_redirect_uri_scheme">oc</string>
+    <string name="kiteworks_redirect_uri_host">android.owncloud.com</string>
     <string name="kiteworks_redirect_uri_path">/</string>
     <string name="kiteworks_openid_scope"></string>
     <string name="kiteworks_openid_prompt"></string>

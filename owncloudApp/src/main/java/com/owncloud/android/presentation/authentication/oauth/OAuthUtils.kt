@@ -125,15 +125,23 @@ class OAuthUtils {
             }.build()
 
         fun buildRedirectUri(context: Context, isKiteworksServer: Boolean = false): Uri {
-            val path = if (isKiteworksServer) {
-                context.getString(R.string.kiteworks_redirect_uri_path)
+            val scheme: String
+            val host: String
+            val path: String
+
+            if (isKiteworksServer) {
+                scheme = context.getString(R.string.kiteworks_redirect_uri_scheme)
+                host = context.getString(R.string.kiteworks_redirect_uri_host)
+                path = context.getString(R.string.kiteworks_redirect_uri_path)
             } else {
-                context.getString(R.string.oauth2_redirect_uri_path)
+                scheme = context.getString(R.string.oauth2_redirect_uri_scheme)
+                host = context.getString(R.string.oauth2_redirect_uri_host)
+                path = context.getString(R.string.oauth2_redirect_uri_path)
             }
 
             return Uri.Builder()
-                .scheme(context.getString(R.string.oauth2_redirect_uri_scheme))
-                .authority(context.getString(R.string.oauth2_redirect_uri_host))
+                .scheme(scheme)
+                .authority(host)
                 .path(path)
                 .build()
         }
