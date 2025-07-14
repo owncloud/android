@@ -651,7 +651,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
 
         } else {
             if (isKiteworksServer) {
-                OAuthUtils.getClientAuth(getString(R.string.kiteworks_client_id), getString(R.string.kiteworks_client_secret))
+                OAuthUtils.getClientAuth(getString(R.string.kiteworks_client_secret), getString(R.string.kiteworks_client_id))
             } else {
                 OAuthUtils.getClientAuth(getString(R.string.oauth2_client_secret), getString(R.string.oauth2_client_id))
             }
@@ -667,13 +667,11 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         if (serverInfo is ServerInfo.OIDCServer) {
             tokenEndPoint = serverInfo.oidcServerConfiguration.tokenEndpoint
             if (serverInfo.oidcServerConfiguration.isTokenEndpointAuthMethodSupportedClientSecretPost()) {
-                if (isKiteworksServer) {
-                    clientId = contextProvider.getString(R.string.kiteworks_client_id)
-                    clientSecret = contextProvider.getString(R.string.kiteworks_client_secret)
-                } else {
-                    clientId = clientRegistrationInfo?.clientId ?: contextProvider.getString(R.string.oauth2_client_id)
-                    clientSecret = clientRegistrationInfo?.clientSecret ?: contextProvider.getString(R.string.oauth2_client_secret)
-                }
+                val defaultClientId = if (isKiteworksServer) R.string.kiteworks_client_id else R.string.oauth2_client_id
+                val defaultClientSecret = if (isKiteworksServer) R.string.kiteworks_client_secret else R.string.oauth2_client_secret
+
+                clientId = clientRegistrationInfo?.clientId ?: contextProvider.getString(defaultClientId)
+                clientSecret = clientRegistrationInfo?.clientSecret ?: contextProvider.getString(defaultClientSecret)
             }
         } else {
             tokenEndPoint = "$serverBaseUrl${File.separator}${contextProvider.getString(R.string.oauth2_url_endpoint_access)}"
