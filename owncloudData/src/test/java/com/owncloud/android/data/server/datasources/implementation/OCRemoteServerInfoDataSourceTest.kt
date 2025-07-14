@@ -111,7 +111,6 @@ class OCRemoteServerInfoDataSourceTest {
 
         val currentValue = ocRemoteServerInfoDatasource.getAuthenticationMethod(OC_SECURE_SERVER_INFO_OIDC_AUTH.baseUrl)
 
-        assertNotNull(expectedValue)
         assertEquals(expectedValue, currentValue)
 
         verify {
