@@ -45,6 +45,7 @@ ownCloud admins and users.
 * Bugfix - Crash from Google Play Console in PreviewImageFragment: [#4577](https://github.com/owncloud/android/issues/4577)
 * Bugfix - No message when uploading a file with no quota: [#4582](https://github.com/owncloud/android/issues/4582)
 * Bugfix - Crash from Google Play Console in PreviewImagePagerAdapter: [#4596](https://github.com/owncloud/android/issues/4596)
+* Bugfix - Change space icon in file details view for personal space: [#4624](https://github.com/owncloud/android/issues/4624)
 * Change - Bump target SDK to 35: [#4529](https://github.com/owncloud/android/issues/4529)
 * Change - Replace dav4android location: [#4536](https://github.com/owncloud/android/issues/4536)
 * Change - Modify biometrics fail source string: [#4572](https://github.com/owncloud/android/issues/4572)
@@ -136,6 +137,14 @@ ownCloud admins and users.
 
    https://github.com/owncloud/android/issues/4596
    https://github.com/owncloud/android/pull/4600
+
+* Bugfix - Change space icon in file details view for personal space: [#4624](https://github.com/owncloud/android/issues/4624)
+
+   The space icon in the file details view has been replaced by the folder icon
+   when the space that contains the file is personal.
+
+   https://github.com/owncloud/android/issues/4624
+   https://github.com/owncloud/android/pull/4640
 
 * Change - Bump target SDK to 35: [#4529](https://github.com/owncloud/android/issues/4529)
 
