@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/scroll"
@@ -8,185 +8,144 @@
     android:fillViewport="true"
     android:orientation="vertical">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:gravity="end"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="end"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <ImageButton
-                android:id="@+id/settings_link"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:background="?attr/selectableItemBackground"
-                android:contentDescription="@string/actionbar_settings"
-                android:gravity="center"
-                android:src="@drawable/ic_settings"
-                android:text="@string/actionbar_settings"
-                android:tint="?attr/colorPrimary" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/layout_login"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
+        <ImageButton
+            android:id="@+id/settings_link"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="?attr/selectableItemBackground"
+            android:contentDescription="@string/actionbar_settings"
             android:gravity="center"
-            android:orientation="vertical"
-            android:padding="10dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:src="@drawable/ic_settings"
+            android:text="@string/actionbar_settings"
+            android:tint="?attr/colorPrimary" />
 
-            <ImageView
-                android:id="@+id/thumbnail"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="50dp"
-                android:contentDescription="@string/app_name"
-                android:src="@drawable/ic_homecloud_login_logo" />
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
             <LinearLayout
-                android:id="@+id/main_login_layout"
+                android:id="@+id/layout_login"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/centeredRefreshButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginBottom="10dp"
-                    android:contentDescription="@string/auth_check_server"
-                    android:text="@string/auth_check_server"
-                    android:theme="@style/Button.Authenticator"
-                    android:visibility="gone" />
-
-                <TextView
-                    android:id="@+id/instructions_message"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="fill_horizontal"
-                    android:layout_marginBottom="10dp"
-                    android:contentDescription="@string/auth_expired_basic_auth_toast"
-                    android:text="@string/auth_expired_basic_auth_toast"
-                    android:visibility="gone" />
-
-                <FrameLayout
-                    android:id="@+id/hostUrlFrame"
+                <ImageView
+                    android:id="@+id/thumbnail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="0dp"
-                    android:focusable="true">
+                    android:contentDescription="@string/app_name"
+                    android:src="@drawable/ic_homecloud_login_logo" />
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/hostUrlInputLayout"
+                <LinearLayout
+                    android:id="@+id/main_login_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <FrameLayout
+                        android:id="@+id/hostUrlFrame"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="16dp"
-                        app:endIconDrawable="@drawable/ic_arrow_right"
-                        app:endIconMode="custom">
+                        android:layout_marginBottom="0dp"
+                        android:focusable="true">
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/hostUrlInputLayout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="24dp"
+                            android:layout_marginVertical="16dp"
+                            app:endIconDrawable="@drawable/ic_arrow_right"
+                            app:endIconMode="custom">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/hostUrlInput"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:drawablePadding="5dp"
+                                android:hint="@string/auth_host_url"
+                                android:inputType="textUri"
+                                android:paddingEnd="55dp">
+
+                                <requestFocus />
+                            </com.google.android.material.textfield.TextInputEditText>
+
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                    </FrameLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/account_username_container"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="24dp"
+                        android:layout_marginVertical="16dp"
+                        android:visibility="gone"
+                        tools:visibility="visible">
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/hostUrlInput"
+                            android:id="@+id/account_username"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:drawablePadding="5dp"
-                            android:hint="@string/auth_host_url"
-                            android:inputType="textUri"
-                            android:paddingEnd="55dp">
+                            android:hint="@string/auth_username"
+                            android:inputType="textNoSuggestions">
 
-                            <requestFocus />
                         </com.google.android.material.textfield.TextInputEditText>
-
                     </com.google.android.material.textfield.TextInputLayout>
 
-                </FrameLayout>
-
-                <TextView
-                    android:id="@+id/server_status_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:contentDescription="@string/auth_testing_connection"
-                    android:drawablePadding="5dp"
-                    android:gravity="center_vertical"
-                    android:minHeight="32dp"
-                    android:visibility="invisible"
-                    app:drawableStartCompat="@android:drawable/stat_notify_sync"
-                    tools:text="@string/auth_testing_connection"
-                    tools:visibility="visible" />
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/account_username_container"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="16dp"
-                    android:hint="@string/auth_username"
-                    android:visibility="gone"
-                    tools:visibility="visible">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/account_username"
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/account_password_container"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:drawablePadding="5dp"
-                        android:hint="@string/auth_username"
-                        android:inputType="textNoSuggestions">
+                        android:layout_marginHorizontal="24dp"
+                        android:layout_marginVertical="16dp"
+                        android:visibility="gone"
+                        app:passwordToggleEnabled="true"
+                        tools:visibility="visible">
 
-                    </com.google.android.material.textfield.TextInputEditText>
-                </com.google.android.material.textfield.TextInputLayout>
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/account_password"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:drawablePadding="5dp"
+                            android:hint="@string/auth_password"
+                            android:inputType="textPassword">
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/account_password_container"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="16dp"
-                    android:visibility="gone"
-                    app:passwordToggleEnabled="true"
-                    tools:visibility="visible">
+                        </com.google.android.material.textfield.TextInputEditText>
+                    </com.google.android.material.textfield.TextInputLayout>
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/account_password"
+                    <Button
+                        android:id="@+id/ctaButton"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:drawablePadding="5dp"
-                        android:hint="@string/auth_password"
-                        android:inputType="textPassword">
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginHorizontal="24dp"
+                        android:contentDescription="@string/setup_btn_login"
+                        android:text="@string/setup_btn_login"
+                        android:theme="@style/Button.Primary" />
+                </LinearLayout>
 
-                    </com.google.android.material.textfield.TextInputEditText>
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <TextView
-                    android:id="@+id/auth_status_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:contentDescription="@string/auth_unauthorized"
-                    android:drawablePadding="5dp"
-                    android:gravity="center_vertical"
-                    android:visibility="gone"
-                    tools:text="@string/auth_unauthorized" />
-
-                <Button
-                    android:id="@+id/loginButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:contentDescription="@string/setup_btn_login"
-                    android:text="@string/setup_btn_login"
-                    android:theme="@style/Button.Primary"
-                    android:visibility="gone"
-                    tools:visibility="visible" />
             </LinearLayout>
-
-        </LinearLayout>
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</ScrollView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</LinearLayout>

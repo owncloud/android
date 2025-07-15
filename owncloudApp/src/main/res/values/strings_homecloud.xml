@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="drawer_menu_sign_out">Sign out</string>
+    <string name="setup_btn_next">Next</string>
 </resources>

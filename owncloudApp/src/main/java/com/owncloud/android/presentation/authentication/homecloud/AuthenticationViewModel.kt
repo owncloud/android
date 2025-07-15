@@ -24,29 +24,20 @@ package com.owncloud.android.presentation.authentication.homecloud
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.owncloud.android.MainApp
 import com.owncloud.android.R
-import com.owncloud.android.domain.authentication.oauth.RegisterClientUseCase
-import com.owncloud.android.domain.authentication.oauth.RequestTokenUseCase
-import com.owncloud.android.domain.authentication.oauth.model.ClientRegistrationInfo
-import com.owncloud.android.domain.authentication.oauth.model.TokenRequest
-import com.owncloud.android.domain.authentication.oauth.model.TokenResponse
 import com.owncloud.android.domain.authentication.usecases.GetBaseUrlUseCase
 import com.owncloud.android.domain.authentication.usecases.LoginBasicAsyncUseCase
-import com.owncloud.android.domain.authentication.usecases.LoginOAuthAsyncUseCase
-import com.owncloud.android.domain.authentication.usecases.SupportsOAuth2UseCase
 import com.owncloud.android.domain.capabilities.usecases.GetStoredCapabilitiesUseCase
 import com.owncloud.android.domain.capabilities.usecases.RefreshCapabilitiesFromServerAsyncUseCase
 import com.owncloud.android.domain.server.model.ServerInfo
 import com.owncloud.android.domain.server.usecases.GetServerInfoAsyncUseCase
 import com.owncloud.android.domain.spaces.usecases.RefreshSpacesFromServerAsyncUseCase
 import com.owncloud.android.domain.utils.Event
-import com.owncloud.android.domain.webfinger.usecases.GetOwnCloudInstanceFromWebFingerUseCase
-import com.owncloud.android.domain.webfinger.usecases.GetOwnCloudInstancesFromAuthenticatedWebFingerUseCase
 import com.owncloud.android.extensions.ViewModelExt.runUseCaseWithResult
-import com.owncloud.android.presentation.authentication.oauth.OAuthUtils
+import com.owncloud.android.extensions.update
 import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.providers.ContextProvider
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
@@ -78,7 +69,101 @@ class AuthenticationViewModel(
     private val _accountDiscovery = MediatorLiveData<Event<UIResult<Unit>>>()
     val accountDiscovery: LiveData<Event<UIResult<Unit>>> = _accountDiscovery
 
+    private val _screenState = MutableLiveData<LoginScreenState>(
+        LoginScreenState(
+            ctaButtonLabel = contextProvider.getString(R.string.setup_btn_next)
+        )
+    )
+    val screenState: LiveData<LoginScreenState> = _screenState
+
     var launchedFromDeepLink = false
+
+    fun handleUrlChanged(url: String) {
+        _screenState.update {
+            it.copy(
+                url = url
+            )
+        }
+        updateScreenState()
+    }
+
+    fun handleLoginChanged(username: String) {
+        _screenState.update {
+            it.copy(
+                username = username
+            )
+        }
+        updateScreenState()
+    }
+
+    fun handlePasswordChanged(password: String) {
+        _screenState.update {
+            it.copy(
+                password = password
+            )
+        }
+        updateScreenState()
+    }
+
+    fun handleCtaButtonClicked() {
+        val currentValue = _screenState.value ?: return
+        if (currentValue.credentialsAreVisible) {
+            if (currentValue.url.isNotEmpty()) {
+                getServerInfo(serverUrl = currentValue.url, creatingAccount = false)
+            }
+        } else {
+            _screenState.update {
+                it.copy(
+                    credentialsAreVisible = true,
+                )
+            }
+            updateScreenState()
+        }
+    }
+
+    private fun updateScreenState() {
+        val currentValue = _screenState.value ?: return
+        when {
+            currentValue.url.isEmpty() -> {
+                _screenState.update {
+                    it.copy(
+                        credentialsAreVisible = false,
+                        ctaButtonEnabled = false,
+                        ctaButtonLabel = contextProvider.getString(R.string.setup_btn_next),
+                        username = "",
+                        password = "",
+                    )
+                }
+            }
+
+            !currentValue.credentialsAreVisible -> { // url is not empty, but credentials are not displayed yet
+                _screenState.update {
+                    it.copy(
+                        ctaButtonEnabled = true,
+                        ctaButtonLabel = contextProvider.getString(R.string.setup_btn_next),
+                    )
+                }
+            }
+
+            currentValue.username.isEmpty() && currentValue.password.isEmpty() -> {
+                _screenState.update {
+                    it.copy(
+                        ctaButtonEnabled = false,
+                        ctaButtonLabel = contextProvider.getString(R.string.setup_btn_login),
+                    )
+                }
+            }
+
+            else -> {
+                _screenState.update {
+                    it.copy(
+                        ctaButtonEnabled = true,
+                        ctaButtonLabel = contextProvider.getString(R.string.setup_btn_login),
+                    )
+                }
+            }
+        }
+    }
 
     fun getServerInfo(
         serverUrl: String,
@@ -150,3 +235,12 @@ class AuthenticationViewModel(
         workManagerProvider.enqueueAccountDiscovery(accountName)
     }
 }
+
+data class LoginScreenState(
+    val ctaButtonEnabled: Boolean = false,
+    val ctaButtonLabel: String,
+    val username: String = "",
+    val password: String = "",
+    val url: String = "",
+    val credentialsAreVisible: Boolean = false,
+)
