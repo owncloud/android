@@ -59,6 +59,8 @@ class ConnectionValidator(
 
             client.account = baseClient.account
             client.credentials = baseClient.credentials
+            client.isKiteworksServer = baseClient.isKiteworksServer
+
             while (validationRetryCount < VALIDATION_RETRY_COUNT) {
                 Timber.d("validationRetryCount %d", validationRetryCount)
                 var successCounter = 0

@@ -1,0 +1,6 @@
+Enhancement: New set of configurations for Kiteworks servers
+
+A new set of configurations in setup file has been added to support the connection to Kiteworks servers.
+
+https://github.com/owncloud/android/issues/4622
+https://github.com/owncloud/android/pull/4632

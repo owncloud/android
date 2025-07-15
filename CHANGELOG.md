@@ -56,6 +56,7 @@ ownCloud admins and users.
 * Enhancement - Polish UI and sync operations over Kiteworks servers: [#4591](https://github.com/owncloud/android/issues/4591)
 * Enhancement - Integration of instrumented tests in GitHub Actions: [#4595](https://github.com/owncloud/android/issues/4595)
 * Enhancement - SBOM (Software Bill of Materials): [#4598](https://github.com/owncloud/android/issues/4598)
+* Enhancement - New set of configurations for Kiteworks servers: [#4622](https://github.com/owncloud/android/issues/4622)
 
 ## Details
 
@@ -222,6 +223,14 @@ ownCloud admins and users.
    https://github.com/owncloud/android/issues/4598
    https://github.com/owncloud/android/pull/4599
    https://github.com/owncloud/android/pull/4621
+
+* Enhancement - New set of configurations for Kiteworks servers: [#4622](https://github.com/owncloud/android/issues/4622)
+
+   A new set of configurations in setup file has been added to support the
+   connection to Kiteworks servers.
+
+   https://github.com/owncloud/android/issues/4622
+   https://github.com/owncloud/android/pull/4632
 
 # Changelog for ownCloud Android Client [4.5.1] (2025-04-03)
 
