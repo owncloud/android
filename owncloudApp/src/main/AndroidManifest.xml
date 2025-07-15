@@ -235,10 +235,11 @@
             android:theme="@style/Theme.homeCloud" />
         <activity android:name=".presentation.security.biometric.BiometricActivity" />
         <activity
-            android:name=".presentation.authentication.LoginActivity"
+            android:name=".presentation.authentication.homecloud.LoginActivity"
             android:exported="true"
             android:label="@string/login_label"
             android:launchMode="singleTask"
+            android:windowSoftInputMode="adjustResize"
             android:theme="@style/Theme.homeCloud.Toolbar">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />

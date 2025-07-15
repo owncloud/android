@@ -20,6 +20,7 @@ package com.owncloud.android.extensions
 
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.work.WorkInfo
 import com.owncloud.android.workers.DownloadFileWorker.Companion.WORKER_KEY_PROGRESS
@@ -56,4 +57,11 @@ fun LiveData<WorkInfo?>.observeWorkerTillItFinishes(
             }
         }
     })
+}
+
+fun <T> MutableLiveData<T>.update(action: (T) -> T) {
+    val expectedValue = action(this.value as T)
+    if (this.value != expectedValue) {
+        this.value = expectedValue
+    }
 }

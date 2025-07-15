@@ -95,6 +95,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import java.io.File
 
+@Deprecated(message = "Use `homecloud` sub-package")
 class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrustedCertListener, SecurityEnforced {
 
     private val authenticationViewModel by viewModel<AuthenticationViewModel>()
