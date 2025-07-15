@@ -380,6 +380,7 @@ class FileDetailsFragment : FileFragment() {
             binding.fdSpaceLabel.visibility = View.VISIBLE
             binding.fdIconSpace.visibility = View.VISIBLE
             if (space.isPersonal && !isMultiPersonal) {
+                binding.fdIconSpace.setImageResource(R.drawable.ic_folder)
                 binding.fdSpace.text = getString(R.string.bottom_nav_personal)
             } else {
                 binding.fdSpace.text = space.name
