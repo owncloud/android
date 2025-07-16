@@ -443,6 +443,8 @@
   <string name="confirmation_disable_camera_uploads_title">Confirmar</string>
   <string name="confirmation_disable_pictures_upload_message">Está seguro de que quiere deshabilitar esta funcionalidad? Las imágenes pendientes no se subirán.</string>
   <string name="confirmation_disable_videos_upload_message">Está seguro de que quiere deshabilitar esta funcionalidad? Los vídeos pendientes no se subirán.</string>
+  <string name="proper_pics_folder_warning_camera_upload">Por favor, asegúrese que la carpeta seleccionada es la correcta, donde se almacenan las fotos que se toman con la cámara. En caso contrario, las fotos no serán detectadas. No olvide que las fotos serán enviadas al servidor en al menos, 15 minutos tras ser tomadas. Para un mejor rendimiento, asegure en la configuración de su dispositivo que %1$s está permitido para ser ejecutado en segundo plano.</string>
+  <string name="proper_videos_folder_warning_camera_upload">Por favor, asegúrese que la carpeta seleccionada es la correcta, donde se almacenan los vídeos que se toman con la cámara. En caso contrario, los vídeos no serán detectadas. No olvide que los vídeos serán enviados al servidor en al menos, 15 minutos tras ser tomados. Para un mejor rendimiento, asegure en la configuración de su dispositivo que %1$s está permitido para ser ejecutado en segundo plano.</string>
   <string name="conflict_title">Fichero con conflicto</string>
   <string name="conflict_description">Hay un conflicto en el fichero %1$s, haga click para resolverlo.</string>
   <string name="conflict_message">¿Qué archivos desea mantener? Si selecciona ambas versiones, el archivo local tendrá un número añadido a su nombre.</string>
@@ -676,6 +678,8 @@ Póngase en contacto con su administrador</string>
   <!--Release Notes-->
   <string name="release_notes_4_6_0_title_shares_space_docs_provider">Space \"compartir\" en el explorador de ficheros nativo de Android</string>
   <string name="release_notes_4_6_0_subtitle_shares_space_docs_provider">Space \"compartir\" aparece ahora junto como otros spaces de las cuentas Infinite Scale en apps con soporte a Documents Provider</string>
+  <string name="release_notes_4_6_0_title_duplicated_automatic_uploads">Subidas automáticas mejoradas</string>
+  <string name="release_notes_4_6_0_subtitle_duplicated_automatic_uploads">Subidas automáticas más consistentes frente a duplicados</string>
   <string name="release_notes_header">Nuevo en %1$s</string>
   <string name="release_notes_footer">Gracias por usar %1$s.\n❤</string>
   <string name="release_notes_proceed">Proceder</string>
