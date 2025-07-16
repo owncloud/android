@@ -58,6 +58,7 @@ ownCloud admins and users.
 * Enhancement - Integration of instrumented tests in GitHub Actions: [#4595](https://github.com/owncloud/android/issues/4595)
 * Enhancement - SBOM (Software Bill of Materials): [#4598](https://github.com/owncloud/android/issues/4598)
 * Enhancement - New set of configurations for Kiteworks servers: [#4622](https://github.com/owncloud/android/issues/4622)
+* Enhancement - Test: [#4624](https://github.com/owncloud/android/issues/4624)
 
 ## Details
 
@@ -240,6 +241,13 @@ ownCloud admins and users.
 
    https://github.com/owncloud/android/issues/4622
    https://github.com/owncloud/android/pull/4632
+
+* Enhancement - Test: [#4624](https://github.com/owncloud/android/issues/4624)
+
+   Calens Test #1
+
+   https://github.com/owncloud/android/issues/4624
+   https://github.com/owncloud/android/pull/4640
 
 # Changelog for ownCloud Android Client [4.5.1] (2025-04-03)
 
