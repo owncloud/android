@@ -4,14 +4,19 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - master
+    - feature/*
+    - fix/*
+    - improvement/*
+    - release/*
+    - technical/*
+
 
 permissions:
   contents: write
 
 jobs:
   sbom:
-    # Skip if the job was triggered by the SBOM commit
+    # Skip if the job was triggered by the SBOM commit in the latest push.
     if: "!contains(github.event.head_commit.message, 'SBOM updated')"
     runs-on: ubuntu-latest
 
@@ -20,32 +25,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          ssh-key: ${{ secrets.DEPLOYMENT_SSH_KEY_SBOM }}
+          # Parent commit to compare
+          fetch-depth: 2
           persist-credentials: false
 
-      # Start SSH agent and add the SSH key to authenticate Git operations
-      - name: Start SSH agent and add key
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.DEPLOYMENT_SSH_KEY_SBOM }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          # Start the SSH agent
-          eval "$(ssh-agent -s)"
-
-          # Add the private key to the SSH agent
-          ssh-add ~/.ssh/id_rsa
-
-          # Add GitHub to known hosts to prevent authenticity prompts
-          ssh-keyscan github.com >> ~/.ssh/known_hosts
-
-          # Check the SSH connection to GitHub (ignore failure)
-          ssh -o StrictHostKeyChecking=no -T git@github.com || true
-
-      # Dry-run push to confirm SSH authentication is working
-      - name: Check SSH push permissions (dry-run)
-        run: |
-          git remote set-url origin git@github.com:${{ github.repository }}.git
-          git push --dry-run origin HEAD
 
       # Cache Gradle dependencies to speed up future builds
       - name: Cache Gradle dependencies
@@ -78,17 +61,11 @@ jobs:
       - name: Install jq
         run: sudo apt-get update && sudo apt-get install -y jq
 
-      # Fetch the master branch to compare with current SBOM
-      - name: Fetch origin/master
-        run: git fetch origin master
-
-      # Prepare common JQ filter in a script
-      - name: Prepare normalize script
+      # Creates script to normalize SBOM files to compare
+      - name: Normalization script
         run: |
-          # Normalize SBOM JSON by removing non-essential fields and sorting arrays for consistent diff
           cat <<'EOF' > normalize-sbom.sh
           #!/bin/bash
-
           jq -S '
             del(.serialNumber, .timestamp, .metadata.timestamp)
             | .components |= (if type=="array" then sort_by(.["bom-ref"] // "") else . end)
@@ -97,32 +74,32 @@ jobs:
           EOF
           chmod +x normalize-sbom.sh
 
-      # Extract & normalize both SBOMs
-      - name: Extract and normalize both SBOMs
+      # Compares with the HEAD to check if there are changes
+      - name: Compare with previous SBOM
+        id: compare
         run: |
-          git show origin/master:sbom.json > sbom_master.json || echo '{}' > sbom_master.json
-          ./normalize-sbom.sh sbom_master.json sbom_master_normalized.json
-          ./normalize-sbom.sh sbom.json sbom_normalized.json
+          # Try HEAD first to compare with previous commit's sbom (HEAD~1)
+          git show HEAD~1:sbom.json > sbom_prev.json 2>/dev/null || echo '{}' > sbom_prev.json
 
-      # Compare normalized SBOMs
-      - name: Compare SBOMs and show diff
-        id: diff_sbom
-        run: |
-          if diff -u sbom_master_normalized.json sbom_normalized.json > sbom_diff.txt; then
+          ./normalize-sbom.sh sbom_prev.json sbom_prev_normalized.json
+          ./normalize-sbom.sh sbom.json sbom_current_normalized.json
+
+          if diff -q sbom_prev_normalized.json sbom_current_normalized.json; then
             echo "no_changes=true" >> $GITHUB_OUTPUT
-            echo "NO Differences found in SBOM"
+            echo "No changes in SBOM"
           else
             echo "no_changes=false" >> $GITHUB_OUTPUT
-            echo "Differences found in SBOM:"
-            cat sbom_diff.txt
+            echo "Differences in SBOM"
+            diff sbom_prev_normalized.json sbom_current_normalized.json || true
           fi
 
       # Commit the SBOM file only if it differs from master to avoid unnecessary commits
-      - name: Commit and push SBOM over SSH
-        if: steps.diff_sbom.outputs.no_changes == 'false'
-        run: |
-          git config user.email "devops@owncloud.com"
-          git config user.name "ownClouders"
-          git add sbom.json
-          git commit -m "docs: SBOM updated"
-          git push origin master
+      - name: Commit and push updated SBOM
+        if: steps.compare.outputs.no_changes == 'false'
+        uses: GuillaumeFalourd/git-commit-push@v1.3
+        with:
+          commit_message: "docs: SBOM updated"
+          files: sbom.json
+          email: devops@owncloud.com
+          name: ownClouders
+          access_token: ${{ secrets.GH_PAT }}

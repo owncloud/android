@@ -225,13 +225,12 @@ ownCloud admins and users.
 
 * Enhancement - SBOM (Software Bill of Materials): [#4598](https://github.com/owncloud/android/issues/4598)
 
-   SBOM to be generated in every PR via GitHub Actions with the list of all
-   dependencies used in the code, powered by cyclonedx. Finally, it is pushed to
-   the repo's root folder .
+   SBOM to be generated via GitHub Actions with the list of all dependencies used
+   in the code, powered by cyclonedx. Finally, it is pushed to the repo's root
+   folder if changes are detected.
 
    https://github.com/owncloud/android/issues/4598
-   https://github.com/owncloud/android/pull/4599
-   https://github.com/owncloud/android/pull/4621
+   https://github.com/owncloud/android/pull/4641
 
 * Enhancement - New set of configurations for Kiteworks servers: [#4622](https://github.com/owncloud/android/issues/4622)
 
