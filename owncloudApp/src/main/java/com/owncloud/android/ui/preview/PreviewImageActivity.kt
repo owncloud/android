@@ -34,17 +34,14 @@ import android.os.Handler
 import android.os.Message
 import android.view.KeyEvent
 import android.view.Menu
-import android.view.MenuItem
 import android.view.View
-import android.view.Window
-import androidx.core.content.ContextCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import androidx.viewpager.widget.ViewPager
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener
 import androidx.work.WorkInfo
 import com.owncloud.android.R
 import com.owncloud.android.data.providers.SharedPreferencesProvider
+import com.owncloud.android.databinding.PreviewImageActivityBinding
 import com.owncloud.android.domain.exceptions.AccountNotFoundException
 import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.domain.files.model.OCFile
@@ -82,12 +79,13 @@ class PreviewImageActivity : FileActivity(),
     }
     private val fileOperationsViewModel: FileOperationsViewModel by viewModel()
 
-    private lateinit var viewPager: ViewPager
     private lateinit var previewImagePagerAdapter: PreviewImagePagerAdapter
     private var savedPosition = 0
     private var hasSavedPosition = false
     private var localBroadcastManager: LocalBroadcastManager? = null
     private var fullScreenAnchorView: View? = null
+
+    private lateinit var binding: PreviewImageActivityBinding
 
     var mHideSystemUiHandler: Handler = object : Handler() {
         override fun handleMessage(msg: Message) {
@@ -97,17 +95,24 @@ class PreviewImageActivity : FileActivity(),
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        requestWindowFeature(Window.FEATURE_ACTION_BAR_OVERLAY)
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.preview_image_activity)
+        binding = PreviewImageActivityBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         // ActionBar
+        setSupportActionBar(binding.standardToolbar)
         supportActionBar?.run {
             setDisplayHomeAsUpEnabled(true)
-            setHomeActionContentDescription(R.string.common_back)
             setHomeButtonEnabled(true)
         }
         showActionBar(false)
+        binding.standardToolbar.setNavigationOnClickListener {
+            if (isDrawerOpen()) {
+                closeDrawer()
+            } else {
+                backToDisplayActivity()
+            }
+        }
 
         /// FullScreen and Immersive Mode
         fullScreenAnchorView = window.decorView
@@ -122,7 +127,6 @@ class PreviewImageActivity : FileActivity(),
                 setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
             }
         }
-        window.statusBarColor = ContextCompat.getColor(this, R.color.owncloud_blue_dark_transparent)
         localBroadcastManager = LocalBroadcastManager.getInstance(this)
     }
 
@@ -204,8 +208,7 @@ class PreviewImageActivity : FileActivity(),
             imageFiles.toMutableList()
         )
 
-        viewPager = findViewById(R.id.fragmentPager)
-        viewPager.apply {
+        binding.fragmentPager.apply {
             filterTouchesWhenObscured = PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(context)
 
             var position = if (hasSavedPosition) savedPosition else previewImagePagerAdapter.getFilePosition(file)
@@ -222,7 +225,7 @@ class PreviewImageActivity : FileActivity(),
                 // ; or just:
                 // http://stackoverflow.com/questions/11794269/onpageselected-isnt-triggered-when-calling
                 // -setcurrentitem0
-                viewPager.post { onPageSelected(viewPager.currentItem) }
+                this.post { onPageSelected(this.currentItem) }
             }
         }
         startObservingFinishedDownloads()
@@ -253,18 +256,6 @@ class PreviewImageActivity : FileActivity(),
             mHideSystemUiHandler.removeMessages(0)
         }
     }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean =
-        if (item.itemId == android.R.id.home) {
-            if (isDrawerOpen()) {
-                closeDrawer()
-            } else {
-                backToDisplayActivity()
-            }
-            true
-        } else {
-            super.onOptionsItemSelected(item)
-        }
 
     override fun onResume() {
         super.onResume()
@@ -308,7 +299,7 @@ class PreviewImageActivity : FileActivity(),
             }
 
             // Call to reset image zoom to initial state
-            (viewPager.adapter as PreviewImagePagerAdapter?)?.resetZoom()
+            (binding.fragmentPager.adapter as PreviewImagePagerAdapter?)?.resetZoom()
         } else {
             // too soon! ; selection of page (first image) was faster than binding of FileOperationsService;
             // wait a bit!
@@ -393,12 +384,7 @@ class PreviewImageActivity : FileActivity(),
     }
 
     private fun showActionBar(show: Boolean) {
-        val actionBar = supportActionBar ?: return
-        if (show) {
-            actionBar.show()
-        } else {
-            actionBar.hide()
-        }
+        binding.standardToolbar.visibility = if (show) View.VISIBLE else View.GONE
     }
 
     private fun updateActionBarTitle(title: String) {

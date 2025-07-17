@@ -38,7 +38,6 @@ import android.view.MenuItem
 import android.view.View
 import android.view.Window
 import androidx.annotation.OptIn
-import androidx.appcompat.app.AlertDialog
 import androidx.core.view.MenuProvider
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
@@ -146,6 +145,7 @@ class PreviewVideoActivity : FileActivity(), Player.Listener, OnPrepareVideoPlay
         checkNotNull(account) { "Instanced with a NULL ownCloud Account" }
         check(file.isVideo) { "Not a video file" }
 
+        setSupportActionBar(binding.standardToolbar)
         supportActionBar?.run {
             setDisplayHomeAsUpEnabled(true)
             setHomeButtonEnabled(true)
