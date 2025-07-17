@@ -101,11 +101,10 @@
     </style>
 
     <!-- Extends Theme.homeCloud for video in full screen mode -->
-    <style name="Theme.homeCloud.Video">
-        <item name="windowActionBarOverlay">true</item>
-        <item name="android:windowLayoutInDisplayCutoutMode">never</item>
-        <item name="actionBarTheme">@style/homeCloud.Appbar.Transparent</item>
-        <item name="android:windowBackground">@android:color/background_dark</item>
+    <style name="Theme.homeCloud.Video" parent="Theme.homeCloud.Toolbar">
+        <item name="appBarLayoutStyle">@style/homeCloud.Appbar.Transparent</item>
+        <item name="toolbarStyle">@style/homeCloud.Appbar.Transparent</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">false</item>
     </style>
 
     <!-- DIALOG THEMES: styles for DIALOGs -->
@@ -185,7 +184,7 @@
         <item name="android:textColor">?attr/colorPrimary</item>
     </style>
 
-    <!-- Transparent style for the app bar -->
+    <!-- Transparent style for the toolbar -->
     <style name="homeCloud.Appbar.Transparent" parent="homeCloud.Appbar">
         <item name="android:background">@color/homecloud_transparent_bar_background</item>
     </style>

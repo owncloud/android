@@ -24,6 +24,17 @@
         android:id="@+id/video_player"
         app:show_buffering="always"
         android:layout_width="match_parent"
+        app:played_color="?attr/colorAccent"
+        app:scrubber_color="@color/white"
         android:layout_height="match_parent" />
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/standard_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:accessibilityHeading="true"
+        android:focusable="true"
+        android:focusableInTouchMode="false"
+        app:navigationContentDescription="@string/common_back" />
 
 </FrameLayout>
