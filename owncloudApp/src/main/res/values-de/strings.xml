@@ -674,7 +674,6 @@
   <string name="error_webfinger_username_empty">Der Benutzername ist leer</string>
   <!--Release Notes-->
   <string name="release_notes_4_6_0_title_shares_space_docs_provider">Gemeinsamer Speicherplatz im nativen Android-Dateiexplorer</string>
-  <string name="release_notes_4_6_0_subtitle_shares_space_docs_provider">Der Freigabebereich wird jetzt zusammen mit den anderen Bereichen im Dokumentenanbieter in Infinite Scale-Konten angezeigt</string>
   <string name="release_notes_header">Neu in %1$s</string>
   <string name="release_notes_footer">Vielen Dank für die Verwendung von %1$s.\n</string>
   <string name="release_notes_proceed">Fortfahren</string>
