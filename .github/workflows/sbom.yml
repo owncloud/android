@@ -16,12 +16,12 @@ permissions:
 
 jobs:
   sbom:
-    # Skip if the job was triggered by the SBOM commit in the latest push.
-    if: "!contains(github.event.head_commit.message, 'SBOM updated')"
+    # Skip if the job was triggered by the SBOM commit or a merge commit in the latest push.
+    if: "!contains(github.event.head_commit.message, 'Merge pull request') && !contains(github.event.head_commit.message, 'SBOM updated')"
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout the full repository history (required to access origin/master)
+      # Checkout the repository
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
