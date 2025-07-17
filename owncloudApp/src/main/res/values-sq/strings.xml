@@ -672,7 +672,6 @@
   <string name="error_webfinger_username_empty">Emër përdoruesi i zbrazët</string>
   <!--Release Notes-->
   <string name="release_notes_4_6_0_title_shares_space_docs_provider">Hapësirë pjesësh në eksplorues kartelash të vetë Android-it</string>
-  <string name="release_notes_4_6_0_subtitle_shares_space_docs_provider">Hapësira e pjesëve tanimë shfaqet tok me hapësira të tjera në Furnizues Dokumentesh në llogari Infinite Scale</string>
   <string name="release_notes_4_6_0_title_duplicated_automatic_uploads">U përmirësuan ngarkimet e automatizuara</string>
   <string name="release_notes_header">E re në %1$s</string>
   <string name="release_notes_footer">Faleminderit për përdorimin e %1$s.\n❤</string>
