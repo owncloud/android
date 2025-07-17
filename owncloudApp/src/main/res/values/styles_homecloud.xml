@@ -94,9 +94,10 @@
     </style>
 
     <!-- Extends Theme.homeCloud to make LEGACY ActionBar both OVERLAY and TRANSPARENT -->
-    <style name="Theme.homeCloud.Overlay">
-        <item name="windowActionBarOverlay">true</item>
-        <item name="actionBarTheme">@style/homeCloud.Appbar.Transparent</item>
+    <style name="Theme.homeCloud.Overlay" parent="Theme.homeCloud.Toolbar">
+        <item name="appBarLayoutStyle">@style/homeCloud.Appbar.Transparent</item>
+        <item name="toolbarStyle">@style/homeCloud.Appbar.Transparent</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">false</item>
     </style>
 
     <!-- Extends Theme.homeCloud for video in full screen mode -->
@@ -185,8 +186,8 @@
     </style>
 
     <!-- Transparent style for the app bar -->
-    <style name="homeCloud.Appbar.Transparent" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
-        <item name="colorPrimary">@color/owncloud_blue_transparent</item>
+    <style name="homeCloud.Appbar.Transparent" parent="homeCloud.Appbar">
+        <item name="android:background">@color/homecloud_transparent_bar_background</item>
     </style>
 
     <style name="Theme.homeCloud.BottomNavigation" parent="Widget.Material3.BottomNavigationView">

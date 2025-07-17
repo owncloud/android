@@ -59,7 +59,8 @@
                     android:id="@+id/dialog_remove_no"
                     style="@style/Button.Borderless"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:text="@string/common_no" />
 
                 <androidx.appcompat.widget.AppCompatButton
@@ -67,6 +68,7 @@
                     style="@style/Button.Borderless"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:text="@string/confirmation_remove_local" />
 
                 <androidx.appcompat.widget.AppCompatButton
@@ -74,6 +76,7 @@
                     style="@style/Button.Borderless"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:text="@string/common_yes" />
 
             </LinearLayout>
