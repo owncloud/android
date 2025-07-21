@@ -206,9 +206,6 @@ class FileDisplayActivity : FileActivity(),
 
         checkPasscodeEnforced(this)
 
-        if (BuildConfig.DEBUG) {
-            sharedPreferences.putInt(MainApp.PREFERENCE_KEY_LAST_SEEN_VERSION_CODE, MainApp.versionCode)
-        }
         sharedPreferences.putBoolean(PREFERENCE_CLEAR_DATA_ALREADY_TRIGGERED, true)
         localBroadcastManager = LocalBroadcastManager.getInstance(this)
 
