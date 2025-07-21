@@ -23,6 +23,7 @@ package com.owncloud.android.extensions
 import android.view.View
 import androidx.core.view.AccessibilityDelegateCompat
 import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.accessibility.AccessibilityNodeInfoCompat
 
 fun View.setAccessibilityRole(className: Class<*>? = null, roleDescription: String? = null) {
@@ -33,4 +34,22 @@ fun View.setAccessibilityRole(className: Class<*>? = null, roleDescription: Stri
             roleDescription?.let { info.roleDescription = it }
         }
     })
+}
+
+fun View.applyStatusBarInsets() {
+    // Cache original padding once
+    val initialPaddingTop = paddingTop
+    val initialPaddingLeft = paddingLeft
+    val initialPaddingRight = paddingRight
+
+    ViewCompat.setOnApplyWindowInsetsListener(this) { view, insets ->
+        val statusBarInsets = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+        view.setPadding(
+            initialPaddingLeft + statusBarInsets.left,
+            initialPaddingTop + statusBarInsets.top,
+            initialPaddingRight + statusBarInsets.right,
+            paddingBottom,
+        )
+        insets
+    }
 }
