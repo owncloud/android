@@ -17,7 +17,6 @@
     android:id="@+id/owncloud_app_bar"
     android:layout_width="match_parent"
     android:layout_height="?android:actionBarSize"
-    android:theme="@style/homeCloud.Appbar"
     android:focusableInTouchMode="true">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -97,7 +96,6 @@
         android:focusable="true"
         android:focusableInTouchMode="false"
         android:visibility="gone"
-        app:navigationContentDescription="@string/common_back"
-        app:popupTheme="?attr/actionBarPopupTheme" />
+        app:navigationContentDescription="@string/common_back" />
 
 </com.google.android.material.appbar.AppBarLayout>

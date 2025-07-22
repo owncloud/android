@@ -38,6 +38,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.owncloud.android.MainApp
 import com.owncloud.android.R
 import com.owncloud.android.domain.user.model.UserQuota
@@ -74,7 +75,7 @@ class ManageAccountsDialogFragment : DialogFragment(), ManageAccountsAdapter.Acc
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val builder = AlertDialog.Builder(ContextThemeWrapper(requireContext(), R.style.Theme_AppCompat_Dialog_Alert))
+        val builder = MaterialAlertDialogBuilder(ContextThemeWrapper(requireContext(), R.style.Theme_AppCompat_Dialog_Alert))
         val inflater = this.layoutInflater
         dialogView = inflater.inflate(R.layout.manage_accounts_dialog, null)
         builder.setView(dialogView)
@@ -101,7 +102,7 @@ class ManageAccountsDialogFragment : DialogFragment(), ManageAccountsAdapter.Acc
     override fun removeAccount(account: Account) {
         dialogView.isVisible = false
         val hasAccountAttachedCameraUploads = manageAccountsViewModel.hasAutomaticUploadsAttached(account.name)
-        val dialog = AlertDialog.Builder(requireContext())
+        val dialog = MaterialAlertDialogBuilder(requireContext())
             .setMessage(getString(
                 if (hasAccountAttachedCameraUploads) R.string.confirmation_remove_account_alert_camera_uploads
                 else R.string.confirmation_remove_account_alert, account.name)
@@ -126,7 +127,7 @@ class ManageAccountsDialogFragment : DialogFragment(), ManageAccountsAdapter.Acc
 
     override fun cleanAccountLocalStorage(account: Account) {
         dialogView.isVisible = false
-        val dialog = AlertDialog.Builder(requireContext())
+        val dialog = MaterialAlertDialogBuilder(requireContext())
             .setTitle(getString(R.string.clean_data_account_title))
             .setIcon(R.drawable.ic_warning)
             .setMessage(getString(R.string.clean_data_account_message, account.name))

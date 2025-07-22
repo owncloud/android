@@ -144,7 +144,7 @@
     <string name="auth_password">Password</string>
     <string name="auth_register">New to %1$s?</string>
     <string name="sync_string_files">Files</string>
-    <string name="setup_btn_login">Log in</string>
+    <string name="setup_btn_login">Login</string>
     <string name="uploader_btn_upload_text">Upload</string>
     <string name="uploader_top_message">Choose upload folder</string>
     <string name="choose_upload_space">Choose upload space</string>

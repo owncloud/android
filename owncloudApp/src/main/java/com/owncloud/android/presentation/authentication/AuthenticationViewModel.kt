@@ -54,6 +54,7 @@ import com.owncloud.android.providers.WorkManagerProvider
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
+@Deprecated(message = "Use `homecloud` sub-package")
 class AuthenticationViewModel(
     private val loginBasicAsyncUseCase: LoginBasicAsyncUseCase,
     private val loginOAuthAsyncUseCase: LoginOAuthAsyncUseCase,

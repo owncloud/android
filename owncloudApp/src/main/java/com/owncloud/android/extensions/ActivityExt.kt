@@ -44,6 +44,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.owncloud.android.BuildConfig
 import com.owncloud.android.R
@@ -327,7 +328,7 @@ private fun Activity.showSelectSecurityDialog(
         val options = arrayOf(getString(R.string.security_enforced_first_option), getString(R.string.security_enforced_second_option))
         var optionSelected = 0
 
-        AlertDialog.Builder(this)
+        MaterialAlertDialogBuilder(this)
             .setCancelable(false)
             .setTitle(getString(R.string.security_enforced_title))
             .setSingleChoiceItems(options, LockType.PASSCODE.ordinal) { _, which -> optionSelected = which }
@@ -372,7 +373,7 @@ fun Activity.openFeedbackDialog() {
         setPadding(64, 16, 64, 16)
         addView(getInContactDescriptionTextView)
     }
-    val builder = AlertDialog.Builder(this)
+    val builder = MaterialAlertDialogBuilder(this)
     builder.apply {
         setTitle(getString(R.string.drawer_feedback))
         setView(layout)
@@ -416,7 +417,7 @@ fun Activity.manageOptionLockSelected(type: LockType) {
 }
 
 fun Activity.showBiometricDialog(iEnableBiometrics: EnableBiometrics) {
-    AlertDialog.Builder(this)
+    MaterialAlertDialogBuilder(this)
         .setCancelable(false)
         .setTitle(getString(R.string.biometric_dialog_title))
         .setPositiveButton(R.string.common_yes) { dialog, _ ->

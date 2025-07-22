@@ -1,25 +1,23 @@
-<?xml version="1.0" encoding="utf-8"?><!--
-  ownCloud Android client application
-
-  Copyright (C) 2020 ownCloud GmbH.
-  
-  This program is free software: you can redistribute it and/or modify
-  it under the terms of the GNU General Public License version 2,
-  as published by the Free Software Foundation.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program.  If not, see <http://www.gnu.org/licenses/>.
-  -->
-
-<com.owncloud.android.ui.preview.ViewPagerWorkAround xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/fragmentPager"
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/previewImageCoordinatorLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:filterTouchesWhenObscured="true"
-    android:contentDescription="@string/content_description_image_previewed"
-    />
+    android:layout_height="match_parent">
+
+    <com.owncloud.android.ui.preview.ViewPagerWorkAround
+        android:id="@+id/fragmentPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:contentDescription="@string/content_description_image_previewed"
+        android:filterTouchesWhenObscured="true" />
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/standard_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:accessibilityHeading="true"
+        android:focusable="true"
+        android:focusableInTouchMode="false"
+        app:navigationContentDescription="@string/common_back" />
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

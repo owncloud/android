@@ -45,6 +45,7 @@ import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.net.toUri
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.owncloud.android.BuildConfig
 import com.owncloud.android.MainApp
 import com.owncloud.android.MainApp.Companion.accountType
@@ -94,6 +95,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import java.io.File
 
+@Deprecated(message = "Use `homecloud` sub-package")
 class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrustedCertListener, SecurityEnforced {
 
     private val authenticationViewModel by viewModel<AuthenticationViewModel>()
@@ -353,7 +355,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
                 } else {
                     text = getString(R.string.auth_connection_established)
                     setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_lock_open, 0, 0, 0)
-                    val builder = AlertDialog.Builder(context)
+                    val builder = MaterialAlertDialogBuilder(context)
                     builder.apply {
                         setTitle(context.getString(R.string.insecure_http_url_title_dialog))
                         setMessage(context.getString(R.string.insecure_http_url_message_dialog))

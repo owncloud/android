@@ -33,6 +33,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
+
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.owncloud.android.AppRater;
 import com.owncloud.android.R;
 import com.owncloud.android.extensions.ActivityExtKt;
@@ -72,10 +74,11 @@ public class RateMeDialog extends DialogFragment {
         return fragment;
     }
 
+    @NonNull
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
         // Create a view by inflating desired layout
-        View view = inflater.inflate(R.layout.rate_me_dialog, container, false);
+        View view = getLayoutInflater().inflate(R.layout.rate_me_dialog, null);
 
         // Allow or disallow touches with other visible windows
         view.setFilterTouchesWhenObscured(
@@ -127,13 +130,9 @@ public class RateMeDialog extends DialogFragment {
             dialog.dismiss();
         });
 
-        return view;
-    }
-
-    @NonNull
-    @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        dialog = super.onCreateDialog(savedInstanceState);
+        dialog = new MaterialAlertDialogBuilder(getContext())
+                .setView(view)
+                .create();
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         /// set cancellation behavior

@@ -20,12 +20,14 @@
     android:id="@+id/scroll_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?attr/colorSurface"
     android:fillViewport="true">
 
     <TextView
         android:id="@+id/text_preview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textColor="?attr/colorPrimary"
         android:paddingTop="@dimen/standard_half_margin"
         android:paddingBottom="@dimen/standard_half_margin"
         android:layout_marginStart="@dimen/standard_margin"

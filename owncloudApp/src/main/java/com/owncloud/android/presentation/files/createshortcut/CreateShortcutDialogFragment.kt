@@ -20,12 +20,14 @@
 
 package com.owncloud.android.presentation.files.createshortcut
 
+import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.DialogFragment
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.owncloud.android.R
 import com.owncloud.android.databinding.CreateShortcutDialogBinding
 import com.owncloud.android.domain.files.model.OCFile
@@ -40,19 +42,21 @@ class CreateShortcutDialogFragment : DialogFragment() {
     private val binding get() = _binding!!
     private var isCreateShortcutButtonEnabled = false
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        _binding = CreateShortcutDialogBinding.inflate(inflater, container, false)
-        return binding.root
-    }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        _binding = CreateShortcutDialogBinding.inflate(layoutInflater)
         binding.apply {
             handleInputsUrlAndFileName()
             cancelButton.setOnClickListener {
                 dialog?.dismiss()
             }
+            createButton.apply { // A workaround to avoid adding a new translation string
+                text = text.toString().replaceFirstChar { it.uppercase() }
+            }
         }
+        return MaterialAlertDialogBuilder(requireContext())
+            .setView(binding.root)
+            .create()
     }
 
     private fun handleInputsUrlAndFileName() {
@@ -116,10 +120,8 @@ class CreateShortcutDialogFragment : DialogFragment() {
                     )
                     dialog?.dismiss()
                 }
-                setTextColor(resources.getColor(R.color.primary_button_background_color, null))
             } else {
                 setOnClickListener(null)
-                setTextColor(resources.getColor(R.color.grey, null))
             }
         }
     }

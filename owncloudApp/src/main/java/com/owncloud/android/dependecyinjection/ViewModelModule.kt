@@ -27,7 +27,7 @@ import com.owncloud.android.MainApp
 import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.presentation.accounts.ManageAccountsViewModel
-import com.owncloud.android.presentation.authentication.AuthenticationViewModel
+import com.owncloud.android.presentation.authentication.homecloud.AuthenticationViewModel
 import com.owncloud.android.presentation.authentication.oauth.OAuthViewModel
 import com.owncloud.android.presentation.capabilities.CapabilityViewModel
 import com.owncloud.android.presentation.common.DrawerViewModel
@@ -95,7 +95,7 @@ val viewModelModule = module {
             initialFolderToDisplay, fileListOption)
     }
     viewModel { (ocFile: OCFile) -> ConflictsResolveViewModel(get(), get(), get(), get(), get(), ocFile) }
-    viewModel { AuthenticationViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
+    viewModel { AuthenticationViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get()) }
     viewModel { MigrationViewModel(MainApp.dataFolder, get(), get(), get(), get(), get(), get(), get()) }
     viewModel { TransfersViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(),
         get()) }

@@ -33,7 +33,7 @@
         android:paddingBottom="@dimen/standard_padding"
         android:text="@string/ssl_validator_header"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="@android:color/black"
+        android:textColor="?attr/colorPrimary"
         />
 
     <TextView
@@ -439,30 +439,27 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center">
+        android:gravity="end">
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnCancel"
             style="@style/Button.Borderless"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:text="@string/common_no" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/details_btn"
             style="@style/Button.Borderless"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="2"
             android:text="@string/ssl_validator_btn_details_see" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/ok"
             style="@style/Button.Borderless"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:text="@string/common_yes" />
 
     </LinearLayout>

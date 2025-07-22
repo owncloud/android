@@ -31,7 +31,7 @@ import com.owncloud.android.MainApp
 import com.owncloud.android.MainApp.Companion.versionCode
 import com.owncloud.android.R
 import com.owncloud.android.databinding.ReleaseNotesActivityBinding
-import com.owncloud.android.presentation.authentication.LoginActivity
+import com.owncloud.android.presentation.authentication.homecloud.LoginActivity
 import com.owncloud.android.ui.activity.FileDisplayActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 

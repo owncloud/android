@@ -29,6 +29,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.DialogFragment
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputLayout
 import com.owncloud.android.R
 import com.owncloud.android.domain.files.model.OCFile
@@ -71,7 +72,7 @@ class CreateFolderDialogFragment : DialogFragment() {
         inputText.requestFocus()
 
         // Build the dialog
-        val builder = AlertDialog.Builder(requireActivity())
+        val builder = MaterialAlertDialogBuilder(requireActivity())
         builder.setView(view)
             .setPositiveButton(android.R.string.ok) { dialog, _ ->
                 createFolderListener.onFolderNameSet(

@@ -1,0 +1,246 @@
+/**
+ * ownCloud Android client application
+ *
+ * @author David González Verdugo
+ * @author Abel García de Prada
+ * @author Juan Carlos Garrote Gascón
+ *
+ * Copyright (C) 2024 ownCloud GmbH.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+package com.owncloud.android.presentation.authentication.homecloud
+
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.owncloud.android.R
+import com.owncloud.android.domain.authentication.usecases.GetBaseUrlUseCase
+import com.owncloud.android.domain.authentication.usecases.LoginBasicAsyncUseCase
+import com.owncloud.android.domain.capabilities.usecases.GetStoredCapabilitiesUseCase
+import com.owncloud.android.domain.capabilities.usecases.RefreshCapabilitiesFromServerAsyncUseCase
+import com.owncloud.android.domain.server.model.ServerInfo
+import com.owncloud.android.domain.server.usecases.GetServerInfoAsyncUseCase
+import com.owncloud.android.domain.spaces.usecases.RefreshSpacesFromServerAsyncUseCase
+import com.owncloud.android.domain.utils.Event
+import com.owncloud.android.extensions.ViewModelExt.runUseCaseWithResult
+import com.owncloud.android.extensions.update
+import com.owncloud.android.presentation.common.UIResult
+import com.owncloud.android.providers.ContextProvider
+import com.owncloud.android.providers.CoroutinesDispatcherProvider
+import com.owncloud.android.providers.WorkManagerProvider
+import kotlinx.coroutines.launch
+import timber.log.Timber
+
+class AuthenticationViewModel(
+    private val loginBasicAsyncUseCase: LoginBasicAsyncUseCase,
+    private val getServerInfoAsyncUseCase: GetServerInfoAsyncUseCase,
+    private val getBaseUrlUseCase: GetBaseUrlUseCase,
+    private val refreshCapabilitiesFromServerAsyncUseCase: RefreshCapabilitiesFromServerAsyncUseCase,
+    private val getStoredCapabilitiesUseCase: GetStoredCapabilitiesUseCase,
+    private val refreshSpacesFromServerAsyncUseCase: RefreshSpacesFromServerAsyncUseCase,
+    private val workManagerProvider: WorkManagerProvider,
+    private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
+    private val contextProvider: ContextProvider,
+) : ViewModel() {
+
+    private val _serverInfo = MediatorLiveData<Event<UIResult<ServerInfo>>>()
+    val serverInfo: LiveData<Event<UIResult<ServerInfo>>> = _serverInfo
+
+    private val _loginResult = MediatorLiveData<Event<UIResult<String>>>()
+    val loginResult: LiveData<Event<UIResult<String>>> = _loginResult
+
+    private val _baseUrl = MediatorLiveData<Event<UIResult<String>>>()
+    val baseUrl: LiveData<Event<UIResult<String>>> = _baseUrl
+
+    private val _accountDiscovery = MediatorLiveData<Event<UIResult<Unit>>>()
+    val accountDiscovery: LiveData<Event<UIResult<Unit>>> = _accountDiscovery
+
+    private val _screenState = MutableLiveData<LoginScreenState>(
+        LoginScreenState(
+            ctaButtonLabel = contextProvider.getString(R.string.setup_btn_next)
+        )
+    )
+    val screenState: LiveData<LoginScreenState> = _screenState
+
+    var launchedFromDeepLink = false
+
+    fun handleUrlChanged(url: String) {
+        _screenState.update {
+            it.copy(
+                url = url
+            )
+        }
+        updateScreenState()
+    }
+
+    fun handleLoginChanged(username: String) {
+        _screenState.update {
+            it.copy(
+                username = username
+            )
+        }
+        updateScreenState()
+    }
+
+    fun handlePasswordChanged(password: String) {
+        _screenState.update {
+            it.copy(
+                password = password
+            )
+        }
+        updateScreenState()
+    }
+
+    fun handleCtaButtonClicked() {
+        val currentValue = _screenState.value ?: return
+        if (currentValue.credentialsAreVisible) {
+            if (currentValue.url.isNotEmpty()) {
+                getServerInfo(serverUrl = currentValue.url, creatingAccount = false)
+            }
+        } else {
+            _screenState.update {
+                it.copy(
+                    credentialsAreVisible = true,
+                )
+            }
+            updateScreenState()
+        }
+    }
+
+    private fun updateScreenState() {
+        val currentValue = _screenState.value ?: return
+        when {
+            currentValue.url.isEmpty() -> {
+                _screenState.update {
+                    it.copy(
+                        credentialsAreVisible = false,
+                        ctaButtonEnabled = false,
+                        ctaButtonLabel = contextProvider.getString(R.string.setup_btn_next),
+                        username = "",
+                        password = "",
+                    )
+                }
+            }
+
+            !currentValue.credentialsAreVisible -> { // url is not empty, but credentials are not displayed yet
+                _screenState.update {
+                    it.copy(
+                        ctaButtonEnabled = true,
+                        ctaButtonLabel = contextProvider.getString(R.string.setup_btn_next),
+                    )
+                }
+            }
+
+            currentValue.username.isEmpty() && currentValue.password.isEmpty() -> {
+                _screenState.update {
+                    it.copy(
+                        ctaButtonEnabled = false,
+                        ctaButtonLabel = contextProvider.getString(R.string.setup_btn_login),
+                    )
+                }
+            }
+
+            else -> {
+                _screenState.update {
+                    it.copy(
+                        ctaButtonEnabled = true,
+                        ctaButtonLabel = contextProvider.getString(R.string.setup_btn_login),
+                    )
+                }
+            }
+        }
+    }
+
+    fun getServerInfo(
+        serverUrl: String,
+        creatingAccount: Boolean = false,
+    ) {
+        runUseCaseWithResult(
+            coroutineDispatcher = coroutinesDispatcherProvider.io,
+            showLoading = true,
+            liveData = _serverInfo,
+            useCase = getServerInfoAsyncUseCase,
+            useCaseParams = GetServerInfoAsyncUseCase.Params(
+                serverPath = serverUrl,
+                creatingAccount = creatingAccount,
+                enforceOIDC = contextProvider.getBoolean(R.bool.enforce_oidc),
+                secureConnectionEnforced = contextProvider.getBoolean(R.bool.enforce_secure_connection),
+            )
+        )
+    }
+
+    fun loginBasic(
+        username: String,
+        password: String,
+        updateAccountWithUsername: String?
+    ) = runUseCaseWithResult(
+        coroutineDispatcher = coroutinesDispatcherProvider.io,
+        liveData = _loginResult,
+        showLoading = true,
+        useCase = loginBasicAsyncUseCase,
+        useCaseParams = LoginBasicAsyncUseCase.Params(
+            serverInfo = serverInfo.value?.peekContent()?.getStoredData(),
+            username = username,
+            password = password,
+            updateAccountWithUsername = updateAccountWithUsername
+        )
+    )
+
+    fun getBaseUrl(
+        accountName: String
+    ) = runUseCaseWithResult(
+        coroutineDispatcher = coroutinesDispatcherProvider.io,
+        requiresConnection = false,
+        liveData = _baseUrl,
+        useCase = getBaseUrlUseCase,
+        useCaseParams = GetBaseUrlUseCase.Params(
+            accountName = accountName
+        )
+    )
+
+    fun discoverAccount(accountName: String, discoveryNeeded: Boolean = false) {
+        Timber.d("Account Discovery for account: $accountName needed: $discoveryNeeded")
+        if (!discoveryNeeded) {
+            _accountDiscovery.postValue(Event(UIResult.Success()))
+            return
+        }
+        _accountDiscovery.postValue(Event(UIResult.Loading()))
+        viewModelScope.launch(coroutinesDispatcherProvider.io) {
+            // 1. Refresh capabilities for account
+            refreshCapabilitiesFromServerAsyncUseCase(RefreshCapabilitiesFromServerAsyncUseCase.Params(accountName))
+            val capabilities = getStoredCapabilitiesUseCase(GetStoredCapabilitiesUseCase.Params(accountName))
+
+            val spacesAvailableForAccount = capabilities?.isSpacesAllowed() == true
+
+            // 2 If Account does not support spaces we can skip this
+            if (spacesAvailableForAccount) {
+                refreshSpacesFromServerAsyncUseCase(RefreshSpacesFromServerAsyncUseCase.Params(accountName))
+            }
+            _accountDiscovery.postValue(Event(UIResult.Success()))
+        }
+        workManagerProvider.enqueueAccountDiscovery(accountName)
+    }
+}
+
+data class LoginScreenState(
+    val ctaButtonEnabled: Boolean = false,
+    val ctaButtonLabel: String,
+    val username: String = "",
+    val password: String = "",
+    val url: String = "",
+    val credentialsAreVisible: Boolean = false,
+)

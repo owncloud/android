@@ -56,6 +56,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.work.WorkManager
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.owncloud.android.AppRater
 import com.owncloud.android.BuildConfig
 import com.owncloud.android.MainApp
@@ -1456,7 +1457,7 @@ class FileDisplayActivity : FileActivity(),
             addView(scrollView)
         }
 
-        val dialog = AlertDialog.Builder(this@FileDisplayActivity)
+        val dialog = MaterialAlertDialogBuilder(this@FileDisplayActivity)
             .setTitle(getString(R.string.open_shortcut_title))
             .setView(layout)
             .setPositiveButton(R.string.drawer_open) { view, _ ->

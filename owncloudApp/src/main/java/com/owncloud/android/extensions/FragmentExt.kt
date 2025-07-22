@@ -31,6 +31,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.owncloud.android.R
 import com.owncloud.android.domain.appregistry.model.AppRegistryProvider
@@ -60,7 +61,7 @@ fun Fragment.showAlertDialog(
     negativeButtonListener: ((DialogInterface, Int) -> Unit)? = null
 ) {
     val requiredActivity = activity ?: return
-    AlertDialog.Builder(requiredActivity)
+    MaterialAlertDialogBuilder(requiredActivity)
         .setTitle(title)
         .setMessage(message)
         .setPositiveButton(positiveButtonText, positiveButtonListener)

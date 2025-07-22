@@ -30,6 +30,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.DialogFragment
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputLayout
 import com.owncloud.android.R
 import com.owncloud.android.domain.files.model.OCFile
@@ -85,7 +86,7 @@ class RenameFileDialogFragment : DialogFragment(), DialogInterface.OnClickListen
         inputText.requestFocus()
 
         // Build the dialog
-        return AlertDialog.Builder(requireActivity()).apply {
+        return MaterialAlertDialogBuilder(requireActivity()).apply {
             setView(view)
             setPositiveButton(android.R.string.ok, this@RenameFileDialogFragment)
             setNegativeButton(android.R.string.cancel, this@RenameFileDialogFragment)
