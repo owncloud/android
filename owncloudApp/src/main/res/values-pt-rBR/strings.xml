@@ -676,7 +676,6 @@
   <string name="error_webfinger_username_empty">Nome de usuário vazio</string>
   <!--Release Notes-->
   <string name="release_notes_4_6_0_title_shares_space_docs_provider">Compartilha espaço no explorador de arquivos nativo do Android</string>
-  <string name="release_notes_4_6_0_subtitle_shares_space_docs_provider">O espaço compartilhado agora aparece junto com os outros espaços no Provedor de Documentos em contas de Escala Infinita</string>
   <string name="release_notes_4_6_0_title_duplicated_automatic_uploads">Envios automáticos melhorados</string>
   <string name="release_notes_4_6_0_subtitle_duplicated_automatic_uploads">Os envios automáticos são mais consistentes contra duplicações</string>
   <string name="release_notes_header">Novo em %1$s</string>

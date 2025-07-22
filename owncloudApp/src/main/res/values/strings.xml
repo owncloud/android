@@ -732,9 +732,11 @@
 
     <!-- Release Notes -->
     <string name="release_notes_4_6_0_title_shares_space_docs_provider">Shares space in Android native file explorer</string>
-    <string name="release_notes_4_6_0_subtitle_shares_space_docs_provider">Shares space now appears all together with the other spaces in Documents Provider in Infinite Scale accounts</string>
+    <string name="release_notes_4_6_0_subtitle_shares_space_docs_provider">Shares space now appears next to the other spaces in Documents Provider for Infinite Scale accounts</string>
     <string name="release_notes_4_6_0_title_duplicated_automatic_uploads">Automatic uploads improved</string>
     <string name="release_notes_4_6_0_subtitle_duplicated_automatic_uploads">Automatic uploads are more consistent against duplications</string>
+    <string name="release_notes_4_6_0_title_bearer_token_handling">Multiple accounts on Infinite Scale servers</string>
+    <string name="release_notes_4_6_0_subtitle_bearer_token_handling">Multiple accounts can be logged in at the same time on the same Infinite Scale server. Additionally, fixed a problem related with session handling</string>
     <string name="release_notes_header">New in %1$s</string>
     <string name="release_notes_footer">Thank you for using %1$s.\n&#10084;</string>
     <string name="release_notes_proceed">Proceed</string>
