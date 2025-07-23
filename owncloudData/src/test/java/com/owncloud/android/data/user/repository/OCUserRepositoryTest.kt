@@ -21,6 +21,7 @@
 
 package com.owncloud.android.data.user.repository
 
+import com.owncloud.android.data.authentication.datasources.LocalAuthenticationDataSource
 import com.owncloud.android.data.user.datasources.LocalUserDataSource
 import com.owncloud.android.data.user.datasources.RemoteUserDataSource
 import com.owncloud.android.testutil.OC_ACCOUNT_NAME
@@ -40,7 +41,8 @@ import org.junit.Test
 class OCUserRepositoryTest {
     private val remoteUserDataSource = mockk<RemoteUserDataSource>()
     private val localUserDataSource = mockk<LocalUserDataSource>(relaxUnitFun = true)
-    private val ocUserRepository = OCUserRepository(localUserDataSource, remoteUserDataSource)
+    private val localAuthenticationDataSource = mockk<LocalAuthenticationDataSource>(relaxUnitFun = true)
+    private val ocUserRepository = OCUserRepository(localUserDataSource, remoteUserDataSource, localAuthenticationDataSource)
 
     @Test
     fun `getUserInfo returns an UserInfo`() {
