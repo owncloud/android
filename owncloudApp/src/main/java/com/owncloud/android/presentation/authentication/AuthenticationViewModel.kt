@@ -4,8 +4,9 @@
  * @author David González Verdugo
  * @author Abel García de Prada
  * @author Juan Carlos Garrote Gascón
+ * @author Jorge Aguado Recio
  *
- * Copyright (C) 2024 ownCloud GmbH.
+ * Copyright (C) 2025 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -42,6 +43,7 @@ import com.owncloud.android.domain.capabilities.usecases.RefreshCapabilitiesFrom
 import com.owncloud.android.domain.server.model.ServerInfo
 import com.owncloud.android.domain.server.usecases.GetServerInfoAsyncUseCase
 import com.owncloud.android.domain.spaces.usecases.RefreshSpacesFromServerAsyncUseCase
+import com.owncloud.android.domain.user.usecases.SaveIdForAccountUseCase
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.domain.webfinger.usecases.GetOwnCloudInstanceFromWebFingerUseCase
 import com.owncloud.android.domain.webfinger.usecases.GetOwnCloudInstancesFromAuthenticatedWebFingerUseCase
@@ -65,6 +67,7 @@ class AuthenticationViewModel(
     private val refreshCapabilitiesFromServerAsyncUseCase: RefreshCapabilitiesFromServerAsyncUseCase,
     private val getStoredCapabilitiesUseCase: GetStoredCapabilitiesUseCase,
     private val refreshSpacesFromServerAsyncUseCase: RefreshSpacesFromServerAsyncUseCase,
+    private val saveIdForAccountUseCase: SaveIdForAccountUseCase,
     private val workManagerProvider: WorkManagerProvider,
     private val requestTokenUseCase: RequestTokenUseCase,
     private val registerClientUseCase: RegisterClientUseCase,
@@ -274,6 +277,7 @@ class AuthenticationViewModel(
             // 2 If Account does not support spaces we can skip this
             if (spacesAvailableForAccount) {
                 refreshSpacesFromServerAsyncUseCase(RefreshSpacesFromServerAsyncUseCase.Params(accountName))
+                saveIdForAccountUseCase(SaveIdForAccountUseCase.Params(accountName))
             }
             _accountDiscovery.postValue(Event(UIResult.Success()))
         }

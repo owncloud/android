@@ -5,7 +5,7 @@
  * @author Juan Carlos Garrote Gascón
  * @author Jorge Aguado Recio
  *
- * Copyright (C) 2024 ownCloud GmbH.
+ * Copyright (C) 2025 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -22,6 +22,7 @@
 
 package com.owncloud.android.data.user.repository
 
+import com.owncloud.android.data.authentication.datasources.LocalAuthenticationDataSource
 import com.owncloud.android.data.user.datasources.LocalUserDataSource
 import com.owncloud.android.data.user.datasources.RemoteUserDataSource
 import com.owncloud.android.domain.user.UserRepository
@@ -32,7 +33,8 @@ import kotlinx.coroutines.flow.Flow
 
 class OCUserRepository(
     private val localUserDataSource: LocalUserDataSource,
-    private val remoteUserDataSource: RemoteUserDataSource
+    private val remoteUserDataSource: RemoteUserDataSource,
+    private val localAuthenticationDataSource: LocalAuthenticationDataSource
 ) : UserRepository {
     override fun getUserInfo(accountName: String): UserInfo = remoteUserDataSource.getUserInfo(accountName)
     override fun getUserQuota(accountName: String): UserQuota =
@@ -54,4 +56,11 @@ class OCUserRepository(
 
     override fun getUserAvatar(accountName: String): UserAvatar =
         remoteUserDataSource.getUserAvatar(accountName)
+
+    override fun saveUserId(accountName: String){
+        remoteUserDataSource.getUserId(accountName).also {
+            localAuthenticationDataSource.saveIdForAccount(accountName, it)
+        }
+    }
+
 }
