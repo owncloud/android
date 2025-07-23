@@ -29,6 +29,7 @@ package com.owncloud.android.lib.resources.users.services.implementation
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.users.GetRemoteUserAvatarOperation
+import com.owncloud.android.lib.resources.users.GetRemoteUserIdOperation
 import com.owncloud.android.lib.resources.users.GetRemoteUserInfoOperation
 import com.owncloud.android.lib.resources.users.GetRemoteUserQuotaOperation
 import com.owncloud.android.lib.resources.users.RemoteAvatarData
@@ -44,5 +45,8 @@ class OCUserService(override val client: OwnCloudClient) : UserService {
 
     override fun getUserAvatar(avatarDimension: Int): RemoteOperationResult<RemoteAvatarData> =
         GetRemoteUserAvatarOperation(avatarDimension).execute(client)
+
+    override fun getUserId(): RemoteOperationResult<String> =
+        GetRemoteUserIdOperation().execute(client)
 
 }
