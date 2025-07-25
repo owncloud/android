@@ -50,7 +50,6 @@ import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -337,6 +336,7 @@ class FileDisplayActivity : FileActivity(),
         }
 
         startListeningToOperations()
+        mainFileListFragment?.setListeners()
     }
 
     /**
@@ -400,15 +400,17 @@ class FileDisplayActivity : FileActivity(),
             initialFolderToDisplay = file,
             fileListOption = fileListOption,
             accountName = getCurrentOwnCloudAccount(applicationContext).name
-        ).apply {
-            fileActions = this@FileDisplayActivity
-            uploadActions = this@FileDisplayActivity
-            setSearchListener(findViewById(R.id.root_toolbar_search_view))
-        }
+        ).setListeners()
         this.fileListOption = fileListOption
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.left_fragment_container, mainListOfFiles, TAG_LIST_OF_FILES)
         transaction.commit()
+    }
+
+    private fun MainFileListFragment.setListeners(): MainFileListFragment = this.apply {
+        fileActions = this@FileDisplayActivity
+        uploadActions = this@FileDisplayActivity
+        setSearchListener(findViewById(R.id.root_toolbar_search_view))
     }
 
     private fun initAndShowListOfSpaces() {
