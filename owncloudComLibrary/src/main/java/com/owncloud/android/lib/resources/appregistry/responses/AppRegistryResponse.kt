@@ -53,6 +53,6 @@ data class AppRegistryMimeTypeResponse(
 data class AppRegistryProviderResponse(
     val name: String,
     @Json(name = "product_name")
-    val productName: String,
+    val productName: String?,
     val icon: String,
 )

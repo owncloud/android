@@ -1,0 +1,7 @@
+Bugfix: Mini-fab for creating new document not always available
+
+The productName property has been made nullable to handle cases where it is not present
+in the JSON response, allowing the mini-fab for creating new documents to be properly shown.
+
+https://github.com/owncloud/enterprise/issues/7277
+https://github.com/owncloud/android/pull/4649
