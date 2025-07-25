@@ -90,7 +90,6 @@
         </activity>
         <activity
             android:name=".ui.activity.FileDisplayActivity"
-            android:configChanges="orientation|screenSize"
             android:theme="@style/Theme.homeCloud.Toolbar.Drawer"
             android:windowSoftInputMode="adjustPan" />
         <activity
