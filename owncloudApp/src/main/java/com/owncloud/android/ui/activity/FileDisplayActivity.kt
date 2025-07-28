@@ -763,6 +763,9 @@ class FileDisplayActivity : FileActivity(),
                 mainFileListFragment?.navigateToFolderId(folderIdToDisplay)
                 cleanSecondFragment()
                 updateToolbar(mainFileListFragment?.getCurrentFile())
+                mainFileListFragment?.getCurrentFile()?.let {
+                    file = it
+                }
             } else {
                 val currentDirDisplayed = mainFileListFragment?.getCurrentFile()
                 // If current file is null (we are in the spaces list, for example), close the app
