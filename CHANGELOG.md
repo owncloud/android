@@ -37,9 +37,19 @@ ownCloud admins and users.
 
 ## Summary
 
+* Bugfix - Crash from Google Play Console in TransferListFragment: [#4650](https://github.com/owncloud/android/issues/4650)
 * Bugfix - Mini-fab for creating new document not always available: [#7277](https://github.com/owncloud/enterprise/issues/7277)
 
 ## Details
+
+* Bugfix - Crash from Google Play Console in TransferListFragment: [#4650](https://github.com/owncloud/android/issues/4650)
+
+   In order to prevent app crashes, the account parameter from TransferListFragment
+   has been removed and the newInstance method has been created to pass parameters
+   safely.
+
+   https://github.com/owncloud/android/issues/4650
+   https://github.com/owncloud/android/pull/4652
 
 * Bugfix - Mini-fab for creating new document not always available: [#7277](https://github.com/owncloud/enterprise/issues/7277)
 

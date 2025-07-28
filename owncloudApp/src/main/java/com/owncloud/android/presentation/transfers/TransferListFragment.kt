@@ -47,14 +47,12 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import java.io.File
 
-class TransferListFragment(
-    private val account: Account
-) : Fragment() {
+class TransferListFragment : Fragment() {
 
     private val transfersViewModel by viewModel<TransfersViewModel>()
     private val capabilityViewModel: CapabilityViewModel by viewModel {
         parametersOf(
-            account.name,
+            requireArguments().getString(ARG_ACCOUNT_NAME),
         )
     }
 
@@ -140,5 +138,17 @@ class TransferListFragment(
             listEmptyDatasetSubTitle.setText(R.string.upload_list_empty_subtitle)
         }
         transfersAdapter.setData(transfersWithSpace)
+    }
+
+    companion object {
+        private const val ARG_ACCOUNT_NAME = "ACCOUNT_NAME"
+
+        @JvmStatic
+        fun newInstance(account: Account): TransferListFragment {
+            val args = Bundle().apply {
+                putString(ARG_ACCOUNT_NAME, account.name)
+            }
+            return TransferListFragment().apply { arguments = args }
+        }
     }
 }
