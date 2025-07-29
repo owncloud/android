@@ -25,6 +25,8 @@
 
     <color name="homecloud_menu_background">@color/white</color>
 
+    <color name="homecloud_signin_logo_text_color">@color/black</color>
+
     <!-- Original ownCloud colors override -->
     <color name="textColor">@color/homecloud_primary</color>
 
