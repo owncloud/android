@@ -225,11 +225,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         authenticationViewModel.accountDiscovery.observe(this) {
             if (it.peekContent() is UIResult.Success) {
                 notifyDocumentsProviderRoots(applicationContext)
-                if (authenticationViewModel.launchedFromDeepLink) {
-                    launchFileDisplayActivity()
-                } else {
-                    finish()
-                }
+                launchFileDisplayActivity()
             }
         }
 

@@ -20,6 +20,7 @@
 
 package com.owncloud.android.ui.activity
 
+import android.accounts.AccountManager
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -27,6 +28,7 @@ import com.owncloud.android.BuildConfig
 import com.owncloud.android.MainApp
 import com.owncloud.android.R
 import com.owncloud.android.data.providers.implementation.OCSharedPreferencesProvider
+import com.owncloud.android.presentation.authentication.homecloud.LoginActivity
 import com.owncloud.android.presentation.security.LockTimeout
 import com.owncloud.android.presentation.security.PREFERENCE_LOCK_TIMEOUT
 import com.owncloud.android.providers.MdmProvider
@@ -63,7 +65,11 @@ class SplashActivity : AppCompatActivity() {
 
         checkLockDelayEnforced(mdmProvider)
 
-        startActivity(Intent(this, FileDisplayActivity::class.java))
+        val nextScreenIntent = Intent(
+            this,
+            if (isAccountAvailable()) FileDisplayActivity::class.java else LoginActivity::class.java
+        )
+        startActivity(nextScreenIntent)
         finish()
     }
 
@@ -75,5 +81,11 @@ class SplashActivity : AppCompatActivity() {
         if (lockTimeout != LockTimeout.DISABLED) {
             OCSharedPreferencesProvider(this@SplashActivity).putString(PREFERENCE_LOCK_TIMEOUT, lockTimeout.name)
         }
+    }
+
+    private fun isAccountAvailable(): Boolean {
+        val accountManager = AccountManager.get(this)
+        val accounts = accountManager.getAccountsByType(MainApp.accountType)
+        return accounts.size > 0
     }
 }
