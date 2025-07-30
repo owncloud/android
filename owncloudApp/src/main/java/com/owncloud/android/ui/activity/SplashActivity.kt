@@ -27,11 +27,13 @@ import androidx.appcompat.app.AppCompatActivity
 import com.owncloud.android.BuildConfig
 import com.owncloud.android.MainApp
 import com.owncloud.android.R
+import com.owncloud.android.data.providers.SharedPreferencesProvider
 import com.owncloud.android.data.providers.implementation.OCSharedPreferencesProvider
 import com.owncloud.android.presentation.authentication.homecloud.LoginActivity
 import com.owncloud.android.presentation.security.LockTimeout
 import com.owncloud.android.presentation.security.PREFERENCE_LOCK_TIMEOUT
 import com.owncloud.android.providers.MdmProvider
+import com.owncloud.android.ui.activity.FileDisplayActivity.Companion.PREFERENCE_CLEAR_DATA_ALREADY_TRIGGERED
 import com.owncloud.android.utils.CONFIGURATION_ALLOW_SCREENSHOTS
 import com.owncloud.android.utils.CONFIGURATION_DEVICE_PROTECTION
 import com.owncloud.android.utils.CONFIGURATION_LOCK_DELAY_TIME
@@ -41,8 +43,11 @@ import com.owncloud.android.utils.CONFIGURATION_REDACT_AUTH_HEADER_LOGS
 import com.owncloud.android.utils.CONFIGURATION_SEND_LOGIN_HINT_AND_USER
 import com.owncloud.android.utils.CONFIGURATION_SERVER_URL
 import com.owncloud.android.utils.CONFIGURATION_SERVER_URL_INPUT_VISIBILITY
+import org.koin.android.ext.android.inject
 
 class SplashActivity : AppCompatActivity() {
+
+    private val sharedPreferences: SharedPreferencesProvider by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,6 +67,7 @@ class SplashActivity : AppCompatActivity() {
                 cacheBooleanRestriction(CONFIGURATION_SEND_LOGIN_HINT_AND_USER, R.string.send_login_hint_and_user_configuration_feedback_ok)
             }
         }
+        sharedPreferences.putBoolean(PREFERENCE_CLEAR_DATA_ALREADY_TRIGGERED, true)
 
         checkLockDelayEnforced(mdmProvider)
 
