@@ -55,7 +55,6 @@
         android:resizeableActivity="true"
         android:supportsPictureInPicture="false"
         android:supportsRtl="false"
-        android:taskAffinity=""
         android:theme="@style/Theme.homeCloud.Toolbar"
         tools:replace="android:allowBackup,android:supportsRtl">
         <activity

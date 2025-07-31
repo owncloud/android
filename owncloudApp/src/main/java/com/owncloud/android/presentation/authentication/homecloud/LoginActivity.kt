@@ -92,7 +92,6 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
     private var loginAction: Byte = ACTION_CREATE
 
     private var userAccount: Account? = null
-    private var username: String? = null
     private lateinit var serverBaseUrl: String
 
 
@@ -132,7 +131,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
             binding.accountUsername.isEnabled = false
             binding.accountUsername.isFocusable = false
             userAccount?.name?.let {
-                username = getUsernameOfAccount(it)
+                authenticationViewModel.handleLoginChanged(getUsernameOfAccount(it))
             }
 
         }
@@ -146,7 +145,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
 
             userAccount?.let {
                 AccountUtils.getUsernameForAccount(it)?.let { username ->
-                    binding.accountUsername.setText(username)
+                    authenticationViewModel.handleLoginChanged(username)
                 }
             }
         }
@@ -190,6 +189,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
     private fun launchFileDisplayActivity() {
         val newIntent = Intent(this, FileDisplayActivity::class.java)
         newIntent.data = intent.data
+        newIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         startActivity(newIntent)
         finish()
     }
@@ -225,11 +225,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         authenticationViewModel.accountDiscovery.observe(this) {
             if (it.peekContent() is UIResult.Success) {
                 notifyDocumentsProviderRoots(applicationContext)
-                if (authenticationViewModel.launchedFromDeepLink) {
-                    launchFileDisplayActivity()
-                } else {
-                    finish()
-                }
+                launchFileDisplayActivity()
             }
         }
 
