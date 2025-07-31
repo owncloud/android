@@ -1,6 +1,6 @@
 # Table of Contents
 
-* [Changelog for unreleased](#changelog-for-owncloud-android-client-unreleased-unreleased)
+* [Changelog for 4.6.1](#changelog-for-owncloud-android-client-461-2025-08-01)
 * [Changelog for 4.6.0](#changelog-for-owncloud-android-client-460-2025-07-22)
 * [Changelog for 4.5.1](#changelog-for-owncloud-android-client-451-2025-04-03)
 * [Changelog for 4.5.0](#changelog-for-owncloud-android-client-450-2025-03-24)
@@ -28,12 +28,12 @@
 * [Changelog for 2.18.1](#changelog-for-owncloud-android-client-2181-2021-07-20)
 * [Changelog for 2.18.0](#changelog-for-owncloud-android-client-2180-2021-05-24)
 * [Changelog for 2.17 versions and below](#changelog-for-217-versions-and-below)
-# Changelog for ownCloud Android Client [unreleased] (UNRELEASED)
+# Changelog for ownCloud Android Client [4.6.1] (2025-08-01)
 
-The following sections list the changes in ownCloud Android Client unreleased relevant to
+The following sections list the changes in ownCloud Android Client 4.6.1 relevant to
 ownCloud admins and users.
 
-[unreleased]: https://github.com/owncloud/android/compare/v4.6.0...master
+[4.6.1]: https://github.com/owncloud/android/compare/v4.6.0...v4.6.1
 
 ## Summary
 
