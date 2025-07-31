@@ -76,7 +76,6 @@ import com.owncloud.android.presentation.files.removefile.RemoveFilesDialogFragm
 import com.owncloud.android.presentation.files.removefile.RemoveFilesDialogFragment.Companion.TAG_REMOVE_FILES_DIALOG_FRAGMENT
 import com.owncloud.android.presentation.files.renamefile.RenameFileDialogFragment
 import com.owncloud.android.presentation.files.renamefile.RenameFileDialogFragment.Companion.FRAGMENT_TAG_RENAME_FILE
-import com.owncloud.android.ui.activity.FileActivity.REQUEST_CODE__UPDATE_CREDENTIALS
 import com.owncloud.android.ui.activity.FileDisplayActivity
 import com.owncloud.android.ui.fragment.FileFragment
 import com.owncloud.android.ui.preview.PreviewAudioFragment
@@ -172,7 +171,7 @@ class FileDetailsFragment : FileFragment() {
                                     putExtra(EXTRA_ACTION, ACTION_UPDATE_EXPIRED_TOKEN)
                                     addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
                                 }
-                                startActivityForResult(updateAccountCredentials, REQUEST_CODE__UPDATE_CREDENTIALS)
+                                startActivity(updateAccountCredentials)
                             }.show()
                     } else {
                         showErrorInSnackbar(R.string.sync_fail_ticker, uiResult.error)

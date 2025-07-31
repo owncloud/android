@@ -39,6 +39,7 @@ ownCloud admins and users.
 
 * Bugfix - Crash from Google Play Console in TransferListFragment: [#4650](https://github.com/owncloud/android/issues/4650)
 * Bugfix - Mini-fab for creating new document not always available: [#7277](https://github.com/owncloud/enterprise/issues/7277)
+* Bugfix - Re-login not working properly when credentials expire: [#7277](https://github.com/owncloud/enterprise/issues/7277)
 
 ## Details
 
@@ -59,6 +60,14 @@ ownCloud admins and users.
 
    https://github.com/owncloud/enterprise/issues/7277
    https://github.com/owncloud/android/pull/4649
+
+* Bugfix - Re-login not working properly when credentials expire: [#7277](https://github.com/owncloud/enterprise/issues/7277)
+
+   The startActivityForResult method has been replaced with startActivity to make
+   re-login work properly when credentials expire.
+
+   https://github.com/owncloud/enterprise/issues/7277
+   https://github.com/owncloud/android/pull/4654
 
 # Changelog for ownCloud Android Client [4.6.0] (2025-07-22)
 
