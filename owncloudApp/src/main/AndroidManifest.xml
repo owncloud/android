@@ -198,10 +198,6 @@
             android:configChanges="orientation|screenSize" />
         <activity android:name=".ui.errorhandling.ErrorShowActivity" />
         <activity
-            android:name=".ui.activity.UploadListActivity"
-            android:label="@string/bottom_nav_uploads"
-            android:theme="@style/Theme.homeCloud.Toolbar.Drawer" />
-        <activity
             android:name=".ui.activity.WhatsNewActivity"
             android:label="@string/whats_new_label"
             android:configChanges="keyboardHidden|orientation|screenSize" />

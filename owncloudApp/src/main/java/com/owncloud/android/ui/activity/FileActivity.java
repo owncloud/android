@@ -36,9 +36,9 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Parcelable;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 import com.owncloud.android.R;
@@ -58,6 +58,7 @@ import com.owncloud.android.ui.dialog.ConfirmationDialogFragment;
 import com.owncloud.android.ui.dialog.SslUntrustedCertDialog;
 import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter;
 import com.owncloud.android.ui.helpers.FileOperationsHelper;
+
 import timber.log.Timber;
 
 /**
@@ -434,6 +435,13 @@ public class FileActivity extends DrawerActivity
                 intent.putExtra(EXTRA_FILE_LIST_OPTION, (Parcelable) FileListOption.AV_OFFLINE);
                 startActivity(intent);
                 break;
+            case UPLOADS_LIST:
+                intent = new Intent(this, FileDisplayActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.putExtra(EXTRA_FILE_LIST_OPTION, (Parcelable) FileListOption.UPLOADS_LIST);
+                startActivity(intent);
+                break;
+
         }
     }
 
