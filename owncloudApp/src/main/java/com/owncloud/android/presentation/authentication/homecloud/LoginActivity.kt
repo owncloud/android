@@ -155,10 +155,6 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
 
         initBrandableOptionsUI()
 
-        binding.hostUrlInputLayout.setEndIconOnClickListener {
-            binding.hostUrlInput.setText("")
-        }
-
         binding.ctaButton.setOnClickListener {
             authenticationViewModel.handleCtaButtonClicked()
         }
@@ -247,11 +243,6 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
             binding.hostUrlInput.updateTextIfDiffers(it.url)
             binding.accountPassword.updateTextIfDiffers(it.password)
             binding.accountUsername.updateTextIfDiffers(it.username)
-            if (it.url.isEmpty()) {
-                binding.hostUrlInputLayout.endIconDrawable = null
-            } else {
-                binding.hostUrlInputLayout.setEndIconDrawable(R.drawable.ic_clear_input)
-            }
         }
     }
 
