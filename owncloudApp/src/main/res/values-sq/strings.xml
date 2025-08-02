@@ -677,6 +677,8 @@
   <string name="release_notes_icon">Ikonë shënimesh hedhjeje në qarkullim</string>
   <string name="release_notes_bugfixes_title">Ndreqje të metash të vockla</string>
   <string name="release_notes_bugfixes_subtitle">U ndreqën disa të meta, për të përmirësuar punimin te aplikacioni</string>
+  <string name="release_notes_4_6_1_title_shares_space_docs_provider">Hapësirë pjesësh në eksplorues kartelash të vetë Android-it</string>
+  <string name="release_notes_4_6_1_title_duplicated_automatic_uploads">U përmirësuan ngarkimet e automatizuara</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Hape në web</string>
   <string name="ic_action_open_with_web">Hape në %1$s (web)</string>

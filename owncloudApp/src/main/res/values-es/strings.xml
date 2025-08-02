@@ -682,6 +682,9 @@ Póngase en contacto con su administrador</string>
   <string name="release_notes_icon">Icono notas de lanzamiento</string>
   <string name="release_notes_bugfixes_title">Solución de problemas</string>
   <string name="release_notes_bugfixes_subtitle">Algunos errores se solucionaron para mejorar la experiencia en la app</string>
+  <string name="release_notes_4_6_1_title_shares_space_docs_provider">Space \"compartir\" en el explorador de ficheros nativo de Android</string>
+  <string name="release_notes_4_6_1_title_duplicated_automatic_uploads">Subidas automáticas mejoradas</string>
+  <string name="release_notes_4_6_1_subtitle_duplicated_automatic_uploads">Subidas automáticas más consistentes frente a duplicados</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Abrir en web</string>
   <string name="ic_action_open_with_web">Open in %1$s (web)</string>
