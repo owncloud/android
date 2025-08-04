@@ -643,16 +643,6 @@ class MainFileListFragment : Fragment(),
                 menuOptions.forEach { menuOption ->
                     setMenuOption(menuOption, file, dialog)
                 }
-                // Disable drag gesture
-                fileOptionsBottomSheetSingleFileBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
-                    override fun onStateChanged(bottomSheet: View, newState: Int) {
-                        if (newState == BottomSheetBehavior.STATE_DRAGGING) {
-                            fileOptionsBottomSheetSingleFileBehavior.state = BottomSheetBehavior.STATE_EXPANDED
-                        }
-                    }
-
-                    override fun onSlide(bottomSheet: View, slideOffset: Float) {}
-                })
                 dialog.setOnShowListener { fileOptionsBottomSheetSingleFileBehavior.peekHeight = fileOptionsBottomSheetSingleFile.measuredHeight }
                 dialog.show()
                 mainFileListViewModel.getAppRegistryForMimeType(file.mimeType, isMultiselection = false)
