@@ -29,13 +29,9 @@ import android.app.Dialog
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.text.InputType
-import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
-import android.view.ViewGroup
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
@@ -211,9 +207,7 @@ class PublicShareDialogFragment : DialogFragment() {
         initTitleAndLabels()
         initPasswordListener()
         initExpirationListener()
-        initPasswordFocusChangeListener()
         initPasswordChangeInputListener()
-        initPasswordToggleListener()
 
         binding.saveButton.setOnClickListener { onSaveShareSetting() }
         binding.cancelButton.setOnClickListener { dismiss() }
@@ -331,31 +325,12 @@ class PublicShareDialogFragment : DialogFragment() {
         }
     }
 
-    private fun initPasswordFocusChangeListener() {
-        binding.shareViaLinkPasswordValue.setOnFocusChangeListener { v: View, hasFocus: Boolean ->
-            if (v.id == R.id.shareViaLinkPasswordValue) {
-                onPasswordFocusChanged(hasFocus)
-            }
-        }
-    }
-
     private fun initPasswordChangeInputListener() {
         binding.shareViaLinkPasswordValue.doOnTextChanged { text, _, _, _ ->
             capabilities?.passwordPolicy?.let { passwordPolicy ->
                 updateRequirementsPasswordPolicy(text.toString(), passwordPolicy)
             } ?: handleNullPasswordPolicy()
         }
-    }
-
-    private fun initPasswordToggleListener() {
-        binding.shareViaLinkPasswordValue.setOnTouchListener(object : RightDrawableOnTouchListener() {
-            override fun onDrawableTouch(event: MotionEvent): Boolean {
-                if (event.action == MotionEvent.ACTION_UP) {
-                    onViewPasswordClick()
-                }
-                return true
-            }
-        })
     }
 
     private fun handleNullPasswordPolicy() {
@@ -499,97 +474,6 @@ class PublicShareDialogFragment : DialogFragment() {
                 else resources.getColor(R.color.grey, null)
             )
         }
-    }
-
-    private abstract class RightDrawableOnTouchListener : View.OnTouchListener {
-
-        private val fuzz = 75
-
-        /**
-         * {@inheritDoc}
-         */
-        override fun onTouch(view: View, event: MotionEvent): Boolean {
-            var rightDrawable: Drawable? = null
-            if (view is TextView) {
-                val drawables = view.compoundDrawables
-                if (drawables.size > 2) {
-                    rightDrawable = drawables[2]
-                }
-            }
-            if (rightDrawable != null) {
-                val x = event.x.toInt()
-                val y = event.y.toInt()
-                val bounds = rightDrawable.bounds
-                if (x >= view.right - bounds.width() - fuzz && x <= view.right - view.paddingRight + fuzz && y >= view.paddingTop - fuzz &&
-                    y <= view.height - view.paddingBottom + fuzz) {
-
-                    return onDrawableTouch(event)
-                }
-            }
-            return false
-        }
-
-        abstract fun onDrawableTouch(event: MotionEvent): Boolean
-    }
-
-    /**
-     * Handles changes in focus on the text input for the password (basic authorization).
-     * When (hasFocus), the button to toggle password visibility is shown.
-     * When (!hasFocus), the button is made invisible and the password is hidden.
-     *
-     * @param hasFocus          'True' if focus is received, 'false' if is lost
-     */
-    private fun onPasswordFocusChanged(hasFocus: Boolean) {
-        if (hasFocus) {
-            showViewPasswordButton()
-        } else {
-            hidePassword()
-            hidePasswordButton()
-        }
-
-    }
-
-    /**
-     * Called when the eye icon in the password field is clicked.
-     *
-     * Toggles the visibility of the password in the field.
-     */
-    fun onViewPasswordClick() {
-        if (_binding != null) {
-            if (isPasswordVisible) {
-                hidePassword()
-            } else {
-                showPassword()
-            }
-            binding.shareViaLinkPasswordValue.setSelection(
-                binding.shareViaLinkPasswordValue.selectionStart,
-                binding.shareViaLinkPasswordValue.selectionEnd
-            )
-        }
-    }
-
-    private fun showViewPasswordButton() {
-        val drawable = if (isPasswordVisible)
-            R.drawable.ic_view_black
-        else
-            R.drawable.ic_hide_black
-        binding.shareViaLinkPasswordValue.setCompoundDrawablesWithIntrinsicBounds(0, 0, drawable, 0)
-    }
-
-    private fun hidePasswordButton() {
-        binding.shareViaLinkPasswordValue.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
-    }
-
-    private fun showPassword() {
-        binding.shareViaLinkPasswordValue.inputType =
-            InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD or InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS
-        showViewPasswordButton()
-    }
-
-    private fun hidePassword() {
-        binding.shareViaLinkPasswordValue.inputType =
-            InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD or InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS
-        showViewPasswordButton()
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -927,7 +811,7 @@ class PublicShareDialogFragment : DialogFragment() {
                         minSpecialChars = passwordPolicy.minSpecialCharacters,
                     )
                 )
-                showPassword()
+                binding.shareViaLinkPasswordValue.transformationMethod = null
             }
         }
     }
