@@ -958,6 +958,7 @@ class MainFileListFragment : Fragment(),
         sortBottomSheetFragment.show(childFragmentManager, SortBottomSheetFragment.TAG)
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onViewTypeListener(viewType: ViewType) {
         binding.optionsLayout.viewTypeSelected = viewType
 
@@ -970,7 +971,7 @@ class MainFileListFragment : Fragment(),
             layoutManager.spanCount = ColumnQuantity(requireContext(), R.layout.grid_item).calculateNoOfColumns()
         }
 
-        fileListAdapter.notifyItemRangeChanged(0, fileListAdapter.itemCount)
+        fileListAdapter.notifyDataSetChanged()
     }
 
     override fun onSortSelected(sortType: SortType) {
