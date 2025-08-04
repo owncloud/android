@@ -29,10 +29,12 @@ import android.os.Build
 import android.os.Build.VERSION.SDK_INT
 import android.os.Handler
 import android.os.HandlerThread
+import android.os.Parcelable
 import android.os.Process
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import com.owncloud.android.R
+import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.presentation.authentication.ACTION_UPDATE_EXPIRED_TOKEN
 import com.owncloud.android.presentation.authentication.EXTRA_ACCOUNT
@@ -41,7 +43,8 @@ import com.owncloud.android.presentation.authentication.homecloud.LoginActivity
 import com.owncloud.android.presentation.conflicts.ConflictsResolveActivity
 import com.owncloud.android.presentation.settings.SettingsActivity
 import com.owncloud.android.presentation.settings.SettingsActivity.Companion.KEY_NOTIFICATION_INTENT
-import com.owncloud.android.ui.activity.UploadListActivity
+import com.owncloud.android.ui.activity.FileActivity
+import com.owncloud.android.ui.activity.FileDisplayActivity
 import java.util.Random
 
 object NotificationUtils {
@@ -115,9 +118,9 @@ object NotificationUtils {
     }
 
     fun composePendingIntentToUploadList(context: Context): PendingIntent {
-        val showUploadListIntent = Intent(context, UploadListActivity::class.java).apply {
-            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        }
+        val showUploadListIntent = Intent(context, FileDisplayActivity::class.java)
+        showUploadListIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        showUploadListIntent.putExtra(FileActivity.EXTRA_FILE_LIST_OPTION, FileListOption.UPLOADS_LIST as Parcelable)
 
         return PendingIntent.getActivity(context, System.currentTimeMillis().toInt(), showUploadListIntent, pendingIntentFlags)
     }

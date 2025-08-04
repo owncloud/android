@@ -802,7 +802,11 @@ class MainFileListFragment : Fragment(),
             fileListAdapter.updateFileList(
                 filesToAdd = fileListUiState.folderContent,
                 fileListOption = fileListUiState.fileListOption,
-            )
+            ) {
+                binding.recyclerViewMainFileList.apply {
+                    post { scrollToPosition(0) }
+                }
+            }
             showOrHideEmptyView(fileListUiState)
 
             binding.spaceHeader.root.apply {
