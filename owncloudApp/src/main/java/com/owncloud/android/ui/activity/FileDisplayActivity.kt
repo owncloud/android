@@ -50,7 +50,6 @@ import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -110,6 +109,7 @@ import com.owncloud.android.presentation.spaces.SpacesListFragment
 import com.owncloud.android.presentation.spaces.SpacesListFragment.Companion.BUNDLE_KEY_CLICK_SPACE
 import com.owncloud.android.presentation.spaces.SpacesListFragment.Companion.REQUEST_KEY_CLICK_SPACE
 import com.owncloud.android.presentation.spaces.SpacesListViewModel
+import com.owncloud.android.presentation.transfers.TransferListFragment
 import com.owncloud.android.presentation.transfers.TransfersViewModel
 import com.owncloud.android.providers.WorkManagerProvider
 import com.owncloud.android.syncadapter.FileSyncAdapter
@@ -337,6 +337,7 @@ class FileDisplayActivity : FileActivity(),
         }
 
         startListeningToOperations()
+        mainFileListFragment?.setListeners()
     }
 
     /**
@@ -400,15 +401,17 @@ class FileDisplayActivity : FileActivity(),
             initialFolderToDisplay = file,
             fileListOption = fileListOption,
             accountName = getCurrentOwnCloudAccount(applicationContext).name
-        ).apply {
-            fileActions = this@FileDisplayActivity
-            uploadActions = this@FileDisplayActivity
-            setSearchListener(findViewById(R.id.root_toolbar_search_view))
-        }
+        ).setListeners()
         this.fileListOption = fileListOption
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.left_fragment_container, mainListOfFiles, TAG_LIST_OF_FILES)
         transaction.commit()
+    }
+
+    private fun MainFileListFragment.setListeners(): MainFileListFragment = this.apply {
+        fileActions = this@FileDisplayActivity
+        uploadActions = this@FileDisplayActivity
+        setSearchListener(findViewById(R.id.root_toolbar_search_view))
     }
 
     private fun initAndShowListOfSpaces() {
@@ -429,6 +432,14 @@ class FileDisplayActivity : FileActivity(),
         this.fileListOption = FileListOption.SHARED_BY_LINK
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.left_fragment_container, sharesFragment)
+        transaction.commit()
+    }
+
+    private fun initAndShowListOfUploads() {
+        val uploadsFragment = TransferListFragment()
+        this.fileListOption = FileListOption.UPLOADS_LIST
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.left_fragment_container, uploadsFragment)
         transaction.commit()
     }
 
@@ -761,6 +772,9 @@ class FileDisplayActivity : FileActivity(),
                 mainFileListFragment?.navigateToFolderId(folderIdToDisplay)
                 cleanSecondFragment()
                 updateToolbar(mainFileListFragment?.getCurrentFile())
+                mainFileListFragment?.getCurrentFile()?.let {
+                    file = it
+                }
             } else {
                 val currentDirDisplayed = mainFileListFragment?.getCurrentFile()
                 // If current file is null (we are in the spaces list, for example), close the app
@@ -982,9 +996,10 @@ class FileDisplayActivity : FileActivity(),
 
                     FileListOption.ALL_FILES -> getString(R.string.default_display_name_for_root_folder)
                     FileListOption.SPACES_LIST -> getString(R.string.bottom_nav_spaces)
+                    FileListOption.UPLOADS_LIST -> getString(R.string.uploads_view_title)
                 }
             setTitle(title)
-            setupRootToolbar(title = title, isSearchEnabled = true, isAvatarRequested = false)
+            setupRootToolbar(title = title, isSearchEnabled = !fileListOption.isUploadList(), isAvatarRequested = false)
         } else if ((space?.isProject == true || (space?.isPersonal == true && isMultiPersonal)) && chosenFile.remotePath == OCFile.ROOT_PATH) {
             updateStandardToolbar(title = space.name, displayHomeAsUpEnabled = true, homeButtonEnabled = true)
         } else {
@@ -1812,6 +1827,14 @@ class FileDisplayActivity : FileActivity(),
                     updateToolbar(file)
                 }
             }
+
+            FileListOption.UPLOADS_LIST -> {
+                if (previousFileListOption != newFileListOption || initialState) {
+                    fileListOption = newFileListOption
+                    initAndShowListOfUploads()
+                    setupRootToolbar(title = getString(R.string.uploads_view_title), isSearchEnabled = false, isAvatarRequested = false)
+                }
+            }
         }
     }
 
@@ -1823,7 +1846,9 @@ class FileDisplayActivity : FileActivity(),
         FileListOption.SPACES_LIST -> R.id.nav_spaces
         FileListOption.SHARED_BY_LINK -> R.id.nav_shared_by_link_files
         FileListOption.AV_OFFLINE -> R.id.nav_available_offline_files
-        else -> R.id.nav_all_files
+        FileListOption.ALL_FILES -> R.id.nav_all_files
+        FileListOption.UPLOADS_LIST -> R.id.nav_uploads
+        null -> R.id.nav_all_files
     }
 
     override fun optionLockSelected(type: LockType) {

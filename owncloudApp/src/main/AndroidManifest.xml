@@ -55,7 +55,6 @@
         android:resizeableActivity="true"
         android:supportsPictureInPicture="false"
         android:supportsRtl="false"
-        android:taskAffinity=""
         android:theme="@style/Theme.homeCloud.Toolbar"
         tools:replace="android:allowBackup,android:supportsRtl">
         <activity
@@ -90,7 +89,6 @@
         </activity>
         <activity
             android:name=".ui.activity.FileDisplayActivity"
-            android:configChanges="orientation|screenSize"
             android:theme="@style/Theme.homeCloud.Toolbar.Drawer"
             android:windowSoftInputMode="adjustPan" />
         <activity
@@ -199,10 +197,6 @@
             android:label="@string/prefs_log_open_logs_list_view"
             android:configChanges="orientation|screenSize" />
         <activity android:name=".ui.errorhandling.ErrorShowActivity" />
-        <activity
-            android:name=".ui.activity.UploadListActivity"
-            android:label="@string/bottom_nav_uploads"
-            android:theme="@style/Theme.homeCloud.Toolbar.Drawer" />
         <activity
             android:name=".ui.activity.WhatsNewActivity"
             android:label="@string/whats_new_label"

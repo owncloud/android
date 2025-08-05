@@ -56,11 +56,11 @@ class FileListAdapter(
     private val listener: FileListAdapterListener,
 ) : SelectableAdapter<RecyclerView.ViewHolder>() {
 
-    var files = mutableListOf<Any>()
+    private var files = mutableListOf<Any>()
     private var account: Account? = AccountUtils.getCurrentOwnCloudAccount(context)
     private var fileListOption: FileListOption = FileListOption.ALL_FILES
 
-    fun updateFileList(filesToAdd: List<OCFileWithSyncInfo>, fileListOption: FileListOption) {
+    fun updateFileList(filesToAdd: List<OCFileWithSyncInfo>, fileListOption: FileListOption, onSortChanged: () -> Unit) {
 
         val listWithFooter = mutableListOf<Any>()
         listWithFooter.addAll(filesToAdd)
@@ -70,7 +70,7 @@ class FileListAdapter(
         }
 
         val diffUtilCallback = FileListDiffCallback(
-            oldList = files,
+            oldList = files.toList(),
             newList = listWithFooter,
             oldFileListOption = this.fileListOption,
             newFileListOption = fileListOption,
@@ -82,6 +82,9 @@ class FileListAdapter(
         this.fileListOption = fileListOption
 
         diffResult.dispatchUpdatesTo(this)
+        if (diffUtilCallback.isOnlySortOrderChanged()) {
+            onSortChanged()
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder =

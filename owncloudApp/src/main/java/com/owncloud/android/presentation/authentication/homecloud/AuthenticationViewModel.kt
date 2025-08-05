@@ -130,7 +130,6 @@ class AuthenticationViewModel(
                         credentialsAreVisible = false,
                         ctaButtonEnabled = false,
                         ctaButtonLabel = contextProvider.getString(R.string.setup_btn_next),
-                        username = "",
                         password = "",
                     )
                 }

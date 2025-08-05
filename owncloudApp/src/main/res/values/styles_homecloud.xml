@@ -260,6 +260,8 @@
         <item name="hintTextColor">@color/homecloud_input_stroke_focused</item>
         <item name="android:textColorHint">@color/homecloud_input_stroke_focused</item>
         <item name="shapeAppearance">@style/homeCloud.TextInputLayout.InputShape</item>
+        <item name="endIconTint">?attr/colorPrimary</item>
+        <item name="passwordToggleTint">?attr/colorPrimary</item>
     </style>
 
     <style name="Button.Secondary" parent="Widget.Material3.Button.OutlinedButton">

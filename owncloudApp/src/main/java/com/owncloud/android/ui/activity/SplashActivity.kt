@@ -20,16 +20,20 @@
 
 package com.owncloud.android.ui.activity
 
+import android.accounts.AccountManager
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.owncloud.android.BuildConfig
 import com.owncloud.android.MainApp
 import com.owncloud.android.R
+import com.owncloud.android.data.providers.SharedPreferencesProvider
 import com.owncloud.android.data.providers.implementation.OCSharedPreferencesProvider
+import com.owncloud.android.presentation.authentication.homecloud.LoginActivity
 import com.owncloud.android.presentation.security.LockTimeout
 import com.owncloud.android.presentation.security.PREFERENCE_LOCK_TIMEOUT
 import com.owncloud.android.providers.MdmProvider
+import com.owncloud.android.ui.activity.FileDisplayActivity.Companion.PREFERENCE_CLEAR_DATA_ALREADY_TRIGGERED
 import com.owncloud.android.utils.CONFIGURATION_ALLOW_SCREENSHOTS
 import com.owncloud.android.utils.CONFIGURATION_DEVICE_PROTECTION
 import com.owncloud.android.utils.CONFIGURATION_LOCK_DELAY_TIME
@@ -39,8 +43,11 @@ import com.owncloud.android.utils.CONFIGURATION_REDACT_AUTH_HEADER_LOGS
 import com.owncloud.android.utils.CONFIGURATION_SEND_LOGIN_HINT_AND_USER
 import com.owncloud.android.utils.CONFIGURATION_SERVER_URL
 import com.owncloud.android.utils.CONFIGURATION_SERVER_URL_INPUT_VISIBILITY
+import org.koin.android.ext.android.inject
 
 class SplashActivity : AppCompatActivity() {
+
+    private val sharedPreferences: SharedPreferencesProvider by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,10 +67,15 @@ class SplashActivity : AppCompatActivity() {
                 cacheBooleanRestriction(CONFIGURATION_SEND_LOGIN_HINT_AND_USER, R.string.send_login_hint_and_user_configuration_feedback_ok)
             }
         }
+        sharedPreferences.putBoolean(PREFERENCE_CLEAR_DATA_ALREADY_TRIGGERED, true)
 
         checkLockDelayEnforced(mdmProvider)
 
-        startActivity(Intent(this, FileDisplayActivity::class.java))
+        val nextScreenIntent = Intent(
+            this,
+            if (isAccountAvailable()) FileDisplayActivity::class.java else LoginActivity::class.java
+        )
+        startActivity(nextScreenIntent)
         finish()
     }
 
@@ -75,5 +87,11 @@ class SplashActivity : AppCompatActivity() {
         if (lockTimeout != LockTimeout.DISABLED) {
             OCSharedPreferencesProvider(this@SplashActivity).putString(PREFERENCE_LOCK_TIMEOUT, lockTimeout.name)
         }
+    }
+
+    private fun isAccountAvailable(): Boolean {
+        val accountManager = AccountManager.get(this)
+        val accounts = accountManager.getAccountsByType(MainApp.accountType)
+        return accounts.size > 0
     }
 }

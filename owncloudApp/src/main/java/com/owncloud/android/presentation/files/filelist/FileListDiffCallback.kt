@@ -57,4 +57,14 @@ class FileListDiffCallback(
 
     override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean =
         oldList[oldItemPosition] == newList[newItemPosition] && oldFileListOption == newFileListOption
+
+    fun isOnlySortOrderChanged(): Boolean {
+        if (oldList.size != newList.size) return false // different sizes
+        if (oldList == newList) return false // same elements and same order
+
+        val oldFreq = oldList.groupingBy { it }.eachCount()
+        val newFreq = newList.groupingBy { it }.eachCount()
+
+        return oldFreq == newFreq // same elements with different order
+    }
 }

@@ -244,6 +244,11 @@ class MainFileListViewModel(
                     FileListOption.SPACES_LIST -> {
                         parentDir = TODO("Move it to usecase if possible")
                     }
+
+                    FileListOption.UPLOADS_LIST -> {
+                        parentDir = null
+                        // do nothing
+                    }
                 }
             } else if (parentId == ROOT_PARENT_ID) {
                 // Browsing to parent folder. Root
@@ -374,6 +379,7 @@ class MainFileListViewModel(
             FileListOption.SHARED_BY_LINK -> retrieveFlowForShareByLink(currentFolderDisplayed, currentFolderDisplayed.owner)
             FileListOption.AV_OFFLINE -> retrieveFlowForAvailableOffline(currentFolderDisplayed, currentFolderDisplayed.owner)
             FileListOption.SPACES_LIST -> flowOf()
+            FileListOption.UPLOADS_LIST -> flowOf()
         }.toFileListUiState(
             currentFolderDisplayed,
             fileListOption,

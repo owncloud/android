@@ -25,6 +25,8 @@
 
 package com.owncloud.android.ui.activity;
 
+import static org.koin.java.KoinJavaComponent.inject;
+
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.ActivityNotFoundException;
@@ -36,6 +38,7 @@ import android.view.Menu;
 import android.view.View;
 
 import androidx.fragment.app.FragmentTransaction;
+
 import com.owncloud.android.R;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
@@ -44,18 +47,19 @@ import com.owncloud.android.presentation.authentication.AccountUtils;
 import com.owncloud.android.presentation.transfers.TransferListFragment;
 import com.owncloud.android.presentation.transfers.TransfersViewModel;
 import com.owncloud.android.utils.MimetypeIconUtil;
-import kotlin.Lazy;
+
 import org.jetbrains.annotations.NotNull;
-import timber.log.Timber;
 
 import java.io.File;
 
-import static org.koin.java.KoinJavaComponent.inject;
+import kotlin.Lazy;
+import timber.log.Timber;
 
 /**
  * Activity listing pending, active, failed and completed uploads. User can delete
  * completed and failed uploads from view.
  */
+@Deprecated(since = "Replaced with TransferListFragment directly in FileDisplayActivity")
 public class UploadListActivity extends FileActivity {
 
     private static final String TAG_UPLOAD_LIST_FRAGMENT = "UPLOAD_LIST_FRAGMENT";
