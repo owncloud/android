@@ -2,7 +2,9 @@
  * ownCloud Android client application
  *
  * @author Abel García de Prada
- * Copyright (C) 2020 ownCloud GmbH.
+ * @author Jorge Aguado Recio
+ *
+ * Copyright (C) 2025 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -27,6 +29,7 @@ import com.owncloud.android.lib.resources.users.RemoteUserInfo
 import com.owncloud.android.lib.resources.users.services.implementation.OCUserService
 import com.owncloud.android.testutil.OC_ACCOUNT_NAME
 import com.owncloud.android.testutil.OC_USER_AVATAR
+import com.owncloud.android.testutil.OC_USER_ID
 import com.owncloud.android.testutil.OC_USER_INFO
 import com.owncloud.android.testutil.OC_USER_QUOTA
 import com.owncloud.android.utils.createRemoteOperationResultMock
@@ -122,6 +125,22 @@ class OCRemoteUserDataSourceTest {
         assertEquals(OC_USER_AVATAR, userAvatar)
 
         verify(exactly = 1) { ocUserService.getUserAvatar(avatarDimension) }
+    }
+
+    @Test
+    fun `getUserId returns String containing the user id`() {
+        val getUserIdResult: RemoteOperationResult<String> = createRemoteOperationResultMock(data = OC_USER_ID, isSuccess = true)
+
+        every {
+            ocUserService.getUserId()
+        } returns getUserIdResult
+
+        val userId = ocRemoteUserDataSource.getUserId(OC_ACCOUNT_NAME)
+        assertEquals(OC_USER_ID, userId)
+
+        verify(exactly = 1) {
+            ocUserService.getUserId()
+        }
     }
 }
 
