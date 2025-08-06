@@ -488,6 +488,8 @@ class MainFileListFragment : Fragment(),
         // Observe transfers
         observeTransfers()
 
+        observeClearSelectionEvents()
+
     }
 
     private fun observeCurrentFolderDisplayed() {
@@ -919,6 +921,12 @@ class MainFileListFragment : Fragment(),
 
     }
 
+    private fun observeClearSelectionEvents() {
+        collectLatestLifecycleFlow(fileOperationsViewModel.disableSelectionModeEvent) {
+            disableSelectionMode()
+        }
+    }
+
     fun navigateToFolderId(folderId: Long) {
         mainFileListViewModel.navigateToFolderId(folderId)
     }
@@ -1245,8 +1253,6 @@ class MainFileListFragment : Fragment(),
     private fun onShowRemoveDialog(filesToRemove: List<OCFile>, isAvailableLocallyAndNotAvailableOffline: Boolean) {
         val dialog = RemoveFilesDialogFragment.newInstance(ArrayList(filesToRemove), isAvailableLocallyAndNotAvailableOffline)
         dialog.show(requireActivity().supportFragmentManager, TAG_REMOVE_FILES_DIALOG_FRAGMENT)
-        fileListAdapter.clearSelection()
-        updateActionModeAfterTogglingSelected()
     }
 
     override fun createShortcutFileFromApp(fileName: String, url: String) {
@@ -1355,29 +1361,25 @@ class MainFileListFragment : Fragment(),
         return when (menuId) {
             R.id.action_share_file -> {
                 fileActions?.onShareFileClicked(singleFile)
-                fileListAdapter.clearSelection()
-                updateActionModeAfterTogglingSelected()
+                disableSelectionMode()
                 true
             }
 
             R.id.action_open_file_with -> {
                 fileActions?.openFile(singleFile)
-                fileListAdapter.clearSelection()
-                updateActionModeAfterTogglingSelected()
+                disableSelectionMode()
                 true
             }
 
             R.id.action_rename_file -> {
                 val dialog = RenameFileDialogFragment.newInstance(singleFile)
                 dialog.show(requireActivity().supportFragmentManager, FRAGMENT_TAG_RENAME_FILE)
-                fileListAdapter.clearSelection()
-                updateActionModeAfterTogglingSelected()
+                disableSelectionMode()
                 true
             }
 
             R.id.action_see_details -> {
-                fileListAdapter.clearSelection()
-                updateActionModeAfterTogglingSelected()
+                disableSelectionMode()
                 fileActions?.showDetails(singleFile)
                 true
             }
@@ -1483,8 +1485,7 @@ class MainFileListFragment : Fragment(),
                 action.putParcelableArrayListExtra(FolderPickerActivity.EXTRA_FILES, checkedFiles)
                 action.putExtra(FolderPickerActivity.EXTRA_PICKER_MODE, FolderPickerActivity.PickerMode.MOVE)
                 requireActivity().startActivityForResult(action, FileDisplayActivity.REQUEST_CODE__MOVE_FILES)
-                fileListAdapter.clearSelection()
-                updateActionModeAfterTogglingSelected()
+                disableSelectionMode()
                 true
             }
 
@@ -1493,8 +1494,7 @@ class MainFileListFragment : Fragment(),
                 action.putParcelableArrayListExtra(FolderPickerActivity.EXTRA_FILES, checkedFiles)
                 action.putExtra(FolderPickerActivity.EXTRA_PICKER_MODE, FolderPickerActivity.PickerMode.COPY)
                 requireActivity().startActivityForResult(action, FileDisplayActivity.REQUEST_CODE__COPY_FILES)
-                fileListAdapter.clearSelection()
-                updateActionModeAfterTogglingSelected()
+                disableSelectionMode()
                 true
             }
 
@@ -1577,6 +1577,11 @@ class MainFileListFragment : Fragment(),
                 fileOperationsViewModel.performOperation(FileOperation.SynchronizeFileOperation(fileToSync = file, accountName = file.owner))
             }
         }
+    }
+
+    private fun disableSelectionMode() {
+        fileListAdapter.clearSelection()
+        updateActionModeAfterTogglingSelected()
     }
 
     fun setProgressBarAsIndeterminate(indeterminate: Boolean) {
