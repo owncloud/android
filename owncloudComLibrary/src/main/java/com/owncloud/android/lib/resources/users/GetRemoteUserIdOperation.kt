@@ -43,7 +43,7 @@ class GetRemoteUserIdOperation: RemoteOperation<String>() {
             val response = getMethod.getResponseBodyAsString()
 
             if (status == HttpConstants.HTTP_OK) {
-                Timber.d("Successful response $response")
+                Timber.d("Successful response: $response")
 
                 val moshi: Moshi = Moshi.Builder().build()
                 val adapter: JsonAdapter<GraphMeResponse> = moshi.adapter(GraphMeResponse::class.java)
@@ -51,10 +51,10 @@ class GetRemoteUserIdOperation: RemoteOperation<String>() {
                 result = RemoteOperationResult(ResultCode.OK)
                 result.data = getMethod.getResponseBodyAsString().let { adapter.fromJson(it)!!.id }
 
-                Timber.d("Get User Id completed and parsed to ${result.data}")
+                Timber.d("Get user id completed and parsed to ${result.data}")
             } else {
                 result = RemoteOperationResult(getMethod)
-                Timber.e("Failed response while getting user id status code: $status, response: $response")
+                Timber.e("Failed response while getting user id; status code: $status, response: $response")
             }
         } catch (e: Exception) {
             result = RemoteOperationResult(e)
