@@ -112,6 +112,9 @@ class FileOperationsViewModel(
 
     val openDialogs = mutableListOf<FileAlreadyExistsDialog>()
 
+    private val _disableSelectionModeEvent = MutableSharedFlow<Unit>()
+    val disableSelectionModeEvent: SharedFlow<Unit> = _disableSelectionModeEvent
+
     // Used to save the last operation folder
     private var lastTargetFolder: OCFile? = null
 
@@ -221,6 +224,9 @@ class FileOperationsViewModel(
     }
 
     private fun removeOperation(fileOperation: FileOperation.RemoveOperation) {
+        viewModelScope.launch {
+            _disableSelectionModeEvent.emit(Unit)
+        }
         runOperation(
             liveData = _removeFileLiveData,
             useCase = removeFileUseCase,
