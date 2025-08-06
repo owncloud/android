@@ -34,15 +34,15 @@ public class FeatureList {
 
     static final private FeatureItem[] featuresList = {
             // Basic features showed on first install
-            new FeatureItem(R.drawable.whats_new_files, R.string.welcome_feature_1_title,
+            new FeatureItem(R.drawable.whats_new_placeholder, R.string.welcome_feature_1_title,
                     R.string.welcome_feature_1_text),
-            new FeatureItem(R.drawable.whats_new_share, R.string.welcome_feature_2_title,
+            new FeatureItem(R.drawable.whats_new_placeholder, R.string.welcome_feature_2_title,
                     R.string.welcome_feature_2_text),
-            new FeatureItem(R.drawable.whats_new_accounts, R.string.welcome_feature_3_title,
-                    R.string.welcome_feature_3_text),
-            new FeatureItem(R.drawable.whats_new_camera_uploads, R.string.welcome_feature_4_title,
+//            new FeatureItem(R.drawable.whats_new_accounts, R.string.welcome_feature_3_title,
+//                    R.string.welcome_feature_3_text),
+            new FeatureItem(R.drawable.whats_new_placeholder, R.string.welcome_feature_4_title,
                     R.string.welcome_feature_4_text),
-            new FeatureItem(R.drawable.whats_new_video_streaming, R.string.welcome_feature_5_title,
+            new FeatureItem(R.drawable.whats_new_placeholder, R.string.welcome_feature_5_title,
                     R.string.welcome_feature_5_text)
     };
 

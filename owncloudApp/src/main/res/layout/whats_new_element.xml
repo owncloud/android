@@ -1,36 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:weightSum="100">
+    android:padding="24dp"
+    tools:background="@drawable/bg_welcome">
 
-    <ImageView
+    <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:id="@+id/whatsNewImage"
+        android:layout_height="match_parent"
         android:layout_gravity="center_horizontal"
-        android:gravity="center_horizontal"
-        android:layout_marginBottom="10dp"
-        android:layout_weight="80" />
+        android:maxWidth="480dp"
+        android:minWidth="480dp"
+        android:orientation="vertical"
+        android:weightSum="100">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textStyle="bold"
-        android:textColor="@color/white"
-        android:id="@+id/whatsNewTitle"
-        android:layout_gravity="center_horizontal"
-        android:gravity="center_horizontal" />
+        <ImageView
+            android:id="@+id/whatsNewImage"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="10dp"
+            android:layout_weight="90"
+            android:gravity="start" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:id="@+id/whatsNewText"
-        android:layout_margin="@dimen/standard_margin"
-        android:layout_gravity="center_horizontal"
-        android:gravity="center_horizontal"
-        android:textColor="@color/white" />
-</LinearLayout>
+        <TextView
+            android:id="@+id/whatsNewTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:gravity="start"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            tools:text="@string/welcome_feature_1_title" />
+
+        <TextView
+            android:id="@+id/whatsNewText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginVertical="@dimen/standard_margin"
+            android:gravity="start"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/white"
+            tools:text="@string/welcome_feature_1_text" />
+
+    </LinearLayout>
+</FrameLayout>

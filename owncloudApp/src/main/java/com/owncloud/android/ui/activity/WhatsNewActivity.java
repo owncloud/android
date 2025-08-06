@@ -37,13 +37,14 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.activity.EdgeToEdge;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
-import com.owncloud.android.BuildConfig;
+
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.databinding.WhatsNewActivityBinding;
@@ -75,14 +76,15 @@ public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPa
     }
 
     static private boolean shouldShow(Context context) {
-        return context.getResources().getBoolean(R.bool.wizard_enabled) && !BuildConfig.DEBUG && !BuildConfig.FLAVOR.equals(MainApp.QA_FLAVOR)
-                && context instanceof LoginActivity; // When it is LoginActivity to start it only once
+        Boolean wizardEnabled = context.getResources().getBoolean(R.bool.wizard_enabled);
+        Boolean isLoginActivity = context instanceof LoginActivity; // When it is LoginActivity to start it only once
+        return wizardEnabled && isLoginActivity;
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        EdgeToEdge.enable(this);
         bindingActivity = WhatsNewActivityBinding.inflate(getLayoutInflater());
 
         setContentView(bindingActivity.getRoot());
@@ -102,14 +104,19 @@ public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPa
             if (mProgress.hasNextStep()) {
                 mPager.setCurrentItem(mPager.getCurrentItem() + 1, true);
                 mProgress.animateToStep(mPager.getCurrentItem() + 1);
-            } else {
-                finish();
             }
             updateNextButtonIfNeeded();
         });
+        bindingActivity.done.setOnClickListener( view -> {
+            finish();
+        });
         Button skipButton = bindingActivity.skip;
 
-        skipButton.setOnClickListener(view -> finish());
+        skipButton.setOnClickListener(view -> {
+            if (mProgress.hasNextStep()) {
+                finish();
+            }
+        });
 
         updateNextButtonIfNeeded();
 
@@ -127,11 +134,13 @@ public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPa
 
     private void updateNextButtonIfNeeded() {
         if (!mProgress.hasNextStep()) {
-            mForwardFinishButton.setImageResource(R.drawable.ic_done_white);
-            mForwardFinishButton.setBackground(getResources().getDrawable(R.drawable.round_button));
+            bindingActivity.skip.setVisibility(View.INVISIBLE);
+            bindingActivity.forward.setVisibility(View.GONE);
+            bindingActivity.done.setVisibility(View.VISIBLE);
         } else {
-            mForwardFinishButton.setImageResource(R.drawable.ic_arrow_forward);
-            mForwardFinishButton.setBackground(null);
+            bindingActivity.skip.setVisibility(View.VISIBLE);
+            bindingActivity.forward.setVisibility(View.VISIBLE);
+            bindingActivity.done.setVisibility(View.GONE);
         }
     }
 
