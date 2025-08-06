@@ -3,4 +3,9 @@
     <string name="drawer_menu_sign_out">Sign out</string>
     <string name="setup_btn_next">Next</string>
     <string name="welcome_feature_done_button">Done</string>
+
+    <string name="homecloud_login_email">Email</string>
+    <string name="homecloud_login_server_address">Connecting to</string>
+    <string name="homecloud_login_password">Password</string>
+    <string name="homecloud_reset_password">Reset Password</string>
 </resources>

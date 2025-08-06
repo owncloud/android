@@ -69,11 +69,7 @@ class AuthenticationViewModel(
     private val _accountDiscovery = MediatorLiveData<Event<UIResult<Unit>>>()
     val accountDiscovery: LiveData<Event<UIResult<Unit>>> = _accountDiscovery
 
-    private val _screenState = MutableLiveData<LoginScreenState>(
-        LoginScreenState(
-            ctaButtonLabel = contextProvider.getString(R.string.setup_btn_next)
-        )
-    )
+    private val _screenState = MutableLiveData(LoginScreenState())
     val screenState: LiveData<LoginScreenState> = _screenState
 
     var launchedFromDeepLink = false
@@ -107,48 +103,18 @@ class AuthenticationViewModel(
 
     fun handleCtaButtonClicked() {
         val currentValue = _screenState.value ?: return
-        if (currentValue.credentialsAreVisible) {
-            if (currentValue.url.isNotEmpty()) {
-                getServerInfo(serverUrl = currentValue.url, creatingAccount = false)
-            }
-        } else {
-            _screenState.update {
-                it.copy(
-                    credentialsAreVisible = true,
-                )
-            }
-            updateScreenState()
+        if (currentValue.url.isNotEmpty()) {
+            getServerInfo(serverUrl = currentValue.url, creatingAccount = false)
         }
     }
 
     private fun updateScreenState() {
         val currentValue = _screenState.value ?: return
         when {
-            currentValue.url.isEmpty() -> {
-                _screenState.update {
-                    it.copy(
-                        credentialsAreVisible = false,
-                        ctaButtonEnabled = false,
-                        ctaButtonLabel = contextProvider.getString(R.string.setup_btn_next),
-                        password = "",
-                    )
-                }
-            }
-
-            !currentValue.credentialsAreVisible -> { // url is not empty, but credentials are not displayed yet
-                _screenState.update {
-                    it.copy(
-                        ctaButtonEnabled = true,
-                        ctaButtonLabel = contextProvider.getString(R.string.setup_btn_next),
-                    )
-                }
-            }
-
             currentValue.username.isEmpty() && currentValue.password.isEmpty() -> {
                 _screenState.update {
                     it.copy(
                         ctaButtonEnabled = false,
-                        ctaButtonLabel = contextProvider.getString(R.string.setup_btn_login),
                     )
                 }
             }
@@ -157,7 +123,6 @@ class AuthenticationViewModel(
                 _screenState.update {
                     it.copy(
                         ctaButtonEnabled = true,
-                        ctaButtonLabel = contextProvider.getString(R.string.setup_btn_login),
                     )
                 }
             }
@@ -237,9 +202,7 @@ class AuthenticationViewModel(
 
 data class LoginScreenState(
     val ctaButtonEnabled: Boolean = false,
-    val ctaButtonLabel: String,
     val username: String = "",
     val password: String = "",
     val url: String = "",
-    val credentialsAreVisible: Boolean = false,
 )

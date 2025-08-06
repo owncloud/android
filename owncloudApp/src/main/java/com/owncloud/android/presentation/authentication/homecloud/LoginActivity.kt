@@ -36,7 +36,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.WindowManager.LayoutParams.FLAG_SECURE
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.owncloud.android.BuildConfig
@@ -75,8 +74,6 @@ import com.owncloud.android.providers.ContextProvider
 import com.owncloud.android.providers.MdmProvider
 import com.owncloud.android.ui.activity.FileDisplayActivity
 import com.owncloud.android.ui.dialog.SslUntrustedCertDialog
-import com.owncloud.android.utils.CONFIGURATION_SERVER_URL
-import com.owncloud.android.utils.CONFIGURATION_SERVER_URL_INPUT_VISIBILITY
 import com.owncloud.android.utils.PreferenceUtils
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -153,10 +150,14 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         binding.root.filterTouchesWhenObscured =
             PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(this@LoginActivity)
 
-        initBrandableOptionsUI()
-
         binding.ctaButton.setOnClickListener {
             authenticationViewModel.handleCtaButtonClicked()
+        }
+
+        binding.resetPasswordLink.setOnClickListener {
+            // TODO: Implement reset password functionality
+            // For now, show a toast message
+            showMessageInSnackbar(message = "Not implemented yet")
         }
 
         binding.settingsLink.setOnClickListener {
@@ -237,9 +238,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         }
 
         authenticationViewModel.screenState.observe(this) {
-            updateLoginButtonState(it.ctaButtonEnabled, it.ctaButtonLabel)
-            binding.accountUsernameContainer.isVisible = it.credentialsAreVisible
-            binding.accountPasswordContainer.isVisible = it.credentialsAreVisible
+            updateLoginButtonState(it.ctaButtonEnabled)
             binding.hostUrlInput.updateTextIfDiffers(it.url)
             binding.accountPassword.updateTextIfDiffers(it.password)
             binding.accountUsername.updateTextIfDiffers(it.username)
@@ -392,21 +391,8 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         showError(getString(R.string.ssl_validator_not_saved))
     }
 
-    private fun initBrandableOptionsUI() {
-        val showInput = mdmProvider.getBrandingBoolean(mdmKey = CONFIGURATION_SERVER_URL_INPUT_VISIBILITY, booleanKey = R.bool.show_server_url_input)
-        binding.hostUrlFrame.isVisible = showInput
-
-        val url = mdmProvider.getBrandingString(mdmKey = CONFIGURATION_SERVER_URL, stringKey = R.string.server_url)
-        if (url.isNotEmpty()) {
-            binding.hostUrlInput.setText(url)
-        }
-    }
-
-    private fun updateLoginButtonState(isEnabled: Boolean, label: String) {
-        binding.ctaButton.run {
-            this.isEnabled = isEnabled
-            this.text = label
-        }
+    private fun updateLoginButtonState(isEnabled: Boolean) {
+        binding.ctaButton.isEnabled = isEnabled
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

@@ -276,7 +276,7 @@
         <item name="colorOnPrimary">@color/homecloud_button_primary_text</item>
     </style>
 
-    <style name="Button.Borderless" parent="Widget.Material3.Button">
+    <style name="Button.Borderless" parent="Widget.Material3.Button.TextButton">
         <item name="android:textColor">@color/selector_borderless_button_color</item>
     </style>
 
