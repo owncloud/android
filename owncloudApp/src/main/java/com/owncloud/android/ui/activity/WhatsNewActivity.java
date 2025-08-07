@@ -38,12 +38,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.viewpager.widget.ViewPager;
+import androidx.viewpager2.adapter.FragmentStateAdapter;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
@@ -57,11 +57,11 @@ import com.owncloud.android.wizard.ProgressIndicator;
 /**
  * @author Bartosz Przybylski
  */
-public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPageChangeListener {
+public class WhatsNewActivity extends FragmentActivity {
 
     private ImageButton mForwardFinishButton;
     private ProgressIndicator mProgress;
-    private ViewPager mPager;
+    private ViewPager2 mPager;
 
     private WhatsNewActivityBinding bindingActivity;
 
@@ -92,12 +92,19 @@ public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPa
         mProgress = bindingActivity.progressIndicator;
         mPager = bindingActivity.contentPanel;
 
-        FeaturesViewAdapter adapter = new FeaturesViewAdapter(getSupportFragmentManager(),
+        FeaturesViewAdapter adapter = new FeaturesViewAdapter(this,
                 FeatureList.get());
 
-        mProgress.setNumberOfSteps(adapter.getCount());
+        mProgress.setNumberOfSteps(adapter.getItemCount());
         mPager.setAdapter(adapter);
-        mPager.addOnPageChangeListener(this);
+        mPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+                mProgress.animateToStep(position + 1);
+                updateNextButtonIfNeeded();
+            }
+        });
 
         mForwardFinishButton = bindingActivity.forward;
         mForwardFinishButton.setOnClickListener(view -> {
@@ -142,21 +149,6 @@ public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPa
             bindingActivity.forward.setVisibility(View.VISIBLE);
             bindingActivity.done.setVisibility(View.GONE);
         }
-    }
-
-    @Override
-    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-    }
-
-    @Override
-    public void onPageSelected(int position) {
-        mProgress.animateToStep(position + 1);
-        updateNextButtonIfNeeded();
-    }
-
-    @Override
-    public void onPageScrollStateChanged(int state) {
-
     }
 
     public static class FeatureFragment extends Fragment {
@@ -204,22 +196,23 @@ public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPa
         }
     }
 
-    private final class FeaturesViewAdapter extends FragmentPagerAdapter {
+    private final class FeaturesViewAdapter extends FragmentStateAdapter {
 
         FeatureItem[] mFeatures;
 
-        public FeaturesViewAdapter(FragmentManager fm, FeatureItem[] features) {
-            super(fm);
+        public FeaturesViewAdapter(FragmentActivity activity, FeatureItem[] features) {
+            super(activity);
             mFeatures = features;
         }
 
+        @NonNull
         @Override
-        public Fragment getItem(int position) {
+        public Fragment createFragment(int position) {
             return FeatureFragment.newInstance(mFeatures[position]);
         }
 
         @Override
-        public int getCount() {
+        public int getItemCount() {
             return mFeatures.length;
         }
     }
