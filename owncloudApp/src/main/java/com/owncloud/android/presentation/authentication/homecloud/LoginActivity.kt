@@ -50,6 +50,7 @@ import com.owncloud.android.domain.exceptions.SSLErrorException
 import com.owncloud.android.domain.exceptions.ServerNotReachableException
 import com.owncloud.android.domain.server.model.ServerInfo
 import com.owncloud.android.extensions.checkPasscodeEnforced
+import com.owncloud.android.extensions.hideSoftKeyboard
 import com.owncloud.android.extensions.manageOptionLockSelected
 import com.owncloud.android.extensions.parseError
 import com.owncloud.android.extensions.showErrorInToast
@@ -75,8 +76,6 @@ import com.owncloud.android.providers.ContextProvider
 import com.owncloud.android.providers.MdmProvider
 import com.owncloud.android.ui.activity.FileDisplayActivity
 import com.owncloud.android.ui.dialog.SslUntrustedCertDialog
-import com.owncloud.android.utils.CONFIGURATION_SERVER_URL
-import com.owncloud.android.utils.CONFIGURATION_SERVER_URL_INPUT_VISIBILITY
 import com.owncloud.android.utils.PreferenceUtils
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -153,10 +152,15 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         binding.root.filterTouchesWhenObscured =
             PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(this@LoginActivity)
 
-        initBrandableOptionsUI()
-
         binding.ctaButton.setOnClickListener {
+            hideSoftKeyboard()
             authenticationViewModel.handleCtaButtonClicked()
+        }
+
+        binding.resetPasswordLink.setOnClickListener {
+            // TODO: Implement reset password functionality
+            // For now, show a toast message
+            showMessageInSnackbar(message = "Not implemented yet")
         }
 
         binding.settingsLink.setOnClickListener {
@@ -237,9 +241,8 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         }
 
         authenticationViewModel.screenState.observe(this) {
-            updateLoginButtonState(it.ctaButtonEnabled, it.ctaButtonLabel)
-            binding.accountUsernameContainer.isVisible = it.credentialsAreVisible
-            binding.accountPasswordContainer.isVisible = it.credentialsAreVisible
+            updateLoginButtonState(it.ctaButtonEnabled)
+            updateLoadingState(it.isLoading)
             binding.hostUrlInput.updateTextIfDiffers(it.url)
             binding.accountPassword.updateTextIfDiffers(it.password)
             binding.accountUsername.updateTextIfDiffers(it.username)
@@ -265,7 +268,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
                         proceedLogin(serverInfo)
                     }
                     setNegativeButton(android.R.string.cancel) { dialog, which ->
-                        // do nothing
+                        authenticationViewModel.handleInsecureConnectionCancelled()
                     }
                     setCancelable(false)
                     show()
@@ -384,28 +387,24 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
 
     override fun onCancelCertificate() {
         Timber.d("Server certificate is not trusted")
+        authenticationViewModel.handleInsecureConnectionCancelled()
         showError(getString(R.string.ssl_certificate_not_trusted))
     }
 
     override fun onFailedSavingCertificate() {
         Timber.d("Server certificate could not be saved")
+        authenticationViewModel.handleInsecureConnectionCancelled()
         showError(getString(R.string.ssl_validator_not_saved))
     }
 
-    private fun initBrandableOptionsUI() {
-        val showInput = mdmProvider.getBrandingBoolean(mdmKey = CONFIGURATION_SERVER_URL_INPUT_VISIBILITY, booleanKey = R.bool.show_server_url_input)
-        binding.hostUrlFrame.isVisible = showInput
-
-        val url = mdmProvider.getBrandingString(mdmKey = CONFIGURATION_SERVER_URL, stringKey = R.string.server_url)
-        if (url.isNotEmpty()) {
-            binding.hostUrlInput.setText(url)
-        }
+    private fun updateLoginButtonState(isEnabled: Boolean) {
+        binding.ctaButton.isEnabled = isEnabled
     }
 
-    private fun updateLoginButtonState(isEnabled: Boolean, label: String) {
-        binding.ctaButton.run {
-            this.isEnabled = isEnabled
-            this.text = label
+    private fun updateLoadingState(isLoading: Boolean) {
+        with(binding) {
+            ctaButton.isVisible = !isLoading
+            loadingLayout.isVisible = isLoading
         }
     }
 
