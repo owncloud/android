@@ -8,4 +8,5 @@
     <string name="homecloud_login_server_address">Connecting to</string>
     <string name="homecloud_login_password">Password</string>
     <string name="homecloud_reset_password">Reset Password</string>
+    <string name="homecloud_login_loading">Logging in to your account</string>
 </resources>

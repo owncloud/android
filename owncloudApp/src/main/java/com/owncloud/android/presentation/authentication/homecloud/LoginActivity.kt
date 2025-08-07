@@ -36,6 +36,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.WindowManager.LayoutParams.FLAG_SECURE
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.owncloud.android.BuildConfig
@@ -49,6 +50,7 @@ import com.owncloud.android.domain.exceptions.SSLErrorException
 import com.owncloud.android.domain.exceptions.ServerNotReachableException
 import com.owncloud.android.domain.server.model.ServerInfo
 import com.owncloud.android.extensions.checkPasscodeEnforced
+import com.owncloud.android.extensions.hideSoftKeyboard
 import com.owncloud.android.extensions.manageOptionLockSelected
 import com.owncloud.android.extensions.parseError
 import com.owncloud.android.extensions.showErrorInToast
@@ -151,6 +153,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
             PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(this@LoginActivity)
 
         binding.ctaButton.setOnClickListener {
+            hideSoftKeyboard()
             authenticationViewModel.handleCtaButtonClicked()
         }
 
@@ -239,6 +242,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
 
         authenticationViewModel.screenState.observe(this) {
             updateLoginButtonState(it.ctaButtonEnabled)
+            updateLoadingState(it.isLoading)
             binding.hostUrlInput.updateTextIfDiffers(it.url)
             binding.accountPassword.updateTextIfDiffers(it.password)
             binding.accountUsername.updateTextIfDiffers(it.username)
@@ -264,7 +268,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
                         proceedLogin(serverInfo)
                     }
                     setNegativeButton(android.R.string.cancel) { dialog, which ->
-                        // do nothing
+                        authenticationViewModel.handleInsecureConnectionCancelled()
                     }
                     setCancelable(false)
                     show()
@@ -383,16 +387,25 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
 
     override fun onCancelCertificate() {
         Timber.d("Server certificate is not trusted")
+        authenticationViewModel.handleInsecureConnectionCancelled()
         showError(getString(R.string.ssl_certificate_not_trusted))
     }
 
     override fun onFailedSavingCertificate() {
         Timber.d("Server certificate could not be saved")
+        authenticationViewModel.handleInsecureConnectionCancelled()
         showError(getString(R.string.ssl_validator_not_saved))
     }
 
     private fun updateLoginButtonState(isEnabled: Boolean) {
         binding.ctaButton.isEnabled = isEnabled
+    }
+
+    private fun updateLoadingState(isLoading: Boolean) {
+        with(binding) {
+            ctaButton.isVisible = !isLoading
+            loadingLayout.isVisible = isLoading
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

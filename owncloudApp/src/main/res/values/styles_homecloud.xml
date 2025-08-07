@@ -71,6 +71,8 @@
         <!-- Buttons -->
         <item name="materialButtonStyle">@style/Button.Primary</item>
 
+        <item name="circularProgressIndicatorStyle">@style/Widget.homeCloud.CircularProgressBar</item>
+
         <item name="android:windowOptOutEdgeToEdgeEnforcement" tools:targetApi="35">true</item>
     </style>
 
@@ -221,6 +223,13 @@
         <item name="android:background">@color/homecloud_bar_background</item>
         <item name="android:progressDrawable">@drawable/top_progress_bar_determinate</item>
         <item name="android:indeterminateDrawable">@drawable/top_progress_bar_indeterminate</item>
+    </style>
+
+    <style name="Widget.homeCloud.CircularProgressBar" parent="@style/Widget.Material3.CircularProgressIndicator">
+        <item name="indicatorColor">@color/homecloud_progressbar_indicator</item>
+        <item name="trackThickness">4dp</item>
+        <item name="trackColor">@color/homecloud_progressbar_track</item>
+        <item name="indeterminateTrackVisible">true</item>
     </style>
 
     <!-- Button Bar hack due to Lollipop bug:

@@ -24,7 +24,6 @@ package com.owncloud.android.presentation.authentication.homecloud
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.owncloud.android.R
@@ -69,10 +68,28 @@ class AuthenticationViewModel(
     private val _accountDiscovery = MediatorLiveData<Event<UIResult<Unit>>>()
     val accountDiscovery: LiveData<Event<UIResult<Unit>>> = _accountDiscovery
 
-    private val _screenState = MutableLiveData(LoginScreenState())
+    private val _screenState = MediatorLiveData(LoginScreenState())
     val screenState: LiveData<LoginScreenState> = _screenState
 
     var launchedFromDeepLink = false
+
+    init {
+        _screenState.addSource(_serverInfo) { event ->
+            if (event.peekContent().isError) {
+                resetLoadingState()
+            }
+        }
+        _screenState.addSource(_loginResult) { event ->
+            if (event.peekContent().isError) {
+                resetLoadingState()
+            }
+        }
+        _screenState.addSource(_accountDiscovery) { event ->
+            if (event.peekContent().isError) {
+                resetLoadingState()
+            }
+        }
+    }
 
     fun handleUrlChanged(url: String) {
         _screenState.update {
@@ -104,6 +121,11 @@ class AuthenticationViewModel(
     fun handleCtaButtonClicked() {
         val currentValue = _screenState.value ?: return
         if (currentValue.url.isNotEmpty()) {
+            _screenState.update {
+                it.copy(
+                    isLoading = true
+                )
+            }
             getServerInfo(serverUrl = currentValue.url, creatingAccount = false)
         }
     }
@@ -127,6 +149,18 @@ class AuthenticationViewModel(
                 }
             }
         }
+    }
+
+    private fun resetLoadingState() {
+        _screenState.update {
+            it.copy(
+                isLoading = false
+            )
+        }
+    }
+
+    fun handleInsecureConnectionCancelled() {
+        resetLoadingState()
     }
 
     fun getServerInfo(
@@ -202,6 +236,7 @@ class AuthenticationViewModel(
 
 data class LoginScreenState(
     val ctaButtonEnabled: Boolean = false,
+    val isLoading: Boolean = false,
     val username: String = "",
     val password: String = "",
     val url: String = "",

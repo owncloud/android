@@ -23,6 +23,9 @@
     <color name="homecloud_dialog_button_disabled">@color/homecloud_blue_darken_2_24</color>
     <color name="homecloud_dialog_button_enabled">@color/homecloud_blue_darken_2</color>
 
+    <color name="homecloud_progressbar_indicator">@color/homecloud_blue_darken_2</color>
+    <color name="homecloud_progressbar_track">#E0E0E0</color>
+
     <color name="homecloud_menu_background">@color/white</color>
 
     <color name="homecloud_signin_logo_text_color">@color/black</color>
