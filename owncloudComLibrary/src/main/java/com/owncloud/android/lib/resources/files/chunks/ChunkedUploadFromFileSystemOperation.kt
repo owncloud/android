@@ -102,7 +102,7 @@ class ChunkedUploadFromFileSystemOperation(
                 Timber.d("Upload of $localPath to $remotePath, chunk index $chunkIndex, count $chunkCount, HTTP result status $status")
 
                 if (isSuccess(status)) {
-                    result = RemoteOperationResult<Unit>(ResultCode.OK)
+                    result = RemoteOperationResult<Unit>(ResultCode.OK).apply { data = Unit }
                 } else {
                     result = RemoteOperationResult<Unit>(putMethod)
                     break

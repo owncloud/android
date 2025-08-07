@@ -4,8 +4,9 @@
  * @author Abel García de Prada
  * @author Juan Carlos Garrote Gascón
  * @author Aitor Ballesteros Pavón
+ * @author Jorge Aguado Recio
  *
- * Copyright (C) 2024 ownCloud GmbH.
+ * Copyright (C) 2025 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -60,7 +61,8 @@ class RetryUploadFromSystemUseCase(
                     behavior = uploadToRetry.localBehaviour.name,
                     uploadPath = uploadToRetry.remotePath,
                     sourcePath = uploadToRetry.sourcePath,
-                    uploadIdInStorageManager = params.uploadIdInStorageManager
+                    uploadIdInStorageManager = params.uploadIdInStorageManager,
+                    createdBy = uploadToRetry.createdBy
                 )
             )
         } else {

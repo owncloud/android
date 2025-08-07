@@ -1,0 +1,6 @@
+Bugfix: Removed files in failed uploads
+
+Files have been prevented from being deleted from the source folder on upload retries by using the createdBy property.
+
+https://github.com/owncloud/android/issues/4653
+https://github.com/owncloud/android/pull/4657

@@ -8,9 +8,10 @@
  * @author Christian Schabesberger
  * @author Abel García de Prada
  * @author Juan Carlos Garrote Gascón
+ * @author Jorge Aguado Recio
  *
  * Copyright (C) 2011  Bartek Przybylski
- * Copyright (C) 2022 ownCloud GmbH.
+ * Copyright (C) 2025 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -1077,7 +1078,8 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                                             lastModifiedInSeconds = localFile.lastModified().div(1_000).toString(),
                                             behavior = UploadBehavior.MOVE.toString(),
                                             uploadPath = upload.remotePath,
-                                            uploadIdInStorageManager = upload.id
+                                            uploadIdInStorageManager = upload.id,
+                                            createdBy = UploadEnqueuedBy.ENQUEUED_BY_USER
                                         )
                                     )
                                 }
