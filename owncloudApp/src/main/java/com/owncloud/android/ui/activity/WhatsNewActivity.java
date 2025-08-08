@@ -45,11 +45,8 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
-import com.owncloud.android.MainApp;
-import com.owncloud.android.R;
 import com.owncloud.android.databinding.WhatsNewActivityBinding;
 import com.owncloud.android.databinding.WhatsNewElementBinding;
-import com.owncloud.android.presentation.authentication.homecloud.LoginActivity;
 import com.owncloud.android.wizard.FeatureList;
 import com.owncloud.android.wizard.FeatureList.FeatureItem;
 import com.owncloud.android.wizard.ProgressIndicator;
@@ -65,20 +62,21 @@ public class WhatsNewActivity extends FragmentActivity {
 
     private WhatsNewActivityBinding bindingActivity;
 
+    private static final String ONBOARDING_DISPLAYED_KEY = "onboarding_displayed";
+
     static public void runIfNeeded(Context context) {
         if (context instanceof WhatsNewActivity) {
             return;
         }
 
-        if (shouldShow(context)) {
+        if (!isOnboardingDisplayed(context)) {
             context.startActivity(new Intent(context, WhatsNewActivity.class));
         }
     }
 
-    static private boolean shouldShow(Context context) {
-        Boolean wizardEnabled = context.getResources().getBoolean(R.bool.wizard_enabled);
-        Boolean isLoginActivity = context instanceof LoginActivity; // When it is LoginActivity to start it only once
-        return wizardEnabled && isLoginActivity;
+    static private Boolean isOnboardingDisplayed(Context context) {
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
+        return pref.getBoolean(ONBOARDING_DISPLAYED_KEY, false);
     }
 
     @Override
@@ -108,35 +106,46 @@ public class WhatsNewActivity extends FragmentActivity {
 
         mForwardFinishButton = bindingActivity.forward;
         mForwardFinishButton.setOnClickListener(view -> {
-            if (mProgress.hasNextStep()) {
-                mPager.setCurrentItem(mPager.getCurrentItem() + 1, true);
-                mProgress.animateToStep(mPager.getCurrentItem() + 1);
-            }
-            updateNextButtonIfNeeded();
+            goToNextPage();
         });
         bindingActivity.done.setOnClickListener( view -> {
-            finish();
+            handleOnboardingDisplayed();
         });
         Button skipButton = bindingActivity.skip;
 
         skipButton.setOnClickListener(view -> {
             if (mProgress.hasNextStep()) {
-                finish();
+                handleOnboardingDisplayed();
             }
         });
 
         updateNextButtonIfNeeded();
-
-        // Wizard already shown
-        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
-        SharedPreferences.Editor editor = pref.edit();
-        editor.putInt(MainApp.PREFERENCE_KEY_LAST_SEEN_VERSION_CODE, MainApp.Companion.getVersionCode());
-        editor.apply();
     }
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+        if (mPager.getCurrentItem() > 0) {
+            goToPreviousPage();
+        } else {
+            handleOnboardingDisplayed();
+            super.onBackPressed();
+        }
+    }
+
+    private void goToNextPage() {
+        if (mProgress.hasNextStep()) {
+            mPager.setCurrentItem(mPager.getCurrentItem() + 1, true);
+            mProgress.animateToStep(mPager.getCurrentItem() + 1);
+        }
+        updateNextButtonIfNeeded();
+    }
+
+    private void goToPreviousPage() {
+        if (mPager.getCurrentItem() > 0) {
+            mPager.setCurrentItem(mPager.getCurrentItem() - 1, true);
+            mProgress.animateToStep(mPager.getCurrentItem() + 1);
+        }
+        updateNextButtonIfNeeded();
     }
 
     private void updateNextButtonIfNeeded() {
@@ -194,6 +203,15 @@ public class WhatsNewActivity extends FragmentActivity {
 
             return bindingElement.getRoot();
         }
+    }
+
+    private void handleOnboardingDisplayed() {
+        // Wizard already shown
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putBoolean(ONBOARDING_DISPLAYED_KEY, true);
+        editor.apply();
+        finish();
     }
 
     private final class FeaturesViewAdapter extends FragmentStateAdapter {

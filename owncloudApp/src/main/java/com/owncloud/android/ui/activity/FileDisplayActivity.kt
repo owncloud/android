@@ -286,8 +286,8 @@ class FileDisplayActivity : FileActivity(),
             AppRater.appLaunched(this, packageName)
         }
 
-
         checkNotificationPermission()
+        WhatsNewActivity.runIfNeeded(this)
         Timber.v("onCreate() end")
     }
 

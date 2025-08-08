@@ -37,7 +37,6 @@ import android.os.Build
 import android.os.Bundle
 import android.view.WindowManager
 import android.widget.CheckBox
-import androidx.appcompat.app.AlertDialog
 import androidx.core.content.pm.PackageInfoCompat
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.owncloud.android.data.providers.implementation.OCSharedPreferencesProvider
@@ -70,7 +69,6 @@ import com.owncloud.android.providers.LogsProvider
 import com.owncloud.android.providers.MdmProvider
 import com.owncloud.android.ui.activity.FileDisplayActivity
 import com.owncloud.android.ui.activity.FileDisplayActivity.Companion.PREFERENCE_CLEAR_DATA_ALREADY_TRIGGERED
-import com.owncloud.android.ui.activity.WhatsNewActivity
 import com.owncloud.android.utils.CONFIGURATION_ALLOW_SCREENSHOTS
 import com.owncloud.android.utils.DOWNLOAD_NOTIFICATION_CHANNEL_ID
 import com.owncloud.android.utils.DebugInjector
@@ -131,38 +129,32 @@ class MainApp : Application() {
                     activity !is BiometricActivity
                 ) {
                     StorageMigrationActivity.runIfNeeded(activity)
-                    if (isFirstRun()) {
-                        WhatsNewActivity.runIfNeeded(activity)
+                    ReleaseNotesActivity.runIfNeeded(activity)
 
-                    } else {
-                        ReleaseNotesActivity.runIfNeeded(activity)
-
-                        val pref = PreferenceManager.getDefaultSharedPreferences(appContext)
-                        val clearDataAlreadyTriggered = pref.contains(PREFERENCE_CLEAR_DATA_ALREADY_TRIGGERED)
-                        if (clearDataAlreadyTriggered || isNewVersionCode()) {
-                            val dontShowAgainDialogPref = pref.getBoolean(PREFERENCE_KEY_DONT_SHOW_OCIS_ACCOUNT_WARNING_DIALOG, false)
-                            if (!dontShowAgainDialogPref && shouldShowDialog(activity)) {
-                                val checkboxDialog = activity.layoutInflater.inflate(R.layout.checkbox_dialog, null)
-                                val checkbox = checkboxDialog.findViewById<CheckBox>(R.id.checkbox_dialog)
-                                checkbox.setText(R.string.ocis_accounts_warning_checkbox_message)
-                                val builder = MaterialAlertDialogBuilder(activity).apply {
-                                    setView(checkboxDialog)
-                                    setTitle(R.string.ocis_accounts_warning_title)
-                                    setMessage(R.string.ocis_accounts_warning_message)
-                                    setCancelable(false)
-                                    setPositiveButton(R.string.ocis_accounts_warning_button) { _, _ ->
-                                        if (checkbox.isChecked) {
-                                            pref.edit().putBoolean(PREFERENCE_KEY_DONT_SHOW_OCIS_ACCOUNT_WARNING_DIALOG, true).apply()
-                                        }
+                    val pref = PreferenceManager.getDefaultSharedPreferences(appContext)
+                    val clearDataAlreadyTriggered = pref.contains(PREFERENCE_CLEAR_DATA_ALREADY_TRIGGERED)
+                    if (clearDataAlreadyTriggered || isNewVersionCode()) {
+                        val dontShowAgainDialogPref = pref.getBoolean(PREFERENCE_KEY_DONT_SHOW_OCIS_ACCOUNT_WARNING_DIALOG, false)
+                        if (!dontShowAgainDialogPref && shouldShowDialog(activity)) {
+                            val checkboxDialog = activity.layoutInflater.inflate(R.layout.checkbox_dialog, null)
+                            val checkbox = checkboxDialog.findViewById<CheckBox>(R.id.checkbox_dialog)
+                            checkbox.setText(R.string.ocis_accounts_warning_checkbox_message)
+                            val builder = MaterialAlertDialogBuilder(activity).apply {
+                                setView(checkboxDialog)
+                                setTitle(R.string.ocis_accounts_warning_title)
+                                setMessage(R.string.ocis_accounts_warning_message)
+                                setCancelable(false)
+                                setPositiveButton(R.string.ocis_accounts_warning_button) { _, _ ->
+                                    if (checkbox.isChecked) {
+                                        pref.edit().putBoolean(PREFERENCE_KEY_DONT_SHOW_OCIS_ACCOUNT_WARNING_DIALOG, true).apply()
                                     }
                                 }
-                                val alertDialog = builder.create()
-                                alertDialog.show()
                             }
-                        } else { // "Clear data" button is pressed from the app settings in the device settings.
-                            AccountUtils.deleteAccounts(appContext)
-                            WhatsNewActivity.runIfNeeded(activity)
+                            val alertDialog = builder.create()
+                            alertDialog.show()
                         }
+                    } else { // "Clear data" button is pressed from the app settings in the device settings.
+                        AccountUtils.deleteAccounts(appContext)
                     }
                 }
 
@@ -311,13 +303,6 @@ class MainApp : Application() {
             description = getString(R.string.file_sync_notification_channel_description),
             importance = IMPORTANCE_LOW
         )
-    }
-
-    private fun isFirstRun(): Boolean {
-        if (getLastSeenVersionCode() != 0) {
-            return false
-        }
-        return AccountUtils.getCurrentOwnCloudAccount(appContext) == null
     }
 
     companion object {
