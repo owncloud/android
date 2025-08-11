@@ -98,6 +98,7 @@ class AuthenticationViewModel(
             )
         }
         updateScreenState()
+        resetLoginError()
     }
 
     fun handleLoginChanged(username: String) {
@@ -107,6 +108,7 @@ class AuthenticationViewModel(
             )
         }
         updateScreenState()
+        resetLoginError()
     }
 
     fun handlePasswordChanged(password: String) {
@@ -116,6 +118,7 @@ class AuthenticationViewModel(
             )
         }
         updateScreenState()
+        resetLoginError()
     }
 
     fun handleCtaButtonClicked() {
@@ -232,12 +235,64 @@ class AuthenticationViewModel(
         }
         workManagerProvider.enqueueAccountDiscovery(accountName)
     }
+
+    fun showLoginError(message: String, highlightFields: Boolean) {
+        _screenState.update {
+            it.copy(
+                error = it.error.copy(
+                    fields = it.error.fields.toMutableMap().apply {
+                        if (highlightFields) {
+                            this[Field.EMAIL] = " "
+                            this[Field.PASSWORD] = " "
+                        }
+                    },
+                    message = message,
+                )
+            )
+        }
+    }
+
+    fun showServerError(message: CharSequence) {
+        _screenState.update {
+            it.copy(
+                error = it.error.copy(
+                    fields = it.error.fields.toMutableMap().apply {
+                        this[Field.SERVER] = message
+                    }
+                )
+            )
+        }
+    }
+
+    private fun resetLoginError() {
+        _screenState.update {
+            it.copy(
+                error = LoginError.none()
+            )
+        }
+    }
+
+    data class LoginScreenState(
+        val ctaButtonEnabled: Boolean = false,
+        val isLoading: Boolean = false,
+        val username: String = "",
+        val password: String = "",
+        val url: String = "",
+        val error: LoginError = LoginError.none(),
+    )
+
+    data class LoginError(
+        val message: String,
+        val fields: Map<Field, CharSequence?>,
+    ) {
+        companion object {
+            fun none() = LoginError(message = "", fields = emptyMap())
+        }
+    }
+
+    enum class Field {
+        EMAIL, PASSWORD, SERVER,
+    }
 }
 
-data class LoginScreenState(
-    val ctaButtonEnabled: Boolean = false,
-    val isLoading: Boolean = false,
-    val username: String = "",
-    val password: String = "",
-    val url: String = "",
-)
+
