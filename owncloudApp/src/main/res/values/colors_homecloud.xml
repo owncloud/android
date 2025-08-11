@@ -8,6 +8,7 @@
     <color name="homecloud_surface">@color/white</color>
     <color name="homecloud_input_stroke_focused">@color/homecloud_blue_darken_2</color>
     <color name="homecloud_input_stroke_nonfocused">@color/homecloud_border_gray</color>
+    <color name="homecloud_input_placeholder">#7A7A7A</color>
     <color name="homecloud_drawer_header_background">#F0F1F5</color>
 
     <color name="homecloud_bar_background">#FFFFFE</color>

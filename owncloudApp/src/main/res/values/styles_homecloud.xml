@@ -265,9 +265,8 @@
         <item name="boxBackgroundColor">@android:color/transparent</item>
         <item name="boxStrokeColor">@color/selector_input_border</item>
         <item name="boxStrokeWidth">1dp</item>
-        <item name="boxStrokeWidthFocused">1dp</item>
-        <item name="hintTextColor">@color/homecloud_input_stroke_focused</item>
-        <item name="android:textColorHint">@color/homecloud_input_stroke_focused</item>
+        <item name="boxStrokeWidthFocused">3dp</item>
+        <item name="hintTextColor">@color/selector_input_hint</item>
         <item name="shapeAppearance">@style/homeCloud.TextInputLayout.InputShape</item>
         <item name="endIconTint">?attr/colorPrimary</item>
         <item name="passwordToggleTint">?attr/colorPrimary</item>
