@@ -282,8 +282,10 @@
     </style>
 
     <style name="Button.Primary" parent="Widget.Material3.Button">
-        <item name="colorPrimary">@color/homecloud_button_primary_background</item>
-        <item name="colorOnPrimary">@color/homecloud_button_primary_text</item>
+        <item name="colorPrimary">@color/selector_button_primary_background</item>
+        <item name="colorOnPrimary">@color/selector_button_primary_text</item>
+        <item name="backgroundTint">@color/selector_button_primary_background</item>
+        <item name="android:textColor">@color/selector_button_primary_text</item>
     </style>
 
     <style name="Button.Borderless" parent="Widget.Material3.Button.TextButton">
