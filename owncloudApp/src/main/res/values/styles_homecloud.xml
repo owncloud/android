@@ -264,13 +264,14 @@
     <style name="homeCloud.TextInputLayout.OutlinedBox" parent="Widget.Material3.TextInputLayout.OutlinedBox">
         <item name="boxBackgroundColor">@android:color/transparent</item>
         <item name="boxStrokeColor">@color/selector_input_border</item>
+        <item name="boxStrokeErrorColor">@color/homecloud_error</item>
         <item name="boxStrokeWidth">1dp</item>
-        <item name="boxStrokeWidthFocused">1dp</item>
-        <item name="hintTextColor">@color/homecloud_input_stroke_focused</item>
-        <item name="android:textColorHint">@color/homecloud_input_stroke_focused</item>
+        <item name="boxStrokeWidthFocused">3dp</item>
+        <item name="hintTextColor">@color/selector_input_hint</item>
         <item name="shapeAppearance">@style/homeCloud.TextInputLayout.InputShape</item>
         <item name="endIconTint">?attr/colorPrimary</item>
         <item name="passwordToggleTint">?attr/colorPrimary</item>
+        <item name="errorIconDrawable">@null</item>
     </style>
 
     <style name="Button.Secondary" parent="Widget.Material3.Button.OutlinedButton">
@@ -281,8 +282,10 @@
     </style>
 
     <style name="Button.Primary" parent="Widget.Material3.Button">
-        <item name="colorPrimary">@color/homecloud_button_primary_background</item>
-        <item name="colorOnPrimary">@color/homecloud_button_primary_text</item>
+        <item name="colorPrimary">@color/selector_button_primary_background</item>
+        <item name="colorOnPrimary">@color/selector_button_primary_text</item>
+        <item name="backgroundTint">@color/selector_button_primary_background</item>
+        <item name="android:textColor">@color/selector_button_primary_text</item>
     </style>
 
     <style name="Button.Borderless" parent="Widget.Material3.Button.TextButton">

@@ -34,12 +34,10 @@ import android.accounts.AccountAuthenticatorResponse
 import android.accounts.AccountManager
 import android.content.Intent
 import android.os.Bundle
-import android.view.WindowManager.LayoutParams.FLAG_SECURE
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.owncloud.android.BuildConfig
 import com.owncloud.android.MainApp.Companion.accountType
 import com.owncloud.android.R
 import com.owncloud.android.databinding.AccountSetupHomecloudBinding
@@ -73,7 +71,6 @@ import com.owncloud.android.presentation.security.LockType
 import com.owncloud.android.presentation.security.SecurityEnforced
 import com.owncloud.android.presentation.settings.SettingsActivity
 import com.owncloud.android.providers.ContextProvider
-import com.owncloud.android.providers.MdmProvider
 import com.owncloud.android.ui.activity.FileDisplayActivity
 import com.owncloud.android.ui.dialog.SslUntrustedCertDialog
 import com.owncloud.android.utils.PreferenceUtils
@@ -85,7 +82,6 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
 
     private val authenticationViewModel by viewModel<AuthenticationViewModel>()
     private val contextProvider by inject<ContextProvider>()
-    private val mdmProvider by inject<MdmProvider>()
 
     private var authTokenType: String? = null
     private var loginAction: Byte = ACTION_CREATE
@@ -104,11 +100,6 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         super.onCreate(savedInstanceState)
 
         checkPasscodeEnforced(this)
-
-        // Protection against screen recording
-        if (!BuildConfig.DEBUG) {
-            window.addFlags(FLAG_SECURE)
-        } // else, let it go, or taking screenshots & testing will not be possible
 
         // Get values from intent
         handleDeepLink()
@@ -246,6 +237,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
             binding.hostUrlInput.updateTextIfDiffers(it.url)
             binding.accountPassword.updateTextIfDiffers(it.password)
             binding.accountUsername.updateTextIfDiffers(it.username)
+            showErrorsIfAny(it.error)
         }
     }
 
@@ -319,7 +311,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
             }
         }
         text?.let {
-            showError(it)
+            authenticationViewModel.showServerError(it)
         }
     }
 
@@ -336,25 +328,37 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
     }
 
     private fun loginIsError(uiResult: UIResult.Error<String>) {
-        val text = when (uiResult.error) {
+        when (uiResult.error) {
             is NoNetworkConnectionException, is ServerNotReachableException -> {
-                getString(R.string.error_no_network_connection)
+                authenticationViewModel.showLoginError(
+                    message = getString(R.string.error_no_network_connection),
+                    highlightFields = false,
+                )
             }
 
             else -> {
-                uiResult.error?.parseError("", resources, true)
+                val text = uiResult.error?.parseError("", resources, true)?.toString()
+                authenticationViewModel.showLoginError(
+                    message = text ?: "",
+                    highlightFields = true,
+                )
             }
-        }
-        text?.let {
-            showError(it)
         }
     }
 
-    private fun showError(text: CharSequence) {
-        MaterialAlertDialogBuilder(this)
-            .setMessage(text)
-            .setPositiveButton(android.R.string.ok) { _, _ -> }
-            .show()
+    private fun showErrorsIfAny(loginError: AuthenticationViewModel.LoginError) {
+        loginError.fields.getOrDefault(AuthenticationViewModel.Field.SERVER, null).let { fieldError ->
+            binding.hostUrlInputLayout.error = fieldError
+        }
+        loginError.fields.getOrDefault(AuthenticationViewModel.Field.EMAIL, null).let { fieldError ->
+            binding.accountUsernameContainer.error = fieldError
+        }
+        loginError.fields.getOrDefault(AuthenticationViewModel.Field.PASSWORD, null).let { fieldError ->
+            binding.accountPasswordContainer.error = fieldError
+        }
+        binding.ctaButton.isEnabled = loginError.fields.isEmpty() && loginError.message.isEmpty()
+        binding.errorMessage.text = loginError.message
+        binding.errorMessage.isVisible = loginError.message.isNotBlank()
     }
 
     private fun updateBaseUrlAndHostInput(uiResult: UIResult<String>) {
@@ -388,13 +392,17 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
     override fun onCancelCertificate() {
         Timber.d("Server certificate is not trusted")
         authenticationViewModel.handleInsecureConnectionCancelled()
-        showError(getString(R.string.ssl_certificate_not_trusted))
+        authenticationViewModel.showServerError(
+            getString(R.string.ssl_certificate_not_trusted)
+        )
     }
 
     override fun onFailedSavingCertificate() {
         Timber.d("Server certificate could not be saved")
         authenticationViewModel.handleInsecureConnectionCancelled()
-        showError(getString(R.string.ssl_validator_not_saved))
+        authenticationViewModel.showServerError(
+            getString(R.string.ssl_validator_not_saved)
+        )
     }
 
     private fun updateLoginButtonState(isEnabled: Boolean) {

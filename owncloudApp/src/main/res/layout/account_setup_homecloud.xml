@@ -52,6 +52,8 @@
                     android:id="@+id/thumbnail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="48dp"
+                    android:layout_marginBottom="16dp"
                     android:contentDescription="@string/app_name"
                     android:src="@drawable/ic_homecloud_login_logo" />
 
@@ -66,17 +68,23 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="24dp"
-                        android:layout_marginVertical="16dp"
+                        android:layout_marginTop="16dp"
+                        android:hint="@string/homecloud_login_email_hint"
                         app:endIconDrawable="@drawable/ic_clear_input"
-                        app:endIconMode="clear_text">
+                        app:endIconMode="clear_text"
+                        app:expandedHintEnabled="false"
+                        app:helperText=" "
+                        app:hintAnimationEnabled="false"
+                        app:hintEnabled="true">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/account_username"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:drawablePadding="5dp"
-                            android:hint="@string/homecloud_login_email"
-                            android:inputType="textNoSuggestions">
+                            android:hint="@string/homecloud_login_email_input_hint"
+                            android:inputType="textNoSuggestions"
+                            android:textColorHint="@color/homecloud_input_placeholder">
 
                             <requestFocus />
                         </com.google.android.material.textfield.TextInputEditText>
@@ -87,17 +95,21 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="24dp"
-                        android:layout_marginVertical="16dp"
-                        app:endIconDrawable="@drawable/ic_clear_input"
-                        app:endIconMode="clear_text">
+                        android:layout_marginTop="16dp"
+                        android:hint="@string/homecloud_login_server_address_hint"
+                        app:expandedHintEnabled="false"
+                        app:helperText=" "
+                        app:hintAnimationEnabled="false"
+                        app:hintEnabled="true">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/hostUrlInput"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:drawablePadding="5dp"
-                            android:hint="@string/homecloud_login_server_address"
-                            android:inputType="textUri">
+                            android:hint="@string/homecloud_login_server_address_input_hint"
+                            android:inputType="textUri"
+                            android:textColorHint="@color/homecloud_input_placeholder">
 
                         </com.google.android.material.textfield.TextInputEditText>
                     </com.google.android.material.textfield.TextInputLayout>
@@ -107,30 +119,53 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="24dp"
-                        android:layout_marginVertical="16dp"
-                        app:passwordToggleEnabled="true">
+                        android:layout_marginTop="16dp"
+                        android:hint="@string/homecloud_login_password_hint"
+                        app:endIconDrawable="@drawable/ic_password_visiblity_toggle"
+                        app:endIconMode="password_toggle"
+                        app:expandedHintEnabled="false"
+                        app:helperText=" "
+                        app:hintAnimationEnabled="false"
+                        app:hintEnabled="true">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/account_password"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:drawablePadding="5dp"
-                            android:hint="@string/homecloud_login_password"
-                            android:inputType="textPassword">
+                            android:hint="@string/homecloud_login_password_input_hint"
+                            android:inputType="textPassword"
+                            android:textColorHint="@color/homecloud_input_placeholder">
 
                         </com.google.android.material.textfield.TextInputEditText>
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <Button
                         android:id="@+id/reset_password_link"
+                        style="@style/Button.Borderless"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="40dp"
                         android:layout_gravity="start"
                         android:layout_marginHorizontal="24dp"
-                        android:layout_marginVertical="24dp"
+                        android:layout_marginTop="16dp"
                         android:contentDescription="@string/setup_btn_login"
-                        android:text="@string/homecloud_reset_password"
-                        style="@style/Button.Borderless" />
+                        android:text="@string/homecloud_reset_password" />
+
+                    <TextView
+                        android:id="@+id/error_message"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="24dp"
+                        android:layout_marginTop="16dp"
+                        android:background="@drawable/background_login_error"
+                        android:drawablePadding="16dp"
+                        android:gravity="center_vertical"
+                        android:padding="16dp"
+                        android:visibility="gone"
+                        app:drawableStartCompat="@drawable/ic_exclamation_mark_circle"
+                        app:drawableTint="@color/homecloud_error"
+                        tools:text="Incorrect username or password"
+                        tools:visibility="visible" />
 
                     <Button
                         android:id="@+id/ctaButton"
@@ -138,6 +173,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginHorizontal="24dp"
+                        android:layout_marginTop="16dp"
                         android:contentDescription="@string/setup_btn_login"
                         android:text="@string/setup_btn_login"
                         android:theme="@style/Button.Primary" />
@@ -148,6 +184,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginHorizontal="24dp"
+                        android:layout_marginTop="16dp"
                         android:gravity="center"
                         android:orientation="vertical"
                         android:visibility="gone"
