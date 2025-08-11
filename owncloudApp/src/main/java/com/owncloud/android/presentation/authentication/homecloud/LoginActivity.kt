@@ -34,12 +34,10 @@ import android.accounts.AccountAuthenticatorResponse
 import android.accounts.AccountManager
 import android.content.Intent
 import android.os.Bundle
-import android.view.WindowManager.LayoutParams.FLAG_SECURE
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.owncloud.android.BuildConfig
 import com.owncloud.android.MainApp.Companion.accountType
 import com.owncloud.android.R
 import com.owncloud.android.databinding.AccountSetupHomecloudBinding
@@ -73,7 +71,6 @@ import com.owncloud.android.presentation.security.LockType
 import com.owncloud.android.presentation.security.SecurityEnforced
 import com.owncloud.android.presentation.settings.SettingsActivity
 import com.owncloud.android.providers.ContextProvider
-import com.owncloud.android.providers.MdmProvider
 import com.owncloud.android.ui.activity.FileDisplayActivity
 import com.owncloud.android.ui.dialog.SslUntrustedCertDialog
 import com.owncloud.android.utils.PreferenceUtils
@@ -85,7 +82,6 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
 
     private val authenticationViewModel by viewModel<AuthenticationViewModel>()
     private val contextProvider by inject<ContextProvider>()
-    private val mdmProvider by inject<MdmProvider>()
 
     private var authTokenType: String? = null
     private var loginAction: Byte = ACTION_CREATE
@@ -104,11 +100,6 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         super.onCreate(savedInstanceState)
 
         checkPasscodeEnforced(this)
-
-        // Protection against screen recording
-        if (!BuildConfig.DEBUG) {
-            window.addFlags(FLAG_SECURE)
-        } // else, let it go, or taking screenshots & testing will not be possible
 
         // Get values from intent
         handleDeepLink()
