@@ -307,6 +307,10 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
                 text = getString(R.string.ssl_connection_not_secure)
             }
 
+            uiResult.error is UnknownErrorException -> {
+                text = getString(R.string.homecloud_login_server_connection_error)
+            }
+
             else -> {
                 text = uiResult.error?.parseError("", resources, true)
             }
