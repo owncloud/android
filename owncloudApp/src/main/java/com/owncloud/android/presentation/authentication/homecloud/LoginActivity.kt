@@ -46,6 +46,7 @@ import com.owncloud.android.domain.exceptions.OwncloudVersionNotSupportedExcepti
 import com.owncloud.android.domain.exceptions.SSLErrorCode
 import com.owncloud.android.domain.exceptions.SSLErrorException
 import com.owncloud.android.domain.exceptions.ServerNotReachableException
+import com.owncloud.android.domain.exceptions.UnknownErrorException
 import com.owncloud.android.domain.server.model.ServerInfo
 import com.owncloud.android.extensions.checkPasscodeEnforced
 import com.owncloud.android.extensions.hideSoftKeyboard
@@ -356,7 +357,6 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         loginError.fields.getOrDefault(AuthenticationViewModel.Field.PASSWORD, null).let { fieldError ->
             binding.accountPasswordContainer.error = fieldError
         }
-        binding.ctaButton.isEnabled = loginError.fields.isEmpty() && loginError.message.isEmpty()
         binding.errorMessage.text = loginError.message
         binding.errorMessage.isVisible = loginError.message.isNotBlank()
     }
