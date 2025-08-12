@@ -1,0 +1,7 @@
+Enhancement: Add account ID to the user information
+
+The account ID has been added to the Account Manager only for Infinite Scale users.
+This information will be used to fetch all permissions related to space management.
+
+https://github.com/owncloud/android/issues/4605
+https://github.com/owncloud/android/pull/4647
