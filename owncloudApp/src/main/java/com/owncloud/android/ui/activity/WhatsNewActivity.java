@@ -102,13 +102,21 @@ public class WhatsNewActivity extends FragmentActivity {
                 mProgress.animateToStep(position + 1);
                 updateNextButtonIfNeeded();
             }
+
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                super.onPageScrolled(position, positionOffset, positionOffsetPixels);
+                if (positionOffset == 0) { // when snapped to a page
+                    resetScrollOnChildFragments(position);
+                }
+            }
         });
 
         mForwardFinishButton = bindingActivity.forward;
         mForwardFinishButton.setOnClickListener(view -> {
             goToNextPage();
         });
-        bindingActivity.done.setOnClickListener( view -> {
+        bindingActivity.done.setOnClickListener(view -> {
             handleOnboardingDisplayed();
         });
         Button skipButton = bindingActivity.skip;
@@ -161,16 +169,24 @@ public class WhatsNewActivity extends FragmentActivity {
     }
 
     public static class FeatureFragment extends Fragment {
+
+        private static final String POSITION_KEY = "position";
+
         private FeatureItem mItem;
 
         private WhatsNewElementBinding bindingElement;
 
-        static public FeatureFragment newInstance(FeatureItem item) {
+        static public FeatureFragment newInstance(FeatureItem item, int position) {
             FeatureFragment f = new FeatureFragment();
             Bundle args = new Bundle();
             args.putParcelable("feature", item);
+            args.putInt(POSITION_KEY, position);
             f.setArguments(args);
             return f;
+        }
+
+        static public int fragmentPosition(Fragment fragment) {
+            return fragment.getArguments() != null ? fragment.getArguments().getInt(POSITION_KEY, -1) : -1;
         }
 
         @Override
@@ -203,6 +219,10 @@ public class WhatsNewActivity extends FragmentActivity {
 
             return bindingElement.getRoot();
         }
+
+        public void resetScroll() {
+            bindingElement.getRoot().scrollTo(0, 0);
+        }
     }
 
     private void handleOnboardingDisplayed() {
@@ -212,6 +232,14 @@ public class WhatsNewActivity extends FragmentActivity {
         editor.putBoolean(ONBOARDING_DISPLAYED_KEY, true);
         editor.apply();
         finish();
+    }
+
+    private void resetScrollOnChildFragments(int selectedPosition) {
+        // Reset scroll an all child fragments apart from the currently displayed
+        getSupportFragmentManager().getFragments().stream()
+                .filter(fragment -> fragment instanceof FeatureFragment)
+                .filter(fragment -> FeatureFragment.fragmentPosition(fragment) != selectedPosition)
+                .forEach(fragment -> ((FeatureFragment) fragment).resetScroll());
     }
 
     private final class FeaturesViewAdapter extends FragmentStateAdapter {
@@ -226,7 +254,7 @@ public class WhatsNewActivity extends FragmentActivity {
         @NonNull
         @Override
         public Fragment createFragment(int position) {
-            return FeatureFragment.newInstance(mFeatures[position]);
+            return FeatureFragment.newInstance(mFeatures[position], position);
         }
 
         @Override
