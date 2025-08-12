@@ -97,8 +97,8 @@ class AuthenticationViewModel(
                 url = url
             )
         }
-        updateScreenState()
         resetLoginError()
+        updateCtaButtonState()
     }
 
     fun handleLoginChanged(username: String) {
@@ -107,8 +107,8 @@ class AuthenticationViewModel(
                 username = username
             )
         }
-        updateScreenState()
         resetLoginError()
+        updateCtaButtonState()
     }
 
     fun handlePasswordChanged(password: String) {
@@ -117,8 +117,8 @@ class AuthenticationViewModel(
                 password = password
             )
         }
-        updateScreenState()
         resetLoginError()
+        updateCtaButtonState()
     }
 
     fun handleCtaButtonClicked() {
@@ -133,24 +133,15 @@ class AuthenticationViewModel(
         }
     }
 
-    private fun updateScreenState() {
+    private fun updateCtaButtonState() {
         val currentValue = _screenState.value ?: return
-        when {
-            currentValue.username.isEmpty() && currentValue.password.isEmpty() -> {
-                _screenState.update {
-                    it.copy(
-                        ctaButtonEnabled = false,
-                    )
-                }
-            }
-
-            else -> {
-                _screenState.update {
-                    it.copy(
-                        ctaButtonEnabled = true,
-                    )
-                }
-            }
+        val isCtaButtonEnabled = with(currentValue) {
+            url.isNotEmpty() && username.isNotEmpty() && password.isNotEmpty() && error.isEmpty()
+        }
+        _screenState.update {
+            it.copy(
+                ctaButtonEnabled = isCtaButtonEnabled,
+            )
         }
     }
 
@@ -247,7 +238,8 @@ class AuthenticationViewModel(
                         }
                     },
                     message = message,
-                )
+                ),
+                ctaButtonEnabled = false,
             )
         }
     }
@@ -259,7 +251,8 @@ class AuthenticationViewModel(
                     fields = it.error.fields.toMutableMap().apply {
                         this[Field.SERVER] = message
                     }
-                )
+                ),
+                ctaButtonEnabled = false,
             )
         }
     }
@@ -267,7 +260,7 @@ class AuthenticationViewModel(
     private fun resetLoginError() {
         _screenState.update {
             it.copy(
-                error = LoginError.none()
+                error = LoginError.none(),
             )
         }
     }
@@ -285,6 +278,9 @@ class AuthenticationViewModel(
         val message: String,
         val fields: Map<Field, CharSequence?>,
     ) {
+
+        fun isEmpty() = message.isEmpty() && fields.isEmpty()
+
         companion object {
             fun none() = LoginError(message = "", fields = emptyMap())
         }

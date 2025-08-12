@@ -43,6 +43,7 @@
         <item name="colorOnSurface">?attr/colorPrimary</item>
         <item name="colorOnSurfaceVariant">?attr/colorPrimary</item>
         <item name="colorControlNormal">?attr/colorPrimary</item>
+        <item name="colorError">@color/homecloud_error</item>
 
         <item name="android:textColorPrimary">?attr/colorPrimary</item>
         <item name="android:textColorLink">?attr/colorPrimary</item>
@@ -272,6 +273,7 @@
         <item name="endIconTint">?attr/colorPrimary</item>
         <item name="passwordToggleTint">?attr/colorPrimary</item>
         <item name="errorIconDrawable">@null</item>
+        <item name="errorTextColor">@color/homecloud_error</item>
     </style>
 
     <style name="Button.Secondary" parent="Widget.Material3.Button.OutlinedButton">
