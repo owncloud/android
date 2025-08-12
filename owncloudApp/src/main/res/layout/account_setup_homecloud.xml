@@ -121,7 +121,7 @@
                         android:layout_marginHorizontal="24dp"
                         android:layout_marginTop="16dp"
                         android:hint="@string/homecloud_login_password_hint"
-                        app:endIconDrawable="@drawable/ic_password_visiblity_toggle"
+                        app:endIconDrawable="@drawable/ic_password_toggle"
                         app:endIconMode="password_toggle"
                         app:expandedHintEnabled="false"
                         app:helperText=" "
