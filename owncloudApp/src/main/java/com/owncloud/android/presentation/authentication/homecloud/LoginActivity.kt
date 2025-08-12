@@ -145,7 +145,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
             PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(this@LoginActivity)
 
         binding.ctaButton.setOnClickListener {
-            hideSoftKeyboard()
+            hideSoftKeyboard(clearFocus = true)
             authenticationViewModel.handleCtaButtonClicked()
         }
 
