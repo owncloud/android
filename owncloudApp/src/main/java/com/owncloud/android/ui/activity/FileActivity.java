@@ -6,9 +6,10 @@
  * @author Christian Schabesberger
  * @author Abel García de Prada
  * @author Aitor Ballesteros Pavón
+ * @author Jorge Aguado Recio
  * <p>
  * Copyright (C) 2011  Bartek Przybylski
- * Copyright (C) 2024 ownCloud GmbH.
+ * Copyright (C) 2025 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -323,7 +324,7 @@ public class FileActivity extends DrawerActivity
                 AuthenticatorConstants.EXTRA_ACTION,
                 AuthenticatorConstants.ACTION_UPDATE_EXPIRED_TOKEN);
         updateAccountCredentials.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
-        startActivityForResult(updateAccountCredentials, REQUEST_CODE__UPDATE_CREDENTIALS);
+        startActivity(updateAccountCredentials);
     }
 
     /**

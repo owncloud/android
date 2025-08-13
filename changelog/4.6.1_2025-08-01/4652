@@ -1,0 +1,7 @@
+Bugfix: Crash from Google Play Console in TransferListFragment
+
+In order to prevent app crashes, the account parameter from TransferListFragment has
+been removed and the newInstance method has been created to pass parameters safely.
+
+https://github.com/owncloud/android/issues/4650
+https://github.com/owncloud/android/pull/4652

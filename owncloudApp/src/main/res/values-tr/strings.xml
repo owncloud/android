@@ -596,7 +596,6 @@
   <string name="global_proceed">Devam et</string>
   <string name="error_webfinger_username_empty">Kullanıcı adı boş</string>
   <!--Release Notes-->
-  <string name="release_notes_4_6_0_title_duplicated_automatic_uploads">Otomatik yüklemeler iyileştirildi.</string>
   <string name="release_notes_header">%1$s\'da yeni</string>
   <string name="release_notes_footer">%1$s kullandığınız için teşekkürler.\n❤</string>
   <string name="release_notes_proceed">Devam et</string>

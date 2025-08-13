@@ -44,18 +44,18 @@ class ReleaseNotesViewModel(
     companion object {
         val releaseNotesList = listOf(
             ReleaseNote(
-                title = R.string.release_notes_4_6_0_title_duplicated_automatic_uploads,
-                subtitle = R.string.release_notes_4_6_0_subtitle_duplicated_automatic_uploads,
+                title = R.string.release_notes_4_6_1_title_duplicated_automatic_uploads,
+                subtitle = R.string.release_notes_4_6_1_subtitle_duplicated_automatic_uploads,
                 type = ReleaseNoteType.BUGFIX
             ),
             ReleaseNote(
-                title = R.string.release_notes_4_6_0_title_bearer_token_handling,
-                subtitle = R.string.release_notes_4_6_0_subtitle_bearer_token_handling,
+                title = R.string.release_notes_4_6_1_title_bearer_token_handling,
+                subtitle = R.string.release_notes_4_6_1_subtitle_bearer_token_handling,
                 type = ReleaseNoteType.BUGFIX
             ),
             ReleaseNote(
-                title = R.string.release_notes_4_6_0_title_shares_space_docs_provider,
-                subtitle = R.string.release_notes_4_6_0_subtitle_shares_space_docs_provider,
+                title = R.string.release_notes_4_6_1_title_shares_space_docs_provider,
+                subtitle = R.string.release_notes_4_6_1_subtitle_shares_space_docs_provider,
                 type = ReleaseNoteType.ENHANCEMENT
             ),
             ReleaseNote(

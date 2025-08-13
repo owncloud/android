@@ -98,7 +98,7 @@ public class UploadListActivity extends FileActivity {
 
     private void createUploadListFragment() {
         //UploadListFragment uploadList = new UploadListFragment();
-        TransferListFragment uploadList = new TransferListFragment(getAccount());
+        TransferListFragment uploadList = TransferListFragment.newInstance(getAccount());
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.add(R.id.left_fragment_container, uploadList, TAG_UPLOAD_LIST_FRAGMENT);
         transaction.commit();
