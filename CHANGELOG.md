@@ -1,6 +1,6 @@
 # Table of Contents
 
-* [Changelog for unreleased](#changelog-for-owncloud-android-client-unreleased-unreleased)
+* [Changelog for 4.6.0](#changelog-for-owncloud-android-client-460-2025-07-22)
 * [Changelog for 4.5.1](#changelog-for-owncloud-android-client-451-2025-04-03)
 * [Changelog for 4.5.0](#changelog-for-owncloud-android-client-450-2025-03-24)
 * [Changelog for 4.4.1](#changelog-for-owncloud-android-client-441-2024-10-30)
@@ -27,26 +27,59 @@
 * [Changelog for 2.18.1](#changelog-for-owncloud-android-client-2181-2021-07-20)
 * [Changelog for 2.18.0](#changelog-for-owncloud-android-client-2180-2021-05-24)
 * [Changelog for 2.17 versions and below](#changelog-for-217-versions-and-below)
-# Changelog for ownCloud Android Client [unreleased] (UNRELEASED)
+# Changelog for ownCloud Android Client [4.6.0] (2025-07-22)
 
-The following sections list the changes in ownCloud Android Client unreleased relevant to
+The following sections list the changes in ownCloud Android Client 4.6.0 relevant to
 ownCloud admins and users.
 
-[unreleased]: https://github.com/owncloud/android/compare/v4.5.1...master
+[4.6.0]: https://github.com/owncloud/android/compare/v4.5.1...v4.6.0
 
 ## Summary
 
+* Bugfix - Changes in the automatic uploads algorithm to prevent duplications: [#3983](https://github.com/owncloud/android/issues/3983)
+* Bugfix - Token request with Bearer returns error: [#4080](https://github.com/owncloud/android/issues/4080)
 * Bugfix - Side menu collapses info in landscape: [#4513](https://github.com/owncloud/android/issues/4513)
 * Bugfix - Content in Spaces not shown from third-party apps: [#4522](https://github.com/owncloud/android/issues/4522)
 * Bugfix - Add bottom margin for used quota in account dialog: [#4566](https://github.com/owncloud/android/issues/4566)
+* Bugfix - Infinite edges in Android 15: [#4576](https://github.com/owncloud/android/issues/4576)
+* Bugfix - Crash from Google Play Console in PreviewImageFragment: [#4577](https://github.com/owncloud/android/issues/4577)
+* Bugfix - No message when uploading a file with no quota: [#4582](https://github.com/owncloud/android/issues/4582)
+* Bugfix - Crash from Google Play Console in PreviewImagePagerAdapter: [#4596](https://github.com/owncloud/android/issues/4596)
+* Bugfix - Change space icon in file details view for personal space: [#4624](https://github.com/owncloud/android/issues/4624)
 * Change - Bump target SDK to 35: [#4529](https://github.com/owncloud/android/issues/4529)
 * Change - Replace dav4android location: [#4536](https://github.com/owncloud/android/issues/4536)
 * Change - Modify biometrics fail source string: [#4572](https://github.com/owncloud/android/issues/4572)
+* Change - Update CI badges in README file: [#4623](https://github.com/owncloud/android/issues/4623)
 * Enhancement - QA variant: [#3791](https://github.com/owncloud/android/issues/3791)
 * Enhancement - Shares space in Android native file explorer: [#4515](https://github.com/owncloud/android/issues/4515)
 * Enhancement - Accessibility reports in 4.5.1: [#4568](https://github.com/owncloud/android/issues/4568)
+* Enhancement - Support for Kiteworks servers without client secret: [#4588](https://github.com/owncloud/android/issues/4588)
+* Enhancement - Polish UI and sync operations over Kiteworks servers: [#4591](https://github.com/owncloud/android/issues/4591)
+* Enhancement - Integration of instrumented tests in GitHub Actions: [#4595](https://github.com/owncloud/android/issues/4595)
+* Enhancement - SBOM (Software Bill of Materials): [#4598](https://github.com/owncloud/android/issues/4598)
+* Enhancement - New set of configurations for Kiteworks servers: [#4622](https://github.com/owncloud/android/issues/4622)
 
 ## Details
+
+* Bugfix - Changes in the automatic uploads algorithm to prevent duplications: [#3983](https://github.com/owncloud/android/issues/3983)
+
+   The timestamp for automatic uploads is now updated at the beginning of the
+   upload process instead of at the end. Additionally, the filter used in
+   AutomaticUploadsWorker to select the files to upload has been modified in order
+   to reduce time and charge when evaluating all files.
+
+   https://github.com/owncloud/android/issues/3983
+   https://github.com/owncloud/android/pull/4571
+
+* Bugfix - Token request with Bearer returns error: [#4080](https://github.com/owncloud/android/issues/4080)
+
+   A new condition has been added into the network client to check if the network
+   request comes from TokenRequestRemoteOperation before setting the authorization
+   header. This allows users to have more than one logged-in account on the same
+   server.
+
+   https://github.com/owncloud/android/issues/4080
+   https://github.com/owncloud/android/pull/4586
 
 * Bugfix - Side menu collapses info in landscape: [#4513](https://github.com/owncloud/android/issues/4513)
 
@@ -72,6 +105,47 @@ ownCloud admins and users.
    https://github.com/owncloud/android/issues/4566
    https://github.com/owncloud/android/pull/4567
 
+* Bugfix - Infinite edges in Android 15: [#4576](https://github.com/owncloud/android/issues/4576)
+
+   Infinite edges feature, enabled by default starting from Android 15, has been
+   disabled in the app.
+
+   https://github.com/owncloud/android/issues/4576
+   https://github.com/owncloud/android/pull/4581
+
+* Bugfix - Crash from Google Play Console in PreviewImageFragment: [#4577](https://github.com/owncloud/android/issues/4577)
+
+   In order to prevent app crashes when file variable is null, a nullability check
+   has been added in onPrepareOptionsMenu method from PreviewImageFragment
+
+   https://github.com/owncloud/android/issues/4577
+   https://github.com/owncloud/android/pull/4594
+
+* Bugfix - No message when uploading a file with no quota: [#4582](https://github.com/owncloud/android/issues/4582)
+
+   A message has been added in the file list when uploading a file (from file
+   system, camera or shortcut) without available quota
+
+   https://github.com/owncloud/android/issues/4582
+   https://github.com/owncloud/android/pull/4587
+
+* Bugfix - Crash from Google Play Console in PreviewImagePagerAdapter: [#4596](https://github.com/owncloud/android/issues/4596)
+
+   In order to prevent app crashes, a validation has been added in onPageSelected
+   method from PreviewImageActivity to ensure the image list contains items before
+   using it.
+
+   https://github.com/owncloud/android/issues/4596
+   https://github.com/owncloud/android/pull/4600
+
+* Bugfix - Change space icon in file details view for personal space: [#4624](https://github.com/owncloud/android/issues/4624)
+
+   The space icon in the file details view has been replaced by the folder icon
+   when the space that contains the file is personal.
+
+   https://github.com/owncloud/android/issues/4624
+   https://github.com/owncloud/android/pull/4640
+
 * Change - Bump target SDK to 35: [#4529](https://github.com/owncloud/android/issues/4529)
 
    Target SDK has been upgraded to 35 in order to fulfill Android platform
@@ -95,6 +169,13 @@ ownCloud admins and users.
    https://github.com/owncloud/android/issues/4572
    https://github.com/owncloud/android/pull/4578
 
+* Change - Update CI badges in README file: [#4623](https://github.com/owncloud/android/issues/4623)
+
+   Bitrise badges in README file have been replaced by GitHub Actions badges.
+
+   https://github.com/owncloud/android/issues/4623
+   https://github.com/owncloud/android/pull/4637
+
 * Enhancement - QA variant: [#3791](https://github.com/owncloud/android/issues/3791)
 
    A new flavor for QA has been created in order to make automatic tests easier.
@@ -117,6 +198,47 @@ ownCloud admins and users.
 
    https://github.com/owncloud/android/issues/4568
    https://github.com/owncloud/android/pull/4573
+
+* Enhancement - Support for Kiteworks servers without client secret: [#4588](https://github.com/owncloud/android/issues/4588)
+
+   Support for connecting to Kiteworks servers without requiring client secret has
+   been added to the app.
+
+   https://github.com/owncloud/android/issues/4588
+   https://github.com/owncloud/android/pull/4589
+
+* Enhancement - Polish UI and sync operations over Kiteworks servers: [#4591](https://github.com/owncloud/android/issues/4591)
+
+   The UI and navigation behaviour after performing a sync operation have been
+   refined for accounts associated with Kiteworks servers.
+
+   https://github.com/owncloud/android/issues/4591
+   https://github.com/owncloud/android/pull/4608
+
+* Enhancement - Integration of instrumented tests in GitHub Actions: [#4595](https://github.com/owncloud/android/issues/4595)
+
+   A new workflow has been added to run instrumented tests in GitHub Actions in
+   order to have a more consistent CI pipeline in the project.
+
+   https://github.com/owncloud/android/issues/4595
+   https://github.com/owncloud/android/pull/4602
+
+* Enhancement - SBOM (Software Bill of Materials): [#4598](https://github.com/owncloud/android/issues/4598)
+
+   SBOM to be generated via GitHub Actions with the list of all dependencies used
+   in the code, powered by cyclonedx. Finally, it is pushed to the repo's root
+   folder if changes are detected.
+
+   https://github.com/owncloud/android/issues/4598
+   https://github.com/owncloud/android/pull/4641
+
+* Enhancement - New set of configurations for Kiteworks servers: [#4622](https://github.com/owncloud/android/issues/4622)
+
+   A new set of configurations in setup file has been added to support the
+   connection to Kiteworks servers.
+
+   https://github.com/owncloud/android/issues/4622
+   https://github.com/owncloud/android/pull/4632
 
 # Changelog for ownCloud Android Client [4.5.1] (2025-04-03)
 

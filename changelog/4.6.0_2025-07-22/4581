@@ -1,0 +1,6 @@
+Bugfix: Infinite edges in Android 15
+
+Infinite edges feature, enabled by default starting from Android 15, has been disabled in the app.
+
+https://github.com/owncloud/android/issues/4576
+https://github.com/owncloud/android/pull/4581

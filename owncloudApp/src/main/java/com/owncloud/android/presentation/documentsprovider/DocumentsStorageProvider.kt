@@ -7,9 +7,10 @@
  * @author Abel García de Prada
  * @author Shashvat Kedia
  * @author Juan Carlos Garrote Gascón
+ * @author Jorge Aguado Recio
  *
  * Copyright (C) 2015  Bartosz Przybylski
- * Copyright (C) 2023 ownCloud GmbH.
+ * Copyright (C) 2025 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -198,6 +199,14 @@ class DocumentsStorageProvider : DocumentsProvider() {
             val getPersonalAndProjectSpacesForAccountUseCase: GetPersonalAndProjectSpacesForAccountUseCase by inject()
             val getSpaceByIdForAccountUseCase: GetSpaceByIdForAccountUseCase by inject()
             val getFileByRemotePathUseCase: GetFileByRemotePathUseCase by inject()
+            val getStoredCapabilitiesUseCase: GetStoredCapabilitiesUseCase by inject()
+            val capabilities = getStoredCapabilitiesUseCase(
+                GetStoredCapabilitiesUseCase.Params(
+                    accountName = parentDocumentId
+                )
+            )
+            val isMultiPersonal = capabilities?.spaces?.hasMultiplePersonalSpaces == true
+
 
             getPersonalAndProjectSpacesForAccountUseCase(
                 GetPersonalAndProjectSpacesForAccountUseCase.Params(
@@ -212,7 +221,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
                             spaceId = space.id,
                         )
                     ).getDataOrNull()?.let { rootFolder ->
-                        resultCursor.addSpace(space, rootFolder, context)
+                        resultCursor.addSpace(space, rootFolder, context, isMultiPersonal)
                     }
                 }
             }

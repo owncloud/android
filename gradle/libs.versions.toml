@@ -23,6 +23,7 @@ androidxTestUiAutomator ="2.2.0"
 androidxWork = "2.8.1"
 coil = "2.2.2"
 crashlytics = "3.0.1"
+cyclonedx = "2.3.1"
 detekt = "1.23.3"
 dexopener = "2.0.5"
 disklrucache = "2.0.2"
@@ -138,3 +139,4 @@ sonarqube = { id = "org.sonarqube", version.ref = "sonarqube" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 googleServices = { id = "com.google.gms.google-services", version.ref = "googleServices" }
 crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "crashlytics" }
+cyclonedx = { id = "org.cyclonedx.bom", version.ref = "cyclonedx" }

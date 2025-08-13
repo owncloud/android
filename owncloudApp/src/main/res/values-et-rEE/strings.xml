@@ -443,8 +443,8 @@
   <string name="confirmation_disable_camera_uploads_title">Kinnita</string>
   <string name="confirmation_disable_pictures_upload_message">Kas oled kindel, et soovid selle võimaluse keelata? Ootel pilte ei laeta üles.</string>
   <string name="confirmation_disable_videos_upload_message">Kas oled kindel, et soovid selle võimaluse keelata? Ootel videosid ei laeta üles.</string>
-  <string name="proper_pics_folder_warning_camera_upload">Palun kontrolli, et valitud kaust oleks see, kuhu kaamera salvestab tehtud pildid. Vastasel juhul ei suuda funktsionaalsus su pilte tuvastada. Pea meeles, et fotod laetakse üles vähemalt 15 minuti jooksul nende tegemist.</string>
-  <string name="proper_videos_folder_warning_camera_upload">Palun kontrolli, et valitud kaust oleks see, kuhu kaamera salvestab tehtud videod. Vastasel juhul ei suuda funktsionaalsus su videosid tuvastada. Pea meeles, et videod laetakse üles vähemalt 15 minuti jooksul peale nende salvestamist.</string>
+  <string name="proper_pics_folder_warning_camera_upload">Palun kontrolli, et valitud kaust oleks see, kuhu kaamera salvestab tehtud pildid. Vastasel juhul ei suuda funktsionaalsus pilte tuvastada. Pea meeles, et fotod laetakse üles vähemalt 15 minuti jooksul nende tegemist. Parema jõudluse nimel kontrolli oma seadme seadistustest, et %1$s käivitamine taustal oleks lubatud.</string>
+  <string name="proper_videos_folder_warning_camera_upload">Palun kontrolli, et valitud kaust oleks see, kuhu kaamera salvestab tehtud videod. Vastasel juhul ei suuda funktsionaalsus su videosid tuvastada. Pea meeles, et videod laetakse üles vähemalt 15 minuti jooksul peale nende salvestamist. Parema jõudluse nimel kontrolli oma seadme seadistustest, et %1$s käivitamine taustal oleks lubatud.</string>
   <string name="conflict_title">Konfliktne fail</string>
   <string name="conflict_description">Failis %1$s on konflikt, vajuta lahendamiseks.</string>
   <string name="conflict_message">Millist faili sa soovid säilitada? Kui valid mõlemad versioonid, siis lisatakse kohaliku faili nimele number.</string>
@@ -676,7 +676,8 @@
   <string name="error_webfinger_username_empty">Kasutajanimi on tühi</string>
   <!--Release Notes-->
   <string name="release_notes_4_6_0_title_shares_space_docs_provider">Jagamiste ruum on saadaval läbi Androidi süsteemse failihalduri</string>
-  <string name="release_notes_4_6_0_subtitle_shares_space_docs_provider">Jagamiste ruum on nüüd saadaval koos kõigi teiste ruumidega dokumentide pakkujas Infinite Scale kontodel</string>
+  <string name="release_notes_4_6_0_title_duplicated_automatic_uploads">Automaatsed üleslaadimised on parendatud</string>
+  <string name="release_notes_4_6_0_subtitle_duplicated_automatic_uploads">Automaatsed üleslaadimised käituvad duplikaatide osas ühtlasemalt</string>
   <string name="release_notes_header">Uut %1$sis</string>
   <string name="release_notes_footer">Aitäh, et kasutad %1$si.\n❤</string>
   <string name="release_notes_proceed">Jätka</string>

@@ -57,6 +57,8 @@ public class OwnCloudAccount {
 
     private String mEmail;
 
+    private Boolean mIsKiteworksServer;
+
     /**
      * Constructor for already saved OC accounts.
      * <p>
@@ -75,14 +77,15 @@ public class OwnCloudAccount {
         mSavedAccountName = savedAccount.name;
         mCredentials = null;    // load of credentials is delayed
 
-        AccountManager ama = AccountManager.get(context.getApplicationContext());
-        String baseUrl = ama.getUserData(mSavedAccount, AccountUtils.Constants.KEY_OC_BASE_URL);
+        AccountManager accountManager = AccountManager.get(context.getApplicationContext());
+        String baseUrl = accountManager.getUserData(mSavedAccount, AccountUtils.Constants.KEY_OC_BASE_URL);
         if (baseUrl == null) {
             throw new AccountNotFoundException(mSavedAccount, "Account not found", null);
         }
         mBaseUri = Uri.parse(AccountUtils.getBaseUrlForAccount(context, mSavedAccount));
-        mDisplayName = ama.getUserData(mSavedAccount, AccountUtils.Constants.KEY_DISPLAY_NAME);
-        mEmail = ama.getUserData(mSavedAccount, AccountUtils.Constants.KEY_EMAIL);
+        mDisplayName = accountManager.getUserData(mSavedAccount, AccountUtils.Constants.KEY_DISPLAY_NAME);
+        mEmail = accountManager.getUserData(mSavedAccount, AccountUtils.Constants.KEY_EMAIL);
+        mIsKiteworksServer = Boolean.parseBoolean(accountManager.getUserData(mSavedAccount, AccountUtils.Constants.KEY_IS_KITEWORKS_SERVER));
     }
 
     /**
@@ -155,5 +158,9 @@ public class OwnCloudAccount {
         } else {
             return null;
         }
+    }
+
+    public Boolean getIsKiteworksServer() {
+        return mIsKiteworksServer;
     }
 }

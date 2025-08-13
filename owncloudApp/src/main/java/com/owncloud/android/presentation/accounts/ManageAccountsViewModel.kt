@@ -6,7 +6,7 @@
  * @author Juan Carlos Garrote Gascón
  * @author Jorge Aguado Recio
  *
- * Copyright (C) 2024 ownCloud GmbH.
+ * Copyright (C) 2025 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -91,5 +91,10 @@ class ManageAccountsViewModel(
             getStoredQuotaUseCase(GetStoredQuotaUseCase.Params(accountName))
         }
         quota.getDataOrNull()?.available == -4L
+    }
+
+    fun hasEnoughQuota(accountName: String): Boolean = runBlocking(CoroutinesDispatcherProvider().io) {
+        val quota = getStoredQuotaUseCase(GetStoredQuotaUseCase.Params(accountName))
+        quota.getDataOrNull()?.available != 0L
     }
 }

@@ -181,6 +181,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
     private boolean showHiddenFiles;
     private OCSharedPreferencesProvider sharedPreferencesProvider;
     private boolean areSpacesAllowed;
+    private boolean isMultiPersonal;
 
 
     Pattern pattern = Pattern.compile("[/\\\\]");
@@ -227,6 +228,8 @@ public class ReceiveExternalFilesActivity extends FileActivity
 
     }
     private void subscribeToViewModels() {
+        mReceiveExternalFilesViewModel.isMultiPersonal().observe(this, isMultiPersonalCapability ->
+                isMultiPersonal = isMultiPersonalCapability);
         mReceiveExternalFilesViewModel.getSpacesAreAllowed().observe(this, spaces -> {
             areSpacesAllowed = spaces;
 
@@ -549,7 +552,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
         if (mFile != null) {
             if (mAdapter == null) {
                 mAdapter = new ReceiveExternalFilesAdapter(
-                        this, getStorageManager(), getAccount(), showHiddenFiles);
+                        this, getStorageManager(), getAccount(), showHiddenFiles, isMultiPersonal);
                 mListView.setAdapter(mAdapter);
             }
             Vector<OCFile> files = new Vector<>(sortFileList(getStorageManager().getFolderContent(mFile)));

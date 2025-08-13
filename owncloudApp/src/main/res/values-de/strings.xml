@@ -443,8 +443,6 @@
   <string name="confirmation_disable_camera_uploads_title">Bestätigen</string>
   <string name="confirmation_disable_pictures_upload_message">Soll dieses Feature wirklich deaktiviert werden? Die Bilder in der Warteschlange werden dann nicht hochgeladen.</string>
   <string name="confirmation_disable_videos_upload_message">Soll dieses Feature wirklich deaktiviert werden? Die Videos in der Warteschlange werden dann nicht hochgeladen.</string>
-  <string name="proper_pics_folder_warning_camera_upload">Bitte stelle sicher, dass sich der ausgewählte Ordner an der Stelle befindet, an der die von Ihnen verwendete Kamera die aufgenommenen Bilder speichert. Andernfalls kann die Funktion Ihre Bilder nicht erkennen. Beachte, dass die Bilder innerhalb von mindestens 15 Minuten nach der Aufnahme hochgeladen werden.</string>
-  <string name="proper_videos_folder_warning_camera_upload">Bitte stelle sicher, dass sich der ausgewählte Ordner an der Stelle befindet, an der die von Ihnen verwendete Kamera die aufgenommenen Videos speichert. Andernfalls kann die Funktion Ihre Videos nicht erkennen. Beachte, dass Videos innerhalb von mindestens 15 Minuten nach der Aufnahme hochgeladen werden.</string>
   <string name="conflict_title">Dateikonflikt</string>
   <string name="conflict_description">Ein Konflikt ist in der Datei %1$s aufgetreten. Hier tippen, um das Problem zu lösen.</string>
   <string name="conflict_message">Welche Datei möchtest du behalten? Wenn du beide Versionen auswählst, wird der lokalen Datei eine Zahl am Ende Ihres Dateiname angehangen.</string>
@@ -676,7 +674,6 @@
   <string name="error_webfinger_username_empty">Der Benutzername ist leer</string>
   <!--Release Notes-->
   <string name="release_notes_4_6_0_title_shares_space_docs_provider">Gemeinsamer Speicherplatz im nativen Android-Dateiexplorer</string>
-  <string name="release_notes_4_6_0_subtitle_shares_space_docs_provider">Der Freigabebereich wird jetzt zusammen mit den anderen Bereichen im Dokumentenanbieter in Infinite Scale-Konten angezeigt</string>
   <string name="release_notes_header">Neu in %1$s</string>
   <string name="release_notes_footer">Vielen Dank für die Verwendung von %1$s.\n</string>
   <string name="release_notes_proceed">Fortfahren</string>

@@ -60,7 +60,7 @@ class GetRemoteStatusOperation : RemoteOperation<RemoteServerInfo>() {
         return try {
             val requester = StatusRequester()
             val requestResult = requester.request(baseUrl, client)
-            val result = requester.handleRequestResult(requestResult, baseUrl)
+            val result = requester.handleRequestResult(requestResult, baseUrl, client)
             updateClientBaseUrl(client, result.data.baseUrl)
             return result
         } catch (e: JSONException) {

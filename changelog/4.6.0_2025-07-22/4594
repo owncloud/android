@@ -1,0 +1,7 @@
+Bugfix: Crash from Google Play Console in PreviewImageFragment
+
+In order to prevent app crashes when file variable is null, a nullability check
+has been added in onPrepareOptionsMenu method from PreviewImageFragment
+
+https://github.com/owncloud/android/issues/4577
+https://github.com/owncloud/android/pull/4594

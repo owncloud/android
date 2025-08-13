@@ -5,9 +5,10 @@
  * @author Christian Schabesberger
  * @author David González Verdugo
  * @author Juan Carlos Garrote Gascón
+ * @author Jorge Aguado Recio
  *
  * Copyright (C) 2012  Bartek Przybylski
- * Copyright (C) 2024 ownCloud GmbH.
+ * Copyright (C) 2025 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -347,13 +348,23 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
         String clientIdForRequest = null;
         String clientSecretForRequest = null;
 
+        boolean isKiteworksServer = Boolean.parseBoolean(accountManager.getUserData(account, AccountUtils.Constants.KEY_IS_KITEWORKS_SERVER));
+
         if (clientId == null) {
             Timber.d("Client Id not stored. Let's use the hardcoded one");
-            clientId = mContext.getString(R.string.oauth2_client_id);
+            if (isKiteworksServer) {
+                clientId = mContext.getString(R.string.kiteworks_client_id);
+            } else {
+                clientId = mContext.getString(R.string.oauth2_client_id);
+            }
         }
         if (clientSecret == null) {
             Timber.d("Client Secret not stored. Let's use the hardcoded one");
-            clientSecret = mContext.getString(R.string.oauth2_client_secret);
+            if (isKiteworksServer) {
+                clientSecret = mContext.getString(R.string.kiteworks_client_secret);
+            } else {
+                clientSecret = mContext.getString(R.string.oauth2_client_secret);
+            }
         }
 
         if (oidcServerConfigurationUseCaseResult.isSuccess()) {
@@ -377,7 +388,12 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
 
         String clientAuth = OAuthUtils.Companion.getClientAuth(clientSecret, clientId);
 
-        String scope = mContext.getResources().getString(R.string.oauth2_openid_scope);
+        String scope;
+        if (isKiteworksServer) {
+            scope = mContext.getResources().getString(R.string.kiteworks_openid_scope);
+        } else {
+            scope = mContext.getResources().getString(R.string.oauth2_openid_scope);
+        }
 
         TokenRequest oauthTokenRequest = new TokenRequest.RefreshToken(
                 baseUrl,

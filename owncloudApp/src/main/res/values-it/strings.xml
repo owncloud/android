@@ -354,8 +354,6 @@
   <string name="placeholder_timestamp">2012/05/18 12:23 PM</string>
   <string name="placeholder_media_time">12:23:45</string>
   <string name="confirmation_disable_camera_uploads_title">Conferma</string>
-  <string name="proper_pics_folder_warning_camera_upload">Assicurati che la cartella selezionata sia quella che la tua fotocamera usa per salvare le foto scattate. Altrimenti, la funzione non sarà in grado di rilevare le tue foto. Tieni presente che le foto verranno inviate entro almeno 15 minuti dopo averle scattate.</string>
-  <string name="proper_videos_folder_warning_camera_upload">Assicurati che la cartella selezionata sia quella che la tua fotocamera usa per salvare i video registrati. Altrimenti, la funzione non sarà in grado di rilevare i tuoi video. Tieni presente che i video verranno inviati entro almeno 15 minuti dopo averli registrati.</string>
   <string name="conflict_title">File in conflitto</string>
   <string name="conflict_message">Quali file vuoi tenere? Se selezioni entrambi le versioni, il file locale avrà un numero aggiunto al suo nome.</string>
   <string name="conflict_keep_both">Mantieni entrambi</string>

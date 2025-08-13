@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 47,
-    "identityHash": "5b23f5cc9f61827e65761ee967032368",
+    "identityHash": "429eaab681b347f495eb3f1bd2479e3c",
     "entities": [
       {
         "tableName": "app_registry",
@@ -149,7 +149,7 @@
       },
       {
         "tableName": "capabilities",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`account` TEXT, `version_major` INTEGER NOT NULL, `version_minor` INTEGER NOT NULL, `version_micro` INTEGER NOT NULL, `version_string` TEXT, `version_edition` TEXT, `core_pollinterval` INTEGER NOT NULL, `dav_chunking_version` TEXT NOT NULL, `sharing_api_enabled` INTEGER NOT NULL DEFAULT -1, `sharing_public_enabled` INTEGER NOT NULL DEFAULT -1, `sharing_public_password_enforced` INTEGER NOT NULL DEFAULT -1, `sharing_public_password_enforced_read_only` INTEGER NOT NULL DEFAULT -1, `sharing_public_password_enforced_read_write` INTEGER NOT NULL DEFAULT -1, `sharing_public_password_enforced_public_only` INTEGER NOT NULL DEFAULT -1, `sharing_public_expire_date_enabled` INTEGER NOT NULL DEFAULT -1, `sharing_public_expire_date_days` INTEGER NOT NULL, `sharing_public_expire_date_enforced` INTEGER NOT NULL DEFAULT -1, `sharing_public_upload` INTEGER NOT NULL DEFAULT -1, `sharing_public_multiple` INTEGER NOT NULL DEFAULT -1, `supports_upload_only` INTEGER NOT NULL DEFAULT -1, `sharing_resharing` INTEGER NOT NULL DEFAULT -1, `sharing_federation_outgoing` INTEGER NOT NULL DEFAULT -1, `sharing_federation_incoming` INTEGER NOT NULL DEFAULT -1, `sharing_user_profile_picture` INTEGER NOT NULL DEFAULT -1, `files_bigfilechunking` INTEGER NOT NULL DEFAULT -1, `files_undelete` INTEGER NOT NULL DEFAULT -1, `files_versioning` INTEGER NOT NULL DEFAULT -1, `files_private_links` INTEGER NOT NULL DEFAULT -1, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `app_providers_enabled` INTEGER, `app_providers_version` TEXT, `app_providers_appsUrl` TEXT, `app_providers_openUrl` TEXT, `app_providers_openWebUrl` TEXT, `app_providers_newUrl` TEXT, `spaces_enabled` INTEGER, `spaces_projects` INTEGER, `spaces_shareJail` INTEGER, `password_policy_maxCharacters` INTEGER, `password_policy_minCharacters` INTEGER, `password_policy_minDigits` INTEGER, `password_policy_minLowercaseCharacters` INTEGER, `password_policy_minSpecialCharacters` INTEGER, `password_policy_minUppercaseCharacters` INTEGER)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`account` TEXT, `version_major` INTEGER NOT NULL, `version_minor` INTEGER NOT NULL, `version_micro` INTEGER NOT NULL, `version_string` TEXT, `version_edition` TEXT, `core_pollinterval` INTEGER NOT NULL, `dav_chunking_version` TEXT NOT NULL, `sharing_api_enabled` INTEGER NOT NULL DEFAULT -1, `sharing_public_enabled` INTEGER NOT NULL DEFAULT -1, `sharing_public_password_enforced` INTEGER NOT NULL DEFAULT -1, `sharing_public_password_enforced_read_only` INTEGER NOT NULL DEFAULT -1, `sharing_public_password_enforced_read_write` INTEGER NOT NULL DEFAULT -1, `sharing_public_password_enforced_public_only` INTEGER NOT NULL DEFAULT -1, `sharing_public_expire_date_enabled` INTEGER NOT NULL DEFAULT -1, `sharing_public_expire_date_days` INTEGER NOT NULL, `sharing_public_expire_date_enforced` INTEGER NOT NULL DEFAULT -1, `sharing_public_upload` INTEGER NOT NULL DEFAULT -1, `sharing_public_multiple` INTEGER NOT NULL DEFAULT -1, `supports_upload_only` INTEGER NOT NULL DEFAULT -1, `sharing_resharing` INTEGER NOT NULL DEFAULT -1, `sharing_federation_outgoing` INTEGER NOT NULL DEFAULT -1, `sharing_federation_incoming` INTEGER NOT NULL DEFAULT -1, `sharing_user_profile_picture` INTEGER NOT NULL DEFAULT -1, `files_bigfilechunking` INTEGER NOT NULL DEFAULT -1, `files_undelete` INTEGER NOT NULL DEFAULT -1, `files_versioning` INTEGER NOT NULL DEFAULT -1, `files_private_links` INTEGER NOT NULL DEFAULT -1, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `app_providers_enabled` INTEGER, `app_providers_version` TEXT, `app_providers_appsUrl` TEXT, `app_providers_openUrl` TEXT, `app_providers_openWebUrl` TEXT, `app_providers_newUrl` TEXT, `spaces_enabled` INTEGER, `spaces_projects` INTEGER, `spaces_shareJail` INTEGER, `spaces_hasMultiplePersonalSpaces` INTEGER, `password_policy_maxCharacters` INTEGER, `password_policy_minCharacters` INTEGER, `password_policy_minDigits` INTEGER, `password_policy_minLowercaseCharacters` INTEGER, `password_policy_minSpecialCharacters` INTEGER, `password_policy_minUppercaseCharacters` INTEGER)",
         "fields": [
           {
             "fieldPath": "accountName",
@@ -395,6 +395,12 @@
           {
             "fieldPath": "spaces.shareJail",
             "columnName": "spaces_shareJail",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "spaces.hasMultiplePersonalSpaces",
+            "columnName": "spaces_hasMultiplePersonalSpaces",
             "affinity": "INTEGER",
             "notNull": false
           },
@@ -1134,7 +1140,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '5b23f5cc9f61827e65761ee967032368')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '429eaab681b347f495eb3f1bd2479e3c')"
     ]
   }
 }

@@ -443,8 +443,8 @@
   <string name="confirmation_disable_camera_uploads_title">Confirmar</string>
   <string name="confirmation_disable_pictures_upload_message">Tem certeza de que deseja desativar esse recurso? As fotos pendentes não serão carregadas.</string>
   <string name="confirmation_disable_videos_upload_message">Tem certeza de que deseja desativar esse recurso? Os vídeos pendentes não serão enviados.</string>
-  <string name="proper_pics_folder_warning_camera_upload">Por favor, verifique se a pasta selecionada é onde a câmera que você está usando salva as fotos tiradas. Caso contrário, o recurso não poderá detectar suas fotos. Tenha em mente que as fotos serão enviadas em pelo menos 15 minutos depois de serem tiradas.</string>
-  <string name="proper_videos_folder_warning_camera_upload">Por favor, verifique se a pasta selecionada é onde a câmera que você está usando salva os vídeos gravados. Caso contrário, o recurso não poderá detectar seus vídeos. Tenha em mente que os vídeos serão enviados em pelo menos 15 minutos depois de serem gravados.</string>
+  <string name="proper_pics_folder_warning_camera_upload">Certifique-se de que a pasta selecionada seja onde a câmera que você está usando salva as fotos tiradas. Caso contrário, o recurso não conseguirá detectar suas fotos. Lembre-se de que as fotos serão carregadas em pelo menos 15 minutos após serem tiradas. Para um melhor desempenho, certifique-se nas configurações do seu dispositivo que %1$s  ele permite a execução em segundo plano.</string>
+  <string name="proper_videos_folder_warning_camera_upload">Certifique-se de que a pasta selecionada seja onde a câmera que você está usando salva os vídeos gravados. Caso contrário, o recurso não conseguirá detectar seus vídeos. Lembre-se de que os vídeos serão carregados em pelo menos 15 minutos após a gravação. Para um melhor desempenho, certifique-se nas configurações do seu dispositivo %1$s que ele permite a execução em segundo plano.</string>
   <string name="conflict_title">Arquivo em conflito</string>
   <string name="conflict_description">Há um conflito no arquivo %1$s, toque para resolvê-lo.</string>
   <string name="conflict_message">Quais arquivos você deseja manter? Se você selecionar ambas as versões, o arquivo local terá um número adicionado ao seu nome.</string>
@@ -675,6 +675,9 @@
   <string name="global_proceed">Prosseguir</string>
   <string name="error_webfinger_username_empty">Nome de usuário vazio</string>
   <!--Release Notes-->
+  <string name="release_notes_4_6_0_title_shares_space_docs_provider">Compartilha espaço no explorador de arquivos nativo do Android</string>
+  <string name="release_notes_4_6_0_title_duplicated_automatic_uploads">Envios automáticos melhorados</string>
+  <string name="release_notes_4_6_0_subtitle_duplicated_automatic_uploads">Os envios automáticos são mais consistentes contra duplicações</string>
   <string name="release_notes_header">Novo em %1$s</string>
   <string name="release_notes_footer">Obrigado por usar %1$s.\n❤</string>
   <string name="release_notes_proceed">Prosseguir</string>
