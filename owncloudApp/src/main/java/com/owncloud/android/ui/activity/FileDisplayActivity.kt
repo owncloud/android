@@ -433,7 +433,7 @@ class FileDisplayActivity : FileActivity(),
     }
 
     private fun initAndShowListOfUploads() {
-        val uploadsFragment = TransferListFragment()
+        val uploadsFragment = TransferListFragment.newInstance(account)
         this.fileListOption = FileListOption.UPLOADS_LIST
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.left_fragment_container, uploadsFragment)
