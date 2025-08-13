@@ -44,8 +44,8 @@ public class FeatureList {
                     R.string.welcome_feature_4_text),
             new FeatureItem(R.drawable.whats_new_placeholder, R.string.welcome_feature_5_title,
                     R.string.welcome_feature_5_text),
-            new FeatureItem(R.drawable.whats_new_placeholder, R.string.welcome_feature_6_title,
-                    R.string.welcome_feature_6_text)
+//            new FeatureItem(R.drawable.whats_new_placeholder, R.string.welcome_feature_6_title,
+//                    R.string.welcome_feature_6_text)
     };
 
     static public FeatureItem[] get() {
