@@ -1,5 +1,6 @@
 # Table of Contents
 
+* [Changelog for 4.6.2](#changelog-for-owncloud-android-client-462-2025-08-13)
 * [Changelog for 4.6.1](#changelog-for-owncloud-android-client-461-2025-08-01)
 * [Changelog for 4.6.0](#changelog-for-owncloud-android-client-460-2025-07-22)
 * [Changelog for 4.5.1](#changelog-for-owncloud-android-client-451-2025-04-03)
@@ -28,6 +29,27 @@
 * [Changelog for 2.18.1](#changelog-for-owncloud-android-client-2181-2021-07-20)
 * [Changelog for 2.18.0](#changelog-for-owncloud-android-client-2180-2021-05-24)
 * [Changelog for 2.17 versions and below](#changelog-for-217-versions-and-below)
+# Changelog for ownCloud Android Client [4.6.2] (2025-08-13)
+
+The following sections list the changes in ownCloud Android Client 4.6.2 relevant to
+ownCloud admins and users.
+
+[4.6.2]: https://github.com/owncloud/android/compare/v4.6.1...v4.6.2
+
+## Summary
+
+* Bugfix - Removed files in failed uploads: [#4653](https://github.com/owncloud/android/issues/4653)
+
+## Details
+
+* Bugfix - Removed files in failed uploads: [#4653](https://github.com/owncloud/android/issues/4653)
+
+   Files have been prevented from being deleted from the source folder on upload
+   retries by using the createdBy property.
+
+   https://github.com/owncloud/android/issues/4653
+   https://github.com/owncloud/android/pull/4657
+
 # Changelog for ownCloud Android Client [4.6.1] (2025-08-01)
 
 The following sections list the changes in ownCloud Android Client 4.6.1 relevant to
