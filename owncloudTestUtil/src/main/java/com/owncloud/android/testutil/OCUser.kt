@@ -65,3 +65,5 @@ val OC_USER_AVATAR = UserAvatar(
     eTag = "edcdc7d39dc218d197c269c8f75ab0f4",
     mimeType = "image/png"
 )
+
+const val OC_USER_ID = "us3r1d"
