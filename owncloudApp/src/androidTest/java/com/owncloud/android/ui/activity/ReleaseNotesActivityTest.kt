@@ -2,7 +2,9 @@
  * ownCloud Android client application
  *
  * @author David Crespo Ríos
- * Copyright (C) 2022 ownCloud GmbH.
+ * @author Aitor Ballesteros Pavón
+ *
+ * Copyright (C) 2024 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -70,7 +72,7 @@ class ReleaseNotesActivityTest {
         every { releaseNotesViewModel.getReleaseNotes() } returns releaseNotesList
 
         val intent = Intent(context, ReleaseNotesActivity::class.java)
-        activityScenario = ActivityScenario.launch(intent)
+        activityScenario = ActivityScenario.launchActivityForResult(intent)
     }
 
     @Test
