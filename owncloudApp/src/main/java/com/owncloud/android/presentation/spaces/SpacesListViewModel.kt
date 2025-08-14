@@ -4,7 +4,7 @@
  * @author Juan Carlos Garrote Gascón
  * @author Jorge Aguado Recio
  *
- * Copyright (C) 2024 ownCloud GmbH.
+ * Copyright (C) 2025 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -33,6 +33,10 @@ import com.owncloud.android.domain.spaces.usecases.GetPersonalAndProjectSpacesWi
 import com.owncloud.android.domain.spaces.usecases.GetPersonalSpacesWithSpecialsForAccountAsStreamUseCase
 import com.owncloud.android.domain.spaces.usecases.GetProjectSpacesWithSpecialsForAccountAsStreamUseCase
 import com.owncloud.android.domain.spaces.usecases.RefreshSpacesFromServerAsyncUseCase
+import com.owncloud.android.domain.user.usecases.GetUserIdAsyncUseCase
+import com.owncloud.android.domain.utils.Event
+import com.owncloud.android.extensions.ViewModelExt.runUseCaseWithResult
+import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -46,6 +50,7 @@ class SpacesListViewModel(
     private val getProjectSpacesWithSpecialsForAccountAsStreamUseCase: GetProjectSpacesWithSpecialsForAccountAsStreamUseCase,
     private val getFileByRemotePathUseCase: GetFileByRemotePathUseCase,
     private val getStoredCapabilitiesUseCase: GetStoredCapabilitiesUseCase,
+    private val getUserIdAsyncUseCase: GetUserIdAsyncUseCase,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
     private val accountName: String,
     private val showPersonalSpace: Boolean,
@@ -55,10 +60,16 @@ class SpacesListViewModel(
         MutableStateFlow(SpacesListUiState(spaces = emptyList(), refreshing = false, error = null, searchFilter = ""))
     val spacesList: StateFlow<SpacesListUiState> = _spacesList
 
+    private val _userId = MutableStateFlow<Event<UIResult<String>>?>(null)
+    val userId: StateFlow<Event<UIResult<String>>?> = _userId
+
     init {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
             refreshSpacesFromServer()
             val capabilities = getStoredCapabilitiesUseCase(GetStoredCapabilitiesUseCase.Params(accountName))
+            if (capabilities?.isSpacesAllowed() == true) {
+                getUserId(accountName)
+            }
             val isMultiPersonal = capabilities?.spaces?.hasMultiplePersonalSpaces
             val spacesListFlow = if (isMultiPersonal == true) getPersonalSpacesWithSpecialsForAccountAsStreamUseCase(
                 GetPersonalSpacesWithSpecialsForAccountAsStreamUseCase.Params(accountName = accountName)
@@ -101,6 +112,16 @@ class SpacesListViewModel(
     fun updateSearchFilter(newSearchFilter: String) {
         _spacesList.update { it.copy(searchFilter = newSearchFilter) }
     }
+
+    private fun getUserId(
+        accountName: String
+    ) = runUseCaseWithResult(
+        coroutineDispatcher = coroutinesDispatcherProvider.io,
+        showLoading = false,
+        flow = _userId,
+        useCase = getUserIdAsyncUseCase,
+        useCaseParams = GetUserIdAsyncUseCase.Params(accountName = accountName)
+    )
 
     data class SpacesListUiState(
         val spaces: List<OCSpace>,

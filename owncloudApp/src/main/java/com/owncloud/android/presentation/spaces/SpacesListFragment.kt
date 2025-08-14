@@ -5,7 +5,7 @@
  * @author Jorge Aguado Recio
  * @author Aitor Ballesteros Pavón
  *
- * Copyright (C) 2024 ownCloud GmbH.
+ * Copyright (C) 2025 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -44,8 +44,10 @@ import com.owncloud.android.extensions.toDrawableRes
 import com.owncloud.android.extensions.toSubtitleStringRes
 import com.owncloud.android.extensions.toTitleStringRes
 import com.owncloud.android.presentation.capabilities.CapabilityViewModel
+import com.owncloud.android.presentation.common.UIResult
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
+import timber.log.Timber
 
 class SpacesListFragment : SpacesListAdapter.SpacesListAdapterListener, Fragment(), SearchView.OnQueryTextListener {
     private var _binding: SpacesListFragmentBinding? = null
@@ -120,6 +122,22 @@ class SpacesListFragment : SpacesListAdapter.SpacesListAdapterListener, Fragment
                 setFragmentResult(REQUEST_KEY_CLICK_SPACE, bundleOf(BUNDLE_KEY_CLICK_SPACE to it))
             }
         }
+
+        collectLatestLifecycleFlow(spacesListViewModel.userId) { event ->
+            event?.let {
+                val accountName = requireArguments().getString(BUNDLE_ACCOUNT_NAME)
+                when (val uiResult = event.peekContent()) {
+                    is UIResult.Success -> {
+                        Timber.d ("The account id for $accountName is: ${uiResult.data}")
+                    }
+                    is UIResult.Loading -> { }
+                    is UIResult.Error -> {
+                        Timber.e(uiResult.error, "Failed to retrieve user id for account $accountName")
+                    }
+                }
+            }
+        }
+
     }
 
     private fun showOrHideEmptyView(spacesList: List<OCSpace>) {

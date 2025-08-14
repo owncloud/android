@@ -7,7 +7,7 @@
  * @author Aitor Ballesteros Pavón
  * @author Jorge Aguado Recio
  *
- * Copyright (C) 2024 ownCloud GmbH.
+ * Copyright (C) 2025 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -109,6 +109,7 @@ import com.owncloud.android.domain.user.usecases.GetUserInfoAsyncUseCase
 import com.owncloud.android.domain.user.usecases.GetUserQuotasUseCase
 import com.owncloud.android.domain.user.usecases.GetUserQuotasAsStreamUseCase
 import com.owncloud.android.domain.user.usecases.RefreshUserQuotaFromServerAsyncUseCase
+import com.owncloud.android.domain.user.usecases.GetUserIdAsyncUseCase
 import com.owncloud.android.domain.webfinger.usecases.GetOwnCloudInstanceFromWebFingerUseCase
 import com.owncloud.android.domain.webfinger.usecases.GetOwnCloudInstancesFromAuthenticatedWebFingerUseCase
 import com.owncloud.android.usecases.accounts.RemoveAccountUseCase
@@ -259,6 +260,7 @@ val useCaseModule = module {
     factoryOf(::GetStoredQuotaAsStreamUseCase)
     factoryOf(::GetStoredQuotaUseCase)
     factoryOf(::GetUserAvatarAsyncUseCase)
+    factoryOf(::GetUserIdAsyncUseCase)
     factoryOf(::GetUserInfoAsyncUseCase)
     factoryOf(::GetUserQuotasAsStreamUseCase)
     factoryOf(::GetUserQuotasUseCase)

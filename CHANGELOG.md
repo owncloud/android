@@ -1,5 +1,6 @@
 # Table of Contents
 
+* [Changelog for unreleased](#changelog-for-owncloud-android-client-unreleased-unreleased)
 * [Changelog for 4.6.2](#changelog-for-owncloud-android-client-462-2025-08-13)
 * [Changelog for 4.6.1](#changelog-for-owncloud-android-client-461-2025-08-01)
 * [Changelog for 4.6.0](#changelog-for-owncloud-android-client-460-2025-07-22)
@@ -29,6 +30,28 @@
 * [Changelog for 2.18.1](#changelog-for-owncloud-android-client-2181-2021-07-20)
 * [Changelog for 2.18.0](#changelog-for-owncloud-android-client-2180-2021-05-24)
 * [Changelog for 2.17 versions and below](#changelog-for-217-versions-and-below)
+# Changelog for ownCloud Android Client [unreleased] (UNRELEASED)
+
+The following sections list the changes in ownCloud Android Client unreleased relevant to
+ownCloud admins and users.
+
+[unreleased]: https://github.com/owncloud/android/compare/v4.6.2...master
+
+## Summary
+
+* Enhancement - Add account ID to the user information: [#4605](https://github.com/owncloud/android/issues/4605)
+
+## Details
+
+* Enhancement - Add account ID to the user information: [#4605](https://github.com/owncloud/android/issues/4605)
+
+   The account ID has been added to the Account Manager only for Infinite Scale
+   users. This information will be used to fetch all permissions related to space
+   management.
+
+   https://github.com/owncloud/android/issues/4605
+   https://github.com/owncloud/android/pull/4661
+
 # Changelog for ownCloud Android Client [4.6.2] (2025-08-13)
 
 The following sections list the changes in ownCloud Android Client 4.6.2 relevant to

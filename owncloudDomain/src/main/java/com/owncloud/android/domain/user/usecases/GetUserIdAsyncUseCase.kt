@@ -1,7 +1,6 @@
 /**
  * ownCloud Android client application
  *
- * @author Abel García de Prada
  * @author Jorge Aguado Recio
  *
  * Copyright (C) 2025 ownCloud GmbH.
@@ -19,15 +18,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.data.user.datasources
+package com.owncloud.android.domain.user.usecases
 
-import com.owncloud.android.domain.user.model.UserAvatar
-import com.owncloud.android.domain.user.model.UserInfo
-import com.owncloud.android.domain.user.model.UserQuota
+import com.owncloud.android.domain.BaseUseCaseWithResult
+import com.owncloud.android.domain.user.UserRepository
 
-interface RemoteUserDataSource {
-    fun getUserInfo(accountName: String): UserInfo
-    fun getUserQuota(accountName: String): UserQuota
-    fun getUserAvatar(accountName: String): UserAvatar
-    fun getUserId(accountName: String): String
+class GetUserIdAsyncUseCase(
+    private val userRepository: UserRepository,
+) : BaseUseCaseWithResult<String, GetUserIdAsyncUseCase.Params>() {
+
+    override fun run(params: Params) = userRepository.getUserId(params.accountName)
+
+    data class Params(val accountName: String)
 }

@@ -45,6 +45,7 @@ import com.owncloud.android.domain.user.model.UserInfo
 import com.owncloud.android.lib.common.SingleSessionManager
 import com.owncloud.android.lib.common.accounts.AccountUtils
 import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.ACCOUNT_VERSION
+import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.KEY_ACCOUNT_UUID
 import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.KEY_DISPLAY_NAME
 import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.KEY_ID
 import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.KEY_OC_ACCOUNT_VERSION
@@ -263,5 +264,15 @@ class OCLocalAuthenticationDataSource(
     override fun getBaseUrl(accountName: String): String {
         val account = getAccountIfExists(accountName) ?: throw AccountNotFoundException()
         return accountManager.getUserData(account, KEY_OC_BASE_URL)
+    }
+
+    override fun getUserId(accountName: String): String? {
+        val account = getAccountIfExists(accountName) ?: throw AccountNotFoundException()
+        return accountManager.getUserData(account, KEY_ACCOUNT_UUID)
+    }
+
+    override fun saveIdForAccount(accountName: String, uuid: String) {
+        val account = getAccountIfExists(accountName) ?: throw AccountNotFoundException()
+        accountManager.setUserData(account, KEY_ACCOUNT_UUID, uuid)
     }
 }

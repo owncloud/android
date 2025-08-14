@@ -21,10 +21,12 @@
 
 package com.owncloud.android.data.user.repository
 
+import com.owncloud.android.data.authentication.datasources.LocalAuthenticationDataSource
 import com.owncloud.android.data.user.datasources.LocalUserDataSource
 import com.owncloud.android.data.user.datasources.RemoteUserDataSource
 import com.owncloud.android.testutil.OC_ACCOUNT_NAME
 import com.owncloud.android.testutil.OC_USER_AVATAR
+import com.owncloud.android.testutil.OC_USER_ID
 import com.owncloud.android.testutil.OC_USER_INFO
 import com.owncloud.android.testutil.OC_USER_QUOTA
 import io.mockk.every
@@ -40,7 +42,8 @@ import org.junit.Test
 class OCUserRepositoryTest {
     private val remoteUserDataSource = mockk<RemoteUserDataSource>()
     private val localUserDataSource = mockk<LocalUserDataSource>(relaxUnitFun = true)
-    private val ocUserRepository = OCUserRepository(localUserDataSource, remoteUserDataSource)
+    private val localAuthenticationDataSource = mockk<LocalAuthenticationDataSource>(relaxUnitFun = true)
+    private val ocUserRepository = OCUserRepository(localUserDataSource, localAuthenticationDataSource, remoteUserDataSource)
 
     @Test
     fun `getUserInfo returns an UserInfo`() {
@@ -152,6 +155,40 @@ class OCUserRepositoryTest {
 
         verify(exactly = 1) {
             remoteUserDataSource.getUserAvatar(OC_ACCOUNT_NAME)
+        }
+    }
+
+    @Test
+    fun `getUserId returns a String with the user id when it exists in Account Manager`() {
+        every {
+            localAuthenticationDataSource.getUserId(OC_ACCOUNT_NAME)
+        } returns OC_USER_ID
+
+        val accountId = ocUserRepository.getUserId(OC_ACCOUNT_NAME)
+        assertEquals(OC_USER_ID, accountId)
+
+        verify(exactly = 1) {
+            localAuthenticationDataSource.getUserId(OC_ACCOUNT_NAME)
+        }
+    }
+
+    @Test
+    fun `getUserId returns a String with the user id when it does not exist in Account Manager`() {
+        every {
+            localAuthenticationDataSource.getUserId(OC_ACCOUNT_NAME)
+        } returns null
+
+        every {
+            remoteUserDataSource.getUserId(OC_ACCOUNT_NAME)
+        } returns OC_USER_ID
+
+        val userId = ocUserRepository.getUserId(OC_ACCOUNT_NAME)
+        assertEquals(OC_USER_ID, userId)
+
+        verify(exactly = 1) {
+            localAuthenticationDataSource.getUserId(OC_ACCOUNT_NAME)
+            remoteUserDataSource.getUserId(OC_ACCOUNT_NAME)
+            localAuthenticationDataSource.saveIdForAccount(OC_ACCOUNT_NAME, OC_USER_ID)
         }
     }
 

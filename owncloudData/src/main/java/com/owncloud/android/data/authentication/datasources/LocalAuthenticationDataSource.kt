@@ -2,7 +2,9 @@
  * ownCloud Android client application
  *
  * @author David González Verdugo
- * Copyright (C) 2020 ownCloud GmbH.
+ * @author Jorge Aguado Recio
+ *
+ * Copyright (C) 2025 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -49,4 +51,8 @@ interface LocalAuthenticationDataSource {
     fun supportsOAuth2(accountName: String): Boolean
 
     fun getBaseUrl(accountName: String): String
+
+    fun getUserId(accountName: String): String?
+
+    fun saveIdForAccount(accountName: String, uuid: String)
 }
