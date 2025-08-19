@@ -37,18 +37,16 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.viewpager.widget.ViewPager;
-import com.owncloud.android.BuildConfig;
-import com.owncloud.android.MainApp;
-import com.owncloud.android.R;
+import androidx.viewpager2.adapter.FragmentStateAdapter;
+import androidx.viewpager2.widget.ViewPager2;
+
 import com.owncloud.android.databinding.WhatsNewActivityBinding;
 import com.owncloud.android.databinding.WhatsNewElementBinding;
-import com.owncloud.android.presentation.authentication.homecloud.LoginActivity;
 import com.owncloud.android.wizard.FeatureList;
 import com.owncloud.android.wizard.FeatureList.FeatureItem;
 import com.owncloud.android.wizard.ProgressIndicator;
@@ -56,33 +54,35 @@ import com.owncloud.android.wizard.ProgressIndicator;
 /**
  * @author Bartosz Przybylski
  */
-public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPageChangeListener {
+public class WhatsNewActivity extends FragmentActivity {
 
     private ImageButton mForwardFinishButton;
     private ProgressIndicator mProgress;
-    private ViewPager mPager;
+    private ViewPager2 mPager;
 
     private WhatsNewActivityBinding bindingActivity;
+
+    private static final String ONBOARDING_DISPLAYED_KEY = "onboarding_displayed";
 
     static public void runIfNeeded(Context context) {
         if (context instanceof WhatsNewActivity) {
             return;
         }
 
-        if (shouldShow(context)) {
+        if (!isOnboardingDisplayed(context)) {
             context.startActivity(new Intent(context, WhatsNewActivity.class));
         }
     }
 
-    static private boolean shouldShow(Context context) {
-        return context.getResources().getBoolean(R.bool.wizard_enabled) && !BuildConfig.DEBUG && !BuildConfig.FLAVOR.equals(MainApp.QA_FLAVOR)
-                && context instanceof LoginActivity; // When it is LoginActivity to start it only once
+    static private Boolean isOnboardingDisplayed(Context context) {
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
+        return pref.getBoolean(ONBOARDING_DISPLAYED_KEY, false);
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        EdgeToEdge.enable(this);
         bindingActivity = WhatsNewActivityBinding.inflate(getLayoutInflater());
 
         setContentView(bindingActivity.getRoot());
@@ -90,77 +90,103 @@ public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPa
         mProgress = bindingActivity.progressIndicator;
         mPager = bindingActivity.contentPanel;
 
-        FeaturesViewAdapter adapter = new FeaturesViewAdapter(getSupportFragmentManager(),
+        FeaturesViewAdapter adapter = new FeaturesViewAdapter(this,
                 FeatureList.get());
 
-        mProgress.setNumberOfSteps(adapter.getCount());
+        mProgress.setNumberOfSteps(adapter.getItemCount());
         mPager.setAdapter(adapter);
-        mPager.addOnPageChangeListener(this);
+        mPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+                mProgress.animateToStep(position + 1);
+                updateNextButtonIfNeeded();
+            }
+
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                super.onPageScrolled(position, positionOffset, positionOffsetPixels);
+                if (positionOffset == 0) { // when snapped to a page
+                    resetScrollOnChildFragments(position);
+                }
+            }
+        });
 
         mForwardFinishButton = bindingActivity.forward;
         mForwardFinishButton.setOnClickListener(view -> {
-            if (mProgress.hasNextStep()) {
-                mPager.setCurrentItem(mPager.getCurrentItem() + 1, true);
-                mProgress.animateToStep(mPager.getCurrentItem() + 1);
-            } else {
-                finish();
-            }
-            updateNextButtonIfNeeded();
+            goToNextPage();
+        });
+        bindingActivity.done.setOnClickListener(view -> {
+            handleOnboardingDisplayed();
         });
         Button skipButton = bindingActivity.skip;
 
-        skipButton.setOnClickListener(view -> finish());
+        skipButton.setOnClickListener(view -> {
+            if (mProgress.hasNextStep()) {
+                handleOnboardingDisplayed();
+            }
+        });
 
         updateNextButtonIfNeeded();
-
-        // Wizard already shown
-        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
-        SharedPreferences.Editor editor = pref.edit();
-        editor.putInt(MainApp.PREFERENCE_KEY_LAST_SEEN_VERSION_CODE, MainApp.Companion.getVersionCode());
-        editor.apply();
     }
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+        if (mPager.getCurrentItem() > 0) {
+            goToPreviousPage();
+        } else {
+            handleOnboardingDisplayed();
+            super.onBackPressed();
+        }
+    }
+
+    private void goToNextPage() {
+        if (mProgress.hasNextStep()) {
+            mPager.setCurrentItem(mPager.getCurrentItem() + 1, true);
+            mProgress.animateToStep(mPager.getCurrentItem() + 1);
+        }
+        updateNextButtonIfNeeded();
+    }
+
+    private void goToPreviousPage() {
+        if (mPager.getCurrentItem() > 0) {
+            mPager.setCurrentItem(mPager.getCurrentItem() - 1, true);
+            mProgress.animateToStep(mPager.getCurrentItem() + 1);
+        }
+        updateNextButtonIfNeeded();
     }
 
     private void updateNextButtonIfNeeded() {
         if (!mProgress.hasNextStep()) {
-            mForwardFinishButton.setImageResource(R.drawable.ic_done_white);
-            mForwardFinishButton.setBackground(getResources().getDrawable(R.drawable.round_button));
+            bindingActivity.skip.setVisibility(View.INVISIBLE);
+            bindingActivity.forward.setVisibility(View.GONE);
+            bindingActivity.done.setVisibility(View.VISIBLE);
         } else {
-            mForwardFinishButton.setImageResource(R.drawable.ic_arrow_forward);
-            mForwardFinishButton.setBackground(null);
+            bindingActivity.skip.setVisibility(View.VISIBLE);
+            bindingActivity.forward.setVisibility(View.VISIBLE);
+            bindingActivity.done.setVisibility(View.GONE);
         }
     }
 
-    @Override
-    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-    }
-
-    @Override
-    public void onPageSelected(int position) {
-        mProgress.animateToStep(position + 1);
-        updateNextButtonIfNeeded();
-    }
-
-    @Override
-    public void onPageScrollStateChanged(int state) {
-
-    }
-
     public static class FeatureFragment extends Fragment {
+
+        private static final String POSITION_KEY = "position";
+
         private FeatureItem mItem;
 
         private WhatsNewElementBinding bindingElement;
 
-        static public FeatureFragment newInstance(FeatureItem item) {
+        static public FeatureFragment newInstance(FeatureItem item, int position) {
             FeatureFragment f = new FeatureFragment();
             Bundle args = new Bundle();
             args.putParcelable("feature", item);
+            args.putInt(POSITION_KEY, position);
             f.setArguments(args);
             return f;
+        }
+
+        static public int fragmentPosition(Fragment fragment) {
+            return fragment.getArguments() != null ? fragment.getArguments().getInt(POSITION_KEY, -1) : -1;
         }
 
         @Override
@@ -193,24 +219,46 @@ public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPa
 
             return bindingElement.getRoot();
         }
+
+        public void resetScroll() {
+            bindingElement.getRoot().scrollTo(0, 0);
+        }
     }
 
-    private final class FeaturesViewAdapter extends FragmentPagerAdapter {
+    private void handleOnboardingDisplayed() {
+        // Wizard already shown
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putBoolean(ONBOARDING_DISPLAYED_KEY, true);
+        editor.apply();
+        finish();
+    }
+
+    private void resetScrollOnChildFragments(int selectedPosition) {
+        // Reset scroll an all child fragments apart from the currently displayed
+        getSupportFragmentManager().getFragments().stream()
+                .filter(fragment -> fragment instanceof FeatureFragment)
+                .filter(fragment -> FeatureFragment.fragmentPosition(fragment) != selectedPosition)
+                .forEach(fragment -> ((FeatureFragment) fragment).resetScroll());
+    }
+
+    private final class FeaturesViewAdapter extends FragmentStateAdapter {
 
         FeatureItem[] mFeatures;
 
-        public FeaturesViewAdapter(FragmentManager fm, FeatureItem[] features) {
-            super(fm);
+        public FeaturesViewAdapter(FragmentActivity activity, FeatureItem[] features) {
+            super(activity);
             mFeatures = features;
         }
 
+        @NonNull
         @Override
-        public Fragment getItem(int position) {
-            return FeatureFragment.newInstance(mFeatures[position]);
+        public Fragment createFragment(int position) {
+            return FeatureFragment.newInstance(mFeatures[position], position);
         }
 
         @Override
-        public int getCount() {
+        public int getItemCount() {
             return mFeatures.length;
         }
     }

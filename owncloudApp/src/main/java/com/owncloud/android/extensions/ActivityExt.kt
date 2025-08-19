@@ -36,7 +36,6 @@ import android.webkit.MimeTypeMap
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import androidx.core.text.HtmlCompat
@@ -271,7 +270,7 @@ private fun makeIntent(file: File?, context: Context): Intent {
     return sendIntent
 }
 
-fun Activity.hideSoftKeyboard() {
+fun Activity.hideSoftKeyboard(clearFocus: Boolean) {
     val focusedView = currentFocus
     focusedView?.let {
         val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -279,6 +278,9 @@ fun Activity.hideSoftKeyboard() {
             focusedView.windowToken,
             0
         )
+        if (clearFocus) {
+            it.clearFocus()
+        }
     }
 }
 

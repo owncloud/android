@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="whats_new_image_size">120dp</dimen>
+    <dimen name="whats_new_text_width">350dp</dimen>
+</resources>

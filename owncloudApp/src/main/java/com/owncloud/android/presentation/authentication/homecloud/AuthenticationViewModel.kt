@@ -24,7 +24,6 @@ package com.owncloud.android.presentation.authentication.homecloud
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.owncloud.android.R
@@ -69,14 +68,28 @@ class AuthenticationViewModel(
     private val _accountDiscovery = MediatorLiveData<Event<UIResult<Unit>>>()
     val accountDiscovery: LiveData<Event<UIResult<Unit>>> = _accountDiscovery
 
-    private val _screenState = MutableLiveData<LoginScreenState>(
-        LoginScreenState(
-            ctaButtonLabel = contextProvider.getString(R.string.setup_btn_next)
-        )
-    )
+    private val _screenState = MediatorLiveData(LoginScreenState())
     val screenState: LiveData<LoginScreenState> = _screenState
 
     var launchedFromDeepLink = false
+
+    init {
+        _screenState.addSource(_serverInfo) { event ->
+            if (event.peekContent().isError) {
+                resetLoadingState()
+            }
+        }
+        _screenState.addSource(_loginResult) { event ->
+            if (event.peekContent().isError) {
+                resetLoadingState()
+            }
+        }
+        _screenState.addSource(_accountDiscovery) { event ->
+            if (event.peekContent().isError) {
+                resetLoadingState()
+            }
+        }
+    }
 
     fun handleUrlChanged(url: String) {
         _screenState.update {
@@ -84,7 +97,8 @@ class AuthenticationViewModel(
                 url = url
             )
         }
-        updateScreenState()
+        resetLoginError()
+        updateCtaButtonState()
     }
 
     fun handleLoginChanged(username: String) {
@@ -93,7 +107,8 @@ class AuthenticationViewModel(
                 username = username
             )
         }
-        updateScreenState()
+        resetLoginError()
+        updateCtaButtonState()
     }
 
     fun handlePasswordChanged(password: String) {
@@ -102,66 +117,44 @@ class AuthenticationViewModel(
                 password = password
             )
         }
-        updateScreenState()
+        resetLoginError()
+        updateCtaButtonState()
     }
 
     fun handleCtaButtonClicked() {
         val currentValue = _screenState.value ?: return
-        if (currentValue.credentialsAreVisible) {
-            if (currentValue.url.isNotEmpty()) {
-                getServerInfo(serverUrl = currentValue.url, creatingAccount = false)
-            }
-        } else {
+        if (currentValue.url.isNotEmpty()) {
             _screenState.update {
                 it.copy(
-                    credentialsAreVisible = true,
+                    isLoading = true
                 )
             }
-            updateScreenState()
+            getServerInfo(serverUrl = currentValue.url, creatingAccount = false)
         }
     }
 
-    private fun updateScreenState() {
+    private fun updateCtaButtonState() {
         val currentValue = _screenState.value ?: return
-        when {
-            currentValue.url.isEmpty() -> {
-                _screenState.update {
-                    it.copy(
-                        credentialsAreVisible = false,
-                        ctaButtonEnabled = false,
-                        ctaButtonLabel = contextProvider.getString(R.string.setup_btn_next),
-                        password = "",
-                    )
-                }
-            }
-
-            !currentValue.credentialsAreVisible -> { // url is not empty, but credentials are not displayed yet
-                _screenState.update {
-                    it.copy(
-                        ctaButtonEnabled = true,
-                        ctaButtonLabel = contextProvider.getString(R.string.setup_btn_next),
-                    )
-                }
-            }
-
-            currentValue.username.isEmpty() && currentValue.password.isEmpty() -> {
-                _screenState.update {
-                    it.copy(
-                        ctaButtonEnabled = false,
-                        ctaButtonLabel = contextProvider.getString(R.string.setup_btn_login),
-                    )
-                }
-            }
-
-            else -> {
-                _screenState.update {
-                    it.copy(
-                        ctaButtonEnabled = true,
-                        ctaButtonLabel = contextProvider.getString(R.string.setup_btn_login),
-                    )
-                }
-            }
+        val isCtaButtonEnabled = with(currentValue) {
+            url.isNotEmpty() && username.isNotEmpty() && password.isNotEmpty() && error.isEmpty()
         }
+        _screenState.update {
+            it.copy(
+                ctaButtonEnabled = isCtaButtonEnabled,
+            )
+        }
+    }
+
+    private fun resetLoadingState() {
+        _screenState.update {
+            it.copy(
+                isLoading = false
+            )
+        }
+    }
+
+    fun handleInsecureConnectionCancelled() {
+        resetLoadingState()
     }
 
     fun getServerInfo(
@@ -233,13 +226,69 @@ class AuthenticationViewModel(
         }
         workManagerProvider.enqueueAccountDiscovery(accountName)
     }
+
+    fun showLoginError(message: String, highlightFields: Boolean) {
+        _screenState.update {
+            it.copy(
+                error = it.error.copy(
+                    fields = it.error.fields.toMutableMap().apply {
+                        if (highlightFields) {
+                            this[Field.EMAIL] = " "
+                            this[Field.PASSWORD] = " "
+                        }
+                    },
+                    message = message,
+                ),
+                ctaButtonEnabled = false,
+            )
+        }
+    }
+
+    fun showServerError(message: CharSequence) {
+        _screenState.update {
+            it.copy(
+                error = it.error.copy(
+                    fields = it.error.fields.toMutableMap().apply {
+                        this[Field.SERVER] = message
+                    }
+                ),
+                ctaButtonEnabled = false,
+            )
+        }
+    }
+
+    private fun resetLoginError() {
+        _screenState.update {
+            it.copy(
+                error = LoginError.none(),
+            )
+        }
+    }
+
+    data class LoginScreenState(
+        val ctaButtonEnabled: Boolean = false,
+        val isLoading: Boolean = false,
+        val username: String = "",
+        val password: String = "",
+        val url: String = "",
+        val error: LoginError = LoginError.none(),
+    )
+
+    data class LoginError(
+        val message: String,
+        val fields: Map<Field, CharSequence?>,
+    ) {
+
+        fun isEmpty() = message.isEmpty() && fields.isEmpty()
+
+        companion object {
+            fun none() = LoginError(message = "", fields = emptyMap())
+        }
+    }
+
+    enum class Field {
+        EMAIL, PASSWORD, SERVER,
+    }
 }
 
-data class LoginScreenState(
-    val ctaButtonEnabled: Boolean = false,
-    val ctaButtonLabel: String,
-    val username: String = "",
-    val password: String = "",
-    val url: String = "",
-    val credentialsAreVisible: Boolean = false,
-)
+

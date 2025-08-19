@@ -34,12 +34,10 @@ import android.accounts.AccountAuthenticatorResponse
 import android.accounts.AccountManager
 import android.content.Intent
 import android.os.Bundle
-import android.view.WindowManager.LayoutParams.FLAG_SECURE
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.owncloud.android.BuildConfig
 import com.owncloud.android.MainApp.Companion.accountType
 import com.owncloud.android.R
 import com.owncloud.android.databinding.AccountSetupHomecloudBinding
@@ -48,8 +46,10 @@ import com.owncloud.android.domain.exceptions.OwncloudVersionNotSupportedExcepti
 import com.owncloud.android.domain.exceptions.SSLErrorCode
 import com.owncloud.android.domain.exceptions.SSLErrorException
 import com.owncloud.android.domain.exceptions.ServerNotReachableException
+import com.owncloud.android.domain.exceptions.UnknownErrorException
 import com.owncloud.android.domain.server.model.ServerInfo
 import com.owncloud.android.extensions.checkPasscodeEnforced
+import com.owncloud.android.extensions.hideSoftKeyboard
 import com.owncloud.android.extensions.manageOptionLockSelected
 import com.owncloud.android.extensions.parseError
 import com.owncloud.android.extensions.showErrorInToast
@@ -72,11 +72,8 @@ import com.owncloud.android.presentation.security.LockType
 import com.owncloud.android.presentation.security.SecurityEnforced
 import com.owncloud.android.presentation.settings.SettingsActivity
 import com.owncloud.android.providers.ContextProvider
-import com.owncloud.android.providers.MdmProvider
 import com.owncloud.android.ui.activity.FileDisplayActivity
 import com.owncloud.android.ui.dialog.SslUntrustedCertDialog
-import com.owncloud.android.utils.CONFIGURATION_SERVER_URL
-import com.owncloud.android.utils.CONFIGURATION_SERVER_URL_INPUT_VISIBILITY
 import com.owncloud.android.utils.PreferenceUtils
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -86,7 +83,6 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
 
     private val authenticationViewModel by viewModel<AuthenticationViewModel>()
     private val contextProvider by inject<ContextProvider>()
-    private val mdmProvider by inject<MdmProvider>()
 
     private var authTokenType: String? = null
     private var loginAction: Byte = ACTION_CREATE
@@ -105,11 +101,6 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         super.onCreate(savedInstanceState)
 
         checkPasscodeEnforced(this)
-
-        // Protection against screen recording
-        if (!BuildConfig.DEBUG) {
-            window.addFlags(FLAG_SECURE)
-        } // else, let it go, or taking screenshots & testing will not be possible
 
         // Get values from intent
         handleDeepLink()
@@ -153,10 +144,15 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         binding.root.filterTouchesWhenObscured =
             PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(this@LoginActivity)
 
-        initBrandableOptionsUI()
-
         binding.ctaButton.setOnClickListener {
+            hideSoftKeyboard(clearFocus = true)
             authenticationViewModel.handleCtaButtonClicked()
+        }
+
+        binding.resetPasswordLink.setOnClickListener {
+            // TODO: Implement reset password functionality
+            // For now, show a toast message
+            showMessageInSnackbar(message = "Not implemented yet")
         }
 
         binding.settingsLink.setOnClickListener {
@@ -237,12 +233,12 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         }
 
         authenticationViewModel.screenState.observe(this) {
-            updateLoginButtonState(it.ctaButtonEnabled, it.ctaButtonLabel)
-            binding.accountUsernameContainer.isVisible = it.credentialsAreVisible
-            binding.accountPasswordContainer.isVisible = it.credentialsAreVisible
+            updateLoginButtonState(it.ctaButtonEnabled)
+            updateLoadingState(it.isLoading)
             binding.hostUrlInput.updateTextIfDiffers(it.url)
             binding.accountPassword.updateTextIfDiffers(it.password)
             binding.accountUsername.updateTextIfDiffers(it.username)
+            showErrorsIfAny(it.error)
         }
     }
 
@@ -265,7 +261,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
                         proceedLogin(serverInfo)
                     }
                     setNegativeButton(android.R.string.cancel) { dialog, which ->
-                        // do nothing
+                        authenticationViewModel.handleInsecureConnectionCancelled()
                     }
                     setCancelable(false)
                     show()
@@ -311,12 +307,16 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
                 text = getString(R.string.ssl_connection_not_secure)
             }
 
+            uiResult.error is UnknownErrorException -> {
+                text = getString(R.string.homecloud_login_server_connection_error)
+            }
+
             else -> {
                 text = uiResult.error?.parseError("", resources, true)
             }
         }
         text?.let {
-            showError(it)
+            authenticationViewModel.showServerError(it)
         }
     }
 
@@ -333,25 +333,36 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
     }
 
     private fun loginIsError(uiResult: UIResult.Error<String>) {
-        val text = when (uiResult.error) {
+        when (uiResult.error) {
             is NoNetworkConnectionException, is ServerNotReachableException -> {
-                getString(R.string.error_no_network_connection)
+                authenticationViewModel.showLoginError(
+                    message = getString(R.string.error_no_network_connection),
+                    highlightFields = false,
+                )
             }
 
             else -> {
-                uiResult.error?.parseError("", resources, true)
+                val text = uiResult.error?.parseError("", resources, true)?.toString()
+                authenticationViewModel.showLoginError(
+                    message = text ?: "",
+                    highlightFields = true,
+                )
             }
-        }
-        text?.let {
-            showError(it)
         }
     }
 
-    private fun showError(text: CharSequence) {
-        MaterialAlertDialogBuilder(this)
-            .setMessage(text)
-            .setPositiveButton(android.R.string.ok) { _, _ -> }
-            .show()
+    private fun showErrorsIfAny(loginError: AuthenticationViewModel.LoginError) {
+        loginError.fields.getOrDefault(AuthenticationViewModel.Field.SERVER, null).let { fieldError ->
+            binding.hostUrlInputLayout.error = fieldError
+        }
+        loginError.fields.getOrDefault(AuthenticationViewModel.Field.EMAIL, null).let { fieldError ->
+            binding.accountUsernameContainer.error = fieldError
+        }
+        loginError.fields.getOrDefault(AuthenticationViewModel.Field.PASSWORD, null).let { fieldError ->
+            binding.accountPasswordContainer.error = fieldError
+        }
+        binding.errorMessage.text = loginError.message
+        binding.errorMessage.isVisible = loginError.message.isNotBlank()
     }
 
     private fun updateBaseUrlAndHostInput(uiResult: UIResult<String>) {
@@ -384,28 +395,28 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
 
     override fun onCancelCertificate() {
         Timber.d("Server certificate is not trusted")
-        showError(getString(R.string.ssl_certificate_not_trusted))
+        authenticationViewModel.handleInsecureConnectionCancelled()
+        authenticationViewModel.showServerError(
+            getString(R.string.ssl_certificate_not_trusted)
+        )
     }
 
     override fun onFailedSavingCertificate() {
         Timber.d("Server certificate could not be saved")
-        showError(getString(R.string.ssl_validator_not_saved))
+        authenticationViewModel.handleInsecureConnectionCancelled()
+        authenticationViewModel.showServerError(
+            getString(R.string.ssl_validator_not_saved)
+        )
     }
 
-    private fun initBrandableOptionsUI() {
-        val showInput = mdmProvider.getBrandingBoolean(mdmKey = CONFIGURATION_SERVER_URL_INPUT_VISIBILITY, booleanKey = R.bool.show_server_url_input)
-        binding.hostUrlFrame.isVisible = showInput
-
-        val url = mdmProvider.getBrandingString(mdmKey = CONFIGURATION_SERVER_URL, stringKey = R.string.server_url)
-        if (url.isNotEmpty()) {
-            binding.hostUrlInput.setText(url)
-        }
+    private fun updateLoginButtonState(isEnabled: Boolean) {
+        binding.ctaButton.isEnabled = isEnabled
     }
 
-    private fun updateLoginButtonState(isEnabled: Boolean, label: String) {
-        binding.ctaButton.run {
-            this.isEnabled = isEnabled
-            this.text = label
+    private fun updateLoadingState(isLoading: Boolean) {
+        with(binding) {
+            ctaButton.isVisible = !isLoading
+            loadingLayout.isVisible = isLoading
         }
     }
 

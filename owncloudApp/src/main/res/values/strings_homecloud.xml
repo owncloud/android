@@ -2,4 +2,19 @@
 <resources>
     <string name="drawer_menu_sign_out">Sign out</string>
     <string name="setup_btn_next">Next</string>
+    <string name="welcome_feature_done_button">Done</string>
+
+    <string name="homecloud_login_email_hint">Email</string>
+    <string name="homecloud_login_server_address_hint">Connecting to</string>
+    <string name="homecloud_login_password_hint">Password</string>
+    <string name="homecloud_login_email_input_hint">Enter email address</string>
+    <string name="homecloud_login_server_address_input_hint">No device detected</string>
+    <string name="homecloud_login_password_input_hint">Enter password</string>
+    <string name="homecloud_reset_password">Reset Password</string>
+    <string name="homecloud_login_loading">Logging in to your account</string>
+    <string name="homecloud_login_auth_unauthorized">Incorrect email or password</string>
+    <string name="homecloud_login_server_connection_error">An error occurred while connecting to the server.</string>
+
+    <string name="welcome_feature_6_title">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore aliqua. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore aliqua. THE END.</string>
+    <string name="welcome_feature_6_text">Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. THE END.</string>
 </resources>
