@@ -117,8 +117,8 @@ android {
 
         testInstrumentationRunner "com.owncloud.android.utils.OCTestAndroidJUnitRunner"
 
-        versionCode = 1_00_06_0
-        versionName = "1.0.6"
+        versionCode = 1_00_07_0
+        versionName = "1.0.7"
 
         buildConfigField "String", gitRemote, "\"" + getGitOriginRemote() + "\""
         buildConfigField "String", commitSHA1, "\"" + getLatestGitHash() + "\""
