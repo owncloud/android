@@ -484,5 +484,6 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         if (password.isNotBlank()) {
             binding.accountPassword.setText(password)
         }
+        hideSoftKeyboard(clearFocus = true)
     }
 }
