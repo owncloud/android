@@ -1,0 +1,31 @@
+ext.configureHomecloudLoginPrefill = {
+    // Load optional prefill credentials from local.properties (untracked)
+    def localProps = new Properties()
+    def localPropsFile = rootProject.file("local.properties")
+    if (localPropsFile.exists()) {
+        localPropsFile.withInputStream { localProps.load(it) }
+    }
+
+    def prefillUrl = (localProps.getProperty("homecloud.login.url") ?: "").trim()
+    def prefillUsername = (localProps.getProperty("homecloud.login.username") ?: "").trim()
+    def prefillPassword = (localProps.getProperty("homecloud.login.password") ?: "").trim()
+
+    // Provide default empty values for all variants so code compiles everywhere
+    android.defaultConfig.buildConfigField "String", "HOME_CLOUD_PREFILL_URL", '""'
+    android.defaultConfig.buildConfigField "String", "HOME_CLOUD_PREFILL_USERNAME", '""'
+    android.defaultConfig.buildConfigField "String", "HOME_CLOUD_PREFILL_PASSWORD", '""'
+
+    // Enable in debug buildType (any flavor)
+    android.buildTypes.debug.buildConfigField "String", "HOME_CLOUD_PREFILL_URL", "\"${prefillUrl}\""
+    android.buildTypes.debug.buildConfigField "String", "HOME_CLOUD_PREFILL_USERNAME", "\"${prefillUsername}\""
+    android.buildTypes.debug.buildConfigField "String", "HOME_CLOUD_PREFILL_PASSWORD", "\"${prefillPassword}\""
+
+    // Enable in preprod flavor (any buildType)
+    if (android.productFlavors.hasProperty('preprod')) {
+        android.productFlavors.preprod.buildConfigField "String", "HOME_CLOUD_PREFILL_URL", "\"${prefillUrl}\""
+        android.productFlavors.preprod.buildConfigField "String", "HOME_CLOUD_PREFILL_USERNAME", "\"${prefillUsername}\""
+        android.productFlavors.preprod.buildConfigField "String", "HOME_CLOUD_PREFILL_PASSWORD", "\"${prefillPassword}\""
+    }
+}
+
+
