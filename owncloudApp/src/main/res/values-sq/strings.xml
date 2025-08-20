@@ -440,8 +440,8 @@
   <string name="confirmation_disable_camera_uploads_title">Ripohojeni</string>
   <string name="confirmation_disable_pictures_upload_message">Jeni i sigurt se doni të çaktivizohet kjo veçori? Fotot e mbetura nuk do të ngarkohen.</string>
   <string name="confirmation_disable_videos_upload_message">Jeni i sigurt se doni të çaktivizohet kjo veçori? Videot e mbetura nuk do të ngarkohen.</string>
-  <string name="proper_pics_folder_warning_camera_upload">Ju lutemi, sigurohuni që dosja e përzgjedhur është ajo ku kamera që po përdorni ruan fotot e bëra. Përndryshe, veçoria s\’do të jetë në gjendje të pikasë fotot tuaja. Kini parasysh që fotot do të ngarkohen të paktën 15 minuta pasi të jenë bërë.</string>
-  <string name="proper_videos_folder_warning_camera_upload">Ju lutemi, sigurohuni që dosja e përzgjedhur është ajo ku kamera që po përdorni ruan videot e regjistruara. Përndryshe, veçoria s\’do të jetë në gjendje të pikasë videot tuaja. Kini parasysh që videot do të ngarkohen të paktën 15 minuta pasi të jenë regjistruar.</string>
+  <string name="proper_pics_folder_warning_camera_upload">Ju lutemi, garantoni se dosja e përzgjedhur gjendet atje ku kamera që po përdorni ruan fotot e bëra. Përndryshe, veçoria s’do të jetë në gjendje të pikasë fotot tuaja. Mbani parasysh se fotot do të ngarkohen të paktën 15 minuta pas bërjes së tyre. Për funksionim më të mirë, siguroni që te rregullimet e pajisjes tuaj %1$s të jetë lejuar të xhirojë në prapaskenë.</string>
+  <string name="proper_videos_folder_warning_camera_upload">Ju lutemi, garantoni se dosja e përzgjedhur gjendet atje ku kamera që po përdorni ruan videot e bëra. Përndryshe, veçoria s’do të jetë në gjendje të pikasë videot tuaja. Mbani parasysh se videot do të ngarkohen të paktën 15 minuta pas regjistrimit të tyre. Për funksionim më të mirë, siguroni që te rregullimet e pajisjes tuaj %1$s të jetë lejuar të xhirojë në prapaskenë.</string>
   <string name="conflict_title">Kartelë me përplasje</string>
   <string name="conflict_description">Ka një kundërshti në kartelën %1$s, prekeni që të zgjidhet.</string>
   <string name="conflict_message">Cilat kartela doni të mbani? Nëse përzgjidhni të dy versionet, kartelës vendore do t\’i shtohet një numër te emri.</string>
@@ -671,14 +671,14 @@
   <string name="global_proceed">Bëje</string>
   <string name="error_webfinger_username_empty">Emër përdoruesi i zbrazët</string>
   <!--Release Notes-->
-  <string name="release_notes_4_6_0_title_shares_space_docs_provider">Hapësirë pjesësh në eksplorues kartelash të vetë Android-it</string>
-  <string name="release_notes_4_6_0_subtitle_shares_space_docs_provider">Hapësira e pjesëve tanimë shfaqet tok me hapësira të tjera në Furnizues Dokumentesh në llogari Infinite Scale</string>
   <string name="release_notes_header">E re në %1$s</string>
   <string name="release_notes_footer">Faleminderit për përdorimin e %1$s.\n❤</string>
   <string name="release_notes_proceed">Bëje</string>
   <string name="release_notes_icon">Ikonë shënimesh hedhjeje në qarkullim</string>
   <string name="release_notes_bugfixes_title">Ndreqje të metash të vockla</string>
   <string name="release_notes_bugfixes_subtitle">U ndreqën disa të meta, për të përmirësuar punimin te aplikacioni</string>
+  <string name="release_notes_4_6_1_title_shares_space_docs_provider">Hapësirë pjesësh në eksplorues kartelash të vetë Android-it</string>
+  <string name="release_notes_4_6_1_title_duplicated_automatic_uploads">U përmirësuan ngarkimet e automatizuara</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Hape në web</string>
   <string name="ic_action_open_with_web">Hape në %1$s (web)</string>

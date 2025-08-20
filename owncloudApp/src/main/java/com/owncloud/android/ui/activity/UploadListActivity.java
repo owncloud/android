@@ -7,8 +7,9 @@
  * @author Christian Schabesberger
  * @author Juan Carlos Garrote Gascón
  * @author Aitor Ballesteros Pavón
+ * @author Jorge Aguado Recio
  *
- * Copyright (C) 2024 ownCloud GmbH.
+ * Copyright (C) 2025 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -97,7 +98,7 @@ public class UploadListActivity extends FileActivity {
 
     private void createUploadListFragment() {
         //UploadListFragment uploadList = new UploadListFragment();
-        TransferListFragment uploadList = new TransferListFragment();
+        TransferListFragment uploadList = TransferListFragment.newInstance(getAccount());
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.add(R.id.left_fragment_container, uploadList, TAG_UPLOAD_LIST_FRAGMENT);
         transaction.commit();

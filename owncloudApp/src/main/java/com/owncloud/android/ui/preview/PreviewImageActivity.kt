@@ -8,7 +8,7 @@
  * @author Juan Carlos Garrote Gascón
  * @author Jorge Aguado Recio
  *
- * Copyright (C) 2024 ownCloud GmbH.
+ * Copyright (C) 2025 ownCloud GmbH.
  *
  *
  * This program is free software: you can redistribute it and/or modify
@@ -296,10 +296,14 @@ class PreviewImageActivity : FileActivity(),
         if (operationsServiceBinder != null) {
             savedPosition = position
             hasSavedPosition = true
-            val currentFile = previewImagePagerAdapter.getFileAt(position)
-            updateActionBarTitle(currentFile.fileName)
-            if (!previewImagePagerAdapter.pendingErrorAt(position)) {
-                fileOperationsViewModel.performOperation(FileOperation.SynchronizeFileOperation(currentFile, account.name))
+            if (previewImagePagerAdapter.count != 0) {
+                val currentFile = previewImagePagerAdapter.getFileAt(position)
+                updateActionBarTitle(currentFile.fileName)
+                if (!previewImagePagerAdapter.pendingErrorAt(position)) {
+                    fileOperationsViewModel.performOperation(FileOperation.SynchronizeFileOperation(currentFile, account.name))
+                }
+            } else {
+                backToDisplayActivity()
             }
 
             // Call to reset image zoom to initial state

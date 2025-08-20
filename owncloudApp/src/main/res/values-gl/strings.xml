@@ -356,8 +356,6 @@ Descárgueo de aquí: %2$s</string>
   <string name="confirmation_disable_camera_uploads_title">Confirmar</string>
   <string name="confirmation_disable_pictures_upload_message">Confirma que quere desactivar esta característica? As imaxes pendentes non van ser enviadas</string>
   <string name="confirmation_disable_videos_upload_message">Confirma que quere desactivar esta característica? Os vídeos pendentes non van ser enviados</string>
-  <string name="proper_pics_folder_warning_camera_upload">Asegúrese de que o cartafol seleccionado é onde a cámara que está a usar garda as imaxes tomadas. Se non, a función non poderá detectar as súas imaxes. Teña en conta que as imaxes serán enviadas, polo menos, 15 minutos despois de tomalas.</string>
-  <string name="proper_videos_folder_warning_camera_upload">Asegúrese de que o cartafol seleccionado é onde a cámara que está a usar garda os vídeos gravados. Se non, a función non poderá detectar os seus vídeos. Teña en conta que os vídeos serán enviados, polo menos, 15 minutos despois de gravalos.</string>
   <string name="conflict_description">Hai un conflito no ficheiro %1$s, toque para solucionalo</string>
   <string name="conflict_message">Que ficheiros quere conservar? Se selecciona ámbalas dúas versións, engadiráselle un número ao nome do ficheiro local.</string>
   <string name="conflict_keep_both">Conxervar ambos</string>

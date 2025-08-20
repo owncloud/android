@@ -442,8 +442,6 @@
   <string name="confirmation_disable_camera_uploads_title">確認</string>
   <string name="confirmation_disable_pictures_upload_message">本当にこの機能を無効にしますか？保留中の写真はアップロードされません。</string>
   <string name="confirmation_disable_videos_upload_message">本当にこの機能を無効にしますか？保留中のビデオはアップロードされません。</string>
-  <string name="proper_pics_folder_warning_camera_upload">あなたが撮った写真の保存先が、選択されたフォルダーであることを確認してください。そうでないと、あなたの写真を特定することができません。また写真は撮ってから少なくとも15分後にアップロードされます。</string>
-  <string name="proper_videos_folder_warning_camera_upload">あなたが撮った動画の保存先が、選択されたフォルダーであることを確認してください。そうでないと、あなたの動画を特定することができません。また動画は撮ってから少なくとも15分後にアップロードされます。</string>
   <string name="conflict_title">競合ファイル</string>
   <string name="conflict_description">ファイル %1$s に他の競合バージョンがあります。クリックして解決します。</string>
   <string name="conflict_message">どちらのファイルを保存したいですか？両方のバージョンを選択した場合は、ファイル名の後ろに数字を追加したファイルのコピーを作成します。</string>

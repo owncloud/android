@@ -3,8 +3,9 @@
  *
  * @author David González Verdugo
  * @author Juan Carlos Garrote Gascón
+ * @author Jorge Aguado Recio
  *
- * Copyright (C) 2024 ownCloud GmbH.
+ * Copyright (C) 2025 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -50,6 +51,8 @@ const val KEY_FEATURE_SPACES = "KEY_FEATURE_SPACES"
 const val KEY_CLIENT_REGISTRATION_CLIENT_ID = "client_id"
 const val KEY_CLIENT_REGISTRATION_CLIENT_SECRET = "client_secret"
 const val KEY_CLIENT_REGISTRATION_CLIENT_EXPIRATION_DATE = "client_secret_expires_at"
+
+const val KEY_IS_KITEWORKS_SERVER = "is_kiteworks_server"
 
 /** Query parameters to retrieve the authorization code. More info: https://tools.ietf.org/html/rfc6749#section-4.1.1 */
 const val QUERY_PARAMETER_REDIRECT_URI = "redirect_uri"

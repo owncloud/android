@@ -2,7 +2,9 @@
  * ownCloud Android client application
  *
  * @author Abel García de Prada
- * Copyright (C) 2020 ownCloud GmbH.
+ * @author Jorge Aguado Recio
+ *
+ * Copyright (C) 2025 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -50,7 +52,7 @@ class OCRemoteAuthenticationDataSource(
         val getBaseUrlRemoteOperation = GetBaseUrlRemoteOperation()
         val rawBaseUrl = executeRemoteOperation { getBaseUrlRemoteOperation.execute(client) }
 
-        val userBaseUri = rawBaseUrl?.replace(WEBDAV_FILES_PATH_4_0, "")
+        val userBaseUri = rawBaseUrl?.takeIf { !client.isKiteworksServer }?.replace(WEBDAV_FILES_PATH_4_0, "")
             ?: client.baseUri.toString()
 
         // Get user info. It is needed to save the account into the account manager
@@ -59,6 +61,10 @@ class OCRemoteAuthenticationDataSource(
         executeRemoteOperation {
             GetRemoteUserInfoOperation().execute(client)
         }.let { userInfo = it.toDomain() }
+
+        if (client.isKiteworksServer) {
+            userInfo = userInfo.copy(id = userInfo.displayName)
+        }
 
         return Pair(userInfo, userBaseUri)
     }

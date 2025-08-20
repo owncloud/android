@@ -313,6 +313,7 @@
   <string name="biometric_prompt_title">Biometric log in</string>
   <string name="biometric_prompt_subtitle">Log in using your biometric credential.</string>
   <string name="biometric_dialog_title">Do you want to additionally activate biometric security?</string>
+  <string name="biometric_not_available">Biometric unlocking is not available because the system could not provide it</string>
   <string name="media_notif_ticker">%1$s music player</string>
   <string name="media_state_playing">%1$s (playing)</string>
   <string name="media_state_loading">%1$s (loading)</string>
@@ -442,8 +443,8 @@
   <string name="confirmation_disable_camera_uploads_title">Confirm</string>
   <string name="confirmation_disable_pictures_upload_message">Are you sure you want to disable this feature? The pending pictures will not be uploaded.</string>
   <string name="confirmation_disable_videos_upload_message">Are you sure you want to disable this feature? The pending videos will not be uploaded.</string>
-  <string name="proper_pics_folder_warning_camera_upload">Please make sure the folder selected is where the camera you are using saves the pictures taken. Otherwise, the feature will not be able to detect your pictures. Keep in mind that pictures will be uploaded in at least 15 minutes after taking them.</string>
-  <string name="proper_videos_folder_warning_camera_upload">Please make sure the folder selected is where the camera you are using saves the videos recorded. Otherwise, the feature will not be able to detect your videos. Keep in mind that videos will be uploaded in at least 15 minutes after recording them.</string>
+  <string name="proper_pics_folder_warning_camera_upload">Please make sure the folder selected is where the camera you are using saves the pictures taken. Otherwise, the feature will not be able to detect your pictures. Keep in mind that pictures will be uploaded in at least 15 minutes after taking them. For a better performance, make sure in your device settings that %1$s is allowed to run in background.</string>
+  <string name="proper_videos_folder_warning_camera_upload">Please make sure the folder selected is where the camera you are using saves the videos recorded. Otherwise, the feature will not be able to detect your videos. Keep in mind that videos will be uploaded in at least 15 minutes after recording them. For a better performance, make sure in your device settings that %1$s is allowed to run in background.</string>
   <string name="conflict_title">File in conflict</string>
   <string name="conflict_description">There is a conflict in file %1$s, tap to solve it.</string>
   <string name="conflict_message">Which files do you want to keep? If you select both versions, the local file will have a number added to its name.</string>
@@ -730,10 +731,17 @@
   <string name="content_description_image_previewed">Image previewed</string>
   <string name="content_description_add_public_link">Add public link</string>
   <string name="content_description_get_private_link">Get private link</string>
+  <string name="content_description_get_public_link">Get public link for %1$s</string>
+  <string name="content_description_delete_public_link">Delete public link for %1$s</string>
+  <string name="content_description_edit_public_link">Edit public link for %1$s</string>
+  <string name="content_description_remove_account">Remove account %1$s</string>
   <string name="content_description_add_new_content">Add new content</string>
   <string name="content_description_add_new_content_expanded">Add new content expanded</string>
+  <string name="content_description_clean_account_storage">Clean account storage for %1$s</string>
   <string name="content_description_logo">Logo</string>
   <string name="content_description_add_share">Add share</string>
+  <string name="content_description_edit_share">Edit share with %1$s</string>
+  <string name="content_description_delete_share">Delete share with %1$s</string>
   <string name="content_description_file_operations">%1$s operations</string>
   <string name="content_description_sort_by_name_ascending">Sort by %1$s ascending</string>
   <string name="content_description_sort_by_name_descending">Sort by %1$s descending</string>

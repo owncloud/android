@@ -340,8 +340,6 @@
   <string name="confirmation_disable_camera_uploads_title">Confirma</string>
   <string name="confirmation_disable_pictures_upload_message">Estàs segur que vols desactivar aquesta funció? Les fotos pendents no es carregaran.</string>
   <string name="confirmation_disable_videos_upload_message">Estàs segur que vols desactivar aquesta funció? Les fotos pendents no es carregaran.</string>
-  <string name="proper_pics_folder_warning_camera_upload">Si us plau assegura\'t de que la carpeta que has seleccionat és on la càmara que estàs fent servir guarda les fotografies fetes. En cas contrari l\'aplicació no podrà detectar les vostres imatges. Tingueu en compte que les imatges es penjarant al menys 15 minuts després de fer-les.</string>
-  <string name="proper_videos_folder_warning_camera_upload">Si us plau assegura\'t de que la carpeta que has seleccionat és on la càmara que estàs fent servir guarda els videos fets. En cas contrari l\'aplicació no podrà detectar els vostres videos. Tingueu en compte que els videos es penjarant al menys 15 minuts després de fer-los.</string>
   <string name="conflict_description">Hi ha un conflicte en l\'arxiu 1%1$s, clicka per arreglar-ho</string>
   <string name="conflict_message">Quins fitxers vols mantenir? Si seleccioneu les dues versions, el fitxer local tindrà un número afegit al seu nom.</string>
   <string name="conflict_keep_both">Mantén-los ambdós</string>

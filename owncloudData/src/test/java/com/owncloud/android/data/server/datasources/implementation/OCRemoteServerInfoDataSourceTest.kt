@@ -3,8 +3,9 @@
  *
  * @author Abel García de Prada
  * @author Juan Carlos Garrote Gascón
+ * @author Jorge Aguado Recio
  *
- * Copyright (C) 2024 ownCloud GmbH.
+ * Copyright (C) 2025 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -39,6 +40,7 @@ import com.owncloud.android.testutil.OC_INSECURE_SERVER_INFO_BASIC_AUTH
 import com.owncloud.android.testutil.OC_INSECURE_SERVER_INFO_BEARER_AUTH
 import com.owncloud.android.testutil.OC_SECURE_SERVER_INFO_BASIC_AUTH
 import com.owncloud.android.testutil.OC_SECURE_SERVER_INFO_BEARER_AUTH
+import com.owncloud.android.testutil.OC_SECURE_SERVER_INFO_OIDC_AUTH
 import com.owncloud.android.utils.createRemoteOperationResultMock
 import io.mockk.every
 import io.mockk.mockk
@@ -96,6 +98,24 @@ class OCRemoteServerInfoDataSourceTest {
         assertEquals(expectedValue, currentValue)
 
         verify { ocServerInfoService.checkPathExistence(OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl, false, ocClientMocked) }
+    }
+
+    @Test
+    fun `getAuthenticationMethod returns bearer authentication when the server is from Kiteworks`() {
+        val expectedValue = AuthenticationMethod.BEARER_TOKEN
+        prepareAuthorizationMethodToBeRetrieved(expectedValue)
+
+        every {
+            ocClientMocked.isKiteworksServer
+        } returns true
+
+        val currentValue = ocRemoteServerInfoDatasource.getAuthenticationMethod(OC_SECURE_SERVER_INFO_OIDC_AUTH.baseUrl)
+
+        assertEquals(expectedValue, currentValue)
+
+        verify {
+            ocServerInfoService.checkPathExistence(OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl, false, ocClientMocked)
+        }
     }
 
     @Test

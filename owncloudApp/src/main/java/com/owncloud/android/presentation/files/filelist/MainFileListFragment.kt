@@ -8,7 +8,7 @@
  * @author Jorge Aguado Recio
  * @author Aitor Ballesteros Pavón
  *
- * Copyright (C) 2024 ownCloud GmbH.
+ * Copyright (C) 2025 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -386,6 +386,7 @@ class MainFileListFragment : Fragment(),
             layoutManager = layoutManager,
             isPickerMode = isPickingAFolder(),
             listener = this@MainFileListFragment,
+            isMultiPersonal = isMultiPersonal
         )
 
         binding.recyclerViewMainFileList.adapter = fileListAdapter
@@ -636,10 +637,17 @@ class MainFileListFragment : Fragment(),
                 fileNameBottomSheet.text = file.fileName
 
                 val fileSizeBottomSheet = fileOptionsBottomSheetSingleFile.findViewById<TextView>(R.id.file_size_bottom_sheet)
-                fileSizeBottomSheet.text = DisplayUtils.bytesToHumanReadable(file.length, requireContext(), true)
+                val isFolderInKw = isMultiPersonal && file.isFolder
+                fileSizeBottomSheet.text = if (isFolderInKw) "" else DisplayUtils.bytesToHumanReadable(file.length, requireContext(), true)
+
+                val fileSeparatorBottomSheet = fileOptionsBottomSheetSingleFile.findViewById<TextView>(R.id.file_separator_bottom_sheet)
+                fileSeparatorBottomSheet.visibility = if (isFolderInKw) View.GONE else View.VISIBLE
 
                 val fileLastModBottomSheet = fileOptionsBottomSheetSingleFile.findViewById<TextView>(R.id.file_last_mod_bottom_sheet)
                 fileLastModBottomSheet.text = DisplayUtils.getRelativeTimestamp(requireContext(), file.modificationTimestamp)
+                fileLastModBottomSheet.layoutParams = (fileLastModBottomSheet.layoutParams as ViewGroup.MarginLayoutParams).also {
+                        params -> params.marginStart = if (isFolderInKw) 0 else
+                    requireContext().resources.getDimensionPixelSize(R.dimen.standard_quarter_margin) }
 
                 fileOptionsBottomSheetSingleFileLayout = fileOptionsBottomSheetSingleFile.findViewById(R.id.file_options_bottom_sheet_layout)
                 menuOptions.forEach { menuOption ->

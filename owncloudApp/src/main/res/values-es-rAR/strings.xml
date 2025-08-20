@@ -349,8 +349,6 @@
   <string name="confirmation_disable_camera_uploads_title">Confirmar</string>
   <string name="confirmation_disable_pictures_upload_message">¿Está seguro que desea inhabilitar esta funcionalidad? Las imágenes pendientes no serán subidas</string>
   <string name="confirmation_disable_videos_upload_message">¿Está seguro que quiere deshabilitar esta funcionalidad? Los videos pendientes no serán subidos</string>
-  <string name="proper_pics_folder_warning_camera_upload">Por favor asegurate que la carpeta seleccionada es donde la cámara que estas usando guarda las fotos sacadas. De otro modo, esta funcionalidad no será capaz de detectar tus fotos. Tené en cuenta que las fotos serán subidas al menos 15 minutos después de haber sido tomadas.</string>
-  <string name="proper_videos_folder_warning_camera_upload">Por favor asegurate de que la carpeta seleccionada es donde la cámara que estas usando guardas los videos grabados. De otro modo, esta funcionalidad no será capaz de detectar tus videos. Tené en cuenta que los videos serán subidos al menos 15 minutos después de haber sido grabados.</string>
   <string name="conflict_description">Hay un conflicto con el archivo %1$s, presione para resolverlo</string>
   <string name="conflict_message">¿Qué archivos desea mantener? Si selecciona ambas versiones, al archivo local se le agregará un número a su nombre.</string>
   <string name="conflict_keep_both">Mantener ambas</string>

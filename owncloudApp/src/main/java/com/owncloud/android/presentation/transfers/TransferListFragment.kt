@@ -2,8 +2,9 @@
  * ownCloud Android client application
  *
  * @author Juan Carlos Garrote Gascón
+ * @author Jorge Aguado Recio
  *
- * Copyright (C) 2023 ownCloud GmbH.
+ * Copyright (C) 2025 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -20,6 +21,7 @@
 
 package com.owncloud.android.presentation.transfers
 
+import android.accounts.Account
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -39,13 +41,20 @@ import com.owncloud.android.domain.transfers.model.OCTransfer
 import com.owncloud.android.domain.transfers.model.TransferResult
 import com.owncloud.android.extensions.collectLatestLifecycleFlow
 import com.owncloud.android.presentation.authentication.AccountUtils
+import com.owncloud.android.presentation.capabilities.CapabilityViewModel
 import com.owncloud.android.ui.activity.FileActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 import java.io.File
 
 class TransferListFragment : Fragment() {
 
     private val transfersViewModel by viewModel<TransfersViewModel>()
+    private val capabilityViewModel: CapabilityViewModel by viewModel {
+        parametersOf(
+            requireArguments().getString(ARG_ACCOUNT_NAME),
+        )
+    }
 
     private var _binding: FragmentTransferListBinding? = null
     val binding get() = _binding!!
@@ -92,6 +101,7 @@ class TransferListFragment : Fragment() {
             clearSuccessful = {
                 transfersViewModel.clearSuccessfulTransfers()
             },
+            isMultipersonal = capabilityViewModel.checkMultiPersonal()
         )
         binding.transfersRecyclerView.apply {
             layoutManager = LinearLayoutManager(context)
@@ -128,5 +138,17 @@ class TransferListFragment : Fragment() {
             listEmptyDatasetSubTitle.setText(R.string.upload_list_empty_subtitle)
         }
         transfersAdapter.setData(transfersWithSpace)
+    }
+
+    companion object {
+        private const val ARG_ACCOUNT_NAME = "ACCOUNT_NAME"
+
+        @JvmStatic
+        fun newInstance(account: Account): TransferListFragment {
+            val args = Bundle().apply {
+                putString(ARG_ACCOUNT_NAME, account.name)
+            }
+            return TransferListFragment().apply { arguments = args }
+        }
     }
 }

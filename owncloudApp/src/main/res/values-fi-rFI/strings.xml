@@ -442,8 +442,6 @@
   <string name="confirmation_disable_camera_uploads_title">Vahvista</string>
   <string name="confirmation_disable_pictures_upload_message">Oletko varma, että haluat poistaa tämän ominaisuuden käytöstä? Lähetystä  odottavia kuvia ei lähetetä.</string>
   <string name="confirmation_disable_videos_upload_message">Oletko varma, että haluat poistaa tämän ominaisuuden käytöstä? Lähetystä odottavia videoita ei lähetetä.</string>
-  <string name="proper_pics_folder_warning_camera_upload">Varmista, että valittu kansio on se, johon käyttämäsi kamera tallentaa kuvat,  muuten ominaisuus ei havaitse kuviasi. Muista, että kuvien lähettäminen palvelimelle tapahtuu vähintään 15 minuutin päästä kuvien ottamisesta.</string>
-  <string name="proper_videos_folder_warning_camera_upload">Varmista, että valittu kansio on se, johon käyttämäsi kamera tallentaa videot,  muuten ominaisuus ei havaitse videoitasi. Muista, että videoiden lähettäminen palvelimelle tapahtuu vähintään 15 minuutin päästä niiden  tallentamisesta.</string>
   <string name="conflict_title">Tiedostovirhe</string>
   <string name="conflict_description">Tiedoston %1$s osalta on konflikti, napauta ratkaistaksesi tilanteen.</string>
   <string name="conflict_message">Mitkä tiedostot haluat säilyttää? Jos valitset kummatkin versiot, paikallisen version tiedoston nimeen lisätään numero.</string>

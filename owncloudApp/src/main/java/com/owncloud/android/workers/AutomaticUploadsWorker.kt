@@ -3,8 +3,9 @@
  *
  * @author Abel García de Prada
  * @author Juan Carlos Garrote Gascón
+ * @author Jorge Aguado Recio
  *
- * Copyright (C) 2022 ownCloud GmbH.
+ * Copyright (C) 2025 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -122,9 +123,7 @@ class AutomaticUploadsWorker(
         WorkManager.getInstance(appContext).cancelUniqueWork(AUTOMATIC_UPLOADS_WORKER)
     }
 
-    private fun syncFolder(folderBackUpConfiguration: FolderBackUpConfiguration?) {
-        if (folderBackUpConfiguration == null) return
-
+    private fun syncFolder(folderBackUpConfiguration: FolderBackUpConfiguration) {
         val syncType = when {
             folderBackUpConfiguration.isPictureUploads -> SyncType.PICTURE_UPLOADS
             folderBackUpConfiguration.isVideoUploads -> SyncType.VIDEO_UPLOADS
@@ -133,6 +132,7 @@ class AutomaticUploadsWorker(
         }
 
         val currentTimestamp = System.currentTimeMillis()
+        updateTimestamp(folderBackUpConfiguration, syncType, currentTimestamp)
 
         val localPicturesDocumentFiles: List<DocumentFile> = getFilesReadyToUpload(
             syncType = syncType,
@@ -166,7 +166,6 @@ class AutomaticUploadsWorker(
                 chargingOnly = folderBackUpConfiguration.chargingOnly
             )
         }
-        updateTimestamp(folderBackUpConfiguration, syncType, currentTimestamp)
     }
 
     private fun showNotification(
@@ -248,10 +247,14 @@ class AutomaticUploadsWorker(
         val arrayOfLocalFiles = documentTree?.listFiles() ?: arrayOf()
 
         val filteredList: List<DocumentFile> = arrayOfLocalFiles
+            .asSequence()
+            .filter {
+                it.lastModified() in lastSyncTimestamp..<currentTimestamp &&
+                        MimetypeIconUtil.getBestMimeTypeByFilename(it.name).startsWith(syncType.prefixForType) &&
+                        !it.name.orEmpty().startsWith(".")
+            }
             .sortedBy { it.lastModified() }
-            .filter { it.lastModified() >= lastSyncTimestamp }
-            .filter { it.lastModified() < currentTimestamp }
-            .filter { MimetypeIconUtil.getBestMimeTypeByFilename(it.name).startsWith(syncType.prefixForType) }
+            .toList()
 
         Timber.i("Last sync ${syncType.name}: ${Date(lastSyncTimestamp)}")
         Timber.i("CurrentTimestamp ${Date(currentTimestamp)}")

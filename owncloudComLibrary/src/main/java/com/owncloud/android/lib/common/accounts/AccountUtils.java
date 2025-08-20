@@ -226,6 +226,8 @@ public class AccountUtils {
          */
         public static final String KEY_EMAIL = "oc_email";
 
+        public static final String KEY_IS_KITEWORKS_SERVER = "is_kiteworks_server";
+
         public static final int ACCOUNT_VERSION = 1;
     }
 }

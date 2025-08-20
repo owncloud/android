@@ -431,8 +431,6 @@
   <string name="confirmation_disable_camera_uploads_title">확인</string>
   <string name="confirmation_disable_pictures_upload_message">이 기능을 비활성화 하시겠습니까? 첨부된 사진들은 업로드되지 않습니다.</string>
   <string name="confirmation_disable_videos_upload_message">이 기능을 비활성화 하시겠습니까? 첨부된 영상들은 업로드되지 않습니다.</string>
-  <string name="proper_pics_folder_warning_camera_upload">선택한 폴더가 사진이 저장되는 경로인지 확인하시기 바랍니다. 그렇지 않다면 사진을 감지할 수 없습니다. 저장 후 15분이 되어야 업로드된다는 점에 유의하시기 바랍니다.</string>
-  <string name="proper_videos_folder_warning_camera_upload">선택한 폴더가 동영상이 저장되는 경로인지 확인하시기 바랍니다. 그렇지 않다면 동영상을 감지할 수 없습니다. 저장 후 15분이 되어야 업로드된다는 점에 유의하시기 바랍니다.</string>
   <string name="conflict_title">충돌된 파일</string>
   <string name="conflict_description">파일 %1$s에서 충돌이 발생하였습니다. 해결하기 위해 탭하세요.</string>
   <string name="conflict_message">어떤 파일을 저장하시겠습니까? 모두 저장을 선택하면 로컬 버전의 파일 이름에 숫자를 추가합니다.</string>

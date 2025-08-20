@@ -370,8 +370,6 @@ Téléchargez-le ici : %2$s</string>
   <string name="confirmation_disable_camera_uploads_title">Confirmer</string>
   <string name="confirmation_disable_pictures_upload_message">Etes vous sur de vouloir désactiver cette fonctionnalité ? Les images en attente ne pourront pas être téléversées.</string>
   <string name="confirmation_disable_videos_upload_message">Etes vous sur de vouloir désactiver cette fonctionnalité ? Les vidéos en attente ne pourront pas être téléversées.</string>
-  <string name="proper_pics_folder_warning_camera_upload">Veuillez vous assurer que le dossier sélectionné est bien l\'endroit ou l\'appareil photo que vous utilisez sauvegarde les photos. Sinon, cette fonctionnalité ne pourra pas détecter vos photos. Gardez à l\'esprit que les photos seront téléchargées au moins 15 minutes après les avoir prises.</string>
-  <string name="proper_videos_folder_warning_camera_upload">Veuillez vous assurer que le dossier sélectionné est bien l\'endroit ou l\'appareil photo que vous utilisez sauvegarde les videos. Sinon, cette fonctionnalité ne pourra pas détecter vos videos. Gardez à l\'esprit que les videos seront téléversées au moins 15 minutes après avoir été prises.</string>
   <string name="conflict_description">Conflit avec le fichier %1$s, cliquer pour résoudre</string>
   <string name="conflict_message">Quels fichiers voulez vous conserver ? Si les deux versions sont sélectionnées, un numéro de version sera ajouté au nom de fichier de la version locale.</string>
   <string name="conflict_keep_both">Conserver les deux</string>

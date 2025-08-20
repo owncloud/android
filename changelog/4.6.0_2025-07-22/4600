@@ -1,0 +1,7 @@
+Bugfix: Crash from Google Play Console in PreviewImagePagerAdapter
+
+In order to prevent app crashes, a validation has been added in onPageSelected method
+from PreviewImageActivity to ensure the image list contains items before using it.
+
+https://github.com/owncloud/android/issues/4596
+https://github.com/owncloud/android/pull/4600

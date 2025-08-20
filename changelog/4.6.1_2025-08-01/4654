@@ -1,0 +1,7 @@
+Bugfix: Re-login not working properly when credentials expire
+
+The startActivityForResult method has been replaced with startActivity
+to make re-login work properly when credentials expire.
+
+https://github.com/owncloud/enterprise/issues/7277
+https://github.com/owncloud/android/pull/4654
