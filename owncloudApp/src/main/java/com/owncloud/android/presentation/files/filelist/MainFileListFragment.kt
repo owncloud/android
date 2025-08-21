@@ -149,7 +149,7 @@ class MainFileListFragment : Fragment(),
     }
     private val fileOperationsViewModel by sharedViewModel<FileOperationsViewModel>()
     private val transfersViewModel by viewModel<TransfersViewModel>()
-    private val spacesListViewModel: SpacesListViewModel by viewModel {
+    private val spacesListViewModel: SpacesListViewModel by activityViewModel {
         parametersOf(
             requireArguments().getString(ARG_ACCOUNT_NAME),
             false,
