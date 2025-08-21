@@ -17,7 +17,7 @@
     <color name="homecloud_transparent_bar_background">#CCFFFFFE</color>
 
     <color name="homecloud_button_primary_text">@color/homecloud_primary_inverted</color>
-    <color name="homecloud_button_primary_text_disabled">#9E9E9E</color>
+    <color name="homecloud_button_primary_text_disabled">@color/homecloud_content_grey</color>
     <color name="homecloud_button_primary_background">@color/homecloud_blue_darken_2</color>
     <color name="homecloud_button_primary_background_disabled">#EEEEEE</color>
     <color name="homecloud_button_secondary_text">@color/homecloud_blue_darken_2</color>
@@ -36,6 +36,11 @@
     <color name="homecloud_radiobutton_checked_disabled">#E0E0E0</color>
     <color name="homecloud_radiobutton_unchecked_disabled">#E0E0E0</color>
 
+    <color name="homecloud_switch_thumb_checked">@color/homecloud_blue_darken_2</color>
+    <color name="homecloud_switch_thumb_unchecked">#EEEEEE</color>
+    <color name="homecloud_switch_track_checked">@color/homecloud_blue_darken_2_50</color>
+    <color name="homecloud_switch_track_unchecked">@color/homecloud_content_grey</color>
+
     <color name="homecloud_menu_background">@color/white</color>
 
     <color name="homecloud_signin_logo_text_color">@color/black</color>
@@ -46,7 +51,11 @@
     <!-- Palette colors. Don't use them directly -->
     <color name="homecloud_blue_darken_2">#FF1976D2</color>
     <color name="homecloud_blue_darken_2_24">#3D1976D2</color>
+    <color name="homecloud_blue_darken_2_50">#801976D2</color>
+    <color name="homecloud_content_grey">#9E9E9E</color>
+    <color name="homecloud_content_disabled_bg">#616161</color>
     <color name="homecloud_blue_lighten_2">#FF64B5F6</color>
+    <color name="homecloud_blue_lighten_2_50">#8064B5F6</color>
     <color name="homecloud_border_gray">#FFCBCDD3</color>
     <color name="homecloud_grey_2">#7A7A7A</color>
 </resources>

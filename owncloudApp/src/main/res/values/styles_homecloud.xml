@@ -75,6 +75,9 @@
         <!-- Radio button -->
         <item name="radioButtonStyle">@style/homeCloud.RadioButton</item>
 
+        <!-- Switch -->
+        <item name="switchStyle">@style/homeCloud.Switch</item>
+
         <item name="circularProgressIndicatorStyle">@style/Widget.homeCloud.CircularProgressBar</item>
 
         <item name="android:windowOptOutEdgeToEdgeEnforcement" tools:targetApi="35">true</item>
@@ -281,6 +284,11 @@
 
     <style name="homeCloud.RadioButton" parent="Widget.Material3.CompoundButton.RadioButton">
         <item name="buttonTint">@color/selector_homecloud_radiobutton</item>
+    </style>
+
+    <style name="homeCloud.Switch" parent="Widget.Material3.CompoundButton.Switch">
+        <item name="trackTint">@color/selector_switch_track</item>
+        <item name="thumbTint">@color/selector_switch_thumb</item>
     </style>
 
     <style name="Button.Secondary" parent="Widget.Material3.Button.OutlinedButton">

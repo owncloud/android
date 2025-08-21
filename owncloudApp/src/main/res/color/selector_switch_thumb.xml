@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- State Disabled -->
+    <item android:color="?attr/colorOnSurfaceInverse" android:state_enabled="false" />
+
+    <!-- State Checked -->
+    <item android:color="@color/homecloud_switch_thumb_checked" android:state_checked="true" />
+
+    <!-- State Unchecked -->
+    <item android:color="@color/homecloud_switch_thumb_unchecked" />
+</selector>
