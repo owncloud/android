@@ -31,6 +31,11 @@
     <color name="homecloud_progressbar_indicator">@color/homecloud_blue_darken_2</color>
     <color name="homecloud_progressbar_track">#E0E0E0</color>
 
+    <color name="homecloud_radiobutton_checked">@color/homecloud_blue_darken_2</color>
+    <color name="homecloud_radiobutton_unchecked">@color/homecloud_grey_2</color>
+    <color name="homecloud_radiobutton_checked_disabled">#E0E0E0</color>
+    <color name="homecloud_radiobutton_unchecked_disabled">#E0E0E0</color>
+
     <color name="homecloud_menu_background">@color/white</color>
 
     <color name="homecloud_signin_logo_text_color">@color/black</color>
@@ -43,4 +48,5 @@
     <color name="homecloud_blue_darken_2_24">#3D1976D2</color>
     <color name="homecloud_blue_lighten_2">#FF64B5F6</color>
     <color name="homecloud_border_gray">#FFCBCDD3</color>
+    <color name="homecloud_grey_2">#7A7A7A</color>
 </resources>

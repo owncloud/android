@@ -27,6 +27,11 @@
     <color name="homecloud_progressbar_indicator">@color/homecloud_blue_lighten_2</color>
     <color name="homecloud_progressbar_track">#616161</color>
 
+    <color name="homecloud_radiobutton_checked">@color/homecloud_blue_lighten_2</color>
+    <color name="homecloud_radiobutton_unchecked">#B2B2B2</color>
+    <color name="homecloud_radiobutton_checked_disabled">@color/homecloud_content_disabled_bg</color>
+    <color name="homecloud_radiobutton_unchecked_disabled">@color/homecloud_content_disabled_bg</color>
+
     <color name="homecloud_menu_background">#424242</color>
 
     <color name="homecloud_bar_background">#1F1F1F</color>

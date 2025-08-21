@@ -72,6 +72,9 @@
         <!-- Buttons -->
         <item name="materialButtonStyle">@style/Button.Primary</item>
 
+        <!-- Radio button -->
+        <item name="radioButtonStyle">@style/homeCloud.RadioButton</item>
+
         <item name="circularProgressIndicatorStyle">@style/Widget.homeCloud.CircularProgressBar</item>
 
         <item name="android:windowOptOutEdgeToEdgeEnforcement" tools:targetApi="35">true</item>
@@ -274,6 +277,10 @@
         <item name="passwordToggleTint">?attr/colorPrimary</item>
         <item name="errorIconDrawable">@null</item>
         <item name="errorTextColor">@color/homecloud_error</item>
+    </style>
+
+    <style name="homeCloud.RadioButton" parent="Widget.Material3.CompoundButton.RadioButton">
+        <item name="buttonTint">@color/selector_homecloud_radiobutton</item>
     </style>
 
     <style name="Button.Secondary" parent="Widget.Material3.Button.OutlinedButton">
