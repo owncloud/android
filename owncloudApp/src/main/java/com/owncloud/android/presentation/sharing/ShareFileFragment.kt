@@ -51,6 +51,7 @@ import com.owncloud.android.presentation.sharing.shares.SharePublicLinkListAdapt
 import com.owncloud.android.utils.DisplayUtils
 import com.owncloud.android.utils.MimetypeIconUtil
 import com.owncloud.android.utils.PreferenceUtils
+import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import timber.log.Timber
@@ -179,7 +180,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
     private val isPrivateLinkDisabled
         get() = capabilities?.filesPrivateLinks == CapabilityBooleanType.FALSE
 
-    private val capabilityViewModel: CapabilityViewModel by viewModel {
+    private val capabilityViewModel: CapabilityViewModel by activityViewModel {
         parametersOf(
             account?.name
         )

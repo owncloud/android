@@ -125,6 +125,7 @@ import com.owncloud.android.utils.PreferenceUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okio.Path.Companion.toPath
+import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -154,7 +155,7 @@ class MainFileListFragment : Fragment(),
             false,
         )
     }
-    private val capabilityViewModel: CapabilityViewModel by viewModel {
+    private val capabilityViewModel: CapabilityViewModel by activityViewModel {
         parametersOf(
             requireArguments().getString(ARG_ACCOUNT_NAME),
         )
