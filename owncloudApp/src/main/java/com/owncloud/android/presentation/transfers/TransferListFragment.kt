@@ -43,6 +43,7 @@ import com.owncloud.android.extensions.collectLatestLifecycleFlow
 import com.owncloud.android.presentation.authentication.AccountUtils
 import com.owncloud.android.presentation.capabilities.CapabilityViewModel
 import com.owncloud.android.ui.activity.FileActivity
+import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import java.io.File
@@ -50,7 +51,7 @@ import java.io.File
 class TransferListFragment : Fragment() {
 
     private val transfersViewModel by viewModel<TransfersViewModel>()
-    private val capabilityViewModel: CapabilityViewModel by viewModel {
+    private val capabilityViewModel: CapabilityViewModel by activityViewModel {
         parametersOf(
             requireArguments().getString(ARG_ACCOUNT_NAME),
         )

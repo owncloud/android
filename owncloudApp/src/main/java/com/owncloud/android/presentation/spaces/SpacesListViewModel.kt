@@ -75,6 +75,11 @@ class SpacesListViewModel(
 
     fun refreshSpacesFromServer() {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
+            val capabilities = getStoredCapabilitiesUseCase(GetStoredCapabilitiesUseCase.Params(accountName))
+            if (capabilities?.isSpacesProjectsAllowed() != true) {
+                // No need to update spaces if they are not enabled
+                return@launch
+            }
             _spacesList.update { it.copy(refreshing = true) }
             when (val result = refreshSpacesFromServerAsyncUseCase(RefreshSpacesFromServerAsyncUseCase.Params(accountName))) {
                 is UseCaseResult.Success -> _spacesList.update { it.copy(refreshing = false, error = null) }
