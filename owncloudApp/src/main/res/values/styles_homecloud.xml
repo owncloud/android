@@ -122,6 +122,8 @@
         <item name="shapeAppearance">@style/homeCloud.AlertDialog.ShapeAppearance</item>
         <item name="buttonBarPositiveButtonStyle">@style/Theme.homeCloud.Dialog.ButtonBar.Button</item>
         <item name="buttonBarNegativeButtonStyle">@style/Theme.homeCloud.Dialog.ButtonBar.Button</item>
+        <item name="android:background">@color/homecloud_dialog_background</item>
+        <item name="android:windowBackground">@color/homecloud_dialog_background</item>
     </style>
 
     <style name="Theme.homeCloud.Dialog.ButtonBar.Button" parent="@style/Widget.Material3.Button.TextButton.Dialog">
