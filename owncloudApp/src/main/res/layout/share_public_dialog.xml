@@ -3,8 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tool="http://schemas.android.com/tools"
     android:orientation="vertical"
-    android:padding="@dimen/standard_half_margin">
+    android:padding="@dimen/standard_margin">
 
     <TextView
         android:id="@+id/publicShareDialogTitle"
@@ -24,38 +25,23 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <LinearLayout
-                android:id="@+id/shareViaLinkNameSection"
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/standard_half_margin"
-                android:orientation="horizontal">
+                android:layout_marginTop="8dp"
+                android:hint="@string/share_via_link_name_label"
+                app:helperText=" ">
 
-                <TextView
-                    android:labelFor="@+id/shareViaLinkNameValue"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/standard_half_padding"
-                    android:text="@string/share_via_link_name_label"
-                    android:textColor="?attr/colorPrimary"
-                    android:textSize="15sp" />
-
-                <com.google.android.material.textfield.TextInputLayout
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/shareViaLinkNameValue"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="clip_horizontal">
+                    android:layout_marginEnd="@dimen/standard_half_padding"
+                    android:hint="@string/share_via_link_name_label"
+                    android:inputType="textNoSuggestions"
+                    android:textSize="15sp" />
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/shareViaLinkNameValue"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="@dimen/standard_half_padding"
-                        android:inputType="textNoSuggestions"
-                        android:textSize="15sp" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-            </LinearLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
             <RadioGroup
                 android:id="@+id/shareViaLinkEditPermissionGroup"
@@ -84,41 +70,24 @@
 
             </RadioGroup>
 
-            <RelativeLayout
-                android:id="@+id/shareViaLinkPasswordSection"
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/shareViaLinkPasswordSwitch"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/standard_margin">
-
-                <androidx.appcompat.widget.SwitchCompat
-                    android:id="@+id/shareViaLinkPasswordSwitch"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentTop="true"
-                    android:padding="@dimen/standard_half_padding" />
-
-                <TextView
-                    android:id="@+id/shareViaLinkPasswordLabel"
-                    android:labelFor="@+id/shareViaLinkPasswordSwitch"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
-                    android:layout_toStartOf="@id/shareViaLinkPasswordSwitch"
-                    android:paddingLeft="@dimen/standard_half_padding"
-                    android:paddingRight="@dimen/standard_half_padding"
-                    android:paddingTop="@dimen/standard_half_padding"
-                    android:text="@string/share_via_link_password_label"
-                    android:textColor="?attr/colorPrimary"
-                    android:textSize="15sp" />
-
-            </RelativeLayout>
+                android:layout_marginTop="@dimen/standard_margin"
+                android:text="@string/share_via_link_password_label"
+                android:padding="@dimen/standard_half_padding" />
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/shareViaLinkPasswordLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:gravity="clip_horizontal"
+                android:visibility="gone"
+                app:endIconDrawable="@drawable/ic_password_toggle"
+                app:endIconMode="password_toggle"
                 app:passwordToggleEnabled="true"
-                android:gravity="clip_horizontal">
+                tool:visibility="visible">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/shareViaLinkPasswordValue"
@@ -126,8 +95,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/standard_half_margin"
                     android:layout_marginRight="@dimen/standard_half_margin"
-                    android:inputType="textPassword"
-                    android:visibility="visible" />
+                    android:inputType="textPassword" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -290,35 +258,20 @@
 
                 <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/shareViaLinkExpirationSwitch"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentTop="true"
                     android:checked="false"
-                    android:padding="@dimen/standard_half_padding" />
-
-                <TextView
-                    android:id="@+id/shareViaLinkExpirationLabel"
-                    android:labelFor="@+id/shareViaLinkExpirationSwitch"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
-                    android:layout_toStartOf="@id/shareViaLinkExpirationSwitch"
-                    android:paddingLeft="@dimen/standard_half_padding"
-                    android:paddingRight="@dimen/standard_half_padding"
-                    android:paddingTop="@dimen/standard_half_padding"
                     android:text="@string/share_via_link_expiration_date_label"
-                    android:textColor="?attr/colorPrimary"
-                    android:textSize="15sp"
-                    android:focusable="false"/>
+                    android:padding="@dimen/standard_half_padding" />
 
                 <TextView
                     android:id="@+id/shareViaLinkExpirationValue"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
-                    android:layout_below="@id/shareViaLinkExpirationLabel"
-                    android:layout_toStartOf="@id/shareViaLinkExpirationSwitch"
+                    android:layout_below="@id/shareViaLinkExpirationSwitch"
                     android:paddingBottom="@dimen/standard_half_padding"
                     android:paddingLeft="@dimen/standard_half_padding"
                     android:paddingRight="@dimen/standard_half_padding"

@@ -282,6 +282,9 @@
         <item name="passwordToggleTint">?attr/colorPrimary</item>
         <item name="errorIconDrawable">@null</item>
         <item name="errorTextColor">@color/homecloud_error</item>
+        <item name="hintAnimationEnabled">false</item>
+        <item name="hintEnabled">true</item>
+        <item name="expandedHintEnabled">false</item>
     </style>
 
     <style name="homeCloud.RadioButton" parent="Widget.Material3.CompoundButton.RadioButton">
