@@ -41,6 +41,13 @@
     <color name="homecloud_switch_track_checked">@color/homecloud_blue_darken_2_50</color>
     <color name="homecloud_switch_track_unchecked">@color/homecloud_content_grey</color>
 
+    <color name="homecloud_checkbox_checked">@color/homecloud_blue_darken_2</color>
+    <color name="homecloud_checkbox_unchecked">#E0E0E0</color>
+    <color name="homecloud_checkbox_checkmark">@color/white</color>
+    <color name="homecloud_checkbox_disabled_checked">#E0E0E0</color>
+    <color name="homecloud_checkbox_disabled_unchecked">#E0E0E0</color>
+    <color name="homecloud_checkbox_disabled_checkmark">@color/homecloud_content_grey</color>
+
     <color name="homecloud_menu_background">@color/white</color>
 
     <color name="homecloud_signin_logo_text_color">@color/black</color>
