@@ -620,11 +620,11 @@
 
     <string name="share_sharee_unavailable">Sorry, your server version does not allow sharing with users within clients.
         \nPlease contact your administrator</string>
-    <string name="share_privilege_can_share">can share</string>
-    <string name="share_privilege_can_edit">can edit</string>
-    <string name="share_privilege_can_edit_create">create</string>
-    <string name="share_privilege_can_edit_change">change</string>
-    <string name="share_privilege_can_edit_delete">delete</string>
+    <string name="share_privilege_can_share">Can share</string>
+    <string name="share_privilege_can_edit">Can edit</string>
+    <string name="share_privilege_can_edit_create">Create</string>
+    <string name="share_privilege_can_edit_change">Change</string>
+    <string name="share_privilege_can_edit_delete">Delete</string>
     <string name="edit_share_unshare">Stop sharing</string>
     <string name="edit_share_done">done</string>
 
