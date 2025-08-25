@@ -39,9 +39,17 @@ ownCloud admins and users.
 
 ## Summary
 
+* Change - SBOM workflow runs on dependabot PRs: [#4664](https://github.com/owncloud/android/pull/4664)
 * Enhancement - Add account ID to the user information: [#4605](https://github.com/owncloud/android/issues/4605)
 
 ## Details
+
+* Change - SBOM workflow runs on dependabot PRs: [#4664](https://github.com/owncloud/android/pull/4664)
+
+   Changes to dependency versions will be managed within Dependabot PRs, so they
+   can be updated together.
+
+   https://github.com/owncloud/android/pull/4664
 
 * Enhancement - Add account ID to the user information: [#4605](https://github.com/owncloud/android/issues/4605)
 
