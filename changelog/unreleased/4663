@@ -1,0 +1,5 @@
+Enhancement: Update test in GitHub Actions
+
+Workflow to check whether the upgrade from "latest" to "current" works flawless. Exports the execution log and the crash log if any crash happens.
+
+https://github.com/owncloud/android/pull/4663
