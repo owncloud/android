@@ -1,0 +1,5 @@
+Change: SBOM workflow runs on dependabot PRs
+
+Changes to dependency versions will be managed within Dependabot PRs, so they can be updated together.
+
+https://github.com/owncloud/android/pull/4664
