@@ -164,6 +164,7 @@ jobs:
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
 
+      # Run tests over emulator and catch crash logs
       - name: Run Emulator & Execute tests
         uses: reactivecircus/android-emulator-runner@v2
         id: execution
@@ -177,13 +178,30 @@ jobs:
           disable-animations: true
           emulator-options: -no-window -no-audio -no-boot-anim -accel auto -memory 2048
           script: |
+            # To catch only crashes in background
+            adb logcat -b crash *:E > crash_log.txt 2>&1 &
+            LOGCAT_PID=$!
+
             ./gradlew clean test -Dserver="${{ secrets.OC_SERVER_URL }}" -Dusername="${{ secrets.OC_SERVER_USERNAME_TEST }}" -Dpassword="${{ secrets.OC_SERVER_PASSWORD_TEST }}" -Dcommit="$(echo $GITHUB_SHA | cut -c1-7)"
 
+            # Kill logcat to serve crash_log.txt
+            kill $LOGCAT_PID || true
+
+      # If crash happened, upload crash log
+      - name: Upload crash log artifact
+        if: always() && hashFiles('crash_log.txt') != ''
+        uses: actions/upload-artifact@v4
+        with:
+          name: crash-log
+          path: crash_log.txt
+
+      # Prepare crash log file to be uploaded
       - name: Rename log file
         if: always()
         run: |
           cp logs/*.log logs/log.log || true
 
+      # Upload log file
       - name: Upload Execution Log
         if: always()
         uses: actions/upload-artifact@v4
@@ -191,10 +209,12 @@ jobs:
           name: logs
           path: ./logs/log.log
 
+      # Prepare video file to be uploaded by compressing it
       - name: Zip video files
         if: always()
         run: zip -r -9 test-recording.zip video || true
 
+       # Upload video file
       - name: Upload Video
         if: always()
         uses: actions/upload-artifact@v4
