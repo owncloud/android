@@ -29,12 +29,16 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.widget.SearchView
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
 import androidx.recyclerview.widget.GridLayoutManager
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.owncloud.android.R
 import com.owncloud.android.databinding.SpacesListFragmentBinding
 import com.owncloud.android.domain.files.model.FileListOption
@@ -45,6 +49,7 @@ import com.owncloud.android.extensions.toDrawableRes
 import com.owncloud.android.extensions.toSubtitleStringRes
 import com.owncloud.android.extensions.toTitleStringRes
 import com.owncloud.android.presentation.capabilities.CapabilityViewModel
+import com.owncloud.android.utils.DisplayUtils
 import com.owncloud.android.presentation.common.UIResult
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -163,6 +168,43 @@ class SpacesListFragment : SpacesListAdapter.SpacesListAdapterListener, Fragment
 
     override fun onItemClick(ocSpace: OCSpace) {
         spacesListViewModel.getRootFileForSpace(ocSpace)
+    }
+
+    override fun onThreeDotButtonClick(ocSpace: OCSpace) {
+        val spaceOptionsBottomSheet = layoutInflater.inflate(R.layout.file_options_bottom_sheet_fragment, null)
+        val dialog = BottomSheetDialog(requireContext())
+        dialog.setContentView(spaceOptionsBottomSheet)
+
+        val fileOptionsBottomSheetSingleFileBehavior: BottomSheetBehavior<*> = BottomSheetBehavior.from(spaceOptionsBottomSheet.parent as View)
+        val closeBottomSheetButton = spaceOptionsBottomSheet.findViewById<ImageView>(R.id.close_bottom_sheet)
+        closeBottomSheetButton.setOnClickListener {
+            dialog.hide()
+            dialog.dismiss()
+        }
+
+        val thumbnailBottomSheet = spaceOptionsBottomSheet.findViewById<ImageView>(R.id.thumbnail_bottom_sheet)
+        thumbnailBottomSheet.setImageResource(R.drawable.ic_menu_space)
+
+        val spaceNameBottomSheet = spaceOptionsBottomSheet.findViewById<TextView>(R.id.file_name_bottom_sheet)
+        spaceNameBottomSheet.text = ocSpace.name
+
+        val spaceSizeBottomSheet = spaceOptionsBottomSheet.findViewById<TextView>(R.id.file_size_bottom_sheet)
+        spaceSizeBottomSheet.text = DisplayUtils.bytesToHumanReadable(ocSpace.quota?.used!!, requireContext(), true)
+
+        val spaceSeparatorBottomSheet = spaceOptionsBottomSheet.findViewById<TextView>(R.id.file_separator_bottom_sheet)
+        spaceSeparatorBottomSheet.visibility = View.GONE
+
+        fileOptionsBottomSheetSingleFileBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+                if (newState == BottomSheetBehavior.STATE_DRAGGING) {
+                    fileOptionsBottomSheetSingleFileBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                }
+            }
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {}
+        })
+
+        dialog.setOnShowListener { fileOptionsBottomSheetSingleFileBehavior.peekHeight = spaceOptionsBottomSheet.measuredHeight }
+        dialog.show()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
