@@ -72,6 +72,15 @@
         <!-- Buttons -->
         <item name="materialButtonStyle">@style/Button.Primary</item>
 
+        <!-- Radio button -->
+        <item name="radioButtonStyle">@style/homeCloud.RadioButton</item>
+
+        <!-- Switch -->
+        <item name="switchStyle">@style/homeCloud.Switch</item>
+
+        <!-- Checkbox -->
+        <item name="checkboxStyle">@style/homeCloud.CheckBox</item>
+
         <item name="circularProgressIndicatorStyle">@style/Widget.homeCloud.CircularProgressBar</item>
 
         <item name="android:windowOptOutEdgeToEdgeEnforcement" tools:targetApi="35">true</item>
@@ -116,6 +125,8 @@
         <item name="shapeAppearance">@style/homeCloud.AlertDialog.ShapeAppearance</item>
         <item name="buttonBarPositiveButtonStyle">@style/Theme.homeCloud.Dialog.ButtonBar.Button</item>
         <item name="buttonBarNegativeButtonStyle">@style/Theme.homeCloud.Dialog.ButtonBar.Button</item>
+        <item name="android:background">@color/homecloud_dialog_background</item>
+        <item name="android:windowBackground">@color/homecloud_dialog_background</item>
     </style>
 
     <style name="Theme.homeCloud.Dialog.ButtonBar.Button" parent="@style/Widget.Material3.Button.TextButton.Dialog">
@@ -274,6 +285,23 @@
         <item name="passwordToggleTint">?attr/colorPrimary</item>
         <item name="errorIconDrawable">@null</item>
         <item name="errorTextColor">@color/homecloud_error</item>
+        <item name="hintAnimationEnabled">false</item>
+        <item name="hintEnabled">true</item>
+        <item name="expandedHintEnabled">false</item>
+    </style>
+
+    <style name="homeCloud.RadioButton" parent="Widget.Material3.CompoundButton.RadioButton">
+        <item name="buttonTint">@color/selector_homecloud_radiobutton</item>
+    </style>
+
+    <style name="homeCloud.Switch" parent="Widget.Material3.CompoundButton.Switch">
+        <item name="trackTint">@color/selector_switch_track</item>
+        <item name="thumbTint">@color/selector_switch_thumb</item>
+    </style>
+
+    <style name="homeCloud.CheckBox" parent="Widget.Material3.CompoundButton.CheckBox">
+        <item name="buttonTint">@color/selector_homecloud_checkbox</item>
+        <item name="buttonIconTint">@color/selector_homecloud_checkbox_icon</item>
     </style>
 
     <style name="Button.Secondary" parent="Widget.Material3.Button.OutlinedButton">
