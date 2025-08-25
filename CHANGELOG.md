@@ -40,6 +40,7 @@ ownCloud admins and users.
 ## Summary
 
 * Enhancement - Add account ID to the user information: [#4605](https://github.com/owncloud/android/issues/4605)
+* Enhancement - Update test in GitHub Actions: [#4663](https://github.com/owncloud/android/pull/4663)
 
 ## Details
 
@@ -51,6 +52,13 @@ ownCloud admins and users.
 
    https://github.com/owncloud/android/issues/4605
    https://github.com/owncloud/android/pull/4661
+
+* Enhancement - Update test in GitHub Actions: [#4663](https://github.com/owncloud/android/pull/4663)
+
+   Workflow to check whether the upgrade from "latest" to "current" works flawless.
+   Exports the execution log and the crash log if any crash happens.
+
+   https://github.com/owncloud/android/pull/4663
 
 # Changelog for ownCloud Android Client [4.6.2] (2025-08-13)
 
