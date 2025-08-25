@@ -22,6 +22,7 @@
 
 package com.owncloud.android.presentation.spaces
 
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -84,11 +85,14 @@ class SpacesListFragment : SpacesListAdapter.SpacesListAdapterListener, Fragment
         subscribeToViewModels()
     }
 
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        setSpacesLayout(newConfig)
+    }
+
     private fun initViews() {
         setHasOptionsMenu(true)
-
-        val spacesListLayoutManager = GridLayoutManager(requireContext(), 2)
-        binding.recyclerSpacesList.layoutManager = spacesListLayoutManager
+        setSpacesLayout(resources.configuration)
         spacesListAdapter = SpacesListAdapter(this)
         binding.recyclerSpacesList.adapter = spacesListAdapter
 
@@ -149,6 +153,12 @@ class SpacesListFragment : SpacesListAdapter.SpacesListAdapterListener, Fragment
             listEmptyDatasetTitle.setText(FileListOption.SPACES_LIST.toTitleStringRes())
             listEmptyDatasetSubTitle.setText(FileListOption.SPACES_LIST.toSubtitleStringRes())
         }
+    }
+
+    private fun setSpacesLayout(config: Configuration) {
+        val layoutColumns = if (config.orientation == Configuration.ORIENTATION_LANDSCAPE) 2 else 1
+        val spacesListLayoutManager = GridLayoutManager(requireContext(), layoutColumns)
+        binding.recyclerSpacesList.layoutManager = spacesListLayoutManager
     }
 
     override fun onItemClick(ocSpace: OCSpace) {
