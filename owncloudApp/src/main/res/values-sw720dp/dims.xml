@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?><!--
   ownCloud Android client application
 
-  @author David Crespo Ríos
-  @author Juan Carlos Garrote Gascón
   @author Jorge Aguado Recio
 
   Copyright (C) 2025 ownCloud GmbH.
@@ -21,15 +19,9 @@
   -->
 
 <resources>
-    <!-- Passcode margin keyboard for big screens-->
-    <dimen name="passcode_standard_margin">32dp</dimen>
-    <dimen name="passcode_margin_top">100dp</dimen>
-    <dimen name="passcode_margin_bottom">32dp</dimen>
-    <dimen name="passcode_margin_buttons">8dp</dimen>
-
     <!-- Spaces -->
     <dimen name="spaces_thumbnail_height">200dp</dimen>
     <dimen name="spaces_header_card_height">150dp</dimen>
-    <dimen name="spaces_margin_horizontal">30dp</dimen>
-    <dimen name="spaces_margin_vertical">20dp</dimen>
+    <dimen name="spaces_margin_horizontal">50dp</dimen>
+    <dimen name="spaces_margin_vertical">40dp</dimen>
 </resources>

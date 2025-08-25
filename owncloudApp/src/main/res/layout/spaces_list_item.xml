@@ -2,7 +2,9 @@
   ~ ownCloud Android client application
   ~
   ~ @author Juan Carlos Garrote Gascón
-  ~ Copyright (C) 2023 ownCloud GmbH.
+  ~ @author Jorge Aguado Recio
+  ~
+  ~ Copyright (C) 2025 ownCloud GmbH.
   ~
   ~ This program is free software: you can redistribute it and/or modify
   ~ it under the terms of the GNU General Public License version 2,
@@ -24,7 +26,10 @@
     android:id="@+id/spaces_list_item_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
+    android:layout_marginStart="@dimen/spaces_margin_horizontal"
+    android:layout_marginEnd="@dimen/spaces_margin_horizontal"
+    android:layout_marginTop="@dimen/spaces_margin_vertical"
+    android:layout_marginBottom="@dimen/spaces_margin_vertical"
     android:orientation="vertical">
 
     <androidx.cardview.widget.CardView
@@ -53,16 +58,37 @@
                 android:layout_height="1dp"
                 android:background="@color/actionbar_start_color" />
 
-            <TextView
-                android:id="@+id/spaces_list_item_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/standard_half_margin"
-                android:singleLine="true"
-                android:textColor="@color/textColor"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                tools:text="Name" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/spaces_list_item_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_margin="@dimen/standard_half_margin"
+                    android:singleLine="true"
+                    android:textColor="@color/textColor"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    tools:text="Name" />
+
+                <ImageView
+                    android:id="@+id/spaces_three_dot_menu"
+                    android:layout_width="@dimen/icon_button_size"
+                    android:layout_height="@dimen/icon_button_size"
+                    android:scaleType="center"
+                    android:src="@drawable/ic_three_dot_menu"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="?android:attr/selectableItemBackground"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/spaces_list_item_subtitle"
