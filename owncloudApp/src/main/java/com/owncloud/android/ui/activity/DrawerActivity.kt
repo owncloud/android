@@ -583,11 +583,11 @@ abstract class DrawerActivity : ToolbarActivity() {
     private fun getAccountQuotaText(): TextView? = findViewById(R.id.account_quota_text)
     private fun getAccountQuotaStatusText(): TextView? = findViewById(R.id.account_quota_status_text)
     private fun getAccountQuotaBar(): ProgressBar? = findViewById(R.id.account_quota_bar)
-    private fun getDrawerActiveUser() = findNavigationViewChildById(R.id.drawer_active_user) as ConstraintLayout?
-    private fun getDrawerCurrentAccount() = findNavigationViewChildById(R.id.drawer_current_account) as AppCompatImageView?
-    private fun getDrawerHeaderBackground() = findNavigationViewChildById(R.id.drawer_header_background) as ImageView?
-    private fun getDrawerUserName(): TextView? = findNavigationViewChildById(R.id.drawer_username) as TextView?
-    private fun getDrawerUserNameFull(): TextView? = findNavigationViewChildById(R.id.drawer_username_full) as TextView?
+    private fun getDrawerActiveUser(): ConstraintLayout? = findViewById(R.id.drawer_active_user)
+    private fun getDrawerCurrentAccount(): AppCompatImageView? = findViewById(R.id.drawer_current_account)
+    private fun getDrawerHeaderBackground(): ImageView? = findViewById(R.id.drawer_header_background)
+    private fun getDrawerUserName(): TextView? = findViewById(R.id.drawer_username)
+    private fun getDrawerUserNameFull(): TextView? = findViewById(R.id.drawer_username_full)
 
     /**
      * Finds a view that was identified by the id attribute from the drawer header.
