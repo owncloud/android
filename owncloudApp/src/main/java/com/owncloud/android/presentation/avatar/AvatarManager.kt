@@ -20,6 +20,7 @@
 package com.owncloud.android.presentation.avatar
 
 import android.accounts.Account
+import android.content.Context
 import android.graphics.BitmapFactory
 import android.graphics.drawable.Drawable
 import android.media.ThumbnailUtils
@@ -53,7 +54,8 @@ class AvatarManager : KoinComponent {
     fun getAvatarForAccount(
         account: Account,
         fetchIfNotCached: Boolean,
-        displayRadius: Float
+        displayRadius: Float,
+        context: Context,
     ): Drawable? {
         val imageKey = getImageKeyForAccount(account)
 
@@ -85,7 +87,7 @@ class AvatarManager : KoinComponent {
         // generate placeholder from user name
         try {
             Timber.i("Avatar with imageKey $imageKey is not available in cache. Generating one...")
-            return DefaultAvatarTextDrawable.createAvatar(account.name, displayRadius)
+            return DefaultAvatarTextDrawable.createAvatar(account.name, displayRadius, context)
 
         } catch (e: Exception) {
             // nothing to do, return null to apply default icon

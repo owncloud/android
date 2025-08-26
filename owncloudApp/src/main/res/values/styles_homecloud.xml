@@ -44,6 +44,7 @@
         <item name="colorOnSurfaceVariant">?attr/colorPrimary</item>
         <item name="colorControlNormal">?attr/colorPrimary</item>
         <item name="colorError">@color/homecloud_error</item>
+        <item name="colorOutline">@color/homecloud_color_outline</item>
 
         <item name="android:textColorPrimary">?attr/colorPrimary</item>
         <item name="android:textColorLink">?attr/colorPrimary</item>
@@ -82,6 +83,7 @@
         <item name="checkboxStyle">@style/homeCloud.CheckBox</item>
 
         <item name="circularProgressIndicatorStyle">@style/Widget.homeCloud.CircularProgressBar</item>
+        <item name="linearProgressIndicatorStyle">@style/Widget.homeCloud.HorizontalProgressBar</item>
 
         <item name="android:windowOptOutEdgeToEdgeEnforcement" tools:targetApi="35">true</item>
     </style>
@@ -210,6 +212,8 @@
     <style name="Theme.homeCloud.DrawerNavigation" parent="Widget.Material3.NavigationView">
         <item name="itemHorizontalPadding">16dp</item>
         <item name="itemIconPadding">32dp</item>
+        <item name="dividerInsetStart">12dp</item>
+        <item name="dividerInsetEnd">12dp</item>
     </style>
 
     <style name="Theme.homeCloud.BottomNavigation.Indicator" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
@@ -242,6 +246,14 @@
         <item name="trackThickness">4dp</item>
         <item name="trackColor">@color/homecloud_progressbar_track</item>
         <item name="indeterminateTrackVisible">true</item>
+    </style>
+
+    <style name="Widget.homeCloud.HorizontalProgressBar" parent="@style/Widget.Material3.LinearProgressIndicator">
+        <item name="indicatorColor">@color/homecloud_progressbar_indicator</item>
+        <item name="trackThickness">8dp</item>
+        <item name="trackColor">@color/homecloud_progressbar_track</item>
+        <item name="indicatorTrackGapSize">0dp</item>
+        <item name="trackStopIndicatorSize">0dp</item>
     </style>
 
     <!-- Button Bar hack due to Lollipop bug:

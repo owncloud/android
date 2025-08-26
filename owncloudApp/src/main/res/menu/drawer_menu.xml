@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ownCloud Android client application
 
   Copyright (C) 2025 ownCloud GmbH.
@@ -22,49 +21,36 @@
       standard menu
       all items in this group MUST have orderInCategory="0" set
     -->
-    <group android:id="@+id/drawer_menu_settings_etc">
+    <group android:id="@+id/drawer_menu_help_feedback_etc">
         <item
-            android:orderInCategory="3"
-            android:id="@+id/nav_settings"
-            android:icon="@drawable/ic_settings"
-            android:title="@string/actionbar_settings" />
-        <item
-            android:orderInCategory="3"
-            android:id="@+id/drawer_menu_feedback"
-            android:icon="@drawable/ic_email_grey"
-            android:title="@string/drawer_feedback" />
-        <item
-            android:orderInCategory="3"
             android:id="@+id/drawer_menu_help"
-            android:icon="@drawable/ic_help_circle_grey"
+            android:icon="@drawable/ic_drawer_help"
+            android:orderInCategory="0"
             android:title="@string/drawer_help" />
         <item
-            android:orderInCategory="3"
-            android:id="@+id/drawer_menu_privacy_policy"
-            android:icon="@drawable/ic_privacy_policy"
-            android:title="@string/prefs_privacy_policy" />
+            android:id="@+id/drawer_menu_feedback"
+            android:icon="@drawable/ic_drawer_feedback"
+            android:orderInCategory="1"
+            android:title="@string/drawer_feedback" />
 
+        <item
+            android:id="@+id/drawer_menu_privacy_policy"
+            android:icon="@drawable/ic_drawer_privacy"
+            android:orderInCategory="2"
+            android:title="@string/prefs_privacy_policy" />
+    </group>
+
+    <group android:id="@+id/drawer_menu_settings_etc">
+        <item
+            android:id="@+id/nav_settings"
+            android:icon="@drawable/ic_drawer_settings"
+            android:orderInCategory="3"
+            android:title="@string/actionbar_settings" />
         <item
             android:id="@+id/drawer_menu_sign_out"
-            android:icon="@drawable/ic_sign_out"
-            android:orderInCategory="3"
+            android:icon="@drawable/ic_drawer_sign_out"
+            android:orderInCategory="4"
             android:title="@string/drawer_menu_sign_out" />
-
-        <item
-            android:id="@+id/footer_spacer_1"
-            android:checkable="false"
-            android:enabled="false"
-            android:orderInCategory="200"
-            android:title=""
-            android:importantForAccessibility="no"/>
-
-        <item
-            android:id="@+id/footer_spacer_2"
-            android:checkable="false"
-            android:enabled="false"
-            android:orderInCategory="200"
-            android:title=""
-            android:importantForAccessibility="no"/>
     </group>
 
 </menu>

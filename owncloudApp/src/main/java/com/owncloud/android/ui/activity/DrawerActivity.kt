@@ -50,6 +50,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.GravityCompat
 import androidx.core.view.get
 import androidx.core.view.isVisible
+import androidx.core.view.updatePadding
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.drawerlayout.widget.DrawerLayout.DrawerListener
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -134,6 +135,9 @@ abstract class DrawerActivity : ToolbarActivity() {
             override fun onViewAttachedToWindow(v: View) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                     v.rootWindowInsets.displayCutout?.let {
+                        getDrawerActiveUser()?.updatePadding(
+                            top = DisplayUtils.getDrawerHeaderTopPadding(it.safeInsetTop, resources)
+                        )
                         getDrawerActiveUser()?.layoutParams?.height =
                             DisplayUtils.getDrawerHeaderHeight(it.safeInsetTop, resources)
                     }
@@ -354,10 +358,9 @@ abstract class DrawerActivity : ToolbarActivity() {
                 if (userQuota.state == UserQuotaState.EXCEEDED) { // oCIS
                     getAccountQuotaText()?.apply {
                         text = String.format(
-                            getString(R.string.drawer_quota),
+                            getString(R.string.homecloud_drawer_quota),
                             DisplayUtils.bytesToHumanReadable(userQuota.used, context, true),
                             DisplayUtils.bytesToHumanReadable(userQuota.getTotal(), context, true),
-                            userQuota.getRelative()
                         )
                     }
                     getAccountQuotaStatusText()?.apply {
@@ -379,10 +382,9 @@ abstract class DrawerActivity : ToolbarActivity() {
                     }
                     getAccountQuotaText()?.apply {
                         text = String.format(
-                            getString(R.string.drawer_quota),
+                            getString(R.string.homecloud_drawer_quota),
                             DisplayUtils.bytesToHumanReadable(userQuota.used, context, true),
                             DisplayUtils.bytesToHumanReadable(userQuota.getTotal(), context, true),
-                            userQuota.getRelative()
                         )
                     }
                     getAccountQuotaStatusText()?.apply {
@@ -398,10 +400,9 @@ abstract class DrawerActivity : ToolbarActivity() {
                     }
                     getAccountQuotaText()?.apply {
                         text = String.format(
-                            getString(R.string.drawer_quota),
+                            getString(R.string.homecloud_drawer_quota),
                             DisplayUtils.bytesToHumanReadable(userQuota.used, context, true),
                             DisplayUtils.bytesToHumanReadable(userQuota.getTotal(), context, true),
-                            userQuota.getRelative()
                         )
                     }
                     getAccountQuotaStatusText()?.apply {
@@ -415,10 +416,9 @@ abstract class DrawerActivity : ToolbarActivity() {
                         progressTintList = ColorStateList.valueOf(resources.getColor(R.color.color_accent))
                     }
                     getAccountQuotaText()?.text = String.format(
-                        getString(R.string.drawer_quota),
+                        getString(R.string.homecloud_drawer_quota),
                         DisplayUtils.bytesToHumanReadable(userQuota.used, this, true),
                         DisplayUtils.bytesToHumanReadable(userQuota.getTotal(), this, true),
-                        userQuota.getRelative()
                     )
                     getAccountQuotaStatusText()?.visibility = View.GONE
                 }
@@ -461,7 +461,7 @@ abstract class DrawerActivity : ToolbarActivity() {
                 AvatarUtils().loadAvatarForAccount(
                     imageView = it,
                     account = account,
-                    displayRadius = currentAccountAvatarRadiusDimension
+                    displayRadius = resources.getDimension(R.dimen.nav_drawer_header_avatar) / 2f,
                 )
                 drawerViewModel.getUserQuota(account.name)
                 updateQuota()
@@ -583,11 +583,11 @@ abstract class DrawerActivity : ToolbarActivity() {
     private fun getAccountQuotaText(): TextView? = findViewById(R.id.account_quota_text)
     private fun getAccountQuotaStatusText(): TextView? = findViewById(R.id.account_quota_status_text)
     private fun getAccountQuotaBar(): ProgressBar? = findViewById(R.id.account_quota_bar)
-    private fun getDrawerActiveUser() = findNavigationViewChildById(R.id.drawer_active_user) as ConstraintLayout?
-    private fun getDrawerCurrentAccount() = findNavigationViewChildById(R.id.drawer_current_account) as AppCompatImageView?
-    private fun getDrawerHeaderBackground() = findNavigationViewChildById(R.id.drawer_header_background) as ImageView?
-    private fun getDrawerUserName(): TextView? = findNavigationViewChildById(R.id.drawer_username) as TextView?
-    private fun getDrawerUserNameFull(): TextView? = findNavigationViewChildById(R.id.drawer_username_full) as TextView?
+    private fun getDrawerActiveUser(): ConstraintLayout? = findViewById(R.id.drawer_active_user)
+    private fun getDrawerCurrentAccount(): AppCompatImageView? = findViewById(R.id.drawer_current_account)
+    private fun getDrawerHeaderBackground(): ImageView? = findViewById(R.id.drawer_header_background)
+    private fun getDrawerUserName(): TextView? = findViewById(R.id.drawer_username)
+    private fun getDrawerUserNameFull(): TextView? = findViewById(R.id.drawer_username_full)
 
     /**
      * Finds a view that was identified by the id attribute from the drawer header.

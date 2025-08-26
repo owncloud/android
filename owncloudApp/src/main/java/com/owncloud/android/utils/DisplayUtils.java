@@ -29,6 +29,7 @@ import android.text.format.DateUtils;
 import android.util.DisplayMetrics;
 
 import androidx.core.content.ContextCompat;
+
 import com.google.android.material.snackbar.Snackbar;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
@@ -253,6 +254,14 @@ public class DisplayUtils {
             return (int) resources.getDimension(R.dimen.nav_drawer_header_height) + displayCutoutDP;
         } else {
             return (int) resources.getDimension(R.dimen.nav_drawer_header_height);
+        }
+    }
+
+    public static int getDrawerHeaderTopPadding(int displayCutout, Resources resources) {
+        if (resources.getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            return displayCutout / (resources.getDisplayMetrics().densityDpi / DisplayMetrics.DENSITY_DEFAULT);
+        } else {
+            return 0;
         }
     }
 }

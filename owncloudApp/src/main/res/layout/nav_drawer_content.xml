@@ -24,28 +24,50 @@
         android:layout_gravity="start"
         android:fitsSystemWindows="true">
 
-        <androidx.core.widget.NestedScrollView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:fillViewport="true"
-            android:scrollbars="vertical">
+            android:orientation="vertical">
 
-            <com.google.android.material.navigation.NavigationView
-                android:id="@+id/nav_view"
-                android:layout_width="wrap_content"
+            <include
+                layout="@layout/nav_drawer_header"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/nav_drawer_header_height" />
+
+            <androidx.core.widget.NestedScrollView
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_gravity="start"
-                android:fitsSystemWindows="true"
-                app:headerLayout="@layout/nav_drawer_header"
-                app:menu="@menu/drawer_menu">
+                android:fillViewport="true"
+                android:scrollbars="vertical">
 
-                <include
-                    layout="@layout/nav_drawer_footer"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom" />
+                    android:layout_height="match_parent"
+                    android:background="@color/homecloud_drawer_menu_background"
+                    android:orientation="vertical">
 
-            </com.google.android.material.navigation.NavigationView>
-        </androidx.core.widget.NestedScrollView>
+                    <com.google.android.material.navigation.NavigationView
+                        android:id="@+id/nav_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_gravity="start"
+                        android:layout_weight="1"
+                        android:overScrollMode="never"
+                        android:background="@color/homecloud_drawer_menu_background"
+                        android:fitsSystemWindows="true"
+                        app:menu="@menu/drawer_menu" />
+
+                    <include
+                        layout="@layout/nav_drawer_footer_homecloud"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom" />
+
+                </LinearLayout>
+
+            </androidx.core.widget.NestedScrollView>
+
+        </LinearLayout>
+
     </com.google.android.material.navigation.NavigationView>
 </merge>

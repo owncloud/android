@@ -5,13 +5,18 @@
     <color name="homecloud_primary_inverted">#DDFFFFFF</color>
     <color name="homecloud_secondary">#CC000000</color>
     <color name="homecloud_color_accent">@color/homecloud_blue_lighten_2</color>
+    <color name="homecloud_color_outline">#E0E0E0</color>
     <color name="homecloud_surface">@color/white</color>
     <color name="homecloud_error">#F44336</color>
     <color name="homecloud_error_transparent">#1FF44336</color>
     <color name="homecloud_input_stroke_focused">@color/homecloud_blue_darken_2</color>
     <color name="homecloud_input_stroke_nonfocused">@color/homecloud_border_gray</color>
     <color name="homecloud_input_placeholder">#7A7A7A</color>
-    <color name="homecloud_drawer_header_background">#F0F1F5</color>
+    <color name="homecloud_drawer_header_background">@color/white</color>
+    <color name="homecloud_drawer_menu_background">#F0F1F5</color>
+    <color name="homecloud_drawer_avatar_text">@color/homecloud_blue_darken_2</color>
+    <color name="homecloud_drawer_avatar_bg">@color/homecloud_blue_darken_2_12</color>
+    <color name="homecloud_drawer_quota_info">@color/homecloud_grey_2</color>
 
     <color name="homecloud_bar_background">#FFFFFE</color>
     <color name="homecloud_transparent_bar_background">#CCFFFFFE</color>
@@ -57,11 +62,13 @@
 
     <!-- Palette colors. Don't use them directly -->
     <color name="homecloud_blue_darken_2">#FF1976D2</color>
+    <color name="homecloud_blue_darken_2_12">#1F1976D2</color>
     <color name="homecloud_blue_darken_2_24">#3D1976D2</color>
     <color name="homecloud_blue_darken_2_50">#801976D2</color>
     <color name="homecloud_content_grey">#9E9E9E</color>
     <color name="homecloud_content_disabled_bg">#616161</color>
     <color name="homecloud_blue_lighten_2">#FF64B5F6</color>
+    <color name="homecloud_blue_lighten_2_24">#3D64B5F6</color>
     <color name="homecloud_blue_lighten_2_50">#8064B5F6</color>
     <color name="homecloud_border_gray">#FFCBCDD3</color>
     <color name="homecloud_grey_2">#7A7A7A</color>

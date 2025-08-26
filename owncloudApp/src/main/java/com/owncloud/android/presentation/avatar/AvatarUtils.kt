@@ -20,6 +20,7 @@
 package com.owncloud.android.presentation.avatar
 
 import android.accounts.Account
+import android.content.Context
 import android.view.MenuItem
 import android.widget.ImageView
 import com.owncloud.android.R
@@ -61,7 +62,8 @@ class AvatarUtils : KoinComponent {
             val drawable = avatarManager.getAvatarForAccount(
                 account = account,
                 fetchIfNotCached = fetchIfNotCached,
-                displayRadius = displayRadius
+                displayRadius = displayRadius,
+                context = imageView.context,
             )
             withContext(Dispatchers.Main) {
                 if (drawable != null) {
@@ -77,13 +79,15 @@ class AvatarUtils : KoinComponent {
         menuItem: MenuItem,
         account: Account,
         fetchIfNotCached: Boolean = false,
-        displayRadius: Float
+        displayRadius: Float,
+        context: Context,
     ) {
         CoroutineScope(Dispatchers.IO).launch {
             val drawable = avatarManager.getAvatarForAccount(
                 account = account,
                 fetchIfNotCached = fetchIfNotCached,
-                displayRadius = displayRadius
+                displayRadius = displayRadius,
+                context = context,
             )
             withContext(Dispatchers.Main) {
                 if (drawable != null) {
