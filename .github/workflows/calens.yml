@@ -20,7 +20,7 @@ jobs:
     name: Generate Calens Changelog
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           persist-credentials: false
       - name: Run Calens
