@@ -36,6 +36,7 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="start"
                 android:fitsSystemWindows="true"
+                android:background="@color/homecloud_drawer_menu_background"
                 app:headerLayout="@layout/nav_drawer_header"
                 app:menu="@menu/drawer_menu">
 

@@ -38,14 +38,24 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <ImageView
+            android:id="@+id/drawer_header_logo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_drawer_logo"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginVertical="@dimen/standard_margin"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="ContentDescription" />
+
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/drawer_current_account"
             android:layout_width="@dimen/nav_drawer_header_avatar"
             android:layout_height="@dimen/nav_drawer_header_avatar"
-            android:layout_marginBottom="@dimen/standard_half_margin"
             android:src="@drawable/ic_account_circle"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/drawer_username"/>
+            app:layout_constraintBottom_toTopOf="@id/drawer_username"
+            app:layout_constraintTop_toBottomOf="@id/drawer_header_logo"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/drawer_username"
@@ -54,8 +64,9 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:textColor="?attr/colorPrimary"
-            android:textSize="14sp"
+            android:textSize="16sp"
             android:textStyle="bold"
+            android:layout_marginBottom="@dimen/standard_half_margin"
             app:layout_constraintBottom_toTopOf="@id/drawer_username_full"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@id/drawer_current_account"
@@ -67,8 +78,9 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:maxLines="1"
+            android:layout_marginBottom="@dimen/standard_half_margin"
             android:textColor="?attr/colorPrimary"
-            android:textSize="12sp"
+            android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@id/drawer_username"
             app:layout_constraintStart_toStartOf="@id/drawer_username"

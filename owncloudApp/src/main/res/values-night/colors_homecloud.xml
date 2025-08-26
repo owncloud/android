@@ -11,7 +11,10 @@
     <color name="homecloud_input_stroke_focused">@color/homecloud_blue_lighten_2</color>
     <color name="homecloud_input_stroke_nonfocused">@color/homecloud_content_disabled_bg</color>
     <color name="homecloud_input_placeholder">#B2B2B2</color>
-    <color name="homecloud_drawer_header_background">#232323</color>
+    <color name="homecloud_drawer_header_background">#1D1E21</color>
+    <color name="homecloud_drawer_menu_background">#3D3E41</color>
+    <color name="homecloud_drawer_avatar_text">@color/homecloud_blue_lighten_2</color>
+    <color name="homecloud_drawer_avatar_bg">@color/homecloud_blue_lighten_2_24</color>
 
     <color name="homecloud_button_primary_text">#212121</color>
     <color name="homecloud_button_primary_background">@color/homecloud_blue_lighten_2</color>

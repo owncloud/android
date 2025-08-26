@@ -50,6 +50,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.GravityCompat
 import androidx.core.view.get
 import androidx.core.view.isVisible
+import androidx.core.view.updatePadding
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.drawerlayout.widget.DrawerLayout.DrawerListener
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -134,6 +135,9 @@ abstract class DrawerActivity : ToolbarActivity() {
             override fun onViewAttachedToWindow(v: View) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                     v.rootWindowInsets.displayCutout?.let {
+                        getDrawerActiveUser()?.updatePadding(
+                            top = DisplayUtils.getDrawerHeaderTopPadding(it.safeInsetTop, resources)
+                        )
                         getDrawerActiveUser()?.layoutParams?.height =
                             DisplayUtils.getDrawerHeaderHeight(it.safeInsetTop, resources)
                     }
@@ -461,7 +465,7 @@ abstract class DrawerActivity : ToolbarActivity() {
                 AvatarUtils().loadAvatarForAccount(
                     imageView = it,
                     account = account,
-                    displayRadius = currentAccountAvatarRadiusDimension
+                    displayRadius = resources.getDimension(R.dimen.nav_drawer_header_avatar) / 2f,
                 )
                 drawerViewModel.getUserQuota(account.name)
                 updateQuota()

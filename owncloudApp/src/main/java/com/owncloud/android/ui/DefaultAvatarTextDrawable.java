@@ -20,6 +20,7 @@
 
 package com.owncloud.android.ui;
 
+import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.ColorFilter;
@@ -28,7 +29,9 @@ import android.graphics.PixelFormat;
 import android.graphics.drawable.Drawable;
 
 import androidx.annotation.NonNull;
-import com.owncloud.android.utils.BitmapUtils;
+import androidx.core.content.ContextCompat;
+
+import com.owncloud.android.R;
 
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
@@ -83,6 +86,30 @@ public class DefaultAvatarTextDrawable extends Drawable {
     }
 
     /**
+     * Create a DefaultAvatarTextDrawable with the given radius.
+     *
+     * @param text   the text to be rendered
+     * @param textColor color of the user initial text
+     * @param bgColor color of the circle background
+     * @param radius circle radius
+     */
+    public DefaultAvatarTextDrawable(String text, float radius, int textColor, int bgColor) {
+        mRadius = radius;
+        mText = text;
+
+        mBackground = new Paint();
+        mBackground.setStyle(Paint.Style.FILL);
+        mBackground.setAntiAlias(true);
+        mBackground.setColor(bgColor);
+
+        mTextPaint = new Paint();
+        mTextPaint.setColor(textColor);
+        mTextPaint.setTextSize(radius);
+        mTextPaint.setAntiAlias(true);
+        mTextPaint.setTextAlign(Paint.Align.CENTER);
+    }
+
+    /**
      * creates an avatar in form of  a DefaultAvatarTextDrawable with the first letter of the account name in a
      * circle with the
      * given radius.
@@ -95,11 +122,12 @@ public class DefaultAvatarTextDrawable extends Drawable {
      * values
      */
     @NonNull
-    public static DefaultAvatarTextDrawable createAvatar(String accountName, float radiusInDp) throws
+    public static DefaultAvatarTextDrawable createAvatar(String accountName, float radiusInDp, Context context) throws
             UnsupportedEncodingException, NoSuchAlgorithmException {
-        int[] rgb = BitmapUtils.calculateAvatarBackgroundRGB(accountName);
+        int textColor = ContextCompat.getColor(context, R.color.homecloud_drawer_avatar_text);
+        int bgColor = ContextCompat.getColor(context, R.color.homecloud_drawer_avatar_bg);
         DefaultAvatarTextDrawable avatar = new DefaultAvatarTextDrawable(
-                accountName.substring(0, 1).toUpperCase(), rgb[0], rgb[1], rgb[2], radiusInDp);
+                accountName.substring(0, 1).toUpperCase(), radiusInDp, textColor, bgColor);
         return avatar;
     }
 
