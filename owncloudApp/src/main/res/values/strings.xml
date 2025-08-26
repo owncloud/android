@@ -743,6 +743,8 @@
     <string name="release_notes_4_6_1_subtitle_duplicated_automatic_uploads">Automatic uploads are more consistent against duplications</string>
     <string name="release_notes_4_6_1_title_bearer_token_handling">Multiple accounts on Infinite Scale servers</string>
     <string name="release_notes_4_6_1_subtitle_bearer_token_handling">Multiple accounts can be logged in at the same time on the same Infinite Scale server. Additionally, fixed a problem related with session handling</string>
+    <string name="release_notes_4_7_0_title_new_layout_for_spaces">New design for spaces list</string>
+    <string name="release_notes_4_7_0_subtitle_new_layout_for_spaces">A new design for Infinite Scale users in the spaces list, with a three-dot button on each space card that opens an options menu when clicked</string>
     <!-- Open in web -->
     <string name="ic_action_open_in_web">Open in web</string>
     <string name="ic_action_open_with_web">Open in %1$s (web)</string>
