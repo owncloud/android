@@ -189,7 +189,7 @@ class SpacesListFragment : SpacesListAdapter.SpacesListAdapterListener, Fragment
         spaceNameBottomSheet.text = ocSpace.name
 
         val spaceSizeBottomSheet = spaceOptionsBottomSheet.findViewById<TextView>(R.id.file_size_bottom_sheet)
-        spaceSizeBottomSheet.text = DisplayUtils.bytesToHumanReadable(ocSpace.quota?.used!!, requireContext(), true)
+        spaceSizeBottomSheet.text = DisplayUtils.bytesToHumanReadable(ocSpace.quota?.used ?: 0L, requireContext(), true)
 
         val spaceSeparatorBottomSheet = spaceOptionsBottomSheet.findViewById<TextView>(R.id.file_separator_bottom_sheet)
         spaceSeparatorBottomSheet.visibility = View.GONE
