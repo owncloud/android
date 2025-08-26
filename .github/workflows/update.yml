@@ -26,7 +26,6 @@ jobs:
 
     env:
       BUILD_TOOLS_VERSION: "34.0.0"
-      ANDROID_API_LEVEL: 34
 
     steps:
       # Checkout the specific commit from matrix
@@ -37,7 +36,7 @@ jobs:
 
       # Set up Java JDK required for Gradle
       - name: Set up JDK
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: '17'
