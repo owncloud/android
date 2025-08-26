@@ -50,6 +50,7 @@ ownCloud admins and users.
    can be updated together.
 
    https://github.com/owncloud/android/pull/4664
+   https://github.com/owncloud/android/pull/4666
 
 * Enhancement - Add account ID to the user information: [#4605](https://github.com/owncloud/android/issues/4605)
 
