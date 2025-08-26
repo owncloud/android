@@ -5,6 +5,7 @@
     <color name="homecloud_primary_inverted">#DDFFFFFF</color>
     <color name="homecloud_secondary">#CC000000</color>
     <color name="homecloud_color_accent">@color/homecloud_blue_lighten_2</color>
+    <color name="homecloud_color_outline">#E0E0E0</color>
     <color name="homecloud_surface">@color/white</color>
     <color name="homecloud_error">#F44336</color>
     <color name="homecloud_error_transparent">#1FF44336</color>
