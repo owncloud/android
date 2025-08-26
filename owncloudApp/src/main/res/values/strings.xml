@@ -822,7 +822,7 @@
     <string name="content_description_create_new_folder">Create new folder</string>
     <string name="content_description_space_image">Space image</string>
     <string name="content_description_space_name">Space name</string>
-    <string name="content_description_space_three_dot_menu">Space three-dot menu</string>
+    <string name="content_description_space_three_dot_menu">Space menu</string>
     <string name="content_description_space_subtitle">Space subtitle</string>
 
     <string name="create_shortcut_dialog_title">Create a shortcut</string>
