@@ -40,6 +40,7 @@ ownCloud admins and users.
 ## Summary
 
 * Change - SBOM workflow runs on dependabot PRs: [#4664](https://github.com/owncloud/android/pull/4664)
+* Enhancement - New layout for spaces list: [#4604](https://github.com/owncloud/android/issues/4604)
 * Enhancement - Add account ID to the user information: [#4605](https://github.com/owncloud/android/issues/4605)
 
 ## Details
@@ -51,6 +52,15 @@ ownCloud admins and users.
 
    https://github.com/owncloud/android/pull/4664
    https://github.com/owncloud/android/pull/4666
+
+* Enhancement - New layout for spaces list: [#4604](https://github.com/owncloud/android/issues/4604)
+
+   A three-dot button has been added to each space card, allowing a bottom sheet
+   dialog to be opened when clicked. In addition, the spaces layout has been
+   changed to horizontal.
+
+   https://github.com/owncloud/android/issues/4604
+   https://github.com/owncloud/android/pull/4665
 
 * Enhancement - Add account ID to the user information: [#4605](https://github.com/owncloud/android/issues/4605)
 
