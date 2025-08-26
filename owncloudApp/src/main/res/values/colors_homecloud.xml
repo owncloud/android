@@ -16,6 +16,7 @@
     <color name="homecloud_drawer_menu_background">#F0F1F5</color>
     <color name="homecloud_drawer_avatar_text">@color/homecloud_blue_darken_2</color>
     <color name="homecloud_drawer_avatar_bg">@color/homecloud_blue_darken_2_12</color>
+    <color name="homecloud_drawer_quota_info">@color/homecloud_grey_2</color>
 
     <color name="homecloud_bar_background">#FFFFFE</color>
     <color name="homecloud_transparent_bar_background">#CCFFFFFE</color>

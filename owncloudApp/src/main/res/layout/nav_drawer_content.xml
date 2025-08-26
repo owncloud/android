@@ -40,11 +40,11 @@
                 app:headerLayout="@layout/nav_drawer_header"
                 app:menu="@menu/drawer_menu">
 
-                <include
-                    layout="@layout/nav_drawer_footer"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom" />
+                    <include
+                        layout="@layout/nav_drawer_footer_homecloud"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom" />
 
             </com.google.android.material.navigation.NavigationView>
         </androidx.core.widget.NestedScrollView>
