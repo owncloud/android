@@ -1,0 +1,7 @@
+Enhancement: New layout for spaces list
+
+A three-dot button has been added to each space card, allowing a bottom sheet dialog to
+be opened when clicked. In addition, the spaces layout has been changed to horizontal.
+
+https://github.com/owncloud/android/issues/4604
+https://github.com/owncloud/android/pull/4665

@@ -4,8 +4,9 @@
  * @author Juan Carlos Garrote Gascón
  * @author Manuel Plazas Palacio
  * @author Aitor Balleteros Pavón
+ * @author Jorge Aguado Recio
  *
- * Copyright (C) 2024 ownCloud GmbH.
+ * Copyright (C) 2025 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -59,6 +60,10 @@ class SpacesListAdapter(
                 listener.onItemClick(space)
             }
             spacesListItemCard.setAccessibilityRole(className = Button::class.java)
+            spacesListItemName.contentDescription = holder.itemView.context.getString(R.string.content_description_space_name, space.name)
+            spacesThreeDotMenu.contentDescription = holder.itemView.context.getString(R.string.content_description_space_three_dot_menu, space.name)
+            spacesListItemSubtitle.contentDescription = holder.itemView.context.getString(R.string.content_description_space_subtitle,
+                space.description)
 
             if (space.isPersonal && !isMultiPersonal) {
                 spacesListItemName.text = holder.itemView.context.getString(R.string.bottom_nav_personal)
@@ -88,6 +93,10 @@ class SpacesListAdapter(
                     }
                 }
             }
+
+            spacesThreeDotMenu.setOnClickListener {
+                listener.onThreeDotButtonClick(space)
+            }
         }
     }
 
@@ -106,6 +115,7 @@ class SpacesListAdapter(
 
     interface SpacesListAdapterListener {
         fun onItemClick(ocSpace: OCSpace)
+        fun onThreeDotButtonClick(ocSpace: OCSpace)
     }
 
     class SpacesViewHolder(val binding: SpacesListItemBinding) : RecyclerView.ViewHolder(binding.root)

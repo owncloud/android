@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?><!--
   ownCloud Android client application
 
-  Copyright (C) 2024 ownCloud GmbH.
+  Copyright (C) 2025 ownCloud GmbH.
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License version 2,
@@ -81,8 +81,10 @@
     <dimen name="passcode_margin_buttons">4dp</dimen>
 
     <!-- Spaces -->
-    <dimen name="spaces_thumbnail_height">156dp</dimen>
+    <dimen name="spaces_thumbnail_height">200dp</dimen>
     <dimen name="spaces_header_card_height">80dp</dimen>
+    <dimen name="spaces_margin_horizontal">30dp</dimen>
+    <dimen name="spaces_margin_vertical">20dp</dimen>
 
     <!-- Accessibility dims -->
     <dimen name="icon_button_size">48dp</dimen>
