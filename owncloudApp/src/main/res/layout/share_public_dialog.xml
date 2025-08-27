@@ -82,19 +82,18 @@
                 android:id="@+id/shareViaLinkPasswordLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="clip_horizontal"
                 android:visibility="gone"
                 app:endIconDrawable="@drawable/ic_password_toggle"
                 app:endIconMode="password_toggle"
                 app:passwordToggleEnabled="true"
+                android:hint="@string/homecloud_share_password_hint"
                 tool:visibility="visible">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/shareViaLinkPasswordValue"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/standard_half_margin"
-                    android:layout_marginRight="@dimen/standard_half_margin"
+                    android:hint="@string/homecloud_share_password_edit_text_hint"
                     android:inputType="textPassword" />
 
             </com.google.android.material.textfield.TextInputLayout>
