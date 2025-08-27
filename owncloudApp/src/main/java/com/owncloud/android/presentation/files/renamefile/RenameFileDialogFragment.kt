@@ -83,6 +83,11 @@ class RenameFileDialogFragment : DialogFragment(), DialogInterface.OnClickListen
             )
         }
 
+        inputLayout.apply {
+            hint = getString(R.string.homecloud_rename_hint)
+            editText?.hint = getString(R.string.homecloud_rename_edit_text_hint)
+        }
+
         inputText.requestFocus()
 
         // Build the dialog

@@ -21,6 +21,9 @@
     <string name="homecloud_share_password_hint">Password</string>
     <string name="homecloud_share_password_edit_text_hint">Enter password</string>
 
+    <string name="homecloud_rename_hint">Rename</string>
+    <string name="homecloud_rename_edit_text_hint">Enter a new name</string>
+
     <string name="homecloud_new_shortcut_url_edit_text_hint">Enter URL</string>
     <string name="homecloud_new_shortcut_name_edit_text_hint">Enter Name (without .url)</string>
     
