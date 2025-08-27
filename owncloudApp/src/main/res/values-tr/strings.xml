@@ -601,7 +601,6 @@
   <string name="release_notes_proceed">Devam et</string>
   <string name="release_notes_icon">Sürüm notu simgesi</string>
   <string name="release_notes_bugfixes_title">Minör hata düzeltmeleri</string>
-  <string name="release_notes_4_6_1_title_duplicated_automatic_uploads">Otomatik yüklemeler iyileştirildi.</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Web\'te aç</string>
   <string name="ic_action_open_with_web">%1$s\'da aç (web)</string>
