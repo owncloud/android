@@ -681,12 +681,6 @@
   <string name="release_notes_icon">Ícone de nota de lançamento</string>
   <string name="release_notes_bugfixes_title">Pequenas correções de bugs</string>
   <string name="release_notes_bugfixes_subtitle">Alguns bugs foram corrigidos para melhorar a experiência no aplicativo</string>
-  <string name="release_notes_4_6_1_title_shares_space_docs_provider">Compartilha espaço no explorador de arquivos nativo do Android</string>
-  <string name="release_notes_4_6_1_subtitle_shares_space_docs_provider">O espaço compartilhado agora aparece ao lado dos outros espaços no Provedor de Documentos para contas Escala Infinita</string>
-  <string name="release_notes_4_6_1_title_duplicated_automatic_uploads">Envios automáticos melhorados</string>
-  <string name="release_notes_4_6_1_subtitle_duplicated_automatic_uploads">Os envios automáticos são mais consistentes contra duplicações</string>
-  <string name="release_notes_4_6_1_title_bearer_token_handling">Várias contas em Servidores de Escala Infinita</string>
-  <string name="release_notes_4_6_1_subtitle_bearer_token_handling">Várias contas podem ser acessadas simultaneamente no mesmo Servidor de Escala Infinita. Além disso, foi corrigido um problema relacionado ao gerenciamento de sessões.</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Abrir na web</string>
   <string name="ic_action_open_with_web">Abrir em%1$s (web)</string>

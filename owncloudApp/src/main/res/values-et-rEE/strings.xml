@@ -681,12 +681,6 @@
   <string name="release_notes_icon">Väljalasketeavituse ikoon</string>
   <string name="release_notes_bugfixes_title">Väiksemad veaparandused</string>
   <string name="release_notes_bugfixes_subtitle">Mõned vead parandati, et täiustada rakenduse kasutajakogemust</string>
-  <string name="release_notes_4_6_1_title_shares_space_docs_provider">Jagamiste ruum on saadaval läbi Androidi süsteemse failihalduri</string>
-  <string name="release_notes_4_6_1_subtitle_shares_space_docs_provider">Infinite Scale kontodel on jagamiste ruum nüüd dokumentide pakkujas saadaval kõigi teiste ruumide kõrval</string>
-  <string name="release_notes_4_6_1_title_duplicated_automatic_uploads">Automaatsed üleslaadimised on parendatud</string>
-  <string name="release_notes_4_6_1_subtitle_duplicated_automatic_uploads">Automaatsed üleslaadimised käituvad duplikaatide osas ühtlasemalt</string>
-  <string name="release_notes_4_6_1_title_bearer_token_handling">Mitu kontot Infinite Scale serverites</string>
-  <string name="release_notes_4_6_1_subtitle_bearer_token_handling">Samas Infinite Scale serveris võivad olla mitu kontot korraga sisse loginud. Täiendavalt on parandatud probleem sessioonide käitlemisega.</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Ava veebis</string>
   <string name="ic_action_open_with_web">Ava %1$s (veebis)</string>
