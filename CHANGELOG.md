@@ -42,6 +42,7 @@ ownCloud admins and users.
 * Change - SBOM workflow runs on dependabot PRs: [#4664](https://github.com/owncloud/android/pull/4664)
 * Enhancement - New layout for spaces list: [#4604](https://github.com/owncloud/android/issues/4604)
 * Enhancement - Add account ID to the user information: [#4605](https://github.com/owncloud/android/issues/4605)
+* Enhancement - Update test in GitHub Actions: [#4663](https://github.com/owncloud/android/pull/4663)
 
 ## Details
 
@@ -70,6 +71,14 @@ ownCloud admins and users.
 
    https://github.com/owncloud/android/issues/4605
    https://github.com/owncloud/android/pull/4661
+
+* Enhancement - Update test in GitHub Actions: [#4663](https://github.com/owncloud/android/pull/4663)
+
+   A new Github Actions workflow has been added, in order to check whether the
+   upgrade from "latest" to "current" works flawless. It also exports the execution
+   log and the crash log if something goes wrong.
+
+   https://github.com/owncloud/android/pull/4663
 
 # Changelog for ownCloud Android Client [4.6.2] (2025-08-13)
 
