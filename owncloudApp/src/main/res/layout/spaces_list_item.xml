@@ -74,7 +74,6 @@
                     android:textColor="@color/textColor"
                     android:textSize="18sp"
                     android:textStyle="bold"
-                    android:contentDescription="@string/content_description_space_name"
                     tools:text="Name" />
 
                 <ImageView
@@ -86,7 +85,6 @@
                     android:clickable="true"
                     android:focusable="true"
                     android:background="?android:attr/selectableItemBackground"
-                    android:contentDescription="@string/content_description_space_three_dot_menu"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"/>
@@ -102,7 +100,6 @@
                 android:singleLine="true"
                 android:textColor="@color/textColor"
                 android:textSize="15sp"
-                android:contentDescription="@string/content_description_space_subtitle"
                 tools:text="Subtitle" />
 
         </LinearLayout>
