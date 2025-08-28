@@ -662,6 +662,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
 
         var clientId: String? = null
         var clientSecret: String? = null
+        var useAuthorizationHeader = true
 
         val serverInfo = authenticationViewModel.serverInfo.value?.peekContent()?.getStoredData()
         if (serverInfo is ServerInfo.OIDCServer) {
@@ -672,6 +673,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
 
                 clientId = clientRegistrationInfo?.clientId ?: contextProvider.getString(defaultClientId)
                 clientSecret = clientRegistrationInfo?.clientSecret ?: contextProvider.getString(defaultClientSecret)
+                useAuthorizationHeader = false
             }
         } else {
             tokenEndPoint = "$serverBaseUrl${File.separator}${contextProvider.getString(R.string.oauth2_url_endpoint_access)}"
@@ -686,7 +688,8 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
             clientSecret = clientSecret,
             authorizationCode = authorizationCode,
             redirectUri = OAuthUtils.buildRedirectUri(applicationContext, isKiteworksServer).toString(),
-            codeVerifier = authenticationViewModel.codeVerifier
+            codeVerifier = authenticationViewModel.codeVerifier,
+            useAuthorizationHeader = useAuthorizationHeader
         )
 
         authenticationViewModel.requestToken(requestToken)

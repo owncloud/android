@@ -112,7 +112,8 @@ class OCRemoteOAuthDataSource(
                     clientSecret = this.clientSecret,
                     redirectUri = this.redirectUri,
                     clientAuth = this.clientAuth,
-                    codeVerifier = this.codeVerifier
+                    codeVerifier = this.codeVerifier,
+                    useAuthorizationHeader = this.useAuthorizationHeader
                 )
             is TokenRequest.RefreshToken ->
                 TokenRequestParams.RefreshToken(
@@ -122,7 +123,8 @@ class OCRemoteOAuthDataSource(
                     clientId = this.clientId,
                     clientSecret = this.clientSecret,
                     clientAuth = this.clientAuth,
-                    refreshToken = this.refreshToken
+                    refreshToken = this.refreshToken,
+                    useAuthorizationHeader = this.useAuthorizationHeader
                 )
         }
 

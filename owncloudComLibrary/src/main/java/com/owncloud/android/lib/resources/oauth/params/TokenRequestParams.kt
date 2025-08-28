@@ -1,6 +1,6 @@
 /* ownCloud Android Library is available under MIT license
  *
- *   Copyright (C) 2024 ownCloud GmbH.
+ *   Copyright (C) 2025 ownCloud GmbH.
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -35,6 +35,7 @@ sealed class TokenRequestParams(
     val scope: String,
     val clientId: String?,
     val clientSecret: String?,
+    val useAuthorizationHeader: Boolean,
 ) {
     abstract fun toRequestBody(): RequestBody
 
@@ -45,10 +46,11 @@ sealed class TokenRequestParams(
         scope: String,
         clientId: String?,
         clientSecret: String?,
+        useAuthorizationHeader: Boolean,
         val authorizationCode: String,
         val redirectUri: String,
         val codeVerifier: String,
-    ) : TokenRequestParams(tokenEndpoint, clientAuth, grantType, scope, clientId, clientSecret) {
+    ) : TokenRequestParams(tokenEndpoint, clientAuth, grantType, scope, clientId, clientSecret, useAuthorizationHeader) {
 
         override fun toRequestBody(): RequestBody =
             FormBody.Builder().apply {
@@ -70,8 +72,9 @@ sealed class TokenRequestParams(
         scope: String,
         clientId: String?,
         clientSecret: String?,
+        useAuthorizationHeader: Boolean,
         val refreshToken: String? = null
-    ) : TokenRequestParams(tokenEndpoint, clientAuth, grantType, scope, clientId, clientSecret) {
+    ) : TokenRequestParams(tokenEndpoint, clientAuth, grantType, scope, clientId, clientSecret, useAuthorizationHeader) {
 
         override fun toRequestBody(): RequestBody =
             FormBody.Builder().apply {

@@ -3,8 +3,9 @@
  *
  * @author Abel García de Prada
  * @author Juan Carlos Garrote Gascón
+ * @author Jorge Aguado Recio
  *
- * Copyright (C) 2024 ownCloud GmbH.
+ * Copyright (C) 2025 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -29,6 +30,7 @@ sealed class TokenRequest(
     val scope: String,
     val clientId: String?,
     val clientSecret: String?,
+    val useAuthorizationHeader: Boolean,
 ) {
     class AccessToken(
         baseUrl: String,
@@ -37,10 +39,11 @@ sealed class TokenRequest(
         scope: String,
         clientId: String? = null,
         clientSecret: String? = null,
+        useAuthorizationHeader: Boolean,
         val authorizationCode: String,
         val redirectUri: String,
         val codeVerifier: String
-    ) : TokenRequest(baseUrl, tokenEndpoint, clientAuth, GrantType.ACCESS_TOKEN.string, scope, clientId, clientSecret)
+    ) : TokenRequest(baseUrl, tokenEndpoint, clientAuth, GrantType.ACCESS_TOKEN.string, scope, clientId, clientSecret, useAuthorizationHeader)
 
     class RefreshToken(
         baseUrl: String,
@@ -49,8 +52,9 @@ sealed class TokenRequest(
         scope: String,
         clientId: String? = null,
         clientSecret: String? = null,
+        useAuthorizationHeader: Boolean,
         val refreshToken: String? = null
-    ) : TokenRequest(baseUrl, tokenEndpoint, clientAuth, GrantType.REFRESH_TOKEN.string, scope, clientId, clientSecret)
+    ) : TokenRequest(baseUrl, tokenEndpoint, clientAuth, GrantType.REFRESH_TOKEN.string, scope, clientId, clientSecret, useAuthorizationHeader)
 
     enum class GrantType(val string: String) {
         /** Request access token. [More info](https://tools.ietf.org/html/rfc6749#section-4.1.3) */
