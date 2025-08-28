@@ -86,6 +86,7 @@
         <item name="linearProgressIndicatorStyle">@style/Widget.homeCloud.HorizontalProgressBar</item>
 
         <item name="android:windowOptOutEdgeToEdgeEnforcement" tools:targetApi="35">true</item>
+        <item name="android:forceDarkAllowed" tools:targetApi="29">false</item>
     </style>
 
     <!-- Splash Screen -->
@@ -369,5 +370,10 @@
 
     <style name="Theme.homeCloud.SortBottomSheetFragment.Item">
         <item name="android:textAppearance">@style/TextAppearance.OwnCloud.SortBottomSheetFragment.Item</item>
+    </style>
+
+    <style name="homeCloud.FabActionLabel" parent="TextAppearance">
+        <item name="android:background">@drawable/fab_label_background</item>
+        <item name="android:textColor">@color/homecloud_fab_label_text</item>
     </style>
 </resources>

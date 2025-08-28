@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <solid android:color="@color/black_semi_transparent" />
+    <solid android:color="@color/homecloud_fab_label_background" />
     <padding
         android:left="@dimen/standard_padding"
         android:top="4dp"
