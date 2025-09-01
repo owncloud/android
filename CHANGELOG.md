@@ -39,12 +39,21 @@ ownCloud admins and users.
 
 ## Summary
 
+* Bugfix - Add explicit permission to Detekt workflow: [#4675](https://github.com/owncloud/android/pull/4675)
 * Change - SBOM workflow runs on dependabot PRs: [#4664](https://github.com/owncloud/android/pull/4664)
 * Enhancement - New layout for spaces list: [#4604](https://github.com/owncloud/android/issues/4604)
 * Enhancement - Add account ID to the user information: [#4605](https://github.com/owncloud/android/issues/4605)
 * Enhancement - Update test in GitHub Actions: [#4663](https://github.com/owncloud/android/pull/4663)
 
 ## Details
+
+* Bugfix - Add explicit permission to Detekt workflow: [#4675](https://github.com/owncloud/android/pull/4675)
+
+   Read permission has been added to the Detekt workflow. Without this explicit
+   setting, the default permissions would apply, which unnecessarily include write
+   access.
+
+   https://github.com/owncloud/android/pull/4675
 
 * Change - SBOM workflow runs on dependabot PRs: [#4664](https://github.com/owncloud/android/pull/4664)
 
