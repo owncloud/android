@@ -341,8 +341,6 @@
   <string name="confirmation_disable_camera_uploads_title">Bekreft</string>
   <string name="confirmation_disable_pictures_upload_message">Er du sikker på at du vil deaktivere denne funksjonen? De ventende bildene vil ikke bli opplastet</string>
   <string name="confirmation_disable_videos_upload_message">Er du sikker på at du vil deaktivere denne funksjonen? De ventende videoene vil ikke bli lastet opp</string>
-  <string name="proper_pics_folder_warning_camera_upload">Sørg for å velge mappen som kameraet ditt lagrer bildene i. Hvis ikke vil programmet ikke være i stand til å detektere bildene dine. Vær obs på at når du tar bilder vil det ta minst 15 minutter før de blir lastet opp.</string>
-  <string name="proper_videos_folder_warning_camera_upload">Sørg for å velge mappen som kameraet ditt lagrer videoene dine i. Hvis ikke vil programmet ikke være i stand til å detektere videoene. Vær obs på at når du er ferdig å ta opp en video vil det ta minst 15 minutter før de blir lastet opp.</string>
   <string name="conflict_description">Det er en konflikt i fil %1$s, trykk for å løse den</string>
   <string name="conflict_message">Hvilke filer ønsker du å beholder? Hvis du velger begge versjonene, får den lokale filen lagt til et tall i navnet.</string>
   <string name="conflict_keep_both">Behold begge</string>

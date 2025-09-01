@@ -1,88 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_gravity="center">
+    android:orientation="vertical"
+    android:padding="@dimen/standard_margin">
 
-    <FrameLayout
+    <ImageView
+        android:id="@+id/dialog_remove_thumbnail"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="@dimen/standard_margin" />
+
+    <TextView
+        android:id="@+id/dialog_remove_information"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="@dimen/activity_horizontal_margin"
-        app:cardCornerRadius="@dimen/standard_half_margin"
-        app:cardElevation="0dp">
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/two_line_primary_text_size"
+        android:lineSpacingExtra="8dp"
+        tools:text="Do you really want to remove this item with some very long name?" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
-            android:layout_marginTop="@dimen/activity_horizontal_margin"
-            android:orientation="vertical">
+    <LinearLayout
+        android:id="@+id/buttons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/standard_margin"
+        android:layout_marginBottom="@dimen/standard_half_margin"
+        android:gravity="end"
+        android:orientation="horizontal">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/activity_horizontal_margin"
-                android:orientation="horizontal">
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
 
-                <ImageView
-                    android:id="@+id/dialog_remove_thumbnail"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginStart="@dimen/standard_margin" />
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/dialog_remove_no"
+            style="@style/Button.Borderless"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/common_no" />
 
-                <TextView
-                    android:id="@+id/dialog_remove_information"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_gravity="center_vertical"
-                    android:textSize="@dimen/two_line_primary_text_size"
-                    android:layout_marginStart="@dimen/standard_margin"
-                    android:layout_marginEnd="@dimen/standard_margin"
-                    tools:text="Do you really want to remove this item?" />
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/dialog_remove_local_only"
+            style="@style/Button.Borderless"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/confirmation_remove_local" />
 
-            </LinearLayout>
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/dialog_remove_yes"
+            style="@style/Button.Borderless"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/common_yes" />
 
-            <LinearLayout
-                android:id="@+id/buttons"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="end"
-                android:layout_marginBottom="5dp">
-
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/dialog_remove_no"
-                    style="@style/Button.Borderless"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/common_no" />
-
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/dialog_remove_local_only"
-                    style="@style/Button.Borderless"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/confirmation_remove_local" />
-
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/dialog_remove_yes"
-                    style="@style/Button.Borderless"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/common_yes" />
-
-            </LinearLayout>
-        </LinearLayout>
-
-    </FrameLayout>
+    </LinearLayout>
 
 </LinearLayout>
 

@@ -5,6 +5,8 @@ apply plugin: 'kotlin-parcelize'
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.google.firebase.crashlytics'
 
+apply from: 'gradle/homecloudLoginPrefill.gradle'
+
 def commitSHA1 = 'COMMIT_SHA1'
 def gitRemote = 'GIT_REMOTE'
 
@@ -117,8 +119,8 @@ android {
 
         testInstrumentationRunner "com.owncloud.android.utils.OCTestAndroidJUnitRunner"
 
-        versionCode = 1_00_06_0
-        versionName = "1.0.6"
+        versionCode = 1_00_07_0
+        versionName = "1.0.7"
 
         buildConfigField "String", gitRemote, "\"" + getGitOriginRemote() + "\""
         buildConfigField "String", commitSHA1, "\"" + getLatestGitHash() + "\""
@@ -220,6 +222,8 @@ android {
     namespace "com.owncloud.android"
     testNamespace "com.owncloud.android.test"
 }
+
+configureHomecloudLoginPrefill()
 
 static def setAppIdResources(target, appId) {
     target.resValue "string", "account_type", appId

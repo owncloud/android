@@ -1,0 +1,7 @@
+Bugfix: Change space icon in file details view for personal space
+
+The space icon in the file details view has been replaced by the
+folder icon when the space that contains the file is personal.
+
+https://github.com/owncloud/android/issues/4624
+https://github.com/owncloud/android/pull/4640

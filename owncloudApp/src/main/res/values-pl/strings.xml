@@ -395,8 +395,6 @@
   <string name="confirmation_disable_camera_uploads_title">Potwierdź</string>
   <string name="confirmation_disable_pictures_upload_message">Czy jesteś pewien że chcesz dezaktywować tą usługę ? Oczekujące obrazy nie zostaną wrzucone</string>
   <string name="confirmation_disable_videos_upload_message">Czy jesteś pewien że chcesz dezaktywować tą usługę ? Oczekujące filmy nie zostaną wrzucone</string>
-  <string name="proper_pics_folder_warning_camera_upload">Upewnij się, że wskazany folder jest tym samym folderem używanym przez aparat do zapisu. W innym przypadku nie zarejestruje twoich zdjęć. Miej na uwadze że zdjęcia zostaną wysłane w ciągu przynajmniej 15 minut od ich powstania.</string>
-  <string name="proper_videos_folder_warning_camera_upload">Upewnij się, że wskazany folder jest tym samym folderem używanym przez aparat do zapisu. W innym przypadku nie zarejestruje twoich filmów. Miej na uwadze że filmy zostaną wysłane w ciągu przynajmniej 15 minut od ich powstania.</string>
   <string name="conflict_description">W pliku %1$swystąpił konflikt, naciśnij żeby go rozwiązać</string>
   <string name="conflict_message">Które pliki chcesz zachować? Jeśli wybierzesz obie wersje, do nazwy pliku lokalnego zostanie dodana liczba.</string>
   <string name="conflict_keep_both">Zatrzymaj oba</string>

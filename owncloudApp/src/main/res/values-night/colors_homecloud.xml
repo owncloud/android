@@ -1,31 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="homecloud_primary">#FFFFFF</color>
+    <color name="homecloud_primary">#DEFFFFFF</color>
     <color name="homecloud_primary_dark">@color/homecloud_bar_background</color>
     <color name="homecloud_primary_inverted">#DD000000</color>
     <color name="homecloud_secondary">#DDFFFFFF</color>
     <color name="homecloud_color_accent">@color/homecloud_blue_lighten_2</color>
+    <color name="homecloud_color_outline">#616161</color>
     <color name="homecloud_surface">#262729</color>
     <color name="homecloud_error">#F28F8C</color>
     <color name="homecloud_error_transparent">#3DF28F8C</color>
     <color name="homecloud_input_stroke_focused">@color/homecloud_blue_lighten_2</color>
-    <color name="homecloud_input_stroke_nonfocused">#616161</color>
+    <color name="homecloud_input_stroke_nonfocused">@color/homecloud_content_disabled_bg</color>
     <color name="homecloud_input_placeholder">#B2B2B2</color>
-    <color name="homecloud_drawer_header_background">#232323</color>
+    <color name="homecloud_drawer_header_background">#1D1E21</color>
+    <color name="homecloud_drawer_menu_background">#3D3E41</color>
+    <color name="homecloud_drawer_avatar_text">@color/homecloud_blue_lighten_2</color>
+    <color name="homecloud_drawer_avatar_bg">@color/homecloud_blue_lighten_2_24</color>
+    <color name="homecloud_drawer_quota_info">#B2B2B2</color>
 
     <color name="homecloud_button_primary_text">#212121</color>
     <color name="homecloud_button_primary_background">@color/homecloud_blue_lighten_2</color>
-    <color name="homecloud_button_primary_background_disabled">#616161</color>
+    <color name="homecloud_button_primary_background_disabled">@color/homecloud_content_disabled_bg</color>
     <color name="homecloud_button_secondary_text">@color/homecloud_blue_lighten_2</color>
     <color name="homecloud_button_secondary_stroke">@color/homecloud_blue_lighten_2</color>
     <color name="homecloud_button_borderless_text">@color/homecloud_blue_lighten_2</color>
 
-    <color name="homecloud_dialog_background">#1D1E21</color>
+    <color name="homecloud_dialog_background">#262729</color>
     <color name="homecloud_dialog_button_disabled">@color/homecloud_blue_darken_2_24</color>
     <color name="homecloud_dialog_button_enabled">@color/homecloud_blue_lighten_2</color>
 
     <color name="homecloud_progressbar_indicator">@color/homecloud_blue_lighten_2</color>
-    <color name="homecloud_progressbar_track">#616161</color>
+    <color name="homecloud_progressbar_track">@color/homecloud_content_disabled_bg</color>
+
+    <color name="homecloud_radiobutton_checked">@color/homecloud_blue_lighten_2</color>
+    <color name="homecloud_radiobutton_unchecked">#B2B2B2</color>
+    <color name="homecloud_radiobutton_checked_disabled">@color/homecloud_content_disabled_bg</color>
+    <color name="homecloud_radiobutton_unchecked_disabled">@color/homecloud_content_disabled_bg</color>
+
+    <color name="homecloud_switch_thumb_checked">@color/homecloud_blue_lighten_2</color>
+    <color name="homecloud_switch_thumb_unchecked">@color/homecloud_content_disabled_bg</color>
+    <color name="homecloud_switch_track_checked">@color/homecloud_blue_lighten_2_50</color>
+    <color name="homecloud_switch_track_unchecked">@color/homecloud_content_grey</color>
+
+    <color name="homecloud_checkbox_checked">@color/homecloud_blue_lighten_2</color>
+    <color name="homecloud_checkbox_unchecked">#262729</color>
+    <color name="homecloud_checkbox_checkmark">@color/white</color>
+    <color name="homecloud_checkbox_disabled_checked">#616161</color>
+    <color name="homecloud_checkbox_disabled_unchecked">#616161</color>
+    <color name="homecloud_checkbox_disabled_checkmark">#9E9E9E</color>
 
     <color name="homecloud_menu_background">#424242</color>
 

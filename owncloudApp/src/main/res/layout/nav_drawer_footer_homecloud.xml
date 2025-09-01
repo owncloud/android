@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/standard_padding"
+    tools:background="@color/grey">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="@color/homecloud_drawer_header_background"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="0dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/standard_padding">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/standard_half_margin"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:text="@string/homecloud_drawer_storage_label"
+                android:textSize="16sp" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/account_quota_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/drawer_loading_quota"
+                android:textColor="@color/homecloud_drawer_quota_info"
+                android:textSize="16sp" />
+
+            <com.google.android.material.progressindicator.LinearProgressIndicator
+                android:id="@+id/account_quota_bar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/standard_half_margin"
+                tools:progress="25" />
+
+        </LinearLayout>
+
+
+    </androidx.cardview.widget.CardView>
+
+</FrameLayout>

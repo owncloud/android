@@ -85,6 +85,11 @@ class CreateFolderDialogFragment : DialogFragment() {
             .setTitle(R.string.uploader_info_dirname)
         val alertDialog = builder.create()
 
+        inputLayout.apply {
+            hint = getString(R.string.homecloud_new_folder_hint)
+            editText?.hint = getString(R.string.homecloud_new_folder_edit_text_hint)
+        }
+
         alertDialog.setOnShowListener {
             val okButton = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE)
             okButton.isEnabled = isButtonEnabled

@@ -4,8 +4,9 @@
  * @author Abel García de Prada
  * @author Juan Carlos Garrote Gascón
  * @author Aitor Ballesteros Pavón
+ * @author Jorge Aguado Recio
  *
- * Copyright (C) 2024 ownCloud GmbH.
+ * Copyright (C) 2025 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -75,7 +76,6 @@ import com.owncloud.android.presentation.files.removefile.RemoveFilesDialogFragm
 import com.owncloud.android.presentation.files.removefile.RemoveFilesDialogFragment.Companion.TAG_REMOVE_FILES_DIALOG_FRAGMENT
 import com.owncloud.android.presentation.files.renamefile.RenameFileDialogFragment
 import com.owncloud.android.presentation.files.renamefile.RenameFileDialogFragment.Companion.FRAGMENT_TAG_RENAME_FILE
-import com.owncloud.android.ui.activity.FileActivity.REQUEST_CODE__UPDATE_CREDENTIALS
 import com.owncloud.android.ui.activity.FileDisplayActivity
 import com.owncloud.android.ui.fragment.FileFragment
 import com.owncloud.android.ui.preview.PreviewAudioFragment
@@ -107,6 +107,8 @@ class FileDetailsFragment : FileFragment() {
 
     private var openInWebProviders: Map<String, Int> = hashMapOf()
 
+    private var isMultiPersonal = false
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -121,15 +123,9 @@ class FileDetailsFragment : FileFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        isMultiPersonal = requireArguments().getBoolean(ARG_IS_MULTIPERSONAL)
 
-        collectLatestLifecycleFlow(fileDetailsViewModel.currentFile) { ocFileWithSyncInfo: OCFileWithSyncInfo? ->
-            if (ocFileWithSyncInfo != null) {
-                file = ocFileWithSyncInfo.file
-                updateDetails(ocFileWithSyncInfo)
-            } else {
-                requireActivity().onBackPressed()
-            }
-        }
+        observeCurrentFile()
 
         collectLatestLifecycleFlow(fileDetailsViewModel.appRegistryMimeType) { appRegistryMimeType ->
             if (appRegistryMimeType != null) {
@@ -175,7 +171,7 @@ class FileDetailsFragment : FileFragment() {
                                     putExtra(EXTRA_ACTION, ACTION_UPDATE_EXPIRED_TOKEN)
                                     addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
                                 }
-                                startActivityForResult(updateAccountCredentials, REQUEST_CODE__UPDATE_CREDENTIALS)
+                                startActivity(updateAccountCredentials)
                             }.show()
                     } else {
                         showErrorInSnackbar(R.string.sync_fail_ticker, uiResult.error)
@@ -382,7 +378,8 @@ class FileDetailsFragment : FileFragment() {
             binding.fdSpace.visibility = View.VISIBLE
             binding.fdSpaceLabel.visibility = View.VISIBLE
             binding.fdIconSpace.visibility = View.VISIBLE
-            if (space.isPersonal) {
+            if (space.isPersonal && !isMultiPersonal) {
+                binding.fdIconSpace.setImageResource(R.drawable.ic_folder)
                 binding.fdSpace.text = getString(R.string.bottom_nav_personal)
             } else {
                 binding.fdSpace.text = space.name
@@ -598,6 +595,17 @@ class FileDetailsFragment : FileFragment() {
         fileOperationsViewModel.setLastUsageFile(fileWaitingToPreview)
     }
 
+    private fun observeCurrentFile() {
+        collectLatestLifecycleFlow(fileDetailsViewModel.currentFile) { ocFileWithSyncInfo: OCFileWithSyncInfo? ->
+            if (ocFileWithSyncInfo != null) {
+                file = ocFileWithSyncInfo.file
+                updateDetails(ocFileWithSyncInfo)
+            } else {
+                requireActivity().onBackPressed()
+            }
+        }
+    }
+
     override fun updateViewForSyncInProgress() {
         // Not yet implemented
     }
@@ -622,6 +630,7 @@ class FileDetailsFragment : FileFragment() {
         private const val ARG_FILE = "FILE"
         private const val ARG_ACCOUNT = "ACCOUNT"
         private const val ARG_SYNC_FILE_AT_OPEN = "SYNC_FILE_AT_OPEN"
+        private const val ARG_IS_MULTIPERSONAL = "IS_MULTIPERSONAL"
         private const val ZERO_MILLISECOND_TIME = 0
 
         /**
@@ -632,12 +641,13 @@ class FileDetailsFragment : FileFragment() {
          * @param account      An ownCloud account; needed to start downloads
          * @return New fragment with arguments set
          */
-        fun newInstance(fileToDetail: OCFile, account: Account, syncFileAtOpen: Boolean = true): FileDetailsFragment =
+        fun newInstance(fileToDetail: OCFile, account: Account, syncFileAtOpen: Boolean = true, isMultiPersonal: Boolean): FileDetailsFragment =
             FileDetailsFragment().apply {
                 arguments = Bundle().apply {
                     putParcelable(ARG_FILE, fileToDetail)
                     putParcelable(ARG_ACCOUNT, account)
                     putBoolean(ARG_SYNC_FILE_AT_OPEN, syncFileAtOpen)
+                    putBoolean(ARG_IS_MULTIPERSONAL, isMultiPersonal)
                 }
             }
     }

@@ -66,6 +66,7 @@ import com.owncloud.android.presentation.sharing.generatePassword
 import com.owncloud.android.ui.dialog.ExpirationDatePickerDialogFragment
 import com.owncloud.android.utils.DateUtils
 import com.owncloud.android.utils.PreferenceUtils
+import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import timber.log.Timber
@@ -150,7 +151,7 @@ class PublicShareDialogFragment : DialogFragment() {
             -1
         }
 
-    private val capabilityViewModel: CapabilityViewModel by viewModel {
+    private val capabilityViewModel: CapabilityViewModel by activityViewModel {
         parametersOf(
             account?.name
         )
@@ -246,7 +247,7 @@ class PublicShareDialogFragment : DialogFragment() {
 
             if (publicShare?.isPasswordProtected == true) {
                 setPasswordSwitchChecked()
-                binding.shareViaLinkPasswordValue.isVisible = true
+                binding.shareViaLinkPasswordLayout.isVisible = true
                 binding.shareViaLinkPasswordValue.hint = getString(R.string.share_via_link_default_password)
             }
 
@@ -581,7 +582,7 @@ class PublicShareDialogFragment : DialogFragment() {
          */
         override fun onCheckedChanged(switchView: CompoundButton, isChecked: Boolean) {
             if (isChecked) {
-                binding.shareViaLinkPasswordValue.isVisible = true
+                binding.shareViaLinkPasswordLayout.isVisible = true
                 binding.shareViaLinkPasswordValue.requestFocus()
                 binding.saveButton.isEnabled = false
                 capabilities?.passwordPolicy?.let {
@@ -595,7 +596,7 @@ class PublicShareDialogFragment : DialogFragment() {
                 mgr?.showSoftInput(binding.shareViaLinkPasswordValue, InputMethodManager.SHOW_IMPLICIT)
 
             } else {
-                binding.shareViaLinkPasswordValue.isVisible = false
+                binding.shareViaLinkPasswordLayout.isVisible = false
                 binding.saveButton.isEnabled = true
                 binding.shareViaLinkPasswordValue.text?.clear()
                 capabilities?.passwordPolicy?.let {
@@ -613,7 +614,6 @@ class PublicShareDialogFragment : DialogFragment() {
     private fun initExpirationListener() {
         onExpirationDateInteractionListener = OnExpirationDateInteractionListener()
         binding.shareViaLinkExpirationSwitch.setOnCheckedChangeListener(onExpirationDateInteractionListener)
-        binding.shareViaLinkExpirationLabel.setOnClickListener(onExpirationDateInteractionListener)
         binding.shareViaLinkExpirationValue.setOnClickListener(onExpirationDateInteractionListener)
     }
 
@@ -748,7 +748,7 @@ class PublicShareDialogFragment : DialogFragment() {
 
         // Hide expiration date switch if date is enforced to prevent it is removed
         if (capabilities?.filesSharingPublicExpireDateEnforced == CapabilityBooleanType.TRUE) {
-            binding.shareViaLinkExpirationLabel.text = getString(R.string.share_via_link_expiration_date_enforced_label)
+            binding.shareViaLinkExpirationSwitch.text = getString(R.string.share_via_link_expiration_date_enforced_label)
             binding.shareViaLinkExpirationSwitch.isVisible = false
             binding.shareViaLinkExpirationExplanationLabel.isVisible = true
             binding.shareViaLinkExpirationExplanationLabel.text = getString(
@@ -823,10 +823,10 @@ class PublicShareDialogFragment : DialogFragment() {
             capabilities?.filesSharingPublicPasswordEnforcedReadWrite == CapabilityBooleanType.TRUE
 
     private fun setPasswordNotEnforced() {
-        binding.shareViaLinkPasswordLabel.text = getString(R.string.share_via_link_password_label)
+        binding.shareViaLinkPasswordSwitch.text = getString(R.string.share_via_link_password_label)
         binding.shareViaLinkPasswordSwitch.isVisible = true
         if (!binding.shareViaLinkPasswordSwitch.isChecked) {
-            binding.shareViaLinkPasswordValue.isVisible = false
+            binding.shareViaLinkPasswordLayout.isVisible = false
             capabilities?.passwordPolicy?.let {
                 binding.layoutPasswordGeneratorButtons.isVisible = false
             }
@@ -834,10 +834,10 @@ class PublicShareDialogFragment : DialogFragment() {
     }
 
     private fun setPasswordEnforced() {
-        binding.shareViaLinkPasswordLabel.text = getString(R.string.share_via_link_password_enforced_label)
+        binding.shareViaLinkPasswordSwitch.text = getString(R.string.share_via_link_password_enforced_label)
         binding.shareViaLinkPasswordSwitch.isChecked = true
         binding.shareViaLinkPasswordSwitch.isVisible = false
-        binding.shareViaLinkPasswordValue.isVisible = true
+        binding.shareViaLinkPasswordLayout.isVisible = true
         capabilities?.passwordPolicy?.let {
             binding.layoutPasswordGeneratorButtons.isVisible = true
         }

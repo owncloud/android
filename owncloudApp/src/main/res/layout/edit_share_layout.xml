@@ -28,19 +28,10 @@
             android:id="@+id/editShareTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ellipsize="middle"
             android:padding="@dimen/standard_padding"
-            android:singleLine="true"
+            tools:text="Share with [very_very_very_very_very_very_very_very_very_very_very_long_username]"
             android:text="@string/share_with_edit_title"
-            android:textAppearance="@style/TextAppearance.AppCompat.Title" />
-
-        <!-- for some reason the divider below is determining the width for the fragment;
-             so, leave it there, even if it's height is 0dp, we don't really want to see it -->
-        <View
-            android:id="@+id/shareHeaderDivider"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:background="@color/owncloud_blue" />
+            android:textAppearance="?attr/textAppearanceTitleLarge" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -52,11 +43,9 @@
 
             <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/canEditSwitch"
-                style="?android:attr/listSeparatorTextViewStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
-                android:layout_marginTop="@dimen/standard_half_margin"
                 android:paddingStart="0dp"
                 android:paddingEnd="0dp"
                 android:text="@string/share_privilege_can_edit" />
@@ -84,11 +73,9 @@
 
             <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/canShareSwitch"
-                style="?android:attr/listSeparatorTextViewStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
-                android:layout_marginTop="@dimen/standard_half_margin"
                 android:paddingLeft="0dp"
                 android:text="@string/share_privilege_can_share" />
 
@@ -113,6 +100,7 @@
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_gravity="end"
+            android:layout_marginBottom="24dp"
             android:layout_weight="1"
             android:contentDescription="sharePublicLinkCloseButton"
             android:text="@string/drawer_close"

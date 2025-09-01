@@ -12,7 +12,7 @@
  * @author Jorge Aguado Recio
  *
  * Copyright (C) 2011  Bartek Przybylski
- * Copyright (C) 2024 ownCloud GmbH.
+ * Copyright (C) 2025 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -433,7 +433,7 @@ class FileDisplayActivity : FileActivity(),
     }
 
     private fun initAndShowListOfUploads() {
-        val uploadsFragment = TransferListFragment()
+        val uploadsFragment = TransferListFragment.newInstance(account)
         this.fileListOption = FileListOption.UPLOADS_LIST
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.left_fragment_container, uploadsFragment)
@@ -508,7 +508,7 @@ class FileDisplayActivity : FileActivity(),
                 }
 
                 else -> {
-                    FileDetailsFragment.newInstance(file, account, false)
+                    FileDetailsFragment.newInstance(file, account, false, isMultiPersonal)
                 }
             }
         }
@@ -618,6 +618,9 @@ class FileDisplayActivity : FileActivity(),
 
         // Handle calls form internal activities.
         if (requestCode == REQUEST_CODE__SELECT_CONTENT_FROM_APPS && (resultCode == RESULT_OK || resultCode == RESULT_OK_AND_MOVE)) {
+            if (!manageAccountsViewModel.hasEnoughQuota(account.name)) {
+                showMessageInSnackbar(message = getString(R.string.failed_upload_quota_exceeded_text))
+            }
 
             requestUploadOfContentFromApps(data)
 
@@ -633,6 +636,9 @@ class FileDisplayActivity : FileActivity(),
                         capturedFilePaths: Array<String>
                     ) {
                         if (hasEnoughSpace) {
+                            if (!manageAccountsViewModel.hasEnoughQuota(account.name)) {
+                                showMessageInSnackbar(message = getString(R.string.failed_upload_quota_exceeded_text))
+                            }
                             requestUploadOfFilesFromFileSystem(capturedFilePaths)
                         }
                     }
@@ -819,7 +825,8 @@ class FileDisplayActivity : FileActivity(),
         Timber.v("onResume() start")
         super.onResume()
 
-        if (mainFileListFragment?.getCurrentSpace()?.isProject == true) {
+        if (mainFileListFragment?.getCurrentSpace()?.isProject == true ||
+            (mainFileListFragment?.getCurrentSpace()?.isPersonal == true && isMultiPersonal)) {
             setCheckedItemAtBottomBar(getMenuItemForFileListOption(FileListOption.SPACES_LIST))
             updateToolbar(null, mainFileListFragment?.getCurrentSpace())
         } else {
@@ -981,7 +988,9 @@ class FileDisplayActivity : FileActivity(),
         // or it will show the root folder one
         if (intent.action == ACTION_DETAILS && chosenFile?.remotePath == OCFile.ROOT_PATH && secondFragment is FileDetailsFragment) return
 
-        if (chosenFile == null || (chosenFile.remotePath == OCFile.ROOT_PATH && (space == null || isNotProjectSpaceAndMultiPersonalMode(space)))) {
+        if (chosenFile == null || (chosenFile.remotePath == OCFile.ROOT_PATH && (space == null || isNotProjectSpaceAndMultiPersonalMode(space) ||
+                    isMultiPersonalModeInAvailableOffline(space))
+                )) {
             val title =
                 when (fileListOption) {
                     FileListOption.AV_OFFLINE -> getString(R.string.drawer_item_only_available_offline)
@@ -1006,7 +1015,8 @@ class FileDisplayActivity : FileActivity(),
 
     private fun isNotProjectSpaceAndMultiPersonalMode(space: OCSpace?) = !space!!.isProject && !(space.isPersonal && isMultiPersonal)
 
-
+    private fun isMultiPersonalModeInAvailableOffline(space: OCSpace?) = space!!.isPersonal && isMultiPersonal && fileListOption == FileListOption
+        .AV_OFFLINE
     /**
      * Updates the view associated to the activity after the finish of an operation trying to
      * remove a file.
@@ -1765,7 +1775,8 @@ class FileDisplayActivity : FileActivity(),
         val detailsFragment = FileDetailsFragment.newInstance(
             fileToDetail = ocFile,
             account = account,
-            syncFileAtOpen = syncFileAtOpen
+            syncFileAtOpen = syncFileAtOpen,
+            isMultiPersonal = isMultiPersonal
         )
         setSecondFragment(detailsFragment)
     }
@@ -1947,6 +1958,9 @@ class FileDisplayActivity : FileActivity(),
     }
 
     override fun uploadShortcutFileFromApp(shortcutFilePath: Array<String>) {
+        if (!manageAccountsViewModel.hasEnoughQuota(account.name)) {
+            showMessageInSnackbar(message = getString(R.string.failed_upload_quota_exceeded_text))
+        }
         requestUploadOfFilesFromFileSystem(shortcutFilePath)
     }
 

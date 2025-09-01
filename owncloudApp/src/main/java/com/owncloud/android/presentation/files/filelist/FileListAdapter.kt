@@ -5,8 +5,9 @@
  * @author Juan Carlos Garrote Gascón
  * @author Manuel Plazas Palacio
  * @author Aitor Ballesteros Pavón
+ * @author Jorge Aguado Recio
  *
- * Copyright (C) 2024 ownCloud GmbH.
+ * Copyright (C) 2025 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -54,6 +55,7 @@ class FileListAdapter(
     private val isPickerMode: Boolean,
     private val layoutManager: StaggeredGridLayoutManager,
     private val listener: FileListAdapterListener,
+    private val isMultiPersonal: Boolean,
 ) : SelectableAdapter<RecyclerView.ViewHolder>() {
 
     private var files = mutableListOf<Any>()
@@ -281,7 +283,12 @@ class FileListAdapter(
                 view.binding.let {
                     it.fileListConstraintLayout.filterTouchesWhenObscured = PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(context)
                     it.Filename.text = file.fileName
-                    it.fileListSize.text = DisplayUtils.bytesToHumanReadable(file.length, context, true)
+                    val isFolderInKw = isMultiPersonal && file.isFolder
+                    it.fileListSize.text = if (isFolderInKw) "" else DisplayUtils.bytesToHumanReadable(file.length, context, true)
+                    it.fileListSeparator.visibility = if (isFolderInKw) View.GONE else View.VISIBLE
+                    it.fileListLastMod.layoutParams = (it.fileListLastMod.layoutParams as ViewGroup.MarginLayoutParams).also {
+                            params -> params.marginStart = if (isFolderInKw) 0 else
+                        context.resources.getDimensionPixelSize(R.dimen.standard_quarter_margin) }
                     it.fileListLastMod.text = DisplayUtils.getRelativeTimestamp(context, file.modificationTimestamp)
                     it.threeDotMenu.isVisible = getCheckedItems().isEmpty()
                     it.threeDotMenu.contentDescription = context.getString(R.string.content_description_file_operations, file.fileName)
@@ -293,7 +300,7 @@ class FileListAdapter(
                         fileWithSyncInfo.space?.let { space ->
                             it.spacePathLine.spaceIcon.isVisible = true
                             it.spacePathLine.spaceName.isVisible = true
-                            if (space.isPersonal) {
+                            if (space.isPersonal && !isMultiPersonal) {
                                 it.spacePathLine.spaceIcon.setImageResource(R.drawable.ic_folder)
                                 it.spacePathLine.spaceName.setText(R.string.bottom_nav_personal)
                             } else {

@@ -355,8 +355,6 @@ Download hier: %2$s</string>
   <string name="confirmation_disable_camera_uploads_title">Bevestigen</string>
   <string name="confirmation_disable_pictures_upload_message">Weet u zeker dat u deze optie uit wilt schakelen? Klaarstaande afbeeldingen worden niet geuploade</string>
   <string name="confirmation_disable_videos_upload_message">Weet u zeker dat u deze optie uit wilt schakelen? Klaarstaande video’s worden niet geuploade</string>
-  <string name="proper_pics_folder_warning_camera_upload">Zorg ervoor dat de map is geselecteerd waar de camera foto\'s opslaat na het opnemen. Anders is deze functionaliteit niet in staat om de foto\'s te detecteren. Houd er rekening mee dat uploaden van video\'s tot 15 minuten kan duren.</string>
-  <string name="proper_videos_folder_warning_camera_upload">Zorg ervoor dat de map is geselecteerd waar de camera video\'s opslaat na het opnemen. Anders is deze functionaliteit niet in staat om de video\'s te detecteren. Houd er rekening mee dat uploaden van video\'s tot 15 minuten kan duren.</string>
   <string name="conflict_description">Er is een conflict in bestand %1$s, klik om het op te lossen</string>
   <string name="conflict_message">Welke bestanden wilt u bewaren? Als u beide versies selecteert zal het lokale bestand een nummer aan de naam toegevoegd krijgen.</string>
   <string name="conflict_keep_both">Beide bewaren</string>

@@ -10,7 +10,7 @@
  * @author Aitor Ballesteros Pavón
  * @author Jorge Aguado Recio
  *
- * Copyright (C) 2024 ownCloud GmbH.
+ * Copyright (C) 2025 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -191,14 +191,16 @@ class PreviewImageFragment : FileFragment() {
     override fun onPrepareOptionsMenu(menu: Menu) {
         super.onPrepareOptionsMenu(menu)
         val safeFile = file
-        // Update the file
-        file = mContainerActivity.storageManager.getFileById(file.id ?: -1)
-        val accountName = mContainerActivity.storageManager.account.name
-        previewImageViewModel.filterMenuOptions(safeFile, accountName)
+        safeFile?.let {
+            // Update the file
+            file = mContainerActivity.storageManager.getFileById(it.id ?: -1)
+            val accountName = mContainerActivity.storageManager.account.name
+            previewImageViewModel.filterMenuOptions(it, accountName)
 
-        collectLatestLifecycleFlow(previewImageViewModel.menuOptions) { menuOptions ->
-            val hasWritePermission = safeFile.hasWritePermission
-            menu.filterMenuOptions(menuOptions, hasWritePermission)
+            collectLatestLifecycleFlow(previewImageViewModel.menuOptions) { menuOptions ->
+                val hasWritePermission = it.hasWritePermission
+                menu.filterMenuOptions(menuOptions, hasWritePermission)
+            }
         }
 
         setRolesAccessibilityToMenuItems(menu)

@@ -3,8 +3,9 @@
  *
  * @author Abel García de Prada
  * @author Juan Carlos Garrote Gascón
+ * @author Jorge Aguado Recio
  *
- * Copyright (C) 2024 ownCloud GmbH.
+ * Copyright (C) 2025 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -48,7 +49,9 @@ class OCRemoteOAuthDataSource(
             oidcService.getOIDCServerDiscovery(ownCloudClient)
         }
 
-        return serverConfiguration.toModel()
+        return serverConfiguration.toModel().run {
+            if (ownCloudClient.isKiteworksServer) copy(isKiteworksServer = true) else this
+        }
     }
 
     override fun performTokenRequest(tokenRequest: TokenRequest): TokenResponse {

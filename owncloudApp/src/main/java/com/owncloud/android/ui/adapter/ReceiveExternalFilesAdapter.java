@@ -6,7 +6,9 @@
  * @author Shashvat Kedia
  * @author David González Verdugo
  * @author John Kalimeris
- * Copyright (C) 2021 ownCloud GmbH.
+ * @author Jorge Aguado Recio
+ *
+ * Copyright (C) 2025 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -58,13 +60,15 @@ public class ReceiveExternalFilesAdapter extends BaseAdapter implements ListAdap
     private FileDataStorageManager mStorageManager;
     private LayoutInflater mInflater;
     private OnSearchQueryUpdateListener mOnSearchQueryUpdateListener;
+    private boolean mIsMultiPersonal;
 
     private Boolean mShowHiddenFiles;
 
     public ReceiveExternalFilesAdapter(Context context,
                                        FileDataStorageManager storageManager,
                                        Account account,
-                                       boolean showHiddenFiles) {
+                                       boolean showHiddenFiles,
+                                       boolean isMultiPersonal) {
         mStorageManager = storageManager;
         mContext = context;
         mInflater = (LayoutInflater) mContext
@@ -74,6 +78,7 @@ public class ReceiveExternalFilesAdapter extends BaseAdapter implements ListAdap
         if (mContext instanceof OnSearchQueryUpdateListener) {
             mOnSearchQueryUpdateListener = (OnSearchQueryUpdateListener) mContext;
         }
+        mIsMultiPersonal = isMultiPersonal;
     }
 
     @Override
@@ -142,8 +147,15 @@ public class ReceiveExternalFilesAdapter extends BaseAdapter implements ListAdap
         TextView fileSizeSeparatorV = vi.findViewById(R.id.file_separator);
 
         fileSizeV.setVisibility(View.VISIBLE);
-        fileSizeSeparatorV.setVisibility(View.VISIBLE);
-        fileSizeV.setText(DisplayUtils.bytesToHumanReadable(file.getLength(), mContext, true));
+
+        boolean isFolderInKw = mIsMultiPersonal && file.isFolder();
+        if (isFolderInKw) {
+            fileSizeSeparatorV.setVisibility(View.GONE);
+            fileSizeV.setText("");
+        } else {
+            fileSizeSeparatorV.setVisibility(View.VISIBLE);
+            fileSizeV.setText(DisplayUtils.bytesToHumanReadable(file.getLength(), mContext, true));
+        }
 
         // get Thumbnail if file is image
         if (file.isImage() && file.getRemoteId() != null) {

@@ -354,7 +354,6 @@
   <string name="confirmation_disable_camera_uploads_title">جەزملەشتۈرۈڭ</string>
   <string name="confirmation_disable_pictures_upload_message">بۇ ئىقتىدارنى چەكلەشنى خالامسىز؟ ساقلىنىۋاتقان رەسىملەر يۈكلەنمەيدۇ.</string>
   <string name="confirmation_disable_videos_upload_message">بۇ ئىقتىدارنى چەكلەشنى خالامسىز؟ ساقلىنىۋاتقان سىنلار يۈكلەنمەيدۇ.</string>
-  <string name="proper_videos_folder_warning_camera_upload">تاللانغان ھۆججەت قىسقۇچنىڭ سىز ئىشلىتىۋاتقان كامېرا خاتىرىلەنگەن سىنلارنى ساقلايدىغانلىقىغا كاپالەتلىك قىلىڭ. بولمىسا ، بۇ ئىقتىدار سىنلىرىڭىزنى بايقىيالمايدۇ. سىنلارنى خاتىرىلىگەندىن كېيىن كەم دېگەندە 15 مىنۇت ئىچىدە يۈكلىنىدىغانلىقىنى ئېسىڭىزدە تۇتۇڭ.</string>
   <string name="conflict_title">توقۇنۇشتىكى ھۆججەت</string>
   <string name="conflict_description">% 1 $ s ھۆججىتىدە توقۇنۇش بار ، ئۇنى ھەل قىلىش ئۈچۈن چېكىڭ.</string>
   <string name="conflict_message">قايسى ھۆججەتلەرنى ساقلىماقچى؟ ئەگەر ھەر ئىككى نەشرىنى تاللىسىڭىز ، يەرلىك ھۆججەتنىڭ نامىغا بىر سان قوشۇلىدۇ.</string>

@@ -374,8 +374,6 @@
   <string name="confirmation_disable_camera_uploads_title">אישור</string>
   <string name="confirmation_disable_pictures_upload_message">להשבית את התכונה הזאת? התמונות שממתינות לא יועלו</string>
   <string name="confirmation_disable_videos_upload_message">להשבית את התכונה הזאת? הסרטונים שממתינים לא יועלו</string>
-  <string name="proper_pics_folder_warning_camera_upload">יש לוודא שהתיקייה שנבחרה הנה המקום שבו המצלמה שבה נעשה שימוש שומרת את התמונות שצולמו. אחרת, התכונה לא תוכל לזהות את התמונות שלך. יש לזכור שהתמונות יועלו בתוך 15 דקות לפחות לאחר נטילתן.</string>
-  <string name="proper_videos_folder_warning_camera_upload">יש לוודא שהתיקייה שנבחרה הנה המקום שבו המצלמה שבה נעשה שימוש שומרת את הסרטונים שצולמו. אחרת, התכונה לא תוכל לזהות את הסרטונים שלך. יש לזכור שהסרטונים יועלו בתוך 15 דקות לפחות לאחר הקלטתם.</string>
   <string name="conflict_description">ישנה התנגשות בקובץ %1$s, יש להקיש לפתרון</string>
   <string name="conflict_message">איזה קבצים לשמור? אם יבחרו שתי הגרסאות, הקובץ המקומי יקבל מספר שיצורף לשמו.</string>
   <string name="conflict_keep_both">להשאיר את שניהם</string>

@@ -1,0 +1,7 @@
+Enhancement: Polish UI and sync operations over Kiteworks servers
+
+The UI and navigation behaviour after performing a sync operation
+have been refined for accounts associated with Kiteworks servers.
+
+https://github.com/owncloud/android/issues/4591
+https://github.com/owncloud/android/pull/4608

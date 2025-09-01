@@ -3,8 +3,9 @@
  *
  * @author Abel García de Prada
  * @author Juan Carlos Garrote Gascón
+ * @author Jorge Aguado Recio
  *
- * Copyright (C) 2023 ownCloud GmbH.
+ * Copyright (C) 2025 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -75,7 +76,7 @@ class OCRemoteAppRegistryDataSource(
                     appProviders = appRegistryMimeTypeResponse.appProviders.map { appRegistryProviderResponse ->
                         AppRegistryProvider(
                             name = appRegistryProviderResponse.name,
-                            productName = appRegistryProviderResponse.productName,
+                            productName = appRegistryProviderResponse.productName ?: "",
                             icon = appRegistryProviderResponse.icon
                         )
                     },

@@ -44,6 +44,7 @@
         <item name="colorOnSurfaceVariant">?attr/colorPrimary</item>
         <item name="colorControlNormal">?attr/colorPrimary</item>
         <item name="colorError">@color/homecloud_error</item>
+        <item name="colorOutline">@color/homecloud_color_outline</item>
 
         <item name="android:textColorPrimary">?attr/colorPrimary</item>
         <item name="android:textColorLink">?attr/colorPrimary</item>
@@ -72,7 +73,17 @@
         <!-- Buttons -->
         <item name="materialButtonStyle">@style/Button.Primary</item>
 
+        <!-- Radio button -->
+        <item name="radioButtonStyle">@style/homeCloud.RadioButton</item>
+
+        <!-- Switch -->
+        <item name="switchStyle">@style/homeCloud.Switch</item>
+
+        <!-- Checkbox -->
+        <item name="checkboxStyle">@style/homeCloud.CheckBox</item>
+
         <item name="circularProgressIndicatorStyle">@style/Widget.homeCloud.CircularProgressBar</item>
+        <item name="linearProgressIndicatorStyle">@style/Widget.homeCloud.HorizontalProgressBar</item>
 
         <item name="android:windowOptOutEdgeToEdgeEnforcement" tools:targetApi="35">true</item>
     </style>
@@ -116,6 +127,8 @@
         <item name="shapeAppearance">@style/homeCloud.AlertDialog.ShapeAppearance</item>
         <item name="buttonBarPositiveButtonStyle">@style/Theme.homeCloud.Dialog.ButtonBar.Button</item>
         <item name="buttonBarNegativeButtonStyle">@style/Theme.homeCloud.Dialog.ButtonBar.Button</item>
+        <item name="android:background">@color/homecloud_dialog_background</item>
+        <item name="android:windowBackground">@color/homecloud_dialog_background</item>
     </style>
 
     <style name="Theme.homeCloud.Dialog.ButtonBar.Button" parent="@style/Widget.Material3.Button.TextButton.Dialog">
@@ -199,6 +212,8 @@
     <style name="Theme.homeCloud.DrawerNavigation" parent="Widget.Material3.NavigationView">
         <item name="itemHorizontalPadding">16dp</item>
         <item name="itemIconPadding">32dp</item>
+        <item name="dividerInsetStart">12dp</item>
+        <item name="dividerInsetEnd">12dp</item>
     </style>
 
     <style name="Theme.homeCloud.BottomNavigation.Indicator" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
@@ -231,6 +246,14 @@
         <item name="trackThickness">4dp</item>
         <item name="trackColor">@color/homecloud_progressbar_track</item>
         <item name="indeterminateTrackVisible">true</item>
+    </style>
+
+    <style name="Widget.homeCloud.HorizontalProgressBar" parent="@style/Widget.Material3.LinearProgressIndicator">
+        <item name="indicatorColor">@color/homecloud_progressbar_indicator</item>
+        <item name="trackThickness">8dp</item>
+        <item name="trackColor">@color/homecloud_progressbar_track</item>
+        <item name="indicatorTrackGapSize">0dp</item>
+        <item name="trackStopIndicatorSize">0dp</item>
     </style>
 
     <!-- Button Bar hack due to Lollipop bug:
@@ -274,6 +297,23 @@
         <item name="passwordToggleTint">?attr/colorPrimary</item>
         <item name="errorIconDrawable">@null</item>
         <item name="errorTextColor">@color/homecloud_error</item>
+        <item name="hintAnimationEnabled">false</item>
+        <item name="hintEnabled">true</item>
+        <item name="expandedHintEnabled">false</item>
+    </style>
+
+    <style name="homeCloud.RadioButton" parent="Widget.Material3.CompoundButton.RadioButton">
+        <item name="buttonTint">@color/selector_homecloud_radiobutton</item>
+    </style>
+
+    <style name="homeCloud.Switch" parent="Widget.Material3.CompoundButton.Switch">
+        <item name="trackTint">@color/selector_switch_track</item>
+        <item name="thumbTint">@color/selector_switch_thumb</item>
+    </style>
+
+    <style name="homeCloud.CheckBox" parent="Widget.Material3.CompoundButton.CheckBox">
+        <item name="buttonTint">@color/selector_homecloud_checkbox</item>
+        <item name="buttonIconTint">@color/selector_homecloud_checkbox_icon</item>
     </style>
 
     <style name="Button.Secondary" parent="Widget.Material3.Button.OutlinedButton">

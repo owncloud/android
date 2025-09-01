@@ -38,6 +38,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.owncloud.android.BuildConfig
 import com.owncloud.android.MainApp.Companion.accountType
 import com.owncloud.android.R
 import com.owncloud.android.databinding.AccountSetupHomecloudBinding
@@ -92,6 +93,13 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
 
 
     private lateinit var binding: AccountSetupHomecloudBinding
+
+    companion object {
+        private const val DEV_SHORTCUT_WINDOW_MS = 1200L
+    }
+
+    private var devShortcutTapCount: Int = 0
+    private var devShortcutFirstTapAtMs: Long = 0L
 
     // For handling AbstractAccountAuthenticator responses
     private var accountAuthenticatorResponse: AccountAuthenticatorResponse? = null
@@ -165,6 +173,8 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
 
         initTextFieldsWatchers()
         initLiveDataObservers()
+
+        binding.thumbnail.setOnClickListener { handleDevShortcutTap() }
     }
 
     private fun handleDeepLink() {
@@ -442,5 +452,38 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
 
     override fun optionLockSelected(type: LockType) {
         manageOptionLockSelected(type)
+    }
+
+    private fun handleDevShortcutTap() {
+        val now = System.currentTimeMillis()
+        if (now - devShortcutFirstTapAtMs > DEV_SHORTCUT_WINDOW_MS) {
+            devShortcutFirstTapAtMs = now
+            devShortcutTapCount = 1
+            return
+        }
+
+        devShortcutTapCount += 1
+        if (devShortcutTapCount >= 3) {
+            devShortcutTapCount = 0
+            devShortcutFirstTapAtMs = 0L
+            prefillFromLocalPropertiesIfAvailable()
+        }
+    }
+
+    private fun prefillFromLocalPropertiesIfAvailable() {
+        val url = BuildConfig.HOME_CLOUD_PREFILL_URL
+        val username = BuildConfig.HOME_CLOUD_PREFILL_USERNAME
+        val password = BuildConfig.HOME_CLOUD_PREFILL_PASSWORD
+
+        if (url.isBlank() || username.isBlank()) {
+            return
+        }
+
+        binding.hostUrlInput.setText(url)
+        binding.accountUsername.setText(username)
+        if (password.isNotBlank()) {
+            binding.accountPassword.setText(password)
+        }
+        hideSoftKeyboard(clearFocus = true)
     }
 }
