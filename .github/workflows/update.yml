@@ -208,6 +208,14 @@ jobs:
           name: logs
           path: ./logs/log.log
 
+      # Upload appium log
+      - name: Upload Appium Log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: appium
+          path: ./appium.log
+
       # Prepare video file to be uploaded by compressing it
       - name: Zip video files
         if: always()
