@@ -3,10 +3,12 @@ name: Detekt
 # Controls when the action will run. Workflow runs when manually triggered using the UI
 # or API.
 on:
-  
   pull_request:
     branches:
       - "*"
+
+permissions:
+  contents: read
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
