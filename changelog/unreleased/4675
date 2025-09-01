@@ -1,0 +1,5 @@
+Bugfix: Add explicit permission to Detekt workflow
+
+Read permission has been added to the Detekt workflow. Without this explicit setting, the default permissions would apply, which unnecessarily include write access.
+
+https://github.com/owncloud/android/pull/4675
