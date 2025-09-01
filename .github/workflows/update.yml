@@ -154,7 +154,7 @@ jobs:
         run: |
           mkdir -p logs video
           chmod +x ./runAppium.sh
-          ./runAppium.sh &
+          ./runAppium.sh
 
       # Enable KVM for emulator acceleration
       - name: Enable KVM
