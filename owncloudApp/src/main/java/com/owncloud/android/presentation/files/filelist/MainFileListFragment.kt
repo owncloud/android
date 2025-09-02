@@ -353,7 +353,7 @@ class MainFileListFragment : Fragment(),
             updateActionModeAfterTogglingSelected()
             true
         }
-        if (isPickingAFolder() || getCurrentSpace()?.isPersonal == false) {
+        if (isPickingAFolder() || getCurrentSpace()?.isPersonal == false || getCurrentFile().remotePath == ROOT_PATH) {
             menu.findItem(R.id.action_share_current_folder)?.itemId?.let { menu.removeItem(it) }
         } else {
             menu.findItem(R.id.action_share_current_folder)?.setOnMenuItemClickListener {
@@ -425,13 +425,6 @@ class MainFileListFragment : Fragment(),
         showOrHideFab(requireArguments().getParcelable(ARG_FILE_LIST_OPTION)!!, requireArguments().getParcelable(ARG_INITIAL_FOLDER_TO_DISPLAY)!!)
 
         setFabMainContentDescription()
-
-        setTextHintRootToolbar()
-    }
-
-    private fun setTextHintRootToolbar() {
-        val searchViewRootToolbar = requireActivity().findViewById<SearchView>(R.id.root_toolbar_search_view)
-        searchViewRootToolbar.queryHint = getString(R.string.actionbar_search)
     }
 
     private fun setViewTypeSelector(additionalView: SortOptionsView.AdditionalView) {
@@ -1299,10 +1292,6 @@ class MainFileListFragment : Fragment(),
     override fun onQueryTextChange(newText: String?): Boolean {
         newText?.let { mainFileListViewModel.updateSearchFilter(it) }
         return true
-    }
-
-    fun setSearchListener(searchView: SearchView) {
-        searchView.setOnQueryTextListener(this)
     }
 
     /**

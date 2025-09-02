@@ -29,10 +29,8 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.view.MenuItem
 import androidx.annotation.RequiresApi
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -97,7 +95,6 @@ class LogsListActivity : AppCompatActivity() {
         val toolbar = findViewById<Toolbar>(R.id.standard_toolbar)
         toolbar.isVisible = true
 
-        findViewById<ConstraintLayout>(R.id.root_toolbar).isVisible = false
         setSupportActionBar(toolbar)
         supportActionBar?.apply {
             setDisplayHomeAsUpEnabled(true)
