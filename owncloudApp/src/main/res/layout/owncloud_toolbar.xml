@@ -18,7 +18,7 @@
     android:layout_height="?android:actionBarSize"
     android:focusableInTouchMode="true">
 
-    <androidx.appcompat.widget.Toolbar
+    <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/standard_toolbar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -26,6 +26,7 @@
         android:focusable="true"
         android:focusableInTouchMode="false"
         android:visibility="visible"
-        app:navigationContentDescription="@string/common_back" />
+        app:navigationContentDescription="@string/common_back"
+        android:theme="@style/ThemeOverlay.homeCloud.Toolbar"/>
 
 </com.google.android.material.appbar.AppBarLayout>

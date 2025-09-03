@@ -157,13 +157,9 @@
         <item name="titleTextColor">?attr/colorPrimary</item>
         <item name="titleTextAppearance">@style/homeCloud.Toolbar.Title</item>
         <item name="android:gravity">center_vertical</item>
-        <item name="toolbarNavigationButtonStyle">@style/homeCloud.Toolbar.Button.Navigation.Tinted</item>
         <item name="actionModeStyle">@style/homeCloud.Toolbar.ActionMode</item>
     </style>
 
-    <style name="homeCloud.Toolbar.Button.Navigation.Tinted" parent="Widget.AppCompat.Toolbar.Button.Navigation">
-        <item name="tint">?attr/colorPrimary</item>
-    </style>
 
     <style name="homeCloud.Toolbar.ActionMode" parent="@style/homeCloud.Appbar">
         <item name="colorControlNormal">?attr/colorPrimary</item>
@@ -176,11 +172,11 @@
     </style>
 
     <style name="homeCloud.Toolbar.ActionMode.Button">
-        <item name="android:tint">?attr/colorPrimary</item>
+        <item name="android:tint">@color/homecloud_toolbar_icon_tint</item>
     </style>
 
     <style name="homeCloud.Toolbar.ActionMode.OverflowButton" parent="Widget.AppCompat.Light.ActionButton.Overflow">
-        <item name="android:tint">?attr/colorPrimary</item>
+        <item name="android:tint">@color/homecloud_toolbar_icon_tint</item>
     </style>
 
     <style name="homeCloud.Toolbar.ActionMode.TitleText" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
@@ -193,6 +189,11 @@
         <item name="android:paddingTop">0dp</item>
         <item name="android:textSize">@dimen/toolbar_title_text_size</item>
         <item name="android:paddingBottom">0dp</item>
+    </style>
+
+    <style name="ThemeOverlay.homeCloud.Toolbar" parent="ThemeOverlay.Material3">
+        <item name="colorControlNormal">@color/homecloud_toolbar_icon_tint</item>
+        <item name="drawableTint">@color/homecloud_toolbar_icon_tint</item>
     </style>
 
     <style name="homeCloud.ActionBar.PopupMenu" parent="ThemeOverlay.AppCompat.Light">

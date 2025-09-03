@@ -63,6 +63,8 @@
 
     <color name="homecloud_signin_logo_text_color">@color/black</color>
 
+    <color name="homecloud_toolbar_icon_tint">@color/homecloud_blue_darken_2</color>
+
     <!-- Original ownCloud colors override -->
     <color name="textColor">@color/homecloud_primary</color>
 
