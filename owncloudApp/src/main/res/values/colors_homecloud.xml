@@ -6,7 +6,7 @@
     <color name="homecloud_secondary">#CC000000</color>
     <color name="homecloud_color_accent">@color/homecloud_blue_lighten_2</color>
     <color name="homecloud_color_outline">#E0E0E0</color>
-    <color name="homecloud_surface">@color/white</color>
+    <color name="homecloud_surface">#F0F1F5</color>
     <color name="homecloud_error">#F44336</color>
     <color name="homecloud_error_transparent">#1FF44336</color>
     <color name="homecloud_input_stroke_focused">@color/homecloud_blue_darken_2</color>
@@ -17,6 +17,8 @@
     <color name="homecloud_drawer_avatar_text">@color/homecloud_blue_darken_2</color>
     <color name="homecloud_drawer_avatar_bg">@color/homecloud_blue_darken_2_12</color>
     <color name="homecloud_drawer_quota_info">@color/homecloud_grey_2</color>
+
+    <color name="homecloud_gray_label">@color/homecloud_grey_2</color>
 
     <color name="homecloud_bar_background">#FFFFFE</color>
     <color name="homecloud_transparent_bar_background">#CCFFFFFE</color>
