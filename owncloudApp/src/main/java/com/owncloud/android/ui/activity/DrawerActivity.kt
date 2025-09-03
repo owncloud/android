@@ -149,25 +149,36 @@ abstract class DrawerActivity : ToolbarActivity() {
         setupDrawerContent()
 
         drawerToggle =
-            object : ActionBarDrawerToggle(this, getDrawerLayout(), R.string.drawer_open, R.string.drawer_close) {
+            object : ActionBarDrawerToggle(this, getDrawerLayout(),  getStandardToolbar(), R.string.drawer_open, R.string.drawer_close) {
                 /** Called when a drawer has settled in a completely closed state.  */
                 override fun onDrawerClosed(view: View) {
                     super.onDrawerClosed(view)
-                    drawerToggle?.isDrawerIndicatorEnabled = false
                     invalidateOptionsMenu()
                 }
 
                 /** Called when a drawer has settled in a completely open state.  */
                 override fun onDrawerOpened(drawerView: View) {
                     super.onDrawerOpened(drawerView)
-                    drawerToggle?.isDrawerIndicatorEnabled = true
                     invalidateOptionsMenu()
                 }
             }
 
         // Set the drawer toggle as the DrawerListener
         getDrawerLayout()?.addDrawerListener(drawerToggle as ActionBarDrawerToggle)
-        drawerToggle?.isDrawerIndicatorEnabled = false
+        drawerToggle?.isDrawerIndicatorEnabled = true
+        drawerToggle?.toolbarNavigationClickListener = View.OnClickListener { onBackPressed() }
+    }
+
+    override fun updateStandardToolbar(title: String, homeButtonDisplayed: Boolean, showBackArrow: Boolean) {
+        drawerToggle?.isDrawerIndicatorEnabled = !showBackArrow
+        setDrawerLockMode(
+            if (showBackArrow) {
+                DrawerLayout.LOCK_MODE_LOCKED_CLOSED
+            } else {
+                DrawerLayout.LOCK_MODE_UNLOCKED
+            }
+        )
+        super.updateStandardToolbar(title, homeButtonDisplayed, showBackArrow)
     }
 
     /**
@@ -424,17 +435,6 @@ abstract class DrawerActivity : ToolbarActivity() {
                 }
             }
         }
-    }
-
-    override fun setupRootToolbar(title: String, isSearchEnabled: Boolean, isAvatarRequested: Boolean) {
-        super.setupRootToolbar(
-            title = title,
-            isSearchEnabled = isSearchEnabled,
-            isAvatarRequested = isAvatarRequested,
-        )
-
-        val toolbarLeftIcon = findViewById<ImageView>(R.id.root_toolbar_left_icon)
-        toolbarLeftIcon.setOnClickListener { openDrawer() }
     }
 
     /**

@@ -21,11 +21,10 @@
 package com.owncloud.android.presentation.files.filelist
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import androidx.fragment.app.Fragment
 import com.owncloud.android.R
 import com.owncloud.android.databinding.MainEmptyListFragmentBinding
 
@@ -47,11 +46,6 @@ class MainEmptyListFragment : Fragment() {
             listEmptyDatasetIcon.setImageResource(R.drawable.ic_folder)
             listEmptyDatasetTitle.setText(R.string.file_list_empty_title_all_files)
             listEmptyDatasetSubTitle.setText(R.string.light_users_subtitle)
-        }
-        val titleToolbar = requireActivity().findViewById<TextView>(R.id.root_toolbar_title)
-        titleToolbar.apply {
-            setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, 0, 0)
-            isClickable = false
         }
     }
 

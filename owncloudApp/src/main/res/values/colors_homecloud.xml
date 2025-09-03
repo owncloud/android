@@ -6,7 +6,7 @@
     <color name="homecloud_secondary">#CC000000</color>
     <color name="homecloud_color_accent">@color/homecloud_blue_lighten_2</color>
     <color name="homecloud_color_outline">#E0E0E0</color>
-    <color name="homecloud_surface">@color/white</color>
+    <color name="homecloud_surface">#F0F1F5</color>
     <color name="homecloud_error">#F44336</color>
     <color name="homecloud_error_transparent">#1FF44336</color>
     <color name="homecloud_input_stroke_focused">@color/homecloud_blue_darken_2</color>
@@ -17,6 +17,8 @@
     <color name="homecloud_drawer_avatar_text">@color/homecloud_blue_darken_2</color>
     <color name="homecloud_drawer_avatar_bg">@color/homecloud_blue_darken_2_12</color>
     <color name="homecloud_drawer_quota_info">@color/homecloud_grey_2</color>
+
+    <color name="homecloud_gray_label">@color/homecloud_grey_2</color>
 
     <color name="homecloud_bar_background">#FFFFFE</color>
     <color name="homecloud_transparent_bar_background">#CCFFFFFE</color>
@@ -53,9 +55,17 @@
     <color name="homecloud_checkbox_disabled_unchecked">#E0E0E0</color>
     <color name="homecloud_checkbox_disabled_checkmark">@color/homecloud_content_grey</color>
 
+    <color name="homecloud_fab_color">@color/homecloud_blue_darken_2</color>
+    <color name="homecloud_fab_label_background">#4E4E4E</color>
+    <color name="homecloud_fab_label_text">@color/homecloud_primary_inverted</color>
+
+    <color name="homecloud_search_view_background">#F0F1F5</color>
+
     <color name="homecloud_menu_background">@color/white</color>
 
     <color name="homecloud_signin_logo_text_color">@color/black</color>
+
+    <color name="homecloud_toolbar_icon_tint">@color/homecloud_blue_darken_2</color>
 
     <!-- Original ownCloud colors override -->
     <color name="textColor">@color/homecloud_primary</color>

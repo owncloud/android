@@ -27,7 +27,6 @@ import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import com.owncloud.android.R
 import com.owncloud.android.presentation.settings.advanced.SettingsAdvancedFragment
@@ -46,9 +45,6 @@ class SettingsActivity : AppCompatActivity() {
 
         val toolbar = findViewById<Toolbar>(R.id.standard_toolbar).apply {
             isVisible = true
-        }
-        findViewById<ConstraintLayout>(R.id.root_toolbar).apply {
-            isVisible = false
         }
         setSupportActionBar(toolbar)
         updateToolbarTitle()

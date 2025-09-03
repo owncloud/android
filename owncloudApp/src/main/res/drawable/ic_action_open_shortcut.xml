@@ -3,7 +3,7 @@
     android:height="128dp"
     android:viewportWidth="960"
     android:viewportHeight="960"
-    android:tint="?attr/colorControlNormal"
+    android:tint="@color/homecloud_primary_inverted"
     android:autoMirrored="true">
   <path
       android:fillColor="@android:color/white"

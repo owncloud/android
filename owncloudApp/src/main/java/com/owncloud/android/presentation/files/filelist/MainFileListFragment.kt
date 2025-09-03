@@ -84,6 +84,8 @@ import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.addOpenInWebMenuOptions
 import com.owncloud.android.extensions.collectLatestLifecycleFlow
 import com.owncloud.android.extensions.filterMenuOptions
+import com.owncloud.android.extensions.isLandscapeMode
+import com.owncloud.android.extensions.isTablet
 import com.owncloud.android.extensions.parseError
 import com.owncloud.android.extensions.sendDownloadedFilesByShareSheet
 import com.owncloud.android.extensions.showErrorInSnackbar
@@ -353,7 +355,7 @@ class MainFileListFragment : Fragment(),
             updateActionModeAfterTogglingSelected()
             true
         }
-        if (isPickingAFolder() || getCurrentSpace()?.isPersonal == false) {
+        if (isPickingAFolder() || getCurrentSpace()?.isPersonal == false || getCurrentFile().remotePath == ROOT_PATH) {
             menu.findItem(R.id.action_share_current_folder)?.itemId?.let { menu.removeItem(it) }
         } else {
             menu.findItem(R.id.action_share_current_folder)?.setOnMenuItemClickListener {
@@ -425,13 +427,6 @@ class MainFileListFragment : Fragment(),
         showOrHideFab(requireArguments().getParcelable(ARG_FILE_LIST_OPTION)!!, requireArguments().getParcelable(ARG_INITIAL_FOLDER_TO_DISPLAY)!!)
 
         setFabMainContentDescription()
-
-        setTextHintRootToolbar()
-    }
-
-    private fun setTextHintRootToolbar() {
-        val searchViewRootToolbar = requireActivity().findViewById<SearchView>(R.id.root_toolbar_search_view)
-        searchViewRootToolbar.queryHint = getString(R.string.actionbar_search)
     }
 
     private fun setViewTypeSelector(additionalView: SortOptionsView.AdditionalView) {
@@ -1301,10 +1296,6 @@ class MainFileListFragment : Fragment(),
         return true
     }
 
-    fun setSearchListener(searchView: SearchView) {
-        searchView.setOnQueryTextListener(this)
-    }
-
     /**
      * Call this, when the user presses the up button.
      *
@@ -1547,6 +1538,8 @@ class MainFileListFragment : Fragment(),
 
     override fun onLongItemClick(position: Int): Boolean {
         if (isPickingAFolder()) return false
+
+        if (requireContext().isLandscapeMode && !requireContext().isTablet) return false
 
         if (actionMode == null) {
             actionMode = (requireActivity() as AppCompatActivity).startSupportActionMode(actionModeCallback)

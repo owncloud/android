@@ -39,6 +39,7 @@ import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.sharing.shares.model.OCShare
 import com.owncloud.android.domain.sharing.shares.model.ShareType
 import com.owncloud.android.domain.utils.Event.EventObserver
+import com.owncloud.android.extensions.showDialogFragment
 import com.owncloud.android.extensions.showErrorInSnackbar
 import com.owncloud.android.lib.resources.shares.RemoteShare
 import com.owncloud.android.presentation.common.UIResult
@@ -47,7 +48,6 @@ import com.owncloud.android.presentation.sharing.sharees.SearchShareesFragment
 import com.owncloud.android.presentation.sharing.sharees.UsersAndGroupsSearchProvider
 import com.owncloud.android.presentation.sharing.shares.PublicShareDialogFragment
 import com.owncloud.android.ui.activity.FileActivity
-import com.owncloud.android.extensions.showDialogFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import timber.log.Timber
@@ -70,7 +70,6 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
 
         setupStandardToolbar(
             title = null,
-            displayHomeAsUpEnabled = true,
             homeButtonEnabled = true,
             displayShowTitleEnabled = true,
         )
