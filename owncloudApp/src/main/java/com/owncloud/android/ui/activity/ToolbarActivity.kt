@@ -25,8 +25,10 @@
 package com.owncloud.android.ui.activity
 
 import android.view.Menu
+import android.view.MenuItem
 import android.widget.EditText
 import android.widget.ImageView
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isVisible
@@ -76,7 +78,10 @@ abstract class ToolbarActivity : BaseActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.main_menu, menu)
-        (menu.findItem(R.id.action_search).actionView as SearchView).run {
+        val searchItem = menu.findItem(R.id.action_search)
+        val searchView = searchItem.actionView as SearchView
+        
+        searchView.run {
             val searchText = findViewById<EditText>(androidx.appcompat.R.id.search_src_text)
             val closeButton = findViewById<ImageView>(androidx.appcompat.R.id.search_close_btn)
             val searchButton = findViewById<ImageView>(androidx.appcompat.R.id.search_button)
@@ -84,11 +89,26 @@ abstract class ToolbarActivity : BaseActivity() {
             maxWidth = Int.MAX_VALUE
 
             //searchButton.setBackgroundColor(getColor(R.color.actionbar_start_color))
-            searchText.setHintTextColor(getColor(R.color.search_view_hint_text))
+            //searchText.setHintTextColor(getColor(R.color.search_view_hint_text))
             //closeButton.setColorFilter(getColor(R.color.white))
-            background = getDrawable(R.drawable.rounded_search_view)
             isFocusable = false
         }
+        
+        // Set up listener to handle expanded/collapsed states
+        searchItem.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
+            override fun onMenuItemActionExpand(item: MenuItem): Boolean {
+                // Set rounded background when expanded
+                searchView.background = AppCompatResources.getDrawable(this@ToolbarActivity, R.drawable.rounded_search_view)
+                return true
+            }
+
+            override fun onMenuItemActionCollapse(item: MenuItem): Boolean {
+                // Remove background when collapsed
+                searchView.background = null
+                return true
+            }
+        })
+        
         return true
     }
 }

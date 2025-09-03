@@ -229,7 +229,8 @@
         <!-- Search button icon -->
         <item name="searchIcon">@drawable/ic_search</item>
         <!-- Layout for query suggestion rows -->
-        <item name="suggestionRowLayout">@layout/search_suggestion_row</item>>
+        <item name="suggestionRowLayout">@layout/search_suggestion_row</item>
+        <item name="queryBackground">@null</item>
     </style>
 
     <!-- Style for top progress bar -->
