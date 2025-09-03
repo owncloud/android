@@ -77,6 +77,8 @@ import com.owncloud.android.extensions.checkPasscodeEnforced
 import com.owncloud.android.extensions.collectLatestLifecycleFlow
 import com.owncloud.android.extensions.goToUrl
 import com.owncloud.android.extensions.isDownloadPending
+import com.owncloud.android.extensions.isLandscapeMode
+import com.owncloud.android.extensions.isTablet
 import com.owncloud.android.extensions.manageOptionLockSelected
 import com.owncloud.android.extensions.observeWorkerTillItFinishes
 import com.owncloud.android.extensions.openOCFile
@@ -278,6 +280,12 @@ class FileDisplayActivity : FileActivity(),
 
         if (resources.getBoolean(R.bool.enable_rate_me_feature) && !BuildConfig.DEBUG) {
             AppRater.appLaunched(this, packageName)
+        }
+
+        if (isLandscapeMode && !isTablet) {
+            // Hide both bars in smartphone landscape mode
+            showBottomNavBar(false)
+            binding.navCoordinatorLayout.appBarLayout.isVisible = false
         }
 
         checkNotificationPermission()
@@ -522,7 +530,8 @@ class FileDisplayActivity : FileActivity(),
     }
 
     private fun showBottomNavBar(show: Boolean) {
-        binding.navCoordinatorLayout.bottomNavView.isVisible = show
+        // Do not show bottom bar in smartphone landscape mode
+        binding.navCoordinatorLayout.bottomNavView.isVisible = show && (!isLandscapeMode || isTablet)
     }
 
     /**

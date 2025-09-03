@@ -84,6 +84,8 @@ import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.addOpenInWebMenuOptions
 import com.owncloud.android.extensions.collectLatestLifecycleFlow
 import com.owncloud.android.extensions.filterMenuOptions
+import com.owncloud.android.extensions.isLandscapeMode
+import com.owncloud.android.extensions.isTablet
 import com.owncloud.android.extensions.parseError
 import com.owncloud.android.extensions.sendDownloadedFilesByShareSheet
 import com.owncloud.android.extensions.showErrorInSnackbar
@@ -1536,6 +1538,8 @@ class MainFileListFragment : Fragment(),
 
     override fun onLongItemClick(position: Int): Boolean {
         if (isPickingAFolder()) return false
+
+        if (requireContext().isLandscapeMode && !requireContext().isTablet) return false
 
         if (actionMode == null) {
             actionMode = (requireActivity() as AppCompatActivity).startSupportActionMode(actionModeCallback)
