@@ -34,6 +34,7 @@ import android.accounts.AccountAuthenticatorResponse
 import android.accounts.AccountManager
 import android.content.Intent
 import android.os.Bundle
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
@@ -49,6 +50,7 @@ import com.owncloud.android.domain.exceptions.SSLErrorException
 import com.owncloud.android.domain.exceptions.ServerNotReachableException
 import com.owncloud.android.domain.exceptions.UnknownErrorException
 import com.owncloud.android.domain.server.model.ServerInfo
+import com.owncloud.android.extensions.applyStatusBarInsets
 import com.owncloud.android.extensions.checkPasscodeEnforced
 import com.owncloud.android.extensions.hideSoftKeyboard
 import com.owncloud.android.extensions.manageOptionLockSelected
@@ -110,6 +112,8 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
 
         checkPasscodeEnforced(this)
 
+        enableEdgeToEdge()
+
         // Get values from intent
         handleDeepLink()
         loginAction = intent.getByteExtra(EXTRA_ACTION, ACTION_CREATE)
@@ -123,8 +127,8 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
 
         // UI initialization
         binding = AccountSetupHomecloudBinding.inflate(layoutInflater)
-        val view = binding.root
-        setContentView(view)
+        setContentView(binding.root)
+        binding.settingsLink.applyStatusBarInsets(usePaddings = false)
 
         if (loginAction != ACTION_CREATE) {
             binding.accountUsername.isEnabled = false

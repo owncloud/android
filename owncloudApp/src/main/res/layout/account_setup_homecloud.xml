@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/scroll"
@@ -8,33 +8,16 @@
     android:fillViewport="true"
     android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="end"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <ImageButton
-            android:id="@+id/settings_link"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:background="?attr/selectableItemBackground"
-            android:contentDescription="@string/actionbar_settings"
-            android:gravity="center"
-            android:src="@drawable/ic_settings"
-            android:text="@string/actionbar_settings"
-            android:tint="?attr/colorPrimary" />
-
-    </LinearLayout>
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_width="@dimen/login_screen_fields_width"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal">
 
             <LinearLayout
                 android:id="@+id/layout_login"
@@ -52,7 +35,7 @@
                     android:id="@+id/thumbnail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="48dp"
+                    android:layout_marginTop="120dp"
                     android:layout_marginBottom="16dp"
                     android:contentDescription="@string/app_name"
                     android:src="@drawable/ic_homecloud_login_logo" />
@@ -83,6 +66,7 @@
                             android:layout_height="wrap_content"
                             android:drawablePadding="5dp"
                             android:hint="@string/homecloud_login_email_input_hint"
+                            android:imeOptions="flagNoExtractUi"
                             android:inputType="textNoSuggestions"
                             android:textColorHint="@color/homecloud_input_placeholder">
 
@@ -110,6 +94,7 @@
                             android:layout_height="wrap_content"
                             android:drawablePadding="5dp"
                             android:hint="@string/homecloud_login_server_address_input_hint"
+                            android:imeOptions="flagNoExtractUi"
                             android:inputType="textUri"
                             android:textColorHint="@color/homecloud_input_placeholder">
 
@@ -136,6 +121,7 @@
                             android:layout_height="wrap_content"
                             android:drawablePadding="5dp"
                             android:hint="@string/homecloud_login_password_input_hint"
+                            android:imeOptions="flagNoExtractUi"
                             android:inputType="textPassword"
                             android:textColorHint="@color/homecloud_input_placeholder">
 
@@ -175,7 +161,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginHorizontal="24dp"
-                        android:layout_marginTop="16dp"
+                        android:layout_marginVertical="16dp"
                         android:contentDescription="@string/setup_btn_login"
                         android:text="@string/setup_btn_login"
                         android:theme="@style/Button.Primary" />
@@ -212,4 +198,18 @@
             </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
-</LinearLayout>
+
+    <ImageButton
+        android:id="@+id/settings_link"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
+        android:contentDescription="@string/actionbar_settings"
+        android:padding="@dimen/standard_padding"
+        android:src="@drawable/ic_settings"
+        android:text="@string/actionbar_settings"
+        android:tint="?attr/colorPrimary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
