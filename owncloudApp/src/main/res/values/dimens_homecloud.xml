@@ -8,4 +8,6 @@
 
     <dimen name="fab_actions_spacing">4dp</dimen>
 
+    <dimen name="login_screen_fields_width">@dimen/match_parent</dimen>
+
 </resources>

@@ -21,10 +21,14 @@
 package com.owncloud.android.extensions
 
 import android.view.View
+import android.view.ViewGroup
 import androidx.core.view.AccessibilityDelegateCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.accessibility.AccessibilityNodeInfoCompat
+import androidx.core.view.marginLeft
+import androidx.core.view.marginRight
+import androidx.core.view.marginTop
 
 fun View.setAccessibilityRole(className: Class<*>? = null, roleDescription: String? = null) {
     ViewCompat.setAccessibilityDelegate(this, object : AccessibilityDelegateCompat() {
@@ -36,20 +40,42 @@ fun View.setAccessibilityRole(className: Class<*>? = null, roleDescription: Stri
     })
 }
 
-fun View.applyStatusBarInsets() {
+/**
+ * Applies system status bar insets (padding or margin) to this [View].
+ *
+ * This ensures the view is laid out correctly under the status bar by
+ * either updating its padding or margins with the system bar insets,
+ * while preserving the original values.
+ *
+ * @param usePaddings If `true` (default), status bar insets are added to
+ * the view’s padding. If `false`, they are added to the view’s margins.
+ */
+fun View.applyStatusBarInsets(usePaddings: Boolean = true) {
     // Cache original padding once
     val initialPaddingTop = paddingTop
     val initialPaddingLeft = paddingLeft
     val initialPaddingRight = paddingRight
 
+    val initialMarginTop = marginTop
+    val initialMarginLeft = marginLeft
+    val initialMarginRight = marginRight
+
     ViewCompat.setOnApplyWindowInsetsListener(this) { view, insets ->
         val statusBarInsets = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-        view.setPadding(
-            initialPaddingLeft + statusBarInsets.left,
-            initialPaddingTop + statusBarInsets.top,
-            initialPaddingRight + statusBarInsets.right,
-            paddingBottom,
-        )
+        if (usePaddings) {
+            view.setPadding(
+                initialPaddingLeft + statusBarInsets.left,
+                initialPaddingTop + statusBarInsets.top,
+                initialPaddingRight + statusBarInsets.right,
+                paddingBottom,
+            )
+        } else {
+            (view.layoutParams as? ViewGroup.MarginLayoutParams)?.apply { 
+                topMargin = initialMarginTop + statusBarInsets.top
+                leftMargin = initialMarginLeft + statusBarInsets.left
+                rightMargin = initialMarginRight + statusBarInsets.right
+            }
+        }
         insets
     }
 }

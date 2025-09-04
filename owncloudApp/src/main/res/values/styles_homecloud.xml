@@ -91,7 +91,7 @@
 
     <!-- Splash Screen -->
     <style name="Theme.homeCloud.Splash">
-        <item name="android:windowBackground">@drawable/homecloud_splash_screen</item>
+        <item name="android:windowBackground">@drawable/homecloud_splash_background</item>
     </style>
 
     <!-- Extends Theme.homeCloud to remove legacy ActionBar from the window and add, via layouts, a Toolbar -->

@@ -2,4 +2,6 @@
 <resources>
     <dimen name="whats_new_image_size">120dp</dimen>
     <dimen name="whats_new_text_width">350dp</dimen>
+
+    <dimen name="login_screen_fields_width">400dp</dimen>
 </resources>
