@@ -35,7 +35,6 @@ import com.owncloud.android.presentation.settings.automaticuploads.SettingsVideo
 import com.owncloud.android.presentation.settings.logging.SettingsLogsFragment
 import com.owncloud.android.presentation.settings.more.SettingsMoreFragment
 import com.owncloud.android.presentation.settings.security.SettingsSecurityFragment
-import com.owncloud.android.ui.activity.FileDisplayActivity
 
 class SettingsActivity : AppCompatActivity() {
 
@@ -77,10 +76,7 @@ class SettingsActivity : AppCompatActivity() {
                 if (supportFragmentManager.backStackEntryCount > 0) {
                     supportFragmentManager.popBackStack()
                 } else {
-                    intent = Intent(this, FileDisplayActivity::class.java).apply {
-                        addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                    }
-                    startActivity(intent)
+                    finish()
                 }
             }
         }
