@@ -127,7 +127,7 @@ public class WhatsNewActivity extends FragmentActivity {
             }
         });
 
-        updateNextButtonIfNeeded();
+        bindingActivity.getRoot().post(this::updateNextButtonIfNeeded);
     }
 
     @Override
