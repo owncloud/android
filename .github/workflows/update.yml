@@ -19,20 +19,16 @@ jobs:
     # Job to build APKs for the latest commit and the commit that triggered the workflow
     name: Build APKs
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        # Run matrix for latest commit on branch and current commit SHA
-        commit: ["latest", "${{ github.sha }}"]
-
+   
     env:
       BUILD_TOOLS_VERSION: "34.0.0"
 
     steps:
-      # Checkout the specific commit from matrix
+      # Checkout the specific commit
       - name: Checkout specific commit
         uses: actions/checkout@v5
         with:
-          ref: ${{ matrix.commit }}
+          ref: ${{ github.sha }}
 
       # Set up Java JDK required for Gradle
       - name: Set up JDK
@@ -62,7 +58,7 @@ jobs:
 
       # Copy the built APK to a commit-specific name
       - name: Get apk
-        run: cp owncloudApp/build/outputs/apk/qa/release/owncloud_*-qa-release*.apk owncloud-${{ matrix.commit }}.apk
+        run: cp owncloudApp/build/outputs/apk/qa/release/owncloud_*-qa-release*.apk owncloud-${{ github.sha }}.apk
 
       # Decode keystore from secret for signing
       - name: Restore keystore
@@ -72,9 +68,9 @@ jobs:
       # Align and sign the APK
       - name: Sign APK
         run: |
-          APK_INPUT="owncloud-${{ matrix.commit }}.apk"
-          APK_ALIGNED="owncloud-${{ matrix.commit }}-aligned.apk"
-          APK_SIGNED="owncloudSigned-${{ matrix.commit }}.apk"
+          APK_INPUT="owncloud-${{ github.sha }}.apk"
+          APK_ALIGNED="owncloud-${{ github.sha }}-aligned.apk"
+          APK_SIGNED="owncloudSigned-${{ github.sha }}.apk"
           KEYSTORE="./test.keystore"
           KEY_ALIAS="${{ secrets.TEST_KS_ALIAS }}"
           KEY_PASSWORD="${{ secrets.TEST_KS_KEY }}"
@@ -103,10 +99,9 @@ jobs:
       - name: Upload APK as artifact
         uses: actions/upload-artifact@v4
         with:
-          name: owncloudSigned-${{ matrix.commit }}
-          path: ./owncloudSigned-${{ matrix.commit }}.apk
-          # Removed after 1 day
-          retention-days: 1
+          name: owncloudSigned-${{ github.sha }}
+          path: ./owncloudSigned-${{ github.sha }}.apk
+          retention-days: 90
 
   execute_tests:
     # Job to run tests using the APKs built in previous job
@@ -127,10 +122,11 @@ jobs:
       - name: Clone tests repo
         run: git clone https://github.com/owncloud/android-update-testing.git .
 
-      # Download APK built from latest commit
-      - name: Get apk built from latest
-        uses: actions/download-artifact@v4
+      # Download APK built last latest signing
+      - name: Download latest signed APK
+        uses: dawidd6/action-download-artifact@v11
         with:
+          workflow: Build apk from latest
           name: owncloudSigned-latest
           path: ./src/test/resources
 
@@ -221,7 +217,7 @@ jobs:
         if: always()
         run: zip -r -9 test-recording.zip video || true
 
-       # Upload video file
+      # Upload video file
       - name: Upload Video
         if: always()
         uses: actions/upload-artifact@v4
