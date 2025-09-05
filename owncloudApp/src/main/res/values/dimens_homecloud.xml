@@ -5,4 +5,9 @@
 
     <item name="match_parent" type="dimen">-1</item>
     <item name="wrap_content" type="dimen">-2</item>
+
+    <dimen name="fab_actions_spacing">4dp</dimen>
+
+    <dimen name="login_screen_fields_width">@dimen/match_parent</dimen>
+
 </resources>

@@ -233,7 +233,6 @@
             android:exported="true"
             android:label="@string/login_label"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize"
             android:theme="@style/Theme.homeCloud.Toolbar">
             <intent-filter>

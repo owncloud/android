@@ -25,8 +25,11 @@ import android.accounts.Account
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.forEach
 import androidx.core.view.isVisible
 import androidx.documentfile.provider.DocumentFile
 import androidx.fragment.app.Fragment
@@ -69,6 +72,7 @@ class TransferListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setHasOptionsMenu(true)
         transfersAdapter = TransfersAdapter(
             cancel = { transfer ->
                 transfersViewModel.cancelUpload(transfer)
@@ -123,6 +127,11 @@ class TransferListFragment : Fragment() {
             }
         }
 
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        menu.forEach { it.isVisible = false }
     }
 
     override fun onDestroy() {

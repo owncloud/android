@@ -25,23 +25,14 @@
 package com.owncloud.android.ui.activity
 
 import android.view.Menu
-import android.view.View
-import android.view.View.VISIBLE
-import android.widget.Button
+import android.view.MenuItem
 import android.widget.EditText
 import android.widget.ImageView
-import android.widget.TextView
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import com.owncloud.android.R
-import com.owncloud.android.extensions.setAccessibilityRole
-import com.owncloud.android.presentation.accounts.ManageAccountsDialogFragment
-import com.owncloud.android.presentation.accounts.ManageAccountsDialogFragment.Companion.MANAGE_ACCOUNTS_DIALOG
-import com.owncloud.android.presentation.authentication.AccountUtils
-import com.owncloud.android.presentation.avatar.AvatarUtils
 
 /**
  * Base class providing toolbar registration functionality, see [.setupToolbar].
@@ -54,104 +45,43 @@ abstract class ToolbarActivity : BaseActivity() {
      */
     open fun setupStandardToolbar(
         title: String?,
-        displayHomeAsUpEnabled: Boolean,
         homeButtonEnabled: Boolean,
-        displayShowTitleEnabled: Boolean
+        displayShowTitleEnabled: Boolean,
     ) {
-        useStandardToolbar(true)
-
         val standardToolbar = getStandardToolbar()
 
         title?.let { standardToolbar.title = it }
         setSupportActionBar(standardToolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(displayHomeAsUpEnabled)
+        supportActionBar?.setDisplayHomeAsUpEnabled(homeButtonEnabled)
         supportActionBar?.setHomeButtonEnabled(homeButtonEnabled)
         supportActionBar?.setDisplayShowTitleEnabled(displayShowTitleEnabled)
     }
 
-    open fun setupRootToolbar(
-        title: String,
-        isSearchEnabled: Boolean,
-        isAvatarRequested: Boolean = false,
-    ) {
-        useStandardToolbar(false)
-
-        val toolbarTitle = findViewById<TextView>(R.id.root_toolbar_title)
-        val searchView = findViewById<SearchView>(R.id.root_toolbar_search_view)
-        val avatarView = findViewById<ImageView>(R.id.root_toolbar_avatar)
-
-        toolbarTitle.apply {
-            isVisible = true
-            text = title
-            if (isSearchEnabled) {
-                setOnClickListener {
-                    toolbarTitle.isVisible = false
-                    searchView.isVisible = true
-                    searchView.isIconified = false
-                }
-                toolbarTitle.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_search, 0)
-            } else {
-                setOnClickListener(null)
-                toolbarTitle.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
-            }
-        }
-        toolbarTitle.setAccessibilityRole(className = Button::class.java)
-
-        searchView.apply {
-            isVisible = false
-            setOnCloseListener {
-                searchView.visibility = View.GONE
-                toolbarTitle.visibility = VISIBLE
-                false
-            }
-            val textSearchView = findViewById<EditText>(androidx.appcompat.R.id.search_src_text)
-            val closeButton = findViewById<ImageView>(androidx.appcompat.R.id.search_close_btn)
-            textSearchView.setHintTextColor(ContextCompat.getColor(applicationContext, R.color.search_view_hint_text))
-            //closeButton.setColorFilter(ContextCompat.getColor(applicationContext, R.color.white))
-        }
-
-        AccountUtils.getCurrentOwnCloudAccount(baseContext) ?: return
-        if (isAvatarRequested) {
-            AvatarUtils().loadAvatarForAccount(
-                avatarView,
-                AccountUtils.getCurrentOwnCloudAccount(baseContext),
-                true,
-                baseContext.resources.getDimension(R.dimen.toolbar_avatar_radius)
-            )
-        }
-        avatarView.setOnClickListener {
-            val dialog = ManageAccountsDialogFragment.newInstance(AccountUtils.getCurrentOwnCloudAccount(applicationContext))
-            dialog.show(supportFragmentManager, MANAGE_ACCOUNTS_DIALOG)
-        }
-    }
-
-    private fun useStandardToolbar(isToolbarStandard: Boolean) {
-        getRootToolbar().isVisible = !isToolbarStandard
-        getStandardToolbar().isVisible = isToolbarStandard
-    }
-
     open fun updateStandardToolbar(
         title: String = getString(R.string.default_display_name_for_root_folder),
-        displayHomeAsUpEnabled: Boolean = true,
-        homeButtonEnabled: Boolean = true
+        homeButtonDisplayed: Boolean = true,
+        showBackArrow: Boolean = false,
     ) {
-
         if (getStandardToolbar().isVisible) {
             supportActionBar?.title = title
-            supportActionBar?.setDisplayHomeAsUpEnabled(displayHomeAsUpEnabled)
-            supportActionBar?.setHomeButtonEnabled(homeButtonEnabled)
+            supportActionBar?.setDisplayHomeAsUpEnabled(homeButtonDisplayed)
+            supportActionBar?.setHomeButtonEnabled(homeButtonDisplayed)
+            supportActionBar?.setHomeAsUpIndicator(
+                if (showBackArrow) androidx.appcompat.R.drawable.abc_ic_ab_back_material else R.drawable.ic_drawer_icon
+            )
         } else {
-            setupStandardToolbar(title, displayHomeAsUpEnabled, displayHomeAsUpEnabled, true)
+            setupStandardToolbar(title = title, homeButtonEnabled = homeButtonDisplayed, displayShowTitleEnabled = true)
         }
     }
 
-    private fun getRootToolbar(): ConstraintLayout = findViewById(R.id.root_toolbar)
-
-    private fun getStandardToolbar(): Toolbar = findViewById(R.id.standard_toolbar)
+    protected fun getStandardToolbar(): Toolbar = findViewById(R.id.standard_toolbar)
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.main_menu, menu)
-        (menu.findItem(R.id.action_search).actionView as SearchView).run {
+        val searchItem = menu.findItem(R.id.action_search)
+        val searchView = searchItem.actionView as SearchView
+        
+        searchView.run {
             val searchText = findViewById<EditText>(androidx.appcompat.R.id.search_src_text)
             val closeButton = findViewById<ImageView>(androidx.appcompat.R.id.search_close_btn)
             val searchButton = findViewById<ImageView>(androidx.appcompat.R.id.search_button)
@@ -159,11 +89,26 @@ abstract class ToolbarActivity : BaseActivity() {
             maxWidth = Int.MAX_VALUE
 
             //searchButton.setBackgroundColor(getColor(R.color.actionbar_start_color))
-            searchText.setHintTextColor(getColor(R.color.search_view_hint_text))
+            //searchText.setHintTextColor(getColor(R.color.search_view_hint_text))
             //closeButton.setColorFilter(getColor(R.color.white))
-            background = getDrawable(R.drawable.rounded_search_view)
             isFocusable = false
         }
+        
+        // Set up listener to handle expanded/collapsed states
+        searchItem.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
+            override fun onMenuItemActionExpand(item: MenuItem): Boolean {
+                // Set rounded background when expanded
+                searchView.background = AppCompatResources.getDrawable(this@ToolbarActivity, R.drawable.rounded_search_view)
+                return true
+            }
+
+            override fun onMenuItemActionCollapse(item: MenuItem): Boolean {
+                // Remove background when collapsed
+                searchView.background = null
+                return true
+            }
+        })
+        
         return true
     }
 }

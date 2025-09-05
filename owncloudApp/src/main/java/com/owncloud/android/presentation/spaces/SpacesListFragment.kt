@@ -94,7 +94,6 @@ class SpacesListFragment : SpacesListAdapter.SpacesListAdapterListener, Fragment
         binding.swipeRefreshSpacesList.setOnRefreshListener {
             spacesListViewModel.refreshSpacesFromServer()
         }
-        setTextHintRootToolbar()
     }
 
     private fun subscribeToViewModels() {
@@ -156,11 +155,6 @@ class SpacesListFragment : SpacesListAdapter.SpacesListAdapterListener, Fragment
 
     fun setSearchListener(searchView: SearchView) {
         searchView.setOnQueryTextListener(this)
-    }
-
-    private fun setTextHintRootToolbar() {
-        val searchViewRootToolbar = requireActivity().findViewById<SearchView>(R.id.root_toolbar_search_view)
-        searchViewRootToolbar.queryHint = getString(R.string.actionbar_search_space)
     }
 
     companion object {

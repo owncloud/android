@@ -29,7 +29,6 @@ import android.widget.LinearLayout
 import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import com.owncloud.android.R
 import com.owncloud.android.extensions.showMessageInSnackbar
@@ -47,7 +46,6 @@ class PrivacyPolicyActivity : AppCompatActivity() {
             setTitle(R.string.actionbar_privacy_policy)
             isVisible = true
         }
-        findViewById<ConstraintLayout>(R.id.root_toolbar).isVisible = false
 
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)

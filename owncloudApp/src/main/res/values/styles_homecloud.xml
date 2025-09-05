@@ -86,11 +86,12 @@
         <item name="linearProgressIndicatorStyle">@style/Widget.homeCloud.HorizontalProgressBar</item>
 
         <item name="android:windowOptOutEdgeToEdgeEnforcement" tools:targetApi="35">true</item>
+        <item name="android:forceDarkAllowed" tools:targetApi="29">false</item>
     </style>
 
     <!-- Splash Screen -->
     <style name="Theme.homeCloud.Splash">
-        <item name="android:windowBackground">@drawable/homecloud_splash_screen</item>
+        <item name="android:windowBackground">@drawable/homecloud_splash_background</item>
     </style>
 
     <!-- Extends Theme.homeCloud to remove legacy ActionBar from the window and add, via layouts, a Toolbar -->
@@ -156,13 +157,9 @@
         <item name="titleTextColor">?attr/colorPrimary</item>
         <item name="titleTextAppearance">@style/homeCloud.Toolbar.Title</item>
         <item name="android:gravity">center_vertical</item>
-        <item name="toolbarNavigationButtonStyle">@style/homeCloud.Toolbar.Button.Navigation.Tinted</item>
         <item name="actionModeStyle">@style/homeCloud.Toolbar.ActionMode</item>
     </style>
 
-    <style name="homeCloud.Toolbar.Button.Navigation.Tinted" parent="Widget.AppCompat.Toolbar.Button.Navigation">
-        <item name="tint">?attr/colorPrimary</item>
-    </style>
 
     <style name="homeCloud.Toolbar.ActionMode" parent="@style/homeCloud.Appbar">
         <item name="colorControlNormal">?attr/colorPrimary</item>
@@ -175,11 +172,11 @@
     </style>
 
     <style name="homeCloud.Toolbar.ActionMode.Button">
-        <item name="android:tint">?attr/colorPrimary</item>
+        <item name="android:tint">@color/homecloud_toolbar_icon_tint</item>
     </style>
 
     <style name="homeCloud.Toolbar.ActionMode.OverflowButton" parent="Widget.AppCompat.Light.ActionButton.Overflow">
-        <item name="android:tint">?attr/colorPrimary</item>
+        <item name="android:tint">@color/homecloud_toolbar_icon_tint</item>
     </style>
 
     <style name="homeCloud.Toolbar.ActionMode.TitleText" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
@@ -192,6 +189,11 @@
         <item name="android:paddingTop">0dp</item>
         <item name="android:textSize">@dimen/toolbar_title_text_size</item>
         <item name="android:paddingBottom">0dp</item>
+    </style>
+
+    <style name="ThemeOverlay.homeCloud.Toolbar" parent="ThemeOverlay.Material3">
+        <item name="colorControlNormal">@color/homecloud_toolbar_icon_tint</item>
+        <item name="drawableTint">@color/homecloud_toolbar_icon_tint</item>
     </style>
 
     <style name="homeCloud.ActionBar.PopupMenu" parent="ThemeOverlay.AppCompat.Light">
@@ -228,7 +230,8 @@
         <!-- Search button icon -->
         <item name="searchIcon">@drawable/ic_search</item>
         <!-- Layout for query suggestion rows -->
-        <item name="suggestionRowLayout">@layout/search_suggestion_row</item>>
+        <item name="suggestionRowLayout">@layout/search_suggestion_row</item>
+        <item name="queryBackground">@null</item>
     </style>
 
     <!-- Style for top progress bar -->
@@ -369,5 +372,10 @@
 
     <style name="Theme.homeCloud.SortBottomSheetFragment.Item">
         <item name="android:textAppearance">@style/TextAppearance.OwnCloud.SortBottomSheetFragment.Item</item>
+    </style>
+
+    <style name="homeCloud.FabActionLabel" parent="TextAppearance">
+        <item name="android:background">@drawable/fab_label_background</item>
+        <item name="android:textColor">@color/homecloud_fab_label_text</item>
     </style>
 </resources>

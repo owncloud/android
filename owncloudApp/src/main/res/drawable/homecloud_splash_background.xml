@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:drawable="@drawable/homecloud_splash_screen"
+        android:gravity="center" />
+    <item
+        android:top="270dp"
+        android:drawable="@drawable/homecloud_splash_logo"
+        android:gravity="center" />
+</layer-list>

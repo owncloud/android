@@ -18,8 +18,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="58dip"
-    style="@style/RtlOverlay.Widget.AppCompat.Search.DropDown"
-    >
+    android:background="@android:color/transparent">
 
     <ImageView
         android:id="@android:id/icon1"
@@ -70,7 +69,6 @@
     <TextView
         android:id="@android:id/text1"
         style="?android:attr/dropDownItemStyle"
-        android:textAppearance="?attr/textAppearanceSearchResultTitle"
         android:maxLines="1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

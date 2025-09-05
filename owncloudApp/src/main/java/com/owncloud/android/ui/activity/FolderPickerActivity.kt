@@ -109,7 +109,6 @@ open class FolderPickerActivity : FileActivity(),
         // Action bar setup
         setupStandardToolbar(
             title = null,
-            displayHomeAsUpEnabled = false,
             homeButtonEnabled = false,
             displayShowTitleEnabled = true,
         )
@@ -322,23 +321,23 @@ open class FolderPickerActivity : FileActivity(),
         if (isRootFromPersonalInCopyOrCameraFolderMode) {
             updateStandardToolbar(
                 title = getString(R.string.default_display_name_for_root_folder),
-                displayHomeAsUpEnabled = true,
-                homeButtonEnabled = true
+                homeButtonDisplayed = true,
+                showBackArrow = true,
             )
         } else if (isRootFromPersonal) {
             updateStandardToolbar(
                 title = getString(R.string.default_display_name_for_root_folder),
-                displayHomeAsUpEnabled = false,
-                homeButtonEnabled = false
+                homeButtonDisplayed = true,
+                showBackArrow = true
             )
         } else if (isRootFromProject) {
             updateStandardToolbar(
                 title = space!!.name,
-                displayHomeAsUpEnabled = pickerMode == PickerMode.COPY || pickerMode == PickerMode.CAMERA_FOLDER,
-                homeButtonEnabled = pickerMode == PickerMode.COPY || pickerMode == PickerMode.CAMERA_FOLDER
+                homeButtonDisplayed = pickerMode == PickerMode.COPY || pickerMode == PickerMode.CAMERA_FOLDER,
+                showBackArrow = true,
             )
         } else {
-            updateStandardToolbar(title = chosenFile.fileName, displayHomeAsUpEnabled = true, homeButtonEnabled = true)
+            updateStandardToolbar(title = chosenFile.fileName, homeButtonDisplayed = true, showBackArrow = true)
         }
     }
 
@@ -360,8 +359,8 @@ open class FolderPickerActivity : FileActivity(),
         val atRoot = (currentDir == null || currentDir.parentId == 0L)
         updateStandardToolbar(
             title = if (atRoot) getString(R.string.default_display_name_for_root_folder) else currentDir!!.fileName,
-            displayHomeAsUpEnabled = !atRoot,
-            homeButtonEnabled = !atRoot,
+            homeButtonDisplayed = true,
+            showBackArrow = !atRoot,
         )
     }
 

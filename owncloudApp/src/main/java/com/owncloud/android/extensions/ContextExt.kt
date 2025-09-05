@@ -21,6 +21,7 @@ package com.owncloud.android.extensions
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
+import android.content.res.Configuration
 import android.os.Build
 import androidx.annotation.RequiresApi
 
@@ -39,3 +40,9 @@ fun Context.createNotificationChannel(
 
     notificationManager.createNotificationChannel(notificationChannel)
 }
+
+val Context.isLandscapeMode: Boolean
+    get() = resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+
+val Context.isTablet: Boolean
+    get() = resources.configuration.smallestScreenWidthDp >= 600

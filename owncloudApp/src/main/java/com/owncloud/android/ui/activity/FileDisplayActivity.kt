@@ -77,6 +77,8 @@ import com.owncloud.android.extensions.checkPasscodeEnforced
 import com.owncloud.android.extensions.collectLatestLifecycleFlow
 import com.owncloud.android.extensions.goToUrl
 import com.owncloud.android.extensions.isDownloadPending
+import com.owncloud.android.extensions.isLandscapeMode
+import com.owncloud.android.extensions.isTablet
 import com.owncloud.android.extensions.manageOptionLockSelected
 import com.owncloud.android.extensions.observeWorkerTillItFinishes
 import com.owncloud.android.extensions.openOCFile
@@ -246,16 +248,10 @@ class FileDisplayActivity : FileActivity(),
         setContentView(view)
 
         // setup toolbar
-        setupStandardToolbar( // This is a dirty workaround to make selection mode styling work properly
-            title = "",
-            displayHomeAsUpEnabled = false,
-            homeButtonEnabled = false,
-            displayShowTitleEnabled = false
-        )
-        setupRootToolbar(
-            isSearchEnabled = true,
+        setupStandardToolbar(
             title = getString(R.string.default_display_name_for_root_folder),
-            isAvatarRequested = true,
+            homeButtonEnabled = true,
+            displayShowTitleEnabled = true
         )
 
         // setup drawer
@@ -284,6 +280,12 @@ class FileDisplayActivity : FileActivity(),
 
         if (resources.getBoolean(R.bool.enable_rate_me_feature) && !BuildConfig.DEBUG) {
             AppRater.appLaunched(this, packageName)
+        }
+
+        if (isLandscapeMode && !isTablet) {
+            // Hide both bars in smartphone landscape mode
+            showBottomNavBar(false)
+            binding.navCoordinatorLayout.appBarLayout.isVisible = false
         }
 
         checkNotificationPermission()
@@ -408,16 +410,13 @@ class FileDisplayActivity : FileActivity(),
     private fun MainFileListFragment.setListeners(): MainFileListFragment = this.apply {
         fileActions = this@FileDisplayActivity
         uploadActions = this@FileDisplayActivity
-        setSearchListener(findViewById(R.id.root_toolbar_search_view))
     }
 
     private fun initAndShowListOfSpaces() {
         val listOfSpaces = SpacesListFragment.newInstance(
             showPersonalSpace = false,
             accountName = com.owncloud.android.presentation.authentication.AccountUtils.getCurrentOwnCloudAccount(applicationContext).name
-        ).apply {
-            setSearchListener(findViewById(R.id.root_toolbar_search_view))
-        }
+        )
         this.fileListOption = FileListOption.SPACES_LIST
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.left_fragment_container, listOfSpaces, TAG_LIST_OF_SPACES)
@@ -531,7 +530,8 @@ class FileDisplayActivity : FileActivity(),
     }
 
     private fun showBottomNavBar(show: Boolean) {
-        binding.navCoordinatorLayout.bottomNavView.isVisible = show
+        // Do not show bottom bar in smartphone landscape mode
+        binding.navCoordinatorLayout.bottomNavView.isVisible = show && (!isLandscapeMode || isTablet)
     }
 
     /**
@@ -747,7 +747,6 @@ class FileDisplayActivity : FileActivity(),
 
     override fun onBackPressed() {
         val isFabOpen = mainFileListFragment?.isFabExpanded() ?: false
-
         /*
          * BackPressed priority/hierarchy:
          *    1. close drawer if opened
@@ -1005,11 +1004,11 @@ class FileDisplayActivity : FileActivity(),
                     FileListOption.UPLOADS_LIST -> getString(R.string.uploads_view_title)
                 }
             setTitle(title)
-            setupRootToolbar(title = title, isSearchEnabled = !fileListOption.isUploadList(), isAvatarRequested = false)
+            updateStandardToolbar(title = title, homeButtonDisplayed = true, showBackArrow = false)
         } else if ((space?.isProject == true || (space?.isPersonal == true && isMultiPersonal)) && chosenFile.remotePath == OCFile.ROOT_PATH) {
-            updateStandardToolbar(title = space.name, displayHomeAsUpEnabled = true, homeButtonEnabled = true)
+            updateStandardToolbar(title = space.name, homeButtonDisplayed = true, showBackArrow = false)
         } else {
-            updateStandardToolbar(title = chosenFile.fileName, displayHomeAsUpEnabled = true, homeButtonEnabled = true)
+            updateStandardToolbar(title = chosenFile.fileName, homeButtonDisplayed = true, showBackArrow = true)
         }
     }
 
@@ -1840,7 +1839,11 @@ class FileDisplayActivity : FileActivity(),
                 if (previousFileListOption != newFileListOption || initialState) {
                     fileListOption = newFileListOption
                     initAndShowListOfUploads()
-                    setupRootToolbar(title = getString(R.string.uploads_view_title), isSearchEnabled = false, isAvatarRequested = false)
+                    updateStandardToolbar(
+                        title = getString(R.string.uploads_view_title),
+                        homeButtonDisplayed = true,
+                        showBackArrow = false,
+                    )
                 }
             }
         }
@@ -1892,6 +1895,7 @@ class FileDisplayActivity : FileActivity(),
     override fun onCurrentFolderUpdated(newCurrentFolder: OCFile, currentSpace: OCSpace?) {
         updateToolbar(newCurrentFolder, currentSpace)
         file = newCurrentFolder
+        invalidateOptionsMenu()
     }
 
     override fun onFileClicked(file: OCFile) {
