@@ -35,6 +35,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import android.widget.AutoCompleteTextView
 import androidx.appcompat.widget.SearchView
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
@@ -115,6 +116,10 @@ class SearchShareesFragment : Fragment(),
         super.onViewCreated(view, savedInstanceState)
         // Get the SearchView and set the searchable configuration
         val searchView = view.findViewById<SearchView>(R.id.searchView)
+        val autoComplete = searchView.findViewById<AutoCompleteTextView>(
+            androidx.appcompat.R.id.search_src_text
+        )
+        autoComplete.setDropDownBackgroundResource(R.drawable.bg_popup_menu)
         val searchManager = requireActivity().getSystemService(Context.SEARCH_SERVICE) as SearchManager
         searchView.setSearchableInfo(
             searchManager.getSearchableInfo(
