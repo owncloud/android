@@ -26,7 +26,7 @@
 
     <androidx.appcompat.widget.SearchView
         android:id="@+id/searchView"
-        style="@style/ownCloud.SearchView"
+        style="@style/homeCloud.SearchView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/share_search" />
