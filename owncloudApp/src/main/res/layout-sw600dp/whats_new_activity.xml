@@ -21,7 +21,7 @@
             android:id="@+id/contentPanel"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="90" />
+            android:layout_weight="85" />
 
         <LinearLayout
             android:id="@+id/controlPanel"
@@ -30,7 +30,7 @@
             android:layout_marginLeft="@dimen/standard_margin"
             android:layout_marginRight="@dimen/standard_margin"
             android:layout_marginBottom="@dimen/standard_margin"
-            android:layout_weight="10"
+            android:layout_weight="15"
             android:orientation="horizontal"
             android:weightSum="3">
 
@@ -42,7 +42,6 @@
                 android:layout_gravity="center_vertical|center_horizontal"
                 android:layout_weight="1"
                 android:text="@string/welcome_feature_skip_button"
-                android:textAllCaps="true"
                 android:textColor="@color/white" />
 
             <com.owncloud.android.wizard.ProgressIndicator
@@ -52,21 +51,19 @@
                 android:layout_gravity="center_vertical|center_horizontal"
                 android:layout_weight="1" />
 
-            <LinearLayout
+            <FrameLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_weight="1"
-                android:orientation="vertical">
+                android:layout_weight="1">
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/done"
                     style="@style/Button.Borderless"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical|center_horizontal"
+                    android:layout_gravity="center"
                     android:text="@string/welcome_feature_done_button"
-                    android:textAllCaps="true"
                     android:textColor="@color/white"
                     tools:visibility="gone" />
 
@@ -78,7 +75,7 @@
                     android:layout_gravity="center"
                     android:padding="@dimen/standard_padding"
                     android:src="@drawable/ic_arrow_forward" />
-            </LinearLayout>
+            </FrameLayout>
         </LinearLayout>
     </LinearLayout>
 </FrameLayout>
