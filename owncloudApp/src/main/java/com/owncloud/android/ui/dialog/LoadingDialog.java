@@ -21,18 +21,16 @@ package com.owncloud.android.ui.dialog;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.ProgressBar;
+import android.view.WindowManager;
 import android.widget.TextView;
 
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
+
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.owncloud.android.R;
 import com.owncloud.android.extensions.DialogExtKt;
 import com.owncloud.android.utils.PreferenceUtils;
@@ -66,9 +64,9 @@ public class LoadingDialog extends DialogFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
         // Create a view by inflating desired layout
-        View v = inflater.inflate(R.layout.loading_dialog, container, false);
+        View v = getLayoutInflater().inflate(R.layout.loading_dialog, null);
 
         // Allow or disallow touches with other visible windows
         v.setFilterTouchesWhenObscured(
@@ -80,19 +78,9 @@ public class LoadingDialog extends DialogFragment {
         int messageId = getArguments().getInt(ARG_MESSAGE_ID, R.string.placeholder_sentence);
         tv.setText(messageId);
 
-        // set progress wheel color
-        ProgressBar progressBar = v.findViewById(R.id.loadingBar);
-        progressBar.getIndeterminateDrawable().setColorFilter(
-                ContextCompat.getColor(getActivity(), R.color.color_accent),
-                PorterDuff.Mode.SRC_IN
-        );
-
-        return v;
-    }
-
-    @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        Dialog dialog = super.onCreateDialog(savedInstanceState);
+        Dialog dialog = new MaterialAlertDialogBuilder(getContext())
+                .setView(v)
+                .create();
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         /// set cancellation behavior
@@ -111,6 +99,16 @@ public class LoadingDialog extends DialogFragment {
             dialog.setOnKeyListener(keyListener);
         }
         DialogExtKt.avoidScreenshotsIfNeeded(dialog);
+
+        // Adjust width
+        Window window = dialog.getWindow();
+        if (window != null) {
+            window.setLayout(
+                    (int) (250 * getResources().getDisplayMetrics().density),
+                    WindowManager.LayoutParams.WRAP_CONTENT
+            );
+        }
+
         return dialog;
     }
 
