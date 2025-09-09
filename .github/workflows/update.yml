@@ -17,7 +17,7 @@ permissions:
 jobs:
   build_and_test:
     # Job to build APKs for the latest commit and the commit that triggered the workflow
-    name: Build APKs
+    name: Build and Test
     runs-on: ubuntu-latest
    
     env:
