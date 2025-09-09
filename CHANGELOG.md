@@ -44,6 +44,7 @@ ownCloud admins and users.
 * Enhancement - New layout for spaces list: [#4604](https://github.com/owncloud/android/issues/4604)
 * Enhancement - Add account ID to the user information: [#4605](https://github.com/owncloud/android/issues/4605)
 * Enhancement - Update test in GitHub Actions: [#4663](https://github.com/owncloud/android/pull/4663)
+* Enhancement - New workflow to generate a build from "latest" tag on demand: [#4681](https://github.com/owncloud/android/pull/4681)
 
 ## Details
 
@@ -88,6 +89,13 @@ ownCloud admins and users.
    log and the crash log if something goes wrong.
 
    https://github.com/owncloud/android/pull/4663
+
+* Enhancement - New workflow to generate a build from "latest" tag on demand: [#4681](https://github.com/owncloud/android/pull/4681)
+
+   New workflow has been added to GitHub Actions to build signed apk from "latest"
+   tag when the tag is pushed, every 2 months or manually triggered.
+
+   https://github.com/owncloud/android/pull/4681
 
 # Changelog for ownCloud Android Client [4.6.2] (2025-08-13)
 
