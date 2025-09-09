@@ -15,13 +15,14 @@ permissions:
   contents: read
 
 jobs:
-  build_apks:
+  build_and_test:
     # Job to build APKs for the latest commit and the commit that triggered the workflow
     name: Build APKs
     runs-on: ubuntu-latest
    
     env:
       BUILD_TOOLS_VERSION: "34.0.0"
+      GITHUB_SHA: ${{ github.sha }}
 
     steps:
       # Checkout the specific commit
@@ -101,18 +102,7 @@ jobs:
         with:
           name: owncloudSigned-${{ github.sha }}
           path: ./owncloudSigned-${{ github.sha }}.apk
-          retention-days: 90
-
-  execute_tests:
-    # Job to run tests using the APKs built in previous job
-    name: Execute tests
-    needs: build_apks
-    runs-on: ubuntu-latest
-
-    env:
-      GITHUB_SHA: ${{ github.sha }}
-
-    steps:
+          retention-days: 1
 
       # Clean up the workspace
       - name: Clean up
