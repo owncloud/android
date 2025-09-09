@@ -40,7 +40,7 @@ jobs:
 
       # Set up Android SDK and build tools
       - name: Set up Android SDK
-        uses: android-actions/setup-android@v2
+        uses: android-actions/setup-android@v3
 
       # Cache Gradle dependencies to speed up builds
       - name: Cache Gradle
@@ -122,7 +122,7 @@ jobs:
 
       # Download APK built from current commit
       - name: Get apk built from current
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           name: owncloudSigned-${{ github.sha }}
           path: ./src/test/resources
