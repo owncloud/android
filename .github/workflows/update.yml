@@ -129,14 +129,14 @@ jobs:
 
       # Download APK built from latest commit
       - name: Get apk built from latest
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           name: owncloudSigned-latest
           path: ./src/test/resources
 
       # Download APK built from current commit
       - name: Get apk built from current
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           name: owncloudSigned-${{ github.sha }}
           path: ./src/test/resources
