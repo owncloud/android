@@ -1,0 +1,5 @@
+Enhancement: New workflow to generate a build from "latest" tag on demand
+
+New workflow has been added to GitHub Actions to build signed apk from "latest" tag when the tag is pushed, every 2 months or manually triggered.
+
+https://github.com/owncloud/android/pull/4681
