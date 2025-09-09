@@ -106,7 +106,10 @@ jobs:
 
       # Clean up the workspace
       - name: Clean up
-        run: rm -rf ${{ github.workspace }}/*
+        run: |
+          rm -rf ${{ github.workspace }}/*
+          rm -rf ${{ github.workspace }}/.[!.]*
+          rm -rf ${{ github.workspace }}/..?*
 
       # Clone repository containing update tests
       - name: Clone tests repo
