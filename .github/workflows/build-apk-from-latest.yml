@@ -38,7 +38,7 @@ jobs:
 
       # Set up Android SDK and build tools
       - name: Set up Android SDK
-        uses: android-actions/setup-android@v2
+        uses: android-actions/setup-android@v3
 
       # Cache Gradle dependencies to speed up builds
       - name: Cache Gradle
