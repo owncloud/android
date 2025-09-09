@@ -73,7 +73,8 @@ class FileDetailsFragmentTest {
         val fileDetailsFragment = FileDetailsFragment.newInstance(
             OC_FILE,
             OC_ACCOUNT,
-            syncFileAtOpen = false
+            syncFileAtOpen = false,
+            isMultiPersonal = false
         )
 
         launch(TestShareFileActivity::class.java).onActivity {
