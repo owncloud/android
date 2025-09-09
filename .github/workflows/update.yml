@@ -120,8 +120,9 @@ jobs:
       - name: Download latest signed APK
         uses: dawidd6/action-download-artifact@v11
         with:
-          workflow: Build apk from latest
+          workflow: build-apk-from-latest.yml
           name: owncloudSigned-latest
+          workflow_conclusion: success
           path: ./src/test/resources
 
       # Download APK built from current commit
