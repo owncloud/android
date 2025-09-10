@@ -34,6 +34,7 @@ import com.owncloud.android.domain.spaces.usecases.GetPersonalSpacesWithSpecials
 import com.owncloud.android.domain.spaces.usecases.GetProjectSpacesWithSpecialsForAccountAsStreamUseCase
 import com.owncloud.android.domain.spaces.usecases.RefreshSpacesFromServerAsyncUseCase
 import com.owncloud.android.domain.user.usecases.GetUserIdAsyncUseCase
+import com.owncloud.android.domain.user.usecases.GetUserPermissionsAsyncUseCase
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.ViewModelExt.runUseCaseWithResult
 import com.owncloud.android.presentation.common.UIResult
@@ -51,6 +52,7 @@ class SpacesListViewModel(
     private val getFileByRemotePathUseCase: GetFileByRemotePathUseCase,
     private val getStoredCapabilitiesUseCase: GetStoredCapabilitiesUseCase,
     private val getUserIdAsyncUseCase: GetUserIdAsyncUseCase,
+    private val getUserPermissionsAsyncUseCase: GetUserPermissionsAsyncUseCase,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
     private val accountName: String,
     private val showPersonalSpace: Boolean,
@@ -62,6 +64,9 @@ class SpacesListViewModel(
 
     private val _userId = MutableStateFlow<Event<UIResult<String>>?>(null)
     val userId: StateFlow<Event<UIResult<String>>?> = _userId
+
+    private val _userPermissions = MutableStateFlow<Event<UIResult<List<String>>>?>(null)
+    val userPermissions: StateFlow<Event<UIResult<List<String>>>?> = _userPermissions
 
     init {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
@@ -121,6 +126,16 @@ class SpacesListViewModel(
         flow = _userId,
         useCase = getUserIdAsyncUseCase,
         useCaseParams = GetUserIdAsyncUseCase.Params(accountName = accountName)
+    )
+
+    fun getUserPermissions(
+        accountId: String
+    ) = runUseCaseWithResult(
+        coroutineDispatcher = coroutinesDispatcherProvider.io,
+        showLoading = false,
+        flow = _userPermissions,
+        useCase = getUserPermissionsAsyncUseCase,
+        useCaseParams = GetUserPermissionsAsyncUseCase.Params(accountName = accountName, accountId = accountId)
     )
 
     data class SpacesListUiState(
