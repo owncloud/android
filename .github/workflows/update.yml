@@ -13,26 +13,24 @@ on:
 permissions:
   # Only need read access to repository contents
   contents: read
+  actions: read
 
 jobs:
-  build_apks:
+  build_and_test:
     # Job to build APKs for the latest commit and the commit that triggered the workflow
-    name: Build APKs
+    name: Build and Test
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        # Run matrix for latest commit on branch and current commit SHA
-        commit: ["latest", "${{ github.sha }}"]
-
+   
     env:
       BUILD_TOOLS_VERSION: "34.0.0"
+      GITHUB_SHA: ${{ github.sha }}
 
     steps:
-      # Checkout the specific commit from matrix
+      # Checkout the specific commit
       - name: Checkout specific commit
         uses: actions/checkout@v5
         with:
-          ref: ${{ matrix.commit }}
+          ref: ${{ github.sha }}
 
       # Set up Java JDK required for Gradle
       - name: Set up JDK
@@ -43,7 +41,7 @@ jobs:
 
       # Set up Android SDK and build tools
       - name: Set up Android SDK
-        uses: android-actions/setup-android@v2
+        uses: android-actions/setup-android@v3
 
       # Cache Gradle dependencies to speed up builds
       - name: Cache Gradle
@@ -62,7 +60,7 @@ jobs:
 
       # Copy the built APK to a commit-specific name
       - name: Get apk
-        run: cp owncloudApp/build/outputs/apk/qa/release/owncloud_*-qa-release*.apk owncloud-${{ matrix.commit }}.apk
+        run: cp owncloudApp/build/outputs/apk/qa/release/owncloud_*-qa-release*.apk owncloud-${{ github.sha }}.apk
 
       # Decode keystore from secret for signing
       - name: Restore keystore
@@ -72,9 +70,9 @@ jobs:
       # Align and sign the APK
       - name: Sign APK
         run: |
-          APK_INPUT="owncloud-${{ matrix.commit }}.apk"
-          APK_ALIGNED="owncloud-${{ matrix.commit }}-aligned.apk"
-          APK_SIGNED="owncloudSigned-${{ matrix.commit }}.apk"
+          APK_INPUT="owncloud-${{ github.sha }}.apk"
+          APK_ALIGNED="owncloud-${{ github.sha }}-aligned.apk"
+          APK_SIGNED="owncloudSigned-${{ github.sha }}.apk"
           KEYSTORE="./test.keystore"
           KEY_ALIAS="${{ secrets.TEST_KS_ALIAS }}"
           KEY_PASSWORD="${{ secrets.TEST_KS_KEY }}"
@@ -103,40 +101,33 @@ jobs:
       - name: Upload APK as artifact
         uses: actions/upload-artifact@v4
         with:
-          name: owncloudSigned-${{ matrix.commit }}
-          path: ./owncloudSigned-${{ matrix.commit }}.apk
-          # Removed after 1 day
+          name: owncloudSigned-${{ github.sha }}
+          path: ./owncloudSigned-${{ github.sha }}.apk
           retention-days: 1
-
-  execute_tests:
-    # Job to run tests using the APKs built in previous job
-    name: Execute tests
-    needs: build_apks
-    runs-on: ubuntu-latest
-
-    env:
-      GITHUB_SHA: ${{ github.sha }}
-
-    steps:
 
       # Clean up the workspace
       - name: Clean up
-        run: rm -rf ${{ github.workspace }}/*
+        run: |
+          rm -rf ${{ github.workspace }}/*
+          rm -rf ${{ github.workspace }}/.[!.]*
+          rm -rf ${{ github.workspace }}/..?*
 
       # Clone repository containing update tests
       - name: Clone tests repo
         run: git clone https://github.com/owncloud/android-update-testing.git .
 
-      # Download APK built from latest commit
-      - name: Get apk built from latest
-        uses: actions/download-artifact@v4
+      # Download APK built last latest signing
+      - name: Download latest signed APK
+        uses: dawidd6/action-download-artifact@v11
         with:
+          workflow: build-apk-from-latest.yml
           name: owncloudSigned-latest
+          workflow_conclusion: success
           path: ./src/test/resources
 
       # Download APK built from current commit
       - name: Get apk built from current
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           name: owncloudSigned-${{ github.sha }}
           path: ./src/test/resources
@@ -154,7 +145,7 @@ jobs:
         run: |
           mkdir -p logs video
           chmod +x ./runAppium.sh
-          ./runAppium.sh &
+          ./runAppium.sh
 
       # Enable KVM for emulator acceleration
       - name: Enable KVM
@@ -208,12 +199,20 @@ jobs:
           name: logs
           path: ./logs/log.log
 
+      # Upload appium log
+      - name: Upload Appium Log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: appium
+          path: ./appium.log
+
       # Prepare video file to be uploaded by compressing it
       - name: Zip video files
         if: always()
         run: zip -r -9 test-recording.zip video || true
 
-       # Upload video file
+      # Upload video file
       - name: Upload Video
         if: always()
         uses: actions/upload-artifact@v4

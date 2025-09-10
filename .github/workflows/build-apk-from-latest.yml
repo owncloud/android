@@ -6,8 +6,8 @@ on:
     tags:
       - latest
   schedule:
-    # Runs on the 1st day of every 2 months at 00:00 UTC
-    - cron: "0 0 1 */2 *"
+    # Runs Saturdays 21:00 UTC
+    - cron: "0 21 * * 6"
 
 permissions:
   # Only need read access to repository contents
@@ -101,5 +101,5 @@ jobs:
         with:
           name: owncloudSigned-latest
           path: ./owncloudSigned-latest.apk
-          retention-days: 90
+          retention-days: 7
 
