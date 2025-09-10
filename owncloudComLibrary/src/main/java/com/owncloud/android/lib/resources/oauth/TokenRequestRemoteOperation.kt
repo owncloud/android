@@ -2,7 +2,7 @@
  *
  *   @author Abel García de Prada
  *
- *   Copyright (C) 2020 ownCloud GmbH.
+ *   Copyright (C) 2025 ownCloud GmbH.
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -54,7 +54,9 @@ class TokenRequestRemoteOperation(
 
             val postMethod = PostMethod(URL(tokenRequestParams.tokenEndpoint), requestBody)
 
-            postMethod.addRequestHeader(AUTHORIZATION_HEADER, tokenRequestParams.clientAuth)
+            if (tokenRequestParams.useAuthorizationHeader) {
+                postMethod.addRequestHeader(AUTHORIZATION_HEADER, tokenRequestParams.clientAuth)
+            }
 
             val status = client.executeHttpMethod(postMethod)
 

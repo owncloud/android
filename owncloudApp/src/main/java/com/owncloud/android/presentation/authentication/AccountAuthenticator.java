@@ -346,6 +346,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
 
         String clientIdForRequest = null;
         String clientSecretForRequest = null;
+        Boolean useAuthorizationHeader = true;
 
         boolean isKiteworksServer = Boolean.parseBoolean(accountManager.getUserData(account, AccountUtils.Constants.KEY_IS_KITEWORKS_SERVER));
 
@@ -377,6 +378,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
             oidcServerConfigurationUseCaseResult.getDataOrNull().isTokenEndpointAuthMethodSupportedClientSecretPost()) {
                 clientIdForRequest = clientId;
                 clientSecretForRequest = clientSecret;
+                useAuthorizationHeader = false;
             }
         } else {
             Timber.d("OIDC Discovery failed. Server discovery info: [ %s ]",
@@ -401,6 +403,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
                 scope,
                 clientIdForRequest,
                 clientSecretForRequest,
+                useAuthorizationHeader,
                 refreshToken
         );
 

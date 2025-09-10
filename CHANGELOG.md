@@ -39,6 +39,7 @@ ownCloud admins and users.
 
 ## Summary
 
+* Bugfix - Set authorization header for token request only when necessary: [#4575](https://github.com/owncloud/android/issues/4575)
 * Bugfix - Add explicit permission to Detekt workflow: [#4675](https://github.com/owncloud/android/pull/4675)
 * Change - SBOM workflow runs on dependabot PRs: [#4664](https://github.com/owncloud/android/pull/4664)
 * Enhancement - New layout for spaces list: [#4604](https://github.com/owncloud/android/issues/4604)
@@ -47,6 +48,15 @@ ownCloud admins and users.
 * Enhancement - New workflow to generate a build from "latest" tag on demand: [#4681](https://github.com/owncloud/android/pull/4681)
 
 ## Details
+
+* Bugfix - Set authorization header for token request only when necessary: [#4575](https://github.com/owncloud/android/issues/4575)
+
+   A new field has been added to the token request to indicate whether the
+   authorization header should be applied in case `client_secret_post` method is
+   supported or not.
+
+   https://github.com/owncloud/android/issues/4575
+   https://github.com/owncloud/android/pull/4671
 
 * Bugfix - Add explicit permission to Detekt workflow: [#4675](https://github.com/owncloud/android/pull/4675)
 

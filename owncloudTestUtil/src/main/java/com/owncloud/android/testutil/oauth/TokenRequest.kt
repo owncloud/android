@@ -2,7 +2,9 @@
  * ownCloud Android client application
  *
  * @author Abel García de Prada
- * Copyright (C) 2021 ownCloud GmbH.
+ * @author Jorge Aguado Recio
+ *
+ * Copyright (C) 2025 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -31,7 +33,8 @@ val OC_TOKEN_REQUEST_REFRESH = TokenRequest.RefreshToken(
     tokenEndpoint = OC_TOKEN_ENDPOINT,
     clientAuth = OC_CLIENT_AUTH,
     scope = OC_SCOPE,
-    refreshToken = OC_REFRESH_TOKEN
+    refreshToken = OC_REFRESH_TOKEN,
+    useAuthorizationHeader = true
 )
 
 val OC_TOKEN_REQUEST_ACCESS = TokenRequest.AccessToken(
@@ -41,5 +44,6 @@ val OC_TOKEN_REQUEST_ACCESS = TokenRequest.AccessToken(
     scope = OC_SCOPE,
     authorizationCode = "4uth0r1z4t10nC0d3",
     redirectUri = OC_REDIRECT_URI,
-    codeVerifier = "A high-entropy cryptographic random STRING using the unreserved characters"
+    codeVerifier = "A high-entropy cryptographic random STRING using the unreserved characters",
+    useAuthorizationHeader = true
 )

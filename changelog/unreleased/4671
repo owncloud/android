@@ -1,0 +1,7 @@
+Bugfix: Set authorization header for token request only when necessary
+
+A new field has been added to the token request to indicate whether the authorization
+header should be applied in case `client_secret_post` method is supported or not.
+
+https://github.com/owncloud/android/issues/4575
+https://github.com/owncloud/android/pull/4671
