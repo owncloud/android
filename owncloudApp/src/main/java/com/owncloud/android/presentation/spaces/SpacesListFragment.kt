@@ -137,6 +137,7 @@ class SpacesListFragment : SpacesListAdapter.SpacesListAdapterListener, Fragment
                 when (val uiResult = event.peekContent()) {
                     is UIResult.Success -> {
                         Timber.d ("The account id for $accountName is: ${uiResult.data}")
+                        uiResult.data?.let { spacesListViewModel.getUserPermissions(it) }
                     }
                     is UIResult.Loading -> { }
                     is UIResult.Error -> {
@@ -146,6 +147,20 @@ class SpacesListFragment : SpacesListAdapter.SpacesListAdapterListener, Fragment
             }
         }
 
+        collectLatestLifecycleFlow(spacesListViewModel.userPermissions) { event ->
+            event?.let {
+                val accountName = requireArguments().getString(BUNDLE_ACCOUNT_NAME)
+                when (val uiResult = event.peekContent()) {
+                    is UIResult.Success -> {
+                        Timber.d ("The permissions for $accountName are: ${uiResult.data}")
+                    }
+                    is UIResult.Loading -> { }
+                    is UIResult.Error -> {
+                        Timber.e(uiResult.error, "Failed to retrieve user permissions for account $accountName")
+                    }
+                }
+            }
+        }
     }
 
     private fun showOrHideEmptyView(spacesList: List<OCSpace>) {

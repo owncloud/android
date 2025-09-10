@@ -56,6 +56,11 @@ class OCRemoteUserDataSource(
             clientManager.getUserService(accountName).getUserId()
         }
 
+    override fun getUserPermissions(accountName: String, accountId: String): List<String> =
+        executeRemoteOperation {
+            clientManager.getUserService(accountName).getUserPermissions(accountId)
+        }
+
 }
 
 /**************************************************************************************************************
