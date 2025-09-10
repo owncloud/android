@@ -42,6 +42,7 @@ ownCloud admins and users.
 * Bugfix - Set authorization header for token request only when necessary: [#4575](https://github.com/owncloud/android/issues/4575)
 * Bugfix - Add explicit permission to Detekt workflow: [#4675](https://github.com/owncloud/android/pull/4675)
 * Change - SBOM workflow runs on dependabot PRs: [#4664](https://github.com/owncloud/android/pull/4664)
+* Change - Update test workflow uses "build-from-latest-apk" workflow: [#4681](https://github.com/owncloud/android/pull/4681)
 * Enhancement - New layout for spaces list: [#4604](https://github.com/owncloud/android/issues/4604)
 * Enhancement - Add account ID to the user information: [#4605](https://github.com/owncloud/android/issues/4605)
 * Enhancement - Update test in GitHub Actions: [#4663](https://github.com/owncloud/android/pull/4663)
@@ -73,6 +74,14 @@ ownCloud admins and users.
 
    https://github.com/owncloud/android/pull/4664
    https://github.com/owncloud/android/pull/4666
+
+* Change - Update test workflow uses "build-from-latest-apk" workflow: [#4681](https://github.com/owncloud/android/pull/4681)
+
+   Workflow for update testing has been changed in order to build now only over the
+   current commit, taking "latest" from the existing workflow
+   "build-from-latest-apk", that runs periodically.
+
+   https://github.com/owncloud/android/pull/4681
 
 * Enhancement - New layout for spaces list: [#4604](https://github.com/owncloud/android/issues/4604)
 
