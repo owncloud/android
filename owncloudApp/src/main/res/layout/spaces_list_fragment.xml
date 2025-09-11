@@ -3,7 +3,9 @@
   ~ ownCloud Android client application
   ~
   ~ @author Juan Carlos Garrote Gascón
-  ~ Copyright (C) 2022 ownCloud GmbH.
+  ~ @author Jorge Aguado Recio
+  ~
+  ~ Copyright (C) 2025 ownCloud GmbH.
   ~
   ~ This program is free software: you can redistribute it and/or modify
   ~ it under the terms of the GNU General Public License version 2,
@@ -61,6 +63,7 @@
                 android:layout_height="match_parent"
                 android:scrollbars="vertical"
                 android:paddingHorizontal="@dimen/standard_half_margin"
+                android:paddingBottom="40dp"
                 tools:listitem="@layout/spaces_list_item"/>
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
@@ -77,5 +80,19 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <com.getbase.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_create_space"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="@dimen/standard_margin"
+        android:layout_marginBottom="@dimen/standard_margin"
+        android:contentDescription="@string/fab_new_space"
+        android:visibility="invisible"
+        fab:fab_title="@string/fab_new_space"
+        fab:fab_colorNormal="@color/primary_button_background_color"
+        fab:fab_colorPressed="@color/owncloud_blue"
+        fab:fab_icon="@drawable/ic_add"
+        tools:visibility="visible"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
