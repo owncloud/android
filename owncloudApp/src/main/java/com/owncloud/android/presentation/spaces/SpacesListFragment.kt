@@ -153,10 +153,12 @@ class SpacesListFragment : SpacesListAdapter.SpacesListAdapterListener, Fragment
                 when (val uiResult = event.peekContent()) {
                     is UIResult.Success -> {
                         Timber.d ("The permissions for $accountName are: ${uiResult.data}")
+                        uiResult.data?.let { binding.fabCreateSpace.isVisible = it.contains(DRIVES_CREATE_ALL_PERMISSION) }
                     }
                     is UIResult.Loading -> { }
                     is UIResult.Error -> {
                         Timber.e(uiResult.error, "Failed to retrieve user permissions for account $accountName")
+                        binding.fabCreateSpace.isVisible = false
                     }
                 }
             }
@@ -251,6 +253,7 @@ class SpacesListFragment : SpacesListAdapter.SpacesListAdapterListener, Fragment
         const val BUNDLE_KEY_CLICK_SPACE = "BUNDLE_KEY_CLICK_SPACE"
         const val BUNDLE_SHOW_PERSONAL_SPACE = "showPersonalSpace"
         const val BUNDLE_ACCOUNT_NAME = "accountName"
+        const val DRIVES_CREATE_ALL_PERMISSION = "Drives.Create.all"
         fun newInstance(
             showPersonalSpace: Boolean,
             accountName: String
