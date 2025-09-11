@@ -63,4 +63,7 @@ class OCUserRepository(
                 localAuthenticationDataSource.saveIdForAccount(accountName, it)
             }
 
+    override fun getUserPermissions(accountName: String, accountId: String): List<String> =
+        remoteUserDataSource.getUserPermissions(accountName, accountId)
+
 }

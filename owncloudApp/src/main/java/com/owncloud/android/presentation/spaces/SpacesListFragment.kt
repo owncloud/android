@@ -137,6 +137,7 @@ class SpacesListFragment : SpacesListAdapter.SpacesListAdapterListener, Fragment
                 when (val uiResult = event.peekContent()) {
                     is UIResult.Success -> {
                         Timber.d ("The account id for $accountName is: ${uiResult.data}")
+                        uiResult.data?.let { spacesListViewModel.getUserPermissions(it) }
                     }
                     is UIResult.Loading -> { }
                     is UIResult.Error -> {
@@ -146,6 +147,22 @@ class SpacesListFragment : SpacesListAdapter.SpacesListAdapterListener, Fragment
             }
         }
 
+        collectLatestLifecycleFlow(spacesListViewModel.userPermissions) { event ->
+            event?.let {
+                val accountName = requireArguments().getString(BUNDLE_ACCOUNT_NAME)
+                when (val uiResult = event.peekContent()) {
+                    is UIResult.Success -> {
+                        Timber.d ("The permissions for $accountName are: ${uiResult.data}")
+                        uiResult.data?.let { binding.fabCreateSpace.isVisible = it.contains(DRIVES_CREATE_ALL_PERMISSION) }
+                    }
+                    is UIResult.Loading -> { }
+                    is UIResult.Error -> {
+                        Timber.e(uiResult.error, "Failed to retrieve user permissions for account $accountName")
+                        binding.fabCreateSpace.isVisible = false
+                    }
+                }
+            }
+        }
     }
 
     private fun showOrHideEmptyView(spacesList: List<OCSpace>) {
@@ -236,6 +253,7 @@ class SpacesListFragment : SpacesListAdapter.SpacesListAdapterListener, Fragment
         const val BUNDLE_KEY_CLICK_SPACE = "BUNDLE_KEY_CLICK_SPACE"
         const val BUNDLE_SHOW_PERSONAL_SPACE = "showPersonalSpace"
         const val BUNDLE_ACCOUNT_NAME = "accountName"
+        const val DRIVES_CREATE_ALL_PERMISSION = "Drives.Create.all"
         fun newInstance(
             showPersonalSpace: Boolean,
             accountName: String
