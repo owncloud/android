@@ -828,6 +828,20 @@
     <string name="open_shortcut_description">This shortcut points to:</string>
     <string name="open_shortcut_title">Open link</string>
 
+    <string name="create_space_dialog_title">Create a space</string>
+    <string name="create_space_dialog_name">Name</string>
+    <string name="create_space_dialog_subtitle">Subtitle</string>
+    <string name="create_space_dialog_quota">Quota</string>
+    <string-array name="create_space_dialog_quota_units">
+        <item>1 GB</item>
+        <item>2 GB</item>
+        <item>5 GB</item>
+        <item>10 GB</item>
+        <item>50 GB</item>
+        <item>100 GB</item>
+        <item>No restriction</item>
+    </string-array>
+
     <string name="feedback_dialog_get_in_contact_description"><![CDATA[ Ask for help in our <a href=\"%1$s\"><b>forum</b></a> or contribute in our <a href=\"%2$s\"><b>GitHub repo</b></a>]]></string>
 
     <string name="link_role_accessibility">Link</string>

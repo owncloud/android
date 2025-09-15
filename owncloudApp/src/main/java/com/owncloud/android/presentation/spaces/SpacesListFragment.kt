@@ -50,6 +50,7 @@ import com.owncloud.android.extensions.toTitleStringRes
 import com.owncloud.android.presentation.capabilities.CapabilityViewModel
 import com.owncloud.android.utils.DisplayUtils
 import com.owncloud.android.presentation.common.UIResult
+import com.owncloud.android.presentation.spaces.createspace.CreateSpaceDialogFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import timber.log.Timber
@@ -102,6 +103,12 @@ class SpacesListFragment : SpacesListAdapter.SpacesListAdapterListener, Fragment
 
         binding.swipeRefreshSpacesList.setOnRefreshListener {
             spacesListViewModel.refreshSpacesFromServer()
+        }
+
+        binding.fabCreateSpace.setOnClickListener {
+            val dialog = CreateSpaceDialogFragment()
+            dialog.show(requireActivity().supportFragmentManager, DIALOG_CREATE_SPACE)
+            binding.fabCreateSpace.isFocusable = false
         }
         setTextHintRootToolbar()
     }
@@ -254,6 +261,9 @@ class SpacesListFragment : SpacesListAdapter.SpacesListAdapterListener, Fragment
         const val BUNDLE_SHOW_PERSONAL_SPACE = "showPersonalSpace"
         const val BUNDLE_ACCOUNT_NAME = "accountName"
         const val DRIVES_CREATE_ALL_PERMISSION = "Drives.Create.all"
+
+        private const val DIALOG_CREATE_SPACE = "DIALOG_CREATE_SPACE"
+
         fun newInstance(
             showPersonalSpace: Boolean,
             accountName: String

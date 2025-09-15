@@ -64,6 +64,7 @@
                 android:scrollbars="vertical"
                 android:paddingHorizontal="@dimen/standard_half_margin"
                 android:paddingBottom="40dp"
+                android:clipToPadding="false"
                 tools:listitem="@layout/spaces_list_item"/>
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
