@@ -106,7 +106,7 @@ class SpacesListFragment : SpacesListAdapter.SpacesListAdapterListener, Fragment
         }
 
         binding.fabCreateSpace.setOnClickListener {
-            val dialog = CreateSpaceDialogFragment()
+            val dialog = CreateSpaceDialogFragment.newInstance(requireArguments().getString(BUNDLE_ACCOUNT_NAME))
             dialog.show(requireActivity().supportFragmentManager, DIALOG_CREATE_SPACE)
             binding.fabCreateSpace.isFocusable = false
         }
@@ -143,7 +143,7 @@ class SpacesListFragment : SpacesListAdapter.SpacesListAdapterListener, Fragment
                 val accountName = requireArguments().getString(BUNDLE_ACCOUNT_NAME)
                 when (val uiResult = event.peekContent()) {
                     is UIResult.Success -> {
-                        Timber.d ("The account id for $accountName is: ${uiResult.data}")
+                        Timber.d("The account id for $accountName is: ${uiResult.data}")
                         uiResult.data?.let { spacesListViewModel.getUserPermissions(it) }
                     }
                     is UIResult.Loading -> { }
@@ -159,7 +159,7 @@ class SpacesListFragment : SpacesListAdapter.SpacesListAdapterListener, Fragment
                 val accountName = requireArguments().getString(BUNDLE_ACCOUNT_NAME)
                 when (val uiResult = event.peekContent()) {
                     is UIResult.Success -> {
-                        Timber.d ("The permissions for $accountName are: ${uiResult.data}")
+                        Timber.d("The permissions for $accountName are: ${uiResult.data}")
                         uiResult.data?.let { binding.fabCreateSpace.isVisible = it.contains(DRIVES_CREATE_ALL_PERMISSION) }
                     }
                     is UIResult.Loading -> { }

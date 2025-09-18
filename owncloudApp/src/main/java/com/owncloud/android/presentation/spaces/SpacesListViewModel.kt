@@ -29,6 +29,7 @@ import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.files.model.OCFile.Companion.ROOT_PATH
 import com.owncloud.android.domain.files.usecases.GetFileByRemotePathUseCase
 import com.owncloud.android.domain.spaces.model.OCSpace
+import com.owncloud.android.domain.spaces.usecases.CreateSpaceUseCase
 import com.owncloud.android.domain.spaces.usecases.GetPersonalAndProjectSpacesWithSpecialsForAccountAsStreamUseCase
 import com.owncloud.android.domain.spaces.usecases.GetPersonalSpacesWithSpecialsForAccountAsStreamUseCase
 import com.owncloud.android.domain.spaces.usecases.GetProjectSpacesWithSpecialsForAccountAsStreamUseCase
@@ -53,6 +54,7 @@ class SpacesListViewModel(
     private val getStoredCapabilitiesUseCase: GetStoredCapabilitiesUseCase,
     private val getUserIdAsyncUseCase: GetUserIdAsyncUseCase,
     private val getUserPermissionsAsyncUseCase: GetUserPermissionsAsyncUseCase,
+    private val createSpaceUseCase: CreateSpaceUseCase,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
     private val accountName: String,
     private val showPersonalSpace: Boolean,
@@ -137,6 +139,20 @@ class SpacesListViewModel(
         useCase = getUserPermissionsAsyncUseCase,
         useCaseParams = GetUserPermissionsAsyncUseCase.Params(accountName = accountName, accountId = accountId)
     )
+
+    fun createSpace(spaceName: String, spaceSubtitle: String, spaceQuota: Long) {
+        viewModelScope.launch(coroutinesDispatcherProvider.io) {
+            createSpaceUseCase(
+                CreateSpaceUseCase.Params(
+                    accountName = accountName,
+                    spaceName = spaceName,
+                    spaceSubtitle = spaceSubtitle,
+                    spaceQuota = spaceQuota
+                )
+            )
+            refreshSpacesFromServerAsyncUseCase(RefreshSpacesFromServerAsyncUseCase.Params(accountName))
+        }
+    }
 
     data class SpacesListUiState(
         val spaces: List<OCSpace>,

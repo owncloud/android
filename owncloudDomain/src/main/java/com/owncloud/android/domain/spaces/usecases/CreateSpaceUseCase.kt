@@ -1,7 +1,6 @@
 /**
  * ownCloud Android client application
  *
- * @author Abel García de Prada
  * @author Jorge Aguado Recio
  *
  * Copyright (C) 2025 ownCloud GmbH.
@@ -18,11 +17,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.owncloud.android.data.spaces.datasources
 
-import com.owncloud.android.domain.spaces.model.OCSpace
+package com.owncloud.android.domain.spaces.usecases
 
-interface RemoteSpacesDataSource {
-    fun refreshSpacesForAccount(accountName: String): List<OCSpace>
-    fun createSpace(accountName: String, spaceName: String, spaceSubtitle: String, spaceQuota: Long): OCSpace
+import com.owncloud.android.domain.BaseUseCase
+import com.owncloud.android.domain.spaces.SpacesRepository
+
+class CreateSpaceUseCase(
+    private val spacesRepository: SpacesRepository
+): BaseUseCase<Unit, CreateSpaceUseCase.Params>() {
+
+    override fun run(params: Params) = spacesRepository.createSpace(params.accountName, params.spaceName, params.spaceSubtitle, params.spaceQuota)
+
+    data class Params (
+        val accountName: String,
+        val spaceName: String,
+        val spaceSubtitle: String,
+        val spaceQuota: Long
+    )
+
 }

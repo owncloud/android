@@ -98,6 +98,7 @@ import com.owncloud.android.domain.spaces.usecases.GetSpaceByIdForAccountUseCase
 import com.owncloud.android.domain.spaces.usecases.GetSpaceWithSpecialsByIdForAccountUseCase
 import com.owncloud.android.domain.spaces.usecases.GetSpacesFromEveryAccountUseCaseAsStream
 import com.owncloud.android.domain.spaces.usecases.RefreshSpacesFromServerAsyncUseCase
+import com.owncloud.android.domain.spaces.usecases.CreateSpaceUseCase
 import com.owncloud.android.domain.transfers.usecases.ClearSuccessfulTransfersUseCase
 import com.owncloud.android.domain.transfers.usecases.GetAllTransfersAsStreamUseCase
 import com.owncloud.android.domain.transfers.usecases.GetAllTransfersUseCase
@@ -220,16 +221,17 @@ val useCaseModule = module {
     factoryOf(::RefreshSharesFromServerAsyncUseCase)
 
     // Spaces
+    factoryOf(::CreateSpaceUseCase)
     factoryOf(::GetPersonalAndProjectSpacesForAccountUseCase)
     factoryOf(::GetPersonalAndProjectSpacesWithSpecialsForAccountAsStreamUseCase)
     factoryOf(::GetPersonalSpaceForAccountUseCase)
     factoryOf(::GetPersonalSpacesWithSpecialsForAccountAsStreamUseCase)
     factoryOf(::GetProjectSpacesWithSpecialsForAccountAsStreamUseCase)
+    factoryOf(::GetSpaceByIdForAccountUseCase)
     factoryOf(::GetSpaceWithSpecialsByIdForAccountUseCase)
     factoryOf(::GetSpacesFromEveryAccountUseCaseAsStream)
     factoryOf(::GetWebDavUrlForSpaceUseCase)
     factoryOf(::RefreshSpacesFromServerAsyncUseCase)
-    factoryOf(::GetSpaceByIdForAccountUseCase)
 
     // Transfers
     factoryOf(::CancelDownloadForFileUseCase)
