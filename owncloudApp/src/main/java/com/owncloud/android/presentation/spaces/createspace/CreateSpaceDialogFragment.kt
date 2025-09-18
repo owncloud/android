@@ -50,12 +50,12 @@ class CreateSpaceDialogFragment : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.apply {
-            cancelButton.setOnClickListener { dialog?.dismiss() }
+            cancelCreateSpaceButton.setOnClickListener { dialog?.dismiss() }
             createSpaceDialogNameValue.doOnTextChanged { name, _, _, _ ->
                 val errorMessage = validateName(name.toString())
                 updateUI(errorMessage)
             }
-            createButton.setOnClickListener {
+            createSpaceButton.setOnClickListener {
                 val spaceQuota = convertToBytes(binding.createSpaceDialogQuotaUnit.selectedItem.toString())
                 spacesListViewModel.createSpace(binding.createSpaceDialogNameValue.text.toString(),
                     binding.createSpaceDialogSubtitleValue.text.toString(), spaceQuota)
@@ -83,7 +83,7 @@ class CreateSpaceDialogFragment : DialogFragment() {
         }
 
         binding.createSpaceDialogNameValue.error = errorMessage
-        binding.createButton.apply {
+        binding.createSpaceButton.apply {
             setTextColor(colorButton)
             isEnabled = errorMessage == null
         }

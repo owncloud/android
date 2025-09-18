@@ -165,7 +165,7 @@
             android:orientation="horizontal">
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/cancelButton"
+                android:id="@+id/cancel_create_space_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -174,7 +174,7 @@
                 style="?android:attr/borderlessButtonStyle" />
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/createButton"
+                android:id="@+id/create_space_button"
                 android:enabled="false"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
