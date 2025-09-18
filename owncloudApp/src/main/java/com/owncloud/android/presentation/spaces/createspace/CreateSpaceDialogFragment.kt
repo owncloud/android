@@ -24,12 +24,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.DialogFragment
+import com.owncloud.android.R
 import com.owncloud.android.databinding.CreateSpaceDialogBinding
 
 class CreateSpaceDialogFragment : DialogFragment() {
     private var _binding: CreateSpaceDialogBinding? = null
     private val binding get() = _binding!!
+
+    private val forbiddenRegex = Regex(FORBIDDEN_CHARACTERS)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = CreateSpaceDialogBinding.inflate(inflater, container, false)
@@ -38,6 +42,41 @@ class CreateSpaceDialogFragment : DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.cancelButton.setOnClickListener { dialog?.dismiss() }
+        binding.apply {
+            cancelButton.setOnClickListener { dialog?.dismiss() }
+            createSpaceDialogNameValue.doOnTextChanged { name, _, _, _ ->
+                val errorMessage = validateName(name.toString())
+                updateUI(errorMessage)
+            }
+        }
+    }
+
+    private fun validateName(spaceName: String): String? =
+        if (spaceName.trim().isEmpty()) {
+            getString(R.string.create_space_dialog_empty_error)
+        } else if (spaceName.length > 255) {
+            getString(R.string.create_space_dialog_length_error)
+        } else if (spaceName.contains(forbiddenRegex)) {
+            getString(R.string.create_space_dialog_characters_error)
+        } else {
+            null
+        }
+
+    private fun updateUI(errorMessage: String?) {
+        val colorButton = if (errorMessage == null) {
+            resources.getColor(R.color.primary_button_background_color, null)
+        } else {
+            resources.getColor(R.color.grey, null)
+        }
+
+        binding.createSpaceDialogNameValue.error = errorMessage
+        binding.createButton.apply {
+            setTextColor(colorButton)
+            isEnabled = errorMessage == null
+        }
+    }
+
+    companion object {
+        private const val FORBIDDEN_CHARACTERS = """[/\\.:?*"'><|]"""
     }
 }

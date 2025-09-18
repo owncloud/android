@@ -841,6 +841,9 @@
         <item>100 GB</item>
         <item>No restriction</item>
     </string-array>
+    <string name="create_space_dialog_empty_error">Space name must not be empty</string>
+    <string name="create_space_dialog_length_error">Space name must not be longer than 255 characters</string>
+    <string name="create_space_dialog_characters_error">Forbidden characters: / \\ . : ? * &quot; ' &gt; &lt; |</string>
 
     <string name="feedback_dialog_get_in_contact_description"><![CDATA[ Ask for help in our <a href=\"%1$s\"><b>forum</b></a> or contribute in our <a href=\"%2$s\"><b>GitHub repo</b></a>]]></string>
 
