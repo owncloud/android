@@ -274,4 +274,32 @@ class OCSpacesRepositoryTest {
         }
     }
 
+    @Test
+    fun `createSpace creates a new project space correctly`() {
+        every {
+            remoteSpacesDataSource.createSpace(
+                accountName = OC_ACCOUNT_NAME,
+                spaceName = OC_SPACE_PROJECT_WITH_IMAGE.name,
+                spaceSubtitle = OC_SPACE_PROJECT_WITH_IMAGE.description!!,
+                spaceQuota = OC_SPACE_PROJECT_WITH_IMAGE.quota?.total!!
+            )
+        } returns OC_SPACE_PROJECT_WITH_IMAGE
+
+        ocSpacesRepository.createSpace(
+            accountName = OC_ACCOUNT_NAME,
+            spaceName = OC_SPACE_PROJECT_WITH_IMAGE.name,
+            spaceSubtitle = OC_SPACE_PROJECT_WITH_IMAGE.description!!,
+            spaceQuota = OC_SPACE_PROJECT_WITH_IMAGE.quota?.total!!
+        )
+
+        verify(exactly = 1) {
+            remoteSpacesDataSource.createSpace(
+                accountName = OC_ACCOUNT_NAME,
+                spaceName = OC_SPACE_PROJECT_WITH_IMAGE.name,
+                spaceSubtitle = OC_SPACE_PROJECT_WITH_IMAGE.description!!,
+                spaceQuota = OC_SPACE_PROJECT_WITH_IMAGE.quota?.total!!
+            )
+        }
+    }
+
 }
