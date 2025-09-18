@@ -54,6 +54,7 @@
                 android:text="@string/create_space_dialog_name"
                 android:textColor="@color/black"
                 android:textSize="15sp"
+                android:labelFor="@id/create_space_dialog_name_value"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"/>
 
@@ -100,6 +101,7 @@
                 android:text="@string/create_space_dialog_subtitle"
                 android:textColor="@color/black"
                 android:textSize="15sp"
+                android:labelFor="@id/create_space_dialog_subtitle_value"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"/>
 
@@ -171,6 +173,7 @@
                 android:layout_weight="1"
                 android:text="@android:string/cancel"
                 android:textColor="@color/primary_button_background_color"
+                android:contentDescription="@string/content_description_cancel_button"
                 style="?android:attr/borderlessButtonStyle" />
 
             <androidx.appcompat.widget.AppCompatButton
@@ -180,6 +183,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/share_privilege_can_edit_create"
+                android:contentDescription="@string/content_description_create_button"
                 style="?android:attr/borderlessButtonStyle"/>
 
         </LinearLayout>
