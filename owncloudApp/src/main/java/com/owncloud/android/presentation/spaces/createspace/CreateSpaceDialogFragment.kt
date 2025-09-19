@@ -65,14 +65,11 @@ class CreateSpaceDialogFragment : DialogFragment() {
     }
 
     private fun validateName(spaceName: String): String? =
-        if (spaceName.trim().isEmpty()) {
-            getString(R.string.create_space_dialog_empty_error)
-        } else if (spaceName.length > 255) {
-            getString(R.string.create_space_dialog_length_error)
-        } else if (spaceName.contains(forbiddenRegex)) {
-            getString(R.string.create_space_dialog_characters_error)
-        } else {
-            null
+        when {
+            spaceName.trim().isEmpty() -> getString(R.string.create_space_dialog_empty_error)
+            spaceName.length > 255 -> getString(R.string.create_space_dialog_length_error)
+            spaceName.contains(forbiddenRegex) -> getString(R.string.create_space_dialog_characters_error)
+            else -> null
         }
 
     private fun updateUI(errorMessage: String?) {
@@ -90,7 +87,7 @@ class CreateSpaceDialogFragment : DialogFragment() {
     }
 
     private fun convertToBytes(spaceQuota: String): Long {
-        val quotaNumber = spaceQuota.replace(" GB", "").trim().toLongOrNull() ?: return 0L
+        val quotaNumber = spaceQuota.removeSuffix(" GB").toLongOrNull() ?: return 0L
         return quotaNumber * 1_000_000_000L
     }
 
