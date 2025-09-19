@@ -31,6 +31,7 @@ import com.owncloud.android.testutil.OC_ACCOUNT_NAME
 import com.owncloud.android.testutil.OC_USER_AVATAR
 import com.owncloud.android.testutil.OC_USER_ID
 import com.owncloud.android.testutil.OC_USER_INFO
+import com.owncloud.android.testutil.OC_USER_PERMISSIONS
 import com.owncloud.android.testutil.OC_USER_QUOTA
 import com.owncloud.android.utils.createRemoteOperationResultMock
 import io.mockk.every
@@ -142,5 +143,23 @@ class OCRemoteUserDataSourceTest {
             ocUserService.getUserId()
         }
     }
+
+    @Test
+    fun `getUserPermissions returns a list of String with all user permissions`() {
+        val getUserPermissionsResult: RemoteOperationResult<List<String>> =
+            createRemoteOperationResultMock(data = OC_USER_PERMISSIONS, isSuccess = true)
+
+        every {
+            ocUserService.getUserPermissions(OC_USER_ID)
+        } returns getUserPermissionsResult
+
+        val userPermissions = ocRemoteUserDataSource.getUserPermissions(OC_ACCOUNT_NAME, OC_USER_ID)
+        assertEquals(OC_USER_PERMISSIONS, userPermissions)
+
+        verify(exactly = 1) {
+            ocUserService.getUserPermissions(OC_USER_ID)
+        }
+    }
+
 }
 

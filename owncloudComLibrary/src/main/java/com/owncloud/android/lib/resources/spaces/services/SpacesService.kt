@@ -28,4 +28,5 @@ import com.owncloud.android.lib.resources.spaces.responses.SpaceResponse
 
 interface SpacesService : Service {
     fun getSpaces(): RemoteOperationResult<List<SpaceResponse>>
+    fun createSpace(spaceName: String, spaceSubtitle: String, spaceQuota: Long): RemoteOperationResult<SpaceResponse>
 }

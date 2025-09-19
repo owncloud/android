@@ -49,6 +49,11 @@ class ReleaseNotesViewModel(
                 type = ReleaseNoteType.ENHANCEMENT
             ),
             ReleaseNote(
+                title = R.string.release_notes_4_7_0_title_create_new_spaces,
+                subtitle = R.string.release_notes_4_7_0_subtitle_create_new_spaces,
+                type = ReleaseNoteType.ENHANCEMENT
+            ),
+            ReleaseNote(
                 title = R.string.release_notes_bugfixes_title,
                 subtitle = R.string.release_notes_bugfixes_subtitle,
                 type = ReleaseNoteType.BUGFIX

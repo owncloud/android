@@ -66,4 +66,11 @@ val OC_USER_AVATAR = UserAvatar(
     mimeType = "image/png"
 )
 
+val OC_USER_PERMISSIONS = listOf(
+    "Drives.Create.all",
+    "Drives.ReadWriteEnabled.all",
+    "Drives.ReadWriteProjectQuota.all",
+    "Drives.DeleteProject.all"
+)
+
 const val OC_USER_ID = "us3r1d"
