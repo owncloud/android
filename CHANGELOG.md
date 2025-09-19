@@ -45,6 +45,7 @@ ownCloud admins and users.
 * Change - Update test workflow uses "build-from-latest-apk" workflow: [#4681](https://github.com/owncloud/android/pull/4681)
 * Enhancement - New layout for spaces list: [#4604](https://github.com/owncloud/android/issues/4604)
 * Enhancement - Add account ID to the user information: [#4605](https://github.com/owncloud/android/issues/4605)
+* Enhancement - Create a new space: [#4606](https://github.com/owncloud/android/issues/4606)
 * Enhancement - Update test in GitHub Actions: [#4663](https://github.com/owncloud/android/pull/4663)
 * Enhancement - New workflow to generate a build from "latest" tag on demand: [#4681](https://github.com/owncloud/android/pull/4681)
 
@@ -100,6 +101,15 @@ ownCloud admins and users.
 
    https://github.com/owncloud/android/issues/4605
    https://github.com/owncloud/android/pull/4661
+
+* Enhancement - Create a new space: [#4606](https://github.com/owncloud/android/issues/4606)
+
+   A new floating action button has been added to the spaces list, visible only to
+   users with right permissions. In addition, a new dialog for space creation has
+   been implemented and, it is shown when the floating action button is tapped.
+
+   https://github.com/owncloud/android/issues/4606
+   https://github.com/owncloud/android/pull/4683
 
 * Enhancement - Update test in GitHub Actions: [#4663](https://github.com/owncloud/android/pull/4663)
 
