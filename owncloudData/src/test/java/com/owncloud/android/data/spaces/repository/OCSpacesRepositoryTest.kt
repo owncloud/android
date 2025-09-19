@@ -275,7 +275,7 @@ class OCSpacesRepositoryTest {
     }
 
     @Test
-    fun `createSpace creates a new project space correctly`() {
+    fun `createSpace creates a new space correctly`() {
         every {
             remoteSpacesDataSource.createSpace(
                 accountName = OC_ACCOUNT_NAME,

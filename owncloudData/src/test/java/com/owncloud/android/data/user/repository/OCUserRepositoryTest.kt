@@ -194,7 +194,7 @@ class OCUserRepositoryTest {
     }
 
     @Test
-    fun `getUserPermissions returns a list of String with all user permissions`() {
+    fun `getUserPermissions returns a list of String with user permissions`() {
         every {
             remoteUserDataSource.getUserPermissions(OC_ACCOUNT_NAME, OC_USER_ID)
         } returns OC_USER_PERMISSIONS
