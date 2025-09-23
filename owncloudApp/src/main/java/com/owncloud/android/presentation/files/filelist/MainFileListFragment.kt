@@ -372,7 +372,7 @@ class MainFileListFragment : Fragment(),
         // Set view and footer correctly
         if (mainFileListViewModel.isGridModeSetAsPreferred()) {
             layoutManager =
-                StaggeredGridLayoutManager(ColumnQuantity(requireContext(), R.layout.grid_item).calculateNoOfColumns(), RecyclerView.VERTICAL)
+                StaggeredGridLayoutManager(ColumnQuantity(requireContext(), R.layout.grid_item).calculateNoOfColumns(binding.root), RecyclerView.VERTICAL)
             viewType = ViewType.VIEW_TYPE_GRID
         } else {
             layoutManager = StaggeredGridLayoutManager(1, RecyclerView.VERTICAL)
@@ -980,7 +980,7 @@ class MainFileListFragment : Fragment(),
 
         } else {
             mainFileListViewModel.setGridModeAsPreferred()
-            layoutManager.spanCount = ColumnQuantity(requireContext(), R.layout.grid_item).calculateNoOfColumns()
+            layoutManager.spanCount = ColumnQuantity(requireContext(), R.layout.grid_item).calculateNoOfColumns(binding.root)
         }
 
         fileListAdapter.notifyDataSetChanged()
@@ -990,6 +990,12 @@ class MainFileListFragment : Fragment(),
         binding.optionsLayout.sortTypeSelected = sortType
 
         mainFileListViewModel.updateSortTypeAndOrder(sortType, binding.optionsLayout.sortOrderSelected)
+    }
+
+    fun onContentWidthChanged() {
+        if (mainFileListViewModel.isGridModeSetAsPreferred()) {
+            layoutManager.spanCount = ColumnQuantity(requireContext(), R.layout.grid_item).calculateNoOfColumns(binding.root)
+        }
     }
 
     private fun isPickingAFolder(): Boolean {

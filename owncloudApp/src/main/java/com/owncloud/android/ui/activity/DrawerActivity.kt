@@ -33,6 +33,7 @@ import android.accounts.AccountManagerFuture
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.content.res.Configuration
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -63,6 +64,7 @@ import com.owncloud.android.domain.user.model.UserQuotaState
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.collectLatestLifecycleFlow
 import com.owncloud.android.extensions.goToUrl
+import com.owncloud.android.extensions.isBigTablet
 import com.owncloud.android.extensions.openPrivacyPolicy
 import com.owncloud.android.extensions.sendEmailOrOpenFeedbackDialogAction
 import com.owncloud.android.extensions.setAccessibilityRole
@@ -163,6 +165,21 @@ abstract class DrawerActivity : ToolbarActivity() {
                 }
             }
 
+       // Make drawer to push content rather than overlay
+        if (isBigTablet) {
+            getDrawerLayout()?.setScrimColor(Color.TRANSPARENT)
+            getDrawerLayout()?.addDrawerListener(object : DrawerListener {
+                override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
+                    val content = getScreenContent()
+                    val moveFactor = drawerView.width * slideOffset
+                    content?.updatePadding(left = moveFactor.toInt())
+                }
+
+                override fun onDrawerOpened(drawerView: View) { onDrawerToggled() }
+                override fun onDrawerClosed(drawerView: View) { onDrawerToggled() }
+                override fun onDrawerStateChanged(newState: Int) {}
+            })
+        }
         // Set the drawer toggle as the DrawerListener
         getDrawerLayout()?.addDrawerListener(drawerToggle as ActionBarDrawerToggle)
         drawerToggle?.isDrawerIndicatorEnabled = true
@@ -180,6 +197,8 @@ abstract class DrawerActivity : ToolbarActivity() {
         )
         super.updateStandardToolbar(title, homeButtonDisplayed, showBackArrow)
     }
+
+    protected open fun onDrawerToggled() {}
 
     /**
      * setup drawer content, basically setting the item selected listener.
@@ -588,6 +607,7 @@ abstract class DrawerActivity : ToolbarActivity() {
     private fun getDrawerHeaderBackground(): ImageView? = findViewById(R.id.drawer_header_background)
     private fun getDrawerUserName(): TextView? = findViewById(R.id.drawer_username)
     private fun getDrawerUserNameFull(): TextView? = findViewById(R.id.drawer_username_full)
+    private fun getScreenContent(): View? = findViewById<View>(R.id.nav_coordinator_layout)
 
     /**
      * Finds a view that was identified by the id attribute from the drawer header.
