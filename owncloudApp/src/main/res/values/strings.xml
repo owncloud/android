@@ -21,6 +21,7 @@
     <string name="actionbar_sort_title">Sort by</string>
     <string name="fab_new_file">New document</string>
     <string name="fab_new_shortcut">New shortcut</string>
+    <string name="fab_new_space">New space</string>
     <string name="drawer_item_all_files">All files</string>
     <string name="drawer_item_only_available_offline">Available offline</string>
     <string name="drawer_item_shared_by_link_files">Shared by link</string>
@@ -739,6 +740,8 @@
     <string name="release_notes_bugfixes_subtitle">Some bugs were fixed to improve experience in the app</string>
     <string name="release_notes_4_7_0_title_new_layout_for_spaces">New design for spaces list</string>
     <string name="release_notes_4_7_0_subtitle_new_layout_for_spaces">A new design for Infinite Scale users in the spaces list, with a three-dot button on each space card that opens an options menu when clicked</string>
+    <string name="release_notes_4_7_0_title_create_new_spaces">Create project spaces</string>
+    <string name="release_notes_4_7_0_subtitle_create_new_spaces">Infinite Scale users with right permissions can now create project spaces directly from the app</string>
     <!-- Open in web -->
     <string name="ic_action_open_in_web">Open in web</string>
     <string name="ic_action_open_with_web">Open in %1$s (web)</string>
@@ -818,6 +821,8 @@
     <string name="content_description_space_name">%1$s space name</string>
     <string name="content_description_space_three_dot_menu">%1$s space menu</string>
     <string name="content_description_space_subtitle">%1$s space subtitle</string>
+    <string name="content_description_create_button">Create button</string>
+    <string name="content_description_cancel_button">Cancel button</string>
 
     <string name="create_shortcut_dialog_title">Create a shortcut</string>
     <string name="create_shortcut_dialog_url">URL</string>
@@ -826,6 +831,25 @@
     <string name="create_shortcut_dialog_url_extension">.url</string>
     <string name="open_shortcut_description">This shortcut points to:</string>
     <string name="open_shortcut_title">Open link</string>
+
+    <string name="create_space_dialog_title">Create a space</string>
+    <string name="create_space_dialog_name">Name</string>
+    <string name="create_space_dialog_subtitle">Subtitle</string>
+    <string name="create_space_dialog_quota">Quota</string>
+    <string-array name="create_space_dialog_quota_units">
+        <item>1 GB</item>
+        <item>2 GB</item>
+        <item>5 GB</item>
+        <item>10 GB</item>
+        <item>50 GB</item>
+        <item>100 GB</item>
+        <item>No restriction</item>
+    </string-array>
+    <string name="create_space_dialog_empty_error">Space name must not be empty</string>
+    <string name="create_space_dialog_length_error">Space name must not be longer than 255 characters</string>
+    <string name="create_space_dialog_characters_error">Forbidden characters: / \\ . : ? * &quot; ' &gt; &lt; |</string>
+    <string name="create_space_correctly">Space created correctly</string>
+    <string name="create_space_failed">Space could not be created</string>
 
     <string name="feedback_dialog_get_in_contact_description"><![CDATA[ Ask for help in our <a href=\"%1$s\"><b>forum</b></a> or contribute in our <a href=\"%2$s\"><b>GitHub repo</b></a>]]></string>
 

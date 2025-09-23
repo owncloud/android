@@ -36,4 +36,5 @@ interface UserRepository {
     fun getAllUserQuotasAsFlow(): Flow<List<UserQuota>>
     fun getUserAvatar(accountName: String): UserAvatar
     fun getUserId(accountName: String): String
+    fun getUserPermissions(accountName: String, accountId: String): List<String>
 }

@@ -29,16 +29,20 @@ import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.files.model.OCFile.Companion.ROOT_PATH
 import com.owncloud.android.domain.files.usecases.GetFileByRemotePathUseCase
 import com.owncloud.android.domain.spaces.model.OCSpace
+import com.owncloud.android.domain.spaces.usecases.CreateSpaceUseCase
 import com.owncloud.android.domain.spaces.usecases.GetPersonalAndProjectSpacesWithSpecialsForAccountAsStreamUseCase
 import com.owncloud.android.domain.spaces.usecases.GetPersonalSpacesWithSpecialsForAccountAsStreamUseCase
 import com.owncloud.android.domain.spaces.usecases.GetProjectSpacesWithSpecialsForAccountAsStreamUseCase
 import com.owncloud.android.domain.spaces.usecases.RefreshSpacesFromServerAsyncUseCase
 import com.owncloud.android.domain.user.usecases.GetUserIdAsyncUseCase
+import com.owncloud.android.domain.user.usecases.GetUserPermissionsAsyncUseCase
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.ViewModelExt.runUseCaseWithResult
 import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -51,6 +55,8 @@ class SpacesListViewModel(
     private val getFileByRemotePathUseCase: GetFileByRemotePathUseCase,
     private val getStoredCapabilitiesUseCase: GetStoredCapabilitiesUseCase,
     private val getUserIdAsyncUseCase: GetUserIdAsyncUseCase,
+    private val getUserPermissionsAsyncUseCase: GetUserPermissionsAsyncUseCase,
+    private val createSpaceUseCase: CreateSpaceUseCase,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
     private val accountName: String,
     private val showPersonalSpace: Boolean,
@@ -62,6 +68,12 @@ class SpacesListViewModel(
 
     private val _userId = MutableStateFlow<Event<UIResult<String>>?>(null)
     val userId: StateFlow<Event<UIResult<String>>?> = _userId
+
+    private val _userPermissions = MutableStateFlow<Event<UIResult<List<String>>>?>(null)
+    val userPermissions: StateFlow<Event<UIResult<List<String>>>?> = _userPermissions
+
+    private val _createSpaceFlow = MutableSharedFlow<Event<UIResult<Unit>>?>()
+    val createSpaceFlow: SharedFlow<Event<UIResult<Unit>>?> = _createSpaceFlow
 
     init {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
@@ -122,6 +134,26 @@ class SpacesListViewModel(
         useCase = getUserIdAsyncUseCase,
         useCaseParams = GetUserIdAsyncUseCase.Params(accountName = accountName)
     )
+
+    fun getUserPermissions(
+        accountId: String
+    ) = runUseCaseWithResult(
+        coroutineDispatcher = coroutinesDispatcherProvider.io,
+        showLoading = false,
+        flow = _userPermissions,
+        useCase = getUserPermissionsAsyncUseCase,
+        useCaseParams = GetUserPermissionsAsyncUseCase.Params(accountName = accountName, accountId = accountId)
+    )
+
+    fun createSpace(spaceName: String, spaceSubtitle: String, spaceQuota: Long) {
+        viewModelScope.launch(coroutinesDispatcherProvider.io) {
+            when (val result = createSpaceUseCase(CreateSpaceUseCase.Params(accountName, spaceName, spaceSubtitle, spaceQuota))) {
+                is UseCaseResult.Success -> _createSpaceFlow.emit(Event(UIResult.Success(result.getDataOrNull())))
+                is UseCaseResult.Error -> _createSpaceFlow.emit(Event(UIResult.Error(error = result.getThrowableOrNull())))
+            }
+            refreshSpacesFromServerAsyncUseCase(RefreshSpacesFromServerAsyncUseCase.Params(accountName))
+        }
+    }
 
     data class SpacesListUiState(
         val spaces: List<OCSpace>,

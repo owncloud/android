@@ -28,6 +28,7 @@ import com.owncloud.android.testutil.OC_ACCOUNT_NAME
 import com.owncloud.android.testutil.OC_USER_AVATAR
 import com.owncloud.android.testutil.OC_USER_ID
 import com.owncloud.android.testutil.OC_USER_INFO
+import com.owncloud.android.testutil.OC_USER_PERMISSIONS
 import com.owncloud.android.testutil.OC_USER_QUOTA
 import io.mockk.every
 import io.mockk.mockk
@@ -189,6 +190,20 @@ class OCUserRepositoryTest {
             localAuthenticationDataSource.getUserId(OC_ACCOUNT_NAME)
             remoteUserDataSource.getUserId(OC_ACCOUNT_NAME)
             localAuthenticationDataSource.saveIdForAccount(OC_ACCOUNT_NAME, OC_USER_ID)
+        }
+    }
+
+    @Test
+    fun `getUserPermissions returns a list of String with user permissions`() {
+        every {
+            remoteUserDataSource.getUserPermissions(OC_ACCOUNT_NAME, OC_USER_ID)
+        } returns OC_USER_PERMISSIONS
+
+        val userPermissions = ocUserRepository.getUserPermissions(OC_ACCOUNT_NAME, OC_USER_ID)
+        assertEquals(OC_USER_PERMISSIONS, userPermissions)
+
+        verify(exactly = 1) {
+            remoteUserDataSource.getUserPermissions(OC_ACCOUNT_NAME, OC_USER_ID)
         }
     }
 

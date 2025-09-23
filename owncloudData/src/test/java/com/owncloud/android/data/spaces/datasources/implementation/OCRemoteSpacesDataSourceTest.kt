@@ -25,6 +25,7 @@ import com.owncloud.android.data.ClientManager
 import com.owncloud.android.data.spaces.datasources.implementation.OCRemoteSpacesDataSource.Companion.toModel
 import com.owncloud.android.lib.resources.spaces.services.OCSpacesService
 import com.owncloud.android.testutil.OC_ACCOUNT_NAME
+import com.owncloud.android.testutil.OC_SPACE_PROJECT_WITH_IMAGE
 import com.owncloud.android.testutil.SPACE_RESPONSE
 import com.owncloud.android.utils.createRemoteOperationResultMock
 import io.mockk.every
@@ -64,4 +65,35 @@ class OCRemoteSpacesDataSourceTest {
             ocSpaceService.getSpaces()
         }
     }
+
+    @Test
+    fun `createSpace creates a new project space correctly`() {
+        val createSpaceOperationResult = createRemoteOperationResultMock(SPACE_RESPONSE, isSuccess = true)
+
+        every {
+            ocSpaceService.createSpace(
+                spaceName = OC_SPACE_PROJECT_WITH_IMAGE.name,
+                spaceSubtitle = OC_SPACE_PROJECT_WITH_IMAGE.description!!,
+                spaceQuota = OC_SPACE_PROJECT_WITH_IMAGE.quota?.total!!
+            )
+        } returns createSpaceOperationResult
+
+        val spaceResult = ocRemoteSpacesDataSource.createSpace(
+            accountName = OC_ACCOUNT_NAME,
+            spaceName = OC_SPACE_PROJECT_WITH_IMAGE.name,
+            spaceSubtitle = OC_SPACE_PROJECT_WITH_IMAGE.description!!,
+            spaceQuota = OC_SPACE_PROJECT_WITH_IMAGE.quota?.total!!
+        )
+        assertEquals(SPACE_RESPONSE.toModel(OC_ACCOUNT_NAME), spaceResult)
+
+        verify(exactly = 1) {
+            clientManager.getSpacesService(OC_ACCOUNT_NAME)
+            ocSpaceService.createSpace(
+                spaceName = OC_SPACE_PROJECT_WITH_IMAGE.name,
+                spaceSubtitle = OC_SPACE_PROJECT_WITH_IMAGE.description!!,
+                spaceQuota = OC_SPACE_PROJECT_WITH_IMAGE.quota?.total!!
+            )
+        }
+    }
+
 }

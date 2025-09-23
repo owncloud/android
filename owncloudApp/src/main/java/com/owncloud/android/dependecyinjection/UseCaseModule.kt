@@ -98,6 +98,7 @@ import com.owncloud.android.domain.spaces.usecases.GetSpaceByIdForAccountUseCase
 import com.owncloud.android.domain.spaces.usecases.GetSpaceWithSpecialsByIdForAccountUseCase
 import com.owncloud.android.domain.spaces.usecases.GetSpacesFromEveryAccountUseCaseAsStream
 import com.owncloud.android.domain.spaces.usecases.RefreshSpacesFromServerAsyncUseCase
+import com.owncloud.android.domain.spaces.usecases.CreateSpaceUseCase
 import com.owncloud.android.domain.transfers.usecases.ClearSuccessfulTransfersUseCase
 import com.owncloud.android.domain.transfers.usecases.GetAllTransfersAsStreamUseCase
 import com.owncloud.android.domain.transfers.usecases.GetAllTransfersUseCase
@@ -110,6 +111,7 @@ import com.owncloud.android.domain.user.usecases.GetUserQuotasUseCase
 import com.owncloud.android.domain.user.usecases.GetUserQuotasAsStreamUseCase
 import com.owncloud.android.domain.user.usecases.RefreshUserQuotaFromServerAsyncUseCase
 import com.owncloud.android.domain.user.usecases.GetUserIdAsyncUseCase
+import com.owncloud.android.domain.user.usecases.GetUserPermissionsAsyncUseCase
 import com.owncloud.android.domain.webfinger.usecases.GetOwnCloudInstanceFromWebFingerUseCase
 import com.owncloud.android.domain.webfinger.usecases.GetOwnCloudInstancesFromAuthenticatedWebFingerUseCase
 import com.owncloud.android.usecases.accounts.RemoveAccountUseCase
@@ -219,16 +221,17 @@ val useCaseModule = module {
     factoryOf(::RefreshSharesFromServerAsyncUseCase)
 
     // Spaces
+    factoryOf(::CreateSpaceUseCase)
     factoryOf(::GetPersonalAndProjectSpacesForAccountUseCase)
     factoryOf(::GetPersonalAndProjectSpacesWithSpecialsForAccountAsStreamUseCase)
     factoryOf(::GetPersonalSpaceForAccountUseCase)
     factoryOf(::GetPersonalSpacesWithSpecialsForAccountAsStreamUseCase)
     factoryOf(::GetProjectSpacesWithSpecialsForAccountAsStreamUseCase)
+    factoryOf(::GetSpaceByIdForAccountUseCase)
     factoryOf(::GetSpaceWithSpecialsByIdForAccountUseCase)
     factoryOf(::GetSpacesFromEveryAccountUseCaseAsStream)
     factoryOf(::GetWebDavUrlForSpaceUseCase)
     factoryOf(::RefreshSpacesFromServerAsyncUseCase)
-    factoryOf(::GetSpaceByIdForAccountUseCase)
 
     // Transfers
     factoryOf(::CancelDownloadForFileUseCase)
@@ -262,6 +265,7 @@ val useCaseModule = module {
     factoryOf(::GetUserAvatarAsyncUseCase)
     factoryOf(::GetUserIdAsyncUseCase)
     factoryOf(::GetUserInfoAsyncUseCase)
+    factoryOf(::GetUserPermissionsAsyncUseCase)
     factoryOf(::GetUserQuotasAsStreamUseCase)
     factoryOf(::GetUserQuotasUseCase)
     factoryOf(::RefreshUserQuotaFromServerAsyncUseCase)

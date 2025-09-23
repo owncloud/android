@@ -2,7 +2,9 @@
  * ownCloud Android client application
  *
  * @author Abel García de Prada
- * Copyright (C) 2022 ownCloud GmbH.
+ * @author Jorge Aguado Recio
+ *
+ * Copyright (C) 2025 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -42,6 +44,13 @@ class OCRemoteSpacesDataSource(
         }
 
         return spacesResponse.map { it.toModel(accountName) }
+    }
+
+    override fun createSpace(accountName: String, spaceName: String, spaceSubtitle: String, spaceQuota: Long): OCSpace {
+        val spaceResponse = executeRemoteOperation {
+            clientManager.getSpacesService(accountName).createSpace(spaceName, spaceSubtitle, spaceQuota)
+        }
+        return spaceResponse.toModel(accountName)
     }
 
     companion object {
