@@ -40,7 +40,9 @@ import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.ViewModelExt.runUseCaseWithResult
 import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -69,6 +71,9 @@ class SpacesListViewModel(
 
     private val _userPermissions = MutableStateFlow<Event<UIResult<List<String>>>?>(null)
     val userPermissions: StateFlow<Event<UIResult<List<String>>>?> = _userPermissions
+
+    private val _createSpaceFlow = MutableSharedFlow<Event<UIResult<Unit>>?>()
+    val createSpaceFlow: SharedFlow<Event<UIResult<Unit>>?> = _createSpaceFlow
 
     init {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
@@ -142,14 +147,10 @@ class SpacesListViewModel(
 
     fun createSpace(spaceName: String, spaceSubtitle: String, spaceQuota: Long) {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
-            createSpaceUseCase(
-                CreateSpaceUseCase.Params(
-                    accountName = accountName,
-                    spaceName = spaceName,
-                    spaceSubtitle = spaceSubtitle,
-                    spaceQuota = spaceQuota
-                )
-            )
+            when (val result = createSpaceUseCase(CreateSpaceUseCase.Params(accountName, spaceName, spaceSubtitle, spaceQuota))) {
+                is UseCaseResult.Success -> _createSpaceFlow.emit(Event(UIResult.Success(result.getDataOrNull())))
+                is UseCaseResult.Error -> _createSpaceFlow.emit(Event(UIResult.Error(error = result.getThrowableOrNull())))
+            }
             refreshSpacesFromServerAsyncUseCase(RefreshSpacesFromServerAsyncUseCase.Params(accountName))
         }
     }

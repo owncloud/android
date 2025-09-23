@@ -28,17 +28,12 @@ import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.DialogFragment
 import com.owncloud.android.R
 import com.owncloud.android.databinding.CreateSpaceDialogBinding
-import com.owncloud.android.presentation.spaces.SpacesListViewModel
-import org.koin.androidx.viewmodel.ext.android.viewModel
-import org.koin.core.parameter.parametersOf
 
 class CreateSpaceDialogFragment : DialogFragment() {
     private var _binding: CreateSpaceDialogBinding? = null
     private val binding get() = _binding!!
 
-    private val spacesListViewModel: SpacesListViewModel by viewModel {
-        parametersOf(requireArguments().getString(ARG_ACCOUNT_NAME), false)
-    }
+    private lateinit var createSpaceListener: CreateSpaceListener
 
     private val forbiddenRegex = Regex(FORBIDDEN_CHARACTERS)
 
@@ -57,8 +52,11 @@ class CreateSpaceDialogFragment : DialogFragment() {
             }
             createSpaceButton.setOnClickListener {
                 val spaceQuota = convertToBytes(binding.createSpaceDialogQuotaUnit.selectedItem.toString())
-                spacesListViewModel.createSpace(binding.createSpaceDialogNameValue.text.toString(),
-                    binding.createSpaceDialogSubtitleValue.text.toString(), spaceQuota)
+                createSpaceListener.createSpace(
+                    spaceName = binding.createSpaceDialogNameValue.text.toString(),
+                    spaceSubtitle = binding.createSpaceDialogSubtitleValue.text.toString(),
+                    spaceQuota = spaceQuota
+                )
                 dialog?.dismiss()
             }
         }
@@ -91,15 +89,22 @@ class CreateSpaceDialogFragment : DialogFragment() {
         return quotaNumber * 1_000_000_000L
     }
 
+    interface CreateSpaceListener {
+        fun createSpace(spaceName: String, spaceSubtitle: String, spaceQuota: Long)
+    }
+
     companion object {
         private const val ARG_ACCOUNT_NAME = "ACCOUNT_NAME"
         private const val FORBIDDEN_CHARACTERS = """[/\\.:?*"'><|]"""
 
-        fun newInstance(accountName: String?): CreateSpaceDialogFragment {
+        fun newInstance(accountName: String?, listener: CreateSpaceListener): CreateSpaceDialogFragment {
             val args = Bundle().apply {
                 putString(ARG_ACCOUNT_NAME, accountName)
             }
-            return CreateSpaceDialogFragment().apply { arguments = args }
+            return CreateSpaceDialogFragment().apply {
+                createSpaceListener = listener
+                arguments = args
+            }
         }
     }
 }

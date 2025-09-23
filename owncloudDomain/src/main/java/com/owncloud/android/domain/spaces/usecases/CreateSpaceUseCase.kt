@@ -20,12 +20,12 @@
 
 package com.owncloud.android.domain.spaces.usecases
 
-import com.owncloud.android.domain.BaseUseCase
+import com.owncloud.android.domain.BaseUseCaseWithResult
 import com.owncloud.android.domain.spaces.SpacesRepository
 
 class CreateSpaceUseCase(
     private val spacesRepository: SpacesRepository
-): BaseUseCase<Unit, CreateSpaceUseCase.Params>() {
+): BaseUseCaseWithResult<Unit, CreateSpaceUseCase.Params>() {
 
     override fun run(params: Params) = spacesRepository.createSpace(params.accountName, params.spaceName, params.spaceSubtitle, params.spaceQuota)
 

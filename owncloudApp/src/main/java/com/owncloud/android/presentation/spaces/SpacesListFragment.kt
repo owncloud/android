@@ -44,6 +44,7 @@ import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.domain.spaces.model.OCSpace
 import com.owncloud.android.extensions.collectLatestLifecycleFlow
 import com.owncloud.android.extensions.showErrorInSnackbar
+import com.owncloud.android.extensions.showMessageInSnackbar
 import com.owncloud.android.extensions.toDrawableRes
 import com.owncloud.android.extensions.toSubtitleStringRes
 import com.owncloud.android.extensions.toTitleStringRes
@@ -55,7 +56,12 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import timber.log.Timber
 
-class SpacesListFragment : SpacesListAdapter.SpacesListAdapterListener, Fragment(), SearchView.OnQueryTextListener {
+class SpacesListFragment :
+    SpacesListAdapter.SpacesListAdapterListener,
+    Fragment(),
+    SearchView.OnQueryTextListener,
+    CreateSpaceDialogFragment.CreateSpaceListener
+{
     private var _binding: SpacesListFragmentBinding? = null
     private val binding get() = _binding!!
 
@@ -106,7 +112,7 @@ class SpacesListFragment : SpacesListAdapter.SpacesListAdapterListener, Fragment
         }
 
         binding.fabCreateSpace.setOnClickListener {
-            val dialog = CreateSpaceDialogFragment.newInstance(requireArguments().getString(BUNDLE_ACCOUNT_NAME))
+            val dialog = CreateSpaceDialogFragment.newInstance(requireArguments().getString(BUNDLE_ACCOUNT_NAME), this)
             dialog.show(requireActivity().supportFragmentManager, DIALOG_CREATE_SPACE)
             binding.fabCreateSpace.isFocusable = false
         }
@@ -170,6 +176,17 @@ class SpacesListFragment : SpacesListAdapter.SpacesListAdapterListener, Fragment
                 }
             }
         }
+
+        collectLatestLifecycleFlow(spacesListViewModel.createSpaceFlow) { event ->
+            event?.let {
+                when (val uiResult = event.peekContent()) {
+                    is UIResult.Success -> { showMessageInSnackbar(getString(R.string.create_space_correctly)) }
+                    is UIResult.Loading -> { }
+                    is UIResult.Error -> { showErrorInSnackbar(R.string.create_space_failed, uiResult.error) }
+                }
+            }
+        }
+
     }
 
     private fun showOrHideEmptyView(spacesList: List<OCSpace>) {
@@ -244,6 +261,10 @@ class SpacesListFragment : SpacesListAdapter.SpacesListAdapterListener, Fragment
     override fun onQueryTextChange(newText: String?): Boolean {
         newText?.let { spacesListViewModel.updateSearchFilter(it) }
         return true
+    }
+
+    override fun createSpace(spaceName: String, spaceSubtitle: String, spaceQuota: Long) {
+        spacesListViewModel.createSpace(spaceName, spaceSubtitle, spaceQuota)
     }
 
     fun setSearchListener(searchView: SearchView) {
