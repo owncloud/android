@@ -25,7 +25,7 @@
         <item name="popupMenuBackground">@drawable/bg_popup_menu</item>
 
         <!-- properties for action mode -->
-        <item name="actionBarSize">56dp</item>
+        <item name="actionBarSize">@dimen/homecloud_toolbar_height</item>
         <item name="windowActionModeOverlay">true</item>
         <item name="actionModeBackground">@color/action_mode_background</item>
         <item name="actionModeCloseButtonStyle">@style/homeCloud.Toolbar.ActionMode.Button</item>
