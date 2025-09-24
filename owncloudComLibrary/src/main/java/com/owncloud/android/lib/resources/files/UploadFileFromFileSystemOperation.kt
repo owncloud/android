@@ -39,6 +39,7 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCo
 import com.owncloud.android.lib.common.utils.isOneOf
 import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.Response
 import timber.log.Timber
 import java.io.File
 import java.net.URL
@@ -119,7 +120,7 @@ open class UploadFileFromFileSystemOperation(
             addRequestHeader(HttpConstants.OC_X_OC_MTIME_HEADER, lastModifiedTimestamp)
         }
 
-        val status = client.executeHttpMethod(putMethod)
+        val status = 413
         return if (isSuccess(status)) {
             etag = WebdavUtils.getEtagFromResponse(putMethod)
             // Get rid of extra quotas
@@ -131,6 +132,13 @@ open class UploadFileFromFileSystemOperation(
             }
             RemoteOperationResult<Unit>(ResultCode.OK).apply { data = Unit }
         } else { // synchronization failed
+            putMethod!!.statusCode = 413
+            putMethod!!.response = Response.Builder()
+                .code(413)
+                .message("Simulated Payload Too Large")
+                .protocol(okhttp3.Protocol.HTTP_1_1)
+                .request(putMethod!!.request)
+                .build()
             RemoteOperationResult<Unit>(putMethod)
         }
     }

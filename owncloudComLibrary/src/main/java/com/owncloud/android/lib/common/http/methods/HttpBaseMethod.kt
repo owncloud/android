@@ -53,7 +53,7 @@ abstract class HttpBaseMethod constructor(url: URL) {
     var readTimeoutUnit: TimeUnit? = null
         private set
 
-    val statusCode: Int
+    var statusCode: Int = 0
         get() = response.code
     val statusMessage: String
         get() = response.message
