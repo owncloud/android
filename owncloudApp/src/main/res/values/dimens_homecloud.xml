@@ -10,4 +10,6 @@
 
     <dimen name="login_screen_fields_width">@dimen/match_parent</dimen>
 
+    <dimen name="homecloud_toolbar_height">56dp</dimen>
+
 </resources>
