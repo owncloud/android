@@ -244,6 +244,9 @@ public class RemoteOperationResult<T>
             case HttpConstants.HTTP_TOO_EARLY:
                 mCode = ResultCode.TOO_EARLY;
                 break;
+            case HttpConstants.HTTP_REQUEST_TOO_LONG:
+                mCode = ResultCode.PAYLOAD_TOO_LONG;
+                break;
             default:
                 break;
         }
@@ -596,6 +599,7 @@ public class RemoteOperationResult<T>
         SPECIFIC_BAD_REQUEST,
         TOO_EARLY,
         NETWORK_ERROR,
-        RESOURCE_LOCKED
+        RESOURCE_LOCKED,
+        PAYLOAD_TOO_LONG
     }
 }

@@ -3,8 +3,9 @@
  *
  * @author David González Verdugo
  * @author Juan Carlos Garrote Gascón
+ * @author Jorge Aguado Recio
  *
- * Copyright (C) 2022 ownCloud GmbH.
+ * Copyright (C) 2025 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -51,6 +52,7 @@ import com.owncloud.android.domain.exceptions.OAuth2ErrorAccessDeniedException
 import com.owncloud.android.domain.exceptions.OAuth2ErrorException
 import com.owncloud.android.domain.exceptions.PartialCopyDoneException
 import com.owncloud.android.domain.exceptions.PartialMoveDoneException
+import com.owncloud.android.domain.exceptions.PayloadTooLongException
 import com.owncloud.android.domain.exceptions.QuotaExceededException
 import com.owncloud.android.domain.exceptions.RedirectToNonSecureException
 import com.owncloud.android.domain.exceptions.ResourceLockedException
@@ -143,6 +145,7 @@ private fun <T> handleRemoteOperationResult(
         RemoteOperationResult.ResultCode.TOO_EARLY -> throw TooEarlyException()
         RemoteOperationResult.ResultCode.NETWORK_ERROR -> throw NetworkErrorException()
         RemoteOperationResult.ResultCode.RESOURCE_LOCKED -> throw ResourceLockedException()
+        RemoteOperationResult.ResultCode.PAYLOAD_TOO_LONG -> throw PayloadTooLongException()
         else -> throw Exception("An unknown error has occurred")
     }
 }
