@@ -753,6 +753,9 @@
   <string name="create_shortcut_dialog_url_extension">.url</string>
   <string name="open_shortcut_description">Este atalho aponta para:</string>
   <string name="open_shortcut_title">Link aberto</string>
+  <string name="create_space_dialog_name">Nome</string>
+  <string name="create_space_dialog_subtitle">Subtítulo</string>
+  <string name="create_space_dialog_quota">Cota</string>
   <string name="feedback_dialog_get_in_contact_description"><![CDATA[ Peça ajuda em nosso <a href="%1$s"><b>fórum</b></a> ou contribua em nosso <a href="%2$s"><b>repositório do GitHub</b></a>]]></string>
   <string name="link_role_accessibility">Linque</string>
   <string name="button_role_accessibility">Botão</string>

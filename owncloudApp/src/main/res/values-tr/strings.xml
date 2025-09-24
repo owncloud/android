@@ -646,6 +646,9 @@
   <string name="create_shortcut_dialog_url_extension">.url</string>
   <string name="open_shortcut_description">Bu kısayolun hedefi:</string>
   <string name="open_shortcut_title">Bağlantıyı aç</string>
+  <string name="create_space_dialog_name">Ad</string>
+  <string name="create_space_dialog_subtitle">Alt başlık</string>
+  <string name="create_space_dialog_quota">Kota</string>
   <string name="link_role_accessibility">Bağlantı</string>
   <string name="button_role_accessibility">Tuş</string>
   <string name="folder_picker_label">Klasör seçici</string>

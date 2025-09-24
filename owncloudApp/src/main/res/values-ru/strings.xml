@@ -738,6 +738,8 @@
   <string name="create_shortcut_dialog_url_extension">.url</string>
   <string name="open_shortcut_description">Этот ярлык указывает на:</string>
   <string name="open_shortcut_title">Открыть ссылку</string>
+  <string name="create_space_dialog_name">Имя</string>
+  <string name="create_space_dialog_quota">Квота</string>
   <string name="link_role_accessibility">Ссылка</string>
   <string name="button_role_accessibility">Кнопка</string>
   <string name="folder_picker_label">Выбор папки</string>

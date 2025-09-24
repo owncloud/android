@@ -743,6 +743,9 @@
   <string name="create_shortcut_dialog_url_extension">.url</string>
   <string name="open_shortcut_description">Oikopolun kohde:</string>
   <string name="open_shortcut_title">Avaa linkki</string>
+  <string name="create_space_dialog_name">Nimi</string>
+  <string name="create_space_dialog_subtitle">Aliotsikko</string>
+  <string name="create_space_dialog_quota">Kiintiö</string>
   <string name="link_role_accessibility">Linkki</string>
   <string name="button_role_accessibility">Painike</string>
   <string name="folder_picker_label">Kansion valitsin</string>

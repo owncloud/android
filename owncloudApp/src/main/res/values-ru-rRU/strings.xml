@@ -715,6 +715,9 @@
   <string name="content_description_create_new_folder">Создать новую папку</string>
   <string name="create_shortcut_dialog_url">URL</string>
   <string name="open_shortcut_title">Открыть ссылку</string>
+  <string name="create_space_dialog_name">Имя</string>
+  <string name="create_space_dialog_subtitle">подзаголовок</string>
+  <string name="create_space_dialog_quota">квота</string>
   <string name="link_role_accessibility">Ссылка</string>
   <string name="pattern_label">Шаблон</string>
   <string name="image_preview_label">Предпросмотр</string>

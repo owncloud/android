@@ -591,6 +591,9 @@ Téléchargez-le ici : %2$s</string>
   <string name="content_description_create_new_folder">Créer un nouveau dossier</string>
   <string name="create_shortcut_dialog_url">URL</string>
   <string name="open_shortcut_title">Ouvrir le lien</string>
+  <string name="create_space_dialog_name">Nom</string>
+  <string name="create_space_dialog_subtitle">Sous titre</string>
+  <string name="create_space_dialog_quota">Quota</string>
   <string name="link_role_accessibility">Lien</string>
   <string name="pattern_label">Motif de nom</string>
   <string name="image_preview_label">Prévisualisation de l\'image</string>
