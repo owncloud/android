@@ -751,6 +751,9 @@
   <string name="create_shortcut_dialog_url_extension">.url</string>
   <string name="open_shortcut_description">Diese Verknüpfung verweist auf:</string>
   <string name="open_shortcut_title">Link öffnen</string>
+  <string name="create_space_dialog_name">Name</string>
+  <string name="create_space_dialog_subtitle">Untertitel</string>
+  <string name="create_space_dialog_quota">Quota</string>
   <string name="feedback_dialog_get_in_contact_description"><![CDATA[ Fragen Sie für Hilfe in unserem <a href="%1$s"><b>Forum</b></a> oder machen Sie einen Beitrag in unserem <a href="%2$s"><b>GitHub repo</b></a>]]></string>
   <string name="link_role_accessibility">Link</string>
   <string name="button_role_accessibility">Schaltfläche</string>

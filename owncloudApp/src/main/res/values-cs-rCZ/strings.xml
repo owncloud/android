@@ -663,6 +663,9 @@ správce systému.</string>
   <string name="content_description_create_new_folder">Vytvořit novou složku</string>
   <string name="create_shortcut_dialog_url">URL</string>
   <string name="open_shortcut_title">Otevřít odkaz</string>
+  <string name="create_space_dialog_name">Název</string>
+  <string name="create_space_dialog_subtitle">Podtitulek</string>
+  <string name="create_space_dialog_quota">Kvóta</string>
   <string name="feedback_dialog_get_in_contact_description"><![CDATA[ Zeptejte se na našem <a href="%1$s"><b>fóru</b></a> nebo přispějte na našem  <a href="%2$s"><b>GitHubu</b></a>]]></string>
   <string name="link_role_accessibility">Odkaz</string>
   <string name="pattern_label">Maska</string>
