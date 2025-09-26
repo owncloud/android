@@ -75,5 +75,6 @@ interface FileRepository {
     fun updateDownloadedFilesStorageDirectoryInStoragePath(oldDirectory: String, newDirectory: String)
     fun saveDownloadWorkerUuid(fileId: Long, workerUuid: UUID)
     fun cleanWorkersUuid(fileId: Long)
+    fun searchFiles(searchPattern: String, ignoreCase: Boolean) : List<OCFile>
 
 }
