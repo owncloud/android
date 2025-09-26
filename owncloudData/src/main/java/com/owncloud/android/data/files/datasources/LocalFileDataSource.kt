@@ -64,4 +64,5 @@ interface LocalFileDataSource {
     fun saveDownloadWorkerUuid(fileId: Long, workerUuid: UUID)
     fun cleanWorkersUuid(fileId: Long)
     fun updateFileWithLastUsage(fileId: Long, lastUsage: Long?)
+    fun searchFiles(searchPattern: String, ignoreCase: Boolean) : List<OCFile>
 }

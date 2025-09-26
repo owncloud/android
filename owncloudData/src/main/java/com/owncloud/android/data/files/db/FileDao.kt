@@ -145,6 +145,16 @@ interface FileDao {
     @Query(SELECT_FILES_WHERE_LAST_USAGE_IS_OLDER_THAN_GIVEN_TIME)
     fun getFilesWithLastUsageOlderThanGivenTime(milliseconds: Long): List<OCFileEntity>
 
+    @Query(SEARCH_FILES_CASE_SENSITIVE)
+    fun searchFilesCaseSensitive(
+        searchPattern: String
+    ): List<OCFileEntity>
+
+    @Query(SEARCH_FILES_CASE_INSENSITIVE)
+    fun searchFilesCaseInsensitive(
+        searchPattern: String
+    ): List<OCFileEntity>
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertOrIgnore(ocFileEntity: OCFileEntity): Long
 
@@ -614,6 +624,18 @@ interface FileDao {
             DELETE
             FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME}
             WHERE owner = :accountName
+        """
+
+        private const val SEARCH_FILES_CASE_INSENSITIVE = """
+            SELECT *
+            FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME}
+            WHERE LOWER(name) LIKE '%' || LOWER(:searchPattern) || '%'
+        """
+
+        private const val SEARCH_FILES_CASE_SENSITIVE = """
+            SELECT *
+            FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME}
+            WHERE name LIKE '%' || :searchPattern || '%'
         """
     }
 }
