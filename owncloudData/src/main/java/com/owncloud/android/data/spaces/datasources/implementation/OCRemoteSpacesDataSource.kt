@@ -53,6 +53,9 @@ class OCRemoteSpacesDataSource(
         return spaceResponse.toModel(accountName)
     }
 
+    override fun getSpacePermissions(accountName: String, spaceId: String): List<String> =
+        executeRemoteOperation { clientManager.getSpacesService(accountName).getSpacePermissions(spaceId) }
+
     companion object {
 
         @VisibleForTesting
