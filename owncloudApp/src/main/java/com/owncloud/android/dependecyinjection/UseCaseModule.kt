@@ -35,11 +35,6 @@ import com.owncloud.android.domain.authentication.usecases.GetBaseUrlUseCase
 import com.owncloud.android.domain.authentication.usecases.LoginBasicAsyncUseCase
 import com.owncloud.android.domain.authentication.usecases.LoginOAuthAsyncUseCase
 import com.owncloud.android.domain.authentication.usecases.SupportsOAuth2UseCase
-import com.owncloud.android.domain.availableoffline.usecases.GetFilesAvailableOfflineFromAccountAsStreamUseCase
-import com.owncloud.android.domain.availableoffline.usecases.GetFilesAvailableOfflineFromAccountUseCase
-import com.owncloud.android.domain.availableoffline.usecases.GetFilesAvailableOfflineFromEveryAccountUseCase
-import com.owncloud.android.domain.availableoffline.usecases.SetFilesAsAvailableOfflineUseCase
-import com.owncloud.android.domain.availableoffline.usecases.UnsetFilesAsAvailableOfflineUseCase
 import com.owncloud.android.domain.automaticuploads.usecases.GetAutomaticUploadsConfigurationUseCase
 import com.owncloud.android.domain.automaticuploads.usecases.GetPictureUploadsConfigurationStreamUseCase
 import com.owncloud.android.domain.automaticuploads.usecases.GetVideoUploadsConfigurationStreamUseCase
@@ -47,10 +42,14 @@ import com.owncloud.android.domain.automaticuploads.usecases.ResetPictureUploads
 import com.owncloud.android.domain.automaticuploads.usecases.ResetVideoUploadsUseCase
 import com.owncloud.android.domain.automaticuploads.usecases.SavePictureUploadsConfigurationUseCase
 import com.owncloud.android.domain.automaticuploads.usecases.SaveVideoUploadsConfigurationUseCase
+import com.owncloud.android.domain.availableoffline.usecases.GetFilesAvailableOfflineFromAccountAsStreamUseCase
+import com.owncloud.android.domain.availableoffline.usecases.GetFilesAvailableOfflineFromAccountUseCase
+import com.owncloud.android.domain.availableoffline.usecases.GetFilesAvailableOfflineFromEveryAccountUseCase
+import com.owncloud.android.domain.availableoffline.usecases.SetFilesAsAvailableOfflineUseCase
+import com.owncloud.android.domain.availableoffline.usecases.UnsetFilesAsAvailableOfflineUseCase
 import com.owncloud.android.domain.capabilities.usecases.GetCapabilitiesAsLiveDataUseCase
 import com.owncloud.android.domain.capabilities.usecases.GetStoredCapabilitiesUseCase
 import com.owncloud.android.domain.capabilities.usecases.RefreshCapabilitiesFromServerAsyncUseCase
-import com.owncloud.android.domain.files.usecases.IsAnyFileAvailableLocallyAndNotAvailableOfflineUseCase
 import com.owncloud.android.domain.files.usecases.CleanConflictUseCase
 import com.owncloud.android.domain.files.usecases.CleanWorkersUUIDUseCase
 import com.owncloud.android.domain.files.usecases.CopyFileUseCase
@@ -68,6 +67,7 @@ import com.owncloud.android.domain.files.usecases.GetSearchFolderContentUseCase
 import com.owncloud.android.domain.files.usecases.GetSharedByLinkForAccountAsStreamUseCase
 import com.owncloud.android.domain.files.usecases.GetSharesRootFolderForAccount
 import com.owncloud.android.domain.files.usecases.GetWebDavUrlForSpaceUseCase
+import com.owncloud.android.domain.files.usecases.IsAnyFileAvailableLocallyAndNotAvailableOfflineUseCase
 import com.owncloud.android.domain.files.usecases.ManageDeepLinkUseCase
 import com.owncloud.android.domain.files.usecases.MoveFileUseCase
 import com.owncloud.android.domain.files.usecases.RemoveFileUseCase
@@ -102,12 +102,12 @@ import com.owncloud.android.domain.transfers.usecases.ClearSuccessfulTransfersUs
 import com.owncloud.android.domain.transfers.usecases.GetAllTransfersAsStreamUseCase
 import com.owncloud.android.domain.transfers.usecases.GetAllTransfersUseCase
 import com.owncloud.android.domain.transfers.usecases.UpdatePendingUploadsPathUseCase
-import com.owncloud.android.domain.user.usecases.GetStoredQuotaUseCase
 import com.owncloud.android.domain.user.usecases.GetStoredQuotaAsStreamUseCase
+import com.owncloud.android.domain.user.usecases.GetStoredQuotaUseCase
 import com.owncloud.android.domain.user.usecases.GetUserAvatarAsyncUseCase
 import com.owncloud.android.domain.user.usecases.GetUserInfoAsyncUseCase
-import com.owncloud.android.domain.user.usecases.GetUserQuotasUseCase
 import com.owncloud.android.domain.user.usecases.GetUserQuotasAsStreamUseCase
+import com.owncloud.android.domain.user.usecases.GetUserQuotasUseCase
 import com.owncloud.android.domain.user.usecases.RefreshUserQuotaFromServerAsyncUseCase
 import com.owncloud.android.domain.webfinger.usecases.GetOwnCloudInstanceFromWebFingerUseCase
 import com.owncloud.android.domain.webfinger.usecases.GetOwnCloudInstancesFromAuthenticatedWebFingerUseCase
@@ -117,6 +117,7 @@ import com.owncloud.android.usecases.files.RemoveLocalFilesForAccountUseCase
 import com.owncloud.android.usecases.files.RemoveLocallyFilesWithLastUsageOlderThanGivenTimeUseCase
 import com.owncloud.android.usecases.synchronization.SynchronizeFileUseCase
 import com.owncloud.android.usecases.synchronization.SynchronizeFolderUseCase
+import com.owncloud.android.usecases.synchronization.UpdateFoldersRecursivelyUseCase
 import com.owncloud.android.usecases.transfers.downloads.CancelDownloadForFileUseCase
 import com.owncloud.android.usecases.transfers.downloads.CancelDownloadsRecursivelyUseCase
 import com.owncloud.android.usecases.transfers.downloads.DownloadFileUseCase
@@ -192,6 +193,7 @@ val useCaseModule = module {
     factoryOf(::SortFilesWithSyncInfoUseCase)
     factoryOf(::SynchronizeFileUseCase)
     factoryOf(::SynchronizeFolderUseCase)
+    factoryOf(::UpdateFoldersRecursivelyUseCase)
 
     // Open in web
     factoryOf(::CreateFileWithAppProviderUseCase)

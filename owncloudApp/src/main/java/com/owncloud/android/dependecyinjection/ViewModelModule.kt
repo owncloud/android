@@ -92,7 +92,7 @@ val viewModelModule = module {
     }
     viewModel { (initialFolderToDisplay: OCFile, fileListOption: FileListOption) ->
         MainFileListViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(),
-            initialFolderToDisplay, fileListOption)
+            get(), initialFolderToDisplay, fileListOption)
     }
     viewModel { (ocFile: OCFile) -> ConflictsResolveViewModel(get(), get(), get(), get(), get(), ocFile) }
     viewModel { AuthenticationViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get()) }
