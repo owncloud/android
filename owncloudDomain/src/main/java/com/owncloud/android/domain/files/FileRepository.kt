@@ -63,6 +63,7 @@ interface FileRepository {
         spaceId: String? = null,
         isActionSetFolderAvailableOfflineOrSynchronize: Boolean = false
     ): List<OCFile>
+    fun refreshFoldersRecursively(accountName: String)
     fun deleteFiles(listOfFilesToDelete: List<OCFile>, removeOnlyLocalCopy: Boolean)
     fun renameFile(ocFile: OCFile, newName: String)
     fun saveFile(file: OCFile)
