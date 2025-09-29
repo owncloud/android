@@ -210,12 +210,17 @@ class OCLocalFileDataSource(
 
     override fun searchFiles(
         searchPattern: String,
-        ignoreCase: Boolean
+        ignoreCase: Boolean,
+        minSize: Long,
+        maxSize: Long,
+        mimePrefix: String,
+        minDate: Long,
+        maxDate: Long
     ): List<OCFile> {
         return if (ignoreCase) {
-            fileDao.searchFilesCaseInsensitive(searchPattern)
+            fileDao.searchFilesCaseInsensitive(searchPattern, minSize, maxSize, mimePrefix, minDate, maxDate)
         } else {
-            fileDao.searchFilesCaseSensitive(searchPattern)
+            fileDao.searchFilesCaseSensitive(searchPattern, minSize, maxSize, mimePrefix, minDate, maxDate)
         }.map {
             it.toModel()
         }

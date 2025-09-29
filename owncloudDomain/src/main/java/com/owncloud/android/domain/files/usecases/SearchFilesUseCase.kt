@@ -12,10 +12,26 @@ class SearchFilesUseCase(
         return if (params.searchPattern.isBlank()) {
             emptyList()
         } else {
-            fileRepository.searchFiles(params.searchPattern, params.ignoreCase)
+            fileRepository.searchFiles(
+                searchPattern = params.searchPattern,
+                ignoreCase = params.ignoreCase,
+                minSize = params.minSize,
+                maxSize = params.maxSize,
+                mimePrefix = params.mimePrefix,
+                minDate = params.minDate,
+                maxDate = params.maxDate,
+            )
         }
     }
 
-    data class Params(val searchPattern: String, val ignoreCase: Boolean = true)
+    data class Params(
+        val searchPattern: String,
+        val ignoreCase: Boolean = true,
+        val minSize: Long = 0L,
+        val maxSize: Long = Long.MAX_VALUE,
+        val mimePrefix: String = "",
+        val minDate: Long = 0L,
+        val maxDate: Long = Long.MAX_VALUE,
+    )
 
 }

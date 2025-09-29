@@ -147,12 +147,22 @@ interface FileDao {
 
     @Query(SEARCH_FILES_CASE_SENSITIVE)
     fun searchFilesCaseSensitive(
-        searchPattern: String
+        searchPattern: String,
+        minSize: Long,
+        maxSize: Long,
+        mimePrefix: String,
+        minDate: Long,
+        maxDate: Long,
     ): List<OCFileEntity>
 
     @Query(SEARCH_FILES_CASE_INSENSITIVE)
     fun searchFilesCaseInsensitive(
-        searchPattern: String
+        searchPattern: String,
+        minSize: Long,
+        maxSize: Long,
+        mimePrefix: String,
+        minDate: Long,
+        maxDate: Long,
     ): List<OCFileEntity>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
@@ -630,12 +640,18 @@ interface FileDao {
             SELECT *
             FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME}
             WHERE LOWER(name) LIKE '%' || LOWER(:searchPattern) || '%'
+            AND length >= :minSize AND length <= :maxSize
+            AND mimeType LIKE :mimePrefix || '%'
+            AND modificationTimestamp >= :minDate AND modificationTimestamp <= :maxDate
         """
 
         private const val SEARCH_FILES_CASE_SENSITIVE = """
             SELECT *
             FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME}
             WHERE name LIKE '%' || :searchPattern || '%'
+            AND length >= :minSize AND length <= :maxSize
+            AND mimeType LIKE :mimePrefix || '%'
+            AND modificationTimestamp >= :minDate AND modificationTimestamp <= :maxDate
         """
     }
 }
