@@ -62,6 +62,7 @@
     <color name="homecloud_bar_background">#1F1F1F</color>
     <color name="homecloud_transparent_bar_background">#CC000000</color>
 
+    <color name="homecloud_signin_background">#262729</color>
     <color name="homecloud_signin_logo_text_color">@color/white</color>
 
     <color name="homecloud_toolbar_icon_tint">@color/homecloud_blue_lighten_2</color>

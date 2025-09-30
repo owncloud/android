@@ -58,6 +58,8 @@ import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import com.owncloud.android.usecases.files.FilterFileMenuOptionsUseCase
 import com.owncloud.android.usecases.synchronization.SynchronizeFolderUseCase
 import com.owncloud.android.usecases.synchronization.SynchronizeFolderUseCase.SyncFolderMode.SYNC_CONTENTS
+import com.owncloud.android.usecases.synchronization.UpdateFoldersRecursivelyUseCase
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -72,6 +74,8 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlin.time.Duration.Companion.minutes
+import kotlin.time.Duration.Companion.seconds
 import com.owncloud.android.domain.files.usecases.SortType.Companion as SortTypeDomain
 
 class MainFileListViewModel(
@@ -83,6 +87,7 @@ class MainFileListViewModel(
     private val getSpaceWithSpecialsByIdForAccountUseCase: GetSpaceWithSpecialsByIdForAccountUseCase,
     private val sortFilesWithSyncInfoUseCase: SortFilesWithSyncInfoUseCase,
     private val synchronizeFolderUseCase: SynchronizeFolderUseCase,
+    private val updateFoldersRecursivelyUseCase: UpdateFoldersRecursivelyUseCase,
     getAppRegistryWhichAllowCreationAsStreamUseCase: GetAppRegistryWhichAllowCreationAsStreamUseCase,
     private val getAppRegistryForMimeTypeAsStreamUseCase: GetAppRegistryForMimeTypeAsStreamUseCase,
     private val getUrlToOpenInWebUseCase: GetUrlToOpenInWebUseCase,
@@ -167,6 +172,7 @@ class MainFileListViewModel(
                 )
             )
         }
+        startPeriodicalFoldersUpdate(accountName = initialFolderToDisplay.owner)
     }
 
     fun navigateToFolderId(folderId: Long) {
@@ -365,6 +371,16 @@ class MainFileListViewModel(
             }
         }
 
+    }
+
+    private fun startPeriodicalFoldersUpdate(accountName: String) {
+        viewModelScope.launch(coroutinesDispatcherProvider.io) {
+            delay(10.seconds) // initial delay to not interfere with the current folder refresh
+            while (true) {
+                updateFoldersRecursivelyUseCase(params = UpdateFoldersRecursivelyUseCase.Params(accountName = accountName))
+                delay(5.minutes) // delay between updates
+            }
+        }
     }
 
     private fun composeFileListUiStateForThisParams(

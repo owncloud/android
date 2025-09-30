@@ -208,6 +208,24 @@ class OCLocalFileDataSource(
         fileDao.updateFileWithLastUsage(fileId, lastUsage)
     }
 
+    override fun searchFiles(
+        searchPattern: String,
+        ignoreCase: Boolean,
+        minSize: Long,
+        maxSize: Long,
+        mimePrefix: String,
+        minDate: Long,
+        maxDate: Long
+    ): List<OCFile> {
+        return if (ignoreCase) {
+            fileDao.searchFilesCaseInsensitive(searchPattern, minSize, maxSize, mimePrefix, minDate, maxDate)
+        } else {
+            fileDao.searchFilesCaseSensitive(searchPattern, minSize, maxSize, mimePrefix, minDate, maxDate)
+        }.map {
+            it.toModel()
+        }
+    }
+
     override fun saveUploadWorkerUuid(fileId: Long, workerUuid: UUID) {
         // Not yet implemented
     }

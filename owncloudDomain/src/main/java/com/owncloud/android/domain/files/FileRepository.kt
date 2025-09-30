@@ -63,6 +63,7 @@ interface FileRepository {
         spaceId: String? = null,
         isActionSetFolderAvailableOfflineOrSynchronize: Boolean = false
     ): List<OCFile>
+    fun refreshFoldersRecursively(accountName: String)
     fun deleteFiles(listOfFilesToDelete: List<OCFile>, removeOnlyLocalCopy: Boolean)
     fun renameFile(ocFile: OCFile, newName: String)
     fun saveFile(file: OCFile)
@@ -74,5 +75,14 @@ interface FileRepository {
     fun updateDownloadedFilesStorageDirectoryInStoragePath(oldDirectory: String, newDirectory: String)
     fun saveDownloadWorkerUuid(fileId: Long, workerUuid: UUID)
     fun cleanWorkersUuid(fileId: Long)
+    fun searchFiles(
+        searchPattern: String,
+        ignoreCase: Boolean,
+        minSize: Long,
+        maxSize: Long,
+        mimePrefix: String,
+        minDate: Long,
+        maxDate: Long,
+    ): List<OCFile>
 
 }

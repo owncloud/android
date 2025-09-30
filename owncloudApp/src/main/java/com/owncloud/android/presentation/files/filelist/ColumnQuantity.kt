@@ -43,9 +43,10 @@ class ColumnQuantity(context: Context, viewId: Int) {
         displayMetrics = context.resources.displayMetrics
     }
 
-    fun calculateNoOfColumns(): Int {
-        var numberOfColumns = displayMetrics.widthPixels.div(width)
-        remaining = displayMetrics.widthPixels.minus(numberOfColumns.times(width))
+    fun calculateNoOfColumns(parentView: View): Int {
+        val totalWidth = parentView.measuredWidth.takeIf { it > 0 } ?: displayMetrics.widthPixels
+        var numberOfColumns = totalWidth.div(width)
+        remaining = totalWidth.minus(numberOfColumns.times(width))
         if (remaining.div(numberOfColumns.times(2)) < 15) {
             numberOfColumns.minus(1)
             remaining = displayMetrics.widthPixels.minus(numberOfColumns.times(width))

@@ -201,6 +201,10 @@ class FileDisplayActivity : FileActivity(),
     private var isLightUser = false
     private var isMultiPersonal = false
 
+    override fun onDrawerToggled() {
+        mainFileListFragment?.onContentWidthChanged()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         Timber.v("onCreate() start")
 
@@ -531,7 +535,8 @@ class FileDisplayActivity : FileActivity(),
 
     private fun showBottomNavBar(show: Boolean) {
         // Do not show bottom bar in smartphone landscape mode
-        binding.navCoordinatorLayout.bottomNavView.isVisible = show && (!isLandscapeMode || isTablet)
+        val bottomNavView = binding.bottomNavView ?: binding.navCoordinatorLayout.bottomNavView
+        bottomNavView?.isVisible = show && (!isLandscapeMode || isTablet)
     }
 
     /**

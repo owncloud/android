@@ -46,3 +46,6 @@ val Context.isLandscapeMode: Boolean
 
 val Context.isTablet: Boolean
     get() = resources.configuration.smallestScreenWidthDp >= 600
+
+val Context.isBigTablet: Boolean
+    get() = resources.configuration.smallestScreenWidthDp >= 720
