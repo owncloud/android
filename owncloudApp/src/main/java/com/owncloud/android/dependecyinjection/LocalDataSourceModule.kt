@@ -39,15 +39,17 @@ import com.owncloud.android.data.files.datasources.LocalFileDataSource
 import com.owncloud.android.data.files.datasources.implementation.OCLocalFileDataSource
 import com.owncloud.android.data.folderbackup.datasources.LocalFolderBackupDataSource
 import com.owncloud.android.data.folderbackup.datasources.implementation.OCLocalFolderBackupDataSource
+import com.owncloud.android.data.providers.LocalStorageProvider
+import com.owncloud.android.data.providers.QaStorageProvider
+import com.owncloud.android.data.providers.ScopedStorageProvider
 import com.owncloud.android.data.providers.SharedPreferencesProvider
 import com.owncloud.android.data.providers.implementation.OCSharedPreferencesProvider
+import com.owncloud.android.data.searches.datasources.LocalSavedSearchesDataSource
+import com.owncloud.android.data.searches.datasources.implementation.OCLocalSavedSearchesDataSource
 import com.owncloud.android.data.sharing.shares.datasources.LocalShareDataSource
 import com.owncloud.android.data.sharing.shares.datasources.implementation.OCLocalShareDataSource
 import com.owncloud.android.data.spaces.datasources.LocalSpacesDataSource
 import com.owncloud.android.data.spaces.datasources.implementation.OCLocalSpacesDataSource
-import com.owncloud.android.data.providers.LocalStorageProvider
-import com.owncloud.android.data.providers.QaStorageProvider
-import com.owncloud.android.data.providers.ScopedStorageProvider
 import com.owncloud.android.data.transfers.datasources.LocalTransferDataSource
 import com.owncloud.android.data.transfers.datasources.implementation.OCLocalTransferDataSource
 import com.owncloud.android.data.user.datasources.LocalUserDataSource
@@ -69,6 +71,7 @@ val localDataSourceModule = module {
     single { OwncloudDatabase.getDatabase(androidContext()).spacesDao() }
     single { OwncloudDatabase.getDatabase(androidContext()).transferDao() }
     single { OwncloudDatabase.getDatabase(androidContext()).userDao() }
+    single { OwncloudDatabase.getDatabase(androidContext()).savedSearchDao() }
 
     singleOf(::OCSharedPreferencesProvider) bind SharedPreferencesProvider::class
     single<LocalStorageProvider> {
@@ -88,4 +91,5 @@ val localDataSourceModule = module {
     factoryOf(::OCLocalSpacesDataSource) bind LocalSpacesDataSource::class
     factoryOf(::OCLocalTransferDataSource) bind LocalTransferDataSource::class
     factoryOf(::OCLocalUserDataSource) bind LocalUserDataSource::class
+    factoryOf(::OCLocalSavedSearchesDataSource) bind LocalSavedSearchesDataSource::class
 }
