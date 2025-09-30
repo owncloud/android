@@ -23,6 +23,7 @@ package com.owncloud.android.usecases.accounts
 import com.owncloud.android.data.appregistry.datasources.LocalAppRegistryDataSource
 import com.owncloud.android.data.capabilities.datasources.LocalCapabilitiesDataSource
 import com.owncloud.android.data.files.datasources.LocalFileDataSource
+import com.owncloud.android.data.searches.datasources.LocalSavedSearchesDataSource
 import com.owncloud.android.data.sharing.shares.datasources.LocalShareDataSource
 import com.owncloud.android.data.spaces.datasources.LocalSpacesDataSource
 import com.owncloud.android.data.user.datasources.LocalUserDataSource
@@ -48,6 +49,7 @@ class RemoveAccountUseCase(
     private val localUserDataSource: LocalUserDataSource,
     private val localSpacesDataSource: LocalSpacesDataSource,
     private val localAppRegistryDataSource: LocalAppRegistryDataSource,
+    private val localSavedSearchesDataSource: LocalSavedSearchesDataSource,
 ) : BaseUseCase<Unit, RemoveAccountUseCase.Params>() {
 
     override fun run(params: Params) {
@@ -82,6 +84,9 @@ class RemoveAccountUseCase(
 
         // Delete app registry for the removed account in database
         localAppRegistryDataSource.deleteAppRegistryForAccount(params.accountName)
+
+        // Delete saved searches
+        localSavedSearchesDataSource.clearForAccount(params.accountName)
     }
 
     data class Params(
