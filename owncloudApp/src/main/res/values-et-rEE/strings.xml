@@ -20,6 +20,7 @@
   <string name="actionbar_sort_title">Sorteeri</string>
   <string name="fab_new_file">Uus dokument</string>
   <string name="fab_new_shortcut">Uus otsetee</string>
+  <string name="fab_new_space">Uus ruum</string>
   <string name="drawer_item_all_files">Kõik failid</string>
   <string name="drawer_item_only_available_offline">Saadaval ilma võrguühenduseta</string>
   <string name="drawer_item_shared_by_link_files">Jagatud lingiga</string>
@@ -681,6 +682,10 @@
   <string name="release_notes_icon">Väljalasketeavituse ikoon</string>
   <string name="release_notes_bugfixes_title">Väiksemad veaparandused</string>
   <string name="release_notes_bugfixes_subtitle">Mõned vead parandati, et täiustada rakenduse kasutajakogemust</string>
+  <string name="release_notes_4_7_0_title_new_layout_for_spaces">Ruumide nimekirja uus disain</string>
+  <string name="release_notes_4_7_0_subtitle_new_layout_for_spaces">Ruumide nimekirja uus disain Infinite Scale kasutajatele koos kolme-punkti nupuga igal ruumi kaardil, mis klikkides avavad valikute menüü</string>
+  <string name="release_notes_4_7_0_title_create_new_spaces">Projektiruumide loomine</string>
+  <string name="release_notes_4_7_0_subtitle_create_new_spaces">Vastavaid õiguseid omavad Infinite Scale kasutajad saavad nüüd projekti ruume luua otse äpis</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Ava veebis</string>
   <string name="ic_action_open_with_web">Ava %1$s (veebis)</string>
@@ -746,6 +751,12 @@
   <string name="content_description_sort_by_name_ascending">Sorteeri %1$s järgi tõusvalt</string>
   <string name="content_description_sort_by_name_descending">Sorteeri %1$s järgi kahanevalt</string>
   <string name="content_description_create_new_folder">Loo uus kaust</string>
+  <string name="content_description_space_image">Ruumi pilt</string>
+  <string name="content_description_space_name">%1$s ruumi nimi</string>
+  <string name="content_description_space_three_dot_menu">%1$s ruumi menüü</string>
+  <string name="content_description_space_subtitle">%1$s ruumi alapealkiri</string>
+  <string name="content_description_create_button">Loomise nupp</string>
+  <string name="content_description_cancel_button">Tühistamise nupp</string>
   <string name="create_shortcut_dialog_title">Loo otsetee</string>
   <string name="create_shortcut_dialog_url">URL</string>
   <string name="create_shortcut_dialog_url_information">Brauseris avamiseks peab URL alguses olema kas http:// või https://</string>
@@ -753,9 +764,24 @@
   <string name="create_shortcut_dialog_url_extension">.url</string>
   <string name="open_shortcut_description">See otsetee viitab:</string>
   <string name="open_shortcut_title">Ava link</string>
+  <string name="create_space_dialog_title">Loo ruum</string>
   <string name="create_space_dialog_name">Nimi</string>
   <string name="create_space_dialog_subtitle">Alapealkiri</string>
   <string name="create_space_dialog_quota">Mahupiir</string>
+  <string-array name="create_space_dialog_quota_units">
+    <item>1 GB</item>
+    <item>2 GB</item>
+    <item>5 GB</item>
+    <item>10 GB</item>
+    <item>50 GB</item>
+    <item>100 GB</item>
+    <item>Piiranguteta</item>
+  </string-array>
+  <string name="create_space_dialog_empty_error">Ruumi nimi ei tohi olla tühi</string>
+  <string name="create_space_dialog_length_error">Ruumi nii ei tphi olla pikem kui 255 märki</string>
+  <string name="create_space_dialog_characters_error">Keelatud märgid: / \\ . : ? * \" \' &gt; &lt; |</string>
+  <string name="create_space_correctly">Ruum loodi korrektselt</string>
+  <string name="create_space_failed">Ruumi loomine ebaõnnestus</string>
   <string name="feedback_dialog_get_in_contact_description"><![CDATA[ Küsi abi meie <a href="%1$s"><b>foorumist</b></a> või anna oma panus <a href="%2$s"><b>GitHub reposse</b></a>]]></string>
   <string name="link_role_accessibility">Link</string>
   <string name="button_role_accessibility">Nupp</string>
