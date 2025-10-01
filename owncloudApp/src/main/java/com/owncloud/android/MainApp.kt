@@ -346,6 +346,9 @@ class MainApp : Application() {
         val dataFolder: String
             get() = appContext.resources.getString(R.string.data_folder)
 
+        val logName: String
+            get() = appContext.resources.getString(R.string.log_name)
+
         // user agent
         // Mozilla/5.0 (Android) ownCloud-android/1.7.0
         val userAgent: String

@@ -15,7 +15,7 @@
     <string name="db_file" formatted="false">owncloud.db</string>
     <string name="db_name" formatted="false">ownCloud</string>
     <string name="data_folder" formatted="false">CuratorFiles</string>
-    <string name="log_name" formatted="false">CuratorFiles_</string>
+    <string name="log_name" formatted="false">CuratorFiles</string>
     <string name="default_display_name_for_root_folder" formatted="false">Curator Files</string>
     <string name="user_agent">Mozilla/5.0 (Android) ownCloud-android/%1$s</string>
 
