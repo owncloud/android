@@ -44,7 +44,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
-
 import com.owncloud.android.databinding.WhatsNewActivityBinding;
 import com.owncloud.android.databinding.WhatsNewElementBinding;
 import com.owncloud.android.wizard.FeatureList;
@@ -101,6 +100,9 @@ public class WhatsNewActivity extends FragmentActivity {
                 super.onPageSelected(position);
                 mProgress.animateToStep(position + 1);
                 updateNextButtonIfNeeded();
+                if (!mProgress.hasNextStep()) {
+                    handleOnboardingDisplayed();
+                }
             }
 
             @Override
@@ -118,12 +120,14 @@ public class WhatsNewActivity extends FragmentActivity {
         });
         bindingActivity.done.setOnClickListener(view -> {
             handleOnboardingDisplayed();
+            finish();
         });
         Button skipButton = bindingActivity.skip;
 
         skipButton.setOnClickListener(view -> {
             if (mProgress.hasNextStep()) {
                 handleOnboardingDisplayed();
+                finish();
             }
         });
 
@@ -135,7 +139,6 @@ public class WhatsNewActivity extends FragmentActivity {
         if (mPager.getCurrentItem() > 0) {
             goToPreviousPage();
         } else {
-            handleOnboardingDisplayed();
             super.onBackPressed();
         }
     }
@@ -231,7 +234,6 @@ public class WhatsNewActivity extends FragmentActivity {
         SharedPreferences.Editor editor = pref.edit();
         editor.putBoolean(ONBOARDING_DISPLAYED_KEY, true);
         editor.apply();
-        finish();
     }
 
     private void resetScrollOnChildFragments(int selectedPosition) {
