@@ -2,4 +2,5 @@
 <resources>
     <dimen name="login_screen_fields_width">400dp</dimen>
     <dimen name="homecloud_toolbar_height">64dp</dimen>
+    <dimen name="whats_new_text_width">312dp</dimen>
 </resources>
