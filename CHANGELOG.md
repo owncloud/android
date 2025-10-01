@@ -39,6 +39,7 @@ ownCloud admins and users.
 
 ## Summary
 
+* Bugfix - Handling of HTTP code response 413: [#4094](https://github.com/owncloud/android/issues/4094)
 * Bugfix - Set authorization header for token request only when necessary: [#4575](https://github.com/owncloud/android/issues/4575)
 * Bugfix - Add explicit permission to Detekt workflow: [#4675](https://github.com/owncloud/android/pull/4675)
 * Change - SBOM workflow runs on dependabot PRs: [#4664](https://github.com/owncloud/android/pull/4664)
@@ -50,6 +51,14 @@ ownCloud admins and users.
 * Enhancement - New workflow to generate a build from "latest" tag on demand: [#4681](https://github.com/owncloud/android/pull/4681)
 
 ## Details
+
+* Bugfix - Handling of HTTP code response 413: [#4094](https://github.com/owncloud/android/issues/4094)
+
+   A new exception has been added to handle cases where the payload exceeds the
+   server limit (HTTP code 413)
+
+   https://github.com/owncloud/android/issues/4094
+   https://github.com/owncloud/android/pull/4685
 
 * Bugfix - Set authorization header for token request only when necessary: [#4575](https://github.com/owncloud/android/issues/4575)
 

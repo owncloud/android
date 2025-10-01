@@ -2,7 +2,9 @@
  * ownCloud Android client application
  *
  * @author David González Verdugo
- * Copyright (C) 2020 ownCloud GmbH.
+ * @author Jorge Aguado Recio
+ *
+ * Copyright (C) 2025 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -41,6 +43,7 @@ import com.owncloud.android.domain.exceptions.NoConnectionWithServerException
 import com.owncloud.android.domain.exceptions.NoNetworkConnectionException
 import com.owncloud.android.domain.exceptions.OAuth2ErrorAccessDeniedException
 import com.owncloud.android.domain.exceptions.OAuth2ErrorException
+import com.owncloud.android.domain.exceptions.PayloadTooLongException
 import com.owncloud.android.domain.exceptions.QuotaExceededException
 import com.owncloud.android.domain.exceptions.RedirectToNonSecureException
 import com.owncloud.android.domain.exceptions.ResourceLockedException
@@ -100,6 +103,7 @@ fun Throwable.parseError(
             is UnauthorizedException -> resources.getString(R.string.auth_unauthorized)
             is NetworkErrorException -> resources.getString(R.string.network_error_message)
             is ResourceLockedException -> resources.getString(R.string.resource_locked_error_message)
+            is PayloadTooLongException -> resources.getString(R.string.uploads_view_upload_status_failed_payload_error)
             else -> resources.getString(R.string.common_error_unknown)
         }
 
