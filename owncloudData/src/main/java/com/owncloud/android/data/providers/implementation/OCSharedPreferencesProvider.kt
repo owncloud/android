@@ -44,6 +44,22 @@ class OCSharedPreferencesProvider(
     override fun putBoolean(key: String, value: Boolean) = editor.putBoolean(key, value).apply()
     override fun getBoolean(key: String, defaultValue: Boolean) = sharedPreferences.getBoolean(key, defaultValue)
 
+    override fun putStringSet(key: String, value: Set<String>) {
+        editor.putStringSet(key, value).apply()
+    }
+
+    override fun getStringSet(key: String, defaultValue: Set<String>): Set<String> {
+        return sharedPreferences.getStringSet(key, defaultValue) ?: defaultValue
+    }
+
+    override fun addItemToStringSet(key: String, value: String) {
+        getStringSet(key, emptySet()).toMutableSet().apply {
+            add(value)
+        }.also {
+            putStringSet(key, it.toSet())
+        }
+    }
+
     override fun containsPreference(key: String) = sharedPreferences.contains(key)
 
     override fun removePreference(key: String) = editor.remove(key).apply()
