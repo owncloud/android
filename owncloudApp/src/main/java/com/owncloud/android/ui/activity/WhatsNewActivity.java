@@ -53,9 +53,9 @@ import com.owncloud.android.wizard.FeatureList.FeatureItem;
 import com.owncloud.android.wizard.ProgressIndicator;
 import timber.log.Timber;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -130,6 +130,7 @@ public class WhatsNewActivity extends FragmentActivity {
                 }
             }
         });
+        mPager.setCurrentItem(findFirstNewItemPosition());
 
         mForwardFinishButton = bindingActivity.forward;
         mForwardFinishButton.setOnClickListener(view -> {
@@ -152,14 +153,21 @@ public class WhatsNewActivity extends FragmentActivity {
     }
 
     private FeaturesViewAdapter initAdapter() {
+        return new FeaturesViewAdapter(this, Arrays.asList(FeatureList.get()));
+    }
+
+    private int findFirstNewItemPosition() {
         Set<String> previouslyDisplayedItems = preferencesProvider.getStringSet(ONBOARDING_DISPLAYED_ITEMS_KEY, Collections.emptySet());
-        List<FeatureItem> itemsToDisplay = new ArrayList<>();
-        Arrays.asList(FeatureList.get()).forEach(featureItem -> {
-            if (!previouslyDisplayedItems.contains(featureItem.getId())) {
-                itemsToDisplay.add(featureItem);
+        Iterator<FeatureItem> iterator = Arrays.asList(FeatureList.get()).iterator();
+        int position = 0;
+        while (iterator.hasNext()) {
+            FeatureItem item = iterator.next();
+            if (!previouslyDisplayedItems.contains(item.getId())) {
+                return position;
             }
-        });
-        return new FeaturesViewAdapter(this, itemsToDisplay);
+            position++;
+        }
+        return position;
     }
 
     @Override
