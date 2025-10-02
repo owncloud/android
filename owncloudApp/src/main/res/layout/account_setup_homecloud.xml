@@ -87,7 +87,6 @@
                         android:inputType="textNoSuggestions"
                         android:textColorHint="@color/homecloud_input_placeholder">
 
-                        <requestFocus />
                     </com.google.android.material.textfield.TextInputEditText>
                 </com.google.android.material.textfield.TextInputLayout>
 
