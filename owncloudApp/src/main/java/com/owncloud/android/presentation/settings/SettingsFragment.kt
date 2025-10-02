@@ -66,11 +66,13 @@ class SettingsFragment : PreferenceFragmentCompat() {
         subsectionWhatsNew = findPreference(SUBSECTION_WHATSNEW)
         subsectionNotifications = findPreference(SUBSECTION_NOTIFICATIONS)
         prefAboutApp = findPreference(PREFERENCE_ABOUT_APP)
+        val subsectionLogs = findPreference<Preference>(SUBSECTION_LOGS)
 
         subsectionPictureUploads?.isVisible = settingsViewModel.isThereAttachedAccount()
         subsectionVideoUploads?.isVisible = settingsViewModel.isThereAttachedAccount()
         subsectionMore?.isVisible = moreViewModel.shouldMoreSectionBeVisible()
         subsectionWhatsNew?.isVisible = releaseNotesViewModel.shouldWhatsNewSectionBeVisible()
+        subsectionLogs?.isVisible = settingsViewModel.isThereAttachedAccount()
 
         if (moreViewModel.isPrivacyPolicyEnabled()) {
             prefPrivacyPolicy?.setOnPreferenceClickListener {
@@ -132,6 +134,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
         private const val SUBSECTION_MORE = "more_subsection"
         private const val SUBSECTION_NOTIFICATIONS = "notifications_subsection"
         private const val SUBSECTION_WHATSNEW = "whatsNew"
+        private const val SUBSECTION_LOGS = "logging_subsection"
 
         // Remove preference with nullability check
         fun PreferenceScreen?.removePreferenceFromScreen(preference: Preference?) {

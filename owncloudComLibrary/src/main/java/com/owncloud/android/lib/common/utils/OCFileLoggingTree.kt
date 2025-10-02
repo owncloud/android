@@ -54,13 +54,14 @@ class OCFileLoggingTree(
 
             var fileNameTimestamp = SimpleDateFormat(LOG_FILE_TIME_FORMAT, Locale.getDefault()).format(Date())
 
-            it.list()?.let { logFiles ->
+            it.listFiles()?.let { logFiles ->
                 if (logFiles.isNotEmpty()) {
 
+                    val lastFile = logFiles.maxBy { file -> file.lastModified() }
                     var lastDateLogFileString = if (context != null) {
-                        logFiles.last().substringAfterLast("${context.packageName}.").substringBeforeLast(".log")
+                        lastFile.name.substringAfterLast("${context.packageName}.").substringBeforeLast(".log")
                     } else {
-                        logFiles.last().substringAfterLast("$filename.").substringBeforeLast(".log")
+                        lastFile.name.substringAfterLast("$filename.").substringBeforeLast(".log")
                     }
 
                     val dateFormat = SimpleDateFormat(LOG_FILE_TIME_FORMAT)
@@ -70,11 +71,13 @@ class OCFileLoggingTree(
                     val lastDayLogFileDate = dateFormat.parse(lastDateLogFileString)
                     val newDayLogFileDate = dateFormat.parse(fileNameTimestamp)
 
-                    val lastDayDateLogFileString = SimpleDateFormat(LOG_FILE_DAY_FORMAT, Locale.getDefault()).format(lastDayLogFileDate!!)
-                    val newDayDateLogFileString = SimpleDateFormat(LOG_FILE_DAY_FORMAT, Locale.getDefault()).format(newDayLogFileDate!!)
+                    val lastDayDateLogFileString = SimpleDateFormat(LOG_FILE_DATE_FORMAT, Locale.getDefault()).format(lastDayLogFileDate!!)
+                    val newDayDateLogFileString = SimpleDateFormat(LOG_FILE_DATE_FORMAT, Locale.getDefault()).format(newDayLogFileDate!!)
 
-                    if (lastDayDateLogFileString == newDayDateLogFileString) {
-                        fileNameTimestamp = lastDateLogFileString
+                    if (lastDayDateLogFileString == newDayDateLogFileString // if the file is created today
+                        && lastFile.length() < 10_000_000L // and it's size is less than 10 MB
+                    ) {
+                        fileNameTimestamp = lastDateLogFileString // then re-use it
                     }
                 }
             }
@@ -161,7 +164,7 @@ class OCFileLoggingTree(
 
         private val LOG_TAG = OCFileLoggingTree::class.java.simpleName
         private const val LOG_FILE_TIME_FORMAT = "yyyy-MM-dd_HH.mm.ss"
-        private const val LOG_FILE_DAY_FORMAT = "dd"
+        private const val LOG_FILE_DATE_FORMAT = "yyyy-MM-dd"
         private const val LOG_MESSAGE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss:SSS"
 
     }

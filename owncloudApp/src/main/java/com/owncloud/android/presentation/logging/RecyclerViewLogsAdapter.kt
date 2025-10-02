@@ -30,6 +30,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.owncloud.android.R
 import com.owncloud.android.databinding.LogListItemBinding
+import com.owncloud.android.extensions.humanReadableModificationDateTime
 import com.owncloud.android.extensions.toLegibleStringSize
 import java.io.File
 
@@ -51,6 +52,7 @@ class RecyclerViewLogsAdapter(
         holder.binding.apply {
             textViewTitleActivityLogsList.text = log.name
             textViewSubtitleActivityLogsList.text = log.toLegibleStringSize(context)
+            textViewModificationDateActivityLogsList.text = log.humanReadableModificationDateTime(context)
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
                 imageViewDownloadActivityLogsList.isVisible = false
             }
