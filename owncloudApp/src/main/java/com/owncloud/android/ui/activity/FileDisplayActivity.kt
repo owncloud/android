@@ -433,6 +433,8 @@ class FileDisplayActivity : FileActivity(),
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.left_fragment_container, sharesFragment)
         transaction.commit()
+        setBottomBarVisibility(isVisible = false)
+        updateStandardToolbar()
     }
 
     private fun initAndShowListOfUploads() {
@@ -551,7 +553,7 @@ class FileDisplayActivity : FileActivity(),
         leftFragmentContainer?.isVisible = !existsSecondFragment
         rightFragmentContainer?.isVisible = existsSecondFragment
 
-        showBottomNavBar(show = !existsSecondFragment)
+        showBottomNavBar(show = !existsSecondFragment && !fileListOption.isSharedByLink())
     }
 
     private fun cleanSecondFragment() {
@@ -795,9 +797,11 @@ class FileDisplayActivity : FileActivity(),
                     if (mainFileListFragment?.getCurrentSpace()?.isProject == true ||
                         (mainFileListFragment?.getCurrentSpace()?.isPersonal == true && isMultiPersonal)) {
                         navigateTo(FileListOption.SPACES_LIST)
-                    }
-                    // If current space is not a project space (personal or shares) or it is null ("Files" in oC10), close the app
-                    else {
+                    } else if (fileListOption.isSharedByLink()) {
+                        setBottomBarVisibility(isVisible = true)
+                        navigateToOption(FileListOption.ALL_FILES)
+                    } else {
+                        // If current space is not a project space (personal or shares) or it is null ("Files" in oC10), close the app
                         finish()
                         return
                     }
@@ -1009,7 +1013,8 @@ class FileDisplayActivity : FileActivity(),
                     FileListOption.UPLOADS_LIST -> getString(R.string.uploads_view_title)
                 }
             setTitle(title)
-            updateStandardToolbar(title = title, homeButtonDisplayed = true, showBackArrow = false)
+            val showBackArrow = fileListOption.isSharedByLink()
+            updateStandardToolbar(title = title, homeButtonDisplayed = true, showBackArrow = showBackArrow)
         } else if ((space?.isProject == true || (space?.isPersonal == true && isMultiPersonal)) && chosenFile.remotePath == OCFile.ROOT_PATH) {
             updateStandardToolbar(title = space.name, homeButtonDisplayed = true, showBackArrow = false)
         } else {
@@ -1827,6 +1832,7 @@ class FileDisplayActivity : FileActivity(),
                         fileListOption = newFileListOption
                         mainFileListFragment?.updateFileListOption(newFileListOption, file) ?: initAndShowListOfFiles(newFileListOption)
                         updateToolbar(null)
+                        setBottomBarVisibility(isVisible = false)
                     }
                 }
             }
@@ -1860,7 +1866,7 @@ class FileDisplayActivity : FileActivity(),
 
     private fun getMenuItemForFileListOption(fileListOption: FileListOption?): Int = when (fileListOption) {
         FileListOption.SPACES_LIST -> R.id.nav_spaces
-        FileListOption.SHARED_BY_LINK -> R.id.nav_shared_by_link_files
+        FileListOption.SHARED_BY_LINK -> 0
         FileListOption.AV_OFFLINE -> R.id.nav_available_offline_files
         FileListOption.ALL_FILES -> R.id.nav_all_files
         FileListOption.UPLOADS_LIST -> R.id.nav_uploads

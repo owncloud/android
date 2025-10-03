@@ -42,14 +42,19 @@
 
     <group android:id="@+id/drawer_menu_settings_etc">
         <item
+            android:id="@+id/drawer_menu_shared_by_link_files"
+            android:icon="@drawable/selector_bottom_navigation_link"
+            android:orderInCategory="3"
+            android:title="@string/bottom_nav_links" />
+        <item
             android:id="@+id/nav_settings"
             android:icon="@drawable/ic_drawer_settings"
-            android:orderInCategory="3"
+            android:orderInCategory="4"
             android:title="@string/actionbar_settings" />
         <item
             android:id="@+id/drawer_menu_sign_out"
             android:icon="@drawable/ic_drawer_sign_out"
-            android:orderInCategory="4"
+            android:orderInCategory="5"
             android:title="@string/drawer_menu_sign_out" />
     </group>
 

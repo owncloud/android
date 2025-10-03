@@ -22,10 +22,6 @@
         android:icon="@drawable/selector_bottom_navigation_folder"
         android:title="@string/bottom_nav_files" />
     <item
-        android:id="@+id/nav_shared_by_link_files"
-        android:icon="@drawable/selector_bottom_navigation_link"
-        android:title="@string/bottom_nav_links" />
-    <item
         android:id="@+id/nav_spaces"
         android:icon="@drawable/ic_spaces"
         android:title="@string/bottom_nav_spaces"
