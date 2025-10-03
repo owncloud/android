@@ -204,45 +204,18 @@ class SpacesListFragment :
             }
         }
 
-        collectLatestLifecycleFlow(spacesListViewModel.menuOptions) { menuOptions ->
-            val spaceOptionsBottomSheetBinding = FileOptionsBottomSheetFragmentBinding.inflate(layoutInflater)
-            val dialog = BottomSheetDialog(requireContext())
-            dialog.setContentView(spaceOptionsBottomSheetBinding.root)
-
-            val fileOptionsBottomSheetSingleFileBehavior: BottomSheetBehavior<*> = BottomSheetBehavior.from(
-                spaceOptionsBottomSheetBinding.root.parent as View)
-            val closeBottomSheetButton = spaceOptionsBottomSheetBinding.closeBottomSheet
-            closeBottomSheetButton.setOnClickListener {
-                dialog.dismiss()
-            }
-
-            val thumbnailBottomSheet = spaceOptionsBottomSheetBinding.thumbnailBottomSheet
-            thumbnailBottomSheet.setImageResource(R.drawable.ic_menu_space)
-
-            val spaceNameBottomSheet = spaceOptionsBottomSheetBinding.fileNameBottomSheet
-            spaceNameBottomSheet.text = currentSpace.name
-
-            val spaceSizeBottomSheet = spaceOptionsBottomSheetBinding.fileSizeBottomSheet
-            spaceSizeBottomSheet.text = DisplayUtils.bytesToHumanReadable(currentSpace.quota?.used ?: 0L, requireContext(), true)
-
-            val spaceSeparatorBottomSheet = spaceOptionsBottomSheetBinding.fileSeparatorBottomSheet
-            spaceSeparatorBottomSheet.visibility = View.GONE
-
-            menuOptions.forEach { menuOption ->
-                setMenuOption(menuOption, spaceOptionsBottomSheetBinding, dialog)
-            }
-
-            fileOptionsBottomSheetSingleFileBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
-                override fun onStateChanged(bottomSheet: View, newState: Int) {
-                    if (newState == BottomSheetBehavior.STATE_DRAGGING) {
-                        fileOptionsBottomSheetSingleFileBehavior.state = BottomSheetBehavior.STATE_EXPANDED
-                    }
+        collectLatestLifecycleFlow(spacesListViewModel.editSpaceFlow) { event ->
+            event?.let {
+                when (val uiResult = event.peekContent()) {
+                    is UIResult.Success -> { showMessageInSnackbar(getString(R.string.edit_space_correctly)) }
+                    is UIResult.Loading -> { }
+                    is UIResult.Error -> { showErrorInSnackbar(R.string.edit_space_failed, uiResult.error) }
                 }
-                override fun onSlide(bottomSheet: View, slideOffset: Float) {}
-            })
+            }
+        }
 
-            dialog.setOnShowListener { fileOptionsBottomSheetSingleFileBehavior.peekHeight = spaceOptionsBottomSheetBinding.root.measuredHeight }
-            dialog.show()
+        collectLatestLifecycleFlow(spacesListViewModel.menuOptions) { menuOptions ->
+            showSpaceMenuOptionsDialog(menuOptions)
         }
 
     }
@@ -293,6 +266,10 @@ class SpacesListFragment :
         spacesListViewModel.createSpace(spaceName, spaceSubtitle, spaceQuota)
     }
 
+    override fun editSpace(spaceId: String, spaceName: String, spaceSubtitle: String, spaceQuota: Long?) {
+        spacesListViewModel.editSpace(spaceId, spaceName, spaceSubtitle, spaceQuota)
+    }
+
     fun setSearchListener(searchView: SearchView) {
         searchView.setOnQueryTextListener(this)
     }
@@ -300,6 +277,47 @@ class SpacesListFragment :
     private fun setTextHintRootToolbar() {
         val searchViewRootToolbar = requireActivity().findViewById<SearchView>(R.id.root_toolbar_search_view)
         searchViewRootToolbar.queryHint = getString(R.string.actionbar_search_space)
+    }
+
+    private fun showSpaceMenuOptionsDialog(menuOptions: List<SpaceMenuOption>) {
+        val spaceOptionsBottomSheetBinding = FileOptionsBottomSheetFragmentBinding.inflate(layoutInflater)
+        val dialog = BottomSheetDialog(requireContext())
+        dialog.setContentView(spaceOptionsBottomSheetBinding.root)
+
+        val fileOptionsBottomSheetSingleFileBehavior: BottomSheetBehavior<*> = BottomSheetBehavior.from(
+            spaceOptionsBottomSheetBinding.root.parent as View)
+        val closeBottomSheetButton = spaceOptionsBottomSheetBinding.closeBottomSheet
+        closeBottomSheetButton.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        val thumbnailBottomSheet = spaceOptionsBottomSheetBinding.thumbnailBottomSheet
+        thumbnailBottomSheet.setImageResource(R.drawable.ic_menu_space)
+
+        val spaceNameBottomSheet = spaceOptionsBottomSheetBinding.fileNameBottomSheet
+        spaceNameBottomSheet.text = currentSpace.name
+
+        val spaceSizeBottomSheet = spaceOptionsBottomSheetBinding.fileSizeBottomSheet
+        spaceSizeBottomSheet.text = DisplayUtils.bytesToHumanReadable(currentSpace.quota?.used ?: 0L, requireContext(), true)
+
+        val spaceSeparatorBottomSheet = spaceOptionsBottomSheetBinding.fileSeparatorBottomSheet
+        spaceSeparatorBottomSheet.visibility = View.GONE
+
+        menuOptions.forEach { menuOption ->
+            setMenuOption(menuOption, spaceOptionsBottomSheetBinding, dialog)
+        }
+
+        fileOptionsBottomSheetSingleFileBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+                if (newState == BottomSheetBehavior.STATE_DRAGGING) {
+                    fileOptionsBottomSheetSingleFileBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                }
+            }
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {}
+        })
+
+        dialog.setOnShowListener { fileOptionsBottomSheetSingleFileBehavior.peekHeight = spaceOptionsBottomSheetBinding.root.measuredHeight }
+        dialog.show()
     }
 
     private fun setMenuOption(menuOption: SpaceMenuOption, binding: FileOptionsBottomSheetFragmentBinding, dialog: BottomSheetDialog) {

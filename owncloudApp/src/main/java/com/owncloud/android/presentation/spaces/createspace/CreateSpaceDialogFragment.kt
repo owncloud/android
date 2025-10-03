@@ -48,6 +48,7 @@ class CreateSpaceDialogFragment : DialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         val currentSpace = requireArguments().getParcelable<OCSpace>(ARG_CURRENT_SPACE)
         val isEditMode = requireArguments().getBoolean(ARG_EDIT_SPACE_MODE)
+        val canEditQuota = requireArguments().getBoolean(ARG_CAN_EDIT_SPACE_QUOTA)
         binding.apply {
             cancelCreateSpaceButton.setOnClickListener { dialog?.dismiss() }
             createSpaceDialogNameValue.doOnTextChanged { name, _, _, _ ->
@@ -57,7 +58,6 @@ class CreateSpaceDialogFragment : DialogFragment() {
 
             if (isEditMode) {
                 createSpaceDialogTitle.text = getString(R.string.edit_space)
-                val canEditQuota = requireArguments().getBoolean(ARG_CAN_EDIT_SPACE_QUOTA)
                 createSpaceDialogQuotaSection.isVisible = canEditQuota
 
                 currentSpace?.let {
@@ -72,12 +72,24 @@ class CreateSpaceDialogFragment : DialogFragment() {
             }
 
             createSpaceButton.setOnClickListener {
-                val spaceQuota = convertToBytes(binding.createSpaceDialogQuotaUnit.selectedItem.toString())
-                createSpaceListener.createSpace(
-                    spaceName = binding.createSpaceDialogNameValue.text.toString(),
-                    spaceSubtitle = binding.createSpaceDialogSubtitleValue.text.toString(),
-                    spaceQuota = spaceQuota
-                )
+                val spaceName = createSpaceDialogNameValue.text.toString()
+                val spaceSubtitle = createSpaceDialogSubtitleValue.text.toString()
+                val spaceQuota = convertToBytes(createSpaceDialogQuotaUnit.selectedItem.toString())
+
+                if (isEditMode) {
+                    createSpaceListener.editSpace(
+                        spaceId = currentSpace!!.id,
+                        spaceName = spaceName,
+                        spaceSubtitle = spaceSubtitle,
+                        spaceQuota = if (canEditQuota) spaceQuota else null
+                    )
+                } else {
+                    createSpaceListener.createSpace(
+                        spaceName = spaceName,
+                        spaceSubtitle = spaceSubtitle,
+                        spaceQuota = spaceQuota
+                    )
+                }
                 dialog?.dismiss()
             }
         }
@@ -112,6 +124,7 @@ class CreateSpaceDialogFragment : DialogFragment() {
 
     interface CreateSpaceListener {
         fun createSpace(spaceName: String, spaceSubtitle: String, spaceQuota: Long)
+        fun editSpace(spaceId: String, spaceName: String, spaceSubtitle: String, spaceQuota: Long?)
     }
 
     companion object {
