@@ -24,10 +24,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.DialogFragment
 import com.owncloud.android.R
 import com.owncloud.android.databinding.CreateSpaceDialogBinding
+import com.owncloud.android.domain.spaces.model.OCSpace
 
 class CreateSpaceDialogFragment : DialogFragment() {
     private var _binding: CreateSpaceDialogBinding? = null
@@ -44,12 +46,31 @@ class CreateSpaceDialogFragment : DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val currentSpace = requireArguments().getParcelable<OCSpace>(ARG_CURRENT_SPACE)
+        val isEditMode = requireArguments().getBoolean(ARG_EDIT_SPACE_MODE)
         binding.apply {
             cancelCreateSpaceButton.setOnClickListener { dialog?.dismiss() }
             createSpaceDialogNameValue.doOnTextChanged { name, _, _, _ ->
                 val errorMessage = validateName(name.toString())
                 updateUI(errorMessage)
             }
+
+            if (isEditMode) {
+                createSpaceDialogTitle.text = getString(R.string.edit_space)
+                val canEditQuota = requireArguments().getBoolean(ARG_CAN_EDIT_SPACE_QUOTA)
+                createSpaceDialogQuotaSection.isVisible = canEditQuota
+
+                currentSpace?.let {
+                    createSpaceDialogNameValue.setText(it.name)
+                    createSpaceDialogSubtitleValue.setText(it.description)
+                }
+
+                createSpaceButton.apply {
+                    text = getString(R.string.share_confirm_public_link_button)
+                    contentDescription = getString(R.string.share_confirm_public_link_button)
+                }
+            }
+
             createSpaceButton.setOnClickListener {
                 val spaceQuota = convertToBytes(binding.createSpaceDialogQuotaUnit.selectedItem.toString())
                 createSpaceListener.createSpace(
@@ -94,12 +115,21 @@ class CreateSpaceDialogFragment : DialogFragment() {
     }
 
     companion object {
-        private const val ARG_ACCOUNT_NAME = "ACCOUNT_NAME"
+        private const val ARG_EDIT_SPACE_MODE = "EDIT_SPACE_MODE"
+        private const val ARG_CAN_EDIT_SPACE_QUOTA = "CAN_EDIT_SPACE_QUOTA"
+        private const val ARG_CURRENT_SPACE = "CURRENT_SPACE"
         private const val FORBIDDEN_CHARACTERS = """[/\\.:?*"'><|]"""
 
-        fun newInstance(accountName: String?, listener: CreateSpaceListener): CreateSpaceDialogFragment {
+        fun newInstance(
+            isEditMode: Boolean,
+            canEditQuota: Boolean,
+            currentSpace: OCSpace?,
+            listener: CreateSpaceListener
+        ): CreateSpaceDialogFragment {
             val args = Bundle().apply {
-                putString(ARG_ACCOUNT_NAME, accountName)
+                putBoolean(ARG_EDIT_SPACE_MODE, isEditMode)
+                putBoolean(ARG_CAN_EDIT_SPACE_QUOTA, canEditQuota)
+                putParcelable(ARG_CURRENT_SPACE, currentSpace)
             }
             return CreateSpaceDialogFragment().apply {
                 createSpaceListener = listener
