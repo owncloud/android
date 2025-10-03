@@ -84,4 +84,8 @@ class OCSpacesRepository(
         remoteSpacesDataSource.createSpace(accountName, spaceName, spaceSubtitle, spaceQuota)
     }
 
+    override fun editSpace(accountName: String, spaceId: String, spaceName: String, spaceSubtitle: String, spaceQuota: Long?) {
+        remoteSpacesDataSource.editSpace(accountName, spaceId, spaceName, spaceSubtitle, spaceQuota)
+    }
+
 }

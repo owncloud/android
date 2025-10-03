@@ -56,6 +56,13 @@ class OCRemoteSpacesDataSource(
     override fun getSpacePermissions(accountName: String, spaceId: String): List<String> =
         executeRemoteOperation { clientManager.getSpacesService(accountName).getSpacePermissions(spaceId) }
 
+    override fun editSpace(accountName: String, spaceId: String, spaceName: String, spaceSubtitle: String, spaceQuota: Long?): OCSpace {
+        val spaceResponse = executeRemoteOperation {
+            clientManager.getSpacesService(accountName).editSpace(spaceId, spaceName, spaceSubtitle, spaceQuota)
+        }
+        return spaceResponse.toModel(accountName)
+    }
+
     companion object {
 
         @VisibleForTesting

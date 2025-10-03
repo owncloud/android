@@ -36,4 +36,5 @@ interface SpacesRepository {
     fun getSpacePermissions(accountName: String, spaceId: String): List<String>
     fun getWebDavUrlForSpace(accountName: String, spaceId: String?): String?
     fun createSpace(accountName: String, spaceName: String, spaceSubtitle: String, spaceQuota: Long)
+    fun editSpace(accountName: String, spaceId: String, spaceName: String, spaceSubtitle: String, spaceQuota: Long?)
 }

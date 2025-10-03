@@ -852,6 +852,8 @@
     <string name="create_space_correctly">Space created correctly</string>
     <string name="create_space_failed">Space could not be created</string>
     <string name="edit_space">Edit space</string>
+    <string name="edit_space_correctly">Space updated correctly</string>
+    <string name="edit_space_failed">Space could not be updated</string>
 
     <string name="feedback_dialog_get_in_contact_description"><![CDATA[ Ask for help in our <a href=\"%1$s\"><b>forum</b></a> or contribute in our <a href=\"%2$s\"><b>GitHub repo</b></a>]]></string>
 
