@@ -71,7 +71,8 @@ class SpacesListFragment :
     private val binding get() = _binding!!
 
     private var isMultiPersonal = false
-    private var editSpacesPermission: Boolean = false
+    private var editSpacesPermission = false
+    private var editQuotaPermission = false
     private lateinit var currentSpace: OCSpace
 
     private val spacesListViewModel: SpacesListViewModel by viewModel {
@@ -119,7 +120,12 @@ class SpacesListFragment :
         }
 
         binding.fabCreateSpace.setOnClickListener {
-            val dialog = CreateSpaceDialogFragment.newInstance(requireArguments().getString(BUNDLE_ACCOUNT_NAME), this)
+            val dialog = CreateSpaceDialogFragment.newInstance(
+                isEditMode = false,
+                canEditQuota = false,
+                currentSpace = null,
+                listener = this
+            )
             dialog.show(requireActivity().supportFragmentManager, DIALOG_CREATE_SPACE)
             binding.fabCreateSpace.isFocusable = false
         }
@@ -176,6 +182,7 @@ class SpacesListFragment :
                         uiResult.data?.let {
                             binding.fabCreateSpace.isVisible = it.contains(DRIVES_CREATE_ALL_PERMISSION)
                             editSpacesPermission = it.contains(DRIVES_READ_WRITE_ALL_PERMISSION)
+                            editQuotaPermission = it.contains(DRIVES_READ_WRITE_PROJECT_QUOTA_ALL_PERMISSION)
                         }
                     }
                     is UIResult.Loading -> { }
@@ -304,8 +311,12 @@ class SpacesListFragment :
                 dialog.dismiss()
                 when(menuOption) {
                     SpaceMenuOption.EDIT -> {
-                        val accountName = requireArguments().getString(BUNDLE_ACCOUNT_NAME)
-                        val editDialog = CreateSpaceDialogFragment.newInstance(accountName, this@SpacesListFragment)
+                        val editDialog = CreateSpaceDialogFragment.newInstance(
+                            isEditMode = true,
+                            canEditQuota = editQuotaPermission,
+                            currentSpace = currentSpace,
+                            listener = this@SpacesListFragment
+                        )
                         editDialog.show(requireActivity().supportFragmentManager, DIALOG_CREATE_SPACE)
                     }
                 }
@@ -321,6 +332,7 @@ class SpacesListFragment :
         const val BUNDLE_ACCOUNT_NAME = "accountName"
         const val DRIVES_CREATE_ALL_PERMISSION = "Drives.Create.all"
         const val DRIVES_READ_WRITE_ALL_PERMISSION = "Drives.ReadWrite.all"
+        const val DRIVES_READ_WRITE_PROJECT_QUOTA_ALL_PERMISSION = "Drives.ReadWriteProjectQuota.all"
 
         private const val DIALOG_CREATE_SPACE = "DIALOG_CREATE_SPACE"
 
