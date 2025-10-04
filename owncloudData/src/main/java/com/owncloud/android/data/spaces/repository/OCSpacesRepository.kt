@@ -74,11 +74,18 @@ class OCSpacesRepository(
     override fun getSpaceByIdForAccount(spaceId: String?, accountName: String): OCSpace? =
         localSpacesDataSource.getSpaceByIdForAccount(spaceId = spaceId, accountName = accountName)
 
+    override fun getSpacePermissions(accountName: String, spaceId: String): List<String> =
+        remoteSpacesDataSource.getSpacePermissions(accountName, spaceId)
+
     override fun getWebDavUrlForSpace(accountName: String, spaceId: String?): String? =
         localSpacesDataSource.getWebDavUrlForSpace(accountName = accountName, spaceId = spaceId)
 
     override fun createSpace(accountName: String, spaceName: String, spaceSubtitle: String, spaceQuota: Long) {
         remoteSpacesDataSource.createSpace(accountName, spaceName, spaceSubtitle, spaceQuota)
+    }
+
+    override fun editSpace(accountName: String, spaceId: String, spaceName: String, spaceSubtitle: String, spaceQuota: Long?) {
+        remoteSpacesDataSource.editSpace(accountName, spaceId, spaceName, spaceSubtitle, spaceQuota)
     }
 
 }

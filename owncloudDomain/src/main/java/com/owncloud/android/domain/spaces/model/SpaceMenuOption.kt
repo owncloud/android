@@ -1,7 +1,6 @@
 /**
  * ownCloud Android client application
  *
- * @author Abel García de Prada
  * @author Jorge Aguado Recio
  *
  * Copyright (C) 2025 ownCloud GmbH.
@@ -18,13 +17,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.owncloud.android.data.spaces.datasources
 
-import com.owncloud.android.domain.spaces.model.OCSpace
+package com.owncloud.android.domain.spaces.model
 
-interface RemoteSpacesDataSource {
-    fun refreshSpacesForAccount(accountName: String): List<OCSpace>
-    fun createSpace(accountName: String, spaceName: String, spaceSubtitle: String, spaceQuota: Long): OCSpace
-    fun getSpacePermissions(accountName: String, spaceId: String): List<String>
-    fun editSpace(accountName: String, spaceId: String, spaceName: String, spaceSubtitle: String, spaceQuota: Long?): OCSpace
+enum class SpaceMenuOption {
+    EDIT
 }
