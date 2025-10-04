@@ -20,6 +20,7 @@
   <string name="actionbar_sort_title">Renditi sipas</string>
   <string name="fab_new_file">Dokument i ri</string>
   <string name="fab_new_shortcut">Shkurtore e re</string>
+  <string name="fab_new_space">Hapësirë e re</string>
   <string name="drawer_item_all_files">Krejt kartelat</string>
   <string name="drawer_item_only_available_offline">I passhëm jo në linjë</string>
   <string name="drawer_item_shared_by_link_files">Të ndara me lidhje</string>
@@ -77,6 +78,7 @@
   <string name="prefs_camera_video_upload_path_title">Shteg ngarkimesh videosh</string>
   <string name="prefs_camera_video_upload_on_wifi">Videot ngarkoji vetëm përmes wifi-it</string>
   <string name="prefs_camera_video_upload_on_charging">Ngarko video vetëm kur ngarkohet bateria</string>
+  <string name="prefs_automatic_uploads_not_available_users_light">Për përdoruesit “light” s’janë të mundshme ngarkimet e automatizuara</string>
   <string name="prefs_subsection_advanced">Të mëtejshme</string>
   <string name="prefs_subsection_notifications">Administroni njoftime</string>
   <string name="prefs_show_hidden_files">Shfaq kartela të fshehura</string>
@@ -160,6 +162,7 @@
   <string name="file_list_empty_title_available_offline">S’ka kartela “offline” të passhme</string>
   <string name="file_list_empty_title_shared_by_links">Pa lidhje ndarjesh</string>
   <string name="file_list_empty_subtitle_all_files">Ngarkoni ca lëndë ose bëni njëkohësim me pajisjet tuaja!</string>
+  <string name="light_users_subtitle">Hapësirë personale jo e passhme</string>
   <string name="shares_list_empty_title">Pa ndarje</string>
   <string name="shares_list_empty_subtitle">S’po bashkëpunoni në burime personash të tjerë.</string>
   <string name="spaces_list_empty_subtitle">S’keni hyrje te ndonjë hapësirë!</string>
@@ -677,6 +680,10 @@
   <string name="release_notes_icon">Ikonë shënimesh hedhjeje në qarkullim</string>
   <string name="release_notes_bugfixes_title">Ndreqje të metash të vockla</string>
   <string name="release_notes_bugfixes_subtitle">U ndreqën disa të meta, për të përmirësuar punimin te aplikacioni</string>
+  <string name="release_notes_4_7_0_title_new_layout_for_spaces">Skemë e re grafike për listë hapësirash</string>
+  <string name="release_notes_4_7_0_subtitle_new_layout_for_spaces">Një skemë e re grafike për përdorues Infinite Scale te lista e hapësirave, me një buton me tre pika në secilën kartë hapësire që hap një menu opsionesh, kur klikohet mbi të</string>
+  <string name="release_notes_4_7_0_title_create_new_spaces">Krijoni hapësira projekti</string>
+  <string name="release_notes_4_7_0_subtitle_create_new_spaces">Përdorues Infinite Scale me lejet e duhura tani mund të krijojnë hapësira projekti drejt e nga aplikacioni</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Hape në web</string>
   <string name="ic_action_open_with_web">Hape në %1$s (web)</string>
@@ -742,6 +749,12 @@
   <string name="content_description_sort_by_name_ascending">Renditi sipas %1$s në rend rritës</string>
   <string name="content_description_sort_by_name_descending">Renditi në rend rritës sipas %1$s</string>
   <string name="content_description_create_new_folder">Krijo dosje të re</string>
+  <string name="content_description_space_image">Figurë hapësire</string>
+  <string name="content_description_space_name">Emër hapësire %1$s</string>
+  <string name="content_description_space_three_dot_menu">Menu hapësire %1$s</string>
+  <string name="content_description_space_subtitle">Nëntitull hapësire %1$s</string>
+  <string name="content_description_create_button">Buton krijimi</string>
+  <string name="content_description_cancel_button">Buton anulimi</string>
   <string name="create_shortcut_dialog_title">Krijoni një shkurtore</string>
   <string name="create_shortcut_dialog_url">URL</string>
   <string name="create_shortcut_dialog_url_information">URL-ja duhet të fillojë me https:// ose http:// , që të mund të hapet në shfletues</string>
@@ -749,9 +762,24 @@
   <string name="create_shortcut_dialog_url_extension">.url</string>
   <string name="open_shortcut_description">Kjo shkurtore shpie te:</string>
   <string name="open_shortcut_title">Hap lidhje</string>
+  <string name="create_space_dialog_title">Krijoni një hapësirë</string>
   <string name="create_space_dialog_name">Emër</string>
   <string name="create_space_dialog_subtitle">Nëntitull</string>
   <string name="create_space_dialog_quota">Kuota</string>
+  <string-array name="create_space_dialog_quota_units">
+    <item>1 GB</item>
+    <item>2 GB</item>
+    <item>5 GB</item>
+    <item>10 GB</item>
+    <item>50 GB</item>
+    <item>100 GB</item>
+    <item>Pa kufizim</item>
+  </string-array>
+  <string name="create_space_dialog_empty_error">Emri i hapësirës s’mund të jetë i zbrazët</string>
+  <string name="create_space_dialog_length_error">Emri i hapësirës s’mund të jetë më i gjatë se 255 shenja</string>
+  <string name="create_space_dialog_characters_error">Shenja të ndaluara: / \\ . : ? * \" \' &gt; &lt; |</string>
+  <string name="create_space_correctly">Hapësira u krijua saktë</string>
+  <string name="create_space_failed">Hapësira s’u krijua dot</string>
   <string name="feedback_dialog_get_in_contact_description"><![CDATA[ Kërkoni ndihmë te <a href="%1$s"><b>forumi</b></a> ynë, ose kontribuoni te <a href="%2$s"><b>depoja jonë GitHub</b></a>]]></string>
   <string name="link_role_accessibility">Lidhje</string>
   <string name="button_role_accessibility">Buton</string>
