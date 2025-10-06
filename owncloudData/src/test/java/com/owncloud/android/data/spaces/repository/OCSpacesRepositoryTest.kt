@@ -34,6 +34,7 @@ import com.owncloud.android.testutil.OC_SPACE_PROJECT_WITH_IMAGE
 import com.owncloud.android.testutil.OC_USER_QUOTA_LIMITED
 import com.owncloud.android.testutil.OC_USER_QUOTA_UNLIMITED
 import com.owncloud.android.testutil.OC_USER_QUOTA_WITHOUT_PERSONAL
+import com.owncloud.android.testutil.SPACE_PERMISSIONS
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -247,6 +248,20 @@ class OCSpacesRepositoryTest {
     }
 
     @Test
+    fun `getSpacePermissions returns a list of String with space permissions`() {
+        every {
+            remoteSpacesDataSource.getSpacePermissions(OC_ACCOUNT_NAME, OC_SPACE_PROJECT_WITH_IMAGE.id)
+        } returns SPACE_PERMISSIONS
+
+        val spacePermissions = ocSpacesRepository.getSpacePermissions(OC_ACCOUNT_NAME, OC_SPACE_PROJECT_WITH_IMAGE.id)
+        assertEquals(SPACE_PERMISSIONS, spacePermissions)
+
+        verify(exactly = 1) {
+            remoteSpacesDataSource.getSpacePermissions(OC_ACCOUNT_NAME, OC_SPACE_PROJECT_WITH_IMAGE.id)
+        }
+    }
+
+    @Test
     fun `getWebDavUrlForSpace returns a String of webdav url`() {
         every {
             localSpacesDataSource.getWebDavUrlForSpace(OC_SPACE_PROJECT_WITH_IMAGE.id, OC_ACCOUNT_NAME)
@@ -295,6 +310,37 @@ class OCSpacesRepositoryTest {
         verify(exactly = 1) {
             remoteSpacesDataSource.createSpace(
                 accountName = OC_ACCOUNT_NAME,
+                spaceName = OC_SPACE_PROJECT_WITH_IMAGE.name,
+                spaceSubtitle = OC_SPACE_PROJECT_WITH_IMAGE.description!!,
+                spaceQuota = OC_SPACE_PROJECT_WITH_IMAGE.quota?.total!!
+            )
+        }
+    }
+
+    @Test
+    fun `editSpace updates a space correctly`() {
+        every {
+            remoteSpacesDataSource.editSpace(
+                accountName = OC_ACCOUNT_NAME,
+                spaceId = OC_SPACE_PROJECT_WITH_IMAGE.id,
+                spaceName = OC_SPACE_PROJECT_WITH_IMAGE.name,
+                spaceSubtitle = OC_SPACE_PROJECT_WITH_IMAGE.description!!,
+                spaceQuota = OC_SPACE_PROJECT_WITH_IMAGE.quota?.total!!
+            )
+        } returns OC_SPACE_PROJECT_WITH_IMAGE
+
+        ocSpacesRepository.editSpace(
+            accountName = OC_ACCOUNT_NAME,
+            spaceId = OC_SPACE_PROJECT_WITH_IMAGE.id,
+            spaceName = OC_SPACE_PROJECT_WITH_IMAGE.name,
+            spaceSubtitle = OC_SPACE_PROJECT_WITH_IMAGE.description!!,
+            spaceQuota = OC_SPACE_PROJECT_WITH_IMAGE.quota?.total!!
+        )
+
+        verify (exactly = 1) {
+            remoteSpacesDataSource.editSpace(
+                accountName = OC_ACCOUNT_NAME,
+                spaceId = OC_SPACE_PROJECT_WITH_IMAGE.id,
                 spaceName = OC_SPACE_PROJECT_WITH_IMAGE.name,
                 spaceSubtitle = OC_SPACE_PROJECT_WITH_IMAGE.description!!,
                 spaceQuota = OC_SPACE_PROJECT_WITH_IMAGE.quota?.total!!

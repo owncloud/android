@@ -302,3 +302,8 @@ val SPACE_RESPONSE =
         ),
         special = null,
         )
+
+val SPACE_PERMISSIONS = listOf(
+    "libre.graph/driveItem/permissions/delete",
+    "libre.graph/driveItem/permissions/update"
+)

@@ -3,8 +3,9 @@
  *
  * @author Aitor Ballesteros Pavón
  * @author Juan Carlos Garrote Gascón
+ * @author Jorge Aguado Recio
  *
- * Copyright (C) 2023 ownCloud GmbH.
+ * Copyright (C) 2025 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -26,6 +27,7 @@ import com.owncloud.android.data.spaces.datasources.implementation.OCRemoteSpace
 import com.owncloud.android.lib.resources.spaces.services.OCSpacesService
 import com.owncloud.android.testutil.OC_ACCOUNT_NAME
 import com.owncloud.android.testutil.OC_SPACE_PROJECT_WITH_IMAGE
+import com.owncloud.android.testutil.SPACE_PERMISSIONS
 import com.owncloud.android.testutil.SPACE_RESPONSE
 import com.owncloud.android.utils.createRemoteOperationResultMock
 import io.mockk.every
@@ -89,6 +91,56 @@ class OCRemoteSpacesDataSourceTest {
         verify(exactly = 1) {
             clientManager.getSpacesService(OC_ACCOUNT_NAME)
             ocSpaceService.createSpace(
+                spaceName = OC_SPACE_PROJECT_WITH_IMAGE.name,
+                spaceSubtitle = OC_SPACE_PROJECT_WITH_IMAGE.description!!,
+                spaceQuota = OC_SPACE_PROJECT_WITH_IMAGE.quota?.total!!
+            )
+        }
+    }
+
+    @Test
+    fun `getSpacePermissions returns a list of String with project space permissions`() {
+        val getSpacePermissionsResult = createRemoteOperationResultMock(SPACE_PERMISSIONS, isSuccess = true)
+
+        every {
+            ocSpaceService.getSpacePermissions(OC_SPACE_PROJECT_WITH_IMAGE.id)
+        } returns getSpacePermissionsResult
+
+        val spacePermissions = ocRemoteSpacesDataSource.getSpacePermissions(OC_ACCOUNT_NAME, OC_SPACE_PROJECT_WITH_IMAGE.id)
+        assertEquals(SPACE_PERMISSIONS, spacePermissions)
+
+        verify(exactly = 1) {
+            clientManager.getSpacesService(OC_ACCOUNT_NAME)
+            ocSpaceService.getSpacePermissions(OC_SPACE_PROJECT_WITH_IMAGE.id)
+        }
+    }
+
+    @Test
+    fun `editSpace updates a project space correctly`() {
+        val editSpaceOperationResult = createRemoteOperationResultMock(SPACE_RESPONSE, isSuccess = true)
+
+        every {
+            ocSpaceService.editSpace(
+                spaceId = OC_SPACE_PROJECT_WITH_IMAGE.id,
+                spaceName = OC_SPACE_PROJECT_WITH_IMAGE.name,
+                spaceSubtitle = OC_SPACE_PROJECT_WITH_IMAGE.description!!,
+                spaceQuota = OC_SPACE_PROJECT_WITH_IMAGE.quota?.total!!
+            )
+        } returns editSpaceOperationResult
+
+        val spaceResult = ocRemoteSpacesDataSource.editSpace(
+            accountName = OC_ACCOUNT_NAME,
+            spaceId = OC_SPACE_PROJECT_WITH_IMAGE.id,
+            spaceName = OC_SPACE_PROJECT_WITH_IMAGE.name,
+            spaceSubtitle = OC_SPACE_PROJECT_WITH_IMAGE.description!!,
+            spaceQuota = OC_SPACE_PROJECT_WITH_IMAGE.quota?.total!!
+        )
+        assertEquals(SPACE_RESPONSE.toModel(OC_ACCOUNT_NAME), spaceResult)
+
+        verify(exactly = 1) {
+            clientManager.getSpacesService(OC_ACCOUNT_NAME)
+            ocSpaceService.editSpace(
+                spaceId = OC_SPACE_PROJECT_WITH_IMAGE.id,
                 spaceName = OC_SPACE_PROJECT_WITH_IMAGE.name,
                 spaceSubtitle = OC_SPACE_PROJECT_WITH_IMAGE.description!!,
                 spaceQuota = OC_SPACE_PROJECT_WITH_IMAGE.quota?.total!!
