@@ -1,0 +1,6 @@
+Bugfix: Handling of HTTP code response 413
+
+A new exception has been added to handle cases where the payload exceeds the server limit (HTTP code 413)
+
+https://github.com/owncloud/android/issues/4094
+https://github.com/owncloud/android/pull/4685
