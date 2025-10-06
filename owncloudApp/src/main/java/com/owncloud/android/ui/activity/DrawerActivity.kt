@@ -274,7 +274,7 @@ abstract class DrawerActivity : ToolbarActivity() {
                 drawerMenu.findItem(R.id.drawer_menu_shared_by_link_files)?.icon = AppCompatResources.getDrawable(this, R.drawable.ic_ocis_shares)
                 bottomMenu.findItem(R.id.nav_spaces)?.isVisible = capabilities?.isSpacesProjectsAllowed() == true
             } else {
-                bottomMenu.findItem(R.id.nav_all_files)?.title = getString(R.string.bottom_nav_files) + "!"
+                bottomMenu.findItem(R.id.nav_all_files)?.title = getString(R.string.bottom_nav_files)
                 bottomMenu.findItem(R.id.nav_spaces)?.isVisible = false
             }
         }
