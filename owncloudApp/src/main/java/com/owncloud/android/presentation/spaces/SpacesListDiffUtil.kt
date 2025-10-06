@@ -2,8 +2,9 @@
  * ownCloud Android client application
  *
  * @author Juan Carlos Garrote Gascón
+ * @author Jorge Aguado Recio
  *
- * Copyright (C) 2023 ownCloud GmbH.
+ * Copyright (C) 2025 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -42,7 +43,7 @@ class SpacesListDiffUtil(
         val oldItem = oldList[oldItemPosition]
         val newItem = newList[newItemPosition]
 
-        if ((oldItem.name != newItem.name) || (oldItem.description != newItem.description) ||
+        if ((oldItem.name != newItem.name) || (oldItem.description != newItem.description) || (oldItem.quota != newItem.quota) ||
             (oldItem.getSpaceSpecialImage()?.id != newItem.getSpaceSpecialImage()?.id)) {
             return false
         }
