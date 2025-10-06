@@ -238,11 +238,9 @@ class MainApp : Application() {
     private fun startLogsIfEnabled() {
         val preferenceProvider = OCSharedPreferencesProvider(applicationContext)
 
-        if (BuildConfig.DEBUG) {
-            val alreadySet = preferenceProvider.containsPreference(PREFERENCE_ENABLE_LOGGING)
-            if (!alreadySet) {
-                preferenceProvider.putBoolean(PREFERENCE_ENABLE_LOGGING, true)
-            }
+        val alreadySet = preferenceProvider.containsPreference(PREFERENCE_ENABLE_LOGGING)
+        if (!alreadySet) {
+            preferenceProvider.putBoolean(PREFERENCE_ENABLE_LOGGING, true)
         }
 
         enabledLogging = preferenceProvider.getBoolean(PREFERENCE_ENABLE_LOGGING, false)
