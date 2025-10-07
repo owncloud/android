@@ -78,12 +78,14 @@ class CreateSpaceDialogFragment : DialogFragment() {
                 val spaceQuota = convertToBytes(createSpaceDialogQuotaUnit.selectedItem.toString())
 
                 if (isEditMode) {
-                    createSpaceListener.editSpace(
-                        spaceId = currentSpace!!.id,
-                        spaceName = spaceName,
-                        spaceSubtitle = spaceSubtitle,
-                        spaceQuota = if (canEditQuota) spaceQuota else null
-                    )
+                    currentSpace?.let {
+                        createSpaceListener.editSpace(
+                            spaceId = it.id,
+                            spaceName = spaceName,
+                            spaceSubtitle = spaceSubtitle,
+                            spaceQuota = if (canEditQuota) spaceQuota else null
+                        )
+                    }
                 } else {
                     createSpaceListener.createSpace(
                         spaceName = spaceName,
@@ -127,7 +129,7 @@ class CreateSpaceDialogFragment : DialogFragment() {
         val totalGB = spaceQuota / 1_000_000_000.0
         return when (totalGB) {
             1.0 -> 0
-            2.0-> 1
+            2.0 -> 1
             5.0 -> 2
             10.0 -> 3
             50.0 -> 4
