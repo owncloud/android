@@ -1,0 +1,5 @@
+Enhancement: Make Update test more robust
+
+Improvements have been added to the update test workflow in order to make the emulator execution more performant. Also, added a trigger for dependabot PRs.
+
+https://github.com/owncloud/android/pull/4690
