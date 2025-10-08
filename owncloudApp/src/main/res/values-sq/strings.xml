@@ -255,6 +255,7 @@
   <string name="uploads_view_upload_status_failed_localfile_error">S\’u gjet kartelë vendore</string>
   <string name="uploads_view_upload_status_failed_permission_error">Gabim lejesh</string>
   <string name="uploads_view_upload_status_failed_firewall_error">E ndaluar për shkak të një rregulli firewall-i</string>
+  <string name="uploads_view_upload_status_failed_payload_error">Kartelë shumë e madhe për ngarkim</string>
   <string name="uploads_view_upload_status_conflict">Përplasje</string>
   <string name="uploads_view_upload_status_service_interrupted">Aplikacioni u përfundua</string>
   <string name="uploads_view_upload_status_unknown_fail">Gabim i panjohur</string>

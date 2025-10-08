@@ -256,6 +256,7 @@
   <string name="uploads_view_upload_status_failed_localfile_error">Kohalikku faili ei leitud</string>
   <string name="uploads_view_upload_status_failed_permission_error">Õiguse viga</string>
   <string name="uploads_view_upload_status_failed_firewall_error">Keelatud tulemüüri reegli tõttu</string>
+  <string name="uploads_view_upload_status_failed_payload_error">Fail on üleslaadimiseks liiga suur</string>
   <string name="uploads_view_upload_status_conflict">Konflikt</string>
   <string name="uploads_view_upload_status_service_interrupted">Rakendus suleti jõuga</string>
   <string name="uploads_view_upload_status_unknown_fail">Tundmatu viga</string>
