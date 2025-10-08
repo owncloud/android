@@ -9,6 +9,7 @@ on:
     - improvement/*
     - release/*
     - technical/*
+    - dependabot/*
 
 permissions:
   # Only need read access to repository contents
@@ -166,13 +167,13 @@ jobs:
           avd-name: test-avd
           force-avd-creation: true
           disable-animations: true
-          emulator-options: -no-window -no-audio -no-boot-anim -accel auto -memory 2048
+          emulator-options: -no-snapshot -no-window -no-audio -no-boot-anim -accel on -memory 4096
           script: |
             # To catch only crashes in background
             adb logcat -b crash *:E > crash_log.txt 2>&1 &
             LOGCAT_PID=$!
 
-            ./gradlew clean test -Dserver="${{ secrets.OC_SERVER_URL }}" -Dusername="${{ secrets.OC_SERVER_USERNAME_TEST }}" -Dpassword="${{ secrets.OC_SERVER_PASSWORD_TEST }}" -Dcommit="$(echo $GITHUB_SHA | cut -c1-7)"
+            ./gradlew --no-daemon clean test -Dserver="${{ secrets.OC_SERVER_URL }}" -Dusername="${{ secrets.OC_SERVER_USERNAME_TEST }}" -Dpassword="${{ secrets.OC_SERVER_PASSWORD_TEST }}" -Dcommit="$(echo $GITHUB_SHA | cut -c1-7)"
 
             # Kill logcat to serve crash_log.txt
             kill $LOGCAT_PID || true
