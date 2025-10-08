@@ -1,0 +1,7 @@
+Enhancement: Edit a space
+
+A new edit space option has been added to the bottom sheet, available only to users
+with the required permissions when the three-dot menu button is tapped.
+
+https://github.com/owncloud/android/issues/4607
+https://github.com/owncloud/android/pull/4687

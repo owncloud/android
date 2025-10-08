@@ -1,5 +1,5 @@
 /* ownCloud Android Library is available under MIT license
- *   Copyright (C) 2022 ownCloud GmbH.
+ *   Copyright (C) 2025 ownCloud GmbH.
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -19,16 +19,30 @@
  *   ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  *   CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *   THE SOFTWARE.
+ *
  */
-package com.owncloud.android.lib.resources.spaces.services
 
-import com.owncloud.android.lib.common.operations.RemoteOperationResult
-import com.owncloud.android.lib.resources.Service
-import com.owncloud.android.lib.resources.spaces.responses.SpaceResponse
+package com.owncloud.android.lib.common.http.methods.nonwebdav
 
-interface SpacesService : Service {
-    fun getSpaces(): RemoteOperationResult<List<SpaceResponse>>
-    fun createSpace(spaceName: String, spaceSubtitle: String, spaceQuota: Long): RemoteOperationResult<SpaceResponse>
-    fun getSpacePermissions(spaceId: String): RemoteOperationResult<List<String>>
-    fun editSpace(spaceId: String, spaceName: String, spaceSubtitle: String, spaceQuota: Long?): RemoteOperationResult<SpaceResponse>
+import okhttp3.OkHttpClient
+import okhttp3.RequestBody
+import java.io.IOException
+import java.net.URL
+
+/**
+ * OkHttp patch calls wrapper
+ *
+ * @author Jorge Aguado Recio
+ */
+class PatchMethod(
+    url: URL,
+    private val patchRequestBody: RequestBody
+) : HttpMethod(url) {
+    @Throws(IOException::class)
+    override fun onExecute(okHttpClient: OkHttpClient): Int {
+        request = request.newBuilder()
+            .patch(patchRequestBody)
+            .build()
+        return super.onExecute(okHttpClient)
+    }
 }

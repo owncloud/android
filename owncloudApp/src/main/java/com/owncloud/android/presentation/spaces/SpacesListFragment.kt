@@ -30,6 +30,7 @@ import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -42,13 +43,17 @@ import com.owncloud.android.databinding.FileOptionsBottomSheetFragmentBinding
 import com.owncloud.android.databinding.SpacesListFragmentBinding
 import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.domain.spaces.model.OCSpace
+import com.owncloud.android.domain.spaces.model.SpaceMenuOption
 import com.owncloud.android.extensions.collectLatestLifecycleFlow
 import com.owncloud.android.extensions.showErrorInSnackbar
 import com.owncloud.android.extensions.showMessageInSnackbar
 import com.owncloud.android.extensions.toDrawableRes
+import com.owncloud.android.extensions.toDrawableResId
+import com.owncloud.android.extensions.toStringResId
 import com.owncloud.android.extensions.toSubtitleStringRes
 import com.owncloud.android.extensions.toTitleStringRes
 import com.owncloud.android.presentation.capabilities.CapabilityViewModel
+import com.owncloud.android.presentation.common.BottomSheetFragmentItemView
 import com.owncloud.android.utils.DisplayUtils
 import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.presentation.spaces.createspace.CreateSpaceDialogFragment
@@ -66,6 +71,9 @@ class SpacesListFragment :
     private val binding get() = _binding!!
 
     private var isMultiPersonal = false
+    private var editSpacesPermission = false
+    private var editQuotaPermission = false
+    private lateinit var currentSpace: OCSpace
 
     private val spacesListViewModel: SpacesListViewModel by viewModel {
         parametersOf(
@@ -112,7 +120,12 @@ class SpacesListFragment :
         }
 
         binding.fabCreateSpace.setOnClickListener {
-            val dialog = CreateSpaceDialogFragment.newInstance(requireArguments().getString(BUNDLE_ACCOUNT_NAME), this)
+            val dialog = CreateSpaceDialogFragment.newInstance(
+                isEditMode = false,
+                canEditQuota = false,
+                currentSpace = null,
+                listener = this
+            )
             dialog.show(requireActivity().supportFragmentManager, DIALOG_CREATE_SPACE)
             binding.fabCreateSpace.isFocusable = false
         }
@@ -166,7 +179,11 @@ class SpacesListFragment :
                 when (val uiResult = event.peekContent()) {
                     is UIResult.Success -> {
                         Timber.d("The permissions for $accountName are: ${uiResult.data}")
-                        uiResult.data?.let { binding.fabCreateSpace.isVisible = it.contains(DRIVES_CREATE_ALL_PERMISSION) }
+                        uiResult.data?.let {
+                            binding.fabCreateSpace.isVisible = it.contains(DRIVES_CREATE_ALL_PERMISSION)
+                            editSpacesPermission = it.contains(DRIVES_READ_WRITE_ALL_PERMISSION)
+                            editQuotaPermission = it.contains(DRIVES_READ_WRITE_PROJECT_QUOTA_ALL_PERMISSION)
+                        }
                     }
                     is UIResult.Loading -> { }
                     is UIResult.Error -> {
@@ -185,6 +202,20 @@ class SpacesListFragment :
                     is UIResult.Error -> { showErrorInSnackbar(R.string.create_space_failed, uiResult.error) }
                 }
             }
+        }
+
+        collectLatestLifecycleFlow(spacesListViewModel.editSpaceFlow) { event ->
+            event?.let {
+                when (val uiResult = event.peekContent()) {
+                    is UIResult.Success -> { showMessageInSnackbar(getString(R.string.edit_space_correctly)) }
+                    is UIResult.Loading -> { }
+                    is UIResult.Error -> { showErrorInSnackbar(R.string.edit_space_failed, uiResult.error) }
+                }
+            }
+        }
+
+        collectLatestLifecycleFlow(spacesListViewModel.menuOptions) { menuOptions ->
+            showSpaceMenuOptionsDialog(menuOptions)
         }
 
     }
@@ -211,40 +242,8 @@ class SpacesListFragment :
     }
 
     override fun onThreeDotButtonClick(ocSpace: OCSpace) {
-        val spaceOptionsBottomSheetBinding = FileOptionsBottomSheetFragmentBinding.inflate(layoutInflater)
-        val dialog = BottomSheetDialog(requireContext())
-        dialog.setContentView(spaceOptionsBottomSheetBinding.root)
-
-        val fileOptionsBottomSheetSingleFileBehavior: BottomSheetBehavior<*> = BottomSheetBehavior.from(
-            spaceOptionsBottomSheetBinding.root.parent as View)
-        val closeBottomSheetButton = spaceOptionsBottomSheetBinding.closeBottomSheet
-        closeBottomSheetButton.setOnClickListener {
-            dialog.dismiss()
-        }
-
-        val thumbnailBottomSheet = spaceOptionsBottomSheetBinding.thumbnailBottomSheet
-        thumbnailBottomSheet.setImageResource(R.drawable.ic_menu_space)
-
-        val spaceNameBottomSheet = spaceOptionsBottomSheetBinding.fileNameBottomSheet
-        spaceNameBottomSheet.text = ocSpace.name
-
-        val spaceSizeBottomSheet = spaceOptionsBottomSheetBinding.fileSizeBottomSheet
-        spaceSizeBottomSheet.text = DisplayUtils.bytesToHumanReadable(ocSpace.quota?.used ?: 0L, requireContext(), true)
-
-        val spaceSeparatorBottomSheet = spaceOptionsBottomSheetBinding.fileSeparatorBottomSheet
-        spaceSeparatorBottomSheet.visibility = View.GONE
-
-        fileOptionsBottomSheetSingleFileBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
-            override fun onStateChanged(bottomSheet: View, newState: Int) {
-                if (newState == BottomSheetBehavior.STATE_DRAGGING) {
-                    fileOptionsBottomSheetSingleFileBehavior.state = BottomSheetBehavior.STATE_EXPANDED
-                }
-            }
-            override fun onSlide(bottomSheet: View, slideOffset: Float) {}
-        })
-
-        dialog.setOnShowListener { fileOptionsBottomSheetSingleFileBehavior.peekHeight = spaceOptionsBottomSheetBinding.root.measuredHeight }
-        dialog.show()
+        currentSpace = ocSpace
+        spacesListViewModel.filterMenuOptions(ocSpace, editSpacesPermission)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -267,6 +266,10 @@ class SpacesListFragment :
         spacesListViewModel.createSpace(spaceName, spaceSubtitle, spaceQuota)
     }
 
+    override fun editSpace(spaceId: String, spaceName: String, spaceSubtitle: String, spaceQuota: Long?) {
+        spacesListViewModel.editSpace(spaceId, spaceName, spaceSubtitle, spaceQuota)
+    }
+
     fun setSearchListener(searchView: SearchView) {
         searchView.setOnQueryTextListener(this)
     }
@@ -276,12 +279,78 @@ class SpacesListFragment :
         searchViewRootToolbar.queryHint = getString(R.string.actionbar_search_space)
     }
 
+    private fun showSpaceMenuOptionsDialog(menuOptions: List<SpaceMenuOption>) {
+        val spaceOptionsBottomSheetBinding = FileOptionsBottomSheetFragmentBinding.inflate(layoutInflater)
+        val dialog = BottomSheetDialog(requireContext())
+        dialog.setContentView(spaceOptionsBottomSheetBinding.root)
+
+        val fileOptionsBottomSheetSingleFileBehavior: BottomSheetBehavior<*> = BottomSheetBehavior.from(
+            spaceOptionsBottomSheetBinding.root.parent as View)
+        val closeBottomSheetButton = spaceOptionsBottomSheetBinding.closeBottomSheet
+        closeBottomSheetButton.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        val thumbnailBottomSheet = spaceOptionsBottomSheetBinding.thumbnailBottomSheet
+        thumbnailBottomSheet.setImageResource(R.drawable.ic_menu_space)
+
+        val spaceNameBottomSheet = spaceOptionsBottomSheetBinding.fileNameBottomSheet
+        spaceNameBottomSheet.text = currentSpace.name
+
+        val spaceSizeBottomSheet = spaceOptionsBottomSheetBinding.fileSizeBottomSheet
+        spaceSizeBottomSheet.text = DisplayUtils.bytesToHumanReadable(currentSpace.quota?.used ?: 0L, requireContext(), true)
+
+        val spaceSeparatorBottomSheet = spaceOptionsBottomSheetBinding.fileSeparatorBottomSheet
+        spaceSeparatorBottomSheet.visibility = View.GONE
+
+        menuOptions.forEach { menuOption ->
+            setMenuOption(menuOption, spaceOptionsBottomSheetBinding, dialog)
+        }
+
+        fileOptionsBottomSheetSingleFileBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+                if (newState == BottomSheetBehavior.STATE_DRAGGING) {
+                    fileOptionsBottomSheetSingleFileBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                }
+            }
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {}
+        })
+
+        dialog.setOnShowListener { fileOptionsBottomSheetSingleFileBehavior.peekHeight = spaceOptionsBottomSheetBinding.root.measuredHeight }
+        dialog.show()
+    }
+
+    private fun setMenuOption(menuOption: SpaceMenuOption, binding: FileOptionsBottomSheetFragmentBinding, dialog: BottomSheetDialog) {
+        val fileOptionItemView = BottomSheetFragmentItemView(requireContext())
+        fileOptionItemView.apply {
+            itemIcon = ResourcesCompat.getDrawable(resources, menuOption.toDrawableResId(), null)
+            title = getString(menuOption.toStringResId())
+            setOnClickListener {
+                dialog.dismiss()
+                when(menuOption) {
+                    SpaceMenuOption.EDIT -> {
+                        val editDialog = CreateSpaceDialogFragment.newInstance(
+                            isEditMode = true,
+                            canEditQuota = editQuotaPermission,
+                            currentSpace = currentSpace,
+                            listener = this@SpacesListFragment
+                        )
+                        editDialog.show(requireActivity().supportFragmentManager, DIALOG_CREATE_SPACE)
+                    }
+                }
+            }
+        }
+        binding.fileOptionsBottomSheetLayout.addView(fileOptionItemView)
+    }
+
     companion object {
         const val REQUEST_KEY_CLICK_SPACE = "REQUEST_KEY_CLICK_SPACE"
         const val BUNDLE_KEY_CLICK_SPACE = "BUNDLE_KEY_CLICK_SPACE"
         const val BUNDLE_SHOW_PERSONAL_SPACE = "showPersonalSpace"
         const val BUNDLE_ACCOUNT_NAME = "accountName"
         const val DRIVES_CREATE_ALL_PERMISSION = "Drives.Create.all"
+        const val DRIVES_READ_WRITE_ALL_PERMISSION = "Drives.ReadWrite.all"
+        const val DRIVES_READ_WRITE_PROJECT_QUOTA_ALL_PERMISSION = "Drives.ReadWriteProjectQuota.all"
 
         private const val DIALOG_CREATE_SPACE = "DIALOG_CREATE_SPACE"
 

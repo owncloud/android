@@ -3,8 +3,9 @@
  *
  * @author Abel García de Prada
  * @author Juan Carlos Garrote Gascón
+ * @author Jorge Aguado Recio
  *
- * Copyright (C) 2024 ownCloud GmbH.
+ * Copyright (C) 2025 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -21,6 +22,10 @@
 
 package com.owncloud.android.domain.spaces.model
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
 data class OCSpace(
     val accountName: String,
     val driveAlias: String?,
@@ -34,7 +39,7 @@ data class OCSpace(
     val webUrl: String?,
     val description: String?,
     val special: List<SpaceSpecial>?,
-) {
+) : Parcelable {
     val isPersonal get() = driveType == DRIVE_TYPE_PERSONAL
     val isProject get() = driveType == DRIVE_TYPE_PROJECT
 
@@ -57,24 +62,28 @@ data class OCSpace(
     }
 }
 
+@Parcelize
 data class SpaceOwner(
     val user: SpaceUser
-)
+) : Parcelable
 
+@Parcelize
 data class SpaceQuota(
     val remaining: Long?,
     val state: String?,
     val total: Long,
     val used: Long?,
-)
+) : Parcelable
 
+@Parcelize
 data class SpaceRoot(
     val eTag: String?,
     val id: String,
     val webDavUrl: String,
     val deleted: SpaceDeleted?,
-)
+) : Parcelable
 
+@Parcelize
 data class SpaceSpecial(
     val eTag: String,
     val file: SpaceFile,
@@ -84,20 +93,24 @@ data class SpaceSpecial(
     val size: Int,
     val specialFolder: SpaceSpecialFolder,
     val webDavUrl: String
-)
+) : Parcelable
 
+@Parcelize
 data class SpaceDeleted(
     val state: String,
-)
+) : Parcelable
 
+@Parcelize
 data class SpaceUser(
     val id: String
-)
+) : Parcelable
 
+@Parcelize
 data class SpaceFile(
     val mimeType: String
-)
+) : Parcelable
 
+@Parcelize
 data class SpaceSpecialFolder(
     val name: String
-)
+) : Parcelable

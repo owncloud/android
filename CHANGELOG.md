@@ -47,6 +47,7 @@ ownCloud admins and users.
 * Enhancement - New layout for spaces list: [#4604](https://github.com/owncloud/android/issues/4604)
 * Enhancement - Add account ID to the user information: [#4605](https://github.com/owncloud/android/issues/4605)
 * Enhancement - Create a new space: [#4606](https://github.com/owncloud/android/issues/4606)
+* Enhancement - Edit a space: [#4607](https://github.com/owncloud/android/issues/4607)
 * Enhancement - Update test in GitHub Actions: [#4663](https://github.com/owncloud/android/pull/4663)
 * Enhancement - New workflow to generate a build from "latest" tag on demand: [#4681](https://github.com/owncloud/android/pull/4681)
 
@@ -119,6 +120,14 @@ ownCloud admins and users.
 
    https://github.com/owncloud/android/issues/4606
    https://github.com/owncloud/android/pull/4683
+
+* Enhancement - Edit a space: [#4607](https://github.com/owncloud/android/issues/4607)
+
+   A new edit space option has been added to the bottom sheet, available only to
+   users with the required permissions when the three-dot menu button is tapped.
+
+   https://github.com/owncloud/android/issues/4607
+   https://github.com/owncloud/android/pull/4687
 
 * Enhancement - Update test in GitHub Actions: [#4663](https://github.com/owncloud/android/pull/4663)
 
