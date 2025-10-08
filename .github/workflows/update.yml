@@ -9,7 +9,7 @@ on:
     - improvement/*
     - release/*
     - technical/*
-    - dependabot/*
+    - 'dependabot/**'
 
 permissions:
   # Only need read access to repository contents
