@@ -385,7 +385,7 @@ class OCFileRepository(
                                 if (remoteFolder.isAvailableOffline) AVAILABLE_OFFLINE_PARENT else NOT_AVAILABLE_OFFLINE
 
                         })
-                } else if (localChildToSync.etag != remoteChild.etag ||
+                } else if (localFolderByRemotePath.etag != remoteFolder.etag || localChildToSync.etag != remoteChild.etag ||
                     localChildToSync.localModificationTimestamp > remoteChild.lastSyncDateForData!! ||
                     isActionSetFolderAvailableOfflineOrSynchronize
                 ) {
