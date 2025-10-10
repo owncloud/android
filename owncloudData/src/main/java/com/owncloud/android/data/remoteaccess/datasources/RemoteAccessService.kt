@@ -27,7 +27,7 @@ interface RemoteAccessService {
      * @param request Authentication initiation request containing email, clientId, and clientFriendlyName
      * @return Response containing an opaque reference to be used in the token request
      */
-    @POST("client/v1/auth/initiate")
+    @POST(REMOTE_ACCESS_PATH_INITIATE)
     suspend fun initiateAuthentication(
         @Query("type") type: String = "email",
         @Body request: RemoteAccessInitiateRequest
@@ -43,7 +43,7 @@ interface RemoteAccessService {
      * @param request Token request containing the reference and validation code
      * @return Token response containing access token, refresh token, and expiration info
      */
-    @POST("client/v1/auth/token")
+    @POST(REMOTE_ACCESS_PATH_TOKEN)
     suspend fun getToken(
         @Query("type") type: String = "email",
         @Body request: RemoteAccessTokenRequest
@@ -58,7 +58,7 @@ interface RemoteAccessService {
      * @param refreshToken Refresh token from the previous token response
      * @return New token response with refreshed access token
      */
-    @GET("client/v1/auth/refresh")
+    @GET(REMOTE_ACCESS_PATH_TOKEN_REFRESH)
     suspend fun refreshToken(
         @Query("refresh_token") refreshToken: String
     ): RemoteAccessTokenResponse
@@ -71,7 +71,7 @@ interface RemoteAccessService {
      *
      * @return List of devices with their information
      */
-    @GET("client/v1/devices")
+    @GET(REMOTE_ACCESS_PATH_DEVICES)
     suspend fun getDevices(): List<RemoteAccessDeviceResponse>
 
     /**
@@ -83,9 +83,16 @@ interface RemoteAccessService {
      * @param deviceId Device identifier
      * @return Device paths information including available connection paths
      */
-    @GET("client/v1/devices/{deviceID}")
+    @GET(REMOTE_ACCESS_PATH_DEVICE_PATHS)
     suspend fun getDeviceById(
         @Path("deviceID") deviceId: String
     ): RemoteAccessDevicePathsResponse
 }
+
+internal const val REMOTE_ACCESS_PATH_INITIATE = "client/v1/auth/initiate"
+internal const val REMOTE_ACCESS_PATH_TOKEN = "client/v1/auth/token"
+internal const val REMOTE_ACCESS_PATH_TOKEN_REFRESH = "client/v1/auth/refresh"
+internal const val REMOTE_ACCESS_PATH_DEVICES = "client/v1/devices"
+internal const val REMOTE_ACCESS_PATH_DEVICE_PATHS = "client/v1/devices/{deviceID}"
+
 

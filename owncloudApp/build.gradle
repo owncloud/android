@@ -76,6 +76,12 @@ dependencies {
     // Markdown Preview
     implementation libs.bundles.markwon
 
+    // Retrofit and OkHttp
+    implementation libs.retrofit
+    implementation libs.retrofit.converter.moshi
+    implementation libs.okhttp.logging.interceptor
+    implementation libs.moshi.kotlin
+
     // Timber
     implementation libs.timber
 

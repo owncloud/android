@@ -44,6 +44,7 @@ import com.owncloud.android.datamodel.ThumbnailsCacheManager
 import com.owncloud.android.db.PreferenceManager
 import com.owncloud.android.dependecyinjection.commonModule
 import com.owncloud.android.dependecyinjection.localDataSourceModule
+import com.owncloud.android.dependecyinjection.remoteAccessModule
 import com.owncloud.android.dependecyinjection.remoteDataSourceModule
 import com.owncloud.android.dependecyinjection.repositoryModule
 import com.owncloud.android.dependecyinjection.useCaseModule
@@ -379,7 +380,8 @@ class MainApp : Application() {
                         useCaseModule,
                         repositoryModule,
                         localDataSourceModule,
-                        remoteDataSourceModule
+                        remoteDataSourceModule,
+                        remoteAccessModule
                     )
                 )
             }
