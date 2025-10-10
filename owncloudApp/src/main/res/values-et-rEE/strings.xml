@@ -687,6 +687,8 @@
   <string name="release_notes_4_7_0_subtitle_new_layout_for_spaces">Ruumide nimekirja uus disain Infinite Scale kasutajatele koos kolme-punkti nupuga igal ruumi kaardil, mis klikkides avavad valikute menüü</string>
   <string name="release_notes_4_7_0_title_create_new_spaces">Projektiruumide loomine</string>
   <string name="release_notes_4_7_0_subtitle_create_new_spaces">Vastavaid õiguseid omavad Infinite Scale kasutajad saavad nüüd projekti ruume luua otse äpis</string>
+  <string name="release_notes_4_7_0_title_edit_spaces">Muuda projekti ruume</string>
+  <string name="release_notes_4_7_0_subtitle_edit_spaces">Korrektsete õigustega Inifinite Scale kasutajad saavad nüüd projekti ruume muuta otse äpis</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Ava veebis</string>
   <string name="ic_action_open_with_web">Ava %1$s (veebis)</string>
@@ -783,6 +785,9 @@
   <string name="create_space_dialog_characters_error">Keelatud märgid: / \\ . : ? * \" \' &gt; &lt; |</string>
   <string name="create_space_correctly">Ruum loodi korrektselt</string>
   <string name="create_space_failed">Ruumi loomine ebaõnnestus</string>
+  <string name="edit_space">Muuda ruumi</string>
+  <string name="edit_space_correctly">Ruum muudetud korrektselt</string>
+  <string name="edit_space_failed">Ruumi ei õnnestunud uuendada</string>
   <string name="feedback_dialog_get_in_contact_description"><![CDATA[ Küsi abi meie <a href="%1$s"><b>foorumist</b></a> või anna oma panus <a href="%2$s"><b>GitHub reposse</b></a>]]></string>
   <string name="link_role_accessibility">Link</string>
   <string name="button_role_accessibility">Nupp</string>

@@ -685,6 +685,8 @@
   <string name="release_notes_4_7_0_subtitle_new_layout_for_spaces">Një skemë e re grafike për përdorues Infinite Scale te lista e hapësirave, me një buton me tre pika në secilën kartë hapësire që hap një menu opsionesh, kur klikohet mbi të</string>
   <string name="release_notes_4_7_0_title_create_new_spaces">Krijoni hapësira projekti</string>
   <string name="release_notes_4_7_0_subtitle_create_new_spaces">Përdorues Infinite Scale me lejet e duhura tani mund të krijojnë hapësira projekti drejt e nga aplikacioni</string>
+  <string name="release_notes_4_7_0_title_edit_spaces">Përpunoni hapësira projektesh</string>
+  <string name="release_notes_4_7_0_subtitle_edit_spaces">Përdorues Infinite Scale me lejet e duhura tani mund të përpunojnë hapësira projekti drejt e nga aplikacioni</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Hape në web</string>
   <string name="ic_action_open_with_web">Hape në %1$s (web)</string>
@@ -781,6 +783,9 @@
   <string name="create_space_dialog_characters_error">Shenja të ndaluara: / \\ . : ? * \" \' &gt; &lt; |</string>
   <string name="create_space_correctly">Hapësira u krijua saktë</string>
   <string name="create_space_failed">Hapësira s’u krijua dot</string>
+  <string name="edit_space">Përpunoni hapësirë</string>
+  <string name="edit_space_correctly">Hapësira u përditësua saktësisht</string>
+  <string name="edit_space_failed">Hapësira s’u përditësua dot</string>
   <string name="feedback_dialog_get_in_contact_description"><![CDATA[ Kërkoni ndihmë te <a href="%1$s"><b>forumi</b></a> ynë, ose kontribuoni te <a href="%2$s"><b>depoja jonë GitHub</b></a>]]></string>
   <string name="link_role_accessibility">Lidhje</string>
   <string name="button_role_accessibility">Buton</string>
