@@ -44,6 +44,7 @@ material = "1.14.0-alpha03"
 mockk = "1.13.3"
 moshi = "1.15.0"
 patternlockview = "a90b0d4bf0"
+retrofit = "2.9.0"
 photoView = "2.3.0"
 preference = "1.2.0"
 sonarqube = "4.0.0.2929"
@@ -116,6 +117,8 @@ mockk-android = { group = "io.mockk", name = "mockk-android", version.ref = "moc
 moshi-kotlin = { group = "com.squareup.moshi", name = "moshi-kotlin", version.ref = "moshi" }
 moshi-kotlin-codegen = { group = "com.squareup.moshi", name = "moshi-kotlin-codegen", version.ref = "moshi" }
 patternlockview = { group = "com.github.aritraroy.PatternLockView", name = "patternlockview", version.ref = "patternlockview" }
+retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
+retrofit-converter-moshi = { group = "com.squareup.retrofit2", name = "converter-moshi", version.ref = "retrofit" }
 photoview = { group = "com.github.chrisbanes", name = "PhotoView", version.ref = "photoView" }
 stetho = { group = "com.facebook.stetho", name = "stetho", version.ref = "stetho" }
 timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
