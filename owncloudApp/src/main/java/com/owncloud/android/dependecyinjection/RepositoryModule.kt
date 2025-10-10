@@ -28,6 +28,7 @@ import com.owncloud.android.data.capabilities.repository.OCCapabilityRepository
 import com.owncloud.android.data.files.repository.OCFileRepository
 import com.owncloud.android.data.folderbackup.repository.OCFolderBackupRepository
 import com.owncloud.android.data.oauth.repository.OCOAuthRepository
+import com.owncloud.android.data.remoteaccess.repository.HCRemoteAccessRepository
 import com.owncloud.android.data.searches.repository.OCSavedSearchesRepository
 import com.owncloud.android.data.server.repository.OCServerInfoRepository
 import com.owncloud.android.data.sharing.sharees.repository.OCShareeRepository
@@ -42,6 +43,7 @@ import com.owncloud.android.domain.authentication.oauth.OAuthRepository
 import com.owncloud.android.domain.automaticuploads.FolderBackupRepository
 import com.owncloud.android.domain.capabilities.CapabilityRepository
 import com.owncloud.android.domain.files.FileRepository
+import com.owncloud.android.domain.remoteaccess.RemoteAccessRepository
 import com.owncloud.android.domain.searches.SavedSearchesRepository
 import com.owncloud.android.domain.server.ServerInfoRepository
 import com.owncloud.android.domain.sharing.sharees.ShareeRepository
@@ -69,4 +71,5 @@ val repositoryModule = module {
     factoryOf(::OCTransferRepository) bind TransferRepository::class
     factoryOf(::OCUserRepository) bind UserRepository::class
     factoryOf(::OCWebFingerRepository) bind WebFingerRepository::class
+    factoryOf(::HCRemoteAccessRepository) bind RemoteAccessRepository::class
 }

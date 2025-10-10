@@ -80,6 +80,10 @@ import com.owncloud.android.domain.files.usecases.SetLastUsageFileUseCase
 import com.owncloud.android.domain.files.usecases.SortFilesUseCase
 import com.owncloud.android.domain.files.usecases.SortFilesWithSyncInfoUseCase
 import com.owncloud.android.domain.files.usecases.UpdateAlreadyDownloadedFilesPathUseCase
+import com.owncloud.android.domain.remoteaccess.usecases.GetRemoteAccessDeviceByIdUseCase
+import com.owncloud.android.domain.remoteaccess.usecases.GetRemoteAccessDevicesUseCase
+import com.owncloud.android.domain.remoteaccess.usecases.GetRemoteAccessTokenUseCase
+import com.owncloud.android.domain.remoteaccess.usecases.InitiateRemoteAccessAuthenticationUseCase
 import com.owncloud.android.domain.searches.usecases.ClearSavedSearchesForAccountUseCase
 import com.owncloud.android.domain.searches.usecases.GetSavedSearchesForAccountUseCase
 import com.owncloud.android.domain.searches.usecases.RemoveSavedSearchUseCase
@@ -289,6 +293,12 @@ val useCaseModule = module {
     factoryOf(::ResetVideoUploadsUseCase)
     factoryOf(::SavePictureUploadsConfigurationUseCase)
     factoryOf(::SaveVideoUploadsConfigurationUseCase)
+
+    // Remote Access
+    factoryOf(::InitiateRemoteAccessAuthenticationUseCase)
+    factoryOf(::GetRemoteAccessTokenUseCase)
+    factoryOf(::GetRemoteAccessDevicesUseCase)
+    factoryOf(::GetRemoteAccessDeviceByIdUseCase)
 
     // Accounts
     factoryOf(::RemoveAccountUseCase)

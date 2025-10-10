@@ -1,5 +1,6 @@
 package com.owncloud.android.dependecyinjection
 
+import com.owncloud.android.data.remoteaccess.RemoteAccessTokenStorage
 import com.owncloud.android.data.remoteaccess.datasources.RemoteAccessService
 import com.owncloud.android.data.remoteaccess.interceptor.RemoteAccessAuthInterceptor
 import com.squareup.moshi.Moshi
@@ -22,6 +23,11 @@ val remoteAccessModule = module {
         "https://hc-remote-access-env-https.eba-a2nvhpbm.us-west-2.elasticbeanstalk.com/api/"
     }
 
+    // Token Storage
+    single {
+        RemoteAccessTokenStorage(get())
+    }
+
     // Moshi instance for JSON serialization
     single(named("remoteAccessMoshi")) {
         Moshi.Builder().build()
@@ -38,7 +44,7 @@ val remoteAccessModule = module {
 
     // Auth interceptor for Bearer token
     single(named("remoteAccessAuthInterceptor")) {
-        RemoteAccessAuthInterceptor()
+        RemoteAccessAuthInterceptor(get())
     }
 
     // OkHttpClient for Remote Access API
@@ -66,4 +72,3 @@ val remoteAccessModule = module {
         get<Retrofit>(named("remoteAccessRetrofit")).create(RemoteAccessService::class.java)
     }
 }
-

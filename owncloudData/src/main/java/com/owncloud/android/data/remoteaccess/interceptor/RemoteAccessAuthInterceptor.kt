@@ -1,12 +1,15 @@
 package com.owncloud.android.data.remoteaccess.interceptor
 
+import com.owncloud.android.data.remoteaccess.RemoteAccessTokenStorage
 import com.owncloud.android.data.remoteaccess.datasources.REMOTE_ACCESS_PATH_INITIATE
 import com.owncloud.android.data.remoteaccess.datasources.REMOTE_ACCESS_PATH_TOKEN
 import com.owncloud.android.data.remoteaccess.datasources.REMOTE_ACCESS_PATH_TOKEN_REFRESH
 import okhttp3.Interceptor
 import okhttp3.Response
 
-class RemoteAccessAuthInterceptor : Interceptor {
+class RemoteAccessAuthInterceptor(
+    private val tokenStorage: RemoteAccessTokenStorage
+) : Interceptor {
 
     override fun intercept(chain: Interceptor.Chain): Response {
         val originalRequest = chain.request()
@@ -17,10 +20,9 @@ class RemoteAccessAuthInterceptor : Interceptor {
                 !originalRequest.url.encodedPath.contains(REMOTE_ACCESS_PATH_TOKEN_REFRESH)
 
         if (requiresAuth) {
-            // TODO: Get token from shared preferences or token manager
-            val token = "" // Replace with actual token retrieval logic
+            val token = tokenStorage.getAccessToken()
 
-            val request = if (token.isNotEmpty()) {
+            val request = if (!token.isNullOrEmpty()) {
                 originalRequest.newBuilder()
                     .header("Authorization", "Bearer $token")
                     .build()
