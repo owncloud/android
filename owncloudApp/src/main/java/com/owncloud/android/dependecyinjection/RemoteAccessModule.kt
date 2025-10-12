@@ -4,6 +4,7 @@ import com.owncloud.android.BuildConfig
 import com.owncloud.android.data.remoteaccess.RemoteAccessTokenStorage
 import com.owncloud.android.data.remoteaccess.datasources.RemoteAccessService
 import com.owncloud.android.data.remoteaccess.interceptor.RemoteAccessAuthInterceptor
+import com.owncloud.android.data.remoteaccess.interceptor.RemoteAccessTokenRefreshInterceptor
 import com.squareup.moshi.Moshi
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -26,6 +27,7 @@ object RemoteAccessQualifiers {
     const val BASE_URL = "remoteAccessBaseUrl"
     const val LOGGING_INTERCEPTOR = "remoteAccessLoggingInterceptor"
     const val AUTH_INTERCEPTOR = "remoteAccessAuthInterceptor"
+    const val TOKEN_REFRESH_INTERCEPTOR = "remoteAccessTokenRefreshInterceptor"
     const val OKHTTP_CLIENT = "remoteAccessOkHttpClient"
     const val RETROFIT = "remoteAccessRetrofit"
 }
@@ -62,6 +64,15 @@ val remoteAccessModule = module {
         RemoteAccessAuthInterceptor(get())
     }
 
+    // Token refresh interceptor for automatic token refresh on 401/403
+    // Uses lazy injection to break circular dependency with RemoteAccessService
+    single(named(RemoteAccessQualifiers.TOKEN_REFRESH_INTERCEPTOR)) {
+        RemoteAccessTokenRefreshInterceptor(
+            tokenStorage = get(),
+            remoteAccessServiceLazy = inject()
+        )
+    }
+
     // OkHttpClient for Remote Access API
     single(named(RemoteAccessQualifiers.OKHTTP_CLIENT)) {
         // TODO: This is a TEMPORARY solution - trusting all certificates is insecure!
@@ -78,6 +89,7 @@ val remoteAccessModule = module {
 
         OkHttpClient.Builder()
             .addInterceptor(get<RemoteAccessAuthInterceptor>(named(RemoteAccessQualifiers.AUTH_INTERCEPTOR)))
+            .addInterceptor(get<RemoteAccessTokenRefreshInterceptor>(named(RemoteAccessQualifiers.TOKEN_REFRESH_INTERCEPTOR)))
             .addInterceptor(get<HttpLoggingInterceptor>(named(RemoteAccessQualifiers.LOGGING_INTERCEPTOR)))
             .sslSocketFactory(sslContext.socketFactory, trustAllCerts[0] as X509TrustManager)
             .hostnameVerifier { _, _ -> true }
