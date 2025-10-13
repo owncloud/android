@@ -2,6 +2,7 @@ package com.owncloud.android.dependecyinjection
 
 import com.owncloud.android.BuildConfig
 import com.owncloud.android.data.mdnsdiscovery.LocalMdnsDiscoveryDataSource
+import com.owncloud.android.data.mdnsdiscovery.datasources.HCDeviceVerificationClient
 import com.owncloud.android.data.mdnsdiscovery.implementation.HCLocalMdnsDiscoveryDataSource
 import com.owncloud.android.data.remoteaccess.RemoteAccessTokenStorage
 import com.owncloud.android.data.remoteaccess.datasources.RemoteAccessService
@@ -119,4 +120,10 @@ val remoteAccessModule = module {
 
     // mDNS Discovery Data Source
     singleOf(::HCLocalMdnsDiscoveryDataSource) bind LocalMdnsDiscoveryDataSource::class
+    
+    // Device Verification Client for mDNS
+    single {
+        HCDeviceVerificationClient(get())
+    }
+
 }

@@ -80,6 +80,7 @@ import com.owncloud.android.domain.files.usecases.SetLastUsageFileUseCase
 import com.owncloud.android.domain.files.usecases.SortFilesUseCase
 import com.owncloud.android.domain.files.usecases.SortFilesWithSyncInfoUseCase
 import com.owncloud.android.domain.files.usecases.UpdateAlreadyDownloadedFilesPathUseCase
+import com.owncloud.android.domain.mdnsdiscovery.usecases.DiscoverLocalNetworkDevicesUseCase
 import com.owncloud.android.domain.remoteaccess.usecases.GetRemoteAccessDeviceByIdUseCase
 import com.owncloud.android.domain.remoteaccess.usecases.GetRemoteAccessDevicesUseCase
 import com.owncloud.android.domain.remoteaccess.usecases.GetRemoteAccessTokenUseCase
@@ -299,6 +300,9 @@ val useCaseModule = module {
     factoryOf(::GetRemoteAccessTokenUseCase)
     factoryOf(::GetRemoteAccessDevicesUseCase)
     factoryOf(::GetRemoteAccessDeviceByIdUseCase)
+    
+    // mDNS Discovery
+    factoryOf(::DiscoverLocalNetworkDevicesUseCase)
 
     // Accounts
     factoryOf(::RemoveAccountUseCase)
