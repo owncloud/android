@@ -56,6 +56,12 @@ class CreateSpaceDialogFragment : DialogFragment() {
                 updateUI(errorMessage)
             }
 
+            createSpaceDialogQuotaSwitch.setOnCheckedChangeListener { _, isChecked ->
+                createSpaceDialogQuotaNoRestrictionLabel.isVisible = !isChecked
+                createSpaceDialogQuotaLayout.isVisible = isChecked
+                createSpaceDialogQuotaGbLabel.isVisible = isChecked
+            }
+
             if (isEditMode) {
                 createSpaceDialogTitle.text = getString(R.string.edit_space)
                 createSpaceDialogQuotaSection.isVisible = canEditQuota
@@ -63,7 +69,6 @@ class CreateSpaceDialogFragment : DialogFragment() {
                 currentSpace?.let {
                     createSpaceDialogNameValue.setText(it.name)
                     createSpaceDialogSubtitleValue.setText(it.description)
-                    createSpaceDialogQuotaUnit.setSelection(getQuotaValueForSpinner(it.quota!!.total))
                 }
 
                 createSpaceButton.apply {
@@ -75,7 +80,7 @@ class CreateSpaceDialogFragment : DialogFragment() {
             createSpaceButton.setOnClickListener {
                 val spaceName = createSpaceDialogNameValue.text.toString()
                 val spaceSubtitle = createSpaceDialogSubtitleValue.text.toString()
-                val spaceQuota = convertToBytes(createSpaceDialogQuotaUnit.selectedItem.toString())
+                val spaceQuota = convertToBytes(createSpaceDialogQuotaValue.toString())
 
                 if (isEditMode) {
                     currentSpace?.let {
@@ -123,20 +128,6 @@ class CreateSpaceDialogFragment : DialogFragment() {
     private fun convertToBytes(spaceQuota: String): Long {
         val quotaNumber = spaceQuota.removeSuffix(" GB").toLongOrNull() ?: return 0L
         return quotaNumber * 1_000_000_000L
-    }
-
-    private fun getQuotaValueForSpinner(spaceQuota: Long): Int {
-        val totalGB = spaceQuota / 1_000_000_000.0
-        return when (totalGB) {
-            1.0 -> 0
-            2.0 -> 1
-            5.0 -> 2
-            10.0 -> 3
-            50.0 -> 4
-            100.0 -> 5
-            0.0 -> 6
-            else -> 0
-        }
     }
 
     interface CreateSpaceListener {

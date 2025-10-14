@@ -839,6 +839,8 @@
     <string name="create_space_dialog_name">Name</string>
     <string name="create_space_dialog_subtitle">Subtitle</string>
     <string name="create_space_dialog_quota">Quota</string>
+    <string name="create_space_dialog_no_restriction">No restriction</string>
+    <string name="create_space_dialog_gb_unit">GB</string>
     <string-array name="create_space_dialog_quota_units">
         <item>1 GB</item>
         <item>2 GB</item>
