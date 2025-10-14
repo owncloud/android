@@ -31,6 +31,8 @@ import com.owncloud.android.data.capabilities.datasources.implementation.OCRemot
 import com.owncloud.android.data.capabilities.datasources.mapper.RemoteCapabilityMapper
 import com.owncloud.android.data.files.datasources.RemoteFileDataSource
 import com.owncloud.android.data.files.datasources.implementation.OCRemoteFileDataSource
+import com.owncloud.android.data.mdnsdiscovery.datasources.LocalMdnsDiscoveryDataSource
+import com.owncloud.android.data.mdnsdiscovery.implementation.HCLocalMdnsDiscoveryDataSource
 import com.owncloud.android.data.oauth.datasources.RemoteOAuthDataSource
 import com.owncloud.android.data.oauth.datasources.implementation.OCRemoteOAuthDataSource
 import com.owncloud.android.data.server.datasources.RemoteServerInfoDataSource
@@ -79,6 +81,8 @@ val remoteDataSourceModule = module {
     singleOf(::OCRemoteSpacesDataSource) bind RemoteSpacesDataSource::class
     singleOf(::OCRemoteWebFingerDataSource) bind RemoteWebFingerDataSource::class
     single<RemoteUserDataSource> { OCRemoteUserDataSource(get(), androidContext().resources.getDimension(R.dimen.file_avatar_size).toInt()) }
+
+    singleOf(::HCLocalMdnsDiscoveryDataSource) bind LocalMdnsDiscoveryDataSource::class
 
     factoryOf(::RemoteCapabilityMapper)
     factoryOf(::RemoteShareMapper)

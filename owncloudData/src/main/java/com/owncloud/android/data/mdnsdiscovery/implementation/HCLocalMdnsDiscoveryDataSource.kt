@@ -3,7 +3,7 @@ package com.owncloud.android.data.mdnsdiscovery.implementation
 import android.content.Context
 import android.net.nsd.NsdManager
 import android.net.nsd.NsdServiceInfo
-import com.owncloud.android.data.mdnsdiscovery.LocalMdnsDiscoveryDataSource
+import com.owncloud.android.data.mdnsdiscovery.datasources.LocalMdnsDiscoveryDataSource
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow

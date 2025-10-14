@@ -1,7 +1,7 @@
 package com.owncloud.android.data.mdnsdiscovery.repository
 
-import com.owncloud.android.data.mdnsdiscovery.LocalMdnsDiscoveryDataSource
-import com.owncloud.android.data.mdnsdiscovery.datasources.HCDeviceVerificationClient
+import com.owncloud.android.data.mdnsdiscovery.HCDeviceVerificationClient
+import com.owncloud.android.data.mdnsdiscovery.datasources.LocalMdnsDiscoveryDataSource
 import com.owncloud.android.domain.mdnsdiscovery.MdnsDiscoveryRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.mapNotNull

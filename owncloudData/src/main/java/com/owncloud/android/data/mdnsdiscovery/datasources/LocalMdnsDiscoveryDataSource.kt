@@ -1,4 +1,4 @@
-package com.owncloud.android.data.mdnsdiscovery
+package com.owncloud.android.data.mdnsdiscovery.datasources
 
 import kotlinx.coroutines.flow.Flow
 import kotlin.time.Duration
@@ -21,4 +21,3 @@ interface LocalMdnsDiscoveryDataSource {
         duration: Duration,
     ): Flow<String>
 }
-
