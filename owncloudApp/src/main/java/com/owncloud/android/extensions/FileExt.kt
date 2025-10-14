@@ -21,10 +21,21 @@
 package com.owncloud.android.extensions
 
 import android.content.Context
+import com.owncloud.android.R
 import com.owncloud.android.utils.DisplayUtils
 import java.io.File
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 fun File.toLegibleStringSize(context: Context): String {
     val bytes = if (!exists()) 0L else length()
     return DisplayUtils.bytesToHumanReadable(bytes, context, true)
+}
+
+fun File.humanReadableModificationDateTime(context: Context): String {
+    val dateTime = Date(this.lastModified())
+    val dateString = SimpleDateFormat("yyyy-MMM-dd", Locale.getDefault()).format(dateTime)
+    val timeString = SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(dateTime)
+    return context.getString(R.string.homecloud_settings_logs_datetime_pattern, dateString, timeString)
 }

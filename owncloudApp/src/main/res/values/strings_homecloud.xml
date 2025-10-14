@@ -30,6 +30,8 @@
     <string name="homecloud_drawer_storage_label">Storage space</string>
     <string name="homecloud_drawer_quota">%1$s of %2$s used</string>
 
+    <string name="homecloud_settings_logs_datetime_pattern">%1$s at %2$s</string>
+
     <string name="welcome_feature_6_title">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore aliqua. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore aliqua. THE END.</string>
     <string name="welcome_feature_6_text">Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. THE END.</string>
 </resources>

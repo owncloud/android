@@ -31,30 +31,30 @@
             android:layout_marginRight="@dimen/standard_margin"
             android:layout_marginBottom="@dimen/standard_margin"
             android:layout_weight="15"
-            android:orientation="horizontal"
-            android:weightSum="3">
+            android:orientation="horizontal">
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/skip"
                 style="@style/Button.Borderless"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical|center_horizontal"
+                android:layout_gravity="center_vertical"
+                android:gravity="center_vertical|end"
                 android:layout_weight="1"
                 android:text="@string/welcome_feature_skip_button"
                 android:textColor="@color/white" />
 
             <com.owncloud.android.wizard.ProgressIndicator
                 android:id="@+id/progressIndicator"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_vertical|center_horizontal"
-                android:layout_weight="1" />
+                android:paddingHorizontal="@dimen/standard_padding" />
 
             <FrameLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
+                android:layout_gravity="start|center_vertical"
                 android:layout_weight="1">
 
                 <androidx.appcompat.widget.AppCompatButton
@@ -62,7 +62,7 @@
                     style="@style/Button.Borderless"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
+                    android:layout_gravity="start|center_vertical"
                     android:text="@string/welcome_feature_done_button"
                     android:textColor="@color/white"
                     tools:visibility="gone" />
@@ -72,7 +72,7 @@
                     style="@style/Button.Borderless"
                     android:layout_width="64dp"
                     android:layout_height="64dp"
-                    android:layout_gravity="center"
+                    android:layout_gravity="start|center_vertical"
                     android:padding="@dimen/standard_padding"
                     android:src="@drawable/ic_arrow_forward" />
             </FrameLayout>

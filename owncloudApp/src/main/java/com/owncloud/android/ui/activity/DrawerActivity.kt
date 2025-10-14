@@ -49,7 +49,6 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.GravityCompat
-import androidx.core.view.get
 import androidx.core.view.isVisible
 import androidx.core.view.updatePadding
 import androidx.drawerlayout.widget.DrawerLayout
@@ -229,6 +228,9 @@ abstract class DrawerActivity : ToolbarActivity() {
                 R.id.drawer_menu_sign_out -> {
                     logout()
                 }
+                R.id.drawer_menu_shared_by_link_files -> {
+                    navigateToOption(FileListOption.SHARED_BY_LINK)
+                }
                 else -> { Timber.i("Unknown drawer menu item clicked: %s", menuItem.title) }
             }
             true
@@ -264,14 +266,16 @@ abstract class DrawerActivity : ToolbarActivity() {
     private fun setSpacesVisibilityBottomBar(uiResult: UIResult<OCCapability>) {
         if (uiResult is UIResult.Success) {
             val capabilities = uiResult.data
+            val bottomMenu = getBottomNavigationView()?.menu ?: return
+            val drawerMenu = getNavView()?.menu ?: return
             if (AccountUtils.isSpacesFeatureAllowedForAccount(baseContext, account, capabilities)) {
-                getBottomNavigationView()?.menu?.get(0)?.title = getString(R.string.bottom_nav_personal)
-                getBottomNavigationView()?.menu?.get(1)?.title = getString(R.string.bottom_nav_shares)
-                getBottomNavigationView()?.menu?.get(1)?.icon = AppCompatResources.getDrawable(this, R.drawable.ic_ocis_shares)
-                getBottomNavigationView()?.menu?.get(2)?.isVisible = capabilities?.isSpacesProjectsAllowed() == true
+                bottomMenu.findItem(R.id.nav_all_files)?.title = getString(R.string.bottom_nav_personal)
+                drawerMenu.findItem(R.id.drawer_menu_shared_by_link_files)?.title = getString(R.string.bottom_nav_shares)
+                drawerMenu.findItem(R.id.drawer_menu_shared_by_link_files)?.icon = AppCompatResources.getDrawable(this, R.drawable.ic_ocis_shares)
+                bottomMenu.findItem(R.id.nav_spaces)?.isVisible = capabilities?.isSpacesProjectsAllowed() == true
             } else {
-                getBottomNavigationView()?.menu?.get(0)?.title = getString(R.string.bottom_nav_files)
-                getBottomNavigationView()?.menu?.get(2)?.isVisible = false
+                bottomMenu.findItem(R.id.nav_all_files)?.title = getString(R.string.bottom_nav_files)
+                bottomMenu.findItem(R.id.nav_spaces)?.isVisible = false
             }
         }
     }
@@ -282,7 +286,6 @@ abstract class DrawerActivity : ToolbarActivity() {
             R.id.nav_spaces -> navigateToOption(FileListOption.SPACES_LIST)
             R.id.nav_uploads -> navigateToOption(FileListOption.UPLOADS_LIST)
             R.id.nav_available_offline_files -> navigateToOption(FileListOption.AV_OFFLINE)
-            R.id.nav_shared_by_link_files -> navigateToOption(FileListOption.SHARED_BY_LINK)
         }
     }
 

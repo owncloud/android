@@ -34,15 +34,15 @@ public class FeatureList {
 
     static final private FeatureItem[] featuresList = {
             // Basic features showed on first install
-            new FeatureItem(R.drawable.whats_new_placeholder, R.string.welcome_feature_1_title,
+            new FeatureItem("sync", R.drawable.whats_new_placeholder, R.string.welcome_feature_1_title,
                     R.string.welcome_feature_1_text),
-            new FeatureItem(R.drawable.whats_new_placeholder, R.string.welcome_feature_2_title,
+            new FeatureItem("share", R.drawable.whats_new_placeholder, R.string.welcome_feature_2_title,
                     R.string.welcome_feature_2_text),
 //            new FeatureItem(R.drawable.whats_new_accounts, R.string.welcome_feature_3_title,
 //                    R.string.welcome_feature_3_text),
-            new FeatureItem(R.drawable.whats_new_placeholder, R.string.welcome_feature_4_title,
+            new FeatureItem("camera_uploads", R.drawable.whats_new_placeholder, R.string.welcome_feature_4_title,
                     R.string.welcome_feature_4_text),
-            new FeatureItem(R.drawable.whats_new_placeholder, R.string.welcome_feature_5_title,
+            new FeatureItem("video_streaming", R.drawable.whats_new_placeholder, R.string.welcome_feature_5_title,
                     R.string.welcome_feature_5_text),
 //            new FeatureItem(R.drawable.whats_new_placeholder, R.string.welcome_feature_6_title,
 //                    R.string.welcome_feature_6_text)
@@ -57,13 +57,18 @@ public class FeatureList {
         private final int image;
         private final int titleText;
         private final int contentText;
+        private final String id;
 
-        private FeatureItem(int image, int titleText, int contentText) {
+        private FeatureItem(String id, int image, int titleText, int contentText) {
             this.image = image;
             this.titleText = titleText;
             this.contentText = contentText;
+            this.id = id;
         }
 
+        public String getId() {
+            return id;
+        }
         public boolean shouldShowImage() {
             return image != DO_NOT_SHOW;
         }
@@ -95,12 +100,14 @@ public class FeatureList {
 
         @Override
         public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(id);
             dest.writeInt(image);
             dest.writeInt(titleText);
             dest.writeInt(contentText);
         }
 
         private FeatureItem(Parcel p) {
+            id = p.readString();
             image = p.readInt();
             titleText = p.readInt();
             contentText = p.readInt();

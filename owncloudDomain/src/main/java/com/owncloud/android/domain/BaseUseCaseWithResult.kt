@@ -19,6 +19,8 @@
 
 package com.owncloud.android.domain
 
+import timber.log.Timber
+
 /**
  * Parent class for use cases that need error handling
  */
@@ -29,6 +31,7 @@ abstract class BaseUseCaseWithResult<out Type, in Params> {
         try {
             UseCaseResult.Success(run(params))
         } catch (throwable: Throwable) {
+            Timber.w(throwable, "Error in use case ${this::class.simpleName}, params: $params")
             UseCaseResult.Error(throwable)
         }
 }

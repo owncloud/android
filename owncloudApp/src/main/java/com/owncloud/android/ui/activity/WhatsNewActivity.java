@@ -44,12 +44,20 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
-
+import com.owncloud.android.data.providers.SharedPreferencesProvider;
+import com.owncloud.android.data.providers.implementation.OCSharedPreferencesProvider;
 import com.owncloud.android.databinding.WhatsNewActivityBinding;
 import com.owncloud.android.databinding.WhatsNewElementBinding;
 import com.owncloud.android.wizard.FeatureList;
 import com.owncloud.android.wizard.FeatureList.FeatureItem;
 import com.owncloud.android.wizard.ProgressIndicator;
+import timber.log.Timber;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 
 /**
  * @author Bartosz Przybylski
@@ -62,7 +70,10 @@ public class WhatsNewActivity extends FragmentActivity {
 
     private WhatsNewActivityBinding bindingActivity;
 
+    private SharedPreferencesProvider preferencesProvider;
+
     private static final String ONBOARDING_DISPLAYED_KEY = "onboarding_displayed";
+    private static final String ONBOARDING_DISPLAYED_ITEMS_KEY = "onboarding_items_displayed";
 
     static public void runIfNeeded(Context context) {
         if (context instanceof WhatsNewActivity) {
@@ -83,6 +94,7 @@ public class WhatsNewActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
+        preferencesProvider = new OCSharedPreferencesProvider(this);
         bindingActivity = WhatsNewActivityBinding.inflate(getLayoutInflater());
 
         setContentView(bindingActivity.getRoot());
@@ -90,8 +102,7 @@ public class WhatsNewActivity extends FragmentActivity {
         mProgress = bindingActivity.progressIndicator;
         mPager = bindingActivity.contentPanel;
 
-        FeaturesViewAdapter adapter = new FeaturesViewAdapter(this,
-                FeatureList.get());
+        FeaturesViewAdapter adapter = initAdapter();
 
         mProgress.setNumberOfSteps(adapter.getItemCount());
         mPager.setAdapter(adapter);
@@ -101,6 +112,14 @@ public class WhatsNewActivity extends FragmentActivity {
                 super.onPageSelected(position);
                 mProgress.animateToStep(position + 1);
                 updateNextButtonIfNeeded();
+                if (!mProgress.hasNextStep()) {
+                    handleOnboardingDisplayed();
+                }
+                FeatureItem displayedItem = adapter.mFeatures.get(position);
+                if (displayedItem != null) {
+                    preferencesProvider.addItemToStringSet(ONBOARDING_DISPLAYED_ITEMS_KEY, displayedItem.getId());
+                    Timber.d("Save onboarding item displayed: %s", displayedItem.getId());
+                }
             }
 
             @Override
@@ -111,6 +130,7 @@ public class WhatsNewActivity extends FragmentActivity {
                 }
             }
         });
+        mPager.setCurrentItem(findFirstNewItemPosition());
 
         mForwardFinishButton = bindingActivity.forward;
         mForwardFinishButton.setOnClickListener(view -> {
@@ -118,16 +138,36 @@ public class WhatsNewActivity extends FragmentActivity {
         });
         bindingActivity.done.setOnClickListener(view -> {
             handleOnboardingDisplayed();
+            finish();
         });
         Button skipButton = bindingActivity.skip;
 
         skipButton.setOnClickListener(view -> {
             if (mProgress.hasNextStep()) {
                 handleOnboardingDisplayed();
+                finish();
             }
         });
 
         bindingActivity.getRoot().post(this::updateNextButtonIfNeeded);
+    }
+
+    private FeaturesViewAdapter initAdapter() {
+        return new FeaturesViewAdapter(this, Arrays.asList(FeatureList.get()));
+    }
+
+    private int findFirstNewItemPosition() {
+        Set<String> previouslyDisplayedItems = preferencesProvider.getStringSet(ONBOARDING_DISPLAYED_ITEMS_KEY, Collections.emptySet());
+        Iterator<FeatureItem> iterator = Arrays.asList(FeatureList.get()).iterator();
+        int position = 0;
+        while (iterator.hasNext()) {
+            FeatureItem item = iterator.next();
+            if (!previouslyDisplayedItems.contains(item.getId())) {
+                return position;
+            }
+            position++;
+        }
+        return position;
     }
 
     @Override
@@ -135,7 +175,6 @@ public class WhatsNewActivity extends FragmentActivity {
         if (mPager.getCurrentItem() > 0) {
             goToPreviousPage();
         } else {
-            handleOnboardingDisplayed();
             super.onBackPressed();
         }
     }
@@ -227,11 +266,7 @@ public class WhatsNewActivity extends FragmentActivity {
 
     private void handleOnboardingDisplayed() {
         // Wizard already shown
-        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
-        SharedPreferences.Editor editor = pref.edit();
-        editor.putBoolean(ONBOARDING_DISPLAYED_KEY, true);
-        editor.apply();
-        finish();
+        preferencesProvider.putBoolean(ONBOARDING_DISPLAYED_KEY, true);
     }
 
     private void resetScrollOnChildFragments(int selectedPosition) {
@@ -244,9 +279,9 @@ public class WhatsNewActivity extends FragmentActivity {
 
     private final class FeaturesViewAdapter extends FragmentStateAdapter {
 
-        FeatureItem[] mFeatures;
+        List<FeatureItem> mFeatures;
 
-        public FeaturesViewAdapter(FragmentActivity activity, FeatureItem[] features) {
+        public FeaturesViewAdapter(FragmentActivity activity, List<FeatureItem> features) {
             super(activity);
             mFeatures = features;
         }
@@ -254,12 +289,12 @@ public class WhatsNewActivity extends FragmentActivity {
         @NonNull
         @Override
         public Fragment createFragment(int position) {
-            return FeatureFragment.newInstance(mFeatures[position], position);
+            return FeatureFragment.newInstance(mFeatures.get(position), position);
         }
 
         @Override
         public int getItemCount() {
-            return mFeatures.length;
+            return mFeatures.size();
         }
     }
 }

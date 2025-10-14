@@ -50,6 +50,8 @@ import com.owncloud.android.data.migrations.MIGRATION_35_36
 import com.owncloud.android.data.migrations.MIGRATION_37_38
 import com.owncloud.android.data.migrations.MIGRATION_41_42
 import com.owncloud.android.data.migrations.MIGRATION_42_43
+import com.owncloud.android.data.searches.db.SavedSearchDao
+import com.owncloud.android.data.searches.db.SavedSearchEntity
 import com.owncloud.android.data.sharing.shares.db.OCShareDao
 import com.owncloud.android.data.sharing.shares.db.OCShareEntity
 import com.owncloud.android.data.spaces.db.SpaceSpecialEntity
@@ -72,6 +74,7 @@ import com.owncloud.android.data.user.db.UserQuotaEntity
         SpacesEntity::class,
         SpaceSpecialEntity::class,
         UserQuotaEntity::class,
+        SavedSearchEntity::class,
     ],
     autoMigrations = [
         AutoMigration(from = 36, to = 37),
@@ -82,6 +85,7 @@ import com.owncloud.android.data.user.db.UserQuotaEntity
         AutoMigration(from = 44, to = 45),
         AutoMigration(from = 45, to = 46),
         AutoMigration(from = 46, to = 47),
+        AutoMigration(from = 47, to = 48),
     ],
     version = ProviderMeta.DB_VERSION,
     exportSchema = true
@@ -95,6 +99,7 @@ abstract class OwncloudDatabase : RoomDatabase() {
     abstract fun spacesDao(): SpacesDao
     abstract fun transferDao(): TransferDao
     abstract fun userDao(): UserDao
+    abstract fun savedSearchDao(): SavedSearchDao
 
     companion object {
         @Volatile

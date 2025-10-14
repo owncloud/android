@@ -41,11 +41,13 @@
             android:id="@+id/imageView_icon_activity_logs_list"
             android:layout_width="@dimen/file_icon_size"
             android:layout_height="@dimen/file_icon_size"
+            android:alpha="0.6"
             android:src="@drawable/ic_logs"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:tint="?attr/colorPrimary"
             tools:ignore="ContentDescription" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -74,7 +76,7 @@
             tools:text="@tools:sample/lorem" />
 
         <TextView
-            android:id="@+id/textView_subtitle_activity_logs_list"
+            android:id="@+id/textView_modification_date_activity_logs_list"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textColor="@color/list_item_lastmod_and_filesize_text"
@@ -82,6 +84,17 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintStart_toStartOf="@id/textView_title_activity_logs_list"
             app:layout_constraintTop_toBottomOf="@id/textView_title_activity_logs_list"
+            tools:text="@tools:sample/lorem" />
+
+        <TextView
+            android:id="@+id/textView_subtitle_activity_logs_list"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/list_item_lastmod_and_filesize_text"
+            android:textSize="@dimen/two_line_secondary_text_size"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintStart_toStartOf="@id/textView_title_activity_logs_list"
+            app:layout_constraintTop_toBottomOf="@id/textView_modification_date_activity_logs_list"
             tools:text="@tools:sample/lorem" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -102,9 +115,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/activity_horizontal_margin"
-            android:src="@drawable/ic_baseline_download_grey"
+            android:alpha="0.6"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_download"
             app:layout_constraintRight_toLeftOf="@id/imageView_share_activity_logs_list"
             app:layout_constraintTop_toTopOf="parent"
+            app:tint="?attr/colorPrimary"
             tools:ignore="ContentDescription" />
 
         <ImageView
@@ -112,18 +128,24 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/activity_horizontal_margin"
-            android:src="@drawable/ic_share_grey"
+            android:alpha="0.6"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_share"
             app:layout_constraintRight_toLeftOf="@id/imageView_delete_activity_logs_list"
             app:layout_constraintTop_toTopOf="parent"
+            app:tint="?attr/colorPrimary"
             tools:ignore="ContentDescription" />
 
         <ImageView
             android:id="@+id/imageView_delete_activity_logs_list"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_action_delete_grey"
+            android:alpha="0.6"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_delete"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:tint="?attr/colorPrimary"
             tools:ignore="ContentDescription" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

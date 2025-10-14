@@ -33,6 +33,10 @@ interface SharedPreferencesProvider {
     fun putBoolean(key: String, value: Boolean)
     fun getBoolean(key: String, defaultValue: Boolean): Boolean
 
+    fun putStringSet(key: String, value: Set<String>)
+    fun getStringSet(key: String, defaultValue: Set<String>): Set<String>
+    fun addItemToStringSet(key: String, value: String)
+
     fun containsPreference(key: String): Boolean
 
     fun removePreference(key: String)

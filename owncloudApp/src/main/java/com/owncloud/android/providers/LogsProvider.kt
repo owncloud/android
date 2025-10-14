@@ -23,11 +23,12 @@ import android.content.Context
 import com.owncloud.android.BuildConfig
 import com.owncloud.android.MainApp
 import com.owncloud.android.R
-import com.owncloud.android.data.providers.implementation.OCSharedPreferencesProvider
 import com.owncloud.android.data.providers.ScopedStorageProvider
+import com.owncloud.android.data.providers.implementation.OCSharedPreferencesProvider
 import com.owncloud.android.lib.common.http.logging.LogInterceptor
 import com.owncloud.android.lib.common.utils.LoggingHelper
 import com.owncloud.android.utils.CONFIGURATION_REDACT_AUTH_HEADER_LOGS
+import com.owncloud.android.utils.DeviceInfoLogger
 import timber.log.Timber
 import java.io.File
 
@@ -44,8 +45,9 @@ class LogsProvider(
         // Set folder for store logs
         LoggingHelper.startLogging(
             directory = File(localStorageProvider.getLogsPath()),
-            storagePath = dataFolder
+            fileName = MainApp.logName,
         )
+        DeviceInfoLogger.logDeviceInfo(context)
         Timber.d("${BuildConfig.BUILD_TYPE} start logging ${BuildConfig.VERSION_NAME} ${BuildConfig.COMMIT_SHA1}")
 
         initHttpLogs()

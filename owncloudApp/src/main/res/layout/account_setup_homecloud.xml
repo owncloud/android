@@ -37,34 +37,6 @@
                 android:orientation="vertical">
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/account_username_container"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="24dp"
-                    android:layout_marginTop="16dp"
-                    android:hint="@string/homecloud_login_email_hint"
-                    app:endIconDrawable="@drawable/ic_clear_input"
-                    app:endIconMode="clear_text"
-                    app:expandedHintEnabled="false"
-                    app:helperText=" "
-                    app:hintAnimationEnabled="false"
-                    app:hintEnabled="true">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/account_username"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:drawablePadding="5dp"
-                        android:hint="@string/homecloud_login_email_input_hint"
-                        android:imeOptions="flagNoExtractUi"
-                        android:inputType="textNoSuggestions"
-                        android:textColorHint="@color/homecloud_input_placeholder">
-
-                        <requestFocus />
-                    </com.google.android.material.textfield.TextInputEditText>
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/hostUrlInputLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -86,6 +58,33 @@
                         android:hint="@string/homecloud_login_server_address_input_hint"
                         android:imeOptions="flagNoExtractUi"
                         android:inputType="textUri"
+                        android:textColorHint="@color/homecloud_input_placeholder">
+
+                    </com.google.android.material.textfield.TextInputEditText>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/account_username_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="24dp"
+                    android:layout_marginTop="16dp"
+                    android:hint="@string/homecloud_login_email_hint"
+                    app:endIconDrawable="@drawable/ic_clear_input"
+                    app:endIconMode="clear_text"
+                    app:expandedHintEnabled="false"
+                    app:helperText=" "
+                    app:hintAnimationEnabled="false"
+                    app:hintEnabled="true">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/account_username"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawablePadding="5dp"
+                        android:hint="@string/homecloud_login_email_input_hint"
+                        android:imeOptions="flagNoExtractUi"
+                        android:inputType="textNoSuggestions"
                         android:textColorHint="@color/homecloud_input_placeholder">
 
                     </com.google.android.material.textfield.TextInputEditText>

@@ -44,6 +44,7 @@ import com.owncloud.android.datamodel.ThumbnailsCacheManager
 import com.owncloud.android.db.PreferenceManager
 import com.owncloud.android.dependecyinjection.commonModule
 import com.owncloud.android.dependecyinjection.localDataSourceModule
+import com.owncloud.android.dependecyinjection.remoteAccessModule
 import com.owncloud.android.dependecyinjection.remoteDataSourceModule
 import com.owncloud.android.dependecyinjection.repositoryModule
 import com.owncloud.android.dependecyinjection.useCaseModule
@@ -238,11 +239,9 @@ class MainApp : Application() {
     private fun startLogsIfEnabled() {
         val preferenceProvider = OCSharedPreferencesProvider(applicationContext)
 
-        if (BuildConfig.DEBUG) {
-            val alreadySet = preferenceProvider.containsPreference(PREFERENCE_ENABLE_LOGGING)
-            if (!alreadySet) {
-                preferenceProvider.putBoolean(PREFERENCE_ENABLE_LOGGING, true)
-            }
+        val alreadySet = preferenceProvider.containsPreference(PREFERENCE_ENABLE_LOGGING)
+        if (!alreadySet) {
+            preferenceProvider.putBoolean(PREFERENCE_ENABLE_LOGGING, true)
         }
 
         enabledLogging = preferenceProvider.getBoolean(PREFERENCE_ENABLE_LOGGING, false)
@@ -346,6 +345,9 @@ class MainApp : Application() {
         val dataFolder: String
             get() = appContext.resources.getString(R.string.data_folder)
 
+        val logName: String
+            get() = appContext.resources.getString(R.string.log_name)
+
         // user agent
         // Mozilla/5.0 (Android) ownCloud-android/1.7.0
         val userAgent: String
@@ -378,7 +380,8 @@ class MainApp : Application() {
                         useCaseModule,
                         repositoryModule,
                         localDataSourceModule,
-                        remoteDataSourceModule
+                        remoteDataSourceModule,
+                        remoteAccessModule
                     )
                 )
             }

@@ -29,13 +29,13 @@ import java.io.File
 
 object LoggingHelper {
 
-    fun startLogging(directory: File, storagePath: String) {
+    fun startLogging(directory: File, fileName: String) {
         ocFileLoggingTree()?.let {
             Timber.uproot(it)
         }
         if (!directory.exists())
             directory.mkdirs()
-        Timber.plant(OCFileLoggingTree(directory, filename = storagePath))
+        Timber.plant(OCFileLoggingTree(directory, filename = fileName))
     }
 
     fun stopLogging() {

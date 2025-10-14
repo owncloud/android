@@ -49,4 +49,6 @@ dependencies {
     // Detekt
     detektPlugins libs.detekt.formatting
     detektPlugins libs.detekt.libraries
+
+    implementation libs.timber
 }
