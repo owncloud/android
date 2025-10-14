@@ -51,12 +51,16 @@ class CreateSpaceDialogFragment : DialogFragment() {
         val canEditQuota = requireArguments().getBoolean(ARG_CAN_EDIT_SPACE_QUOTA)
         binding.apply {
             cancelCreateSpaceButton.setOnClickListener { dialog?.dismiss() }
-            createSpaceDialogNameValue.doOnTextChanged { name, _, _, _ ->
-                val errorMessage = validateName(name.toString())
-                updateUI(errorMessage)
+            createSpaceDialogNameValue.doOnTextChanged { _, _, _, _ ->
+                updateUI()
+            }
+
+            createSpaceDialogQuotaValue.doOnTextChanged { _, _, _, _ ->
+                updateUI()
             }
 
             createSpaceDialogQuotaSwitch.setOnCheckedChangeListener { _, isChecked ->
+                updateUI()
                 createSpaceDialogQuotaNoRestrictionLabel.isVisible = !isChecked
                 createSpaceDialogQuotaLayout.isVisible = isChecked
                 createSpaceDialogQuotaGbLabel.isVisible = isChecked
@@ -111,17 +115,33 @@ class CreateSpaceDialogFragment : DialogFragment() {
             else -> null
         }
 
-    private fun updateUI(errorMessage: String?) {
-        val colorButton = if (errorMessage == null) {
+    private fun validateQuota(spaceQuota: String): String? {
+        if (!binding.createSpaceDialogQuotaSwitch.isChecked) return null
+
+        return when {
+            spaceQuota.isEmpty() -> getString(R.string.create_space_dialog_quota_empty_error)
+            spaceQuota.toDouble() == 0.0 -> getString(R.string.create_space_dialog_quota_zero_error)
+            spaceQuota.toDouble() > 1000000.0 -> getString(R.string.create_space_dialog_quota_too_large_error)
+            else -> null
+        }
+    }
+
+    private fun updateUI() {
+        val nameError = validateName(binding.createSpaceDialogNameValue.text.toString())
+        val quotaError = validateQuota(binding.createSpaceDialogQuotaValue.text.toString())
+        val noErrors = nameError == null && quotaError == null
+
+        val colorButton = if (noErrors) {
             resources.getColor(R.color.primary_button_background_color, null)
         } else {
             resources.getColor(R.color.grey, null)
         }
 
-        binding.createSpaceDialogNameValue.error = errorMessage
+        binding.createSpaceDialogNameValue.error = nameError
+        binding.createSpaceDialogQuotaValue.error = quotaError
         binding.createSpaceButton.apply {
             setTextColor(colorButton)
-            isEnabled = errorMessage == null
+            isEnabled = noErrors
         }
     }
 
