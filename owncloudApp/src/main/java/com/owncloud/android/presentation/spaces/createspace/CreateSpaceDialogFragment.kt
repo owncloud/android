@@ -125,8 +125,8 @@ class CreateSpaceDialogFragment : DialogFragment() {
 
         return when {
             spaceQuota.isEmpty() -> getString(R.string.create_space_dialog_quota_empty_error)
-            spaceQuota.toDouble() == 0.0 -> getString(R.string.create_space_dialog_quota_zero_error)
-            spaceQuota.toDouble() > 1000000.0 -> getString(R.string.create_space_dialog_quota_too_large_error)
+            spaceQuota.toDouble() == MIN_SPACE_QUOTA_GB -> getString(R.string.create_space_dialog_quota_zero_error)
+            spaceQuota.toDouble() > MAX_SPACE_QUOTA_GB -> getString(R.string.create_space_dialog_quota_too_large_error)
             else -> null
         }
     }
@@ -165,6 +165,8 @@ class CreateSpaceDialogFragment : DialogFragment() {
         private const val ARG_CAN_EDIT_SPACE_QUOTA = "CAN_EDIT_SPACE_QUOTA"
         private const val ARG_CURRENT_SPACE = "CURRENT_SPACE"
         private const val FORBIDDEN_CHARACTERS = """[/\\.:?*"'><|]"""
+        private const val MIN_SPACE_QUOTA_GB = 0.0
+        private const val MAX_SPACE_QUOTA_GB = 1_000_000.0
 
         fun newInstance(
             isEditMode: Boolean,
