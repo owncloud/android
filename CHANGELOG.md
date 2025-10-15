@@ -120,7 +120,9 @@ ownCloud admins and users.
    been implemented and, it is shown when the floating action button is tapped.
 
    https://github.com/owncloud/android/issues/4606
+   https://github.com/owncloud/android/issues/4688
    https://github.com/owncloud/android/pull/4683
+   https://github.com/owncloud/android/pull/4694
 
 * Enhancement - Edit a space: [#4607](https://github.com/owncloud/android/issues/4607)
 
@@ -128,7 +130,9 @@ ownCloud admins and users.
    users with the required permissions when the three-dot menu button is tapped.
 
    https://github.com/owncloud/android/issues/4607
+   https://github.com/owncloud/android/issues/4688
    https://github.com/owncloud/android/pull/4687
+   https://github.com/owncloud/android/pull/4694
 
 * Enhancement - Update test in GitHub Actions: [#4663](https://github.com/owncloud/android/pull/4663)
 
