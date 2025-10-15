@@ -73,6 +73,11 @@ class CreateSpaceDialogFragment : DialogFragment() {
                 currentSpace?.let {
                     createSpaceDialogNameValue.setText(it.name)
                     createSpaceDialogSubtitleValue.setText(it.description)
+                    val totalQuota = it.quota?.total ?: 0L
+                    if (totalQuota != 0L) {
+                        createSpaceDialogQuotaSwitch.isChecked = true
+                        createSpaceDialogQuotaValue.setText(String.format((totalQuota/1_000_000_000.0).toString()))
+                    }
                 }
 
                 createSpaceButton.apply {
