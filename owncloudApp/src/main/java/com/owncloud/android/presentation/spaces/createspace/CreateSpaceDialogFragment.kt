@@ -89,7 +89,7 @@ class CreateSpaceDialogFragment : DialogFragment() {
             createSpaceButton.setOnClickListener {
                 val spaceName = createSpaceDialogNameValue.text.toString()
                 val spaceSubtitle = createSpaceDialogSubtitleValue.text.toString()
-                val spaceQuota = convertToBytes(createSpaceDialogQuotaValue.text.toString())
+                val spaceQuota = if (createSpaceDialogQuotaSwitch.isChecked) convertToBytes(createSpaceDialogQuotaValue.text.toString()) else 0L
 
                 if (isEditMode) {
                     currentSpace?.let {
