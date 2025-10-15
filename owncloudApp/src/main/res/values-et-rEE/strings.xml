@@ -771,15 +771,6 @@
   <string name="create_space_dialog_name">Nimi</string>
   <string name="create_space_dialog_subtitle">Alapealkiri</string>
   <string name="create_space_dialog_quota">Mahupiir</string>
-  <string-array name="create_space_dialog_quota_units">
-    <item>1 GB</item>
-    <item>2 GB</item>
-    <item>5 GB</item>
-    <item>10 GB</item>
-    <item>50 GB</item>
-    <item>100 GB</item>
-    <item>Piiranguteta</item>
-  </string-array>
   <string name="create_space_dialog_empty_error">Ruumi nimi ei tohi olla tühi</string>
   <string name="create_space_dialog_length_error">Ruumi nii ei tphi olla pikem kui 255 märki</string>
   <string name="create_space_dialog_characters_error">Keelatud märgid: / \\ . : ? * \" \' &gt; &lt; |</string>

@@ -769,15 +769,6 @@
   <string name="create_space_dialog_name">Emër</string>
   <string name="create_space_dialog_subtitle">Nëntitull</string>
   <string name="create_space_dialog_quota">Kuota</string>
-  <string-array name="create_space_dialog_quota_units">
-    <item>1 GB</item>
-    <item>2 GB</item>
-    <item>5 GB</item>
-    <item>10 GB</item>
-    <item>50 GB</item>
-    <item>100 GB</item>
-    <item>Pa kufizim</item>
-  </string-array>
   <string name="create_space_dialog_empty_error">Emri i hapësirës s’mund të jetë i zbrazët</string>
   <string name="create_space_dialog_length_error">Emri i hapësirës s’mund të jetë më i gjatë se 255 shenja</string>
   <string name="create_space_dialog_characters_error">Shenja të ndaluara: / \\ . : ? * \" \' &gt; &lt; |</string>

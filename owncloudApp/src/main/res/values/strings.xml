@@ -841,15 +841,6 @@
     <string name="create_space_dialog_quota">Quota</string>
     <string name="create_space_dialog_no_restriction">No restriction</string>
     <string name="create_space_dialog_gb_unit">GB</string>
-    <string-array name="create_space_dialog_quota_units">
-        <item>1 GB</item>
-        <item>2 GB</item>
-        <item>5 GB</item>
-        <item>10 GB</item>
-        <item>50 GB</item>
-        <item>100 GB</item>
-        <item>No restriction</item>
-    </string-array>
     <string name="create_space_dialog_empty_error">Space name must not be empty</string>
     <string name="create_space_dialog_length_error">Space name must not be longer than 255 characters</string>
     <string name="create_space_dialog_characters_error">Forbidden characters: / \\ . : ? * &quot; ' &gt; &lt; |</string>
