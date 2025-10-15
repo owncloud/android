@@ -89,7 +89,7 @@ class CreateSpaceDialogFragment : DialogFragment() {
             createSpaceButton.setOnClickListener {
                 val spaceName = createSpaceDialogNameValue.text.toString()
                 val spaceSubtitle = createSpaceDialogSubtitleValue.text.toString()
-                val spaceQuota = convertToBytes(createSpaceDialogQuotaValue.toString())
+                val spaceQuota = convertToBytes(createSpaceDialogQuotaValue.text.toString())
 
                 if (isEditMode) {
                     currentSpace?.let {
@@ -151,8 +151,8 @@ class CreateSpaceDialogFragment : DialogFragment() {
     }
 
     private fun convertToBytes(spaceQuota: String): Long {
-        val quotaNumber = spaceQuota.removeSuffix(" GB").toLongOrNull() ?: return 0L
-        return quotaNumber * 1_000_000_000L
+        val quotaNumber = spaceQuota.toDoubleOrNull() ?: return 0L
+        return (quotaNumber * 1_000_000_000L).toLong()
     }
 
     interface CreateSpaceListener {
