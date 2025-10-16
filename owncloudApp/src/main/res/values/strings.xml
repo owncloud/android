@@ -826,6 +826,7 @@
     <string name="content_description_space_subtitle">%1$s space subtitle</string>
     <string name="content_description_create_button">Create button</string>
     <string name="content_description_cancel_button">Cancel button</string>
+    <string name="content_description_quota_switch">Space quota</string>
 
     <string name="create_shortcut_dialog_title">Create a shortcut</string>
     <string name="create_shortcut_dialog_url">URL</string>
@@ -839,18 +840,14 @@
     <string name="create_space_dialog_name">Name</string>
     <string name="create_space_dialog_subtitle">Subtitle</string>
     <string name="create_space_dialog_quota">Quota</string>
-    <string-array name="create_space_dialog_quota_units">
-        <item>1 GB</item>
-        <item>2 GB</item>
-        <item>5 GB</item>
-        <item>10 GB</item>
-        <item>50 GB</item>
-        <item>100 GB</item>
-        <item>No restriction</item>
-    </string-array>
+    <string name="create_space_dialog_no_restriction">No restriction</string>
+    <string name="create_space_dialog_gb_unit">GB</string>
     <string name="create_space_dialog_empty_error">Space name must not be empty</string>
     <string name="create_space_dialog_length_error">Space name must not be longer than 255 characters</string>
     <string name="create_space_dialog_characters_error">Forbidden characters: / \\ . : ? * &quot; ' &gt; &lt; |</string>
+    <string name="create_space_dialog_quota_empty_error">Space quota must not be empty</string>
+    <string name="create_space_dialog_quota_zero_error">Space quota must be greater than zero</string>
+    <string name="create_space_dialog_quota_too_large_error">Space quota cannot exceed 1 PB</string>
     <string name="create_space_correctly">Space created correctly</string>
     <string name="create_space_failed">Space could not be created</string>
     <string name="edit_space">Edit space</string>

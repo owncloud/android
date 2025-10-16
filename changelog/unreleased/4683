@@ -4,4 +4,6 @@ A new floating action button has been added to the spaces list, visible only to 
 In addition, a new dialog for space creation has been implemented and, it is shown when the floating action button is tapped.
 
 https://github.com/owncloud/android/issues/4606
+https://github.com/owncloud/android/issues/4688
 https://github.com/owncloud/android/pull/4683
+https://github.com/owncloud/android/pull/4694

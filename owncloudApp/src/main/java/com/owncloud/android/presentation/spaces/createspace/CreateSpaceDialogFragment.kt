@@ -30,6 +30,7 @@ import androidx.fragment.app.DialogFragment
 import com.owncloud.android.R
 import com.owncloud.android.databinding.CreateSpaceDialogBinding
 import com.owncloud.android.domain.spaces.model.OCSpace
+import com.owncloud.android.utils.DisplayUtils
 
 class CreateSpaceDialogFragment : DialogFragment() {
     private var _binding: CreateSpaceDialogBinding? = null
@@ -51,9 +52,20 @@ class CreateSpaceDialogFragment : DialogFragment() {
         val canEditQuota = requireArguments().getBoolean(ARG_CAN_EDIT_SPACE_QUOTA)
         binding.apply {
             cancelCreateSpaceButton.setOnClickListener { dialog?.dismiss() }
-            createSpaceDialogNameValue.doOnTextChanged { name, _, _, _ ->
-                val errorMessage = validateName(name.toString())
-                updateUI(errorMessage)
+            createSpaceDialogNameValue.doOnTextChanged { _, _, _, _ ->
+                updateUI()
+            }
+
+            createSpaceDialogQuotaValue.doOnTextChanged { _, _, _, _ ->
+                updateUI()
+            }
+
+            createSpaceDialogQuotaSwitch.setOnCheckedChangeListener { _, isChecked ->
+                if (isChecked) { createSpaceDialogQuotaValue.setText("1") }
+                updateUI()
+                createSpaceDialogQuotaNoRestrictionLabel.isVisible = !isChecked
+                createSpaceDialogQuotaLayout.isVisible = isChecked
+                createSpaceDialogQuotaGbLabel.isVisible = isChecked
             }
 
             if (isEditMode) {
@@ -63,7 +75,11 @@ class CreateSpaceDialogFragment : DialogFragment() {
                 currentSpace?.let {
                     createSpaceDialogNameValue.setText(it.name)
                     createSpaceDialogSubtitleValue.setText(it.description)
-                    createSpaceDialogQuotaUnit.setSelection(getQuotaValueForSpinner(it.quota!!.total))
+                    val totalQuota = it.quota?.total ?: 0L
+                    if (totalQuota != 0L) {
+                        createSpaceDialogQuotaSwitch.isChecked = true
+                        createSpaceDialogQuotaValue.setText(DisplayUtils.formatFromBytesToGb(totalQuota))
+                    }
                 }
 
                 createSpaceButton.apply {
@@ -75,7 +91,7 @@ class CreateSpaceDialogFragment : DialogFragment() {
             createSpaceButton.setOnClickListener {
                 val spaceName = createSpaceDialogNameValue.text.toString()
                 val spaceSubtitle = createSpaceDialogSubtitleValue.text.toString()
-                val spaceQuota = convertToBytes(createSpaceDialogQuotaUnit.selectedItem.toString())
+                val spaceQuota = if (createSpaceDialogQuotaSwitch.isChecked) convertToBytes(createSpaceDialogQuotaValue.text.toString()) else 0L
 
                 if (isEditMode) {
                     currentSpace?.let {
@@ -106,37 +122,39 @@ class CreateSpaceDialogFragment : DialogFragment() {
             else -> null
         }
 
-    private fun updateUI(errorMessage: String?) {
-        val colorButton = if (errorMessage == null) {
+    private fun validateQuota(spaceQuota: String): String? {
+        if (!binding.createSpaceDialogQuotaSwitch.isChecked) return null
+
+        return when {
+            spaceQuota.isEmpty() -> getString(R.string.create_space_dialog_quota_empty_error)
+            spaceQuota.toDouble() == MIN_SPACE_QUOTA_GB -> getString(R.string.create_space_dialog_quota_zero_error)
+            spaceQuota.toDouble() > MAX_SPACE_QUOTA_GB -> getString(R.string.create_space_dialog_quota_too_large_error)
+            else -> null
+        }
+    }
+
+    private fun updateUI() {
+        val nameError = validateName(binding.createSpaceDialogNameValue.text.toString())
+        val quotaError = validateQuota(binding.createSpaceDialogQuotaValue.text.toString())
+        val noErrors = nameError == null && quotaError == null
+
+        val colorButton = if (noErrors) {
             resources.getColor(R.color.primary_button_background_color, null)
         } else {
             resources.getColor(R.color.grey, null)
         }
 
-        binding.createSpaceDialogNameValue.error = errorMessage
+        binding.createSpaceDialogNameValue.error = nameError
+        binding.createSpaceDialogQuotaValue.error = quotaError
         binding.createSpaceButton.apply {
             setTextColor(colorButton)
-            isEnabled = errorMessage == null
+            isEnabled = noErrors
         }
     }
 
     private fun convertToBytes(spaceQuota: String): Long {
-        val quotaNumber = spaceQuota.removeSuffix(" GB").toLongOrNull() ?: return 0L
-        return quotaNumber * 1_000_000_000L
-    }
-
-    private fun getQuotaValueForSpinner(spaceQuota: Long): Int {
-        val totalGB = spaceQuota / 1_000_000_000.0
-        return when (totalGB) {
-            1.0 -> 0
-            2.0 -> 1
-            5.0 -> 2
-            10.0 -> 3
-            50.0 -> 4
-            100.0 -> 5
-            0.0 -> 6
-            else -> 0
-        }
+        val quotaNumber = spaceQuota.toDoubleOrNull() ?: return 0L
+        return (quotaNumber * 1_000_000_000L).toLong()
     }
 
     interface CreateSpaceListener {
@@ -149,6 +167,8 @@ class CreateSpaceDialogFragment : DialogFragment() {
         private const val ARG_CAN_EDIT_SPACE_QUOTA = "CAN_EDIT_SPACE_QUOTA"
         private const val ARG_CURRENT_SPACE = "CURRENT_SPACE"
         private const val FORBIDDEN_CHARACTERS = """[/\\.:?*"'><|]"""
+        private const val MIN_SPACE_QUOTA_GB = 0.0
+        private const val MAX_SPACE_QUOTA_GB = 1_000_000.0
 
         fun newInstance(
             isEditMode: Boolean,
