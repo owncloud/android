@@ -21,5 +21,5 @@
 package com.owncloud.android.domain.user.model
 
 enum class UserPermissions {
-    CAN_EDIT_SPACES
+    CAN_EDIT_SPACES, CAN_DELETE_SPACES
 }

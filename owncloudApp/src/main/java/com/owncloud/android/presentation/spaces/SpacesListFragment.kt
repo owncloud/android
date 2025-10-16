@@ -22,6 +22,7 @@
 
 package com.owncloud.android.presentation.spaces
 
+import android.content.DialogInterface
 import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -46,6 +47,7 @@ import com.owncloud.android.domain.spaces.model.OCSpace
 import com.owncloud.android.domain.spaces.model.SpaceMenuOption
 import com.owncloud.android.domain.user.model.UserPermissions
 import com.owncloud.android.extensions.collectLatestLifecycleFlow
+import com.owncloud.android.extensions.showAlertDialog
 import com.owncloud.android.extensions.showErrorInSnackbar
 import com.owncloud.android.extensions.showMessageInSnackbar
 import com.owncloud.android.extensions.toDrawableRes
@@ -184,6 +186,7 @@ class SpacesListFragment :
                             binding.fabCreateSpace.isVisible = it.contains(DRIVES_CREATE_ALL_PERMISSION)
                             if(it.contains(DRIVES_READ_WRITE_ALL_PERMISSION)) userPermissions.add(UserPermissions.CAN_EDIT_SPACES)
                             editQuotaPermission = it.contains(DRIVES_READ_WRITE_PROJECT_QUOTA_ALL_PERMISSION)
+                            if(it.contains(DRIVES_DELETE_PROJECT_ALL_PERMISSION)) userPermissions.add(UserPermissions.CAN_DELETE_SPACES)
                         }
                     }
                     is UIResult.Loading -> { }
@@ -338,6 +341,15 @@ class SpacesListFragment :
                         )
                         editDialog.show(requireActivity().supportFragmentManager, DIALOG_CREATE_SPACE)
                     }
+                    SpaceMenuOption.DISABLE -> {
+                        showAlertDialog(
+                            title = getString(R.string.disable_space_dialog_title, currentSpace.name),
+                            message = getString(R.string.disable_space_dialog_message),
+                            positiveButtonText = getString(R.string.common_yes),
+                            positiveButtonListener = { _: DialogInterface?, _: Int -> },
+                            negativeButtonText = getString(R.string.common_no)
+                        )
+                    }
                 }
             }
         }
@@ -352,6 +364,7 @@ class SpacesListFragment :
         const val DRIVES_CREATE_ALL_PERMISSION = "Drives.Create.all"
         const val DRIVES_READ_WRITE_ALL_PERMISSION = "Drives.ReadWrite.all"
         const val DRIVES_READ_WRITE_PROJECT_QUOTA_ALL_PERMISSION = "Drives.ReadWriteProjectQuota.all"
+        const val DRIVES_DELETE_PROJECT_ALL_PERMISSION = "Drives.DeleteProject.all"
 
         private const val DIALOG_CREATE_SPACE = "DIALOG_CREATE_SPACE"
 

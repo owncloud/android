@@ -38,8 +38,15 @@ class FilterSpaceMenuOptionsUseCase(
         val editPermission =
             (UserPermissions.CAN_EDIT_SPACES in params.userPermissions || hasSpacePermission(spacePermissionsResult, DRIVES_MANAGE_PERMISSION))
 
+        val deletePermission =
+            (UserPermissions.CAN_DELETE_SPACES in params.userPermissions || hasSpacePermission(spacePermissionsResult, DRIVES_DELETE_PERMISSION))
+
         if (editPermission) {
             optionsToShow.add(SpaceMenuOption.EDIT)
+        }
+
+        if (!params.space.isDisabled && deletePermission) {
+            optionsToShow.add(SpaceMenuOption.DISABLE)
         }
 
         return optionsToShow
@@ -59,5 +66,6 @@ class FilterSpaceMenuOptionsUseCase(
 
     companion object {
         private const val DRIVES_MANAGE_PERMISSION = "libre.graph/driveItem/permissions/update"
+        private const val DRIVES_DELETE_PERMISSION = "libre.graph/driveItem/permissions/delete"
     }
 }
