@@ -37,6 +37,7 @@ import com.owncloud.android.domain.spaces.usecases.GetPersonalAndProjectSpacesWi
 import com.owncloud.android.domain.spaces.usecases.GetPersonalSpacesWithSpecialsForAccountAsStreamUseCase
 import com.owncloud.android.domain.spaces.usecases.GetProjectSpacesWithSpecialsForAccountAsStreamUseCase
 import com.owncloud.android.domain.spaces.usecases.RefreshSpacesFromServerAsyncUseCase
+import com.owncloud.android.domain.user.model.UserPermissions
 import com.owncloud.android.domain.user.usecases.GetUserIdAsyncUseCase
 import com.owncloud.android.domain.user.usecases.GetUserPermissionsAsyncUseCase
 import com.owncloud.android.domain.utils.Event
@@ -176,13 +177,13 @@ class SpacesListViewModel(
         }
     }
 
-    fun filterMenuOptions(space: OCSpace, editSpacesPermission: Boolean) {
+    fun filterMenuOptions(space: OCSpace, userPermissions: Set<UserPermissions>) {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
             val result = filterSpaceMenuOptionsUseCase(
                 FilterSpaceMenuOptionsUseCase.Params(
                     accountName = accountName,
                     space = space,
-                    editSpacesPermission = editSpacesPermission
+                    userPermissions = userPermissions
                 )
             )
             _menuOptions.emit(result)

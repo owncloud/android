@@ -44,6 +44,7 @@ import com.owncloud.android.databinding.SpacesListFragmentBinding
 import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.domain.spaces.model.OCSpace
 import com.owncloud.android.domain.spaces.model.SpaceMenuOption
+import com.owncloud.android.domain.user.model.UserPermissions
 import com.owncloud.android.extensions.collectLatestLifecycleFlow
 import com.owncloud.android.extensions.showErrorInSnackbar
 import com.owncloud.android.extensions.showMessageInSnackbar
@@ -71,7 +72,7 @@ class SpacesListFragment :
     private val binding get() = _binding!!
 
     private var isMultiPersonal = false
-    private var editSpacesPermission = false
+    private var userPermissions = mutableSetOf<UserPermissions>()
     private var editQuotaPermission = false
     private lateinit var currentSpace: OCSpace
 
@@ -181,7 +182,7 @@ class SpacesListFragment :
                         Timber.d("The permissions for $accountName are: ${uiResult.data}")
                         uiResult.data?.let {
                             binding.fabCreateSpace.isVisible = it.contains(DRIVES_CREATE_ALL_PERMISSION)
-                            editSpacesPermission = it.contains(DRIVES_READ_WRITE_ALL_PERMISSION)
+                            if(it.contains(DRIVES_READ_WRITE_ALL_PERMISSION)) userPermissions.add(UserPermissions.CAN_EDIT_SPACES)
                             editQuotaPermission = it.contains(DRIVES_READ_WRITE_PROJECT_QUOTA_ALL_PERMISSION)
                         }
                     }
@@ -243,7 +244,7 @@ class SpacesListFragment :
 
     override fun onThreeDotButtonClick(ocSpace: OCSpace) {
         currentSpace = ocSpace
-        spacesListViewModel.filterMenuOptions(ocSpace, editSpacesPermission)
+        spacesListViewModel.filterMenuOptions(ocSpace, userPermissions)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

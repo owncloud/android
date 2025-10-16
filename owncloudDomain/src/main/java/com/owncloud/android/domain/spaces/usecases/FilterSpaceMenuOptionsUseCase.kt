@@ -24,6 +24,7 @@ import com.owncloud.android.domain.BaseUseCase
 import com.owncloud.android.domain.UseCaseResult
 import com.owncloud.android.domain.spaces.model.OCSpace
 import com.owncloud.android.domain.spaces.model.SpaceMenuOption
+import com.owncloud.android.domain.user.model.UserPermissions
 
 class FilterSpaceMenuOptionsUseCase(
     private val getSpacePermissionsAsyncUseCase: GetSpacePermissionsAsyncUseCase,
@@ -32,15 +33,10 @@ class FilterSpaceMenuOptionsUseCase(
     override fun run(params: Params): MutableList<SpaceMenuOption> {
         val optionsToShow = mutableListOf<SpaceMenuOption>()
 
-        val editPermission = if (params.editSpacesPermission) {
-            true
-        } else {
-            when (val spacePermissionsResult =
-                getSpacePermissionsAsyncUseCase(GetSpacePermissionsAsyncUseCase.Params(params.accountName, params.space.id))) {
-                is UseCaseResult.Success -> DRIVES_MANAGE_PERMISSION in spacePermissionsResult.data
-                is UseCaseResult.Error -> false
-            }
-        }
+        val spacePermissionsResult = getSpacePermissionsAsyncUseCase(GetSpacePermissionsAsyncUseCase.Params(params.accountName, params.space.id))
+
+        val editPermission =
+            (UserPermissions.CAN_EDIT_SPACES in params.userPermissions || hasSpacePermission(spacePermissionsResult, DRIVES_MANAGE_PERMISSION))
 
         if (editPermission) {
             optionsToShow.add(SpaceMenuOption.EDIT)
@@ -49,10 +45,16 @@ class FilterSpaceMenuOptionsUseCase(
         return optionsToShow
     }
 
+    private fun hasSpacePermission(spacePermissions: UseCaseResult<List<String>>, requiredPermission: String) =
+        when (spacePermissions) {
+            is UseCaseResult.Success -> requiredPermission in spacePermissions.data
+            is UseCaseResult.Error -> false
+        }
+
     data class Params(
         val accountName: String,
         val space: OCSpace,
-        val editSpacesPermission: Boolean
+        val userPermissions: Set<UserPermissions>
     )
 
     companion object {
