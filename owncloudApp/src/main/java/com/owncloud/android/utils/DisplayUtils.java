@@ -255,4 +255,9 @@ public class DisplayUtils {
             return (int) resources.getDimension(R.dimen.nav_drawer_header_height);
         }
     }
+
+    public static String formatFromBytesToGb(long bytes) {
+        BigDecimal valueInGB = new BigDecimal(bytes).divide(BigDecimal.valueOf(1_000_000_000L)).stripTrailingZeros();
+        return valueInGB.toPlainString();
+    }
 }

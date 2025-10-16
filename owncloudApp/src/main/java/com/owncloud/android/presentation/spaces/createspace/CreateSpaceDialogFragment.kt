@@ -30,6 +30,7 @@ import androidx.fragment.app.DialogFragment
 import com.owncloud.android.R
 import com.owncloud.android.databinding.CreateSpaceDialogBinding
 import com.owncloud.android.domain.spaces.model.OCSpace
+import com.owncloud.android.utils.DisplayUtils
 
 class CreateSpaceDialogFragment : DialogFragment() {
     private var _binding: CreateSpaceDialogBinding? = null
@@ -76,7 +77,7 @@ class CreateSpaceDialogFragment : DialogFragment() {
                     val totalQuota = it.quota?.total ?: 0L
                     if (totalQuota != 0L) {
                         createSpaceDialogQuotaSwitch.isChecked = true
-                        createSpaceDialogQuotaValue.setText(String.format((totalQuota/1_000_000_000.0).toString()))
+                        createSpaceDialogQuotaValue.setText(DisplayUtils.formatFromBytesToGb(totalQuota))
                     }
                 }
 
