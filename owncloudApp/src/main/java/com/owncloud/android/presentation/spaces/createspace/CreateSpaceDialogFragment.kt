@@ -61,6 +61,7 @@ class CreateSpaceDialogFragment : DialogFragment() {
             }
 
             createSpaceDialogQuotaSwitch.setOnCheckedChangeListener { _, isChecked ->
+                if (isChecked) { createSpaceDialogQuotaValue.setText("1") }
                 updateUI()
                 createSpaceDialogQuotaNoRestrictionLabel.isVisible = !isChecked
                 createSpaceDialogQuotaLayout.isVisible = isChecked
