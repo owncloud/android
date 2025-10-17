@@ -25,6 +25,7 @@ package com.owncloud.android.lib.resources.spaces.services
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.spaces.CreateRemoteSpaceOperation
+import com.owncloud.android.lib.resources.spaces.DisableRemoteSpaceOperation
 import com.owncloud.android.lib.resources.spaces.EditRemoteSpaceOperation
 import com.owncloud.android.lib.resources.spaces.GetRemoteSpacePermissionsOperation
 import com.owncloud.android.lib.resources.spaces.GetRemoteSpacesOperation
@@ -42,5 +43,8 @@ class OCSpacesService(override val client: OwnCloudClient) : SpacesService {
 
     override fun editSpace(spaceId: String, spaceName: String, spaceSubtitle: String, spaceQuota: Long?): RemoteOperationResult<SpaceResponse> =
         EditRemoteSpaceOperation(spaceId, spaceName, spaceSubtitle, spaceQuota).execute(client)
+
+    override fun disableSpace(spaceId: String): RemoteOperationResult<Unit> =
+        DisableRemoteSpaceOperation(spaceId).execute(client)
 
 }

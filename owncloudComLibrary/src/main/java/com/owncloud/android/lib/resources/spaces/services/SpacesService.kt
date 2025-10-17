@@ -31,4 +31,5 @@ interface SpacesService : Service {
     fun createSpace(spaceName: String, spaceSubtitle: String, spaceQuota: Long): RemoteOperationResult<SpaceResponse>
     fun getSpacePermissions(spaceId: String): RemoteOperationResult<List<String>>
     fun editSpace(spaceId: String, spaceName: String, spaceSubtitle: String, spaceQuota: Long?): RemoteOperationResult<SpaceResponse>
+    fun disableSpace(spaceId: String): RemoteOperationResult<Unit>
 }

@@ -64,6 +64,10 @@ class OCRemoteSpacesDataSource(
         return spaceResponse.toModel(accountName)
     }
 
+    override fun disableSpace(accountName: String, spaceId: String) {
+        executeRemoteOperation { clientManager.getSpacesService(accountName).disableSpace(spaceId) }
+    }
+
     companion object {
         private const val MANAGER_ROLE = "manager"
         private const val EDITOR_ROLE = "editor"

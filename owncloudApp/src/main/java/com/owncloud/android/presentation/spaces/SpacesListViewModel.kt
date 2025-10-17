@@ -31,6 +31,7 @@ import com.owncloud.android.domain.files.usecases.GetFileByRemotePathUseCase
 import com.owncloud.android.domain.spaces.model.OCSpace
 import com.owncloud.android.domain.spaces.model.SpaceMenuOption
 import com.owncloud.android.domain.spaces.usecases.CreateSpaceUseCase
+import com.owncloud.android.domain.spaces.usecases.DisableSpaceUseCase
 import com.owncloud.android.domain.spaces.usecases.EditSpaceUseCase
 import com.owncloud.android.domain.spaces.usecases.FilterSpaceMenuOptionsUseCase
 import com.owncloud.android.domain.spaces.usecases.GetPersonalAndProjectSpacesWithSpecialsForAccountAsStreamUseCase
@@ -63,6 +64,7 @@ class SpacesListViewModel(
     private val createSpaceUseCase: CreateSpaceUseCase,
     private val filterSpaceMenuOptionsUseCase: FilterSpaceMenuOptionsUseCase,
     private val editSpaceUseCase: EditSpaceUseCase,
+    private val disableSpaceUseCase: DisableSpaceUseCase,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
     private val accountName: String,
     private val showPersonalSpace: Boolean,
@@ -86,6 +88,9 @@ class SpacesListViewModel(
 
     private val _editSpaceFlow = MutableSharedFlow<Event<UIResult<Unit>>?>()
     val editSpaceFlow: SharedFlow<Event<UIResult<Unit>>?> = _editSpaceFlow
+
+    private val _disableSpaceFlow = MutableSharedFlow<Event<UIResult<Unit>>?>()
+    val disableSpaceFlow: SharedFlow<Event<UIResult<Unit>>?> = _disableSpaceFlow
 
     init {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
@@ -187,6 +192,16 @@ class SpacesListViewModel(
                 )
             )
             _menuOptions.emit(result)
+        }
+    }
+
+    fun disableSpace(spaceId: String){
+        viewModelScope.launch(coroutinesDispatcherProvider.io) {
+            when (val result = disableSpaceUseCase(DisableSpaceUseCase.Params(accountName, spaceId))) {
+                is UseCaseResult.Success -> _disableSpaceFlow.emit(Event(UIResult.Success(result.getDataOrNull())))
+                is UseCaseResult.Error -> _disableSpaceFlow.emit(Event(UIResult.Error(error = result.getThrowableOrNull())))
+            }
+            refreshSpacesFromServerAsyncUseCase(RefreshSpacesFromServerAsyncUseCase.Params(accountName))
         }
     }
 

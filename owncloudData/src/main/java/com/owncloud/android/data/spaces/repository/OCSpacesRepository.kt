@@ -88,4 +88,8 @@ class OCSpacesRepository(
         remoteSpacesDataSource.editSpace(accountName, spaceId, spaceName, spaceSubtitle, spaceQuota)
     }
 
+    override fun disableSpace(accountName: String, spaceId: String) {
+        remoteSpacesDataSource.disableSpace(accountName, spaceId)
+    }
+
 }
