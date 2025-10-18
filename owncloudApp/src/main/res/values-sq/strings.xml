@@ -758,6 +758,7 @@
   <string name="content_description_space_subtitle">Nëntitull hapësire %1$s</string>
   <string name="content_description_create_button">Buton krijimi</string>
   <string name="content_description_cancel_button">Buton anulimi</string>
+  <string name="content_description_quota_switch">Kuota hapësire</string>
   <string name="create_shortcut_dialog_title">Krijoni një shkurtore</string>
   <string name="create_shortcut_dialog_url">URL</string>
   <string name="create_shortcut_dialog_url_information">URL-ja duhet të fillojë me https:// ose http:// , që të mund të hapet në shfletues</string>
@@ -769,9 +770,14 @@
   <string name="create_space_dialog_name">Emër</string>
   <string name="create_space_dialog_subtitle">Nëntitull</string>
   <string name="create_space_dialog_quota">Kuota</string>
+  <string name="create_space_dialog_no_restriction">Pa kufizim</string>
+  <string name="create_space_dialog_gb_unit">GB</string>
   <string name="create_space_dialog_empty_error">Emri i hapësirës s’mund të jetë i zbrazët</string>
   <string name="create_space_dialog_length_error">Emri i hapësirës s’mund të jetë më i gjatë se 255 shenja</string>
   <string name="create_space_dialog_characters_error">Shenja të ndaluara: / \\ . : ? * \" \' &gt; &lt; |</string>
+  <string name="create_space_dialog_quota_empty_error">Kuotat e hapësirës s’duhet të jenë të zbrazëta</string>
+  <string name="create_space_dialog_quota_zero_error">Kuotat e hapësirës duhet të jenë më të mëdha se zero</string>
+  <string name="create_space_dialog_quota_too_large_error">Kuotat e hapësirës s’mund të tejkalojnë 1 PB</string>
   <string name="create_space_correctly">Hapësira u krijua saktë</string>
   <string name="create_space_failed">Hapësira s’u krijua dot</string>
   <string name="edit_space">Përpunoni hapësirë</string>

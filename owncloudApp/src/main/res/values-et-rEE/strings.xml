@@ -760,6 +760,7 @@
   <string name="content_description_space_subtitle">%1$s ruumi alapealkiri</string>
   <string name="content_description_create_button">Loomise nupp</string>
   <string name="content_description_cancel_button">Tühistamise nupp</string>
+  <string name="content_description_quota_switch">Ruumi mahupiirang</string>
   <string name="create_shortcut_dialog_title">Loo otsetee</string>
   <string name="create_shortcut_dialog_url">URL</string>
   <string name="create_shortcut_dialog_url_information">Brauseris avamiseks peab URL alguses olema kas http:// või https://</string>
@@ -771,9 +772,14 @@
   <string name="create_space_dialog_name">Nimi</string>
   <string name="create_space_dialog_subtitle">Alapealkiri</string>
   <string name="create_space_dialog_quota">Mahupiir</string>
+  <string name="create_space_dialog_no_restriction">Piiranguteta</string>
+  <string name="create_space_dialog_gb_unit">GB</string>
   <string name="create_space_dialog_empty_error">Ruumi nimi ei tohi olla tühi</string>
   <string name="create_space_dialog_length_error">Ruumi nii ei tphi olla pikem kui 255 märki</string>
   <string name="create_space_dialog_characters_error">Keelatud märgid: / \\ . : ? * \" \' &gt; &lt; |</string>
+  <string name="create_space_dialog_quota_empty_error">Ruumi piirang ei tohi olla tühi</string>
+  <string name="create_space_dialog_quota_zero_error">Ruumi piirang peab olema suurem kui 0</string>
+  <string name="create_space_dialog_quota_too_large_error">Ruumi piirang ei saa olla suurem kui 1 PB</string>
   <string name="create_space_correctly">Ruum loodi korrektselt</string>
   <string name="create_space_failed">Ruumi loomine ebaõnnestus</string>
   <string name="edit_space">Muuda ruumi</string>
