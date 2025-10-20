@@ -1,6 +1,6 @@
 ## Submitting issues
 
-If you have questions about how to use ownCloud, please join our [rocket chat channel][rocketchat] or our [forum][forum].
+If you have questions about how to use ownCloud, please join our [forum][forum].
 
 ### Guidelines
 * [Report the issue](https://github.com/owncloud/android/issues/new) using on of our [templates][template], they include all the information we need to track down the issue.
@@ -16,7 +16,6 @@ If your issue appears to be a bug, and hasn't been reported, open a new issue.
 Help us to maximize the effort we can spend fixing issues and adding new features, by not reporting duplicate issues.
 
 [template]: https://github.com/owncloud/android/tree/master/.github/ISSUE_TEMPLATE
-[rocketchat]: https://talk.owncloud.com/channel/mobile
 [forum]: https://central.owncloud.org/
 
 ## Contributing to Source Code
