@@ -2,8 +2,9 @@
  * ownCloud Android client application
  *
  * @author Juan Carlos Garrote Gascón
+ * @author Jorge Aguado Recio
  *
- * Copyright (C) 2024 ownCloud GmbH.
+ * Copyright (C) 2025 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -35,9 +36,12 @@ import com.owncloud.android.domain.spaces.model.SpaceRoot
 import com.owncloud.android.domain.spaces.model.SpaceSpecial
 import com.owncloud.android.domain.spaces.model.SpaceSpecialFolder
 import com.owncloud.android.domain.spaces.model.SpaceUser
+import com.owncloud.android.lib.resources.spaces.responses.GrantedToV2Response
+import com.owncloud.android.lib.resources.spaces.responses.PermissionsResponse
 import com.owncloud.android.lib.resources.spaces.responses.QuotaResponse
 import com.owncloud.android.lib.resources.spaces.responses.RootResponse
 import com.owncloud.android.lib.resources.spaces.responses.SpaceResponse
+import com.owncloud.android.lib.resources.spaces.responses.UserResponse
 
 const val WEB_DAV_URL = "https://server.url/dav/spaces/8871f4f3-fc6f-4a66-8bed-62f175f76f3805bca744-d89f-4e9c-a990-25a0d7f03fe9"
 
@@ -97,7 +101,8 @@ val OC_SPACE_PROJECT_WITH_IMAGE = OCSpace(
         eTag = "989c7968dbbbde8c5fd9849b9123c384",
         id = "8871f4f3-fc6f-4a66-8bed-62f175f76f38$0aa0e03c-ec36-498c-bb9f-857315568199",
         webDavUrl = "https://server.com/dav/spaces/8871f4f3-fc6f-4a66-8bed-62f175f76f38$0aa0e03c-ec36-498c-bb9f-857315568199",
-        deleted = null
+        deleted = null,
+        role = "manager"
     ),
     webUrl = "https://server.com/f/8871f4f3-fc6f-4a66-8bed-62f175f76f38$0aa0e03c-ec36-498c-bb9f-857315568199",
     description = "This is the description of the space",
@@ -114,7 +119,8 @@ val OC_SPACE_PROJECT_WITHOUT_IMAGE = OC_SPACE_PROJECT_WITH_IMAGE.copy(
         eTag = "989c7968dbbbde8c5fd9849b9123c384",
         id = "8871f4f3-fc6f-4a66-8bed-62f175f76f38$0aa0e03c-ec36-498c-bb9f-1234566789",
         webDavUrl = "https://server.com/dav/spaces/8871f4f3-fc6f-4a66-8bed-62f175f76f38$0aa0e03c-ec36-498c-bb9f-1234566789",
-        deleted = null
+        deleted = null,
+        role = "manager"
     ),
     webUrl = "https://server.com/f/8871f4f3-fc6f-4a66-8bed-62f175f76f38$0aa0e03c-ec36-498c-bb9f-1234566789",
     special = listOf(OC_SPACE_SPECIAL_README)
@@ -125,7 +131,15 @@ val OC_SPACE_PERSONAL = OC_SPACE_PROJECT_WITH_IMAGE.copy(
     driveType = "personal",
     name = "Admin",
     description = null,
-    special = null
+    special = null,
+    root = SpaceRoot(
+        eTag = "989c7968dbbbde8c5fd9849b9123c384",
+        id = "8871f4f3-fc6f-4a66-8bed-62f175f76f38$0aa0e03c-ec36-498c-bb9f-857315568199",
+        webDavUrl = "https://server.com/dav/spaces/8871f4f3-fc6f-4a66-8bed-62f175f76f38$0aa0e03c-ec36-498c-bb9f-857315568199",
+        deleted = null,
+        role = null
+    ),
+
 )
 
 val OC_SPACE_PERSONAL_WITH_UNLIMITED_QUOTA = OC_SPACE_PERSONAL.copy(
@@ -159,7 +173,8 @@ val OC_SPACE_SHARES = OCSpace(
         eTag = "989c7968dbbbde8c5fd9849b9123c384",
         id = "a0ca6a90-a365-4782-871e-d44447bbc668\$a0ca6a90-a365-4782-871e-d44447bbc668",
         webDavUrl = "https://server.com/dav/spaces/a0ca6a90-a365-4782-871e-d44447bbc668\$a0ca6a90-a365-4782-871e-d44447bbc668",
-        deleted = null
+        deleted = null,
+        role = null
     ),
     webUrl = "https://server.com/f/a0ca6a90-a365-4782-871e-d44447bbc668\$a0ca6a90-a365-4782-871e-d44447bbc669",
     description = null,
@@ -179,7 +194,8 @@ val OC_SPACE_PROJECT_DISABLED = OC_SPACE_PROJECT_WITH_IMAGE.copy(
         webDavUrl = "https://server.com/dav/spaces/8871f4f3-fc6f-4a66-8bed-62f175f76f38$0aa0e03c-ec36-498c-bb9f-857315568199",
         deleted = SpaceDeleted(
             state = "trashed"
-        )
+        ),
+        role = "manager"
     ),
     special = null
 )
@@ -198,7 +214,8 @@ val SPACE_ENTITY_WITH_SPECIALS = SpacesWithSpecials(
             eTag = "eTag",
             id = "id",
             webDavUrl = WEB_DAV_URL,
-            deleteState = "state"
+            deleteState = "state",
+            role = "manager"
         ),
         webUrl = "webUrl",
         description = "description"
@@ -237,7 +254,8 @@ val SPACE_ENTITY_PERSONAL = SpacesEntity(
             eTag = "989c7968dbbbde8c5fd9849b9123c384",
             id = "8871f4f3-fc6f-4a66-8bed-62f175f76f38\$0aa0e03c-ec36-498c-bb9f-857315568199",
             webDavUrl = "https://server.com/dav/spaces/8871f4f3-fc6f-4a66-8bed-62f175f76f38$0aa0e03c-ec36-498c-bb9f-857315568199",
-            deleteState = null
+            deleteState = null,
+            role = null
         ),
         webUrl = "https://server.com/f/8871f4f3-fc6f-4a66-8bed-62f175f76f38$0aa0e03c-ec36-498c-bb9f-857315568199",
         description = null
@@ -258,7 +276,8 @@ val SPACE_ENTITY_SHARE = SpacesWithSpecials(
             eTag = "eTag",
             id = "id",
             webDavUrl = WEB_DAV_URL,
-            deleteState = "state"
+            deleteState = "state",
+            role = null
         ),
         webUrl = "webUrl",
         description = "description"
@@ -292,7 +311,13 @@ val SPACE_RESPONSE =
             eTag = "eTag",
             id = OC_ACCOUNT_ID,
             webDavUrl = "https://server.url/dav/spaces/8871f4f3-fc6f-4a66-8bed-62f175f76f3805bca744-d89f-4e9c-a990-25a0d7f03fe9",
-            deleted = null
+            deleted = null,
+            permissions = listOf(
+                PermissionsResponse(
+                    grantedToV2 = GrantedToV2Response(UserResponse(id = OC_CLIENT_ID)),
+                    roles = listOf("manager")
+                )
+            )
         ),
         quota = QuotaResponse(
             remaining = 1,
