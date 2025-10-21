@@ -162,6 +162,7 @@ class OCLocalSpacesDataSource(
                         id = spaceRootEntity.id,
                         webDavUrl = spaceRootEntity.webDavUrl,
                         deleted = spaceRootEntity.deleteState?.let { SpaceDeleted(state = it) },
+                        role = spaceRootEntity.role
                     )
                 },
                 webUrl = webUrl,
@@ -183,7 +184,9 @@ class OCLocalSpacesDataSource(
                     SpaceQuotaEntity(remaining = quotaModel.remaining, state = quotaModel.state, total = quotaModel.total, used = quotaModel.used)
                 },
                 root = root.let { rootModel ->
-                    SpaceRootEntity(eTag = rootModel.eTag, id = rootModel.id, webDavUrl = rootModel.webDavUrl, deleteState = rootModel.deleted?.state)
+                    SpaceRootEntity(eTag = rootModel.eTag, id = rootModel.id, webDavUrl = rootModel.webDavUrl, deleteState = rootModel.deleted?.state,
+                        role = rootModel.role
+                    )
                 },
                 webUrl = webUrl,
                 description = description,

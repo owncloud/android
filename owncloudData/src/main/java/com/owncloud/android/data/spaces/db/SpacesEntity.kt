@@ -3,8 +3,9 @@
  *
  * @author Abel García de Prada
  * @author Juan Carlos Garrote Gascón
+ * @author Jorge Aguado Recio
  *
- * Copyright (C) 2024 ownCloud GmbH.
+ * Copyright (C) 2025 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -32,6 +33,7 @@ import com.owncloud.android.data.spaces.db.SpacesEntity.Companion.SPACES_QUOTA_R
 import com.owncloud.android.data.spaces.db.SpacesEntity.Companion.SPACES_QUOTA_STATE
 import com.owncloud.android.data.spaces.db.SpacesEntity.Companion.SPACES_QUOTA_TOTAL
 import com.owncloud.android.data.spaces.db.SpacesEntity.Companion.SPACES_QUOTA_USED
+import com.owncloud.android.data.spaces.db.SpacesEntity.Companion.SPACES_ROLE
 import com.owncloud.android.data.spaces.db.SpacesEntity.Companion.SPACES_ROOT_DELETED_STATE
 import com.owncloud.android.data.spaces.db.SpacesEntity.Companion.SPACES_ROOT_ETAG
 import com.owncloud.android.data.spaces.db.SpacesEntity.Companion.SPACES_ROOT_ID
@@ -80,6 +82,7 @@ data class SpacesEntity(
         const val SPACES_ROOT_ID = "root_id"
         const val SPACES_ROOT_WEB_DAV_URL = "root_web_dav_url"
         const val SPACES_ROOT_DELETED_STATE = "root_deleted_state"
+        const val SPACES_ROLE = "space_role"
     }
 }
 
@@ -103,6 +106,8 @@ data class SpaceRootEntity(
     val webDavUrl: String,
     @ColumnInfo(name = SPACES_ROOT_DELETED_STATE)
     val deleteState: String?,
+    @ColumnInfo(name = SPACES_ROLE)
+    val role: String?
 )
 
 data class SpacesWithSpecials(
