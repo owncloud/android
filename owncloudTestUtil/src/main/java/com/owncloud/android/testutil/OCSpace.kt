@@ -314,7 +314,7 @@ val SPACE_RESPONSE =
             deleted = null,
             permissions = listOf(
                 PermissionsResponse(
-                    grantedToV2 = GrantedToV2Response(UserResponse(id = OC_CLIENT_ID)),
+                    grantedToV2 = GrantedToV2Response(UserResponse(id = OC_CLIENT_ID), null),
                     roles = listOf("manager")
                 )
             )
