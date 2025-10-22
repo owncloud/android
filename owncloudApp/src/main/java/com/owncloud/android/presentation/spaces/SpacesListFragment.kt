@@ -360,6 +360,15 @@ class SpacesListFragment :
                             negativeButtonText = getString(R.string.common_no)
                         )
                     }
+                    SpaceMenuOption.ENABLE -> {
+                        showAlertDialog(
+                            title = getString(R.string.enable_space_dialog_title, currentSpace.name),
+                            message = getString(R.string.enable_space_dialog_message),
+                            positiveButtonText = getString(R.string.common_yes),
+                            positiveButtonListener = { _: DialogInterface?, _: Int ->  },
+                            negativeButtonText = getString(R.string.common_no)
+                        )
+                    }
                 }
             }
         }

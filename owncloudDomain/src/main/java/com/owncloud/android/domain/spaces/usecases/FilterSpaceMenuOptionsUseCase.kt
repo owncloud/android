@@ -32,6 +32,7 @@ class FilterSpaceMenuOptionsUseCase(
 
     override fun run(params: Params): MutableList<SpaceMenuOption> {
         val optionsToShow = mutableListOf<SpaceMenuOption>()
+        val currentSpace = params.space
 
         val spacePermissionsResult = getSpacePermissionsAsyncUseCase(GetSpacePermissionsAsyncUseCase.Params(params.accountName, params.space.id))
 
@@ -45,8 +46,12 @@ class FilterSpaceMenuOptionsUseCase(
             optionsToShow.add(SpaceMenuOption.EDIT)
         }
 
-        if (!params.space.isDisabled && deletePermission) {
+        if (!currentSpace.isDisabled && deletePermission) {
             optionsToShow.add(SpaceMenuOption.DISABLE)
+        }
+
+        if (currentSpace.isDisabled) {
+            optionsToShow.add(SpaceMenuOption.ENABLE)
         }
 
         return optionsToShow

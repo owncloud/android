@@ -21,5 +21,5 @@
 package com.owncloud.android.domain.spaces.model
 
 enum class SpaceMenuOption {
-    EDIT, DISABLE
+    EDIT, DISABLE, ENABLE
 }
