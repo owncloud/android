@@ -33,17 +33,18 @@ import com.owncloud.android.domain.spaces.model.SpaceRoot
 import com.owncloud.android.domain.spaces.model.SpaceSpecial
 import com.owncloud.android.domain.spaces.model.SpaceSpecialFolder
 import com.owncloud.android.domain.spaces.model.SpaceUser
+import com.owncloud.android.lib.resources.spaces.responses.RootResponse
 import com.owncloud.android.lib.resources.spaces.responses.SpaceResponse
 
 class OCRemoteSpacesDataSource(
     private val clientManager: ClientManager,
 ) : RemoteSpacesDataSource {
-    override fun refreshSpacesForAccount(accountName: String, userId: String): List<OCSpace> {
+    override fun refreshSpacesForAccount(accountName: String, userId: String, userGroups: List<String>): List<OCSpace> {
         val spacesResponse = executeRemoteOperation {
             clientManager.getSpacesService(accountName).getSpaces()
         }
 
-        return spacesResponse.map { it.toModel(accountName, userId) }
+        return spacesResponse.map { it.toModel(accountName, userId, userGroups) }
     }
 
     override fun createSpace(accountName: String, spaceName: String, spaceSubtitle: String, spaceQuota: Long): OCSpace {
@@ -64,6 +65,9 @@ class OCRemoteSpacesDataSource(
     }
 
     companion object {
+        private const val MANAGER_ROLE = "manager"
+        private const val EDITOR_ROLE = "editor"
+        private const val VIEWER_ROLE = "viewer"
 
         @VisibleForTesting
         fun SpaceResponse.toModel(accountName: String): OCSpace =
@@ -113,7 +117,7 @@ class OCRemoteSpacesDataSource(
             )
 
         @VisibleForTesting
-        fun SpaceResponse.toModel(accountName: String, userId: String): OCSpace =
+        fun SpaceResponse.toModel(accountName: String, userId: String, userGroups: List<String>): OCSpace =
             OCSpace(
                 accountName = accountName,
                 driveAlias = driveAlias,
@@ -141,7 +145,7 @@ class OCRemoteSpacesDataSource(
                     id = root.id,
                     webDavUrl = root.webDavUrl,
                     deleted = root.deleted?.let { SpaceDeleted(state = it.state) },
-                    role = root.permissions?.firstOrNull { it.grantedToV2.user?.id == userId }?.roles?.first()
+                    role = getRoleForUser(root, userId, userGroups)
                 ),
                 webUrl = webUrl,
                 description = description,
@@ -158,5 +162,13 @@ class OCRemoteSpacesDataSource(
                     )
                 }
             )
+
+        private fun getRoleForUser(root: RootResponse, userId: String, userGroups: List<String>): String? {
+            val priorityOrder = listOf(MANAGER_ROLE, EDITOR_ROLE, VIEWER_ROLE)
+            val matchingPermissions = root.permissions.orEmpty().filter { permission ->
+                permission.grantedToV2.user?.id == userId || permission.grantedToV2.group?.id in userGroups
+            }
+            return matchingPermissions.flatMap { it.roles }.minByOrNull { priorityOrder.indexOf(it) }
+        }
     }
 }

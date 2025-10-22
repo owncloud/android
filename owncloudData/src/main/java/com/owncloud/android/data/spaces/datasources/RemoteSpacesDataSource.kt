@@ -23,7 +23,7 @@ package com.owncloud.android.data.spaces.datasources
 import com.owncloud.android.domain.spaces.model.OCSpace
 
 interface RemoteSpacesDataSource {
-    fun refreshSpacesForAccount(accountName: String, userId: String): List<OCSpace>
+    fun refreshSpacesForAccount(accountName: String, userId: String, userGroups: List<String>): List<OCSpace>
     fun createSpace(accountName: String, spaceName: String, spaceSubtitle: String, spaceQuota: Long): OCSpace
     fun getSpacePermissions(accountName: String, spaceId: String): List<String>
     fun editSpace(accountName: String, spaceId: String, spaceName: String, spaceSubtitle: String, spaceQuota: Long?): OCSpace

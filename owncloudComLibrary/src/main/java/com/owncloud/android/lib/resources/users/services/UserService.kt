@@ -36,4 +36,5 @@ interface UserService : Service {
     fun getUserAvatar(avatarDimension: Int): RemoteOperationResult<RemoteAvatarData>
     fun getUserId(): RemoteOperationResult<String>
     fun getUserPermissions(accountId: String): RemoteOperationResult<List<String>>
+    fun getUserGroups(): RemoteOperationResult<List<String>>
 }

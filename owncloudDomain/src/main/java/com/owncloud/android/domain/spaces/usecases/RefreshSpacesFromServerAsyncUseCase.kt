@@ -21,11 +21,13 @@ package com.owncloud.android.domain.spaces.usecases
 import com.owncloud.android.domain.BaseUseCaseWithResult
 import com.owncloud.android.domain.UseCaseResult
 import com.owncloud.android.domain.spaces.SpacesRepository
+import com.owncloud.android.domain.user.usecases.GetUserGroupsAsyncUseCase
 import com.owncloud.android.domain.user.usecases.GetUserIdAsyncUseCase
 
 class RefreshSpacesFromServerAsyncUseCase(
     private val spacesRepository: SpacesRepository,
-    private val getUserIdAsyncUseCase: GetUserIdAsyncUseCase
+    private val getUserIdAsyncUseCase: GetUserIdAsyncUseCase,
+    private val getUserGroupsAsyncUseCase: GetUserGroupsAsyncUseCase
 ) : BaseUseCaseWithResult<Unit, RefreshSpacesFromServerAsyncUseCase.Params>() {
 
     override fun run(params: Params) {
@@ -33,7 +35,11 @@ class RefreshSpacesFromServerAsyncUseCase(
             is UseCaseResult.Error -> ""
             is UseCaseResult.Success -> userIdResult.data
         }
-        spacesRepository.refreshSpacesForAccount(accountName = params.accountName, userId = userId)
+        val userGroups = when (val userGroupsResults = getUserGroupsAsyncUseCase(GetUserGroupsAsyncUseCase.Params(params.accountName))) {
+            is UseCaseResult.Error -> emptyList()
+            is UseCaseResult.Success -> userGroupsResults.data
+        }
+        spacesRepository.refreshSpacesForAccount(accountName = params.accountName, userId = userId, userGroups = userGroups)
 
     }
 

@@ -61,6 +61,11 @@ class OCRemoteUserDataSource(
             clientManager.getUserService(accountName).getUserPermissions(accountId)
         }
 
+    override fun getUserGroups(accountName: String): List<String> =
+        executeRemoteOperation {
+            clientManager.getUserService(accountName).getUserGroups()
+        }
+
 }
 
 /**************************************************************************************************************

@@ -26,7 +26,7 @@ import com.owncloud.android.domain.spaces.model.OCSpace
 import kotlinx.coroutines.flow.Flow
 
 interface SpacesRepository {
-    fun refreshSpacesForAccount(accountName: String, userId: String)
+    fun refreshSpacesForAccount(accountName: String, userId: String, userGroups: List<String>)
     fun getSpacesFromEveryAccountAsStream(): Flow<List<OCSpace>>
     fun getSpacesByDriveTypeWithSpecialsForAccountAsFlow(accountName: String, filterDriveTypes: Set<String>): Flow<List<OCSpace>>
     fun getPersonalSpaceForAccount(accountName: String): OCSpace?
