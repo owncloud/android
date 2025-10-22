@@ -74,3 +74,8 @@ val OC_USER_PERMISSIONS = listOf(
 )
 
 const val OC_USER_ID = "us3r1d"
+
+val OC_USER_GROUPS = listOf(
+    "509a9dcd-bb37-4f4f-a01a-19dca27d9c",
+    "79c867e9-31f8-4795-b0d2-6a519eb0c5"
+)
