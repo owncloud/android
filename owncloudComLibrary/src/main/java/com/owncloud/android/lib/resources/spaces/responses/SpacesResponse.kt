@@ -107,5 +107,11 @@ data class PermissionsResponse(
 
 @JsonClass(generateAdapter = true)
 data class GrantedToV2Response(
-    val user: UserResponse
+    val user: UserResponse?,
+    val group: GroupResponse?
+)
+
+@JsonClass(generateAdapter = true)
+data class GroupResponse(
+    val id: String
 )

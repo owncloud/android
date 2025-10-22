@@ -141,7 +141,7 @@ class OCRemoteSpacesDataSource(
                     id = root.id,
                     webDavUrl = root.webDavUrl,
                     deleted = root.deleted?.let { SpaceDeleted(state = it.state) },
-                    role = root.permissions?.firstOrNull { it.grantedToV2.user.id == userId }?.roles?.first()
+                    role = root.permissions?.firstOrNull { it.grantedToV2.user?.id == userId }?.roles?.first()
                 ),
                 webUrl = webUrl,
                 description = description,
