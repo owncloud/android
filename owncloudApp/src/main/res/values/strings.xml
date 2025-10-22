@@ -859,6 +859,8 @@
     <string name="enable_space">Enable space</string>
     <string name="enable_space_dialog_title">Do you really want to enable the space: %1$s?</string>
     <string name="enable_space_dialog_message">If you enable the selected space, it can be accessed again.</string>
+    <string name="enable_space_correctly">Space enabled correctly</string>
+    <string name="enable_space_failed">Space could not be enabled</string>
 
     <string name="feedback_dialog_get_in_contact_description"><![CDATA[ Ask for help in our <a href=\"%1$s\"><b>forum</b></a> or contribute in our <a href=\"%2$s\"><b>GitHub repo</b></a>]]></string>
 

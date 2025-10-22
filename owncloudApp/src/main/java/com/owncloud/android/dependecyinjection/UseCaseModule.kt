@@ -92,6 +92,7 @@ import com.owncloud.android.domain.sharing.shares.usecases.RefreshSharesFromServ
 import com.owncloud.android.domain.spaces.usecases.CreateSpaceUseCase
 import com.owncloud.android.domain.spaces.usecases.DisableSpaceUseCase
 import com.owncloud.android.domain.spaces.usecases.EditSpaceUseCase
+import com.owncloud.android.domain.spaces.usecases.EnableSpaceUseCase
 import com.owncloud.android.domain.spaces.usecases.FilterSpaceMenuOptionsUseCase
 import com.owncloud.android.domain.spaces.usecases.GetPersonalAndProjectSpacesForAccountUseCase
 import com.owncloud.android.domain.spaces.usecases.GetPersonalAndProjectSpacesWithSpecialsForAccountAsStreamUseCase
@@ -229,6 +230,7 @@ val useCaseModule = module {
     factoryOf(::CreateSpaceUseCase)
     factoryOf(::DisableSpaceUseCase)
     factoryOf(::EditSpaceUseCase)
+    factoryOf(::EnableSpaceUseCase)
     factoryOf(::FilterSpaceMenuOptionsUseCase)
     factoryOf(::GetPersonalAndProjectSpacesForAccountUseCase)
     factoryOf(::GetPersonalAndProjectSpacesWithSpecialsForAccountAsStreamUseCase)

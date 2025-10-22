@@ -28,4 +28,5 @@ interface RemoteSpacesDataSource {
     fun getSpacePermissions(accountName: String, spaceId: String): List<String>
     fun editSpace(accountName: String, spaceId: String, spaceName: String, spaceSubtitle: String, spaceQuota: Long?): OCSpace
     fun disableSpace(accountName: String, spaceId: String)
+    fun enableSpace(accountName: String, spaceId: String)
 }

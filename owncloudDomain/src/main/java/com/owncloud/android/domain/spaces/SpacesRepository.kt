@@ -38,4 +38,5 @@ interface SpacesRepository {
     fun createSpace(accountName: String, spaceName: String, spaceSubtitle: String, spaceQuota: Long)
     fun editSpace(accountName: String, spaceId: String, spaceName: String, spaceSubtitle: String, spaceQuota: Long?)
     fun disableSpace(accountName: String, spaceId: String)
+    fun enableSpace(accountName: String, spaceId: String)
 }

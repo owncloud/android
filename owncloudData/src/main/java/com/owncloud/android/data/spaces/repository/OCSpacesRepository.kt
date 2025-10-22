@@ -92,4 +92,8 @@ class OCSpacesRepository(
         remoteSpacesDataSource.disableSpace(accountName, spaceId)
     }
 
+    override fun enableSpace(accountName: String, spaceId: String) {
+        remoteSpacesDataSource.enableSpace(accountName, spaceId)
+    }
+
 }

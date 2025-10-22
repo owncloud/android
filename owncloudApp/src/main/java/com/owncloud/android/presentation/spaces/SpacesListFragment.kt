@@ -228,6 +228,16 @@ class SpacesListFragment :
             }
         }
 
+        collectLatestLifecycleFlow(spacesListViewModel.enableSpaceFlow) { event ->
+            event?.let {
+                when (val uiResult = event.peekContent()) {
+                    is UIResult.Success -> { showMessageInSnackbar(getString(R.string.enable_space_correctly)) }
+                    is UIResult.Loading -> { }
+                    is UIResult.Error -> { showErrorInSnackbar(R.string.enable_space_failed, uiResult.error) }
+                }
+            }
+        }
+
         collectLatestLifecycleFlow(spacesListViewModel.menuOptions) { menuOptions ->
             showSpaceMenuOptionsDialog(menuOptions)
         }
@@ -365,7 +375,7 @@ class SpacesListFragment :
                             title = getString(R.string.enable_space_dialog_title, currentSpace.name),
                             message = getString(R.string.enable_space_dialog_message),
                             positiveButtonText = getString(R.string.common_yes),
-                            positiveButtonListener = { _: DialogInterface?, _: Int ->  },
+                            positiveButtonListener = { _: DialogInterface?, _: Int -> spacesListViewModel.enableSpace(currentSpace.id) },
                             negativeButtonText = getString(R.string.common_no)
                         )
                     }
