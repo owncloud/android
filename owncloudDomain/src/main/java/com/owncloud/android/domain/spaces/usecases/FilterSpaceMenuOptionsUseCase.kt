@@ -52,6 +52,7 @@ class FilterSpaceMenuOptionsUseCase(
 
         if (currentSpace.isDisabled) {
             optionsToShow.add(SpaceMenuOption.ENABLE)
+            optionsToShow.add(SpaceMenuOption.DELETE)
         }
 
         return optionsToShow
