@@ -44,18 +44,13 @@ class ReleaseNotesViewModel(
     companion object {
         val releaseNotesList = listOf(
             ReleaseNote(
+                title = R.string.release_notes_4_7_0_title_space_management,
+                subtitle = R.string.release_notes_4_7_0_subtitle_space_management,
+                type = ReleaseNoteType.ENHANCEMENT
+            ),
+            ReleaseNote(
                 title = R.string.release_notes_4_7_0_title_new_layout_for_spaces,
                 subtitle = R.string.release_notes_4_7_0_subtitle_new_layout_for_spaces,
-                type = ReleaseNoteType.ENHANCEMENT
-            ),
-            ReleaseNote(
-                title = R.string.release_notes_4_7_0_title_create_new_spaces,
-                subtitle = R.string.release_notes_4_7_0_subtitle_create_new_spaces,
-                type = ReleaseNoteType.ENHANCEMENT
-            ),
-            ReleaseNote(
-                title = R.string.release_notes_4_7_0_title_edit_spaces,
-                subtitle = R.string.release_notes_4_7_0_subtitle_edit_spaces,
                 type = ReleaseNoteType.ENHANCEMENT
             ),
             ReleaseNote(
