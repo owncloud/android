@@ -51,6 +51,7 @@ ownCloud admins and users.
 * Enhancement - Update test in GitHub Actions: [#4663](https://github.com/owncloud/android/pull/4663)
 * Enhancement - New workflow to generate a build from "latest" tag on demand: [#4681](https://github.com/owncloud/android/pull/4681)
 * Enhancement - Make Update test more robust: [#4690](https://github.com/owncloud/android/pull/4690)
+* Enhancement - Add user role to spaces: [#4698](https://github.com/owncloud/android/pull/4698)
 
 ## Details
 
@@ -155,6 +156,13 @@ ownCloud admins and users.
    emulator execution more performant. Also, added a trigger for dependabot PRs.
 
    https://github.com/owncloud/android/pull/4690
+
+* Enhancement - Add user role to spaces: [#4698](https://github.com/owncloud/android/pull/4698)
+
+   A new field representing the user role has been added to the space model and to
+   the spaces table in the database.
+
+   https://github.com/owncloud/android/pull/4698
 
 # Changelog for ownCloud Android Client [4.6.2] (2025-08-13)
 

@@ -27,6 +27,8 @@ import com.owncloud.android.data.spaces.datasources.implementation.OCRemoteSpace
 import com.owncloud.android.lib.resources.spaces.services.OCSpacesService
 import com.owncloud.android.testutil.OC_ACCOUNT_NAME
 import com.owncloud.android.testutil.OC_SPACE_PROJECT_WITH_IMAGE
+import com.owncloud.android.testutil.OC_USER_GROUPS
+import com.owncloud.android.testutil.OC_USER_ID
 import com.owncloud.android.testutil.SPACE_PERMISSIONS
 import com.owncloud.android.testutil.SPACE_RESPONSE
 import com.owncloud.android.utils.createRemoteOperationResultMock
@@ -58,7 +60,7 @@ class OCRemoteSpacesDataSourceTest {
 
         every { ocSpaceService.getSpaces() } returns getRemoteSpacesOperationResult
 
-        val resultActual = ocRemoteSpacesDataSource.refreshSpacesForAccount(OC_ACCOUNT_NAME)
+        val resultActual = ocRemoteSpacesDataSource.refreshSpacesForAccount(OC_ACCOUNT_NAME, OC_USER_ID, OC_USER_GROUPS)
 
         assertEquals(listOf(SPACE_RESPONSE.toModel(OC_ACCOUNT_NAME)), resultActual)
 

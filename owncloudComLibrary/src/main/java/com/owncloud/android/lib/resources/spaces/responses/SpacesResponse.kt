@@ -64,6 +64,7 @@ data class RootResponse(
     val id: String,
     val webDavUrl: String,
     val deleted: DeleteResponse?,
+    val permissions: List<PermissionsResponse>?
 )
 
 @JsonClass(generateAdapter = true)
@@ -96,4 +97,21 @@ data class DeleteResponse(
 @JsonClass(generateAdapter = true)
 data class SpecialFolderResponse(
     val name: String
+)
+
+@JsonClass(generateAdapter = true)
+data class PermissionsResponse(
+    val grantedToV2: GrantedToV2Response,
+    val roles: List<String>
+)
+
+@JsonClass(generateAdapter = true)
+data class GrantedToV2Response(
+    val user: UserResponse?,
+    val group: GroupResponse?
+)
+
+@JsonClass(generateAdapter = true)
+data class GroupResponse(
+    val id: String
 )

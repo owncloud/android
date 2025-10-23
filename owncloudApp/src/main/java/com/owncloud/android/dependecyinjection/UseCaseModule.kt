@@ -109,6 +109,7 @@ import com.owncloud.android.domain.transfers.usecases.UpdatePendingUploadsPathUs
 import com.owncloud.android.domain.user.usecases.GetStoredQuotaUseCase
 import com.owncloud.android.domain.user.usecases.GetStoredQuotaAsStreamUseCase
 import com.owncloud.android.domain.user.usecases.GetUserAvatarAsyncUseCase
+import com.owncloud.android.domain.user.usecases.GetUserGroupsAsyncUseCase
 import com.owncloud.android.domain.user.usecases.GetUserInfoAsyncUseCase
 import com.owncloud.android.domain.user.usecases.GetUserQuotasUseCase
 import com.owncloud.android.domain.user.usecases.GetUserQuotasAsStreamUseCase
@@ -269,6 +270,7 @@ val useCaseModule = module {
     factoryOf(::GetStoredQuotaAsStreamUseCase)
     factoryOf(::GetStoredQuotaUseCase)
     factoryOf(::GetUserAvatarAsyncUseCase)
+    factoryOf(::GetUserGroupsAsyncUseCase)
     factoryOf(::GetUserIdAsyncUseCase)
     factoryOf(::GetUserInfoAsyncUseCase)
     factoryOf(::GetUserPermissionsAsyncUseCase)

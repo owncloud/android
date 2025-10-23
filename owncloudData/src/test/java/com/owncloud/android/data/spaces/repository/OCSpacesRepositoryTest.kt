@@ -31,6 +31,8 @@ import com.owncloud.android.testutil.OC_SPACE_PERSONAL
 import com.owncloud.android.testutil.OC_SPACE_PERSONAL_WITH_LIMITED_QUOTA
 import com.owncloud.android.testutil.OC_SPACE_PERSONAL_WITH_UNLIMITED_QUOTA
 import com.owncloud.android.testutil.OC_SPACE_PROJECT_WITH_IMAGE
+import com.owncloud.android.testutil.OC_USER_GROUPS
+import com.owncloud.android.testutil.OC_USER_ID
 import com.owncloud.android.testutil.OC_USER_QUOTA_LIMITED
 import com.owncloud.android.testutil.OC_USER_QUOTA_UNLIMITED
 import com.owncloud.android.testutil.OC_USER_QUOTA_WITHOUT_PERSONAL
@@ -57,17 +59,17 @@ class OCSpacesRepositoryTest {
     @Test
     fun `refreshSpacesForAccount refreshes spaces for account correctly when multipersonal is enabled`() {
         every {
-            remoteSpacesDataSource.refreshSpacesForAccount(OC_ACCOUNT_NAME)
+            remoteSpacesDataSource.refreshSpacesForAccount(OC_ACCOUNT_NAME, OC_USER_ID, OC_USER_GROUPS)
         } returns listOf(OC_SPACE_PERSONAL)
 
         every {
             localCapabilitiesDataSource.getCapabilitiesForAccount(OC_ACCOUNT_NAME)
         } returns OC_CAPABILITY_WITH_MULTIPERSONAL_ENABLED
 
-        ocSpacesRepository.refreshSpacesForAccount(OC_ACCOUNT_NAME)
+        ocSpacesRepository.refreshSpacesForAccount(OC_ACCOUNT_NAME, OC_USER_ID, OC_USER_GROUPS)
 
         verify(exactly = 1) {
-            remoteSpacesDataSource.refreshSpacesForAccount(OC_ACCOUNT_NAME)
+            remoteSpacesDataSource.refreshSpacesForAccount(OC_ACCOUNT_NAME, OC_USER_ID, OC_USER_GROUPS)
             localSpacesDataSource.saveSpacesForAccount(listOf(OC_SPACE_PERSONAL))
             localCapabilitiesDataSource.getCapabilitiesForAccount(OC_ACCOUNT_NAME)
             localUserDataSource.saveQuotaForAccount(OC_ACCOUNT_NAME, OC_USER_QUOTA_WITHOUT_PERSONAL)
@@ -77,17 +79,17 @@ class OCSpacesRepositoryTest {
     @Test
     fun `refreshSpacesForAccount refreshes spaces for account correctly when quota is unlimited`() {
         every {
-            remoteSpacesDataSource.refreshSpacesForAccount(OC_ACCOUNT_NAME)
+            remoteSpacesDataSource.refreshSpacesForAccount(OC_ACCOUNT_NAME, OC_USER_ID, OC_USER_GROUPS)
         } returns listOf(OC_SPACE_PERSONAL_WITH_UNLIMITED_QUOTA)
 
         every {
             localCapabilitiesDataSource.getCapabilitiesForAccount(OC_ACCOUNT_NAME)
         } returns OC_CAPABILITY
 
-        ocSpacesRepository.refreshSpacesForAccount(OC_ACCOUNT_NAME)
+        ocSpacesRepository.refreshSpacesForAccount(OC_ACCOUNT_NAME, OC_USER_ID, OC_USER_GROUPS)
 
         verify(exactly = 1) {
-            remoteSpacesDataSource.refreshSpacesForAccount(OC_ACCOUNT_NAME)
+            remoteSpacesDataSource.refreshSpacesForAccount(OC_ACCOUNT_NAME, OC_USER_ID, OC_USER_GROUPS)
             localSpacesDataSource.saveSpacesForAccount(listOf(OC_SPACE_PERSONAL_WITH_UNLIMITED_QUOTA))
             localCapabilitiesDataSource.getCapabilitiesForAccount(OC_ACCOUNT_NAME)
             localUserDataSource.saveQuotaForAccount(OC_ACCOUNT_NAME, OC_USER_QUOTA_UNLIMITED)
@@ -97,17 +99,17 @@ class OCSpacesRepositoryTest {
     @Test
     fun `refreshSpacesForAccount refreshes spaces for account correctly when quota is limited`() {
         every {
-            remoteSpacesDataSource.refreshSpacesForAccount(OC_ACCOUNT_NAME)
+            remoteSpacesDataSource.refreshSpacesForAccount(OC_ACCOUNT_NAME, OC_USER_ID, OC_USER_GROUPS)
         } returns listOf(OC_SPACE_PERSONAL_WITH_LIMITED_QUOTA)
 
         every {
             localCapabilitiesDataSource.getCapabilitiesForAccount(OC_ACCOUNT_NAME)
         } returns OC_CAPABILITY
 
-        ocSpacesRepository.refreshSpacesForAccount(OC_ACCOUNT_NAME)
+        ocSpacesRepository.refreshSpacesForAccount(OC_ACCOUNT_NAME, OC_USER_ID, OC_USER_GROUPS)
 
         verify(exactly = 1) {
-            remoteSpacesDataSource.refreshSpacesForAccount(OC_ACCOUNT_NAME)
+            remoteSpacesDataSource.refreshSpacesForAccount(OC_ACCOUNT_NAME, OC_USER_ID, OC_USER_GROUPS)
             localSpacesDataSource.saveSpacesForAccount(listOf(OC_SPACE_PERSONAL_WITH_LIMITED_QUOTA))
             localCapabilitiesDataSource.getCapabilitiesForAccount(OC_ACCOUNT_NAME)
             localUserDataSource.saveQuotaForAccount(OC_ACCOUNT_NAME, OC_USER_QUOTA_LIMITED)
@@ -117,17 +119,17 @@ class OCSpacesRepositoryTest {
     @Test
     fun `refreshSpacesForAccount refreshes spaces for account correctly when personal space does not exist`() {
         every {
-            remoteSpacesDataSource.refreshSpacesForAccount(OC_ACCOUNT_NAME)
+            remoteSpacesDataSource.refreshSpacesForAccount(OC_ACCOUNT_NAME, OC_USER_ID, OC_USER_GROUPS)
         } returns listOf(OC_SPACE_PROJECT_WITH_IMAGE)
 
         every {
             localCapabilitiesDataSource.getCapabilitiesForAccount(OC_ACCOUNT_NAME)
         } returns OC_CAPABILITY
 
-        ocSpacesRepository.refreshSpacesForAccount(OC_ACCOUNT_NAME)
+        ocSpacesRepository.refreshSpacesForAccount(OC_ACCOUNT_NAME, OC_USER_ID, OC_USER_GROUPS)
 
         verify(exactly = 1) {
-            remoteSpacesDataSource.refreshSpacesForAccount(OC_ACCOUNT_NAME)
+            remoteSpacesDataSource.refreshSpacesForAccount(OC_ACCOUNT_NAME, OC_USER_ID, OC_USER_GROUPS)
             localSpacesDataSource.saveSpacesForAccount(listOf(OC_SPACE_PROJECT_WITH_IMAGE))
             localCapabilitiesDataSource.getCapabilitiesForAccount(OC_ACCOUNT_NAME)
             localUserDataSource.saveQuotaForAccount(OC_ACCOUNT_NAME, OC_USER_QUOTA_WITHOUT_PERSONAL)

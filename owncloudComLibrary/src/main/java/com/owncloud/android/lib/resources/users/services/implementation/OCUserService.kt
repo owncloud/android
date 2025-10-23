@@ -29,6 +29,7 @@ package com.owncloud.android.lib.resources.users.services.implementation
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.users.GetRemoteUserAvatarOperation
+import com.owncloud.android.lib.resources.users.GetRemoteUserGroupsOperation
 import com.owncloud.android.lib.resources.users.GetRemoteUserIdOperation
 import com.owncloud.android.lib.resources.users.GetRemoteUserInfoOperation
 import com.owncloud.android.lib.resources.users.GetRemoteUserPermissionsOperation
@@ -52,5 +53,8 @@ class OCUserService(override val client: OwnCloudClient) : UserService {
 
     override fun getUserPermissions(accountId: String): RemoteOperationResult<List<String>> =
         GetRemoteUserPermissionsOperation(accountId).execute(client)
+
+    override fun getUserGroups(): RemoteOperationResult<List<String>> =
+        GetRemoteUserGroupsOperation().execute(client)
 
 }
