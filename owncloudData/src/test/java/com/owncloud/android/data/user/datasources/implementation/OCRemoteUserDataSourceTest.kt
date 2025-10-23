@@ -29,6 +29,7 @@ import com.owncloud.android.lib.resources.users.RemoteUserInfo
 import com.owncloud.android.lib.resources.users.services.implementation.OCUserService
 import com.owncloud.android.testutil.OC_ACCOUNT_NAME
 import com.owncloud.android.testutil.OC_USER_AVATAR
+import com.owncloud.android.testutil.OC_USER_GROUPS
 import com.owncloud.android.testutil.OC_USER_ID
 import com.owncloud.android.testutil.OC_USER_INFO
 import com.owncloud.android.testutil.OC_USER_PERMISSIONS
@@ -158,6 +159,23 @@ class OCRemoteUserDataSourceTest {
 
         verify(exactly = 1) {
             ocUserService.getUserPermissions(OC_USER_ID)
+        }
+    }
+
+    @Test
+    fun `getUserGroups returns a list of String with all user groups`() {
+        val getUserGroupsResult: RemoteOperationResult<List<String>> =
+            createRemoteOperationResultMock(data = OC_USER_GROUPS, isSuccess = true)
+
+        every {
+            ocUserService.getUserGroups()
+        } returns getUserGroupsResult
+
+        val userGroups = ocRemoteUserDataSource.getUserGroups(OC_ACCOUNT_NAME)
+        assertEquals(OC_USER_GROUPS, userGroups)
+
+        verify(exactly = 1) {
+            ocUserService.getUserGroups()
         }
     }
 

@@ -81,6 +81,7 @@ data class SpaceRoot(
     val id: String,
     val webDavUrl: String,
     val deleted: SpaceDeleted?,
+    val role: String?
 ) : Parcelable
 
 @Parcelize

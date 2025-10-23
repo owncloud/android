@@ -66,4 +66,7 @@ class OCUserRepository(
     override fun getUserPermissions(accountName: String, accountId: String): List<String> =
         remoteUserDataSource.getUserPermissions(accountName, accountId)
 
+    override fun getUserGroups(accountName: String): List<String> =
+        remoteUserDataSource.getUserGroups(accountName)
+
 }

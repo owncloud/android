@@ -1,0 +1,5 @@
+Enhancement: Add user role to spaces
+
+A new field representing the user role has been added to the space model and to the spaces table in the database.
+
+https://github.com/owncloud/android/pull/4698

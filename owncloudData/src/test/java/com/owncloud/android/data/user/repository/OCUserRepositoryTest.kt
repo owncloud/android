@@ -26,6 +26,7 @@ import com.owncloud.android.data.user.datasources.LocalUserDataSource
 import com.owncloud.android.data.user.datasources.RemoteUserDataSource
 import com.owncloud.android.testutil.OC_ACCOUNT_NAME
 import com.owncloud.android.testutil.OC_USER_AVATAR
+import com.owncloud.android.testutil.OC_USER_GROUPS
 import com.owncloud.android.testutil.OC_USER_ID
 import com.owncloud.android.testutil.OC_USER_INFO
 import com.owncloud.android.testutil.OC_USER_PERMISSIONS
@@ -204,6 +205,20 @@ class OCUserRepositoryTest {
 
         verify(exactly = 1) {
             remoteUserDataSource.getUserPermissions(OC_ACCOUNT_NAME, OC_USER_ID)
+        }
+    }
+
+    @Test
+    fun `getUserGroups returns a list of String with user groups`() {
+        every {
+            remoteUserDataSource.getUserGroups(OC_ACCOUNT_NAME)
+        } returns OC_USER_GROUPS
+
+        val userGroups = ocUserRepository.getUserGroups(OC_ACCOUNT_NAME)
+        assertEquals(OC_USER_GROUPS, userGroups)
+
+        verify(exactly = 1) {
+            remoteUserDataSource.getUserGroups(OC_ACCOUNT_NAME)
         }
     }
 
