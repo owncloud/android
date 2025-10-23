@@ -198,6 +198,15 @@ class SpacesListFragment :
             }
         }
 
+        observeSpaceOperationsFlows()
+
+        collectLatestLifecycleFlow(spacesListViewModel.menuOptions) { menuOptions ->
+            showSpaceMenuOptionsDialog(menuOptions)
+        }
+
+    }
+
+    private fun observeSpaceOperationsFlows() {
         collectLatestLifecycleFlow(spacesListViewModel.createSpaceFlow) { event ->
             event?.let {
                 when (val uiResult = event.peekContent()) {
@@ -238,10 +247,15 @@ class SpacesListFragment :
             }
         }
 
-        collectLatestLifecycleFlow(spacesListViewModel.menuOptions) { menuOptions ->
-            showSpaceMenuOptionsDialog(menuOptions)
+        collectLatestLifecycleFlow(spacesListViewModel.deleteSpaceFlow) { event ->
+            event?.let {
+                when (val uiResult = event.peekContent()) {
+                    is UIResult.Success -> { showMessageInSnackbar(getString(R.string.delete_space_correctly)) }
+                    is UIResult.Loading -> { }
+                    is UIResult.Error -> { showErrorInSnackbar(R.string.delete_space_failed, uiResult.error) }
+                }
+            }
         }
-
     }
 
     private fun showOrHideEmptyView(spacesList: List<OCSpace>) {
@@ -384,7 +398,7 @@ class SpacesListFragment :
                             title = getString(R.string.delete_space_dialog_title, currentSpace.name),
                             message = getString(R.string.delete_space_dialog_message),
                             positiveButtonText = getString(R.string.common_yes),
-                            positiveButtonListener = { _: DialogInterface?, _: Int ->  },
+                            positiveButtonListener = { _: DialogInterface?, _: Int ->  spacesListViewModel.deleteSpace(currentSpace.id) },
                             negativeButtonText = getString(R.string.common_no)
                         )
                     }

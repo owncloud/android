@@ -64,8 +64,8 @@ class OCRemoteSpacesDataSource(
         return spaceResponse.toModel(accountName)
     }
 
-    override fun disableSpace(accountName: String, spaceId: String) {
-        executeRemoteOperation { clientManager.getSpacesService(accountName).disableSpace(spaceId) }
+    override fun disableSpace(accountName: String, spaceId: String, deleteMode: Boolean) {
+        executeRemoteOperation { clientManager.getSpacesService(accountName).disableSpace(spaceId, deleteMode) }
     }
 
     override fun enableSpace(accountName: String, spaceId: String) {

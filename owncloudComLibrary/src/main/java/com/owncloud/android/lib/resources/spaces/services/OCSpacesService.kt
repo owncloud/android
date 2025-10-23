@@ -45,8 +45,8 @@ class OCSpacesService(override val client: OwnCloudClient) : SpacesService {
     override fun editSpace(spaceId: String, spaceName: String, spaceSubtitle: String, spaceQuota: Long?): RemoteOperationResult<SpaceResponse> =
         EditRemoteSpaceOperation(spaceId, spaceName, spaceSubtitle, spaceQuota).execute(client)
 
-    override fun disableSpace(spaceId: String): RemoteOperationResult<Unit> =
-        DisableRemoteSpaceOperation(spaceId).execute(client)
+    override fun disableSpace(spaceId: String, deleteMode: Boolean): RemoteOperationResult<Unit> =
+        DisableRemoteSpaceOperation(spaceId, deleteMode).execute(client)
 
     override fun enableSpace(spaceId: String): RemoteOperationResult<SpaceResponse> =
         EnableRemoteSpaceOperation(spaceId).execute(client)

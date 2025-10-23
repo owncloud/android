@@ -30,7 +30,8 @@ import timber.log.Timber
 import java.net.URL
 
 class DisableRemoteSpaceOperation(
-    private val spaceId: String
+    private val spaceId: String,
+    private val deleteMode: Boolean
 ): RemoteOperation<Unit>() {
     override fun run(client: OwnCloudClient): RemoteOperationResult<Unit> {
         var result: RemoteOperationResult<Unit>
@@ -40,7 +41,9 @@ class DisableRemoteSpaceOperation(
                 appendEncodedPath(spaceId)
             }
 
-            val deleteMethod = DeleteMethod(URL(uriBuilder.build().toString()))
+            val deleteMethod = DeleteMethod(URL(uriBuilder.build().toString())).apply {
+                if (deleteMode) addRequestHeader(PURGE_HEADER, PURGE_HEADER_VALUE)
+            }
 
             val status = client.executeHttpMethod(deleteMethod)
 
@@ -51,17 +54,19 @@ class DisableRemoteSpaceOperation(
                 result = RemoteOperationResult(ResultCode.OK)
             } else {
                 result = RemoteOperationResult(deleteMethod)
-                Timber.e("Failed response while disabling the space; status code: $status, response: $response")
+                Timber.e("Failed response while disabling/deleting the space; status code: $status, response: $response")
             }
         } catch (e: Exception) {
             result = RemoteOperationResult(e)
-            Timber.e(e, "Exception while disabling the space $spaceId")
+            Timber.e(e, "Exception while disabling/deleting the space $spaceId")
         }
         return result
     }
 
     companion object {
         private const val GRAPH_API_SPACES_PATH = "graph/v1.0/drives/"
+        private const val PURGE_HEADER = "Purge"
+        private const val PURGE_HEADER_VALUE = "T"
     }
 
 }

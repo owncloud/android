@@ -97,6 +97,9 @@ class SpacesListViewModel(
     private val _enableSpaceFlow = MutableSharedFlow<Event<UIResult<Unit>>?>()
     val enableSpaceFlow: SharedFlow<Event<UIResult<Unit>>?> = _enableSpaceFlow
 
+    private val _deleteSpaceFlow = MutableSharedFlow<Event<UIResult<Unit>>?>()
+    val deleteSpaceFlow: SharedFlow<Event<UIResult<Unit>>?> = _deleteSpaceFlow
+
     init {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
             refreshSpacesFromServer()
@@ -202,7 +205,7 @@ class SpacesListViewModel(
 
     fun disableSpace(spaceId: String){
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
-            when (val result = disableSpaceUseCase(DisableSpaceUseCase.Params(accountName, spaceId))) {
+            when (val result = disableSpaceUseCase(DisableSpaceUseCase.Params(accountName, spaceId, false))) {
                 is UseCaseResult.Success -> _disableSpaceFlow.emit(Event(UIResult.Success(result.getDataOrNull())))
                 is UseCaseResult.Error -> _disableSpaceFlow.emit(Event(UIResult.Error(error = result.getThrowableOrNull())))
             }
@@ -215,6 +218,16 @@ class SpacesListViewModel(
             when (val result = enableSpaceUseCase(EnableSpaceUseCase.Params(accountName, spaceId))) {
                 is UseCaseResult.Success -> _enableSpaceFlow.emit(Event(UIResult.Success(result.getDataOrNull())))
                 is UseCaseResult.Error -> _enableSpaceFlow.emit(Event(UIResult.Error(error = result.getThrowableOrNull())))
+            }
+            refreshSpacesFromServerAsyncUseCase(RefreshSpacesFromServerAsyncUseCase.Params(accountName))
+        }
+    }
+
+    fun deleteSpace(spaceId: String){
+        viewModelScope.launch(coroutinesDispatcherProvider.io) {
+            when (val result = disableSpaceUseCase(DisableSpaceUseCase.Params(accountName, spaceId, true))) {
+                is UseCaseResult.Success -> _deleteSpaceFlow.emit(Event(UIResult.Success(result.getDataOrNull())))
+                is UseCaseResult.Error -> _deleteSpaceFlow.emit(Event(UIResult.Error(error = result.getThrowableOrNull())))
             }
             refreshSpacesFromServerAsyncUseCase(RefreshSpacesFromServerAsyncUseCase.Params(accountName))
         }

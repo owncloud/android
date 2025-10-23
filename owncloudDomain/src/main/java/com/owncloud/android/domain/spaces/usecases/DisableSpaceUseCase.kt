@@ -27,11 +27,12 @@ class DisableSpaceUseCase(
     private val spacesRepository: SpacesRepository
 ): BaseUseCaseWithResult<Unit, DisableSpaceUseCase.Params>() {
 
-    override fun run(params: Params) = spacesRepository.disableSpace(params.accountName, params.spaceId)
+    override fun run(params: Params) = spacesRepository.disableSpace(params.accountName, params.spaceId, params.deleteMode)
 
     data class Params (
         val accountName: String,
-        val spaceId: String
+        val spaceId: String,
+        val deleteMode: Boolean
     )
 
 }
