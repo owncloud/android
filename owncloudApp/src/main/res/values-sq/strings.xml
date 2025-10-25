@@ -683,6 +683,8 @@
   <string name="release_notes_bugfixes_subtitle">U ndreqën disa të meta, për të përmirësuar punimin te aplikacioni</string>
   <string name="release_notes_4_7_0_title_new_layout_for_spaces">Skemë e re grafike për listë hapësirash</string>
   <string name="release_notes_4_7_0_subtitle_new_layout_for_spaces">Një skemë e re grafike për përdorues Infinite Scale te lista e hapësirave, me një buton me tre pika në secilën kartë hapësire që hap një menu opsionesh, kur klikohet mbi të</string>
+  <string name="release_notes_4_7_0_title_space_management">Administrim hapësirash</string>
+  <string name="release_notes_4_7_0_subtitle_space_management">Përdorues Infinite Scale me lejet e duhura tani mund të administrojnë (krijojnë, përpunojnë, çaktivizojnë, aktivizojnë dhe fshijnë) hapësira drejt e nga aplikacioni</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Hape në web</string>
   <string name="ic_action_open_with_web">Hape në %1$s (web)</string>

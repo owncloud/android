@@ -685,6 +685,8 @@
   <string name="release_notes_bugfixes_subtitle">Mõned vead parandati, et täiustada rakenduse kasutajakogemust</string>
   <string name="release_notes_4_7_0_title_new_layout_for_spaces">Ruumide nimekirja uus disain</string>
   <string name="release_notes_4_7_0_subtitle_new_layout_for_spaces">Ruumide nimekirja uus disain Infinite Scale kasutajatele koos kolme-punkti nupuga igal ruumi kaardil, mis klikkides avavad valikute menüü</string>
+  <string name="release_notes_4_7_0_title_space_management">Ruumide haldamine</string>
+  <string name="release_notes_4_7_0_subtitle_space_management">Korrektsete õigustega Inifinite Scale kasutajad saavad nüüd ruume hallata (luua, muuta, sisse ja välja lüllitada ning kustutada) otse rakendusest</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Ava veebis</string>
   <string name="ic_action_open_with_web">Ava %1$s (veebis)</string>
