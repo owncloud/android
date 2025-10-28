@@ -46,6 +46,7 @@ import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.domain.spaces.model.OCSpace
 import com.owncloud.android.domain.spaces.model.SpaceMenuOption
 import com.owncloud.android.domain.user.model.UserPermissions
+import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.collectLatestLifecycleFlow
 import com.owncloud.android.extensions.showAlertDialog
 import com.owncloud.android.extensions.showErrorInSnackbar
@@ -60,6 +61,7 @@ import com.owncloud.android.presentation.common.BottomSheetFragmentItemView
 import com.owncloud.android.utils.DisplayUtils
 import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.presentation.spaces.createspace.CreateSpaceDialogFragment
+import kotlinx.coroutines.flow.SharedFlow
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import timber.log.Timber
@@ -198,7 +200,11 @@ class SpacesListFragment :
             }
         }
 
-        observeSpaceOperationsFlows()
+        collectSpaceOperationsFlow(spacesListViewModel.createSpaceFlow, R.string.create_space_correctly, R.string.create_space_failed)
+        collectSpaceOperationsFlow(spacesListViewModel.editSpaceFlow, R.string.edit_space_correctly, R.string.edit_space_failed)
+        collectSpaceOperationsFlow(spacesListViewModel.disableSpaceFlow, R.string.disable_space_correctly, R.string.disable_space_failed)
+        collectSpaceOperationsFlow(spacesListViewModel.enableSpaceFlow, R.string.enable_space_correctly, R.string.enable_space_failed)
+        collectSpaceOperationsFlow(spacesListViewModel.deleteSpaceFlow, R.string.delete_space_correctly, R.string.delete_space_failed)
 
         collectLatestLifecycleFlow(spacesListViewModel.menuOptions) { menuOptions ->
             showSpaceMenuOptionsDialog(menuOptions)
@@ -206,53 +212,13 @@ class SpacesListFragment :
 
     }
 
-    private fun observeSpaceOperationsFlows() {
-        collectLatestLifecycleFlow(spacesListViewModel.createSpaceFlow) { event ->
+    private fun collectSpaceOperationsFlow(flow: SharedFlow<Event<UIResult<Unit>>?>, successMessage: Int, errorMessage: Int) {
+        collectLatestLifecycleFlow(flow) { event ->
             event?.let {
                 when (val uiResult = event.peekContent()) {
-                    is UIResult.Success -> { showMessageInSnackbar(getString(R.string.create_space_correctly)) }
+                    is UIResult.Success -> { showMessageInSnackbar(getString(successMessage)) }
                     is UIResult.Loading -> { }
-                    is UIResult.Error -> { showErrorInSnackbar(R.string.create_space_failed, uiResult.error) }
-                }
-            }
-        }
-
-        collectLatestLifecycleFlow(spacesListViewModel.editSpaceFlow) { event ->
-            event?.let {
-                when (val uiResult = event.peekContent()) {
-                    is UIResult.Success -> { showMessageInSnackbar(getString(R.string.edit_space_correctly)) }
-                    is UIResult.Loading -> { }
-                    is UIResult.Error -> { showErrorInSnackbar(R.string.edit_space_failed, uiResult.error) }
-                }
-            }
-        }
-
-        collectLatestLifecycleFlow(spacesListViewModel.disableSpaceFlow) { event ->
-            event?.let {
-                when (val uiResult = event.peekContent()) {
-                    is UIResult.Success -> { showMessageInSnackbar(getString(R.string.disable_space_correctly)) }
-                    is UIResult.Loading -> { }
-                    is UIResult.Error -> { showErrorInSnackbar(R.string.disable_space_failed, uiResult.error) }
-                }
-            }
-        }
-
-        collectLatestLifecycleFlow(spacesListViewModel.enableSpaceFlow) { event ->
-            event?.let {
-                when (val uiResult = event.peekContent()) {
-                    is UIResult.Success -> { showMessageInSnackbar(getString(R.string.enable_space_correctly)) }
-                    is UIResult.Loading -> { }
-                    is UIResult.Error -> { showErrorInSnackbar(R.string.enable_space_failed, uiResult.error) }
-                }
-            }
-        }
-
-        collectLatestLifecycleFlow(spacesListViewModel.deleteSpaceFlow) { event ->
-            event?.let {
-                when (val uiResult = event.peekContent()) {
-                    is UIResult.Success -> { showMessageInSnackbar(getString(R.string.delete_space_correctly)) }
-                    is UIResult.Loading -> { }
-                    is UIResult.Error -> { showErrorInSnackbar(R.string.delete_space_failed, uiResult.error) }
+                    is UIResult.Error -> { showErrorInSnackbar(errorMessage, uiResult.error) }
                 }
             }
         }
