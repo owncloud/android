@@ -24,6 +24,7 @@
 package com.owncloud.android.presentation.spaces
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.core.content.ContextCompat
@@ -55,10 +56,13 @@ class SpacesListAdapter(
         val spacesViewHolder = holder as SpacesViewHolder
         spacesViewHolder.binding.apply {
             val space = spacesList[position]
-
-            spacesListItemCard.setOnClickListener {
-                listener.onItemClick(space)
+            if (space.isDisabled) {
+                spacesListItemCard.isClickable = false
+            } else {
+                spacesListItemCard.setOnClickListener { listener.onItemClick(space) }
             }
+            spacesListItemImage.alpha = if (space.isDisabled) 0.5f else 1f
+            spacesListItemDisabledLabel.visibility = if (space.isDisabled) View.VISIBLE else View.GONE
             spacesListItemCard.setAccessibilityRole(className = Button::class.java)
             spacesListItemName.contentDescription = holder.itemView.context.getString(R.string.content_description_space_name, space.name)
             spacesThreeDotMenu.contentDescription = holder.itemView.context.getString(R.string.content_description_space_three_dot_menu, space.name)

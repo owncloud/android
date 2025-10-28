@@ -856,6 +856,7 @@
     <string name="disable_space_dialog_message">If you disable the selected space, it can no longer be accessed. Only Space managers will still have access. Note: No files will be deleted from the server.</string>
     <string name="disable_space_correctly">Space disabled correctly</string>
     <string name="disable_space_failed">Space could not be disabled</string>
+    <string name="disabled_space_label">Disabled</string>
     <string name="enable_space">Enable space</string>
     <string name="enable_space_dialog_title">Do you really want to enable the space: %1$s?</string>
     <string name="enable_space_dialog_message">If you enable the selected space, it can be accessed again.</string>
