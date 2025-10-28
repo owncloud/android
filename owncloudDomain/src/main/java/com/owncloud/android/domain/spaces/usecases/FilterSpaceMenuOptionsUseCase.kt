@@ -33,6 +33,7 @@ class FilterSpaceMenuOptionsUseCase(
     override fun run(params: Params): MutableList<SpaceMenuOption> {
         val optionsToShow = mutableListOf<SpaceMenuOption>()
         val currentSpace = params.space
+        val isSpaceManager = currentSpace.root.role == DRIVES_MANAGER_ROLE
 
         val spacePermissionsResult = getSpacePermissionsAsyncUseCase(GetSpacePermissionsAsyncUseCase.Params(params.accountName, params.space.id))
 
@@ -42,7 +43,7 @@ class FilterSpaceMenuOptionsUseCase(
         val deletePermission =
             (UserPermissions.CAN_DELETE_SPACES in params.userPermissions || hasSpacePermission(spacePermissionsResult, DRIVES_DELETE_PERMISSION))
 
-        if (editPermission) {
+        if (editPermission || isSpaceManager) {
             optionsToShow.add(SpaceMenuOption.EDIT)
         }
 
@@ -73,5 +74,6 @@ class FilterSpaceMenuOptionsUseCase(
     companion object {
         private const val DRIVES_MANAGE_PERMISSION = "libre.graph/driveItem/permissions/update"
         private const val DRIVES_DELETE_PERMISSION = "libre.graph/driveItem/permissions/delete"
+        private const val DRIVES_MANAGER_ROLE = "manager"
     }
 }
