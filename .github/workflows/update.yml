@@ -70,13 +70,15 @@ jobs:
 
       # Align and sign the APK
       - name: Sign APK
+        shell: bash
+        env:
+          KEY_ALIAS: ${{ secrets.TEST_KS_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.TEST_KS_KEY }}
         run: |
           APK_INPUT="owncloud-${{ github.sha }}.apk"
           APK_ALIGNED="owncloud-${{ github.sha }}-aligned.apk"
           APK_SIGNED="owncloudSigned-${{ github.sha }}.apk"
           KEYSTORE="./test.keystore"
-          KEY_ALIAS="${{ secrets.TEST_KS_ALIAS }}"
-          KEY_PASSWORD="${{ secrets.TEST_KS_KEY }}"
 
           # Align APK for optimal performance
           echo "Aligning APK..."
