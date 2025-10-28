@@ -1,0 +1,5 @@
+Bugfix: Add shell to execute apk signing step in GitHub Actions
+
+New value for shell to the signing step has been added to the action, to assure a correct execution. Also, secrets as environment variables in the step.
+
+https://github.com/owncloud/android/pull/4702
