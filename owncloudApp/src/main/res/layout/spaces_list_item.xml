@@ -63,6 +63,7 @@
                     android:background="@drawable/disabled_space_label_background"
                     android:paddingHorizontal="@dimen/standard_padding"
                     android:paddingVertical="10dp"
+                    android:contentDescription="@string/disabled_space_label"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
