@@ -11,7 +11,7 @@ interface RemoteAccessRepository {
      * @param clientFriendlyName Human-readable client name
      * @return Reference string to be used in token request
      */
-    fun initiateAuthentication(
+    suspend fun initiateAuthentication(
         email: String,
         clientId: String,
         clientFriendlyName: String
@@ -22,7 +22,7 @@ interface RemoteAccessRepository {
      * @param reference Reference from initiate response
      * @param code Validation code received by email
      */
-    fun getToken(
+    suspend fun getToken(
         reference: String,
         code: String
     )
@@ -31,13 +31,13 @@ interface RemoteAccessRepository {
      * Retrieve the list of devices a user has access to
      * @return List of devices
      */
-    fun getDevices(): List<RemoteAccessDevice>
+    suspend fun getDevices(): List<RemoteAccessDevice>
 
     /**
      * Get information about a specific device including its connection paths
      * @param deviceId Device identifier
      * @return List of paths for partivular device
      */
-    fun getDeviceById(deviceId: String): List<RemoteAccessPath>
+    suspend fun getDeviceById(deviceId: String): List<RemoteAccessPath>
 }
 

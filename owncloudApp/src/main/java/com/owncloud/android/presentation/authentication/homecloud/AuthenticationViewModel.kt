@@ -31,6 +31,11 @@ import com.owncloud.android.domain.authentication.usecases.GetBaseUrlUseCase
 import com.owncloud.android.domain.authentication.usecases.LoginBasicAsyncUseCase
 import com.owncloud.android.domain.capabilities.usecases.GetStoredCapabilitiesUseCase
 import com.owncloud.android.domain.capabilities.usecases.RefreshCapabilitiesFromServerAsyncUseCase
+import com.owncloud.android.domain.mdnsdiscovery.usecases.DiscoverLocalNetworkDevicesUseCase
+import com.owncloud.android.domain.remoteaccess.usecases.GetRemoteAccessDeviceByIdUseCase
+import com.owncloud.android.domain.remoteaccess.usecases.GetRemoteAccessDevicesUseCase
+import com.owncloud.android.domain.remoteaccess.usecases.GetRemoteAccessTokenUseCase
+import com.owncloud.android.domain.remoteaccess.usecases.InitiateRemoteAccessAuthenticationUseCase
 import com.owncloud.android.domain.server.model.ServerInfo
 import com.owncloud.android.domain.server.usecases.GetServerInfoAsyncUseCase
 import com.owncloud.android.domain.spaces.usecases.RefreshSpacesFromServerAsyncUseCase
@@ -54,6 +59,11 @@ class AuthenticationViewModel(
     private val workManagerProvider: WorkManagerProvider,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
     private val contextProvider: ContextProvider,
+    private val initiateRemoteAccessAuthenticationUseCase: InitiateRemoteAccessAuthenticationUseCase,
+    private val getRemoteAccessDeviceByIdUseCase: GetRemoteAccessDeviceByIdUseCase,
+    private val getRemoteAccessTokenUseCase: GetRemoteAccessTokenUseCase,
+    private val getRemoteAccessDevicesUseCase: GetRemoteAccessDevicesUseCase,
+    private val discoverLocalNetworkDevicesUseCase: DiscoverLocalNetworkDevicesUseCase,
 ) : ViewModel() {
 
     private val _serverInfo = MediatorLiveData<Event<UIResult<ServerInfo>>>()

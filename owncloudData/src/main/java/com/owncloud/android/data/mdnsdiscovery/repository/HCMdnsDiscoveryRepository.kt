@@ -16,7 +16,7 @@ import kotlin.time.Duration
  */
 class HCMdnsDiscoveryRepository(
     private val localMdnsDiscoveryDataSource: LocalMdnsDiscoveryDataSource,
-    private val deviceVerificationClient: HCDeviceVerificationClient
+    private val deviceVerificationClient: HCDeviceVerificationClient,
 ) : MdnsDiscoveryRepository {
     
     override fun discoverAndVerifyDevices(

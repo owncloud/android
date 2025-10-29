@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/scroll"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/homecloud_signin_background"
+    android:fitsSystemWindows="true">
+
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_login"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:paddingHorizontal="24dp">
+
+            <ImageView
+                android:id="@+id/thumbnail_logo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="120dp"
+                android:layout_marginBottom="16dp"
+                android:contentDescription="@string/app_name"
+                android:src="@drawable/ic_login_logo"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <ImageView
+                android:id="@+id/thumbnail"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:contentDescription="@string/app_name"
+                android:src="@drawable/ic_homecloud_login_logo"
+                app:layout_constraintTop_toBottomOf="@id/thumbnail_logo"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <androidx.constraintlayout.widget.Group
+                android:id="@+id/login_state_group"
+                app:constraint_referenced_ids="hostUrlInputLayout,servers_refresh_button,account_password_container,reset_password_link"
+                android:layout_width="0dp"
+                android:layout_height="0dp" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/hostUrlInputLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:hint="@string/homecloud_login_server_address_hint"
+                app:layout_constraintTop_toBottomOf="@+id/thumbnail"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/servers_refresh_button"
+                app:endIconMode="dropdown_menu"
+                app:expandedHintEnabled="false"
+                app:helperText=" "
+                app:hintAnimationEnabled="false"
+                app:hintEnabled="true">
+
+                <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                    android:id="@+id/hostUrlInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp"
+                    android:hint="@string/homecloud_login_server_address_input_hint"
+                    android:imeOptions="flagNoExtractUi"
+                    android:inputType="textUri"
+                    android:textColorHint="@color/homecloud_input_placeholder"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <ImageView
+                android:id="@+id/servers_refresh_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:padding="6dp"
+                android:contentDescription="refresh"
+                android:src="@drawable/ic_refresh"
+                app:layout_constraintVertical_bias="0.4"
+                app:layout_constraintStart_toEndOf="@id/hostUrlInputLayout"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/hostUrlInputLayout"
+                app:layout_constraintBottom_toBottomOf="@id/hostUrlInputLayout" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/account_username_container"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:hint="@string/homecloud_login_email_hint"
+                app:endIconDrawable="@drawable/ic_clear_input"
+                app:endIconMode="clear_text"
+                app:expandedHintEnabled="false"
+                app:helperText=" "
+                app:hintAnimationEnabled="false"
+                app:hintEnabled="true"
+                app:layout_constraintTop_toBottomOf="@id/hostUrlInputLayout"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/account_username"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="5dp"
+                    android:hint="@string/homecloud_login_email_input_hint"
+                    android:imeOptions="flagNoExtractUi"
+                    android:inputType="textNoSuggestions"
+                    android:textColorHint="@color/homecloud_input_placeholder"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/account_password_container"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:hint="@string/homecloud_login_password_hint"
+                app:endIconDrawable="@drawable/ic_password_toggle"
+                app:endIconMode="password_toggle"
+                app:expandedHintEnabled="false"
+                app:helperText=" "
+                app:hintAnimationEnabled="false"
+                app:hintEnabled="true"
+                app:layout_constraintTop_toBottomOf="@id/account_username_container"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/account_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="5dp"
+                    android:hint="@string/homecloud_login_password_input_hint"
+                    android:imeOptions="flagNoExtractUi"
+                    android:inputType="textPassword"
+                    android:textColorHint="@color/homecloud_input_placeholder"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <Button
+                android:id="@+id/reset_password_link"
+                style="@style/Button.Borderless"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_marginTop="16dp"
+                android:contentDescription="@string/setup_btn_login"
+                android:text="@string/homecloud_reset_password"
+                app:layout_constraintTop_toBottomOf="@id/account_password_container"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0" />
+
+            <TextView
+                android:id="@+id/error_message"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/background_login_error"
+                android:drawablePadding="16dp"
+                android:gravity="center_vertical"
+                android:padding="16dp"
+                android:visibility="gone"
+                app:drawableStartCompat="@drawable/ic_exclamation_mark_circle"
+                app:drawableTint="@color/homecloud_error"
+                tools:text="Incorrect username or password"
+                app:layout_constraintTop_toBottomOf="@id/reset_password_link"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <Button
+                android:id="@+id/actionButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:contentDescription="@string/setup_btn_login"
+                android:text="@string/setup_btn_login"
+                android:theme="@style/Button.Primary"
+                app:layout_constraintTop_toBottomOf="@id/error_message"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <androidx.constraintlayout.widget.Group
+                android:id="@id/loading_layout"
+                app:constraint_referenced_ids="circular_progress,text_progress"
+                android:visibility="gone"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                tools:visibility="visible"/>
+
+            <androidx.constraintlayout.widget.Group
+                android:id="@+id/action_group"
+                app:constraint_referenced_ids="account_username_container,actionButton"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                tools:visibility="gone"/>
+
+            <com.google.android.material.progressindicator.CircularProgressIndicator
+                android:id="@+id/circular_progress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:layout_constraintTop_toBottomOf="@id/actionButton"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:indeterminate="true" />
+
+            <TextView
+                android:id="@+id/text_progress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:layout_constraintTop_toBottomOf="@id/circular_progress"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:text="@string/homecloud_login_loading"
+                android:textAlignment="center"
+                android:textAppearance="?attr/textAppearanceBodyMedium" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+    <ImageButton
+        android:id="@+id/settings_link"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:background="?attr/selectableItemBackground"
+        android:contentDescription="@string/actionbar_settings"
+        android:padding="@dimen/standard_padding"
+        android:src="@drawable/ic_settings"
+        android:text="@string/actionbar_settings"
+        app:tint="?attr/colorPrimary" />
+</FrameLayout>

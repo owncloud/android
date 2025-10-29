@@ -229,7 +229,7 @@
             android:theme="@style/Theme.homeCloud" />
         <activity android:name=".presentation.security.biometric.BiometricActivity" />
         <activity
-            android:name=".presentation.authentication.homecloud.LoginActivity"
+            android:name=".presentation.authentication.homecloud.LoginActivity2"
             android:exported="true"
             android:label="@string/login_label"
             android:launchMode="singleTask"

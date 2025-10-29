@@ -1,6 +1,5 @@
 package com.owncloud.android.data.mdnsdiscovery.implementation
 
-import android.content.Context
 import android.net.nsd.NsdManager
 import android.net.nsd.NsdServiceInfo
 import com.owncloud.android.data.mdnsdiscovery.datasources.LocalMdnsDiscoveryDataSource
@@ -8,11 +7,12 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.isActive
 import timber.log.Timber
 import kotlin.time.Duration
 
 class HCLocalMdnsDiscoveryDataSource(
-    private val context: Context
+    private val nsdManager: NsdManager?
 ) : LocalMdnsDiscoveryDataSource {
 
     override fun discoverDevices(
@@ -20,65 +20,55 @@ class HCLocalMdnsDiscoveryDataSource(
         serviceName: String,
         duration: Duration
     ): Flow<String> = callbackFlow {
-        val nsdManager = context.getSystemService(Context.NSD_SERVICE) as? NsdManager
-
         if (nsdManager == null) {
-            Timber.w("NsdManager is not available")
+            Timber.d("NsdManager is not available")
             close()
             return@callbackFlow
         }
 
-        val discoveryListener = getDiscoveryListener(
-            doOnServiceFound = { service ->
-                // Filter by service name if provided
-                if (serviceName.isNotEmpty() && !service.serviceName.contains(serviceName, ignoreCase = true)) {
-                    Timber.d("Service name doesn't match filter, skipping: ${service.serviceName}")
-                    return@getDiscoveryListener
-                }
-
+        val onServiceFound: (NsdServiceInfo) -> Unit = { service ->
+            // Filter by service name if provided
+            if (serviceName.isNotEmpty() && !service.serviceName.contains(serviceName, ignoreCase = true)) {
+                Timber.d("Service name doesn't match filter, skipping: ${service.serviceName}")
+            } else {
                 nsdManager.resolveService(
                     service = service,
                     onServiceResolved = { serviceUrl ->
                         trySend(serviceUrl)
                     }
                 )
-            },
-            doOnFailed = {
-                close()
             }
-        )
+        }
 
-        try {
-            // Start discovery
-            nsdManager.discoverServices(serviceType, NsdManager.PROTOCOL_DNS_SD, discoveryListener)
+        var discoveryListener: NsdManager.DiscoveryListener? = null
 
-            // Wait for the specified duration
-            delay(duration)
-
-            // Stop discovery
+        while (isActive) {
             try {
+                discoveryListener = getDiscoveryListener(
+                    doOnServiceFound = onServiceFound,
+                )
+                nsdManager.discoverServices(serviceType, NsdManager.PROTOCOL_DNS_SD, discoveryListener)
+                delay(duration)
                 nsdManager.stopServiceDiscovery(discoveryListener)
-            } catch (e: IllegalArgumentException) {
-                Timber.w("Discovery listener was not registered or already stopped: ${e.message}")
+            } catch (e: Exception) {
+                Timber.d(e, "Error during mDNS discovery")
             }
-        } catch (e: Exception) {
-            Timber.w(e, "Error during mDNS discovery")
-            close(e)
         }
 
         awaitClose {
-            // Ensure discovery is stopped when flow is cancelled
-            try {
-                nsdManager.stopServiceDiscovery(discoveryListener)
-            } catch (e: Exception) {
-                Timber.w("Error stopping discovery in awaitClose: ${e.message}")
+            Timber.d("Closing mDNS discovery flow")
+            discoveryListener?.let { listener ->
+                try {
+                    nsdManager.stopServiceDiscovery(listener)
+                } catch (e: Exception) {
+                    Timber.d("Error stopping discovery in awaitClose: ${e.message}")
+                }
             }
         }
     }
 
     private fun getDiscoveryListener(
         doOnServiceFound: (NsdServiceInfo) -> Unit,
-        doOnFailed: () -> Unit,
     ): NsdManager.DiscoveryListener {
         return object : NsdManager.DiscoveryListener {
             override fun onDiscoveryStarted(regType: String) {
@@ -100,7 +90,6 @@ class HCLocalMdnsDiscoveryDataSource(
 
             override fun onStartDiscoveryFailed(serviceType: String, errorCode: Int) {
                 Timber.e("Failed to start discovery for type: $serviceType, error code: $errorCode")
-                doOnFailed()
             }
 
             override fun onStopDiscoveryFailed(serviceType: String, errorCode: Int) {

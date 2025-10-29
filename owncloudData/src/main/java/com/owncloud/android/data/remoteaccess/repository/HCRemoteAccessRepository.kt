@@ -8,14 +8,13 @@ import com.owncloud.android.data.remoteaccess.remote.RemoteAccessTokenRequest
 import com.owncloud.android.domain.remoteaccess.RemoteAccessRepository
 import com.owncloud.android.domain.remoteaccess.model.RemoteAccessDevice
 import com.owncloud.android.domain.remoteaccess.model.RemoteAccessPath
-import kotlinx.coroutines.runBlocking
 
 class HCRemoteAccessRepository(
     private val remoteAccessService: RemoteAccessService,
     private val tokenStorage: RemoteAccessTokenStorage
 ) : RemoteAccessRepository {
 
-    override fun initiateAuthentication(
+    override suspend fun initiateAuthentication(
         email: String,
         clientId: String,
         clientFriendlyName: String
@@ -25,42 +24,30 @@ class HCRemoteAccessRepository(
             clientId = clientId,
             clientFriendlyName = clientFriendlyName
         )
-        val response = wrapNetworkCall {
-            remoteAccessService.initiateAuthentication(request = request)
-        }
 
-        return response.reference
+        return remoteAccessService.initiateAuthentication(request = request).reference
     }
 
-    override fun getToken(reference: String, code: String) {
+    override suspend fun getToken(reference: String, code: String) {
         val request = RemoteAccessTokenRequest(
             reference = reference,
             code = code
         )
-        val response = wrapNetworkCall { remoteAccessService.getToken(request = request) }
+        val (accessToken, refreshToken) = remoteAccessService.getToken(request = request)
 
         tokenStorage.saveToken(
-            accessToken = response.accessToken,
-            refreshToken = response.refreshToken,
+            accessToken = accessToken,
+            refreshToken = refreshToken,
         )
     }
 
-    override fun getDevices(): List<RemoteAccessDevice> {
-        val response = wrapNetworkCall { remoteAccessService.getDevices() }
-
-        return response.map { RemoteAccessModelMapper.toModel(it) }
+    override suspend fun getDevices(): List<RemoteAccessDevice> {
+        return remoteAccessService.getDevices().map { RemoteAccessModelMapper.toModel(it) }
     }
 
-    override fun getDeviceById(deviceId: String): List<RemoteAccessPath> {
-        val response = wrapNetworkCall { remoteAccessService.getDeviceById(deviceId) }
-
-        return response.paths.map { RemoteAccessModelMapper.toModel(it) }
+    override suspend fun getDeviceById(deviceId: String): List<RemoteAccessPath> {
+        return remoteAccessService.getDeviceById(deviceId).paths.map { RemoteAccessModelMapper.toModel(it) }
     }
 
-    private fun <T> wrapNetworkCall(networkCall: suspend () -> T) : T {
-        return runBlocking {
-            networkCall()
-        }
-    }
 }
 

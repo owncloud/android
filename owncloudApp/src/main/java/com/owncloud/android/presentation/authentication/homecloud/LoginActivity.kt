@@ -93,7 +93,6 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
     private var userAccount: Account? = null
     private lateinit var serverBaseUrl: String
 
-
     private lateinit var binding: AccountSetupHomecloudBinding
 
     companion object {
@@ -174,7 +173,6 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
 
         accountAuthenticatorResponse = intent.getParcelableExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE)
         accountAuthenticatorResponse?.onRequestContinued()
-
         initTextFieldsWatchers()
         initLiveDataObservers()
 

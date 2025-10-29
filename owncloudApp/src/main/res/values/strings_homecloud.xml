@@ -34,4 +34,10 @@
 
     <string name="welcome_feature_6_title">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore aliqua. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore aliqua. THE END.</string>
     <string name="welcome_feature_6_text">Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. THE END.</string>
+    <string name="homecloud_code_dialog_title">Allow remote access</string>
+    <string name="homecloud_code_dialog_description">For your security, we have sent a one-time code to enable access to your Curator from any location. Check your email for the code and enter it here. If you do not see it in your inbox, please check your spam folder.</string>
+    <string name="homecloud_enter_code_hint">Enter code</string>
+    <string name="homecloud_button_allow_access">Allow access</string>
+    <string name="homecloud_button_skip">Skip</string>
+    <string name="homecloud_action_button_next">Next</string>
 </resources>

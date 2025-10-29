@@ -29,7 +29,7 @@ import com.owncloud.android.MainApp
 import com.owncloud.android.R
 import com.owncloud.android.data.providers.SharedPreferencesProvider
 import com.owncloud.android.data.providers.implementation.OCSharedPreferencesProvider
-import com.owncloud.android.presentation.authentication.homecloud.LoginActivity
+import com.owncloud.android.presentation.authentication.homecloud.LoginActivity2
 import com.owncloud.android.presentation.security.LockTimeout
 import com.owncloud.android.presentation.security.PREFERENCE_LOCK_TIMEOUT
 import com.owncloud.android.providers.MdmProvider
@@ -73,7 +73,7 @@ class SplashActivity : AppCompatActivity() {
 
         val nextScreenIntent = Intent(
             this,
-            if (isAccountAvailable()) FileDisplayActivity::class.java else LoginActivity::class.java
+            if (isAccountAvailable()) FileDisplayActivity::class.java else LoginActivity2::class.java
         )
         startActivity(nextScreenIntent)
         finish()

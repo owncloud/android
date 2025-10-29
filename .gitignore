@@ -37,7 +37,7 @@ captures
 lint-*ml
 
 .idea/*
-!.idea/codeStyles/
+.idea/codeStyles/
 
 # Prevent exidental commits of build folders
 owncloudApp/release

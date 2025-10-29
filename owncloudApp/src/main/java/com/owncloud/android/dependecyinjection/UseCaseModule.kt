@@ -89,6 +89,7 @@ import com.owncloud.android.domain.searches.usecases.ClearSavedSearchesForAccoun
 import com.owncloud.android.domain.searches.usecases.GetSavedSearchesForAccountUseCase
 import com.owncloud.android.domain.searches.usecases.RemoveSavedSearchUseCase
 import com.owncloud.android.domain.searches.usecases.SaveSavedSearchUseCase
+import com.owncloud.android.domain.server.usecases.GetAvailableServersUseCase
 import com.owncloud.android.domain.server.usecases.GetServerInfoAsyncUseCase
 import com.owncloud.android.domain.sharing.sharees.GetShareesAsyncUseCase
 import com.owncloud.android.domain.sharing.shares.usecases.CreatePrivateShareAsyncUseCase
@@ -300,7 +301,8 @@ val useCaseModule = module {
     factoryOf(::GetRemoteAccessTokenUseCase)
     factoryOf(::GetRemoteAccessDevicesUseCase)
     factoryOf(::GetRemoteAccessDeviceByIdUseCase)
-    
+    factoryOf(::GetAvailableServersUseCase)
+
     // mDNS Discovery
     factoryOf(::DiscoverLocalNetworkDevicesUseCase)
 

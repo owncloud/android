@@ -19,6 +19,7 @@
 
 package com.owncloud.android.dependecyinjection
 
+import android.net.nsd.NsdManager
 import com.owncloud.android.MainApp
 import com.owncloud.android.R
 import com.owncloud.android.data.ClientManager
@@ -81,6 +82,7 @@ val remoteDataSourceModule = module {
     singleOf(::OCRemoteSpacesDataSource) bind RemoteSpacesDataSource::class
     singleOf(::OCRemoteWebFingerDataSource) bind RemoteWebFingerDataSource::class
     single<RemoteUserDataSource> { OCRemoteUserDataSource(get(), androidContext().resources.getDimension(R.dimen.file_avatar_size).toInt()) }
+    single<NsdManager?>{ androidContext().getSystemService(NsdManager::class.java) }
 
     singleOf(::HCLocalMdnsDiscoveryDataSource) bind LocalMdnsDiscoveryDataSource::class
 
