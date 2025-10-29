@@ -18,8 +18,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.domain.spaces.model
+package com.owncloud.android.domain.user.model
 
-enum class SpaceMenuOption {
-    EDIT, DISABLE, ENABLE, DELETE
+enum class UserPermissions {
+    CAN_EDIT_SPACES, CAN_DELETE_SPACES
 }

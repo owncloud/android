@@ -24,6 +24,7 @@ import com.owncloud.android.domain.BaseUseCase
 import com.owncloud.android.domain.UseCaseResult
 import com.owncloud.android.domain.spaces.model.OCSpace
 import com.owncloud.android.domain.spaces.model.SpaceMenuOption
+import com.owncloud.android.domain.user.model.UserPermissions
 
 class FilterSpaceMenuOptionsUseCase(
     private val getSpacePermissionsAsyncUseCase: GetSpacePermissionsAsyncUseCase,
@@ -31,31 +32,48 @@ class FilterSpaceMenuOptionsUseCase(
 
     override fun run(params: Params): MutableList<SpaceMenuOption> {
         val optionsToShow = mutableListOf<SpaceMenuOption>()
+        val currentSpace = params.space
+        val isSpaceManager = currentSpace.root.role == DRIVES_MANAGER_ROLE
 
-        val editPermission = if (params.editSpacesPermission) {
-            true
-        } else {
-            when (val spacePermissionsResult =
-                getSpacePermissionsAsyncUseCase(GetSpacePermissionsAsyncUseCase.Params(params.accountName, params.space.id))) {
-                is UseCaseResult.Success -> DRIVES_MANAGE_PERMISSION in spacePermissionsResult.data
-                is UseCaseResult.Error -> false
-            }
+        val spacePermissionsResult = getSpacePermissionsAsyncUseCase(GetSpacePermissionsAsyncUseCase.Params(params.accountName, params.space.id))
+
+        val editPermission =
+            (UserPermissions.CAN_EDIT_SPACES in params.userPermissions || hasSpacePermission(spacePermissionsResult, DRIVES_MANAGE_PERMISSION))
+
+        val deletePermission =
+            (UserPermissions.CAN_DELETE_SPACES in params.userPermissions || hasSpacePermission(spacePermissionsResult, DRIVES_DELETE_PERMISSION))
+
+        if (editPermission || isSpaceManager) {
+            optionsToShow.add(SpaceMenuOption.EDIT)
         }
 
-        if (editPermission) {
-            optionsToShow.add(SpaceMenuOption.EDIT)
+        if (!currentSpace.isDisabled && deletePermission) {
+            optionsToShow.add(SpaceMenuOption.DISABLE)
+        }
+
+        if (currentSpace.isDisabled) {
+            optionsToShow.add(SpaceMenuOption.ENABLE)
+            optionsToShow.add(SpaceMenuOption.DELETE)
         }
 
         return optionsToShow
     }
 
+    private fun hasSpacePermission(spacePermissions: UseCaseResult<List<String>>, requiredPermission: String) =
+        when (spacePermissions) {
+            is UseCaseResult.Success -> requiredPermission in spacePermissions.data
+            is UseCaseResult.Error -> false
+        }
+
     data class Params(
         val accountName: String,
         val space: OCSpace,
-        val editSpacesPermission: Boolean
+        val userPermissions: Set<UserPermissions>
     )
 
     companion object {
         private const val DRIVES_MANAGE_PERMISSION = "libre.graph/driveItem/permissions/update"
+        private const val DRIVES_DELETE_PERMISSION = "libre.graph/driveItem/permissions/delete"
+        private const val DRIVES_MANAGER_ROLE = "manager"
     }
 }

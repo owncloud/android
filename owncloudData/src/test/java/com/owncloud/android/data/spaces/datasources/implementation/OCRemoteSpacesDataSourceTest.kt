@@ -150,4 +150,72 @@ class OCRemoteSpacesDataSourceTest {
         }
     }
 
+    @Test
+    fun `disableSpace disables a project space correctly when delete mode is false`() {
+        val disableSpaceResult = createRemoteOperationResultMock(Unit, isSuccess = true)
+
+        every {
+            ocSpaceService.disableSpace(
+                spaceId = OC_SPACE_PROJECT_WITH_IMAGE.id,
+                deleteMode = false
+            )
+        } returns disableSpaceResult
+
+        ocRemoteSpacesDataSource.disableSpace(
+            accountName = OC_ACCOUNT_NAME,
+            spaceId = OC_SPACE_PROJECT_WITH_IMAGE.id,
+            deleteMode = false
+        )
+
+        verify(exactly = 1) {
+            clientManager.getSpacesService(OC_ACCOUNT_NAME)
+            ocSpaceService.disableSpace(
+                spaceId = OC_SPACE_PROJECT_WITH_IMAGE.id,
+                deleteMode = false
+            )
+        }
+    }
+
+    @Test
+    fun `disableSpace deletes a project space correctly when delete mode is true`() {
+        val disableSpaceResult = createRemoteOperationResultMock(Unit, isSuccess = true)
+
+        every {
+            ocSpaceService.disableSpace(
+                spaceId = OC_SPACE_PROJECT_WITH_IMAGE.id,
+                deleteMode = true
+            )
+        } returns disableSpaceResult
+
+        ocRemoteSpacesDataSource.disableSpace(
+            accountName = OC_ACCOUNT_NAME,
+            spaceId = OC_SPACE_PROJECT_WITH_IMAGE.id,
+            deleteMode = true
+        )
+
+        verify(exactly = 1) {
+            clientManager.getSpacesService(OC_ACCOUNT_NAME)
+            ocSpaceService.disableSpace(
+                spaceId = OC_SPACE_PROJECT_WITH_IMAGE.id,
+                deleteMode = true
+            )
+        }
+    }
+
+    @Test
+    fun `enableSpace enables a project space correctly`() {
+        val enableSpaceResult = createRemoteOperationResultMock(SPACE_RESPONSE, isSuccess = true)
+
+        every {
+            ocSpaceService.enableSpace(OC_SPACE_PROJECT_WITH_IMAGE.id)
+        } returns enableSpaceResult
+
+        ocRemoteSpacesDataSource.enableSpace(OC_ACCOUNT_NAME, OC_SPACE_PROJECT_WITH_IMAGE.id)
+
+        verify(exactly = 1) {
+            clientManager.getSpacesService(OC_ACCOUNT_NAME)
+            ocSpaceService.enableSpace(OC_SPACE_PROJECT_WITH_IMAGE.id)
+        }
+    }
+
 }

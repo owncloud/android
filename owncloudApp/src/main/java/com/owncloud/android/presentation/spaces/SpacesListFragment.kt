@@ -22,6 +22,7 @@
 
 package com.owncloud.android.presentation.spaces
 
+import android.content.DialogInterface
 import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -44,7 +45,10 @@ import com.owncloud.android.databinding.SpacesListFragmentBinding
 import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.domain.spaces.model.OCSpace
 import com.owncloud.android.domain.spaces.model.SpaceMenuOption
+import com.owncloud.android.domain.user.model.UserPermissions
+import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.collectLatestLifecycleFlow
+import com.owncloud.android.extensions.showAlertDialog
 import com.owncloud.android.extensions.showErrorInSnackbar
 import com.owncloud.android.extensions.showMessageInSnackbar
 import com.owncloud.android.extensions.toDrawableRes
@@ -57,6 +61,7 @@ import com.owncloud.android.presentation.common.BottomSheetFragmentItemView
 import com.owncloud.android.utils.DisplayUtils
 import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.presentation.spaces.createspace.CreateSpaceDialogFragment
+import kotlinx.coroutines.flow.SharedFlow
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import timber.log.Timber
@@ -71,7 +76,7 @@ class SpacesListFragment :
     private val binding get() = _binding!!
 
     private var isMultiPersonal = false
-    private var editSpacesPermission = false
+    private var userPermissions = mutableSetOf<UserPermissions>()
     private var editQuotaPermission = false
     private lateinit var currentSpace: OCSpace
 
@@ -136,7 +141,7 @@ class SpacesListFragment :
         collectLatestLifecycleFlow(spacesListViewModel.spacesList) { uiState ->
             if (uiState.searchFilter != "") {
                 var spacesToListFiltered =
-                    uiState.spaces.filter { it.name.lowercase().contains(uiState.searchFilter.lowercase()) && !it.isPersonal && !it.isDisabled }
+                    uiState.spaces.filter { it.name.lowercase().contains(uiState.searchFilter.lowercase()) && !it.isPersonal }
                 val personalSpace = uiState.spaces.find { it.isPersonal }
                 personalSpace?.let {
                     spacesToListFiltered = spacesToListFiltered.toMutableList().apply {
@@ -147,7 +152,7 @@ class SpacesListFragment :
                 spacesListAdapter.setData(spacesToListFiltered, isMultiPersonal)
             } else {
                 showOrHideEmptyView(uiState.spaces)
-                spacesListAdapter.setData(uiState.spaces.filter { !it.isDisabled }, isMultiPersonal)
+                spacesListAdapter.setData(uiState.spaces, isMultiPersonal)
             }
             binding.swipeRefreshSpacesList.isRefreshing = uiState.refreshing
             uiState.error?.let { showErrorInSnackbar(R.string.spaces_sync_failed, it) }
@@ -181,8 +186,9 @@ class SpacesListFragment :
                         Timber.d("The permissions for $accountName are: ${uiResult.data}")
                         uiResult.data?.let {
                             binding.fabCreateSpace.isVisible = it.contains(DRIVES_CREATE_ALL_PERMISSION)
-                            editSpacesPermission = it.contains(DRIVES_READ_WRITE_ALL_PERMISSION)
+                            if(it.contains(DRIVES_READ_WRITE_ALL_PERMISSION)) userPermissions.add(UserPermissions.CAN_EDIT_SPACES)
                             editQuotaPermission = it.contains(DRIVES_READ_WRITE_PROJECT_QUOTA_ALL_PERMISSION)
+                            if(it.contains(DRIVES_DELETE_PROJECT_ALL_PERMISSION)) userPermissions.add(UserPermissions.CAN_DELETE_SPACES)
                         }
                     }
                     is UIResult.Loading -> { }
@@ -194,30 +200,28 @@ class SpacesListFragment :
             }
         }
 
-        collectLatestLifecycleFlow(spacesListViewModel.createSpaceFlow) { event ->
-            event?.let {
-                when (val uiResult = event.peekContent()) {
-                    is UIResult.Success -> { showMessageInSnackbar(getString(R.string.create_space_correctly)) }
-                    is UIResult.Loading -> { }
-                    is UIResult.Error -> { showErrorInSnackbar(R.string.create_space_failed, uiResult.error) }
-                }
-            }
-        }
-
-        collectLatestLifecycleFlow(spacesListViewModel.editSpaceFlow) { event ->
-            event?.let {
-                when (val uiResult = event.peekContent()) {
-                    is UIResult.Success -> { showMessageInSnackbar(getString(R.string.edit_space_correctly)) }
-                    is UIResult.Loading -> { }
-                    is UIResult.Error -> { showErrorInSnackbar(R.string.edit_space_failed, uiResult.error) }
-                }
-            }
-        }
+        collectSpaceOperationsFlow(spacesListViewModel.createSpaceFlow, R.string.create_space_correctly, R.string.create_space_failed)
+        collectSpaceOperationsFlow(spacesListViewModel.editSpaceFlow, R.string.edit_space_correctly, R.string.edit_space_failed)
+        collectSpaceOperationsFlow(spacesListViewModel.disableSpaceFlow, R.string.disable_space_correctly, R.string.disable_space_failed)
+        collectSpaceOperationsFlow(spacesListViewModel.enableSpaceFlow, R.string.enable_space_correctly, R.string.enable_space_failed)
+        collectSpaceOperationsFlow(spacesListViewModel.deleteSpaceFlow, R.string.delete_space_correctly, R.string.delete_space_failed)
 
         collectLatestLifecycleFlow(spacesListViewModel.menuOptions) { menuOptions ->
             showSpaceMenuOptionsDialog(menuOptions)
         }
 
+    }
+
+    private fun collectSpaceOperationsFlow(flow: SharedFlow<Event<UIResult<Unit>>?>, successMessage: Int, errorMessage: Int) {
+        collectLatestLifecycleFlow(flow) { event ->
+            event?.let {
+                when (val uiResult = event.peekContent()) {
+                    is UIResult.Success -> { showMessageInSnackbar(getString(successMessage)) }
+                    is UIResult.Loading -> { }
+                    is UIResult.Error -> { showErrorInSnackbar(errorMessage, uiResult.error) }
+                }
+            }
+        }
     }
 
     private fun showOrHideEmptyView(spacesList: List<OCSpace>) {
@@ -243,7 +247,7 @@ class SpacesListFragment :
 
     override fun onThreeDotButtonClick(ocSpace: OCSpace) {
         currentSpace = ocSpace
-        spacesListViewModel.filterMenuOptions(ocSpace, editSpacesPermission)
+        spacesListViewModel.filterMenuOptions(ocSpace, userPermissions)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -337,6 +341,33 @@ class SpacesListFragment :
                         )
                         editDialog.show(requireActivity().supportFragmentManager, DIALOG_CREATE_SPACE)
                     }
+                    SpaceMenuOption.DISABLE -> {
+                        showAlertDialog(
+                            title = getString(R.string.disable_space_dialog_title, currentSpace.name),
+                            message = getString(R.string.disable_space_dialog_message),
+                            positiveButtonText = getString(R.string.common_yes),
+                            positiveButtonListener = { _: DialogInterface?, _: Int -> spacesListViewModel.disableSpace(currentSpace.id) },
+                            negativeButtonText = getString(R.string.common_no)
+                        )
+                    }
+                    SpaceMenuOption.ENABLE -> {
+                        showAlertDialog(
+                            title = getString(R.string.enable_space_dialog_title, currentSpace.name),
+                            message = getString(R.string.enable_space_dialog_message),
+                            positiveButtonText = getString(R.string.common_yes),
+                            positiveButtonListener = { _: DialogInterface?, _: Int -> spacesListViewModel.enableSpace(currentSpace.id) },
+                            negativeButtonText = getString(R.string.common_no)
+                        )
+                    }
+                    SpaceMenuOption.DELETE -> {
+                        showAlertDialog(
+                            title = getString(R.string.delete_space_dialog_title, currentSpace.name),
+                            message = getString(R.string.delete_space_dialog_message),
+                            positiveButtonText = getString(R.string.common_yes),
+                            positiveButtonListener = { _: DialogInterface?, _: Int ->  spacesListViewModel.deleteSpace(currentSpace.id) },
+                            negativeButtonText = getString(R.string.common_no)
+                        )
+                    }
                 }
             }
         }
@@ -351,6 +382,7 @@ class SpacesListFragment :
         const val DRIVES_CREATE_ALL_PERMISSION = "Drives.Create.all"
         const val DRIVES_READ_WRITE_ALL_PERMISSION = "Drives.ReadWrite.all"
         const val DRIVES_READ_WRITE_PROJECT_QUOTA_ALL_PERMISSION = "Drives.ReadWriteProjectQuota.all"
+        const val DRIVES_DELETE_PROJECT_ALL_PERMISSION = "Drives.DeleteProject.all"
 
         private const val DIALOG_CREATE_SPACE = "DIALOG_CREATE_SPACE"
 

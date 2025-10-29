@@ -51,7 +51,7 @@ class OCSpacesRepositoryTest {
 
     private val localSpacesDataSource = mockk<LocalSpacesDataSource>(relaxUnitFun = true)
     private val localUserDataSource = mockk<LocalUserDataSource>(relaxUnitFun = true)
-    private val remoteSpacesDataSource = mockk<RemoteSpacesDataSource>()
+    private val remoteSpacesDataSource = mockk<RemoteSpacesDataSource>(relaxUnitFun = true)
     private val localCapabilitiesDataSource = mockk<LocalCapabilitiesDataSource>(relaxUnitFun = true)
     private val ocSpacesRepository = OCSpacesRepository(localSpacesDataSource, localUserDataSource, remoteSpacesDataSource,
         localCapabilitiesDataSource)
@@ -347,6 +347,33 @@ class OCSpacesRepositoryTest {
                 spaceSubtitle = OC_SPACE_PROJECT_WITH_IMAGE.description!!,
                 spaceQuota = OC_SPACE_PROJECT_WITH_IMAGE.quota?.total!!
             )
+        }
+    }
+
+    @Test
+    fun `disableSpace disables a space correctly when delete mode is false`() {
+        ocSpacesRepository.disableSpace(OC_ACCOUNT_NAME, OC_SPACE_PROJECT_WITH_IMAGE.id, false)
+
+        verify(exactly = 1) {
+            remoteSpacesDataSource.disableSpace(OC_ACCOUNT_NAME, OC_SPACE_PROJECT_WITH_IMAGE.id, false)
+        }
+    }
+
+    @Test
+    fun `disableSpace deletes a space correctly when delete mode is true`() {
+        ocSpacesRepository.disableSpace(OC_ACCOUNT_NAME, OC_SPACE_PROJECT_WITH_IMAGE.id, true)
+
+        verify(exactly = 1) {
+            remoteSpacesDataSource.disableSpace(OC_ACCOUNT_NAME, OC_SPACE_PROJECT_WITH_IMAGE.id, true)
+        }
+    }
+
+    @Test
+    fun `enableSpace enables a space correctly`() {
+        ocSpacesRepository.enableSpace(OC_ACCOUNT_NAME, OC_SPACE_PROJECT_WITH_IMAGE.id)
+
+        verify(exactly = 1) {
+            remoteSpacesDataSource.enableSpace(OC_ACCOUNT_NAME, OC_SPACE_PROJECT_WITH_IMAGE.id)
         }
     }
 

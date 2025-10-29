@@ -1,0 +1,7 @@
+Enhancement: Disable/Remove a space
+
+New options to disable, enable and remove spaces have been added to the bottom sheet, available only to users
+with the required permissions when the three-dot menu button is tapped.
+
+https://github.com/owncloud/android/issues/4611
+https://github.com/owncloud/android/pull/4696

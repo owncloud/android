@@ -18,8 +18,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.domain.spaces.model
+package com.owncloud.android.domain.spaces.usecases
 
-enum class SpaceMenuOption {
-    EDIT, DISABLE, ENABLE, DELETE
+import com.owncloud.android.domain.BaseUseCaseWithResult
+import com.owncloud.android.domain.spaces.SpacesRepository
+
+class DisableSpaceUseCase(
+    private val spacesRepository: SpacesRepository
+): BaseUseCaseWithResult<Unit, DisableSpaceUseCase.Params>() {
+
+    override fun run(params: Params) = spacesRepository.disableSpace(params.accountName, params.spaceId, params.deleteMode)
+
+    data class Params (
+        val accountName: String,
+        val spaceId: String,
+        val deleteMode: Boolean
+    )
+
 }

@@ -23,6 +23,7 @@ package com.owncloud.android.presentation.spaces
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.owncloud.android.domain.BaseUseCaseWithResult
 import com.owncloud.android.domain.UseCaseResult
 import com.owncloud.android.domain.capabilities.usecases.GetStoredCapabilitiesUseCase
 import com.owncloud.android.domain.files.model.OCFile
@@ -31,12 +32,15 @@ import com.owncloud.android.domain.files.usecases.GetFileByRemotePathUseCase
 import com.owncloud.android.domain.spaces.model.OCSpace
 import com.owncloud.android.domain.spaces.model.SpaceMenuOption
 import com.owncloud.android.domain.spaces.usecases.CreateSpaceUseCase
+import com.owncloud.android.domain.spaces.usecases.DisableSpaceUseCase
 import com.owncloud.android.domain.spaces.usecases.EditSpaceUseCase
+import com.owncloud.android.domain.spaces.usecases.EnableSpaceUseCase
 import com.owncloud.android.domain.spaces.usecases.FilterSpaceMenuOptionsUseCase
 import com.owncloud.android.domain.spaces.usecases.GetPersonalAndProjectSpacesWithSpecialsForAccountAsStreamUseCase
 import com.owncloud.android.domain.spaces.usecases.GetPersonalSpacesWithSpecialsForAccountAsStreamUseCase
 import com.owncloud.android.domain.spaces.usecases.GetProjectSpacesWithSpecialsForAccountAsStreamUseCase
 import com.owncloud.android.domain.spaces.usecases.RefreshSpacesFromServerAsyncUseCase
+import com.owncloud.android.domain.user.model.UserPermissions
 import com.owncloud.android.domain.user.usecases.GetUserIdAsyncUseCase
 import com.owncloud.android.domain.user.usecases.GetUserPermissionsAsyncUseCase
 import com.owncloud.android.domain.utils.Event
@@ -62,6 +66,8 @@ class SpacesListViewModel(
     private val createSpaceUseCase: CreateSpaceUseCase,
     private val filterSpaceMenuOptionsUseCase: FilterSpaceMenuOptionsUseCase,
     private val editSpaceUseCase: EditSpaceUseCase,
+    private val disableSpaceUseCase: DisableSpaceUseCase,
+    private val enableSpaceUseCase: EnableSpaceUseCase,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
     private val accountName: String,
     private val showPersonalSpace: Boolean,
@@ -85,6 +91,15 @@ class SpacesListViewModel(
 
     private val _editSpaceFlow = MutableSharedFlow<Event<UIResult<Unit>>?>()
     val editSpaceFlow: SharedFlow<Event<UIResult<Unit>>?> = _editSpaceFlow
+
+    private val _disableSpaceFlow = MutableSharedFlow<Event<UIResult<Unit>>?>()
+    val disableSpaceFlow: SharedFlow<Event<UIResult<Unit>>?> = _disableSpaceFlow
+
+    private val _enableSpaceFlow = MutableSharedFlow<Event<UIResult<Unit>>?>()
+    val enableSpaceFlow: SharedFlow<Event<UIResult<Unit>>?> = _enableSpaceFlow
+
+    private val _deleteSpaceFlow = MutableSharedFlow<Event<UIResult<Unit>>?>()
+    val deleteSpaceFlow: SharedFlow<Event<UIResult<Unit>>?> = _deleteSpaceFlow
 
     init {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
@@ -157,35 +172,69 @@ class SpacesListViewModel(
     )
 
     fun createSpace(spaceName: String, spaceSubtitle: String, spaceQuota: Long) {
-        viewModelScope.launch(coroutinesDispatcherProvider.io) {
-            when (val result = createSpaceUseCase(CreateSpaceUseCase.Params(accountName, spaceName, spaceSubtitle, spaceQuota))) {
-                is UseCaseResult.Success -> _createSpaceFlow.emit(Event(UIResult.Success(result.getDataOrNull())))
-                is UseCaseResult.Error -> _createSpaceFlow.emit(Event(UIResult.Error(error = result.getThrowableOrNull())))
-            }
-            refreshSpacesFromServerAsyncUseCase(RefreshSpacesFromServerAsyncUseCase.Params(accountName))
-        }
+        runSpaceOperation(
+            flow = _createSpaceFlow,
+            useCase = createSpaceUseCase,
+            useCaseParams = CreateSpaceUseCase.Params(accountName, spaceName, spaceSubtitle, spaceQuota)
+        )
     }
 
     fun editSpace(spaceId: String, spaceName: String, spaceSubtitle: String, spaceQuota: Long?) {
-        viewModelScope.launch(coroutinesDispatcherProvider.io) {
-            when (val result = editSpaceUseCase(EditSpaceUseCase.Params(accountName, spaceId, spaceName, spaceSubtitle, spaceQuota))) {
-                is UseCaseResult.Success -> _editSpaceFlow.emit(Event(UIResult.Success(result.getDataOrNull())))
-                is UseCaseResult.Error -> _editSpaceFlow.emit(Event(UIResult.Error(error = result.getThrowableOrNull())))
-            }
-            refreshSpacesFromServerAsyncUseCase(RefreshSpacesFromServerAsyncUseCase.Params(accountName))
-        }
+        runSpaceOperation(
+            flow = _editSpaceFlow,
+            useCase = editSpaceUseCase,
+            useCaseParams = EditSpaceUseCase.Params(accountName, spaceId, spaceName, spaceSubtitle, spaceQuota)
+        )
     }
 
-    fun filterMenuOptions(space: OCSpace, editSpacesPermission: Boolean) {
+    fun filterMenuOptions(space: OCSpace, userPermissions: Set<UserPermissions>) {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
             val result = filterSpaceMenuOptionsUseCase(
                 FilterSpaceMenuOptionsUseCase.Params(
                     accountName = accountName,
                     space = space,
-                    editSpacesPermission = editSpacesPermission
+                    userPermissions = userPermissions
                 )
             )
             _menuOptions.emit(result)
+        }
+    }
+
+    fun disableSpace(spaceId: String){
+        runSpaceOperation(
+            flow = _disableSpaceFlow,
+            useCase = disableSpaceUseCase,
+            useCaseParams = DisableSpaceUseCase.Params(accountName, spaceId, false)
+        )
+    }
+
+    fun enableSpace(spaceId: String){
+        runSpaceOperation(
+            flow = _enableSpaceFlow,
+            useCase = enableSpaceUseCase,
+            useCaseParams = EnableSpaceUseCase.Params(accountName,spaceId)
+        )
+    }
+
+    fun deleteSpace(spaceId: String){
+        runSpaceOperation(
+            flow = _deleteSpaceFlow,
+            useCase = disableSpaceUseCase,
+            useCaseParams = DisableSpaceUseCase.Params(accountName,spaceId,true)
+        )
+    }
+
+    private fun <Params> runSpaceOperation(
+        flow: MutableSharedFlow<Event<UIResult<Unit>>?>,
+        useCase: BaseUseCaseWithResult<Unit, Params>,
+        useCaseParams: Params,
+    ) {
+        viewModelScope.launch(coroutinesDispatcherProvider.io) {
+            when (val result = useCase(useCaseParams)) {
+                is UseCaseResult.Success -> flow.emit(Event(UIResult.Success(result.getDataOrNull())))
+                is UseCaseResult.Error -> flow.emit(Event(UIResult.Error(error = result.getThrowableOrNull())))
+            }
+            refreshSpacesFromServerAsyncUseCase(RefreshSpacesFromServerAsyncUseCase.Params(accountName))
         }
     }
 

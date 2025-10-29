@@ -46,13 +46,42 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <ImageView
-                android:id="@+id/spaces_list_item_image"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/spaces_thumbnail_height"
-                android:scaleType="centerCrop"
-                android:src="@drawable/ic_spaces"
-                android:contentDescription="@string/content_description_space_image"/>
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/spaces_list_item_disabled_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/disabled_space_label"
+                    android:textSize="18sp"
+                    android:textColor="@color/black"
+                    android:visibility="gone"
+                    android:elevation="8dp"
+                    android:textStyle="bold"
+                    android:background="@drawable/disabled_space_label_background"
+                    android:paddingHorizontal="@dimen/standard_padding"
+                    android:paddingVertical="10dp"
+                    android:contentDescription="@string/disabled_space_label"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+                <ImageView
+                    android:id="@+id/spaces_list_item_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/spaces_thumbnail_height"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_spaces"
+                    android:contentDescription="@string/content_description_space_image"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <View
                 android:layout_width="match_parent"
