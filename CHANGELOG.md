@@ -42,6 +42,7 @@ ownCloud admins and users.
 * Bugfix - Handling of HTTP code response 413: [#4094](https://github.com/owncloud/android/issues/4094)
 * Bugfix - Set authorization header for token request only when necessary: [#4575](https://github.com/owncloud/android/issues/4575)
 * Bugfix - Add explicit permission to Detekt workflow: [#4675](https://github.com/owncloud/android/pull/4675)
+* Bugfix - Add shell to execute apk signing step in GitHub Actions: [#4702](https://github.com/owncloud/android/pull/4702)
 * Change - SBOM workflow runs on dependabot PRs: [#4664](https://github.com/owncloud/android/pull/4664)
 * Change - Update test workflow uses "build-from-latest-apk" workflow: [#4681](https://github.com/owncloud/android/pull/4681)
 * Enhancement - New layout for spaces list: [#4604](https://github.com/owncloud/android/issues/4604)
@@ -79,6 +80,13 @@ ownCloud admins and users.
    access.
 
    https://github.com/owncloud/android/pull/4675
+
+* Bugfix - Add shell to execute apk signing step in GitHub Actions: [#4702](https://github.com/owncloud/android/pull/4702)
+
+   New value for shell to the signing step has been added to the action, to assure
+   a correct execution. Also, secrets as environment variables in the step.
+
+   https://github.com/owncloud/android/pull/4702
 
 * Change - SBOM workflow runs on dependabot PRs: [#4664](https://github.com/owncloud/android/pull/4664)
 
