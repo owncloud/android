@@ -130,7 +130,7 @@ jobs:
 
       # Download APK built from current commit
       - name: Get apk built from current
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v6
         with:
           name: owncloudSigned-${{ github.sha }}
           path: ./src/test/resources
