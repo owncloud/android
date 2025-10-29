@@ -42,17 +42,13 @@ ownCloud admins and users.
 * Bugfix - Handling of HTTP code response 413: [#4094](https://github.com/owncloud/android/issues/4094)
 * Bugfix - Set authorization header for token request only when necessary: [#4575](https://github.com/owncloud/android/issues/4575)
 * Bugfix - Add explicit permission to Detekt workflow: [#4675](https://github.com/owncloud/android/pull/4675)
-* Bugfix - Add shell to execute apk signing step in GitHub Actions: [#4702](https://github.com/owncloud/android/pull/4702)
 * Change - SBOM workflow runs on dependabot PRs: [#4664](https://github.com/owncloud/android/pull/4664)
-* Change - Update test workflow uses "build-from-latest-apk" workflow: [#4681](https://github.com/owncloud/android/pull/4681)
 * Enhancement - New layout for spaces list: [#4604](https://github.com/owncloud/android/issues/4604)
 * Enhancement - Add account ID to the user information: [#4605](https://github.com/owncloud/android/issues/4605)
 * Enhancement - Create a new space: [#4606](https://github.com/owncloud/android/issues/4606)
 * Enhancement - Edit a space: [#4607](https://github.com/owncloud/android/issues/4607)
 * Enhancement - Disable/Remove a space: [#4611](https://github.com/owncloud/android/issues/4611)
-* Enhancement - Update test in GitHub Actions: [#4663](https://github.com/owncloud/android/pull/4663)
 * Enhancement - New workflow to generate a build from "latest" tag on demand: [#4681](https://github.com/owncloud/android/pull/4681)
-* Enhancement - Make Update test more robust: [#4690](https://github.com/owncloud/android/pull/4690)
 * Enhancement - Add user role to spaces: [#4698](https://github.com/owncloud/android/pull/4698)
 
 ## Details
@@ -82,13 +78,6 @@ ownCloud admins and users.
 
    https://github.com/owncloud/android/pull/4675
 
-* Bugfix - Add shell to execute apk signing step in GitHub Actions: [#4702](https://github.com/owncloud/android/pull/4702)
-
-   New value for shell to the signing step has been added to the action, to assure
-   a correct execution. Also, secrets as environment variables in the step.
-
-   https://github.com/owncloud/android/pull/4702
-
 * Change - SBOM workflow runs on dependabot PRs: [#4664](https://github.com/owncloud/android/pull/4664)
 
    Changes to dependency versions will be managed within Dependabot PRs, so they
@@ -96,14 +85,6 @@ ownCloud admins and users.
 
    https://github.com/owncloud/android/pull/4664
    https://github.com/owncloud/android/pull/4666
-
-* Change - Update test workflow uses "build-from-latest-apk" workflow: [#4681](https://github.com/owncloud/android/pull/4681)
-
-   Workflow for update testing has been changed in order to build now only over the
-   current commit, taking "latest" from the existing workflow
-   "build-from-latest-apk", that runs periodically.
-
-   https://github.com/owncloud/android/pull/4681
 
 * Enhancement - New layout for spaces list: [#4604](https://github.com/owncloud/android/issues/4604)
 
@@ -153,27 +134,12 @@ ownCloud admins and users.
    https://github.com/owncloud/android/issues/4611
    https://github.com/owncloud/android/pull/4696
 
-* Enhancement - Update test in GitHub Actions: [#4663](https://github.com/owncloud/android/pull/4663)
-
-   A new Github Actions workflow has been added, in order to check whether the
-   upgrade from "latest" to "current" works flawless. It also exports the execution
-   log and the crash log if something goes wrong.
-
-   https://github.com/owncloud/android/pull/4663
-
 * Enhancement - New workflow to generate a build from "latest" tag on demand: [#4681](https://github.com/owncloud/android/pull/4681)
 
    New workflow has been added to GitHub Actions to build signed apk from "latest"
    tag when the tag is pushed, every 2 months or manually triggered.
 
    https://github.com/owncloud/android/pull/4681
-
-* Enhancement - Make Update test more robust: [#4690](https://github.com/owncloud/android/pull/4690)
-
-   Improvements have been added to the update test workflow in order to make the
-   emulator execution more performant. Also, added a trigger for dependabot PRs.
-
-   https://github.com/owncloud/android/pull/4690
 
 * Enhancement - Add user role to spaces: [#4698](https://github.com/owncloud/android/pull/4698)
 
