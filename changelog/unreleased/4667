@@ -1,5 +1,0 @@
-Change: Update test workflow uses "build-from-latest-apk" workflow
-
-Workflow for update testing has been changed in order to build now only over the current commit, taking "latest" from the existing workflow "build-from-latest-apk", that runs periodically.
-
-https://github.com/owncloud/android/pull/4681

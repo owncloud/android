@@ -1,5 +1,0 @@
-Enhancement: Update test in GitHub Actions
-
-A new Github Actions workflow has been added, in order to check whether the upgrade from "latest" to "current" works flawless. It also exports the execution log and the crash log if something goes wrong.
-
-https://github.com/owncloud/android/pull/4663
