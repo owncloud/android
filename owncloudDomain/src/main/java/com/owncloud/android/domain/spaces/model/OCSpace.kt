@@ -24,6 +24,7 @@ package com.owncloud.android.domain.spaces.model
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
+import kotlin.math.roundToLong
 
 @Parcelize
 data class OCSpace(
@@ -73,7 +74,12 @@ data class SpaceQuota(
     val state: String?,
     val total: Long,
     val used: Long?,
-) : Parcelable
+) : Parcelable {
+
+    fun getRelative(): Double =
+        if (used == null) 0.0 else ((used * 100).toDouble() / total * 100).roundToLong() / 100.0
+
+}
 
 @Parcelize
 data class SpaceRoot(
