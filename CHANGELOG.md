@@ -49,6 +49,7 @@ ownCloud admins and users.
 * Enhancement - Add account ID to the user information: [#4605](https://github.com/owncloud/android/issues/4605)
 * Enhancement - Create a new space: [#4606](https://github.com/owncloud/android/issues/4606)
 * Enhancement - Edit a space: [#4607](https://github.com/owncloud/android/issues/4607)
+* Enhancement - Disable/Remove a space: [#4611](https://github.com/owncloud/android/issues/4611)
 * Enhancement - Update test in GitHub Actions: [#4663](https://github.com/owncloud/android/pull/4663)
 * Enhancement - New workflow to generate a build from "latest" tag on demand: [#4681](https://github.com/owncloud/android/pull/4681)
 * Enhancement - Make Update test more robust: [#4690](https://github.com/owncloud/android/pull/4690)
@@ -142,6 +143,15 @@ ownCloud admins and users.
    https://github.com/owncloud/android/issues/4688
    https://github.com/owncloud/android/pull/4687
    https://github.com/owncloud/android/pull/4694
+
+* Enhancement - Disable/Remove a space: [#4611](https://github.com/owncloud/android/issues/4611)
+
+   New options to disable, enable and remove spaces have been added to the bottom
+   sheet, available only to users with the required permissions when the three-dot
+   menu button is tapped.
+
+   https://github.com/owncloud/android/issues/4611
+   https://github.com/owncloud/android/pull/4696
 
 * Enhancement - Update test in GitHub Actions: [#4663](https://github.com/owncloud/android/pull/4663)
 
