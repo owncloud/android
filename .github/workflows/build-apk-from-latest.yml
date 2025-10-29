@@ -97,7 +97,7 @@ jobs:
 
       # Upload the signed APK as an artifact
       - name: Upload APK as artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: owncloudSigned-latest
           path: ./owncloudSigned-latest.apk
