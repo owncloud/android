@@ -49,6 +49,7 @@ ownCloud admins and users.
 * Enhancement - Edit a space: [#4607](https://github.com/owncloud/android/issues/4607)
 * Enhancement - Disable/Remove a space: [#4611](https://github.com/owncloud/android/issues/4611)
 * Enhancement - New workflow to generate a build from "latest" tag on demand: [#4681](https://github.com/owncloud/android/pull/4681)
+* Enhancement - Show space quota: [#4693](https://github.com/owncloud/android/issues/4693)
 * Enhancement - Add user role to spaces: [#4698](https://github.com/owncloud/android/pull/4698)
 
 ## Details
@@ -140,6 +141,14 @@ ownCloud admins and users.
    tag when the tag is pushed, every 2 months or manually triggered.
 
    https://github.com/owncloud/android/pull/4681
+
+* Enhancement - Show space quota: [#4693](https://github.com/owncloud/android/issues/4693)
+
+   The used and total values of the space quota have been added to the bottom sheet
+   dialog, displayed when the three-dot menu button is tapped.
+
+   https://github.com/owncloud/android/issues/4693
+   https://github.com/owncloud/android/pull/4704
 
 * Enhancement - Add user role to spaces: [#4698](https://github.com/owncloud/android/pull/4698)
 

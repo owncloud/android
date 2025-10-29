@@ -1,0 +1,7 @@
+Enhancement: Show space quota
+
+The used and total values of the space quota have been added to the bottom
+sheet dialog, displayed when the three-dot menu button is tapped.
+
+https://github.com/owncloud/android/issues/4693
+https://github.com/owncloud/android/pull/4704

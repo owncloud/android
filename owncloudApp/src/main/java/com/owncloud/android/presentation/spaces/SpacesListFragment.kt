@@ -302,7 +302,21 @@ class SpacesListFragment :
         spaceNameBottomSheet.text = currentSpace.name
 
         val spaceSizeBottomSheet = spaceOptionsBottomSheetBinding.fileSizeBottomSheet
-        spaceSizeBottomSheet.text = DisplayUtils.bytesToHumanReadable(currentSpace.quota?.used ?: 0L, requireContext(), true)
+        currentSpace.quota?.let { quota ->
+            val usedQuota = quota.used
+            val totalQuota = quota.total
+
+            val quotaText = when {
+                usedQuota == null -> getString(R.string.drawer_unavailable_used_storage)
+                totalQuota == 0L -> DisplayUtils.bytesToHumanReadable(usedQuota, requireContext(), true)
+                else -> getString(
+                    R.string.drawer_quota,
+                    DisplayUtils.bytesToHumanReadable(usedQuota, requireContext(), true),
+                    DisplayUtils.bytesToHumanReadable(totalQuota, requireContext(), true),
+                    quota.getRelative().toString())
+            }
+            spaceSizeBottomSheet.text = quotaText
+        }
 
         val spaceSeparatorBottomSheet = spaceOptionsBottomSheetBinding.fileSeparatorBottomSheet
         spaceSeparatorBottomSheet.visibility = View.GONE
