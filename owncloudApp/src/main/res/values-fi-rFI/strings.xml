@@ -746,6 +746,7 @@
   <string name="create_space_dialog_name">Nimi</string>
   <string name="create_space_dialog_subtitle">Aliotsikko</string>
   <string name="create_space_dialog_quota">Kiintiö</string>
+  <string name="disabled_space_label">Ei käytössä</string>
   <string name="link_role_accessibility">Linkki</string>
   <string name="button_role_accessibility">Painike</string>
   <string name="folder_picker_label">Kansion valitsin</string>

@@ -746,6 +746,7 @@
   <string name="create_space_dialog_name">Name</string>
   <string name="create_space_dialog_subtitle">Untertitel</string>
   <string name="create_space_dialog_quota">Kontingent</string>
+  <string name="disabled_space_label">Deaktiviert</string>
   <string name="feedback_dialog_get_in_contact_description"><![CDATA[ Bitten Sie in unserem <a href="%1$s"><b>Forum</b></a> um Hilfe oder unterstützen Sie in unserem <a href="%2$s"><b>GitHub-Repository</b></a>]]></string>
   <string name="link_role_accessibility">Link</string>
   <string name="button_role_accessibility">Schaltfläche</string>

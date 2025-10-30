@@ -783,6 +783,7 @@
   <string name="edit_space">Muuda ruumi</string>
   <string name="edit_space_correctly">Ruum muudetud korrektselt</string>
   <string name="edit_space_failed">Ruumi ei õnnestunud uuendada</string>
+  <string name="disabled_space_label">Välja lülitatud</string>
   <string name="feedback_dialog_get_in_contact_description"><![CDATA[ Küsi abi meie <a href="%1$s"><b>foorumist</b></a> või anna oma panus <a href="%2$s"><b>GitHub reposse</b></a>]]></string>
   <string name="link_role_accessibility">Link</string>
   <string name="button_role_accessibility">Nupp</string>

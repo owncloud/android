@@ -758,6 +758,7 @@ Póngase en contacto con su administrador</string>
   <string name="create_space_dialog_name">Nombre</string>
   <string name="create_space_dialog_subtitle">Subtitulo</string>
   <string name="create_space_dialog_quota">Cupo</string>
+  <string name="disabled_space_label">Deshabilitado</string>
   <string name="feedback_dialog_get_in_contact_description"><![CDATA[ Solicita ayuda en nuestro <a href="%1$s"><b>foro</b></a> o contribuye con nosotros en nuestro <a href="%2$s"><b>repositorio GitHub</b></a>]]></string>
   <string name="link_role_accessibility">Enlace</string>
   <string name="button_role_accessibility">Botón</string>

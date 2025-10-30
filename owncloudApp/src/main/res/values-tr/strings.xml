@@ -649,6 +649,7 @@
   <string name="create_space_dialog_name">Ad</string>
   <string name="create_space_dialog_subtitle">Alt başlık</string>
   <string name="create_space_dialog_quota">Kota</string>
+  <string name="disabled_space_label">Devre Dışı</string>
   <string name="link_role_accessibility">Bağlantı</string>
   <string name="button_role_accessibility">Tuş</string>
   <string name="folder_picker_label">Klasör seçici</string>

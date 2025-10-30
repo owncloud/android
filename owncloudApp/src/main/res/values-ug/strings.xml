@@ -606,6 +606,7 @@
   <string name="open_shortcut_title">ئۇلانمىنى ئېچىڭ</string>
   <string name="create_space_dialog_name">ئىسمى</string>
   <string name="create_space_dialog_quota">نورما</string>
+  <string name="disabled_space_label">چەكلەنگەن</string>
   <string name="link_role_accessibility">ئۇلىنىش</string>
   <string name="button_role_accessibility">Button</string>
   <string name="folder_picker_label">ھۆججەت قىسقۇچ</string>

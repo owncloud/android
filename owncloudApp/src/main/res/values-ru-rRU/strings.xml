@@ -718,6 +718,7 @@
   <string name="create_space_dialog_name">Имя</string>
   <string name="create_space_dialog_subtitle">подзаголовок</string>
   <string name="create_space_dialog_quota">квота</string>
+  <string name="disabled_space_label">Отключена</string>
   <string name="link_role_accessibility">Ссылка</string>
   <string name="pattern_label">Шаблон</string>
   <string name="image_preview_label">Предпросмотр</string>

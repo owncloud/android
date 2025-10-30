@@ -783,6 +783,7 @@
   <string name="edit_space">Editar espaço</string>
   <string name="edit_space_correctly">Espaço atualizado corretamente</string>
   <string name="edit_space_failed">O espaço não pôde ser atualizado</string>
+  <string name="disabled_space_label">Desabilitado</string>
   <string name="feedback_dialog_get_in_contact_description"><![CDATA[ Peça ajuda em nosso <a href="%1$s"><b>fórum</b></a> ou contribua em nosso <a href="%2$s"><b>repositório do GitHub</b></a>]]></string>
   <string name="link_role_accessibility">Linque</string>
   <string name="button_role_accessibility">Botão</string>

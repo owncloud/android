@@ -781,6 +781,7 @@
   <string name="edit_space">Përpunoni hapësirë</string>
   <string name="edit_space_correctly">Hapësira u përditësua saktësisht</string>
   <string name="edit_space_failed">Hapësira s’u përditësua dot</string>
+  <string name="disabled_space_label">I çaktivizuar</string>
   <string name="feedback_dialog_get_in_contact_description"><![CDATA[ Kërkoni ndihmë te <a href="%1$s"><b>forumi</b></a> ynë, ose kontribuoni te <a href="%2$s"><b>depoja jonë GitHub</b></a>]]></string>
   <string name="link_role_accessibility">Lidhje</string>
   <string name="button_role_accessibility">Buton</string>
