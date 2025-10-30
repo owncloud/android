@@ -382,6 +382,7 @@ class SpacesListFragment :
                             negativeButtonText = getString(R.string.common_no)
                         )
                     }
+                    SpaceMenuOption.EDIT_IMAGE -> { }
                 }
             }
         }
