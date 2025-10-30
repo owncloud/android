@@ -22,6 +22,7 @@
 
 package com.owncloud.android.presentation.spaces
 
+import android.app.Activity
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.res.Configuration
@@ -63,6 +64,7 @@ import com.owncloud.android.presentation.common.BottomSheetFragmentItemView
 import com.owncloud.android.utils.DisplayUtils
 import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.presentation.spaces.createspace.CreateSpaceDialogFragment
+import com.owncloud.android.presentation.transfers.TransfersViewModel
 import kotlinx.coroutines.flow.SharedFlow
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -93,9 +95,22 @@ class SpacesListFragment :
             requireArguments().getString(BUNDLE_ACCOUNT_NAME),
         )
     }
+    private val transfersViewModel: TransfersViewModel by viewModel()
 
     private val editSpaceImageLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { }
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode != Activity.RESULT_OK) return@registerForActivityResult
+
+            val selectedImageUri = result.data?.data ?: return@registerForActivityResult
+            val accountName = requireArguments().getString(BUNDLE_ACCOUNT_NAME) ?: return@registerForActivityResult
+
+            transfersViewModel.uploadFilesFromContentUri(
+                accountName = accountName,
+                listOfContentUris = listOf(selectedImageUri),
+                uploadFolderPath = SPACE_CONFIG_DIR,
+                spaceId = currentSpace.id
+            )
+        }
 
     private lateinit var spacesListAdapter: SpacesListAdapter
 
@@ -410,6 +425,7 @@ class SpacesListFragment :
         const val DRIVES_READ_WRITE_ALL_PERMISSION = "Drives.ReadWrite.all"
         const val DRIVES_READ_WRITE_PROJECT_QUOTA_ALL_PERMISSION = "Drives.ReadWriteProjectQuota.all"
         const val DRIVES_DELETE_PROJECT_ALL_PERMISSION = "Drives.DeleteProject.all"
+        const val SPACE_CONFIG_DIR = "/.space/"
 
         private const val DIALOG_CREATE_SPACE = "DIALOG_CREATE_SPACE"
 
