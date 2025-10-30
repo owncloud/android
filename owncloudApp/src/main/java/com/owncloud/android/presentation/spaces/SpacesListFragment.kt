@@ -23,6 +23,7 @@
 package com.owncloud.android.presentation.spaces
 
 import android.content.DialogInterface
+import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -30,6 +31,7 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
@@ -91,6 +93,9 @@ class SpacesListFragment :
             requireArguments().getString(BUNDLE_ACCOUNT_NAME),
         )
     }
+
+    private val editSpaceImageLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { }
 
     private lateinit var spacesListAdapter: SpacesListAdapter
 
@@ -382,7 +387,14 @@ class SpacesListFragment :
                             negativeButtonText = getString(R.string.common_no)
                         )
                     }
-                    SpaceMenuOption.EDIT_IMAGE -> { }
+                    SpaceMenuOption.EDIT_IMAGE -> {
+                        val action = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+                            addCategory(Intent.CATEGORY_OPENABLE)
+                            type = "image/*"
+                            putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("image/jpeg", "image/png", "image/bmp", "image/x-ms-bmp", "image/gif"))
+                        }
+                        editSpaceImageLauncher.launch(action)
+                    }
                 }
             }
         }
