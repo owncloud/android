@@ -42,6 +42,8 @@
         android:hint="@string/homecloud_enter_code_hint"
         app:hintAnimationEnabled="false"
         app:hintEnabled="false"
+        app:errorEnabled="true"
+        app:endIconMode="none"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/messageTextView">

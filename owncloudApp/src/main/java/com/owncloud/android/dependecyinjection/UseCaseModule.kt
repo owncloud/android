@@ -81,6 +81,7 @@ import com.owncloud.android.domain.files.usecases.SortFilesUseCase
 import com.owncloud.android.domain.files.usecases.SortFilesWithSyncInfoUseCase
 import com.owncloud.android.domain.files.usecases.UpdateAlreadyDownloadedFilesPathUseCase
 import com.owncloud.android.domain.mdnsdiscovery.usecases.DiscoverLocalNetworkDevicesUseCase
+import com.owncloud.android.domain.remoteaccess.usecases.GetExistingRemoveAccessUserUseCase
 import com.owncloud.android.domain.remoteaccess.usecases.GetRemoteAccessDeviceByIdUseCase
 import com.owncloud.android.domain.remoteaccess.usecases.GetRemoteAccessDevicesUseCase
 import com.owncloud.android.domain.remoteaccess.usecases.GetRemoteAccessTokenUseCase
@@ -302,6 +303,7 @@ val useCaseModule = module {
     factoryOf(::GetRemoteAccessDevicesUseCase)
     factoryOf(::GetRemoteAccessDeviceByIdUseCase)
     factoryOf(::GetAvailableServersUseCase)
+    factoryOf(::GetExistingRemoveAccessUserUseCase)
 
     // mDNS Discovery
     factoryOf(::DiscoverLocalNetworkDevicesUseCase)

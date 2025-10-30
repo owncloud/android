@@ -24,8 +24,11 @@ interface RemoteAccessRepository {
      */
     suspend fun getToken(
         reference: String,
-        code: String
+        code: String,
+        userName: String
     )
+
+    fun getUserName(): String?
 
     /**
      * Retrieve the list of devices a user has access to

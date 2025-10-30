@@ -2,11 +2,9 @@ package com.owncloud.android.domain.remoteaccess.usecases
 
 import com.owncloud.android.domain.remoteaccess.RemoteAccessRepository
 
-class GetRemoteAccessTokenUseCase(
+class GetExistingRemoveAccessUserUseCase(
     private val remoteAccessRepository: RemoteAccessRepository
 ) {
 
-    suspend fun execute(reference: String, code: String, username: String) =
-        remoteAccessRepository.getToken(reference, code, username)
+    fun execute(): String? = remoteAccessRepository.getUserName()
 }
-
