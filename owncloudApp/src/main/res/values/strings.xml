@@ -849,6 +849,7 @@
     <string name="create_space_correctly">Space created correctly</string>
     <string name="create_space_failed">Space could not be created</string>
     <string name="edit_space">Edit space</string>
+    <string name="edit_space_image">Edit space image</string>
     <string name="edit_space_correctly">Space updated correctly</string>
     <string name="edit_space_failed">Space could not be updated</string>
     <string name="disable_space">Disable space</string>
