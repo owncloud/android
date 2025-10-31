@@ -783,7 +783,22 @@
   <string name="edit_space">Editar espaço</string>
   <string name="edit_space_correctly">Espaço atualizado corretamente</string>
   <string name="edit_space_failed">O espaço não pôde ser atualizado</string>
+  <string name="disable_space">Desativar espaço</string>
+  <string name="disable_space_dialog_title">Você realmente deseja desativar o espaço: %1$s?</string>
+  <string name="disable_space_dialog_message">Se você desativar o espaço selecionado, ele não poderá mais ser acessado. Somente os administradores do espaço ainda terão acesso. Observação: nenhum arquivo será excluído do servidor.</string>
+  <string name="disable_space_correctly">Espaço desativado corretamente</string>
+  <string name="disable_space_failed">Não foi possível desativar o espaço.</string>
   <string name="disabled_space_label">Desabilitado</string>
+  <string name="enable_space">Habilitar espaço</string>
+  <string name="enable_space_dialog_title">Você realmente deseja habilitar o espaço: %1$s?</string>
+  <string name="enable_space_dialog_message">Se você habilitar o espaço selecionado, ele poderá ser acessado novamente.</string>
+  <string name="enable_space_correctly">Espaço habilitado corretamente</string>
+  <string name="enable_space_failed">Não foi possível ativar o espaço.</string>
+  <string name="delete_space">Apague o espaço</string>
+  <string name="delete_space_dialog_title">Tem mesmo vontade de apagar o espaço: %1$s?</string>
+  <string name="delete_space_dialog_message">Se você excluir o espaço selecionado, ele não poderá mais ser acessado e os arquivos serão excluídos do servidor.</string>
+  <string name="delete_space_correctly">Espaço excluído corretamente</string>
+  <string name="delete_space_failed">Não foi possível excluir espaço.</string>
   <string name="feedback_dialog_get_in_contact_description"><![CDATA[ Peça ajuda em nosso <a href="%1$s"><b>fórum</b></a> ou contribua em nosso <a href="%2$s"><b>repositório do GitHub</b></a>]]></string>
   <string name="link_role_accessibility">Linque</string>
   <string name="button_role_accessibility">Botão</string>

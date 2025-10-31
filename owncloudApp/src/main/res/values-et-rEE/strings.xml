@@ -783,7 +783,22 @@
   <string name="edit_space">Muuda ruumi</string>
   <string name="edit_space_correctly">Ruum muudetud korrektselt</string>
   <string name="edit_space_failed">Ruumi ei õnnestunud uuendada</string>
+  <string name="disable_space">Lülita ruum välja</string>
+  <string name="disable_space_dialog_title">Kas soovid tõesti ruumi %1$s välja lülitada?</string>
+  <string name="disable_space_dialog_message">Kui sa lülitad valitud ruumi välja, siis ligipääs ruumile kaob. Ligipääs säilib ainult ruumide halduritele. Märkus: faile serverist ei kustutata.</string>
+  <string name="disable_space_correctly">Ruum lülitati korrektselt välja</string>
+  <string name="disable_space_failed">Ruumi väljalülitamine ebaõnnestus</string>
   <string name="disabled_space_label">Välja lülitatud</string>
+  <string name="enable_space">Lülita ruum sisse</string>
+  <string name="enable_space_dialog_title">Kas soovid tõesti ruumi %1$s sisse lülitada?</string>
+  <string name="enable_space_dialog_message">Kui lülitad valitud ruumi sisse, siis ligipääs taastub.</string>
+  <string name="enable_space_correctly">Ruum lülitati korrektselt sisse</string>
+  <string name="enable_space_failed">Ruumi sisselülitamine ebaõnnestus</string>
+  <string name="delete_space">Kustuta ruum</string>
+  <string name="delete_space_dialog_title">Kas soovid tõesti ruumi %1$s kustutada?</string>
+  <string name="delete_space_dialog_message">Kui sa kustutad valitud ruumi, siis ligipääs failidele kaob ning failid kustutatakse serverist.</string>
+  <string name="delete_space_correctly">Ruum kustutati korrektselt</string>
+  <string name="delete_space_failed">Ruumi kustutamine ebaõnnestus</string>
   <string name="feedback_dialog_get_in_contact_description"><![CDATA[ Küsi abi meie <a href="%1$s"><b>foorumist</b></a> või anna oma panus <a href="%2$s"><b>GitHub reposse</b></a>]]></string>
   <string name="link_role_accessibility">Link</string>
   <string name="button_role_accessibility">Nupp</string>

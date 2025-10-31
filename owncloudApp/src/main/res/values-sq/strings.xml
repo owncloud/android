@@ -781,7 +781,22 @@
   <string name="edit_space">Përpunoni hapësirë</string>
   <string name="edit_space_correctly">Hapësira u përditësua saktësisht</string>
   <string name="edit_space_failed">Hapësira s’u përditësua dot</string>
+  <string name="disable_space">Çaktivizoje hapësirën</string>
+  <string name="disable_space_dialog_title">Doni vërtet të çaktivizohet hapësira: %1$s?</string>
+  <string name="disable_space_dialog_message">Nëse çaktivizoni hapësirën e përzgjedhur, s’mund të përdoret më. Vetëm përgjegjës Hapësirash do të munden ende të hyjnë në të. Shënim: S’do të fshihen kartela në shërbyes.</string>
+  <string name="disable_space_correctly">Hapësira u çaktivizua saktë</string>
+  <string name="disable_space_failed">Hapësira s’u çaktivizua dot</string>
   <string name="disabled_space_label">I çaktivizuar</string>
+  <string name="enable_space">Aktivizo hapësirën</string>
+  <string name="enable_space_dialog_title">Doni vërtet të aktivizohet hapësira: %1$s?</string>
+  <string name="enable_space_dialog_message">Nëse aktivizoni hapësirën e përzgjedhur, mund të përdoret sërish.</string>
+  <string name="enable_space_correctly">Hapësira u aktivizua saktë</string>
+  <string name="enable_space_failed">Hapësira s’u aktivizua dot</string>
+  <string name="delete_space">Fshije hapësirën</string>
+  <string name="delete_space_dialog_title">Doni vërtet të fshihet hapësira: %1$s?</string>
+  <string name="delete_space_dialog_message">Nëse fshihni hapësirën e përzgjedhur, s’mund të përdoret më dhe kartelat te shërbyesi do të fshihen.</string>
+  <string name="delete_space_correctly">Hapësira u fshi saktë</string>
+  <string name="delete_space_failed">Hapësira s’u fshi dot</string>
   <string name="feedback_dialog_get_in_contact_description"><![CDATA[ Kërkoni ndihmë te <a href="%1$s"><b>forumi</b></a> ynë, ose kontribuoni te <a href="%2$s"><b>depoja jonë GitHub</b></a>]]></string>
   <string name="link_role_accessibility">Lidhje</string>
   <string name="button_role_accessibility">Buton</string>
