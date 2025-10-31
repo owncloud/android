@@ -22,7 +22,9 @@
 
 package com.owncloud.android.presentation.spaces
 
+import android.app.Activity
 import android.content.DialogInterface
+import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -30,6 +32,7 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
@@ -61,6 +64,7 @@ import com.owncloud.android.presentation.common.BottomSheetFragmentItemView
 import com.owncloud.android.utils.DisplayUtils
 import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.presentation.spaces.createspace.CreateSpaceDialogFragment
+import com.owncloud.android.presentation.transfers.TransfersViewModel
 import kotlinx.coroutines.flow.SharedFlow
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -91,6 +95,22 @@ class SpacesListFragment :
             requireArguments().getString(BUNDLE_ACCOUNT_NAME),
         )
     }
+    private val transfersViewModel: TransfersViewModel by viewModel()
+
+    private val editSpaceImageLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode != Activity.RESULT_OK) return@registerForActivityResult
+
+            val selectedImageUri = result.data?.data ?: return@registerForActivityResult
+            val accountName = requireArguments().getString(BUNDLE_ACCOUNT_NAME) ?: return@registerForActivityResult
+
+            transfersViewModel.uploadFilesFromContentUri(
+                accountName = accountName,
+                listOfContentUris = listOf(selectedImageUri),
+                uploadFolderPath = SPACE_CONFIG_DIR,
+                spaceId = currentSpace.id
+            )
+        }
 
     private lateinit var spacesListAdapter: SpacesListAdapter
 
@@ -382,6 +402,14 @@ class SpacesListFragment :
                             negativeButtonText = getString(R.string.common_no)
                         )
                     }
+                    SpaceMenuOption.EDIT_IMAGE -> {
+                        val action = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+                            addCategory(Intent.CATEGORY_OPENABLE)
+                            type = "image/*"
+                            putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("image/jpeg", "image/png", "image/bmp", "image/x-ms-bmp", "image/gif"))
+                        }
+                        editSpaceImageLauncher.launch(action)
+                    }
                 }
             }
         }
@@ -397,6 +425,7 @@ class SpacesListFragment :
         const val DRIVES_READ_WRITE_ALL_PERMISSION = "Drives.ReadWrite.all"
         const val DRIVES_READ_WRITE_PROJECT_QUOTA_ALL_PERMISSION = "Drives.ReadWriteProjectQuota.all"
         const val DRIVES_DELETE_PROJECT_ALL_PERMISSION = "Drives.DeleteProject.all"
+        const val SPACE_CONFIG_DIR = "/.space/"
 
         private const val DIALOG_CREATE_SPACE = "DIALOG_CREATE_SPACE"
 
