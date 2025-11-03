@@ -1,10 +1,8 @@
 package com.owncloud.android.domain.server.usecases
 
 import com.owncloud.android.domain.mdnsdiscovery.usecases.DiscoverLocalNetworkDevicesUseCase
-import com.owncloud.android.domain.remoteaccess.usecases.GetRemoteAccessDeviceByIdUseCase
-import com.owncloud.android.domain.remoteaccess.usecases.GetRemoteAccessDevicesUseCase
+import com.owncloud.android.domain.remoteaccess.usecases.GetRemoteAvailableServersUseCase
 import com.owncloud.android.domain.server.model.Server
-import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -15,22 +13,14 @@ import kotlinx.coroutines.flow.update
 import timber.log.Timber
 
 class GetAvailableServersUseCase(
-    private val getRemoteAccessDevicesUseCase: GetRemoteAccessDevicesUseCase,
-    private val getRemoteAccessDeviceByIdUseCase: GetRemoteAccessDeviceByIdUseCase,
+    private val getRemoteAvailableServersUseCase: GetRemoteAvailableServersUseCase,
     private val discoverLocalNetworkDevicesUseCase: DiscoverLocalNetworkDevicesUseCase,
 ) {
 
     private val remoteAccessDevicesFlow = MutableStateFlow(emptyList<Server>())
 
     suspend fun refreshRemoteAccessDevices() {
-        val remoteAccessDevices = getRemoteAccessDevicesUseCase.execute().map {
-            val devicePath = getRemoteAccessDeviceByIdUseCase.execute(it.seagateDeviceId)
-            val remoteAccessPath = devicePath.firstOrNull()
-            val baseUrl = "https://${remoteAccessPath?.address.orEmpty()}:${remoteAccessPath?.port ?: ""}"
-            Server(
-                hostName = it.friendlyName, hostUrl = baseUrl
-            )
-        }
+        val remoteAccessDevices = getRemoteAvailableServersUseCase.execute()
         remoteAccessDevicesFlow.update { remoteAccessDevices }
     }
 

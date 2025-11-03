@@ -2,6 +2,7 @@ package com.owncloud.android.data.mdnsdiscovery
 
 import com.owncloud.android.data.mdnsdiscovery.remote.HCDeviceStatusResponse
 import com.squareup.moshi.Moshi
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
@@ -70,6 +71,8 @@ class HCDeviceVerificationClient(
                 }
 
                 isReady
+            } catch (e: CancellationException) {
+                throw e
             } catch (e: Exception) {
                 Timber.w(e, "Device verification failed for: $deviceUrl")
                 false

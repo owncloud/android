@@ -1,20 +1,21 @@
 package com.owncloud.android.data.remoteaccess.repository
 
-import com.owncloud.android.data.remoteaccess.RemoteAccessModelMapper
+import com.owncloud.android.data.mdnsdiscovery.HCDeviceVerificationClient
 import com.owncloud.android.data.remoteaccess.RemoteAccessTokenStorage
 import com.owncloud.android.domain.exceptions.WrongCodeException
 import com.owncloud.android.data.remoteaccess.datasources.RemoteAccessService
 import com.owncloud.android.data.remoteaccess.remote.RemoteAccessInitiateRequest
+import com.owncloud.android.data.remoteaccess.remote.RemoteAccessPath
 import com.owncloud.android.data.remoteaccess.remote.RemoteAccessTokenRequest
 import com.owncloud.android.domain.remoteaccess.RemoteAccessRepository
-import com.owncloud.android.domain.remoteaccess.model.RemoteAccessDevice
-import com.owncloud.android.domain.remoteaccess.model.RemoteAccessPath
+import com.owncloud.android.domain.server.model.Server
 import com.owncloud.android.lib.common.http.HttpConstants
 import retrofit2.HttpException
 
 class HCRemoteAccessRepository(
     private val remoteAccessService: RemoteAccessService,
-    private val tokenStorage: RemoteAccessTokenStorage
+    private val tokenStorage: RemoteAccessTokenStorage,
+    private val deviceVerificationClient: HCDeviceVerificationClient
 ) : RemoteAccessRepository {
 
     override suspend fun initiateAuthentication(
@@ -58,13 +59,27 @@ class HCRemoteAccessRepository(
         return tokenStorage.getUserName()
     }
 
-    override suspend fun getDevices(): List<RemoteAccessDevice> {
-        return remoteAccessService.getDevices().map { RemoteAccessModelMapper.toModel(it) }
+    override suspend fun getAvailableServers(): List<Server> {
+        return remoteAccessService.getDevices().mapNotNull {
+            val devicePaths = remoteAccessService.getDeviceById(it.seagateDeviceId).paths
+            var server: Server? = null
+            for (devicePath in devicePaths) {
+                val baseUrl = getDeviceBaseUrl(devicePath)
+                if (deviceVerificationClient.verifyDevice(baseUrl)) {
+                    server = Server(
+                        hostName = it.friendlyName, hostUrl = "$baseUrl/files"
+                    )
+                    break
+                }
+            }
+            server
+        }
     }
 
-    override suspend fun getDeviceById(deviceId: String): List<RemoteAccessPath> {
-        return remoteAccessService.getDeviceById(deviceId).paths.map { RemoteAccessModelMapper.toModel(it) }
+    private fun getDeviceBaseUrl(remoteAccessPath: RemoteAccessPath): String {
+        val address = remoteAccessPath.address
+        val port = if (remoteAccessPath.port == null) "" else ":${remoteAccessPath.port}"
+        return "https://${address}${port}"
     }
-
 }
 

@@ -19,6 +19,7 @@
 
 package com.owncloud.android.domain
 
+import kotlinx.coroutines.CancellationException
 import timber.log.Timber
 
 /**
@@ -30,6 +31,8 @@ abstract class BaseUseCaseWithResult<out Type, in Params> {
     operator fun invoke(params: Params): UseCaseResult<Type> =
         try {
             UseCaseResult.Success(run(params))
+        } catch (e: CancellationException) {
+            throw e
         } catch (throwable: Throwable) {
             Timber.w(throwable, "Error in use case ${this::class.simpleName}, params: $params")
             UseCaseResult.Error(throwable)

@@ -28,8 +28,10 @@ val networkModule = module {
 
     // OkHttpClient for Remote Access API
     single(named(NetworkModuleQualifiers.OKHTTP_CLIENT_TRUST_ALL)) {
-        // TODO: This is a TEMPORARY solution - trusting all certificates is insecure!
-        // Replace with proper certificate pinning or trusted certificate validation in production
+        /* TODO: This is a TEMPORARY solution - trusting all certificates is insecure!
+           Replace with proper certificate pinning or trusted certificate validation in production
+           This should be done as part of https://jira.seagate.com/jira/browse/HCNOVEO-867
+         */
         val trustAllCerts = arrayOf<TrustManager>(object : X509TrustManager {
             override fun checkClientTrusted(chain: Array<X509Certificate>, authType: String) {}
             override fun checkServerTrusted(chain: Array<X509Certificate>, authType: String) {}
@@ -66,7 +68,7 @@ val networkModule = module {
     // Device Verification Client for mDNS
     single {
         HCDeviceVerificationClient(
-            okHttpClient = get<OkHttpClient>(named(NetworkModuleQualifiers.OKHTTP_CLIENT_PINNED_CERTS)),
+            okHttpClient = get<OkHttpClient>(named(NetworkModuleQualifiers.OKHTTP_CLIENT_TRUST_ALL)),
             moshi = get()
         )
     }
