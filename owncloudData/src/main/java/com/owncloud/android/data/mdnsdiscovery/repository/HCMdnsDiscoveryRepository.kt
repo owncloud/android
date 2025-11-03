@@ -3,6 +3,7 @@ package com.owncloud.android.data.mdnsdiscovery.repository
 import com.owncloud.android.data.mdnsdiscovery.HCDeviceVerificationClient
 import com.owncloud.android.data.mdnsdiscovery.datasources.LocalMdnsDiscoveryDataSource
 import com.owncloud.android.domain.mdnsdiscovery.MdnsDiscoveryRepository
+import com.owncloud.android.domain.server.model.Server
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.mapNotNull
 import timber.log.Timber
@@ -23,7 +24,7 @@ class HCMdnsDiscoveryRepository(
         serviceType: String,
         serviceName: String,
         duration: Duration
-    ): Flow<String> {
+    ): Flow<Server> {
         Timber.d("Starting mDNS discovery with verification - serviceType: $serviceType, serviceName: $serviceName, duration: $duration")
         
         return localMdnsDiscoveryDataSource.discoverDevices(
@@ -38,7 +39,16 @@ class HCMdnsDiscoveryRepository(
             
             if (isVerified) {
                 Timber.d("Device verified: $deviceUrl")
-                deviceUrl
+                
+                // Get certificate common name
+                val certificateCommonName = deviceVerificationClient.getCertificateCommonName(deviceUrl).orEmpty()
+                Timber.d("Device certificate common name: $certificateCommonName")
+                
+                Server(
+                    hostName = deviceUrl,
+                    hostUrl = deviceUrl,
+                    certificateCommonName = certificateCommonName
+                )
             } else {
                 Timber.d("Device verification failed, skipping: $deviceUrl")
                 null

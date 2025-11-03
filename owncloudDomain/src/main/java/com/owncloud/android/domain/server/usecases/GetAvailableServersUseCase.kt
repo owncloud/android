@@ -29,17 +29,17 @@ class GetAvailableServersUseCase(
         discoverLocalNetworkDevicesParams: DiscoverLocalNetworkDevicesUseCase.Params
     ): StateFlow<List<Server>> {
         val localNetworkDevicesFlow = discoverLocalNetworkDevicesUseCase.execute(discoverLocalNetworkDevicesParams)
-            .stateIn(scope, SharingStarted.WhileSubscribed(5000), "")
+            .stateIn(scope, SharingStarted.WhileSubscribed(5000), null)
 
         return combine(remoteAccessDevicesFlow, localNetworkDevicesFlow) { remote, local ->
-            Timber.d("Remote access devices: $remote, Local network devices: $local")
+            Timber.d("Remote access devices: $remote, Local network device: $local")
             val mutableServers = remote.toMutableList()
-            if (local.isNotEmpty()) {
-                mutableServers.add(
-                    Server(hostName = local, hostUrl = local)
-                )
+            if (local != null) {
+                if (local.certificateCommonName.isEmpty() || mutableServers.none { it.certificateCommonName == local.certificateCommonName }) {
+                    mutableServers.add(local)
+                }
             }
-            mutableServers.distinctBy { it.hostUrl }
+            mutableServers
         }.stateIn(
             scope = scope,
             started = SharingStarted.WhileSubscribed(5000),

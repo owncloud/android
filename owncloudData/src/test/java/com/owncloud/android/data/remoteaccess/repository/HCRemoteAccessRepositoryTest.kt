@@ -69,10 +69,11 @@ class HCRemoteAccessRepositoryTest {
         coEvery { remoteAccessService.getDevices() } returns devices
         coEvery { remoteAccessService.getDeviceById("1") } returns RemoteAccessDevicePathsResponse("1",  paths = paths)
         coEvery { deviceVerificationClient.verifyDevice("https://test.com:443") } returns true
+        coEvery { deviceVerificationClient.getCertificateCommonName("https://test.com:443") } returns "test-cert-001"
 
         val result = repository.getAvailableServers()
 
-        val expectedServer = Server(hostName = "Test Device", hostUrl = "https://test.com:443/files")
+        val expectedServer = Server(hostName = "Test Device", hostUrl = "https://test.com:443/files", certificateCommonName = "test-cert-001")
         assertEquals(listOf(expectedServer), result)
     }
 }

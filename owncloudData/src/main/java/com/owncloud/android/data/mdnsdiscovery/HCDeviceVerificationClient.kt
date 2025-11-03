@@ -1,5 +1,6 @@
 package com.owncloud.android.data.mdnsdiscovery
 
+import com.owncloud.android.data.mdnsdiscovery.remote.HCDeviceAboutResponse
 import com.owncloud.android.data.mdnsdiscovery.remote.HCDeviceStatusResponse
 import com.squareup.moshi.Moshi
 import kotlinx.coroutines.CancellationException
@@ -21,6 +22,10 @@ class HCDeviceVerificationClient(
         moshi.adapter(HCDeviceStatusResponse::class.java)
     }
 
+    private val aboutAdapter by lazy {
+        moshi.adapter(HCDeviceAboutResponse::class.java)
+    }
+
     /**
      * Verifies if a device is alive by checking the /api/v1/status endpoint
      *
@@ -31,21 +36,8 @@ class HCDeviceVerificationClient(
         return withContext(Dispatchers.IO) {
             try {
                 val statusUrl = "$deviceUrl/api/v1/status"
-                Timber.d("Verifying device at: $statusUrl")
 
-                val request = Request.Builder()
-                    .url(statusUrl)
-                    .get()
-                    .build()
-
-                val response = okHttpClient.newCall(request).execute()
-
-                if (!response.isSuccessful) {
-                    Timber.w("Device verification failed with HTTP ${response.code} for: $deviceUrl")
-                    return@withContext false
-                }
-
-                val responseBody = response.body?.string()
+                val responseBody = makeRequest(statusUrl)
                 if (responseBody == null) {
                     Timber.w("Device verification failed: empty response body for: $deviceUrl")
                     return@withContext false
@@ -76,6 +68,57 @@ class HCDeviceVerificationClient(
             } catch (e: Exception) {
                 Timber.w(e, "Device verification failed for: $deviceUrl")
                 false
+            }
+        }
+    }
+
+    private fun makeRequest(url: String): String? {
+        val request = Request.Builder()
+            .url(url)
+            .get()
+            .build()
+
+        val response = okHttpClient.newCall(request).execute()
+
+        if (!response.isSuccessful) {
+            Timber.w("Failed to fetch about info with HTTP ${response.code} for: $url")
+            return null
+        }
+
+        return response.body?.string()
+    }
+
+    /**
+     * Fetches the certificate common name from the /api/v1/about endpoint.
+     *
+     * @param deviceUrl The base URL of the device (e.g., "https://192.168.1.100:8080")
+     * @return The certificate_common_name string, or null if it cannot be fetched or parsed.
+     */
+    suspend fun getCertificateCommonName(deviceUrl: String): String? {
+        return withContext(Dispatchers.IO) {
+            try {
+                val aboutUrl = "$deviceUrl/api/v1/about"
+                Timber.d("Fetching about info from: $aboutUrl")
+
+                val responseBody = makeRequest(aboutUrl)
+                if (responseBody == null) {
+                    Timber.w("Failed to fetch about info: empty response body for: $deviceUrl")
+                    return@withContext null
+                }
+
+                val aboutResponse = aboutAdapter.fromJson(responseBody)
+
+                if (aboutResponse == null) {
+                    Timber.w("Failed to fetch about info: unable to parse response for: $deviceUrl")
+                    return@withContext null
+                }
+
+                aboutResponse.certificateCommonName
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                Timber.w(e, "Failed to fetch about info for: $deviceUrl")
+                null
             }
         }
     }
