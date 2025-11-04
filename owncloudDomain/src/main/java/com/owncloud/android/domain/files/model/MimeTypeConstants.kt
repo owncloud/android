@@ -2,7 +2,9 @@
  * ownCloud Android client application
  *
  * @author Abel García de Prada
- * Copyright (C) 2020 ownCloud GmbH.
+ * @author Jorge Aguado Recio
+ *
+ * Copyright (C) 2025 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -29,4 +31,9 @@ const val MIME_PREFIX_IMAGE = "image/"
 const val MIME_PREFIX_TEXT = "text/"
 
 const val MIME_SVG = "image/svg+xml"
+const val MIME_JPEG = "image/jpeg"
+const val MIME_PNG = "image/png"
+const val MIME_BMP = "image/bmp"
+const val MIME_X_MS_BMP = "image/x-ms-bmp"
+const val MIME_GIF = "image/gif"
 

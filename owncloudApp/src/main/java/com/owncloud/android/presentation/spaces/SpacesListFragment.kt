@@ -47,6 +47,12 @@ import com.owncloud.android.R
 import com.owncloud.android.databinding.FileOptionsBottomSheetFragmentBinding
 import com.owncloud.android.databinding.SpacesListFragmentBinding
 import com.owncloud.android.domain.files.model.FileListOption
+import com.owncloud.android.domain.files.model.MIME_BMP
+import com.owncloud.android.domain.files.model.MIME_GIF
+import com.owncloud.android.domain.files.model.MIME_JPEG
+import com.owncloud.android.domain.files.model.MIME_PNG
+import com.owncloud.android.domain.files.model.MIME_PREFIX_IMAGE
+import com.owncloud.android.domain.files.model.MIME_X_MS_BMP
 import com.owncloud.android.domain.spaces.model.OCSpace
 import com.owncloud.android.domain.spaces.model.SpaceMenuOption
 import com.owncloud.android.domain.transfers.model.TransferStatus
@@ -237,7 +243,7 @@ class SpacesListFragment :
             showSpaceMenuOptionsDialog(menuOptions)
         }
 
-        collectLatestLifecycleFlow(transfersViewModel.transfersWithSpaceStateFlow) { transfersWithSpace->
+        collectLatestLifecycleFlow(transfersViewModel.transfersWithSpaceStateFlow) { transfersWithSpace ->
             val remotePath = SPACE_CONFIG_DIR + selectedImageName
             val matchedTransfer = transfersWithSpace.map { it.first }.find { it.remotePath == remotePath }
 
@@ -423,8 +429,8 @@ class SpacesListFragment :
                     SpaceMenuOption.EDIT_IMAGE -> {
                         val action = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
                             addCategory(Intent.CATEGORY_OPENABLE)
-                            type = "image/*"
-                            putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("image/jpeg", "image/png", "image/bmp", "image/x-ms-bmp", "image/gif"))
+                            type = MIME_PREFIX_IMAGE
+                            putExtra(Intent.EXTRA_MIME_TYPES, arrayOf(MIME_JPEG, MIME_PNG, MIME_BMP, MIME_X_MS_BMP, MIME_GIF))
                         }
                         editSpaceImageLauncher.launch(action)
                     }
