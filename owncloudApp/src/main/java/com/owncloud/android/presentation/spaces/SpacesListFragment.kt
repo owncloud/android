@@ -37,6 +37,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
+import androidx.documentfile.provider.DocumentFile
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
 import androidx.recyclerview.widget.GridLayoutManager
@@ -48,6 +49,7 @@ import com.owncloud.android.databinding.SpacesListFragmentBinding
 import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.domain.spaces.model.OCSpace
 import com.owncloud.android.domain.spaces.model.SpaceMenuOption
+import com.owncloud.android.domain.transfers.model.TransferStatus
 import com.owncloud.android.domain.user.model.UserPermissions
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.collectLatestLifecycleFlow
@@ -82,6 +84,8 @@ class SpacesListFragment :
     private var isMultiPersonal = false
     private var userPermissions = mutableSetOf<UserPermissions>()
     private var editQuotaPermission = false
+    private var lastUpdatedRemotePath: String? = null
+    private var selectedImageName: String? = null
     private lateinit var currentSpace: OCSpace
 
     private val spacesListViewModel: SpacesListViewModel by viewModel {
@@ -103,6 +107,8 @@ class SpacesListFragment :
 
             val selectedImageUri = result.data?.data ?: return@registerForActivityResult
             val accountName = requireArguments().getString(BUNDLE_ACCOUNT_NAME) ?: return@registerForActivityResult
+            val documentFile = DocumentFile.fromSingleUri(requireContext(), selectedImageUri) ?: return@registerForActivityResult
+            selectedImageName = documentFile.name
 
             transfersViewModel.uploadFilesFromContentUri(
                 accountName = accountName,
@@ -222,12 +228,24 @@ class SpacesListFragment :
 
         collectSpaceOperationsFlow(spacesListViewModel.createSpaceFlow, R.string.create_space_correctly, R.string.create_space_failed)
         collectSpaceOperationsFlow(spacesListViewModel.editSpaceFlow, R.string.edit_space_correctly, R.string.edit_space_failed)
+        collectSpaceOperationsFlow(spacesListViewModel.editSpaceImageFlow, R.string.edit_space_image_correctly, R.string.edit_space_image_failed)
         collectSpaceOperationsFlow(spacesListViewModel.disableSpaceFlow, R.string.disable_space_correctly, R.string.disable_space_failed)
         collectSpaceOperationsFlow(spacesListViewModel.enableSpaceFlow, R.string.enable_space_correctly, R.string.enable_space_failed)
         collectSpaceOperationsFlow(spacesListViewModel.deleteSpaceFlow, R.string.delete_space_correctly, R.string.delete_space_failed)
 
         collectLatestLifecycleFlow(spacesListViewModel.menuOptions) { menuOptions ->
             showSpaceMenuOptionsDialog(menuOptions)
+        }
+
+        collectLatestLifecycleFlow(transfersViewModel.transfersWithSpaceStateFlow) { transfersWithSpace->
+            val remotePath = SPACE_CONFIG_DIR + selectedImageName
+            val matchedTransfer = transfersWithSpace.map { it.first }.find { it.remotePath == remotePath }
+
+            if (matchedTransfer != null && matchedTransfer.status == TransferStatus.TRANSFER_SUCCEEDED &&
+                lastUpdatedRemotePath != matchedTransfer.remotePath) {
+                spacesListViewModel.editSpaceImage(currentSpace.id, matchedTransfer.remotePath)
+                lastUpdatedRemotePath = matchedTransfer.remotePath
+            }
         }
 
     }

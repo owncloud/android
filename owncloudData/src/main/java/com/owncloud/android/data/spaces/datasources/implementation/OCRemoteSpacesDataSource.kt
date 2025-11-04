@@ -64,6 +64,13 @@ class OCRemoteSpacesDataSource(
         return spaceResponse.toModel(accountName)
     }
 
+    override fun editSpaceImage(accountName: String, spaceId: String, imageId: String): OCSpace {
+        val spaceResponse = executeRemoteOperation {
+            clientManager.getSpacesService(accountName).editSpaceImage(spaceId, imageId)
+        }
+        return spaceResponse.toModel(accountName)
+    }
+
     override fun disableSpace(accountName: String, spaceId: String, deleteMode: Boolean) {
         executeRemoteOperation { clientManager.getSpacesService(accountName).disableSpace(spaceId, deleteMode) }
     }
