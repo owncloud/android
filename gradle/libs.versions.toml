@@ -40,7 +40,7 @@ kotlinxCoroutines = "1.6.4"
 ksp = "1.9.20-1.0.14"
 ktlint = "11.1.0"
 markwon = "4.6.2"
-material = "1.14.0-alpha03"
+material = "1.13.0"
 mockk = "1.13.3"
 moshi = "1.15.0"
 okhttp = "4.9.2"
@@ -51,6 +51,7 @@ preference = "1.2.0"
 sonarqube = "4.0.0.2929"
 stetho = "1.6.0"
 timber = "5.0.1"
+turbine = "1.0.0"
 
 [libraries]
 androidx-annotation = { group = "androidx.annotation", name = "annotation", version.ref = "androidxAnnotation" }
@@ -125,6 +126,7 @@ retrofit-converter-moshi = { group = "com.squareup.retrofit2", name = "converter
 photoview = { group = "com.github.chrisbanes", name = "PhotoView", version.ref = "photoView" }
 stetho = { group = "com.facebook.stetho", name = "stetho", version.ref = "stetho" }
 timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
+turbine = { group = "app.cash.turbine", name = "turbine", version.ref = "turbine" }
 
 # Dependencies of the included build-logic
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "androidGradlePlugin" }

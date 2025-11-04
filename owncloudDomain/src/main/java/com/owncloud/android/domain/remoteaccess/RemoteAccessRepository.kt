@@ -1,7 +1,6 @@
 package com.owncloud.android.domain.remoteaccess
 
-import com.owncloud.android.domain.remoteaccess.model.RemoteAccessDevice
-import com.owncloud.android.domain.remoteaccess.model.RemoteAccessPath
+import com.owncloud.android.domain.server.model.Server
 
 interface RemoteAccessRepository {
     /**
@@ -11,7 +10,7 @@ interface RemoteAccessRepository {
      * @param clientFriendlyName Human-readable client name
      * @return Reference string to be used in token request
      */
-    fun initiateAuthentication(
+    suspend fun initiateAuthentication(
         email: String,
         clientId: String,
         clientFriendlyName: String
@@ -22,22 +21,18 @@ interface RemoteAccessRepository {
      * @param reference Reference from initiate response
      * @param code Validation code received by email
      */
-    fun getToken(
+    suspend fun getToken(
         reference: String,
-        code: String
+        code: String,
+        userName: String
     )
 
-    /**
-     * Retrieve the list of devices a user has access to
-     * @return List of devices
-     */
-    fun getDevices(): List<RemoteAccessDevice>
+    fun getUserName(): String?
 
     /**
-     * Get information about a specific device including its connection paths
-     * @param deviceId Device identifier
-     * @return List of paths for partivular device
+     * Get all available server urls for all devices
+     * @return a list of available servers
      */
-    fun getDeviceById(deviceId: String): List<RemoteAccessPath>
+    suspend fun getAvailableServers(): List<Server>
 }
 

@@ -44,6 +44,7 @@ import com.owncloud.android.providers.WorkManagerProvider
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
+@Deprecated("deprecated in favor of new login flow using com.owncloud.android.presentation.authentication.homecloud.LoginViewModel")
 class AuthenticationViewModel(
     private val loginBasicAsyncUseCase: LoginBasicAsyncUseCase,
     private val getServerInfoAsyncUseCase: GetServerInfoAsyncUseCase,

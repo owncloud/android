@@ -59,7 +59,7 @@ import com.owncloud.android.presentation.authentication.BASIC_TOKEN_TYPE
 import com.owncloud.android.presentation.authentication.EXTRA_ACCOUNT
 import com.owncloud.android.presentation.authentication.EXTRA_ACTION
 import com.owncloud.android.presentation.authentication.KEY_AUTH_TOKEN_TYPE
-import com.owncloud.android.presentation.authentication.homecloud.LoginActivity
+import com.owncloud.android.presentation.authentication.homecloud.LegacyLoginActivity
 import com.owncloud.android.presentation.authentication.OAUTH_TOKEN_TYPE
 import com.owncloud.android.presentation.authentication.oauth.OAuthViewModel
 import com.owncloud.android.presentation.common.UIResult
@@ -103,7 +103,7 @@ import org.koin.dsl.module
 
 class LoginActivityTest {
 
-    private lateinit var activityScenario: ActivityScenario<LoginActivity>
+    private lateinit var activityScenario: ActivityScenario<LegacyLoginActivity>
 
     private lateinit var authenticationViewModel: AuthenticationViewModel
     private lateinit var oauthViewModel: OAuthViewModel
@@ -193,7 +193,7 @@ class LoginActivityTest {
         every { ocContextProvider.getString(R.string.app_name) } returns BRANDED_APP_NAME
 
         activityScenario = if (intent == null) {
-            ActivityScenario.launch(LoginActivity::class.java)
+            ActivityScenario.launch(LegacyLoginActivity::class.java)
         } else {
             ActivityScenario.launch(intent)
         }
@@ -602,7 +602,7 @@ class LoginActivityTest {
 
     @Test
     fun intent_withSavedAccount_viewModelCalls() {
-        val intentWithAccount = Intent(context, LoginActivity::class.java).apply {
+        val intentWithAccount = Intent(context, LegacyLoginActivity::class.java).apply {
             putExtra(EXTRA_ACCOUNT, OC_ACCOUNT)
         }
 
@@ -614,7 +614,7 @@ class LoginActivityTest {
 
     @Test
     fun supportsOAuth_isSuccess_actionUpdateExpiredTokenOAuth() {
-        val intentWithAccount = Intent(context, LoginActivity::class.java).apply {
+        val intentWithAccount = Intent(context, LegacyLoginActivity::class.java).apply {
             putExtra(EXTRA_ACCOUNT, OC_ACCOUNT)
             putExtra(EXTRA_ACTION, ACTION_UPDATE_EXPIRED_TOKEN)
             putExtra(KEY_AUTH_TOKEN_TYPE, OAUTH_TOKEN_TYPE)
@@ -633,7 +633,7 @@ class LoginActivityTest {
 
     @Test
     fun supportsOAuth_isSuccess_actionUpdateToken() {
-        val intentWithAccount = Intent(context, LoginActivity::class.java).apply {
+        val intentWithAccount = Intent(context, LegacyLoginActivity::class.java).apply {
             putExtra(EXTRA_ACCOUNT, OC_ACCOUNT)
             putExtra(EXTRA_ACTION, ACTION_UPDATE_TOKEN)
             putExtra(KEY_AUTH_TOKEN_TYPE, OC_AUTH_TOKEN_TYPE)
@@ -648,7 +648,7 @@ class LoginActivityTest {
 
     @Test
     fun supportsOAuth_isSuccess_actionUpdateExpiredTokenBasic() {
-        val intentWithAccount = Intent(context, LoginActivity::class.java).apply {
+        val intentWithAccount = Intent(context, LegacyLoginActivity::class.java).apply {
             putExtra(EXTRA_ACCOUNT, OC_ACCOUNT)
             putExtra(EXTRA_ACTION, ACTION_UPDATE_EXPIRED_TOKEN)
             putExtra(KEY_AUTH_TOKEN_TYPE, BASIC_TOKEN_TYPE)
@@ -667,7 +667,7 @@ class LoginActivityTest {
 
     @Test
     fun getBaseUrl_isSuccess_updatesBaseUrl() {
-        val intentWithAccount = Intent(context, LoginActivity::class.java).apply {
+        val intentWithAccount = Intent(context, LegacyLoginActivity::class.java).apply {
             putExtra(EXTRA_ACCOUNT, OC_ACCOUNT)
         }
 
@@ -688,7 +688,7 @@ class LoginActivityTest {
 
     @Test
     fun getBaseUrlAndActionNotCreate_isSuccess_updatesBaseUrl() {
-        val intentWithAccount = Intent(context, LoginActivity::class.java).apply {
+        val intentWithAccount = Intent(context, LegacyLoginActivity::class.java).apply {
             putExtra(EXTRA_ACCOUNT, OC_ACCOUNT)
             putExtra(EXTRA_ACTION, ACTION_UPDATE_EXPIRED_TOKEN)
         }

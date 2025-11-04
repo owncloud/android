@@ -43,12 +43,12 @@ import com.owncloud.android.domain.authentication.oauth.RequestTokenUseCase;
 import com.owncloud.android.domain.authentication.oauth.model.OIDCServerConfiguration;
 import com.owncloud.android.domain.authentication.oauth.model.TokenRequest;
 import com.owncloud.android.domain.authentication.oauth.model.TokenResponse;
-import com.owncloud.android.presentation.authentication.homecloud.LoginActivity;
 import com.owncloud.android.lib.common.accounts.AccountTypeUtils;
 import com.owncloud.android.lib.common.accounts.AccountUtils;
 import kotlin.Lazy;
 import org.jetbrains.annotations.NotNull;
 import timber.log.Timber;
+import com.owncloud.android.presentation.authentication.homecloud.LoginActivity;
 
 import java.io.File;
 

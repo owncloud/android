@@ -1,21 +1,24 @@
 package com.owncloud.android.data.remoteaccess.repository
 
-import com.owncloud.android.data.remoteaccess.RemoteAccessModelMapper
+import com.owncloud.android.data.mdnsdiscovery.HCDeviceVerificationClient
 import com.owncloud.android.data.remoteaccess.RemoteAccessTokenStorage
+import com.owncloud.android.domain.exceptions.WrongCodeException
 import com.owncloud.android.data.remoteaccess.datasources.RemoteAccessService
 import com.owncloud.android.data.remoteaccess.remote.RemoteAccessInitiateRequest
+import com.owncloud.android.data.remoteaccess.remote.RemoteAccessPath
 import com.owncloud.android.data.remoteaccess.remote.RemoteAccessTokenRequest
 import com.owncloud.android.domain.remoteaccess.RemoteAccessRepository
-import com.owncloud.android.domain.remoteaccess.model.RemoteAccessDevice
-import com.owncloud.android.domain.remoteaccess.model.RemoteAccessPath
-import kotlinx.coroutines.runBlocking
+import com.owncloud.android.domain.server.model.Server
+import com.owncloud.android.lib.common.http.HttpConstants
+import retrofit2.HttpException
 
 class HCRemoteAccessRepository(
     private val remoteAccessService: RemoteAccessService,
-    private val tokenStorage: RemoteAccessTokenStorage
+    private val tokenStorage: RemoteAccessTokenStorage,
+    private val deviceVerificationClient: HCDeviceVerificationClient
 ) : RemoteAccessRepository {
 
-    override fun initiateAuthentication(
+    override suspend fun initiateAuthentication(
         email: String,
         clientId: String,
         clientFriendlyName: String
@@ -25,42 +28,62 @@ class HCRemoteAccessRepository(
             clientId = clientId,
             clientFriendlyName = clientFriendlyName
         )
-        val response = wrapNetworkCall {
-            remoteAccessService.initiateAuthentication(request = request)
+
+        return remoteAccessService.initiateAuthentication(request = request).reference
+    }
+
+    override suspend fun getToken(reference: String, code: String, userName: String) {
+        try {
+            val request = RemoteAccessTokenRequest(
+                reference = reference,
+                code = code
+            )
+            val (accessToken, refreshToken) = remoteAccessService.getToken(request = request)
+
+            tokenStorage.saveToken(
+                accessToken = accessToken,
+                refreshToken = refreshToken,
+            )
+
+            tokenStorage.saveUserName(userName = userName)
+        } catch (e: HttpException) {
+            if (e.code() == HttpConstants.HTTP_BAD_REQUEST) {
+                throw WrongCodeException(e)
+            } else {
+                throw e
+            }
         }
-
-        return response.reference
     }
 
-    override fun getToken(reference: String, code: String) {
-        val request = RemoteAccessTokenRequest(
-            reference = reference,
-            code = code
-        )
-        val response = wrapNetworkCall { remoteAccessService.getToken(request = request) }
-
-        tokenStorage.saveToken(
-            accessToken = response.accessToken,
-            refreshToken = response.refreshToken,
-        )
+    override fun getUserName(): String? {
+        return tokenStorage.getUserName()
     }
 
-    override fun getDevices(): List<RemoteAccessDevice> {
-        val response = wrapNetworkCall { remoteAccessService.getDevices() }
-
-        return response.map { RemoteAccessModelMapper.toModel(it) }
-    }
-
-    override fun getDeviceById(deviceId: String): List<RemoteAccessPath> {
-        val response = wrapNetworkCall { remoteAccessService.getDeviceById(deviceId) }
-
-        return response.paths.map { RemoteAccessModelMapper.toModel(it) }
-    }
-
-    private fun <T> wrapNetworkCall(networkCall: suspend () -> T) : T {
-        return runBlocking {
-            networkCall()
+    override suspend fun getAvailableServers(): List<Server> {
+        return remoteAccessService.getDevices().mapNotNull {
+            val devicePaths = remoteAccessService.getDeviceById(it.seagateDeviceId).paths
+            var server: Server? = null
+            for (devicePath in devicePaths) {
+                val baseUrl = getDeviceBaseUrl(devicePath)
+                if (deviceVerificationClient.verifyDevice(baseUrl)) {
+                    // Get certificate common name
+                    val certificateCommonName = deviceVerificationClient.getCertificateCommonName(baseUrl).orEmpty()
+                    server = Server(
+                        hostName = it.friendlyName,
+                        hostUrl = "$baseUrl/files",
+                        certificateCommonName = certificateCommonName
+                    )
+                    break
+                }
+            }
+            server
         }
+    }
+
+    private fun getDeviceBaseUrl(remoteAccessPath: RemoteAccessPath): String {
+        val address = remoteAccessPath.address
+        val port = if (remoteAccessPath.port == null) "" else ":${remoteAccessPath.port}"
+        return "https://${address}${port}"
     }
 }
 

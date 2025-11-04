@@ -1,23 +1,20 @@
 package com.owncloud.android.domain.remoteaccess.usecases
 
-import com.owncloud.android.domain.BaseUseCaseWithResult
+import android.os.Build
 import com.owncloud.android.domain.remoteaccess.RemoteAccessRepository
+import java.util.UUID
 
 class InitiateRemoteAccessAuthenticationUseCase(
     private val remoteAccessRepository: RemoteAccessRepository
-) : BaseUseCaseWithResult<String, InitiateRemoteAccessAuthenticationUseCase.Params>() {
+) {
 
-    override fun run(params: Params): String =
+    suspend fun execute(
+        email: String,
+    ): String =
         remoteAccessRepository.initiateAuthentication(
-            email = params.email,
-            clientId = params.clientId,
-            clientFriendlyName = params.clientFriendlyName
+            email = email,
+            clientId = UUID.randomUUID().toString(),
+            clientFriendlyName = Build.MODEL
         )
-
-    data class Params(
-        val email: String,
-        val clientId: String,
-        val clientFriendlyName: String
-    )
 }
 

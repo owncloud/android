@@ -80,14 +80,16 @@ import com.owncloud.android.domain.files.usecases.SetLastUsageFileUseCase
 import com.owncloud.android.domain.files.usecases.SortFilesUseCase
 import com.owncloud.android.domain.files.usecases.SortFilesWithSyncInfoUseCase
 import com.owncloud.android.domain.files.usecases.UpdateAlreadyDownloadedFilesPathUseCase
-import com.owncloud.android.domain.remoteaccess.usecases.GetRemoteAccessDeviceByIdUseCase
-import com.owncloud.android.domain.remoteaccess.usecases.GetRemoteAccessDevicesUseCase
+import com.owncloud.android.domain.mdnsdiscovery.usecases.DiscoverLocalNetworkDevicesUseCase
+import com.owncloud.android.domain.remoteaccess.usecases.GetExistingRemoveAccessUserUseCase
 import com.owncloud.android.domain.remoteaccess.usecases.GetRemoteAccessTokenUseCase
+import com.owncloud.android.domain.remoteaccess.usecases.GetRemoteAvailableServersUseCase
 import com.owncloud.android.domain.remoteaccess.usecases.InitiateRemoteAccessAuthenticationUseCase
 import com.owncloud.android.domain.searches.usecases.ClearSavedSearchesForAccountUseCase
 import com.owncloud.android.domain.searches.usecases.GetSavedSearchesForAccountUseCase
 import com.owncloud.android.domain.searches.usecases.RemoveSavedSearchUseCase
 import com.owncloud.android.domain.searches.usecases.SaveSavedSearchUseCase
+import com.owncloud.android.domain.server.usecases.GetAvailableServersUseCase
 import com.owncloud.android.domain.server.usecases.GetServerInfoAsyncUseCase
 import com.owncloud.android.domain.sharing.sharees.GetShareesAsyncUseCase
 import com.owncloud.android.domain.sharing.shares.usecases.CreatePrivateShareAsyncUseCase
@@ -297,8 +299,12 @@ val useCaseModule = module {
     // Remote Access
     factoryOf(::InitiateRemoteAccessAuthenticationUseCase)
     factoryOf(::GetRemoteAccessTokenUseCase)
-    factoryOf(::GetRemoteAccessDevicesUseCase)
-    factoryOf(::GetRemoteAccessDeviceByIdUseCase)
+    factoryOf(::GetRemoteAvailableServersUseCase)
+    factoryOf(::GetAvailableServersUseCase)
+    factoryOf(::GetExistingRemoveAccessUserUseCase)
+
+    // mDNS Discovery
+    factoryOf(::DiscoverLocalNetworkDevicesUseCase)
 
     // Accounts
     factoryOf(::RemoveAccountUseCase)
