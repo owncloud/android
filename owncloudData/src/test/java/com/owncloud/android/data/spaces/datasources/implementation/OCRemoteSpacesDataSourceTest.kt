@@ -27,6 +27,7 @@ import com.owncloud.android.data.spaces.datasources.implementation.OCRemoteSpace
 import com.owncloud.android.lib.resources.spaces.services.OCSpacesService
 import com.owncloud.android.testutil.OC_ACCOUNT_NAME
 import com.owncloud.android.testutil.OC_SPACE_PROJECT_WITH_IMAGE
+import com.owncloud.android.testutil.OC_SPACE_SPECIAL_IMAGE
 import com.owncloud.android.testutil.OC_USER_GROUPS
 import com.owncloud.android.testutil.OC_USER_ID
 import com.owncloud.android.testutil.SPACE_PERMISSIONS
@@ -146,6 +147,33 @@ class OCRemoteSpacesDataSourceTest {
                 spaceName = OC_SPACE_PROJECT_WITH_IMAGE.name,
                 spaceSubtitle = OC_SPACE_PROJECT_WITH_IMAGE.description!!,
                 spaceQuota = OC_SPACE_PROJECT_WITH_IMAGE.quota?.total!!
+            )
+        }
+    }
+
+    @Test
+    fun `editSpaceImage updates the project space image correctly`() {
+        val editSpaceImageOperationResult = createRemoteOperationResultMock(SPACE_RESPONSE, isSuccess = true)
+
+        every {
+            ocSpaceService.editSpaceImage(
+                spaceId = OC_SPACE_PROJECT_WITH_IMAGE.id,
+                imageId = OC_SPACE_SPECIAL_IMAGE.id
+            )
+        } returns editSpaceImageOperationResult
+
+        val spaceResult = ocRemoteSpacesDataSource.editSpaceImage(
+            accountName = OC_ACCOUNT_NAME,
+            spaceId = OC_SPACE_PROJECT_WITH_IMAGE.id,
+            imageId = OC_SPACE_SPECIAL_IMAGE.id
+        )
+        assertEquals(SPACE_RESPONSE.toModel(OC_ACCOUNT_NAME), spaceResult)
+
+        verify(exactly = 1) {
+            clientManager.getSpacesService(OC_ACCOUNT_NAME)
+            ocSpaceService.editSpaceImage(
+                spaceId = OC_SPACE_PROJECT_WITH_IMAGE.id,
+                imageId = OC_SPACE_SPECIAL_IMAGE.id
             )
         }
     }

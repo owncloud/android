@@ -31,6 +31,7 @@ import com.owncloud.android.testutil.OC_SPACE_PERSONAL
 import com.owncloud.android.testutil.OC_SPACE_PERSONAL_WITH_LIMITED_QUOTA
 import com.owncloud.android.testutil.OC_SPACE_PERSONAL_WITH_UNLIMITED_QUOTA
 import com.owncloud.android.testutil.OC_SPACE_PROJECT_WITH_IMAGE
+import com.owncloud.android.testutil.OC_SPACE_SPECIAL_IMAGE
 import com.owncloud.android.testutil.OC_USER_GROUPS
 import com.owncloud.android.testutil.OC_USER_ID
 import com.owncloud.android.testutil.OC_USER_QUOTA_LIMITED
@@ -346,6 +347,31 @@ class OCSpacesRepositoryTest {
                 spaceName = OC_SPACE_PROJECT_WITH_IMAGE.name,
                 spaceSubtitle = OC_SPACE_PROJECT_WITH_IMAGE.description!!,
                 spaceQuota = OC_SPACE_PROJECT_WITH_IMAGE.quota?.total!!
+            )
+        }
+    }
+
+    @Test
+    fun `editSpaceImage updates the space image correctly`() {
+        every {
+            remoteSpacesDataSource.editSpaceImage(
+                accountName = OC_ACCOUNT_NAME,
+                spaceId = OC_SPACE_PROJECT_WITH_IMAGE.id,
+                imageId = OC_SPACE_SPECIAL_IMAGE.id
+            )
+        } returns OC_SPACE_PROJECT_WITH_IMAGE
+
+        ocSpacesRepository.editSpaceImage(
+            accountName = OC_ACCOUNT_NAME,
+            spaceId = OC_SPACE_PROJECT_WITH_IMAGE.id,
+            imageId = OC_SPACE_SPECIAL_IMAGE.id
+        )
+
+        verify(exactly = 1) {
+            remoteSpacesDataSource.editSpaceImage(
+                accountName = OC_ACCOUNT_NAME,
+                spaceId = OC_SPACE_PROJECT_WITH_IMAGE.id,
+                imageId = OC_SPACE_SPECIAL_IMAGE.id
             )
         }
     }
