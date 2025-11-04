@@ -48,6 +48,7 @@ ownCloud admins and users.
 * Enhancement - Create a new space: [#4606](https://github.com/owncloud/android/issues/4606)
 * Enhancement - Edit a space: [#4607](https://github.com/owncloud/android/issues/4607)
 * Enhancement - Disable/Remove a space: [#4611](https://github.com/owncloud/android/issues/4611)
+* Enhancement - Update space image: [#4691](https://github.com/owncloud/android/issues/4691)
 * Enhancement - Show space quota: [#4693](https://github.com/owncloud/android/issues/4693)
 * Enhancement - Add user role to spaces: [#4698](https://github.com/owncloud/android/pull/4698)
 
@@ -133,6 +134,15 @@ ownCloud admins and users.
 
    https://github.com/owncloud/android/issues/4611
    https://github.com/owncloud/android/pull/4696
+
+* Enhancement - Update space image: [#4691](https://github.com/owncloud/android/issues/4691)
+
+   A new option to update the space image has been added to the bottom sheet,
+   available only to users with the required permissions when the three-dot menu
+   button is tapped.
+
+   https://github.com/owncloud/android/issues/4691
+   https://github.com/owncloud/android/pull/4705
 
 * Enhancement - Show space quota: [#4693](https://github.com/owncloud/android/issues/4693)
 
