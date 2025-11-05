@@ -247,10 +247,17 @@ class SpacesListFragment :
             val remotePath = SPACE_CONFIG_DIR + selectedImageName
             val matchedTransfer = transfersWithSpace.map { it.first }.find { it.remotePath == remotePath }
 
-            if (matchedTransfer != null && matchedTransfer.status == TransferStatus.TRANSFER_SUCCEEDED &&
-                lastUpdatedRemotePath != matchedTransfer.remotePath) {
-                spacesListViewModel.editSpaceImage(currentSpace.id, matchedTransfer.remotePath)
-                lastUpdatedRemotePath = matchedTransfer.remotePath
+            if (matchedTransfer != null && lastUpdatedRemotePath != matchedTransfer.remotePath) {
+                when(matchedTransfer.status) {
+                    TransferStatus.TRANSFER_SUCCEEDED -> {
+                        spacesListViewModel.editSpaceImage(currentSpace.id, matchedTransfer.remotePath)
+                        lastUpdatedRemotePath = matchedTransfer.remotePath
+                    }
+                    TransferStatus.TRANSFER_FAILED -> {
+                        showMessageInSnackbar(getString(R.string.edit_space_image_failed))
+                    }
+                    else -> { }
+                }
             }
         }
 
