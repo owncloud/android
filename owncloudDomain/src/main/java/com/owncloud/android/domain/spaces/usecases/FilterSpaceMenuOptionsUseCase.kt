@@ -51,6 +51,7 @@ class FilterSpaceMenuOptionsUseCase(
 
         if (editImagePermission) {
             optionsToShow.add(SpaceMenuOption.EDIT_IMAGE)
+            optionsToShow.add(SpaceMenuOption.SET_ICON)
         }
 
         if (!currentSpace.isDisabled && deletePermission) {
