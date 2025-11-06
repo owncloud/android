@@ -51,6 +51,7 @@ ownCloud admins and users.
 * Enhancement - Update space image: [#4691](https://github.com/owncloud/android/issues/4691)
 * Enhancement - Show space quota: [#4693](https://github.com/owncloud/android/issues/4693)
 * Enhancement - Add user role to spaces: [#4698](https://github.com/owncloud/android/pull/4698)
+* Enhancement - Cancellation policy for CI workflows: [#4712](https://github.com/owncloud/android/pull/4712)
 
 ## Details
 
@@ -158,6 +159,13 @@ ownCloud admins and users.
    the spaces table in the database.
 
    https://github.com/owncloud/android/pull/4698
+
+* Enhancement - Cancellation policy for CI workflows: [#4712](https://github.com/owncloud/android/pull/4712)
+
+   A new cancellation policy has been set to CI workflows. Only one concurrent
+   execution of every workflow in every branch.
+
+   https://github.com/owncloud/android/pull/4712
 
 # Changelog for ownCloud Android Client [4.6.2] (2025-08-13)
 
