@@ -4,8 +4,10 @@
  * @author Bartek Przybylski
  * @author David A. Velasco
  * @author David González Verdugo
+ * @author Jorge Aguado Recio
+ *
  * Copyright (C) 2011  Bartek Przybylski
- * Copyright (C) 2020 ownCloud GmbH.
+ * Copyright (C) 2025 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -35,6 +37,8 @@ import com.owncloud.android.R;
 
 import java.io.File;
 import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
 import java.net.IDN;
 import java.text.DateFormat;
 import java.util.Calendar;
@@ -257,7 +261,11 @@ public class DisplayUtils {
     }
 
     public static String formatFromBytesToGb(long bytes) {
-        BigDecimal valueInGB = new BigDecimal(bytes).divide(BigDecimal.valueOf(1_000_000_000L)).stripTrailingZeros();
-        return valueInGB.toPlainString();
+        BigDecimal valueInGB = new BigDecimal(bytes).divide(BigDecimal.valueOf(1_000_000_000L));
+        if (valueInGB.compareTo(BigDecimal.ONE) >= 0) {
+            return valueInGB.setScale(1, RoundingMode.HALF_UP).stripTrailingZeros().toPlainString();
+        } else {
+            return valueInGB.round(new MathContext(1, RoundingMode.HALF_UP)).stripTrailingZeros().toPlainString();
+        }
     }
 }
