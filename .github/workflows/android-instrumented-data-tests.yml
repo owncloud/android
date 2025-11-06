@@ -6,6 +6,11 @@ permissions:
 on:
   pull_request:
 
+# Cancels other executions in the same branch
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   instrumented-tests:
     name: Run Android Instrumented Data Tests

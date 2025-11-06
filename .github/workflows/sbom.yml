@@ -11,6 +11,10 @@ on:
     - technical/*
     - 'dependabot/**'
 
+# Cancels other executions in the same branch
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 permissions:
   contents: write
