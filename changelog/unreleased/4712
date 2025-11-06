@@ -1,0 +1,5 @@
+Enhancement: Cancellation policy for CI workflows
+
+A new cancellation policy has been set to CI workflows. Only one concurrent execution of every workflow in every branch. 
+
+https://github.com/owncloud/android/pull/4712
