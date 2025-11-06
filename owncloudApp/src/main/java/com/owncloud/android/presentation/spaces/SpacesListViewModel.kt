@@ -33,6 +33,7 @@ import com.owncloud.android.domain.spaces.model.OCSpace
 import com.owncloud.android.domain.spaces.model.SpaceMenuOption
 import com.owncloud.android.domain.spaces.usecases.CreateSpaceUseCase
 import com.owncloud.android.domain.spaces.usecases.DisableSpaceUseCase
+import com.owncloud.android.domain.spaces.usecases.EditSpaceImageUseCase
 import com.owncloud.android.domain.spaces.usecases.EditSpaceUseCase
 import com.owncloud.android.domain.spaces.usecases.EnableSpaceUseCase
 import com.owncloud.android.domain.spaces.usecases.FilterSpaceMenuOptionsUseCase
@@ -66,6 +67,7 @@ class SpacesListViewModel(
     private val createSpaceUseCase: CreateSpaceUseCase,
     private val filterSpaceMenuOptionsUseCase: FilterSpaceMenuOptionsUseCase,
     private val editSpaceUseCase: EditSpaceUseCase,
+    private val editSpaceImageUseCase: EditSpaceImageUseCase,
     private val disableSpaceUseCase: DisableSpaceUseCase,
     private val enableSpaceUseCase: EnableSpaceUseCase,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
@@ -91,6 +93,9 @@ class SpacesListViewModel(
 
     private val _editSpaceFlow = MutableSharedFlow<Event<UIResult<Unit>>?>()
     val editSpaceFlow: SharedFlow<Event<UIResult<Unit>>?> = _editSpaceFlow
+
+    private val _editSpaceImageFlow = MutableSharedFlow<Event<UIResult<Unit>>?>()
+    val editSpaceImageFlow: SharedFlow<Event<UIResult<Unit>>?> = _editSpaceImageFlow
 
     private val _disableSpaceFlow = MutableSharedFlow<Event<UIResult<Unit>>?>()
     val disableSpaceFlow: SharedFlow<Event<UIResult<Unit>>?> = _disableSpaceFlow
@@ -221,6 +226,14 @@ class SpacesListViewModel(
             flow = _deleteSpaceFlow,
             useCase = disableSpaceUseCase,
             useCaseParams = DisableSpaceUseCase.Params(accountName,spaceId,true)
+        )
+    }
+
+    fun editSpaceImage(spaceId: String, remotePath: String) {
+        runSpaceOperation(
+            flow = _editSpaceImageFlow,
+            useCase = editSpaceImageUseCase,
+            useCaseParams = EditSpaceImageUseCase.Params(accountName, spaceId, remotePath)
         )
     }
 

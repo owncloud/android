@@ -43,8 +43,14 @@ class FilterSpaceMenuOptionsUseCase(
         val deletePermission =
             (UserPermissions.CAN_DELETE_SPACES in params.userPermissions || hasSpacePermission(spacePermissionsResult, DRIVES_DELETE_PERMISSION))
 
+        val editImagePermission = hasSpacePermission(spacePermissionsResult, DRIVES_MANAGE_PERMISSION)
+
         if (editPermission || isSpaceManager) {
             optionsToShow.add(SpaceMenuOption.EDIT)
+        }
+
+        if (editImagePermission) {
+            optionsToShow.add(SpaceMenuOption.EDIT_IMAGE)
         }
 
         if (!currentSpace.isDisabled && deletePermission) {

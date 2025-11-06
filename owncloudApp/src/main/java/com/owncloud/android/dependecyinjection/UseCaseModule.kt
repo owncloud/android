@@ -91,6 +91,7 @@ import com.owncloud.android.domain.sharing.shares.usecases.GetSharesAsLiveDataUs
 import com.owncloud.android.domain.sharing.shares.usecases.RefreshSharesFromServerAsyncUseCase
 import com.owncloud.android.domain.spaces.usecases.CreateSpaceUseCase
 import com.owncloud.android.domain.spaces.usecases.DisableSpaceUseCase
+import com.owncloud.android.domain.spaces.usecases.EditSpaceImageUseCase
 import com.owncloud.android.domain.spaces.usecases.EditSpaceUseCase
 import com.owncloud.android.domain.spaces.usecases.EnableSpaceUseCase
 import com.owncloud.android.domain.spaces.usecases.FilterSpaceMenuOptionsUseCase
@@ -229,6 +230,7 @@ val useCaseModule = module {
     // Spaces
     factoryOf(::CreateSpaceUseCase)
     factoryOf(::DisableSpaceUseCase)
+    factoryOf(::EditSpaceImageUseCase)
     factoryOf(::EditSpaceUseCase)
     factoryOf(::EnableSpaceUseCase)
     factoryOf(::FilterSpaceMenuOptionsUseCase)

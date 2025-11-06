@@ -102,7 +102,7 @@ val viewModelModule = module {
         get()) }
     viewModel { ReceiveExternalFilesViewModel(get(), get(), get(), get()) }
     viewModel { (accountName: String, showPersonalSpace: Boolean) ->
-        SpacesListViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), accountName,
+        SpacesListViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), accountName,
             showPersonalSpace)
     }
 }
