@@ -89,7 +89,6 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:text="@string/homecloud_button_skip"
-        android:enabled="false"
         app:layout_constraintBaseline_toBaselineOf="@id/allowButton"
         app:layout_constraintEnd_toStartOf="@id/allowButton" />
 

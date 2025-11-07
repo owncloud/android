@@ -3,10 +3,13 @@ package com.owncloud.android.presentation.authentication.homecloud
 import android.accounts.AccountManager
 import android.content.Intent
 import android.os.Bundle
+import android.text.TextWatcher
 import android.util.Patterns
 import android.view.View
+import androidx.activity.addCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.lifecycleScope
@@ -40,6 +43,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
 
     private lateinit var binding: AccountSetupHomecloudBinding
     private val dialogBinding by lazy { AccountDialogCodeBinding.inflate(layoutInflater) }
+    private var codeTextWatcher: TextWatcher? = null
 
     private val adapter by lazy {
         ServerAddressAdapter(
@@ -60,9 +64,14 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
 
         handleDeepLink()
 
+        onBackPressedDispatcher.addCallback {
+            loginViewModel.onBackPressed()
+        }
+
         binding = AccountSetupHomecloudBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.settingsLink.applyStatusBarInsets(usePaddings = false)
+        binding.backButton.applyStatusBarInsets(usePaddings = false)
         binding.root.filterTouchesWhenObscured =
             PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(this)
 
@@ -94,6 +103,9 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
     }
 
     private fun setupListeners() {
+        binding.backButton.setOnClickListener {
+            loginViewModel.onBackPressed()
+        }
         binding.settingsLink.setOnClickListener {
             val settingsIntent = Intent(this, SettingsActivity::class.java)
             startActivity(settingsIntent)
@@ -126,10 +138,11 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
 
     private fun handleEvents(event: LoginViewModel.LoginEvent) {
         when (event) {
-            LoginViewModel.LoginEvent.NavigateToCodeDialog -> showCodeDialog()
-            LoginViewModel.LoginEvent.NavigateToLogin -> showLoginScreen()
+            LoginViewModel.LoginEvent.ShowCodeDialog -> showCodeDialog()
+            LoginViewModel.LoginEvent.DismissCodeDialog -> hideCodeDialog()
             is LoginViewModel.LoginEvent.LoginResult -> handleLoginResult(event)
             is LoginViewModel.LoginEvent.ShowUntrustedCertDialog -> showUntrustedCertDialog(event.certificateCombinedException)
+            LoginViewModel.LoginEvent.Close -> finish()
         }
     }
 
@@ -151,16 +164,17 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
 
     private fun updateServers(servers: List<Server>) {
         adapter.setServers(servers)
-        dialogBinding.skipButton.isEnabled = servers.isNotEmpty()
+        binding.hostUrlInputLayout.startIconDrawable = if (servers.isEmpty()) null else ContextCompat.getDrawable(this, R.drawable.ic_device)
     }
 
-    private fun showLoginScreen() {
-        binding.loginStateGroup.visibility = View.VISIBLE
+    private fun hideCodeDialog() {
         dialog.dismiss()
     }
 
     private fun showCodeDialog() {
-        dialogBinding.codeEditText.doAfterTextChanged {
+        dialogBinding.codeEditText.removeTextChangedListener(codeTextWatcher)
+        dialogBinding.codeEditText.setText("")
+        codeTextWatcher = dialogBinding.codeEditText.doAfterTextChanged {
             val isNotEmpty = it.toString().isNotEmpty()
             dialogBinding.allowButton.isEnabled = isNotEmpty
             if (isNotEmpty) {
@@ -173,41 +187,65 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         dialogBinding.skipButton.setOnClickListener {
             loginViewModel.onSkipClicked()
         }
+        dialog.setOnDismissListener {
+            loginViewModel.onCodeDialogDismissed()
+        }
         dialog.show()
     }
 
     private fun updateLoginState(state: LoginScreenState) {
-        updateServers(state.servers)
-        binding.accountUsername.updateTextIfDiffers(state.username)
-        binding.accountPassword.updateTextIfDiffers(state.password)
-        binding.serversRefreshButton.visibility = if (state.isRefreshServersLoading) View.INVISIBLE else View.VISIBLE
-        binding.serversRefreshLoading.visibility = if (state.isRefreshServersLoading) View.VISIBLE else View.GONE
         binding.errorMessage.text = state.errorMessage
         binding.errorMessage.isVisible = !state.errorMessage.isNullOrBlank()
 
-        when (state.loginState) {
-            LoginViewModel.LoginState.REMOTE_ACCESS -> {
+        when (state) {
+            is LoginScreenState.EmailState -> {
+                // Show email input, hide email text
+                binding.accountUsernameContainer.visibility = View.VISIBLE
+                binding.accountUsernameText.visibility = View.GONE
+                binding.accountUsername.updateTextIfDiffers(state.username)
+                
+                binding.backButton.visibility = View.GONE
                 binding.accountUsernameContainer.error = state.errorEmailInvalidMessage
                 binding.loginStateGroup.visibility = View.GONE
                 binding.actionButton.setText(R.string.homecloud_action_button_next)
                 dialogBinding.allowButton.visibility = if (state.isAllowLoading) View.INVISIBLE else View.VISIBLE
                 dialogBinding.allowLoading.visibility = if (state.isAllowLoading) View.VISIBLE else View.GONE
-                binding.actionButton.isEnabled = state.errorEmailInvalidMessage == null && state.username.isNotEmpty()
+                // Enable button only if username is not empty and is a valid email
+                binding.actionButton.isEnabled = state.username.isNotEmpty() && Patterns.EMAIL_ADDRESS.matcher(state.username).matches()
                 binding.serversRefreshButton.visibility = View.INVISIBLE
+                binding.serversRefreshLoading.visibility = View.GONE
                 dialogBinding.codeInputLayout.error = state.errorCodeMessage
+                binding.accountUsername.isEnabled = true
             }
 
-            LoginViewModel.LoginState.LOGIN -> {
+            is LoginScreenState.LoginState -> {
+                // Hide email input, show email text
+                binding.accountUsernameContainer.visibility = View.GONE
+                binding.accountUsernameText.visibility = View.VISIBLE
+                binding.accountUsernameText.text = state.username
+                
+                binding.backButton.visibility = View.VISIBLE
+                updateServers(state.servers)
+                binding.accountPassword.updateTextIfDiffers(state.password)
+                if (state.selectedServer == null) {
+                    binding.hostUrlInput.updateTextIfDiffers(state.serverUrl)
+                } else {
+                    binding.hostUrlInput.updateTextIfDiffers(state.selectedServer.hostName)
+                }
+                binding.serversRefreshButton.visibility = if (state.isRefreshServersLoading) View.INVISIBLE else View.VISIBLE
+                binding.serversRefreshLoading.visibility = if (state.isRefreshServersLoading) View.VISIBLE else View.GONE
+
                 if (state.isLoading) {
+                    binding.backButton.visibility = View.GONE
                     binding.loadingLayout.visibility = View.VISIBLE
                     binding.actionGroup.visibility = View.GONE
                     binding.loginStateGroup.visibility = View.GONE
                     binding.serversRefreshButton.visibility = View.INVISIBLE
                 } else {
+                    binding.backButton.visibility = View.VISIBLE
                     binding.loadingLayout.visibility = View.GONE
                     binding.actionGroup.visibility = View.VISIBLE
                     binding.loginStateGroup.visibility = View.VISIBLE
-                    binding.accountUsername.isEnabled = false
                     binding.actionButton.setText(R.string.setup_btn_login)
                     binding.actionButton.isEnabled = state.username.isNotEmpty() && state.password.isNotEmpty() &&
                             (state.selectedServer != null || state.serverUrl.isNotEmpty()) && Patterns.EMAIL_ADDRESS.matcher(state.username).matches()
