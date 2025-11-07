@@ -2,13 +2,11 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_margin="16dp"
     android:padding="24dp">
 
-    <!-- Title -->
     <TextView
         android:id="@+id/titleTextView"
         android:layout_width="0dp"
@@ -20,7 +18,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Message Body -->
     <TextView
         android:id="@+id/messageTextView"
         android:layout_width="0dp"
@@ -33,30 +30,22 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/titleTextView" />
 
-    <!-- Code Input Field -->
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/codeInputLayout"
+
+    <com.owncloud.android.presentation.authentication.homecloud.VerificationCodeView
+        android:id="@+id/codeEditVerification"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:hint="@string/homecloud_enter_code_hint"
-        app:hintAnimationEnabled="false"
-        app:hintEnabled="false"
-        app:errorEnabled="true"
-        app:endIconMode="none"
+        android:layout_marginTop="16dp"
+        app:codeLength="6"
+        app:borderColor="@color/homecloud_input_stroke_nonfocused"
+        app:borderWidth="1dp"
+        app:errorTextColor="@color/homecloud_error"
+        app:focusBorderColor="@color/homecloud_input_stroke_focused"
+        app:focusBorderWidth="3dp"
+        app:cornerRadius="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/messageTextView">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/codeEditText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="number"
-            android:maxLength="6"
-            tools:text="876123" />
-
-    </com.google.android.material.textfield.TextInputLayout>
+        app:layout_constraintTop_toBottomOf="@id/messageTextView"/>
 
     <com.google.android.material.progressindicator.CircularProgressIndicator
         android:id="@+id/allowLoading"
@@ -67,10 +56,8 @@
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@id/allowButton"
-        app:layout_constraintEnd_toEndOf="@id/allowButton"
-        app:layout_constraintTop_toBottomOf="@id/codeInputLayout"/>
+        app:layout_constraintTop_toBottomOf="@id/codeEditVerification"/>
 
-    <!-- Action Buttons -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/allowButton"
         style="@style/Button.Borderless"
@@ -80,7 +67,7 @@
         android:text="@string/homecloud_button_allow_access"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/codeInputLayout" />
+        app:layout_constraintTop_toBottomOf="@id/codeEditVerification" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/skipButton"

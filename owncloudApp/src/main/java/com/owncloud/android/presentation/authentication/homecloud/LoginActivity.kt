@@ -43,7 +43,6 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
 
     private lateinit var binding: AccountSetupHomecloudBinding
     private val dialogBinding by lazy { AccountDialogCodeBinding.inflate(layoutInflater) }
-    private var codeTextWatcher: TextWatcher? = null
 
     private val adapter by lazy {
         ServerAddressAdapter(
@@ -172,17 +171,12 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
     }
 
     private fun showCodeDialog() {
-        dialogBinding.codeEditText.removeTextChangedListener(codeTextWatcher)
-        dialogBinding.codeEditText.setText("")
-        codeTextWatcher = dialogBinding.codeEditText.doAfterTextChanged {
-            val isNotEmpty = it.toString().isNotEmpty()
-            dialogBinding.allowButton.isEnabled = isNotEmpty
-            if (isNotEmpty) {
-                dialogBinding.codeInputLayout.error = null
-            }
+        dialogBinding.codeEditVerification.clearCode()
+        dialogBinding.codeEditVerification.onCodeChangedListener = { code ->
+            dialogBinding.allowButton.isEnabled = code.isNotEmpty()
         }
         dialogBinding.allowButton.setOnClickListener {
-            loginViewModel.onCodeEntered(dialogBinding.codeEditText.text.toString())
+            loginViewModel.onCodeEntered(dialogBinding.codeEditVerification.getCode())
         }
         dialogBinding.skipButton.setOnClickListener {
             loginViewModel.onSkipClicked()
@@ -190,6 +184,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         dialog.setOnDismissListener {
             loginViewModel.onCodeDialogDismissed()
         }
+        dialogBinding.allowButton.isEnabled = dialogBinding.codeEditVerification.getCode().isNotEmpty()
         dialog.show()
     }
 
@@ -203,7 +198,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
                 binding.accountUsernameContainer.visibility = View.VISIBLE
                 binding.accountUsernameText.visibility = View.GONE
                 binding.accountUsername.updateTextIfDiffers(state.username)
-                
+
                 binding.backButton.visibility = View.GONE
                 binding.accountUsernameContainer.error = state.errorEmailInvalidMessage
                 binding.loginStateGroup.visibility = View.GONE
@@ -214,7 +209,11 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
                 binding.actionButton.isEnabled = state.username.isNotEmpty() && Patterns.EMAIL_ADDRESS.matcher(state.username).matches()
                 binding.serversRefreshButton.visibility = View.INVISIBLE
                 binding.serversRefreshLoading.visibility = View.GONE
-                dialogBinding.codeInputLayout.error = state.errorCodeMessage
+                if (state.errorCodeMessage == null) {
+                    dialogBinding.codeEditVerification.clearError()
+                } else {
+                    dialogBinding.codeEditVerification.setError(state.errorCodeMessage)
+                }
                 binding.accountUsername.isEnabled = true
             }
 
@@ -223,7 +222,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
                 binding.accountUsernameContainer.visibility = View.GONE
                 binding.accountUsernameText.visibility = View.VISIBLE
                 binding.accountUsernameText.text = state.username
-                
+
                 binding.backButton.visibility = View.VISIBLE
                 updateServers(state.servers)
                 binding.accountPassword.updateTextIfDiffers(state.password)
@@ -234,7 +233,6 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
                 }
                 binding.serversRefreshButton.visibility = if (state.isRefreshServersLoading) View.INVISIBLE else View.VISIBLE
                 binding.serversRefreshLoading.visibility = if (state.isRefreshServersLoading) View.VISIBLE else View.GONE
-
                 if (state.isLoading) {
                     binding.backButton.visibility = View.GONE
                     binding.loadingLayout.visibility = View.VISIBLE
