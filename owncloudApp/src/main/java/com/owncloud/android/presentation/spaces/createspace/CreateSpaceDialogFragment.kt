@@ -65,7 +65,7 @@ class CreateSpaceDialogFragment : DialogFragment() {
                 updateUI()
                 createSpaceDialogQuotaNoRestrictionLabel.isVisible = !isChecked
                 createSpaceDialogQuotaLayout.isVisible = isChecked
-                createSpaceDialogQuotaGbLabel.isVisible = isChecked
+                createSpaceDialogQuotaUnitLabel.isVisible = isChecked
             }
 
             if (isEditMode) {

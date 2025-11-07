@@ -169,7 +169,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
-                android:id="@+id/create_space_dialog_quota_gb_label"
+                android:id="@+id/create_space_dialog_quota_unit_label"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginTop="@dimen/standard_half_margin"
