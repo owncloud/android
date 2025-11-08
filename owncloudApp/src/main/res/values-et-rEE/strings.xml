@@ -783,6 +783,9 @@
   <string name="edit_space">Muuda ruumi</string>
   <string name="edit_space_correctly">Ruum muudetud korrektselt</string>
   <string name="edit_space_failed">Ruumi ei õnnestunud uuendada</string>
+  <string name="edit_space_image">Muuda pilti</string>
+  <string name="edit_space_image_correctly">Pildi uuendamine õnnestus</string>
+  <string name="edit_space_image_failed">Pildi muutmine ebaõnnestus</string>
   <string name="disable_space">Lülita ruum välja</string>
   <string name="disable_space_dialog_title">Kas soovid tõesti ruumi %1$s välja lülitada?</string>
   <string name="disable_space_dialog_message">Kui sa lülitad valitud ruumi välja, siis ligipääs ruumile kaob. Ligipääs säilib ainult ruumide halduritele. Märkus: faile serverist ei kustutata.</string>

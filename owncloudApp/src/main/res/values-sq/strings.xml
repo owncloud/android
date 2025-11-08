@@ -781,6 +781,9 @@
   <string name="edit_space">Përpunoni hapësirë</string>
   <string name="edit_space_correctly">Hapësira u përditësua saktësisht</string>
   <string name="edit_space_failed">Hapësira s’u përditësua dot</string>
+  <string name="edit_space_image">Përpunoni figurën</string>
+  <string name="edit_space_image_correctly">Figura u përditësua saktë</string>
+  <string name="edit_space_image_failed">Figura s’u përditësua dot</string>
   <string name="disable_space">Çaktivizoje hapësirën</string>
   <string name="disable_space_dialog_title">Doni vërtet të çaktivizohet hapësira: %1$s?</string>
   <string name="disable_space_dialog_message">Nëse çaktivizoni hapësirën e përzgjedhur, s’mund të përdoret më. Vetëm përgjegjës Hapësirash do të munden ende të hyjnë në të. Shënim: S’do të fshihen kartela në shërbyes.</string>
