@@ -4,8 +4,10 @@
  * @author Bartek Przybylski
  * @author David A. Velasco
  * @author David González Verdugo
+ * @author Jorge Aguado Recio
+ *
  * Copyright (C) 2011  Bartek Przybylski
- * Copyright (C) 2020 ownCloud GmbH.
+ * Copyright (C) 2025 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -27,6 +29,7 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.text.format.DateUtils;
 import android.util.DisplayMetrics;
+import android.util.Pair;
 
 import androidx.core.content.ContextCompat;
 import com.google.android.material.snackbar.Snackbar;
@@ -35,6 +38,8 @@ import com.owncloud.android.R;
 
 import java.io.File;
 import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
 import java.net.IDN;
 import java.text.DateFormat;
 import java.util.Calendar;
@@ -49,7 +54,7 @@ public class DisplayUtils {
 
     private static final String OWNCLOUD_APP_NAME = "ownCloud";
 
-    private static final String[] sizeSuffixes = {"B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"};
+    public static final String[] sizeSuffixes = {"B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"};
     private static final int[] sizeScales = {0, 0, 1, 1, 1, 2, 2, 2, 2};
 
     private static Map<String, String> mimeType2HumanReadable;
@@ -256,8 +261,22 @@ public class DisplayUtils {
         }
     }
 
-    public static String formatFromBytesToGb(long bytes) {
-        BigDecimal valueInGB = new BigDecimal(bytes).divide(BigDecimal.valueOf(1_000_000_000L)).stripTrailingZeros();
-        return valueInGB.toPlainString();
+    public static Pair<String, String> formatFromBytes(long bytes) {
+        BigDecimal value = new BigDecimal(bytes);
+        BigDecimal baseUnit = new BigDecimal(1000L);
+        int unitIndex = 0;
+
+        while (value.compareTo(baseUnit) >= 0 && unitIndex < sizeSuffixes.length - 1) {
+            value = value.divide(baseUnit);
+            unitIndex++;
+        }
+
+        if (value.compareTo(BigDecimal.ONE) >= 0) {
+            value = value.setScale(1, RoundingMode.HALF_UP);
+        } else {
+            value = value.round(new MathContext(1, RoundingMode.HALF_UP));
+        }
+
+        return new Pair<>(value.stripTrailingZeros().toPlainString(), sizeSuffixes[unitIndex]);
     }
 }
