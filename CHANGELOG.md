@@ -124,8 +124,10 @@ ownCloud admins and users.
 
    https://github.com/owncloud/android/issues/4607
    https://github.com/owncloud/android/issues/4688
+   https://github.com/owncloud/android/issues/4695
    https://github.com/owncloud/android/pull/4687
    https://github.com/owncloud/android/pull/4694
+   https://github.com/owncloud/android/pull/4713
 
 * Enhancement - Disable/Remove a space: [#4611](https://github.com/owncloud/android/issues/4611)
 
