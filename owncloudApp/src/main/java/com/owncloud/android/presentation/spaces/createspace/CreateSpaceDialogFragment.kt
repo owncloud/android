@@ -78,7 +78,9 @@ class CreateSpaceDialogFragment : DialogFragment() {
                     val totalQuota = it.quota?.total ?: 0L
                     if (totalQuota != 0L) {
                         createSpaceDialogQuotaSwitch.isChecked = true
-                        createSpaceDialogQuotaValue.setText(DisplayUtils.formatFromBytesToGb(totalQuota))
+                        val formattedQuota = DisplayUtils.formatFromBytes(totalQuota)
+                        createSpaceDialogQuotaValue.setText(formattedQuota.first)
+                        createSpaceDialogQuotaUnitLabel.text = formattedQuota.second
                     }
                 }
 
@@ -91,7 +93,8 @@ class CreateSpaceDialogFragment : DialogFragment() {
             createSpaceButton.setOnClickListener {
                 val spaceName = createSpaceDialogNameValue.text.toString()
                 val spaceSubtitle = createSpaceDialogSubtitleValue.text.toString()
-                val spaceQuota = if (createSpaceDialogQuotaSwitch.isChecked) convertToBytes(createSpaceDialogQuotaValue.text.toString()) else 0L
+                val spaceQuota = if (createSpaceDialogQuotaSwitch.isChecked) convertToBytes(createSpaceDialogQuotaValue.text.toString(),
+                        createSpaceDialogQuotaUnitLabel.text.toString()) else 0L
 
                 if (isEditMode) {
                     currentSpace?.let {
@@ -152,9 +155,18 @@ class CreateSpaceDialogFragment : DialogFragment() {
         }
     }
 
-    private fun convertToBytes(spaceQuota: String): Long {
-        val quotaNumber = spaceQuota.toDoubleOrNull() ?: return 0L
-        return (quotaNumber * 1_000_000_000L).toLong()
+    private fun convertToBytes(spaceQuotaValue: String, spaceQuotaUnit: String): Long {
+        val quotaNumber = spaceQuotaValue.toDoubleOrNull() ?: return 0L
+        val multiplier = when (spaceQuotaUnit) {
+            DisplayUtils.sizeSuffixes[0] -> B_MULTIPLIER
+            DisplayUtils.sizeSuffixes[1] -> KB_MULTIPLIER
+            DisplayUtils.sizeSuffixes[2] -> MB_MULTIPLIER
+            DisplayUtils.sizeSuffixes[3] -> GB_MULTIPLIER
+            DisplayUtils.sizeSuffixes[4] -> TB_MULTIPLIER
+            DisplayUtils.sizeSuffixes[5] -> PB_MULTIPLIER
+            else -> B_MULTIPLIER
+        }
+        return (quotaNumber * multiplier).toLong()
     }
 
     interface CreateSpaceListener {
@@ -169,6 +181,12 @@ class CreateSpaceDialogFragment : DialogFragment() {
         private const val FORBIDDEN_CHARACTERS = """[/\\.:?*"'><|]"""
         private const val MIN_SPACE_QUOTA_GB = 0.0
         private const val MAX_SPACE_QUOTA_GB = 1_000_000.0
+        private const val B_MULTIPLIER = 1L
+        private const val KB_MULTIPLIER = 1_000L
+        private const val MB_MULTIPLIER = 1_000_000L
+        private const val GB_MULTIPLIER = 1_000_000_000L
+        private const val TB_MULTIPLIER = 1_000_000_000_000L
+        private const val PB_MULTIPLIER = 1_000_000_000_000_000L
 
         fun newInstance(
             isEditMode: Boolean,

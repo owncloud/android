@@ -29,6 +29,7 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.text.format.DateUtils;
 import android.util.DisplayMetrics;
+import android.util.Pair;
 
 import androidx.core.content.ContextCompat;
 import com.google.android.material.snackbar.Snackbar;
@@ -53,7 +54,7 @@ public class DisplayUtils {
 
     private static final String OWNCLOUD_APP_NAME = "ownCloud";
 
-    private static final String[] sizeSuffixes = {"B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"};
+    public static final String[] sizeSuffixes = {"B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"};
     private static final int[] sizeScales = {0, 0, 1, 1, 1, 2, 2, 2, 2};
 
     private static Map<String, String> mimeType2HumanReadable;
@@ -260,12 +261,22 @@ public class DisplayUtils {
         }
     }
 
-    public static String formatFromBytesToGb(long bytes) {
-        BigDecimal valueInGB = new BigDecimal(bytes).divide(BigDecimal.valueOf(1_000_000_000L));
-        if (valueInGB.compareTo(BigDecimal.ONE) >= 0) {
-            return valueInGB.setScale(1, RoundingMode.HALF_UP).stripTrailingZeros().toPlainString();
-        } else {
-            return valueInGB.round(new MathContext(1, RoundingMode.HALF_UP)).stripTrailingZeros().toPlainString();
+    public static Pair<String, String> formatFromBytes(long bytes) {
+        BigDecimal value = new BigDecimal(bytes);
+        BigDecimal baseUnit = new BigDecimal(1000L);
+        int unitIndex = 0;
+
+        while (value.compareTo(baseUnit) >= 0 && unitIndex < sizeSuffixes.length - 1) {
+            value = value.divide(baseUnit);
+            unitIndex++;
         }
+
+        if (value.compareTo(BigDecimal.ONE) >= 0) {
+            value = value.setScale(1, RoundingMode.HALF_UP);
+        } else {
+            value = value.round(new MathContext(1, RoundingMode.HALF_UP));
+        }
+
+        return new Pair<>(value.stripTrailingZeros().toPlainString(), sizeSuffixes[unitIndex]);
     }
 }
