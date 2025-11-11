@@ -171,8 +171,9 @@ class SpacesListFragment :
 
     private fun subscribeToViewModels() {
         collectLatestLifecycleFlow(spacesListViewModel.spacesList) { uiState ->
+            var spacesToListFiltered: List<OCSpace>
             if (uiState.searchFilter != "") {
-                var spacesToListFiltered =
+                spacesToListFiltered =
                     uiState.spaces.filter { it.name.lowercase().contains(uiState.searchFilter.lowercase()) && !it.isPersonal &&
                             shouldShowDisabledSpace(it) }
                 val personalSpace = uiState.spaces.find { it.isPersonal }
@@ -184,8 +185,9 @@ class SpacesListFragment :
                 showOrHideEmptyView(spacesToListFiltered)
                 spacesListAdapter.setData(spacesToListFiltered, isMultiPersonal)
             } else {
-                showOrHideEmptyView(uiState.spaces)
-                spacesListAdapter.setData(uiState.spaces.filter { shouldShowDisabledSpace(it) }, isMultiPersonal)
+                spacesToListFiltered = uiState.spaces.filter { shouldShowDisabledSpace(it) }
+                showOrHideEmptyView(spacesToListFiltered)
+                spacesListAdapter.setData(spacesToListFiltered, isMultiPersonal)
             }
             binding.swipeRefreshSpacesList.isRefreshing = uiState.refreshing
             uiState.error?.let { showErrorInSnackbar(R.string.spaces_sync_failed, it) }
