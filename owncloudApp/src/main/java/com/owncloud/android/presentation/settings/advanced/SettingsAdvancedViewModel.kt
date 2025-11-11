@@ -23,6 +23,7 @@ package com.owncloud.android.presentation.settings.advanced
 
 import androidx.lifecycle.ViewModel
 import com.owncloud.android.data.providers.SharedPreferencesProvider
+import com.owncloud.android.presentation.settings.advanced.SettingsAdvancedFragment.Companion.PREF_SHOW_DISABLED_SPACES
 import com.owncloud.android.presentation.settings.advanced.SettingsAdvancedFragment.Companion.PREF_SHOW_HIDDEN_FILES
 import com.owncloud.android.providers.WorkManagerProvider
 import com.owncloud.android.workers.RemoveLocallyFilesWithLastUsageOlderThanGivenTimeWorker.Companion.DELETE_FILES_OLDER_GIVEN_TIME_WORKER
@@ -37,6 +38,10 @@ class SettingsAdvancedViewModel(
 
     fun setShowHiddenFiles(hide: Boolean) {
         preferencesProvider.putBoolean(PREF_SHOW_HIDDEN_FILES, hide)
+    }
+
+    fun setShowDisabledSpaces(showDisabledSpaces: Boolean) {
+        preferencesProvider.putBoolean(PREF_SHOW_DISABLED_SPACES, showDisabledSpaces)
     }
 
     fun scheduleDeleteLocalFiles(newValue: String) {

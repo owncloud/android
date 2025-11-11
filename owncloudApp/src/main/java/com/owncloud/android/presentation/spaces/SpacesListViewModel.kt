@@ -23,6 +23,7 @@ package com.owncloud.android.presentation.spaces
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.owncloud.android.data.providers.SharedPreferencesProvider
 import com.owncloud.android.domain.BaseUseCaseWithResult
 import com.owncloud.android.domain.UseCaseResult
 import com.owncloud.android.domain.capabilities.usecases.GetStoredCapabilitiesUseCase
@@ -47,6 +48,7 @@ import com.owncloud.android.domain.user.usecases.GetUserPermissionsAsyncUseCase
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.ViewModelExt.runUseCaseWithResult
 import com.owncloud.android.presentation.common.UIResult
+import com.owncloud.android.presentation.settings.advanced.SettingsAdvancedFragment.Companion.PREF_SHOW_DISABLED_SPACES
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -71,6 +73,7 @@ class SpacesListViewModel(
     private val disableSpaceUseCase: DisableSpaceUseCase,
     private val enableSpaceUseCase: EnableSpaceUseCase,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
+    private val sharedPreferencesProvider: SharedPreferencesProvider,
     private val accountName: String,
     private val showPersonalSpace: Boolean,
 ) : ViewModel() {
@@ -105,6 +108,8 @@ class SpacesListViewModel(
 
     private val _deleteSpaceFlow = MutableSharedFlow<Event<UIResult<Unit>>?>()
     val deleteSpaceFlow: SharedFlow<Event<UIResult<Unit>>?> = _deleteSpaceFlow
+
+    val showDisabledSpaces = sharedPreferencesProvider.getBoolean(PREF_SHOW_DISABLED_SPACES, false)
 
     init {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {

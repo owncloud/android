@@ -77,6 +77,11 @@ class SettingsAdvancedFragment : PreferenceFragmentCompat() {
             true
         }
 
+        prefShowDisabledSpaces?.setOnPreferenceChangeListener { _: Preference?, newValue: Any ->
+            advancedViewModel.setShowDisabledSpaces(newValue as Boolean)
+            true
+        }
+
         prefRemoveLocalFiles?.setOnPreferenceChangeListener { preference: Preference?, newValue: Any ->
             val index = (preference as ListPreference).findIndexOfValue(newValue as String)
             preference.summary = getString(R.string.prefs_delete_local_files_summary, preference.entries[index])
