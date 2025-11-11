@@ -3,8 +3,9 @@
  *
  * @author David Crespo Ríos
  * @author Aitor Ballesteros Pavón
+ * @author Jorge Aguado Recio
  *
- * Copyright (C) 2024 ownCloud GmbH.
+ * Copyright (C) 2025 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -36,6 +37,7 @@ class SettingsAdvancedFragment : PreferenceFragmentCompat() {
     private val advancedViewModel by viewModel<SettingsAdvancedViewModel>()
 
     private var prefShowHiddenFiles: SwitchPreferenceCompat? = null
+    private var prefShowDisabledSpaces: SwitchPreferenceCompat? = null
     private var prefRemoveLocalFiles: ListPreference? = null
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
@@ -59,6 +61,7 @@ class SettingsAdvancedFragment : PreferenceFragmentCompat() {
             ).toTypedArray()
             summary = getString(R.string.prefs_delete_local_files_summary, this.entry)
         }
+        prefShowDisabledSpaces = findPreference(PREF_SHOW_DISABLED_SPACES)
         initPreferenceListeners()
     }
 
@@ -84,5 +87,6 @@ class SettingsAdvancedFragment : PreferenceFragmentCompat() {
 
     companion object {
         const val PREF_SHOW_HIDDEN_FILES = "show_hidden_files"
+        const val PREF_SHOW_DISABLED_SPACES = "show_disabled_spaces"
     }
 }
