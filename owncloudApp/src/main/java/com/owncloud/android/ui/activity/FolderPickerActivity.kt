@@ -6,8 +6,9 @@
  * @author Abel García de Prada
  * @author Juan Carlos Garrote Gascón
  * @author Aitor Ballesteros Pavón
+ * @author Jorge Aguado Recio
  *
- * Copyright (C) 2023 ownCloud GmbH.
+ * Copyright (C) 2025 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -272,7 +273,7 @@ open class FolderPickerActivity : FileActivity(),
         val accountNameIntent = intent.getStringExtra(KEY_ACCOUNT_NAME)
         val accountName = accountNameIntent ?: AccountUtils.getCurrentOwnCloudAccount(applicationContext).name
 
-        val listOfSpaces = SpacesListFragment.newInstance(showPersonalSpace = true, accountName = accountName)
+        val listOfSpaces = SpacesListFragment.newInstance(showPersonalSpace = true, isPickerMode = true, accountName = accountName)
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.fragment_container, listOfSpaces)
         transaction.commit()
