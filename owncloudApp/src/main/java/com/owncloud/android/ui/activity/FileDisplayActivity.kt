@@ -407,6 +407,7 @@ class FileDisplayActivity : FileActivity(),
     private fun initAndShowListOfSpaces() {
         val listOfSpaces = SpacesListFragment.newInstance(
             showPersonalSpace = false,
+            isPickerMode = false,
             accountName = com.owncloud.android.presentation.authentication.AccountUtils.getCurrentOwnCloudAccount(applicationContext).name
         ).apply {
             setSearchListener(findViewById(R.id.root_toolbar_search_view))

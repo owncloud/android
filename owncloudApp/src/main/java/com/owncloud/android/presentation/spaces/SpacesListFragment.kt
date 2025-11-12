@@ -149,7 +149,7 @@ class SpacesListFragment :
     private fun initViews() {
         setHasOptionsMenu(true)
         setSpacesLayout(resources.configuration)
-        spacesListAdapter = SpacesListAdapter(this)
+        spacesListAdapter = SpacesListAdapter(this, isPickerMode())
         binding.recyclerSpacesList.adapter = spacesListAdapter
 
         binding.swipeRefreshSpacesList.setOnRefreshListener {
@@ -220,7 +220,7 @@ class SpacesListFragment :
                     is UIResult.Success -> {
                         Timber.d("The permissions for $accountName are: ${uiResult.data}")
                         uiResult.data?.let {
-                            binding.fabCreateSpace.isVisible = it.contains(DRIVES_CREATE_ALL_PERMISSION)
+                            binding.fabCreateSpace.isVisible = it.contains(DRIVES_CREATE_ALL_PERMISSION) && !isPickerMode()
                             if(it.contains(DRIVES_READ_WRITE_ALL_PERMISSION)) userPermissions.add(UserPermissions.CAN_EDIT_SPACES)
                             editQuotaPermission = it.contains(DRIVES_READ_WRITE_PROJECT_QUOTA_ALL_PERMISSION)
                             if(it.contains(DRIVES_DELETE_PROJECT_ALL_PERMISSION)) userPermissions.add(UserPermissions.CAN_DELETE_SPACES)
@@ -452,10 +452,13 @@ class SpacesListFragment :
 
     private fun shouldShowDisabledSpace(space: OCSpace): Boolean = !space.isDisabled || spacesListViewModel.showDisabledSpaces
 
+    private fun isPickerMode(): Boolean = requireArguments().getBoolean(BUNDLE_IS_PICKER_MODE, false)
+
     companion object {
         const val REQUEST_KEY_CLICK_SPACE = "REQUEST_KEY_CLICK_SPACE"
         const val BUNDLE_KEY_CLICK_SPACE = "BUNDLE_KEY_CLICK_SPACE"
         const val BUNDLE_SHOW_PERSONAL_SPACE = "showPersonalSpace"
+        const val BUNDLE_IS_PICKER_MODE = "isPickerMode"
         const val BUNDLE_ACCOUNT_NAME = "accountName"
         const val DRIVES_CREATE_ALL_PERMISSION = "Drives.Create.all"
         const val DRIVES_READ_WRITE_ALL_PERMISSION = "Drives.ReadWrite.all"
@@ -467,10 +470,12 @@ class SpacesListFragment :
 
         fun newInstance(
             showPersonalSpace: Boolean,
+            isPickerMode: Boolean,
             accountName: String
         ): SpacesListFragment {
             val args = Bundle().apply {
                 putBoolean(BUNDLE_SHOW_PERSONAL_SPACE, showPersonalSpace)
+                putBoolean(BUNDLE_IS_PICKER_MODE, isPickerMode)
                 putString(BUNDLE_ACCOUNT_NAME, accountName)
             }
             return SpacesListFragment().apply { arguments = args }

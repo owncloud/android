@@ -41,6 +41,7 @@ import com.owncloud.android.utils.PreferenceUtils
 
 class SpacesListAdapter(
     private val listener: SpacesListAdapterListener,
+    private val isPickerMode: Boolean
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val spacesList = mutableListOf<OCSpace>()
@@ -96,6 +97,10 @@ class SpacesListAdapter(
                         setBackgroundColor(ContextCompat.getColor(spacesViewHolder.itemView.context, R.color.spaces_card_background_color))
                     }
                 }
+            }
+
+            if (isPickerMode) {
+                spacesThreeDotMenu.visibility = View.GONE
             }
 
             spacesThreeDotMenu.setOnClickListener {
