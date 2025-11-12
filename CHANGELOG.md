@@ -51,6 +51,7 @@ ownCloud admins and users.
 * Enhancement - Update space image: [#4691](https://github.com/owncloud/android/issues/4691)
 * Enhancement - Show space quota: [#4693](https://github.com/owncloud/android/issues/4693)
 * Enhancement - Add user role to spaces: [#4698](https://github.com/owncloud/android/pull/4698)
+* Enhancement - New setting to show disabled spaces: [#4711](https://github.com/owncloud/android/issues/4711)
 * Enhancement - Cancellation policy for CI workflows: [#4712](https://github.com/owncloud/android/pull/4712)
 
 ## Details
@@ -161,6 +162,14 @@ ownCloud admins and users.
    the spaces table in the database.
 
    https://github.com/owncloud/android/pull/4698
+
+* Enhancement - New setting to show disabled spaces: [#4711](https://github.com/owncloud/android/issues/4711)
+
+   A new setting has been added to the advanced section that allows space managers
+   to show or hide disabled spaces in the spaces list.
+
+   https://github.com/owncloud/android/issues/4711
+   https://github.com/owncloud/android/pull/4714
 
 * Enhancement - Cancellation policy for CI workflows: [#4712](https://github.com/owncloud/android/pull/4712)
 

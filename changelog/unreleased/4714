@@ -1,0 +1,7 @@
+Enhancement: New setting to show disabled spaces
+
+A new setting has been added to the advanced section that allows space
+managers to show or hide disabled spaces in the spaces list.
+
+https://github.com/owncloud/android/issues/4711
+https://github.com/owncloud/android/pull/4714

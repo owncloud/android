@@ -171,9 +171,11 @@ class SpacesListFragment :
 
     private fun subscribeToViewModels() {
         collectLatestLifecycleFlow(spacesListViewModel.spacesList) { uiState ->
+            var spacesToListFiltered: List<OCSpace>
             if (uiState.searchFilter != "") {
-                var spacesToListFiltered =
-                    uiState.spaces.filter { it.name.lowercase().contains(uiState.searchFilter.lowercase()) && !it.isPersonal }
+                spacesToListFiltered =
+                    uiState.spaces.filter { it.name.lowercase().contains(uiState.searchFilter.lowercase()) && !it.isPersonal &&
+                            shouldShowDisabledSpace(it) }
                 val personalSpace = uiState.spaces.find { it.isPersonal }
                 personalSpace?.let {
                     spacesToListFiltered = spacesToListFiltered.toMutableList().apply {
@@ -183,8 +185,9 @@ class SpacesListFragment :
                 showOrHideEmptyView(spacesToListFiltered)
                 spacesListAdapter.setData(spacesToListFiltered, isMultiPersonal)
             } else {
-                showOrHideEmptyView(uiState.spaces)
-                spacesListAdapter.setData(uiState.spaces, isMultiPersonal)
+                spacesToListFiltered = uiState.spaces.filter { shouldShowDisabledSpace(it) }
+                showOrHideEmptyView(spacesToListFiltered)
+                spacesListAdapter.setData(spacesToListFiltered, isMultiPersonal)
             }
             binding.swipeRefreshSpacesList.isRefreshing = uiState.refreshing
             uiState.error?.let { showErrorInSnackbar(R.string.spaces_sync_failed, it) }
@@ -446,6 +449,8 @@ class SpacesListFragment :
         }
         binding.fileOptionsBottomSheetLayout.addView(fileOptionItemView)
     }
+
+    private fun shouldShowDisabledSpace(space: OCSpace): Boolean = !space.isDisabled || spacesListViewModel.showDisabledSpaces
 
     companion object {
         const val REQUEST_KEY_CLICK_SPACE = "REQUEST_KEY_CLICK_SPACE"
