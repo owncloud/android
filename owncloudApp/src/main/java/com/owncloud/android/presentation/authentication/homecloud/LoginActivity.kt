@@ -3,7 +3,6 @@ package com.owncloud.android.presentation.authentication.homecloud
 import android.accounts.AccountManager
 import android.content.Intent
 import android.os.Bundle
-import android.text.TextWatcher
 import android.util.Patterns
 import android.view.View
 import androidx.activity.addCallback
@@ -18,7 +17,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.owncloud.android.R
 import com.owncloud.android.databinding.AccountDialogCodeBinding
 import com.owncloud.android.databinding.AccountSetupHomecloudBinding
-import com.owncloud.android.domain.server.model.Server
+import com.owncloud.android.domain.device.model.Device
 import com.owncloud.android.extensions.applyStatusBarInsets
 import com.owncloud.android.extensions.checkPasscodeEnforced
 import com.owncloud.android.extensions.manageOptionLockSelected
@@ -45,7 +44,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
     private val dialogBinding by lazy { AccountDialogCodeBinding.inflate(layoutInflater) }
 
     private val adapter by lazy {
-        ServerAddressAdapter(
+        DeviceAddressAdapter(
             this, mutableListOf()
         )
     }
@@ -124,8 +123,8 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
 
         binding.hostUrlInput.setAdapter(adapter)
         binding.hostUrlInput.setOnItemClickListener { parent, view, position, id ->
-            val selectedServer = parent.getItemAtPosition(position) as Server
-            loginViewModel.onServerSelected(selectedServer)
+            val selectedDevice = parent.getItemAtPosition(position) as Device
+            loginViewModel.onDeviceSelected(selectedDevice)
         }
         binding.hostUrlInput.doAfterTextChanged { text ->
             loginViewModel.onServerUrlChanged(text.toString())
@@ -161,9 +160,9 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         launchFileDisplayActivity()
     }
 
-    private fun updateServers(servers: List<Server>) {
-        adapter.setServers(servers)
-        binding.hostUrlInputLayout.startIconDrawable = if (servers.isEmpty()) null else ContextCompat.getDrawable(this, R.drawable.ic_device)
+    private fun updateDevices(devices: List<Device>) {
+        adapter.setDevices(devices)
+        binding.hostUrlInputLayout.startIconDrawable = if (devices.isEmpty()) null else ContextCompat.getDrawable(this, R.drawable.ic_device)
     }
 
     private fun hideCodeDialog() {
@@ -224,12 +223,12 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
                 binding.accountUsernameText.text = state.username
 
                 binding.backButton.visibility = View.VISIBLE
-                updateServers(state.servers)
+                updateDevices(state.devices)
                 binding.accountPassword.updateTextIfDiffers(state.password)
-                if (state.selectedServer == null) {
+                if (state.selectedDevice == null) {
                     binding.hostUrlInput.updateTextIfDiffers(state.serverUrl)
                 } else {
-                    binding.hostUrlInput.updateTextIfDiffers(state.selectedServer.hostName)
+                    binding.hostUrlInput.updateTextIfDiffers(state.selectedDevice.name)
                 }
                 binding.serversRefreshButton.visibility = if (state.isRefreshServersLoading) View.INVISIBLE else View.VISIBLE
                 binding.serversRefreshLoading.visibility = if (state.isRefreshServersLoading) View.VISIBLE else View.GONE
@@ -246,7 +245,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
                     binding.loginStateGroup.visibility = View.VISIBLE
                     binding.actionButton.setText(R.string.setup_btn_login)
                     binding.actionButton.isEnabled = state.username.isNotEmpty() && state.password.isNotEmpty() &&
-                            (state.selectedServer != null || state.serverUrl.isNotEmpty()) && Patterns.EMAIL_ADDRESS.matcher(state.username).matches()
+                            (state.selectedDevice != null || state.serverUrl.isNotEmpty()) && Patterns.EMAIL_ADDRESS.matcher(state.username).matches()
                 }
             }
         }

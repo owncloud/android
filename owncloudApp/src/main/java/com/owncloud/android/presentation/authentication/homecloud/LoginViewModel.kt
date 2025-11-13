@@ -9,6 +9,8 @@ import com.owncloud.android.R
 import com.owncloud.android.domain.authentication.usecases.LoginBasicAsyncUseCase
 import com.owncloud.android.domain.capabilities.usecases.GetStoredCapabilitiesUseCase
 import com.owncloud.android.domain.capabilities.usecases.RefreshCapabilitiesFromServerAsyncUseCase
+import com.owncloud.android.domain.device.SaveCurrentDeviceUseCase
+import com.owncloud.android.domain.device.model.Device
 import com.owncloud.android.domain.exceptions.NoNetworkConnectionException
 import com.owncloud.android.domain.exceptions.OwncloudVersionNotSupportedException
 import com.owncloud.android.domain.exceptions.SSLErrorCode
@@ -19,8 +21,7 @@ import com.owncloud.android.domain.mdnsdiscovery.usecases.DiscoverLocalNetworkDe
 import com.owncloud.android.domain.remoteaccess.usecases.GetExistingRemoveAccessUserUseCase
 import com.owncloud.android.domain.remoteaccess.usecases.GetRemoteAccessTokenUseCase
 import com.owncloud.android.domain.remoteaccess.usecases.InitiateRemoteAccessAuthenticationUseCase
-import com.owncloud.android.domain.server.model.Server
-import com.owncloud.android.domain.server.usecases.GetAvailableServersUseCase
+import com.owncloud.android.domain.server.usecases.GetAvailableDevicesUseCase
 import com.owncloud.android.domain.server.usecases.GetServerInfoAsyncUseCase
 import com.owncloud.android.domain.spaces.usecases.RefreshSpacesFromServerAsyncUseCase
 import com.owncloud.android.extensions.parseError
@@ -53,8 +54,9 @@ class LoginViewModel(
     private val contextProvider: ContextProvider,
     private val initiateRemoteAccessAuthenticationUseCase: InitiateRemoteAccessAuthenticationUseCase,
     private val getRemoteAccessTokenUseCase: GetRemoteAccessTokenUseCase,
-    private val getServersUseCase: GetAvailableServersUseCase,
+    private val getServersUseCase: GetAvailableDevicesUseCase,
     private val getExistingRemoveAccessUserUseCase: GetExistingRemoveAccessUserUseCase,
+    private val saveCurrentDeviceUseCase: SaveCurrentDeviceUseCase,
     private val savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
@@ -122,22 +124,22 @@ class LoginViewModel(
         }
     }
 
-    fun onServerSelected(selectedServer: Server) {
-        changeServer(selectedServer, selectedServer.hostUrl)
+    fun onDeviceSelected(selectedDevice: Device) {
+        changeDevice(selectedDevice, selectedDevice.preferredPath.hostUrl)
     }
 
     fun onServerUrlChanged(serverUrl: String) {
-        changeServer(null, serverUrl)
+        changeDevice(null, serverUrl)
     }
 
-    private fun changeServer(selectedServer: Server?, hostUrl: String) {
+    private fun changeDevice(selectedDevice: Device?, hostUrl: String) {
         _state.update { currentState ->
             when (currentState) {
                 is LoginScreenState.LoginState -> {
-                    if (selectedServer == null) {
+                    if (selectedDevice == null) {
                         currentState.copy(serverUrl = hostUrl)
                     } else {
-                        currentState.copy(selectedServer = selectedServer, serverUrl = selectedServer.hostUrl)
+                        currentState.copy(selectedDevice = selectedDevice, serverUrl = selectedDevice.preferredPath.hostUrl)
                     }
                 }
 
@@ -217,7 +219,7 @@ class LoginViewModel(
         _state.update {
             LoginScreenState.LoginState(
                 username = currentState.username,
-                servers = currentState.servers
+                devices = currentState.devices
             )
         }
         _events.emit(LoginEvent.DismissCodeDialog)
@@ -237,7 +239,7 @@ class LoginViewModel(
             _state.update {
                 LoginScreenState.LoginState(
                     username = existingUserName,
-                    servers = it.servers
+                    devices = it.devices
                 )
             }
             _events.emit(LoginEvent.DismissCodeDialog)
@@ -254,18 +256,18 @@ class LoginViewModel(
                     serviceName = "HomeCloud",
                     duration = 30.seconds
                 )
-            ).collect { servers ->
-                Timber.d("DEBUG servers: $servers")
+            ).collect { devices ->
+                Timber.d("DEBUG devices: $devices")
                 _state.update { currentState ->
                     when (currentState) {
                         is LoginScreenState.EmailState -> currentState.copy(
-                            servers = servers
+                            devices = devices
                         )
 
                         is LoginScreenState.LoginState -> currentState.copy(
-                            servers = servers,
-                            selectedServer = servers.firstOrNull(),
-                            serverUrl = servers.firstOrNull()?.hostUrl.orEmpty()
+                            devices = devices,
+                            selectedDevice = devices.firstOrNull(),
+                            serverUrl = devices.firstOrNull()?.preferredPath?.hostUrl.orEmpty()
                         )
                     }
                 }
@@ -331,7 +333,7 @@ class LoginViewModel(
             runCatchingException(
                 block = {
                     val serverInfoResult = withContext(coroutinesDispatcherProvider.io) {
-                        val serverUrl = if (currentState.selectedServer != null) currentState.selectedServer.hostUrl else currentState.serverUrl
+                        val serverUrl = if (currentState.selectedDevice != null) currentState.selectedDevice.preferredPath.hostUrl else currentState.serverUrl
                         getServerInfoAsyncUseCase(
                             GetServerInfoAsyncUseCase.Params(
                                 serverPath = serverUrl,
@@ -357,6 +359,7 @@ class LoginViewModel(
                         if (accountNameResult.isSuccess) {
                             val accountName = accountNameResult.getDataOrNull().orEmpty()
                             discoverAccount(accountName, loginAction == ACTION_CREATE)
+                            currentState.selectedDevice?.let { saveCurrentDeviceUseCase(it) }
                             _events.emit(LoginEvent.LoginResult(accountName = accountName))
                         } else {
                             handleLoginError(accountNameResult.getThrowableOrNull())
@@ -445,24 +448,24 @@ class LoginViewModel(
         abstract val username: String
         abstract val errorMessage: String?
 
-        abstract val servers: List<Server>
+        abstract val devices: List<Device>
 
         fun copyState(
             username: String = this.username,
             errorMessage: String? = this.errorMessage,
-            servers: List<Server> = this.servers,
+            devices: List<Device> = this.devices,
         ): LoginScreenState {
             return when (this) {
                 is EmailState -> copy(
                     username = username,
                     errorMessage = errorMessage,
-                    servers = servers
+                    devices = devices
                 )
 
                 is LoginState -> copy(
                     username = username,
                     errorMessage = errorMessage,
-                    servers = servers
+                    devices = devices
                 )
             }
         }
@@ -474,7 +477,7 @@ class LoginViewModel(
             override val errorMessage: String? = null,
             val errorCodeMessage: String? = null,
             val errorEmailInvalidMessage: String? = null,
-            override val servers: List<Server> = emptyList(),
+            override val devices: List<Device> = emptyList(),
         ) : LoginScreenState()
 
         data class LoginState(
@@ -482,10 +485,10 @@ class LoginViewModel(
             val password: String = "",
             val isLoading: Boolean = false,
             val isRefreshServersLoading: Boolean = false,
-            val selectedServer: Server? = null,
+            val selectedDevice: Device? = null,
             val serverUrl: String = "",
             override val errorMessage: String? = null,
-            override val servers: List<Server> = emptyList(),
+            override val devices: List<Device> = emptyList(),
         ) : LoginScreenState()
     }
 

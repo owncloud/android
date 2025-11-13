@@ -1,6 +1,7 @@
 package com.owncloud.android.dependecyinjection
 
 import com.owncloud.android.BuildConfig
+import com.owncloud.android.data.device.CurrentDeviceStorage
 import com.owncloud.android.data.remoteaccess.RemoteAccessTokenStorage
 import com.owncloud.android.data.remoteaccess.datasources.RemoteAccessService
 import com.owncloud.android.data.remoteaccess.interceptor.RemoteAccessAuthInterceptor
@@ -40,6 +41,11 @@ val remoteAccessModule = module {
         RemoteAccessTokenStorage(get())
     }
 
+    // Current Device Storage
+    single {
+        CurrentDeviceStorage(get())
+    }
+
     // Logging interceptor for debugging
     single(named(RemoteAccessQualifiers.LOGGING_INTERCEPTOR)) {
         HttpLoggingInterceptor { message ->
@@ -59,6 +65,7 @@ val remoteAccessModule = module {
     single(named(RemoteAccessQualifiers.TOKEN_REFRESH_INTERCEPTOR)) {
         RemoteAccessTokenRefreshInterceptor(
             tokenStorage = get(),
+            currentDeviceStorage = get(),
             remoteAccessServiceLazy = inject()
         )
     }

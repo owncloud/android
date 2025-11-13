@@ -1,5 +1,6 @@
 package com.owncloud.android.data.remoteaccess.interceptor
 
+import com.owncloud.android.data.device.CurrentDeviceStorage
 import com.owncloud.android.data.remoteaccess.RemoteAccessTokenStorage
 import com.owncloud.android.data.remoteaccess.datasources.REMOTE_ACCESS_PATH_INITIATE
 import com.owncloud.android.data.remoteaccess.datasources.REMOTE_ACCESS_PATH_TOKEN
@@ -26,6 +27,7 @@ import timber.log.Timber
  */
 class RemoteAccessTokenRefreshInterceptor(
     private val tokenStorage: RemoteAccessTokenStorage,
+    private val currentDeviceStorage: CurrentDeviceStorage,
     private val remoteAccessServiceLazy: Lazy<RemoteAccessService>
 ) : Interceptor {
 
@@ -126,10 +128,11 @@ class RemoteAccessTokenRefreshInterceptor(
             } catch (e: Exception) {
                 Timber.e(e, "Failed to refresh token")
                 
-                // If refresh failed with auth error, clear tokens
+                // If refresh failed with auth error, clear tokens and device paths
                 if (e is retrofit2.HttpException && (e.code() == 401 || e.code() == 403)) {
-                    Timber.w("Refresh token is invalid, clearing tokens")
+                    Timber.w("Refresh token is invalid, clearing tokens and device paths")
                     tokenStorage.clearTokens()
+                    currentDeviceStorage.clearDevicePaths()
                 }
                 
                 // Return null to indicate refresh failure

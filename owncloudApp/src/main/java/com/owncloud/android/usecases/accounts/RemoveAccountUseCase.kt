@@ -31,6 +31,7 @@ import com.owncloud.android.domain.BaseUseCase
 import com.owncloud.android.domain.automaticuploads.usecases.GetAutomaticUploadsConfigurationUseCase
 import com.owncloud.android.domain.automaticuploads.usecases.ResetPictureUploadsUseCase
 import com.owncloud.android.domain.automaticuploads.usecases.ResetVideoUploadsUseCase
+import com.owncloud.android.domain.device.CurrentDeviceRepository
 import com.owncloud.android.usecases.transfers.uploads.CancelTransfersFromAccountUseCase
 
 /*
@@ -50,6 +51,7 @@ class RemoveAccountUseCase(
     private val localSpacesDataSource: LocalSpacesDataSource,
     private val localAppRegistryDataSource: LocalAppRegistryDataSource,
     private val localSavedSearchesDataSource: LocalSavedSearchesDataSource,
+    private val currentDeviceRepository: CurrentDeviceRepository,
 ) : BaseUseCase<Unit, RemoveAccountUseCase.Params>() {
 
     override fun run(params: Params) {
@@ -87,6 +89,8 @@ class RemoveAccountUseCase(
 
         // Delete saved searches
         localSavedSearchesDataSource.clearForAccount(params.accountName)
+
+        currentDeviceRepository.clearCurrentDevicePaths()
     }
 
     data class Params(

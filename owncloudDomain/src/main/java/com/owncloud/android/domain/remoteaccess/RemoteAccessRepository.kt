@@ -1,6 +1,6 @@
 package com.owncloud.android.domain.remoteaccess
 
-import com.owncloud.android.domain.server.model.Server
+import com.owncloud.android.domain.device.model.Device
 
 interface RemoteAccessRepository {
     /**
@@ -30,9 +30,14 @@ interface RemoteAccessRepository {
     fun getUserName(): String?
 
     /**
-     * Get all available server urls for all devices
-     * @return a list of available servers
+     * Get all available devices with their access paths
+     * @return a list of available devices
      */
-    suspend fun getAvailableServers(): List<Server>
+    suspend fun getAvailableDevices(): List<Device>
+
+    /**
+     * Clear all stored device paths
+     */
+    fun clearDevicePaths()
 }
 
