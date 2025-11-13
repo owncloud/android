@@ -683,7 +683,6 @@
   <string name="release_notes_icon">Ícone de nota de lançamento</string>
   <string name="release_notes_bugfixes_title">Pequenas correções de bugs</string>
   <string name="release_notes_bugfixes_subtitle">Alguns bugs foram corrigidos para melhorar a experiência no aplicativo</string>
-  <string name="release_notes_4_7_0_title_new_layout_for_spaces">Novo design para lista de espaços</string>
   <string name="release_notes_4_7_0_subtitle_new_layout_for_spaces">Um novo design para usuários do Infinite Scale na lista de espaços, com um botão de três pontos em cada cartão de espaço que abre um menu de opções quando clicado</string>
   <string name="release_notes_4_7_0_title_space_management">Gestão de espaço</string>
   <string name="release_notes_4_7_0_subtitle_space_management">Usuários do Infinite Scale com permissões corretas agora podem gerenciar espaços (criar, editar, desabilitar, habilitar e excluir) diretamente do aplicativo</string>

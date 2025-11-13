@@ -84,7 +84,7 @@
     <string name="prefs_subsection_notifications">Manage notifications</string>
     <string name="prefs_show_hidden_files">Show hidden files</string>
     <string name="prefs_show_disabled_spaces">Show disabled spaces</string>
-    <string name="prefs_show_disabled_spaces_summary">Only applying to space managers in Infinite Scale accounts</string>
+    <string name="prefs_show_disabled_spaces_summary">Applies only to space managers in Infinite Scale accounts</string>
     <string name="prefs_log_open_logs_list_view">Log files</string>
     <string name="prefs_log_no_logs_list_view">Empty log folder!</string>
     <string name="prefs_log_empty_subtitle">Enable logging and log files will show up here.</string>
@@ -741,7 +741,7 @@
     <string name="release_notes_icon">Release note icon</string>
     <string name="release_notes_bugfixes_title">Minor bugfixes</string>
     <string name="release_notes_bugfixes_subtitle">Some bugs were fixed to improve experience in the app</string>
-    <string name="release_notes_4_7_0_title_new_layout_for_spaces">New design for spaces list</string>
+    <string name="release_notes_4_7_0_title_new_layout_for_spaces">New design for the spaces list</string>
     <string name="release_notes_4_7_0_subtitle_new_layout_for_spaces">A new design for Infinite Scale users in the spaces list, with a three-dot button on each space card that opens an options menu when clicked</string>
     <string name="release_notes_4_7_0_title_space_management">Space management</string>
     <string name="release_notes_4_7_0_subtitle_space_management">Infinite Scale users with right permissions can now manage spaces (create, edit, disable, enable and delete) directly from the app</string>
