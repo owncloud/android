@@ -251,6 +251,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
     }
 
     private void setIntentFlags(Intent intent) {
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
         intent.addFlags(Intent.FLAG_FROM_BACKGROUND);

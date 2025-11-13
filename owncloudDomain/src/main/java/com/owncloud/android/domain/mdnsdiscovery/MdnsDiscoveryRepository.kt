@@ -1,6 +1,6 @@
 package com.owncloud.android.domain.mdnsdiscovery
 
-import com.owncloud.android.domain.server.model.Server
+import com.owncloud.android.domain.device.model.Device
 import kotlinx.coroutines.flow.Flow
 import kotlin.time.Duration
 
@@ -25,6 +25,6 @@ interface MdnsDiscoveryRepository {
         serviceType: String,
         serviceName: String,
         duration: Duration
-    ): Flow<Server>
+    ): Flow<Device>
 }
 

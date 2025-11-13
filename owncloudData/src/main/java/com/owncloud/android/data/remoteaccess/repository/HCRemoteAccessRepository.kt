@@ -1,21 +1,25 @@
 package com.owncloud.android.data.remoteaccess.repository
 
+import com.owncloud.android.data.device.CurrentDeviceStorage
 import com.owncloud.android.data.mdnsdiscovery.HCDeviceVerificationClient
 import com.owncloud.android.data.remoteaccess.RemoteAccessTokenStorage
-import com.owncloud.android.domain.exceptions.WrongCodeException
 import com.owncloud.android.data.remoteaccess.datasources.RemoteAccessService
 import com.owncloud.android.data.remoteaccess.remote.RemoteAccessInitiateRequest
 import com.owncloud.android.data.remoteaccess.remote.RemoteAccessPath
 import com.owncloud.android.data.remoteaccess.remote.RemoteAccessTokenRequest
+import com.owncloud.android.domain.device.model.Device
+import com.owncloud.android.domain.device.model.DevicePath
+import com.owncloud.android.domain.device.model.DevicePathType
+import com.owncloud.android.domain.exceptions.WrongCodeException
 import com.owncloud.android.domain.remoteaccess.RemoteAccessRepository
-import com.owncloud.android.domain.server.model.Server
 import com.owncloud.android.lib.common.http.HttpConstants
 import retrofit2.HttpException
 
 class HCRemoteAccessRepository(
     private val remoteAccessService: RemoteAccessService,
     private val tokenStorage: RemoteAccessTokenStorage,
-    private val deviceVerificationClient: HCDeviceVerificationClient
+    private val deviceVerificationClient: HCDeviceVerificationClient,
+    private val currentDeviceStorage: CurrentDeviceStorage
 ) : RemoteAccessRepository {
 
     override suspend fun initiateAuthentication(
@@ -59,25 +63,57 @@ class HCRemoteAccessRepository(
         return tokenStorage.getUserName()
     }
 
-    override suspend fun getAvailableServers(): List<Server> {
-        return remoteAccessService.getDevices().mapNotNull {
-            val devicePaths = remoteAccessService.getDeviceById(it.seagateDeviceId).paths
-            var server: Server? = null
-            for (devicePath in devicePaths) {
-                val baseUrl = getDeviceBaseUrl(devicePath)
-                if (deviceVerificationClient.verifyDevice(baseUrl)) {
-                    // Get certificate common name
-                    val certificateCommonName = deviceVerificationClient.getCertificateCommonName(baseUrl).orEmpty()
-                    server = Server(
-                        hostName = it.friendlyName,
-                        hostUrl = "$baseUrl/files",
-                        certificateCommonName = certificateCommonName
-                    )
-                    break
+    override suspend fun getAvailableDevices(): List<Device> {
+        return remoteAccessService.getDevices().mapNotNull { deviceResponse ->
+            val remoteDevicePaths = remoteAccessService.getDeviceById(deviceResponse.seagateDeviceId).paths
+
+            // Build all available servers for this device
+            val availablePaths = mutableMapOf<DevicePathType, DevicePath>()
+            var preferredDevicePath: DevicePath? = null
+            var certificateCommonName = ""
+
+            for (remoteDevicePath in remoteDevicePaths) {
+                val baseUrl = getDeviceBaseUrl(remoteDevicePath)
+                val baseFilesUrl = "$baseUrl/files"
+                val devicePathType = remoteDevicePath.type.mapToDomain()
+
+                // Verify device and get certificate
+                val isVerified = deviceVerificationClient.verifyDevice(baseUrl)
+                if (isVerified) {
+                    certificateCommonName = deviceVerificationClient.getCertificateCommonName(baseUrl).orEmpty()
+                }
+
+                val devicePath = DevicePath(
+                    hostName = deviceResponse.friendlyName,
+                    hostUrl = baseFilesUrl,
+                    devicePathType = devicePathType
+                )
+
+                availablePaths[devicePathType] = devicePath
+
+                // Set preferred server to the first verified one
+                if (preferredDevicePath == null && isVerified) {
+                    preferredDevicePath = devicePath
                 }
             }
-            server
+
+            preferredDevicePath = preferredDevicePath ?: availablePaths.values.firstOrNull()
+
+            if (availablePaths.isNotEmpty() && preferredDevicePath != null) {
+                Device(
+                    id = deviceResponse.seagateDeviceId,
+                    availablePaths = availablePaths,
+                    preferredPath = preferredDevicePath,
+                    certificateCommonName = certificateCommonName
+                )
+            } else {
+                null
+            }
         }
+    }
+
+    override fun clearDevicePaths() {
+        currentDeviceStorage.clearDevicePaths()
     }
 
     private fun getDeviceBaseUrl(remoteAccessPath: RemoteAccessPath): String {

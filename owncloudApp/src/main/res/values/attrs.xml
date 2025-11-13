@@ -15,4 +15,15 @@
         <attr name="itemIcon" format="reference" />
         <attr name="title" format="string" />
     </declare-styleable>
+
+    <declare-styleable name="VerificationCodeView">
+        <attr name="codeLength" format="integer" />
+        <attr name="borderColor" format="color" />
+        <attr name="borderWidth" format="dimension" />
+        <attr name="focusBorderColor" format="color" />
+        <attr name="focusBorderWidth" format="dimension" />
+        <attr name="cornerRadius" format="dimension" />
+        <attr name="errorTextColor" format="color" />
+    </declare-styleable>
+
 </resources>
