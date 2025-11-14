@@ -82,6 +82,8 @@
   <string name="prefs_subsection_advanced">Lisavalikud</string>
   <string name="prefs_subsection_notifications">Halda teavitusi</string>
   <string name="prefs_show_hidden_files">Näita peidetud faile</string>
+  <string name="prefs_show_disabled_spaces">Näita väljalülitatud ruume</string>
+  <string name="prefs_show_disabled_spaces_summary">Kehtestatakse vaid ruumide haldajatele Ininite Scale kontodel</string>
   <string name="prefs_log_open_logs_list_view">Logifailid</string>
   <string name="prefs_log_no_logs_list_view">Tühi logide kaust!</string>
   <string name="prefs_log_empty_subtitle">Lülita logimine sisse ning logifailid tekkivad siia.</string>
