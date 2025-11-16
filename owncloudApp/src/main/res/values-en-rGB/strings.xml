@@ -82,6 +82,8 @@
   <string name="prefs_subsection_advanced">Advanced</string>
   <string name="prefs_subsection_notifications">Manage notifications</string>
   <string name="prefs_show_hidden_files">Show hidden files</string>
+  <string name="prefs_show_disabled_spaces">Show disabled spaces</string>
+  <string name="prefs_show_disabled_spaces_summary">Only applying to space managers in Infinite Scale accounts</string>
   <string name="prefs_log_open_logs_list_view">Log files</string>
   <string name="prefs_log_no_logs_list_view">Empty log folder!</string>
   <string name="prefs_log_empty_subtitle">Enable logging and log files will show up here.</string>
@@ -783,6 +785,9 @@
   <string name="edit_space">Edit space</string>
   <string name="edit_space_correctly">Space updated correctly</string>
   <string name="edit_space_failed">Space could not be updated</string>
+  <string name="edit_space_image">Edit image</string>
+  <string name="edit_space_image_correctly">Image updated correctly</string>
+  <string name="edit_space_image_failed">Image could not be updated</string>
   <string name="disable_space">Disable space</string>
   <string name="disable_space_dialog_title">Do you really want to disable the space: %1$s?</string>
   <string name="disable_space_dialog_message">If you disable the selected space, it can no longer be accessed. Only Space managers will still have access. Note: No files will be deleted from the server.</string>
