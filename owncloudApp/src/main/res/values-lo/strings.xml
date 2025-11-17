@@ -83,7 +83,6 @@
   <string name="prefs_subsection_notifications">ການແຈ້ງເຕືອນ</string>
   <string name="prefs_show_hidden_files">ສະແດງໄຟລ໌ທີ່ເຊື່ອງໄວ້</string>
   <string name="prefs_show_disabled_spaces">ສະແດງພື້ນທີ່ທີ່ປິດໃຊ້ງານ</string>
-  <string name="prefs_show_disabled_spaces_summary">ສະແດງພື້ນທີ່ທີ່ຖືກປິດໃຊ້ງານໃນລາຍການພື້ນທີ່</string>
   <string name="prefs_log_open_logs_list_view">ເບິ່ງລາຍການບັນທຶກ</string>
   <string name="prefs_log_no_logs_list_view">ບໍ່ມີລາຍການບັນທຶກ</string>
   <string name="prefs_log_empty_subtitle">ລາຍການບັນທຶກຂອງທ່ານວ່າງເປົ່າ</string>
@@ -681,7 +680,6 @@
   <string name="release_notes_icon">ໄອຄອນบันทึกประจำรุ่น</string>
   <string name="release_notes_bugfixes_title">การแก้ไขข้อบกพร่อง</string>
   <string name="release_notes_bugfixes_subtitle">ແອັບຕອນນີ້เสถียรและเชื่อถือได้มากขึ้น. สำหรับรายการการเปลี่ยนแปลงทั้งหมด, เยี่ยมชม owncloud.com</string>
-  <string name="release_notes_4_7_0_title_new_layout_for_spaces">ຮູບແບບໃໝ່ສຳລັບພື້ນທີ່</string>
   <string name="release_notes_4_7_0_subtitle_new_layout_for_spaces">ຕອນนี้คุณสามารถสลับระหว่างมุมมองรายการและตารางสำหรับพื้นที่ของคุณได้แล้ว</string>
   <string name="release_notes_4_7_0_title_space_management">ການຈັດການພື້ນທີ່</string>
   <string name="release_notes_4_7_0_subtitle_space_management">ເປີດໃຊ້, ປິດໃຊ້ และลบพื้นที่ของคุณโดยตรงจากแอป ownCloud</string>
