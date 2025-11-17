@@ -33,6 +33,7 @@ class VerificationCodeView @JvmOverloads constructor(
     private val errorTextColor: Int
     private val cornerRadius: Float
     private val digitTextSize: Float = 20f
+    private val cursorColor: Int
 
     private val focusedBorder: GradientDrawable
 
@@ -84,6 +85,7 @@ class VerificationCodeView @JvmOverloads constructor(
             focusBorderWidth = attrs.getDimension(R.styleable.VerificationCodeView_focusBorderWidth, 3f)
             cornerRadius = attrs.getDimension(R.styleable.VerificationCodeView_cornerRadius, 12f)
             errorTextColor = attrs.getColor(R.styleable.VerificationCodeView_errorTextColor, Color.RED)
+            cursorColor = attrs.getColor(R.styleable.VerificationCodeView_cursorColor, focusBorderColor)
             defaultBorder = createBorderDrawable(borderColor, borderWidth)
             focusedBorder = createBorderDrawable(focusBorderColor, focusBorderWidth)
             errorBorder = createBorderDrawable(errorTextColor, borderWidth)
@@ -134,6 +136,7 @@ class VerificationCodeView @JvmOverloads constructor(
             inputType = EditorInfo.TYPE_CLASS_NUMBER
             textSize = digitTextSize
             setPadding(0, 24, 0, 24)
+            setTextCursorDrawableCompat(cursorColor)
         }
 
         et.setOnFocusChangeListener { v, hasFocus ->
@@ -201,13 +204,15 @@ class VerificationCodeView @JvmOverloads constructor(
 
     fun getCode(): String = editTexts.joinToString("") { it.text.toString() }
 
+    fun getFilledCodeLength(): Int = codeLength
+
     fun clearCode() {
         editTexts.forEach { it.text?.clear() }
         editTexts.firstOrNull()?.requestFocus()
     }
 
     fun setError(errorMessage: String) {
-        errorTextView.isVisible = false
+        errorTextView.isVisible = true
         errorTextView.text = errorMessage
         setErrorBorder()
     }

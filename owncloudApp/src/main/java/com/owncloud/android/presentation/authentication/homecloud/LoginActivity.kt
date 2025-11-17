@@ -172,10 +172,13 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
     private fun showCodeDialog() {
         dialogBinding.codeEditVerification.clearCode()
         dialogBinding.codeEditVerification.onCodeChangedListener = { code ->
-            dialogBinding.allowButton.isEnabled = code.isNotEmpty()
+            dialogBinding.allowButton.isEnabled = code.length == dialogBinding.codeEditVerification.getFilledCodeLength()
         }
         dialogBinding.allowButton.setOnClickListener {
             loginViewModel.onCodeEntered(dialogBinding.codeEditVerification.getCode())
+        }
+        dialogBinding.resendButton.setOnClickListener {
+            loginViewModel.onActionClicked()
         }
         dialogBinding.skipButton.setOnClickListener {
             loginViewModel.onSkipClicked()
@@ -202,17 +205,32 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
                 binding.accountUsernameContainer.error = state.errorEmailInvalidMessage
                 binding.loginStateGroup.visibility = View.GONE
                 binding.actionButton.setText(R.string.homecloud_action_button_next)
-                dialogBinding.allowButton.visibility = if (state.isAllowLoading) View.INVISIBLE else View.VISIBLE
-                dialogBinding.allowLoading.visibility = if (state.isAllowLoading) View.VISIBLE else View.GONE
                 // Enable button only if username is not empty and is a valid email
                 binding.actionButton.isEnabled = state.username.isNotEmpty() && Patterns.EMAIL_ADDRESS.matcher(state.username).matches()
                 binding.serversRefreshButton.visibility = View.INVISIBLE
                 binding.serversRefreshLoading.visibility = View.GONE
-                if (state.errorCodeMessage == null) {
-                    dialogBinding.codeEditVerification.clearError()
-                } else {
-                    dialogBinding.codeEditVerification.setError(state.errorCodeMessage)
+                when {
+                    state.isAllowLoading -> {
+                        dialogBinding.allowButton.visibility = View.INVISIBLE
+                        dialogBinding.resendButton.visibility = View.INVISIBLE
+                        dialogBinding.allowLoading.visibility = View.VISIBLE
+                    }
+
+                    state.errorCodeMessage == null -> {
+                        dialogBinding.allowButton.visibility = View.VISIBLE
+                        dialogBinding.resendButton.visibility = View.INVISIBLE
+                        dialogBinding.allowLoading.visibility = View.INVISIBLE
+                        dialogBinding.codeEditVerification.clearError()
+                    }
+
+                    else -> {
+                        dialogBinding.allowButton.visibility = View.INVISIBLE
+                        dialogBinding.resendButton.visibility = View.VISIBLE
+                        dialogBinding.allowLoading.visibility = View.INVISIBLE
+                        dialogBinding.codeEditVerification.setError(state.errorCodeMessage)
+                    }
                 }
+
                 binding.accountUsername.isEnabled = true
             }
 
