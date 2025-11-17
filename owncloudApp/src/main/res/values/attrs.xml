@@ -24,6 +24,7 @@
         <attr name="focusBorderWidth" format="dimension" />
         <attr name="cornerRadius" format="dimension" />
         <attr name="errorTextColor" format="color" />
+        <attr name="cursorColor" format="color" />
     </declare-styleable>
 
 </resources>
