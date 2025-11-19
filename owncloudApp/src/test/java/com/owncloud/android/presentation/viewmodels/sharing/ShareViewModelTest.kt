@@ -39,6 +39,7 @@ import com.owncloud.android.presentation.sharing.ShareViewModel
 import com.owncloud.android.providers.ContextProvider
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import com.owncloud.android.testutil.OC_ACCOUNT_NAME
+import com.owncloud.android.testutil.OC_CAPABILITY
 import com.owncloud.android.testutil.OC_SHARE
 import com.owncloud.android.testutil.livedata.getEmittedValues
 import com.owncloud.android.testutil.livedata.getLastEmittedValue
@@ -51,8 +52,10 @@ import io.mockk.spyk
 import io.mockk.unmockkAll
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.TestCoroutineDispatcher
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -84,7 +87,7 @@ class ShareViewModelTest {
     private val sharesLiveData = MutableLiveData<List<OCShare>>()
     private val privateShareLiveData = MutableLiveData<OCShare>()
 
-    private val testCoroutineDispatcher = TestCoroutineDispatcher()
+    private val testCoroutineDispatcher = StandardTestDispatcher()
     private val coroutineDispatcherProvider: CoroutinesDispatcherProvider = CoroutinesDispatcherProvider(
         io = testCoroutineDispatcher,
         main = testCoroutineDispatcher,
@@ -117,7 +120,6 @@ class ShareViewModelTest {
     @After
     fun tearDown() {
         Dispatchers.resetMain()
-        testCoroutineDispatcher.cleanupTestCoroutines()
 
         stopKoin()
         unmockkAll()
@@ -136,8 +138,8 @@ class ShareViewModelTest {
 
         every { getSharesAsLiveDataUseCase(any()) } returns sharesLiveData
         every { getShareAsLiveDataUseCase(any()) } returns privateShareLiveData
+        every { getStoredCapabilitiesUseCase (any()) } returns OC_CAPABILITY
 
-        testCoroutineDispatcher.pauseDispatcher()
 
         shareViewModel = ShareViewModel(
             filePath,
@@ -163,7 +165,7 @@ class ShareViewModelTest {
     fun insertPrivateShareSuccess() {
         insertPrivateShareVerification(
             useCaseResult = UseCaseResult.Success(Unit),
-            expectedValues = listOf(Event(UIResult.Loading()), Event(UIResult.Success()))
+            expectedValues = listOf(Event(UIResult.Success()))
         )
     }
 
@@ -173,14 +175,14 @@ class ShareViewModelTest {
 
         insertPrivateShareVerification(
             useCaseResult = UseCaseResult.Error(error),
-            expectedValues = listOf(Event(UIResult.Loading()), Event(UIResult.Error(error)))
+            expectedValues = listOf(Event(UIResult.Error(error)))
         )
     }
 
     private fun insertPrivateShareVerification(
         useCaseResult: UseCaseResult<Unit>,
         expectedValues: List<Event<UIResult<Unit?>>>
-    ) {
+    ) = runTest {
         initTest()
         coEvery { createPrivateShareAsyncUseCase(any()) } returns useCaseResult
 
@@ -191,10 +193,8 @@ class ShareViewModelTest {
             permissions = OC_SHARE.permissions,
             accountName = OC_SHARE.accountOwner
         )
-
-        val emittedValues = shareViewModel.privateShareCreationStatus.getEmittedValues(expectedValues.size) {
-            testCoroutineDispatcher.resumeDispatcher()
-        }
+        advanceUntilIdle()
+        val emittedValues = shareViewModel.privateShareCreationStatus.getEmittedValues(expectedValues.size)
         assertEquals(expectedValues, emittedValues)
 
         coVerify(exactly = 1) { createPrivateShareAsyncUseCase(any()) }
@@ -208,9 +208,7 @@ class ShareViewModelTest {
 
         shareViewModel.refreshPrivateShare(OC_SHARE.remoteId)
 
-        val emittedValues = shareViewModel.privateShare.getLastEmittedValue {
-            testCoroutineDispatcher.resumeDispatcher()
-        }
+        val emittedValues = shareViewModel.privateShare.getLastEmittedValue()
         assertEquals(Event(UIResult.Success(OC_SHARE)), emittedValues)
 
         coVerify(exactly = 1) { getShareAsLiveDataUseCase(any()) }
@@ -230,14 +228,14 @@ class ShareViewModelTest {
 
         updatePrivateShareVerification(
             useCaseResult = UseCaseResult.Error(error),
-            expectedValues = listOf(Event(UIResult.Loading()), Event(UIResult.Error(error)))
+            expectedValues = listOf(Event(UIResult.Error(error)))
         )
     }
 
     private fun updatePrivateShareVerification(
         useCaseResult: UseCaseResult<Unit>,
         expectedValues: List<Event<UIResult<Unit>?>>
-    ) {
+    ) = runTest {
         initTest()
         coEvery { editPrivateShareAsyncUseCase(any()) } returns useCaseResult
 
@@ -246,10 +244,8 @@ class ShareViewModelTest {
             permissions = OC_SHARE.permissions,
             accountName = OC_SHARE.accountOwner
         )
-
-        val emittedValues = shareViewModel.privateShareEditionStatus.getEmittedValues(expectedValues.size) {
-            testCoroutineDispatcher.resumeDispatcher()
-        }
+        advanceUntilIdle()
+        val emittedValues = shareViewModel.privateShareEditionStatus.getEmittedValues(expectedValues.size)
         assertEquals(expectedValues, emittedValues)
 
         coVerify(exactly = 1) { editPrivateShareAsyncUseCase(any()) }
@@ -264,7 +260,7 @@ class ShareViewModelTest {
     fun insertPublicShareSuccess() {
         insertPublicShareVerification(
             useCaseResult = UseCaseResult.Success(Unit),
-            expectedValues = listOf(Event(UIResult.Loading()), Event(UIResult.Success()))
+            expectedValues = listOf(Event(UIResult.Success()))
         )
     }
 
@@ -274,14 +270,14 @@ class ShareViewModelTest {
 
         insertPublicShareVerification(
             useCaseResult = UseCaseResult.Error(error),
-            expectedValues = listOf(Event(UIResult.Loading()), Event(UIResult.Error(error)))
+            expectedValues = listOf(Event(UIResult.Error(error)))
         )
     }
 
     private fun insertPublicShareVerification(
         useCaseResult: UseCaseResult<Unit>,
         expectedValues: List<Event<UIResult<Unit>?>>
-    ) {
+    ) = runTest {
         initTest()
         coEvery { createPublicShareAsyncUseCase(any()) } returns useCaseResult
 
@@ -293,10 +289,8 @@ class ShareViewModelTest {
             permissions = OC_SHARE.permissions,
             accountName = OC_SHARE.accountOwner
         )
-
-        val emittedValues = shareViewModel.publicShareCreationStatus.getEmittedValues(expectedValues.size) {
-            testCoroutineDispatcher.resumeDispatcher()
-        }
+        advanceUntilIdle()
+        val emittedValues = shareViewModel.publicShareCreationStatus.getEmittedValues(expectedValues.size)
         assertEquals(expectedValues, emittedValues)
 
         coVerify(exactly = 0) { createPrivateShareAsyncUseCase(any()) }
@@ -307,7 +301,7 @@ class ShareViewModelTest {
     fun updatePublicShareSuccess() {
         updatePublicShareVerification(
             useCaseResult = UseCaseResult.Success(Unit),
-            expectedValues = listOf(Event(UIResult.Loading()), Event(UIResult.Success()))
+            expectedValues = listOf(Event(UIResult.Success()))
         )
     }
 
@@ -317,14 +311,14 @@ class ShareViewModelTest {
 
         updatePublicShareVerification(
             useCaseResult = UseCaseResult.Error(error),
-            expectedValues = listOf(Event(UIResult.Loading()), Event(UIResult.Error(error)))
+            expectedValues = listOf(Event(UIResult.Error(error)))
         )
     }
 
     private fun updatePublicShareVerification(
         useCaseResult: UseCaseResult<Unit>,
         expectedValues: List<Event<UIResult<Unit>?>>
-    ) {
+    ) = runTest {
         initTest()
         coEvery { editPublicShareAsyncUseCase(any()) } returns useCaseResult
 
@@ -336,10 +330,8 @@ class ShareViewModelTest {
             permissions = -1,
             accountName = "Carlos"
         )
-
-        val emittedValues = shareViewModel.publicShareEditionStatus.getEmittedValues(expectedValues.size) {
-            testCoroutineDispatcher.resumeDispatcher()
-        }
+        advanceUntilIdle()
+        val emittedValues = shareViewModel.publicShareEditionStatus.getEmittedValues(expectedValues.size)
         assertEquals(expectedValues, emittedValues)
 
         coVerify(exactly = 0) { editPrivateShareAsyncUseCase(any()) }
@@ -364,22 +356,20 @@ class ShareViewModelTest {
 
         deleteShareVerification(
             useCaseResult = UseCaseResult.Error(error),
-            expectedValues = listOf(Event(UIResult.Loading()), Event(UIResult.Error(error)))
+            expectedValues = listOf(Event(UIResult.Error(error)))
         )
     }
 
     private fun deleteShareVerification(
         useCaseResult: UseCaseResult<Unit>,
         expectedValues: List<Event<UIResult<Unit>?>>
-    ) {
+    ) = runTest {
         initTest()
         coEvery { deletePublicShareAsyncUseCase(any()) } returns useCaseResult
 
         shareViewModel.deleteShare(remoteId = OC_SHARE.remoteId)
-
-        val emittedValues = shareViewModel.shareDeletionStatus.getEmittedValues(expectedValues.size) {
-            testCoroutineDispatcher.resumeDispatcher()
-        }
+        advanceUntilIdle()
+        val emittedValues = shareViewModel.shareDeletionStatus.getEmittedValues(expectedValues.size)
 
         assertEquals(expectedValues, emittedValues)
 

@@ -28,7 +28,7 @@ import com.owncloud.android.testutil.livedata.getEmittedValues
 import io.mockk.unmockkAll
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.TestCoroutineDispatcher
+import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -41,7 +41,7 @@ open class ViewModelTest {
     @JvmField
     val instantExecutorRule = InstantTaskExecutorRule()
 
-    val testCoroutineDispatcher = TestCoroutineDispatcher()
+    val testCoroutineDispatcher = StandardTestDispatcher()
     val coroutineDispatcherProvider: CoroutinesDispatcherProvider = CoroutinesDispatcherProvider(
         io = testCoroutineDispatcher,
         main = testCoroutineDispatcher,
@@ -51,8 +51,6 @@ open class ViewModelTest {
     @After
     open fun tearDown() {
         Dispatchers.resetMain()
-        testCoroutineDispatcher.cleanupTestCoroutines()
-
         unmockkAll()
     }
 
@@ -60,9 +58,7 @@ open class ViewModelTest {
         expectedValues: List<Event<UIResult<DomainModel>>>,
         liveData: LiveData<Event<UIResult<DomainModel>>>
     ) {
-        val emittedValues = liveData.getEmittedValues(expectedValues.size) {
-            testCoroutineDispatcher.resumeDispatcher()
-        }
+        val emittedValues = liveData.getEmittedValues(expectedValues.size)
         assertEquals(expectedValues, emittedValues)
     }
 
