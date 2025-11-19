@@ -83,6 +83,7 @@
   <string name="prefs_subsection_notifications">Halda teavitusi</string>
   <string name="prefs_show_hidden_files">Näita peidetud faile</string>
   <string name="prefs_show_disabled_spaces">Näita väljalülitatud ruume</string>
+  <string name="prefs_show_disabled_spaces_summary">Kehtib vaid ruumide haldajatele Ininite Scale kontodel</string>
   <string name="prefs_log_open_logs_list_view">Logifailid</string>
   <string name="prefs_log_no_logs_list_view">Tühi logide kaust!</string>
   <string name="prefs_log_empty_subtitle">Lülita logimine sisse ning logifailid tekkivad siia.</string>
@@ -684,6 +685,7 @@
   <string name="release_notes_icon">Väljalasketeavituse ikoon</string>
   <string name="release_notes_bugfixes_title">Väiksemad veaparandused</string>
   <string name="release_notes_bugfixes_subtitle">Mõned vead parandati, et täiustada rakenduse kasutajakogemust</string>
+  <string name="release_notes_4_7_0_title_new_layout_for_spaces">Ruumide nimekirja uus disain</string>
   <string name="release_notes_4_7_0_subtitle_new_layout_for_spaces">Ruumide nimekirja uus disain Infinite Scale kasutajatele koos kolme-punkti nupuga igal ruumi kaardil, mis klikkides avavad valikute menüü</string>
   <string name="release_notes_4_7_0_title_space_management">Ruumide haldamine</string>
   <string name="release_notes_4_7_0_subtitle_space_management">Korrektsete õigustega Inifinite Scale kasutajad saavad nüüd ruume hallata (luua, muuta, sisse ja välja lüllitada ning kustutada) otse rakendusest</string>

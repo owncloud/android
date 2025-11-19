@@ -83,6 +83,7 @@
   <string name="prefs_subsection_notifications">Benachrichtigungen verwalten</string>
   <string name="prefs_show_hidden_files">Versteckte Dateien anzeigen</string>
   <string name="prefs_show_disabled_spaces">Deaktivierte Spaces anzeigen</string>
+  <string name="prefs_show_disabled_spaces_summary">Gilt nur für Space-Manager in Infinite Scale Konten</string>
   <string name="prefs_log_open_logs_list_view">Protokolle</string>
   <string name="prefs_log_no_logs_list_view">Leerer Protokoll-Ordner!</string>
   <string name="prefs_log_empty_subtitle">Aktiviere Protokollierung, und die Protokoll-Dateien werden hier erscheinen.</string>
@@ -684,6 +685,7 @@
   <string name="release_notes_icon">Icon für Veröffentlichungsnotizen</string>
   <string name="release_notes_bugfixes_title">Geringfügige Fehler behoben</string>
   <string name="release_notes_bugfixes_subtitle">Einige Fehler wurden behoben, um die Benutzung der App zu verbessern.</string>
+  <string name="release_notes_4_7_0_title_new_layout_for_spaces">Neues Design für die Sapces Auflistung</string>
   <string name="release_notes_4_7_0_subtitle_new_layout_for_spaces">Ein neues Design für Infinite Scale-Benutzer in der Space Liste, mit einer Drei-Punkte-Schaltfläche auf jeder Space Karte, die beim Anklicken ein Optionsmenü öffnet.</string>
   <string name="release_notes_4_7_0_title_space_management">Space Management</string>
   <string name="release_notes_4_7_0_subtitle_space_management">Benutzer von Infinite Scale mit den entsprechenden Berechtigungen können nun direkt über die App Spaces verwalten (erstellen, bearbeiten, deaktivieren, aktivieren und löschen)</string>
