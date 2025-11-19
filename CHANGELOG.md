@@ -1,5 +1,6 @@
 # Table of Contents
 
+* [Changelog for unreleased](#changelog-for-owncloud-android-client-unreleased-unreleased)
 * [Changelog for 4.7.0](#changelog-for-owncloud-android-client-470-2025-11-17)
 * [Changelog for 4.6.2](#changelog-for-owncloud-android-client-462-2025-08-13)
 * [Changelog for 4.6.1](#changelog-for-owncloud-android-client-461-2025-08-01)
@@ -30,6 +31,27 @@
 * [Changelog for 2.18.1](#changelog-for-owncloud-android-client-2181-2021-07-20)
 * [Changelog for 2.18.0](#changelog-for-owncloud-android-client-2180-2021-05-24)
 * [Changelog for 2.17 versions and below](#changelog-for-217-versions-and-below)
+# Changelog for ownCloud Android Client [unreleased] (UNRELEASED)
+
+The following sections list the changes in ownCloud Android Client unreleased relevant to
+ownCloud admins and users.
+
+[unreleased]: https://github.com/owncloud/android/compare/v4.7.0...master
+
+## Summary
+
+* Change - Migrate tests to the new kotlinx-coroutines-test API: [#4710](https://github.com/owncloud/android/issues/4710)
+
+## Details
+
+* Change - Migrate tests to the new kotlinx-coroutines-test API: [#4710](https://github.com/owncloud/android/issues/4710)
+
+   Some tests from view model classes have been refactored in order to use the new
+   kotlinx-coroutines-test API.
+
+   https://github.com/owncloud/android/issues/4710
+   https://github.com/owncloud/android/pull/4722
+
 # Changelog for ownCloud Android Client [4.7.0] (2025-11-17)
 
 The following sections list the changes in ownCloud Android Client 4.7.0 relevant to
