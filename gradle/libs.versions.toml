@@ -135,6 +135,7 @@ google-services-gradle = { group = "com.google.gms", name = "google-services", v
 kotlin-gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
 ksp-gradlePlugin = { group = "com.google.devtools.ksp", name = "com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
 ktlint-gradlePlugin = { group = "org.jlleitschuh.gradle", name = "ktlint-gradle", version.ref = "ktlint" }
+androidx-lifecycle-process = { group = "androidx.lifecycle", name = "lifecycle-process", version.ref = "androidxLifecycle" }
 
 [bundles]
 espresso = ["androidx-test-espresso-contrib", "androidx-test-espresso-core", "androidx-test-espresso-intents", "androidx-test-espresso-web"]

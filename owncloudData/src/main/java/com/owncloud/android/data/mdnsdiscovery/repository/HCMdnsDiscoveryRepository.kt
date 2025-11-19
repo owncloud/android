@@ -3,7 +3,6 @@ package com.owncloud.android.data.mdnsdiscovery.repository
 import com.owncloud.android.data.mdnsdiscovery.HCDeviceVerificationClient
 import com.owncloud.android.data.mdnsdiscovery.datasources.LocalMdnsDiscoveryDataSource
 import com.owncloud.android.domain.device.model.Device
-import com.owncloud.android.domain.device.model.DevicePath
 import com.owncloud.android.domain.device.model.DevicePathType
 import com.owncloud.android.domain.mdnsdiscovery.MdnsDiscoveryRepository
 import kotlinx.coroutines.flow.Flow
@@ -46,18 +45,12 @@ class HCMdnsDiscoveryRepository(
                 val certificateCommonName = deviceVerificationClient.getCertificateCommonName(deviceUrl).orEmpty()
                 Timber.d("Device certificate common name: $certificateCommonName")
 
-                val devicePath = DevicePath(
-                    hostName = deviceUrl,
-                    hostUrl = deviceUrl,
-                    devicePathType = DevicePathType.LOCAL
-                )
-
                 Device(
                     id = deviceUrl,
+                    name = deviceUrl,
                     availablePaths = mapOf(
-                        DevicePathType.LOCAL to devicePath
+                        DevicePathType.LOCAL to deviceUrl
                     ),
-                    preferredPath = devicePath,
                     certificateCommonName = certificateCommonName
                 )
             } else {

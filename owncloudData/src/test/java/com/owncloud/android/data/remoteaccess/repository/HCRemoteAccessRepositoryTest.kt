@@ -66,7 +66,6 @@ class HCRemoteAccessRepositoryTest {
         assertEquals(1, result.size)
         assertEquals("Test Device", result[0].name)
         assertEquals(1, result[0].availablePaths.size)
-        assertEquals(DevicePathType.REMOTE, result[0].preferredPath.devicePathType)
         assertEquals("", result[0].certificateCommonName)
     }
 
@@ -90,9 +89,7 @@ class HCRemoteAccessRepositoryTest {
         val device = result[0]
         assertEquals("Test Device", device.name)
         assertEquals(2, device.availablePaths.size)
-        assertEquals(DevicePathType.REMOTE, device.preferredPath.devicePathType)
         assertEquals("test-cert-001", device.certificateCommonName)
-        assertEquals("https://test.com:443/files", device.preferredPath.hostUrl)
     }
     
     @Test
@@ -122,7 +119,5 @@ class HCRemoteAccessRepositoryTest {
         assertEquals(true, device.availablePaths.containsKey(DevicePathType.PUBLIC))
         assertEquals(true, device.availablePaths.containsKey(DevicePathType.REMOTE))
         // First verified should be preferred (LOCAL in this case)
-        assertEquals(DevicePathType.LOCAL, device.preferredPath.devicePathType)
-        assertEquals("https://192.168.1.100/files", device.preferredPath.hostUrl)
     }
 }

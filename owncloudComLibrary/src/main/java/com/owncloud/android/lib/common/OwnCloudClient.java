@@ -101,6 +101,10 @@ public class OwnCloudClient extends HttpClient {
         mConnectionValidator = connectionValidator;
     }
 
+    public void cancelAllRequests() {
+        getOkHttpClient().dispatcher().cancelAll();
+    }
+
     public void clearCredentials() {
         if (!(mCredentials instanceof OwnCloudAnonymousCredentials)) {
             mCredentials = OwnCloudCredentialsFactory.getAnonymousCredentials();

@@ -10,7 +10,7 @@ class HCCurrentDeviceRepository(
 
     override fun saveCurrentDevicePaths(device: Device) {
         device.availablePaths.forEach {
-            currentDeviceStorage.saveDeviceBaseUrl(it.value.hostUrl, it.key.name)
+            currentDeviceStorage.saveDeviceBaseUrl(pathType = it.key.name, baseUrl = it.value)
         }
     }
 

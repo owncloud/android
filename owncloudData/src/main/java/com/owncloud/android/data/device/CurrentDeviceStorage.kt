@@ -15,10 +15,10 @@ class CurrentDeviceStorage(
 
     /**
      * Save device base URL by type
-     * @param baseUrl Complete base URL (e.g., "https://192.168.1.1:8080")
      * @param pathType Type of the path (LOCAL, PUBLIC, REMOTE)
+     * @param baseUrl Complete base URL (e.g., "https://192.168.1.1:8080")
      */
-    fun saveDeviceBaseUrl(baseUrl: String, pathType: String) {
+    fun saveDeviceBaseUrl(pathType: String, baseUrl: String) {
         val key = buildKey(pathType)
         sharedPreferencesProvider.putString(key, baseUrl)
     }

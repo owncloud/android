@@ -32,6 +32,7 @@ import com.owncloud.android.domain.automaticuploads.usecases.GetAutomaticUploads
 import com.owncloud.android.domain.automaticuploads.usecases.ResetPictureUploadsUseCase
 import com.owncloud.android.domain.automaticuploads.usecases.ResetVideoUploadsUseCase
 import com.owncloud.android.domain.device.CurrentDeviceRepository
+import com.owncloud.android.domain.device.usecases.ManageDynamicUrlSwitchingUseCase
 import com.owncloud.android.usecases.transfers.uploads.CancelTransfersFromAccountUseCase
 
 /*
@@ -52,6 +53,7 @@ class RemoveAccountUseCase(
     private val localAppRegistryDataSource: LocalAppRegistryDataSource,
     private val localSavedSearchesDataSource: LocalSavedSearchesDataSource,
     private val currentDeviceRepository: CurrentDeviceRepository,
+    private val manageDynamicUrlSwitchingUseCase: ManageDynamicUrlSwitchingUseCase,
 ) : BaseUseCase<Unit, RemoveAccountUseCase.Params>() {
 
     override fun run(params: Params) {
@@ -91,6 +93,8 @@ class RemoveAccountUseCase(
         localSavedSearchesDataSource.clearForAccount(params.accountName)
 
         currentDeviceRepository.clearCurrentDevicePaths()
+
+        manageDynamicUrlSwitchingUseCase.stopDynamicUrlSwitching()
     }
 
     data class Params(

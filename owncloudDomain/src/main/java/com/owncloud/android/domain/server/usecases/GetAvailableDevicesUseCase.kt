@@ -55,28 +55,21 @@ class GetAvailableDevicesUseCase(
                 }
 
                 if (existingDeviceIndex != NO_EXIST_INDEX) {
-                    // Merge local server into existing device
                     val existingDevice = mutableDevices[existingDeviceIndex]
                     val updatedPaths = existingDevice.availablePaths.toMutableMap()
 
-                    // Add local server as LOCAL type if not already present
                     if (!updatedPaths.containsKey(DevicePathType.LOCAL)) {
-                        val localDevicePath = localDevice.preferredPath
-                        updatedPaths[DevicePathType.LOCAL] = localDevicePath
+                        val localDevicePath = localDevice.availablePaths[DevicePathType.LOCAL]
+                        if (localDevicePath != null) {
+                            updatedPaths[DevicePathType.LOCAL] = localDevicePath
 
-                        // Update device with new paths, prefer LOCAL if it's verified
-                        val newPreferredPath = if (localDevice.certificateCommonName.isNotEmpty()) {
-                            localDevice.preferredPath
-                        } else {
-                            existingDevice.preferredPath
+                            mutableDevices[existingDeviceIndex] = Device(
+                                id = existingDevice.id,
+                                name = localDevice.name,
+                                availablePaths = updatedPaths,
+                                certificateCommonName = existingDevice.certificateCommonName
+                            )
                         }
-
-                        mutableDevices[existingDeviceIndex] = Device(
-                            id = existingDevice.id,
-                            availablePaths = updatedPaths,
-                            preferredPath = newPreferredPath,
-                            certificateCommonName = existingDevice.certificateCommonName
-                        )
                     }
                 } else {
                     mutableDevices.add(localDevice)

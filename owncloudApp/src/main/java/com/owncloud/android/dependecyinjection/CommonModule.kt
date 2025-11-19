@@ -21,6 +21,7 @@
 package com.owncloud.android.dependecyinjection
 
 import androidx.work.WorkManager
+import com.owncloud.android.data.lifecycle.AppLifecycleObserver
 import com.owncloud.android.presentation.avatar.AvatarManager
 import com.owncloud.android.providers.AccountProvider
 import com.owncloud.android.providers.ContextProvider
@@ -43,4 +44,7 @@ val commonModule = module {
     single { WorkManagerProvider(androidContext()) }
     single { AccountProvider(androidContext()) }
     single { WorkManager.getInstance(androidApplication()) }
+    
+    // App Lifecycle Observer - tracks foreground/background state
+    single { AppLifecycleObserver() }
 }

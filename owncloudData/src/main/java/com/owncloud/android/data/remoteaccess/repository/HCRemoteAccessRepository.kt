@@ -5,10 +5,8 @@ import com.owncloud.android.data.mdnsdiscovery.HCDeviceVerificationClient
 import com.owncloud.android.data.remoteaccess.RemoteAccessTokenStorage
 import com.owncloud.android.data.remoteaccess.datasources.RemoteAccessService
 import com.owncloud.android.data.remoteaccess.remote.RemoteAccessInitiateRequest
-import com.owncloud.android.data.remoteaccess.remote.RemoteAccessPath
 import com.owncloud.android.data.remoteaccess.remote.RemoteAccessTokenRequest
 import com.owncloud.android.domain.device.model.Device
-import com.owncloud.android.domain.device.model.DevicePath
 import com.owncloud.android.domain.device.model.DevicePathType
 import com.owncloud.android.domain.exceptions.WrongCodeException
 import com.owncloud.android.domain.remoteaccess.RemoteAccessRepository
@@ -67,43 +65,25 @@ class HCRemoteAccessRepository(
         return remoteAccessService.getDevices().mapNotNull { deviceResponse ->
             val remoteDevicePaths = remoteAccessService.getDeviceById(deviceResponse.seagateDeviceId).paths
 
-            // Build all available servers for this device
-            val availablePaths = mutableMapOf<DevicePathType, DevicePath>()
-            var preferredDevicePath: DevicePath? = null
+            val availablePaths = mutableMapOf<DevicePathType, String>()
             var certificateCommonName = ""
 
             for (remoteDevicePath in remoteDevicePaths) {
-                val baseUrl = getDeviceBaseUrl(remoteDevicePath)
-                val baseFilesUrl = "$baseUrl/files"
                 val devicePathType = remoteDevicePath.type.mapToDomain()
-
-                // Verify device and get certificate
-                val isVerified = deviceVerificationClient.verifyDevice(baseUrl)
-                if (isVerified) {
+                val baseUrl = remoteDevicePath.getDeviceBaseUrl().removeSuffix("/files")
+                if (certificateCommonName.isEmpty()) {
                     certificateCommonName = deviceVerificationClient.getCertificateCommonName(baseUrl).orEmpty()
                 }
 
-                val devicePath = DevicePath(
-                    hostName = deviceResponse.friendlyName,
-                    hostUrl = baseFilesUrl,
-                    devicePathType = devicePathType
-                )
+                availablePaths[devicePathType] = baseUrl
 
-                availablePaths[devicePathType] = devicePath
-
-                // Set preferred server to the first verified one
-                if (preferredDevicePath == null && isVerified) {
-                    preferredDevicePath = devicePath
-                }
             }
 
-            preferredDevicePath = preferredDevicePath ?: availablePaths.values.firstOrNull()
-
-            if (availablePaths.isNotEmpty() && preferredDevicePath != null) {
+            if (availablePaths.isNotEmpty()) {
                 Device(
                     id = deviceResponse.seagateDeviceId,
+                    name = deviceResponse.friendlyName,
                     availablePaths = availablePaths,
-                    preferredPath = preferredDevicePath,
                     certificateCommonName = certificateCommonName
                 )
             } else {
@@ -114,12 +94,6 @@ class HCRemoteAccessRepository(
 
     override fun clearDevicePaths() {
         currentDeviceStorage.clearDevicePaths()
-    }
-
-    private fun getDeviceBaseUrl(remoteAccessPath: RemoteAccessPath): String {
-        val address = remoteAccessPath.address
-        val port = if (remoteAccessPath.port == null) "" else ":${remoteAccessPath.port}"
-        return "https://${address}${port}"
     }
 }
 

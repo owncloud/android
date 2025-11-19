@@ -65,6 +65,7 @@ dependencies {
 
     // Room
     implementation libs.androidx.room.ktx
+    implementation libs.androidx.lifecycle.process
     ksp libs.androidx.room.compiler
 
     implementation libs.moshi.kotlin

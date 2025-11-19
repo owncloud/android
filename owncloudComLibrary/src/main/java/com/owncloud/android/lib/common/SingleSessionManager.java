@@ -183,6 +183,16 @@ public class SingleSessionManager {
         return client;
     }
 
+    public void cancelAllRequests() {
+        for (OwnCloudClient client : mClientsWithKnownUsername.values()) {
+            client.cancelAllRequests();
+        }
+
+        for (OwnCloudClient client : mClientsWithUnknownUsername.values()) {
+            client.cancelAllRequests();
+        }
+    }
+
     public void removeClientFor(OwnCloudAccount account) {
         Timber.d("removeClientFor starting ");
 

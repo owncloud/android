@@ -80,6 +80,7 @@ public class AdvancedX509TrustManager implements X509TrustManager {
      * @see javax.net.ssl.X509TrustManager#checkClientTrusted(X509Certificate[],
      * String authType)
      */
+    @Override
     public void checkClientTrusted(X509Certificate[] certificates, String authType) throws CertificateException {
         mStandardTrustManager.checkClientTrusted(certificates, authType);
     }
@@ -88,6 +89,7 @@ public class AdvancedX509TrustManager implements X509TrustManager {
      * @see javax.net.ssl.X509TrustManager#checkServerTrusted(X509Certificate[],
      * String authType)
      */
+    @Override
     public void checkServerTrusted(X509Certificate[] certificates, String authType) {
         if (!isKnownServer(certificates[0])) {
             CertificateCombinedException result = new CertificateCombinedException(certificates[0]);
@@ -126,6 +128,7 @@ public class AdvancedX509TrustManager implements X509TrustManager {
     /**
      * @see javax.net.ssl.X509TrustManager#getAcceptedIssuers()
      */
+    @Override
     public X509Certificate[] getAcceptedIssuers() {
         return mStandardTrustManager.getAcceptedIssuers();
     }

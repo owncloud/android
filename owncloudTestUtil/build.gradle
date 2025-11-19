@@ -28,6 +28,7 @@ android {
 }
 
 dependencies {
+    api libs.turbine
     implementation project(':owncloudDomain')
     implementation project(':owncloudData')
     implementation project(':owncloudComLibrary')

@@ -12,7 +12,14 @@ data class RemoteAccessPath(
     val address: String,
     @Json(name = "port")
     val port: Int? = null
-)
+) {
+
+    fun getDeviceBaseUrl(): String {
+        val address = address
+        val port = if (port == null) "" else ":${port}"
+        return "https://${address}${port}/files"
+    }
+}
 
 enum class RemoteAccessPathType {
     @Json(name = "local")

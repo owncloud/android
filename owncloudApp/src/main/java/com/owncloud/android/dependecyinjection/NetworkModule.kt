@@ -1,9 +1,11 @@
 package com.owncloud.android.dependecyinjection
 
+import com.owncloud.android.data.connectivity.NetworkStateObserver
 import com.owncloud.android.data.mdnsdiscovery.HCDeviceVerificationClient
 import com.owncloud.android.lib.common.network.PinnedCertificateTrustManager
 import com.squareup.moshi.Moshi
 import okhttp3.OkHttpClient
+import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
@@ -71,5 +73,9 @@ val networkModule = module {
             okHttpClient = get<OkHttpClient>(named(NetworkModuleQualifiers.OKHTTP_CLIENT_TRUST_ALL)),
             moshi = get()
         )
+    }
+
+    single {
+        NetworkStateObserver(androidContext())
     }
 }

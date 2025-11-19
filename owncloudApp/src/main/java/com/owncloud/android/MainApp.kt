@@ -51,6 +51,7 @@ import com.owncloud.android.dependecyinjection.repositoryModule
 import com.owncloud.android.dependecyinjection.useCaseModule
 import com.owncloud.android.dependecyinjection.viewModelModule
 import com.owncloud.android.domain.capabilities.usecases.GetStoredCapabilitiesUseCase
+import com.owncloud.android.domain.device.usecases.ManageDynamicUrlSwitchingUseCase
 import com.owncloud.android.domain.spaces.model.OCSpace
 import com.owncloud.android.domain.spaces.usecases.GetPersonalSpaceForAccountUseCase
 import com.owncloud.android.domain.user.usecases.GetStoredQuotaUseCase
@@ -235,6 +236,12 @@ class MainApp : Application() {
             }
         })
 
+        initDynamicUrlSwitcher()
+    }
+
+    private fun initDynamicUrlSwitcher() {
+        val dynamicUrlSwitchingUseCase: ManageDynamicUrlSwitchingUseCase by inject<ManageDynamicUrlSwitchingUseCase>()
+        dynamicUrlSwitchingUseCase.initDynamicUrlSwitching()
     }
 
     private fun startLogsIfEnabled() {

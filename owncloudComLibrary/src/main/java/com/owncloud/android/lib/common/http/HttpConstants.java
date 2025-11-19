@@ -222,5 +222,5 @@ public class HttpConstants {
     /**
      * Default timeout for establishing a connection
      */
-    public static final int DEFAULT_CONNECTION_TIMEOUT = 60000;
+    public static final int DEFAULT_CONNECTION_TIMEOUT = 10000;
 }

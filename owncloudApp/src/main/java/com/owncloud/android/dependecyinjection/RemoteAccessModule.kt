@@ -1,11 +1,18 @@
 package com.owncloud.android.dependecyinjection
 
 import com.owncloud.android.BuildConfig
+import com.owncloud.android.data.device.BaseUrlChooser
 import com.owncloud.android.data.device.CurrentDeviceStorage
+import com.owncloud.android.data.device.DynamicBaseUrlSwitcher
+import com.owncloud.android.data.device.HCDeviceUrlResolver
 import com.owncloud.android.data.remoteaccess.RemoteAccessTokenStorage
 import com.owncloud.android.data.remoteaccess.datasources.RemoteAccessService
 import com.owncloud.android.data.remoteaccess.interceptor.RemoteAccessAuthInterceptor
 import com.owncloud.android.data.remoteaccess.interceptor.RemoteAccessTokenRefreshInterceptor
+import com.owncloud.android.domain.server.usecases.DeviceUrlResolver
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.core.qualifier.named
@@ -44,6 +51,31 @@ val remoteAccessModule = module {
     // Current Device Storage
     single {
         CurrentDeviceStorage(get())
+    }
+
+    // Device URL Resolver - resolves available device URLs by priority
+    single<DeviceUrlResolver> {
+        HCDeviceUrlResolver(
+            deviceVerificationClient = get()
+        )
+    }
+
+    // Base URL Chooser - dynamically selects best available base URL
+    single {
+        BaseUrlChooser(
+            networkStateObserver = get(),
+            currentDeviceStorage = get(),
+            deviceUrlResolver = get()
+        )
+    }
+
+    // Dynamic Base URL Switcher - manages automatic base URL switching for accounts
+    single {
+        DynamicBaseUrlSwitcher(
+            accountManager = get(),
+            baseUrlChooser = get(),
+            coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+        )
     }
 
     // Logging interceptor for debugging
