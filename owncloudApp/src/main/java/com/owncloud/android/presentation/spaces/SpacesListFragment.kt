@@ -444,6 +444,7 @@ class SpacesListFragment :
                         }
                         editSpaceImageLauncher.launch(action)
                     }
+                    SpaceMenuOption.SET_ICON -> { }
                 }
             }
         }
