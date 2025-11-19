@@ -42,6 +42,8 @@ import io.mockk.mockk
 import io.mockk.mockkConstructor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.advanceUntilIdle
+import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
@@ -87,7 +89,6 @@ class OAuthViewModelTest : ViewModelTest() {
         requestTokenUseCase = mockk()
         registerClientUseCase = mockk()
 
-        testCoroutineDispatcher.pauseDispatcher()
 
         oAuthViewModel = OAuthViewModel(
             getOIDCDiscoveryUseCase = getOIDCDiscoveryUseCase,
@@ -104,27 +105,23 @@ class OAuthViewModelTest : ViewModelTest() {
     }
 
     @Test
-    fun `get oidc server configuration - ok`() {
+    fun `get oidc server configuration - ok`() = runTest {
         every { getOIDCDiscoveryUseCase(any()) } returns UseCaseResult.Success(OC_OIDC_SERVER_CONFIGURATION)
-        oAuthViewModel.getOIDCServerConfiguration(OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl)
 
+        oAuthViewModel.getOIDCServerConfiguration(OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl)
+        advanceUntilIdle()
         assertEmittedValues(
-            expectedValues = listOf(
-                Event<UIResult<OIDCServerConfiguration>>(
-                    UIResult.Success(
-                        OC_OIDC_SERVER_CONFIGURATION
-                    )
-                )
-            ),
+            expectedValues = listOf(Event<UIResult<OIDCServerConfiguration>>(UIResult.Success(OC_OIDC_SERVER_CONFIGURATION))),
             liveData = oAuthViewModel.oidcDiscovery
         )
     }
 
     @Test
-    fun `get oidc server configuration - ko - exception`() {
+    fun `get oidc server configuration - ko - exception`() = runTest {
         every { getOIDCDiscoveryUseCase(any()) } returns UseCaseResult.Error(commonException)
-        oAuthViewModel.getOIDCServerConfiguration(OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl)
 
+        oAuthViewModel.getOIDCServerConfiguration(OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl)
+        advanceUntilIdle()
         assertEmittedValues(
             expectedValues = listOf(Event<UIResult<OIDCServerConfiguration>>(UIResult.Error(commonException))),
             liveData = oAuthViewModel.oidcDiscovery
@@ -132,10 +129,11 @@ class OAuthViewModelTest : ViewModelTest() {
     }
 
     @Test
-    fun `request token - ok - refresh token`() {
+    fun `request token - ok - refresh token`() = runTest {
         every { requestTokenUseCase(any()) } returns UseCaseResult.Success(OC_TOKEN_RESPONSE)
-        oAuthViewModel.requestToken(OC_TOKEN_REQUEST_REFRESH)
 
+        oAuthViewModel.requestToken(OC_TOKEN_REQUEST_REFRESH)
+        advanceUntilIdle()
         assertEmittedValues(
             expectedValues = listOf(Event<UIResult<TokenResponse>>(UIResult.Success(OC_TOKEN_RESPONSE))),
             liveData = oAuthViewModel.requestToken
@@ -143,10 +141,11 @@ class OAuthViewModelTest : ViewModelTest() {
     }
 
     @Test
-    fun `request token - ko - refresh token`() {
+    fun `request token - ko - refresh token`() = runTest {
         every { requestTokenUseCase(any()) } returns UseCaseResult.Error(commonException)
-        oAuthViewModel.requestToken(OC_TOKEN_REQUEST_REFRESH)
 
+        oAuthViewModel.requestToken(OC_TOKEN_REQUEST_REFRESH)
+        advanceUntilIdle()
         assertEmittedValues(
             expectedValues = listOf(Event<UIResult<TokenResponse>>(UIResult.Error(commonException))),
             liveData = oAuthViewModel.requestToken
@@ -154,10 +153,11 @@ class OAuthViewModelTest : ViewModelTest() {
     }
 
     @Test
-    fun `request token - ok - access token`() {
+    fun `request token - ok - access token`() = runTest {
         every { requestTokenUseCase(any()) } returns UseCaseResult.Success(OC_TOKEN_RESPONSE)
-        oAuthViewModel.requestToken(OC_TOKEN_REQUEST_ACCESS)
 
+        oAuthViewModel.requestToken(OC_TOKEN_REQUEST_ACCESS)
+        advanceUntilIdle()
         assertEmittedValues(
             expectedValues = listOf(Event<UIResult<TokenResponse>>(UIResult.Success(OC_TOKEN_RESPONSE))),
             liveData = oAuthViewModel.requestToken
@@ -165,10 +165,11 @@ class OAuthViewModelTest : ViewModelTest() {
     }
 
     @Test
-    fun `request token - ko - access token`() {
+    fun `request token - ko - access token`() = runTest {
         every { requestTokenUseCase(any()) } returns UseCaseResult.Error(commonException)
-        oAuthViewModel.requestToken(OC_TOKEN_REQUEST_ACCESS)
 
+        oAuthViewModel.requestToken(OC_TOKEN_REQUEST_ACCESS)
+        advanceUntilIdle()
         assertEmittedValues(
             expectedValues = listOf(Event<UIResult<TokenResponse>>(UIResult.Error(commonException))),
             liveData = oAuthViewModel.requestToken

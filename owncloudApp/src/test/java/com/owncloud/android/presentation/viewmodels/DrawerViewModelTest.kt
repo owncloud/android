@@ -69,7 +69,6 @@ class DrawerViewModelTest : ViewModelTest() {
         getUserQuotasUseCase = mockk()
         localStorageProvider = mockk()
 
-        testCoroutineDispatcher.pauseDispatcher()
 
         drawerViewModel = DrawerViewModel(
             getStoredQuotaAsStreamUseCase = getStoredQuotaAsStreamUseCase,

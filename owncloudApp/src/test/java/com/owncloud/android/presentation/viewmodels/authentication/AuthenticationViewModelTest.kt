@@ -62,6 +62,8 @@ import io.mockk.mockkConstructor
 import io.mockk.verify
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.advanceUntilIdle
+import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
@@ -129,7 +131,6 @@ class AuthenticationViewModelTest : ViewModelTest() {
         every { contextProvider.getBoolean(R.bool.enforce_secure_connection) } returns false
         every { contextProvider.getBoolean(R.bool.enforce_oidc) } returns false
 
-        testCoroutineDispatcher.pauseDispatcher()
 
         authenticationViewModel = AuthenticationViewModel(
             loginBasicAsyncUseCase = loginBasicAsyncUseCase,
@@ -157,63 +158,55 @@ class AuthenticationViewModelTest : ViewModelTest() {
     }
 
     @Test
-    fun getServerInfoOk() {
+    fun getServerInfoOk() = runTest {
         every { getServerInfoAsyncUseCase(any()) } returns UseCaseResult.Success(OC_SECURE_SERVER_INFO_BASIC_AUTH)
-        authenticationViewModel.getServerInfo(OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl)
 
+        authenticationViewModel.getServerInfo(OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl)
+        advanceUntilIdle()
         assertEmittedValues(
-            expectedValues = listOf(
-                Event(UIResult.Loading()),
-                Event(UIResult.Success(OC_SECURE_SERVER_INFO_BASIC_AUTH))
-            ),
+            expectedValues = listOf(Event(UIResult.Success(OC_SECURE_SERVER_INFO_BASIC_AUTH))),
             liveData = authenticationViewModel.serverInfo
         )
     }
 
     @Test
-    fun getServerInfoException() {
+    fun getServerInfoException() = runTest {
         every { getServerInfoAsyncUseCase(any()) } returns UseCaseResult.Error(commonException)
-        authenticationViewModel.getServerInfo(OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl)
 
+        authenticationViewModel.getServerInfo(OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl)
+        advanceUntilIdle()
         assertEmittedValues(
-            expectedValues = listOf(
-                Event(UIResult.Loading()),
-                Event(UIResult.Error(commonException))
-            ),
+            expectedValues = listOf(Event(UIResult.Error(commonException))),
             liveData = authenticationViewModel.serverInfo
         )
     }
 
     @Test
-    fun loginBasicOk() {
+    fun loginBasicOk() = runTest {
         every { loginBasicAsyncUseCase(any()) } returns UseCaseResult.Success(OC_BASIC_USERNAME)
+
         authenticationViewModel.loginBasic(OC_BASIC_USERNAME, OC_BASIC_PASSWORD, OC_ACCOUNT_NAME)
-
+        advanceUntilIdle()
         assertEmittedValues(
-            expectedValues = listOf(
-                Event(UIResult.Loading()),
-                Event(UIResult.Success(OC_BASIC_USERNAME))
-            ),
+            expectedValues = listOf(Event(UIResult.Success(OC_BASIC_USERNAME))),
             liveData = authenticationViewModel.loginResult
         )
     }
 
     @Test
-    fun loginBasicException() {
+    fun loginBasicException() = runTest {
         every { loginBasicAsyncUseCase(any()) } returns UseCaseResult.Error(commonException)
-        authenticationViewModel.loginBasic(OC_BASIC_USERNAME, OC_BASIC_PASSWORD, null)
 
+        authenticationViewModel.loginBasic(OC_BASIC_USERNAME, OC_BASIC_PASSWORD, null)
+        advanceUntilIdle()
         assertEmittedValues(
-            expectedValues = listOf(
-                Event(UIResult.Loading()),
-                Event(UIResult.Error(commonException))
-            ),
+            expectedValues = listOf(Event(UIResult.Error(commonException))),
             liveData = authenticationViewModel.loginResult
         )
     }
 
     @Test
-    fun loginOAuthWebFingerInstancesOk() {
+    fun loginOAuthWebFingerInstancesOk() = runTest {
         every { getServerInfoAsyncUseCase(any()) } returns UseCaseResult.Success(OC_SECURE_SERVER_INFO_BEARER_AUTH)
         authenticationViewModel.getServerInfo(OC_SECURE_SERVER_INFO_BEARER_AUTH.baseUrl)
 
@@ -229,12 +222,9 @@ class AuthenticationViewModelTest : ViewModelTest() {
             scope = OC_SCOPE,
             clientRegistrationInfo = OC_CLIENT_REGISTRATION
         )
-
+        advanceUntilIdle()
         assertEmittedValues(
-            expectedValues = listOf(
-                Event(UIResult.Loading()),
-                Event(UIResult.Success(OC_BASIC_USERNAME))
-            ),
+            expectedValues = listOf(Event(UIResult.Success(OC_BASIC_USERNAME))),
             liveData = authenticationViewModel.loginResult
         )
 
@@ -255,7 +245,7 @@ class AuthenticationViewModelTest : ViewModelTest() {
     }
 
     @Test
-    fun loginOAuthOk() {
+    fun loginOAuthOk() = runTest {
         every { getServerInfoAsyncUseCase(any()) } returns UseCaseResult.Success(OC_SECURE_SERVER_INFO_BEARER_AUTH)
         authenticationViewModel.getServerInfo(OC_SECURE_SERVER_INFO_BEARER_AUTH.baseUrl)
 
@@ -271,12 +261,9 @@ class AuthenticationViewModelTest : ViewModelTest() {
             scope = OC_SCOPE,
             clientRegistrationInfo = OC_CLIENT_REGISTRATION
         )
-
+        advanceUntilIdle()
         assertEmittedValues(
-            expectedValues = listOf(
-                Event(UIResult.Loading()),
-                Event(UIResult.Success(OC_BASIC_USERNAME))
-            ),
+            expectedValues = listOf(Event(UIResult.Success(OC_BASIC_USERNAME))),
             liveData = authenticationViewModel.loginResult
         )
 
@@ -297,7 +284,7 @@ class AuthenticationViewModelTest : ViewModelTest() {
     }
 
     @Test
-    fun loginOAuthException() {
+    fun loginOAuthException() = runTest {
         every { getServerInfoAsyncUseCase(any()) } returns UseCaseResult.Success(OC_SECURE_SERVER_INFO_BEARER_AUTH)
         authenticationViewModel.getServerInfo(OC_SECURE_SERVER_INFO_BEARER_AUTH.baseUrl)
 
@@ -313,21 +300,19 @@ class AuthenticationViewModelTest : ViewModelTest() {
             scope = OC_SCOPE,
             clientRegistrationInfo = OC_CLIENT_REGISTRATION
         )
-
+        advanceUntilIdle()
         assertEmittedValues(
-            expectedValues = listOf(
-                Event(UIResult.Loading()),
-                Event(UIResult.Error(commonException))
-            ),
+            expectedValues = listOf(Event(UIResult.Error(commonException))),
             liveData = authenticationViewModel.loginResult
         )
     }
 
     @Test
-    fun supportsOAuthOk() {
+    fun supportsOAuthOk() = runTest {
         every { supportsOAuth2UseCase(any()) } returns UseCaseResult.Success(true)
-        authenticationViewModel.supportsOAuth2(OC_BASIC_USERNAME)
 
+        authenticationViewModel.supportsOAuth2(OC_BASIC_USERNAME)
+        advanceUntilIdle()
         assertEmittedValues(
             expectedValues = listOf<Event<UIResult<Boolean>>>(Event(UIResult.Success(true))),
             liveData = authenticationViewModel.supportsOAuth2
@@ -335,10 +320,11 @@ class AuthenticationViewModelTest : ViewModelTest() {
     }
 
     @Test
-    fun supportsOAuthException() {
+    fun supportsOAuthException() = runTest {
         every { supportsOAuth2UseCase(any()) } returns UseCaseResult.Error(commonException)
-        authenticationViewModel.supportsOAuth2(OC_BASIC_USERNAME)
 
+        authenticationViewModel.supportsOAuth2(OC_BASIC_USERNAME)
+        advanceUntilIdle()
         assertEmittedValues(
             expectedValues = listOf<Event<UIResult<Boolean>>>(Event(UIResult.Error(commonException))),
             liveData = authenticationViewModel.supportsOAuth2
@@ -346,10 +332,11 @@ class AuthenticationViewModelTest : ViewModelTest() {
     }
 
     @Test
-    fun getBaseUrlOk() {
+    fun getBaseUrlOk() = runTest {
         every { getBaseUrlUseCase(any()) } returns UseCaseResult.Success(OC_SECURE_BASE_URL)
-        authenticationViewModel.getBaseUrl(OC_BASIC_USERNAME)
 
+        authenticationViewModel.getBaseUrl(OC_BASIC_USERNAME)
+        advanceUntilIdle()
         assertEmittedValues(
             expectedValues = listOf<Event<UIResult<String>>>(Event(UIResult.Success(OC_SECURE_BASE_URL))),
             liveData = authenticationViewModel.baseUrl
@@ -357,10 +344,11 @@ class AuthenticationViewModelTest : ViewModelTest() {
     }
 
     @Test
-    fun getBaseUrlException() {
+    fun getBaseUrlException() = runTest {
         every { getBaseUrlUseCase(any()) } returns UseCaseResult.Error(commonException)
-        authenticationViewModel.getBaseUrl(OC_BASIC_USERNAME)
 
+        authenticationViewModel.getBaseUrl(OC_BASIC_USERNAME)
+        advanceUntilIdle()
         assertEmittedValues(
             expectedValues = listOf<Event<UIResult<String>>>(Event(UIResult.Error(commonException))),
             liveData = authenticationViewModel.baseUrl

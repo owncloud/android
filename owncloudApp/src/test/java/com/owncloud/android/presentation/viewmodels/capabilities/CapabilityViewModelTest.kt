@@ -45,8 +45,10 @@ import io.mockk.unmockkAll
 import io.mockk.verify
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.TestCoroutineDispatcher
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -68,7 +70,7 @@ class CapabilityViewModelTest {
 
     private val capabilitiesLiveData = MutableLiveData<OCCapability>()
 
-    private val testCoroutineDispatcher = TestCoroutineDispatcher()
+    private val testCoroutineDispatcher = StandardTestDispatcher()
     private val coroutineDispatcherProvider: CoroutinesDispatcherProvider = CoroutinesDispatcherProvider(
         io = testCoroutineDispatcher,
         main = testCoroutineDispatcher,
@@ -104,8 +106,6 @@ class CapabilityViewModelTest {
     @After
     fun tearDown() {
         Dispatchers.resetMain()
-        testCoroutineDispatcher.cleanupTestCoroutines()
-
         stopKoin()
         unmockkAll()
     }
@@ -128,8 +128,6 @@ class CapabilityViewModelTest {
 
     @Test
     fun getCapabilitiesAsLiveDataWithData() {
-        initTest()
-
         val capability = OC_CAPABILITY.copy(accountName = testAccountName)
 
         getCapabilitiesAsLiveDataVerification(
@@ -140,8 +138,6 @@ class CapabilityViewModelTest {
 
     @Test
     fun getCapabilitiesAsLiveDataWithoutData() {
-        initTest()
-
         getCapabilitiesAsLiveDataVerification(
             valueToTest = null,
             expectedValue = Event(UIResult.Success(null))
@@ -151,9 +147,11 @@ class CapabilityViewModelTest {
     private fun getCapabilitiesAsLiveDataVerification(
         valueToTest: OCCapability?,
         expectedValue: Event<UIResult<OCCapability>>?
-    ) {
-        capabilitiesLiveData.postValue(valueToTest)
+    ) = runTest {
+        initTest()
 
+        capabilitiesLiveData.postValue(valueToTest)
+        advanceUntilIdle()
         val value = capabilityViewModel.capabilities.getLastEmittedValue()
         assertEquals(expectedValue, value)
 
@@ -182,12 +180,12 @@ class CapabilityViewModelTest {
     private fun fetchCapabilitiesVerification(
         useCaseResult: UseCaseResult<Unit>,
         expectedValue: Event<UIResult<Unit>?>
-    ) {
+    ) = runTest {
         initTest()
         coEvery { refreshCapabilitiesFromServerUseCase(any()) } returns useCaseResult
 
         capabilityViewModel.refreshCapabilitiesFromNetwork()
-
+        advanceUntilIdle()
         val value = capabilityViewModel.capabilities.getLastEmittedValue()
         assertEquals(expectedValue, value)
 

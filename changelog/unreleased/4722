@@ -1,0 +1,6 @@
+Change: Migrate tests to the new kotlinx-coroutines-test API
+
+Some tests from view model classes have been refactored in order to use the new kotlinx-coroutines-test API.
+
+https://github.com/owncloud/android/issues/4710
+https://github.com/owncloud/android/pull/4722
