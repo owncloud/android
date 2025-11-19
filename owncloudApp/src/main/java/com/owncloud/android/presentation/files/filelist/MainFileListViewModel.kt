@@ -172,7 +172,10 @@ class MainFileListViewModel(
                 )
             )
         }
-        startPeriodicalFoldersUpdate(accountName = initialFolderToDisplay.owner)
+        /*
+        TODO: Investigate why folders are duplicated in the list.
+         */
+//        startPeriodicalFoldersUpdate(accountName = initialFolderToDisplay.owner)
     }
 
     fun navigateToFolderId(folderId: Long) {
