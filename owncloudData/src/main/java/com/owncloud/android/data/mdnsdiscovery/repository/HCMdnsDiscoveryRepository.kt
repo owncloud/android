@@ -32,18 +32,21 @@ class HCMdnsDiscoveryRepository(
             serviceType = serviceType,
             serviceName = serviceName,
             duration = duration
-        ).mapNotNull { deviceUrl ->
+        ).mapNotNull { baseUrl ->
             // Verify each discovered device independently
-            Timber.d("Device discovered via mDNS: $deviceUrl - verifying...")
+            Timber.d("Device discovered via mDNS: $baseUrl - verifying...")
 
-            val isVerified = deviceVerificationClient.verifyDevice(deviceUrl)
+            val isVerified = deviceVerificationClient.verifyDevice(baseUrl)
 
             if (isVerified) {
-                Timber.d("Device verified: $deviceUrl")
+                Timber.d("Device verified: $baseUrl")
 
                 // Get certificate common name
-                val certificateCommonName = deviceVerificationClient.getCertificateCommonName(deviceUrl).orEmpty()
+                val certificateCommonName = deviceVerificationClient.getCertificateCommonName(baseUrl).orEmpty()
                 Timber.d("Device certificate common name: $certificateCommonName")
+                val deviceUrl = "$baseUrl/files"
+
+                // Emit device
 
                 Device(
                     id = deviceUrl,
@@ -54,7 +57,7 @@ class HCMdnsDiscoveryRepository(
                     certificateCommonName = certificateCommonName
                 )
             } else {
-                Timber.d("Device verification failed, skipping: $deviceUrl")
+                Timber.d("Device verification failed, skipping: $baseUrl")
                 null
             }
         }

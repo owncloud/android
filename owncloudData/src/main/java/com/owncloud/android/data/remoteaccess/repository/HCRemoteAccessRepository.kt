@@ -70,13 +70,13 @@ class HCRemoteAccessRepository(
 
             for (remoteDevicePath in remoteDevicePaths) {
                 val devicePathType = remoteDevicePath.type.mapToDomain()
-                val baseUrl = remoteDevicePath.getDeviceBaseUrl().removeSuffix("/files")
+                val deviceFilesUrl = remoteDevicePath.getDeviceBaseUrl()
+                val baseUrl = deviceFilesUrl.removeSuffix("/files")
                 if (certificateCommonName.isEmpty()) {
                     certificateCommonName = deviceVerificationClient.getCertificateCommonName(baseUrl).orEmpty()
                 }
 
-                availablePaths[devicePathType] = baseUrl
-
+                availablePaths[devicePathType] = deviceFilesUrl
             }
 
             if (availablePaths.isNotEmpty()) {

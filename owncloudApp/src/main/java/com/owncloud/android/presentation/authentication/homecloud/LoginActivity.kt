@@ -3,6 +3,7 @@ package com.owncloud.android.presentation.authentication.homecloud
 import android.accounts.AccountManager
 import android.content.Intent
 import android.os.Bundle
+import android.text.TextWatcher
 import android.util.Patterns
 import android.view.View
 import androidx.activity.addCallback
@@ -42,6 +43,8 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
 
     private lateinit var binding: AccountSetupHomecloudBinding
     private val dialogBinding by lazy { AccountDialogCodeBinding.inflate(layoutInflater) }
+
+    private var connectFieldTextWatcher: TextWatcher? = null
 
     private val adapter by lazy {
         DeviceAddressAdapter(
@@ -122,11 +125,11 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         }
 
         binding.hostUrlInput.setAdapter(adapter)
-        binding.hostUrlInput.setOnItemClickListener { parent, view, position, id ->
+        binding.hostUrlInput.setOnItemClickListener { parent, _, position, _ ->
             val selectedDevice = parent.getItemAtPosition(position) as Device
             loginViewModel.onDeviceSelected(selectedDevice)
         }
-        binding.hostUrlInput.doAfterTextChanged { text ->
+        connectFieldTextWatcher = binding.hostUrlInput.doAfterTextChanged { text ->
             loginViewModel.onServerUrlChanged(text.toString())
         }
         binding.serversRefreshButton.setOnClickListener {
@@ -243,11 +246,13 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
                 binding.backButton.visibility = View.VISIBLE
                 updateDevices(state.devices)
                 binding.accountPassword.updateTextIfDiffers(state.password)
+                binding.hostUrlInput.removeTextChangedListener(connectFieldTextWatcher)
                 if (state.selectedDevice == null) {
                     binding.hostUrlInput.updateTextIfDiffers(state.serverUrl)
                 } else {
                     binding.hostUrlInput.updateTextIfDiffers(state.selectedDevice.name)
                 }
+                connectFieldTextWatcher?.let {  binding.hostUrlInput.addTextChangedListener(it) }
                 binding.serversRefreshButton.visibility = if (state.isRefreshServersLoading) View.INVISIBLE else View.VISIBLE
                 binding.serversRefreshLoading.visibility = if (state.isRefreshServersLoading) View.VISIBLE else View.GONE
                 if (state.isLoading) {

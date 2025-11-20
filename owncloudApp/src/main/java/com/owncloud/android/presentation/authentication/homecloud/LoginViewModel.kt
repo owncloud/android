@@ -24,7 +24,6 @@ import com.owncloud.android.domain.remoteaccess.usecases.GetRemoteAccessTokenUse
 import com.owncloud.android.domain.remoteaccess.usecases.InitiateRemoteAccessAuthenticationUseCase
 import com.owncloud.android.domain.server.usecases.GetAvailableDevicesUseCase
 import com.owncloud.android.domain.server.usecases.GetAvailableServerInfoUseCase
-import com.owncloud.android.domain.server.usecases.GetServerInfoAsyncUseCase
 import com.owncloud.android.domain.spaces.usecases.RefreshSpacesFromServerAsyncUseCase
 import com.owncloud.android.extensions.parseError
 import com.owncloud.android.lib.common.network.CertificateCombinedException
@@ -47,7 +46,6 @@ import kotlin.time.Duration.Companion.seconds
 
 class LoginViewModel(
     private val loginBasicAsyncUseCase: LoginBasicAsyncUseCase,
-    private val getServerInfoAsyncUseCase: GetServerInfoAsyncUseCase,
     private val refreshCapabilitiesFromServerAsyncUseCase: RefreshCapabilitiesFromServerAsyncUseCase,
     private val getStoredCapabilitiesUseCase: GetStoredCapabilitiesUseCase,
     private val refreshSpacesFromServerAsyncUseCase: RefreshSpacesFromServerAsyncUseCase,
@@ -136,14 +134,13 @@ class LoginViewModel(
         changeDevice(hostUrl = serverUrl)
     }
 
-    private fun changeDevice(selectedDevice: Device? = null, hostUrl: String = "") {
-        _state.update { currentState ->
+    private fun changeDevice(selectedDevice: Device? = null, hostUrl: String = "") { _state.update { currentState ->
             when (currentState) {
                 is LoginScreenState.LoginState -> {
                     if (selectedDevice == null) {
-                        currentState.copy(serverUrl = hostUrl)
+                        currentState.copy(serverUrl = hostUrl, selectedDevice = null)
                     } else {
-                        currentState.copy(selectedDevice = selectedDevice)
+                        currentState.copy(selectedDevice = selectedDevice, serverUrl = "")
                     }
                 }
 
