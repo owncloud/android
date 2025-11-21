@@ -50,6 +50,7 @@ import com.owncloud.android.domain.availableoffline.usecases.UnsetFilesAsAvailab
 import com.owncloud.android.domain.capabilities.usecases.GetCapabilitiesAsLiveDataUseCase
 import com.owncloud.android.domain.capabilities.usecases.GetStoredCapabilitiesUseCase
 import com.owncloud.android.domain.capabilities.usecases.RefreshCapabilitiesFromServerAsyncUseCase
+import com.owncloud.android.domain.device.GetCurrentDevicePathsUseCase
 import com.owncloud.android.domain.device.SaveCurrentDeviceUseCase
 import com.owncloud.android.domain.device.usecases.ManageDynamicUrlSwitchingUseCase
 import com.owncloud.android.domain.files.usecases.CleanConflictUseCase
@@ -308,6 +309,7 @@ val useCaseModule = module {
     factoryOf(::GetAvailableDevicesUseCase)
     factoryOf(::GetExistingRemoveAccessUserUseCase)
     factoryOf(::SaveCurrentDeviceUseCase)
+    factoryOf(::GetCurrentDevicePathsUseCase)
 
     // mDNS Discovery
     factoryOf(::DiscoverLocalNetworkDevicesUseCase)

@@ -114,6 +114,11 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
      */
     private var capabilities: OCCapability? = null
 
+    /**
+     * Remote base url obtained from the current device repository
+     */
+    private var remoteBaseUrl: String? = null
+
     private// Array with numbers already set in public link names
     // Inspect public links for default names already used
     // better not suggesting a name than crashing
@@ -278,6 +283,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
         requireActivity().setTitle(R.string.share_dialog_title)
         observeCapabilities() // Get capabilities to update some UI elements depending on them
         observeShares()
+        observeRemoteBaseUrl()
     }
 
     override fun onAttach(context: Context) {
@@ -355,6 +361,15 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
         }
     }
 
+    private fun observeRemoteBaseUrl() {
+        shareViewModel.remoteBaseUrl.observe(viewLifecycleOwner) { remoteBaseUrl ->
+            this.remoteBaseUrl = remoteBaseUrl
+            showOrHidePrivateLink()
+            updateShareViaLinkVisibility()
+            updatePublicLinkButton()
+        }
+    }
+
     private fun updateShares(shares: List<OCShare>) {
         shares.filter { share ->
             share.shareType == ShareType.USER ||
@@ -372,12 +387,12 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
     }
 
     private fun showOrHidePrivateLink() {
-        if (file?.privateLink.isNullOrEmpty() || isPrivateLinkDisabled) {
+        if (file?.privateLink.isNullOrEmpty() || isPrivateLinkDisabled || remoteBaseUrl.isNullOrEmpty()) {
             binding.getPrivateLinkButton.visibility = View.INVISIBLE
         } else {
             with(binding.getPrivateLinkButton) {
                 visibility = View.VISIBLE
-                setOnClickListener { listener?.copyOrSendPrivateLink(file!!) }
+                setOnClickListener { listener?.copyOrSendPrivateLink(file!!, remoteBaseUrl) }
 
                 setOnLongClickListener {
                     // Show a toast message explaining what a private link is
@@ -402,7 +417,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
         // Update view depending on updated capabilities
         binding.shareHeaderDivider.isVisible = isShareApiEnabled
         binding.shareWithUsersSection.isVisible = isShareApiEnabled
-        binding.shareViaLinkSection.isVisible = isShareApiEnabled && isPublicShareEnabled
+        updateShareViaLinkVisibility()
     }
 
     /**************************************************************************************************************
@@ -477,6 +492,11 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
             return
         }
 
+        if (remoteBaseUrl.isNullOrEmpty()) {
+            binding.addPublicLinkButton.visibility = View.INVISIBLE
+            return
+        }
+
         if (!enableMultiplePublicSharing()) {
             if (publicLinks.isNullOrEmpty()) {
                 binding.addPublicLinkButton.visibility = View.VISIBLE
@@ -484,6 +504,11 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
             }
             binding.addPublicLinkButton.visibility = View.INVISIBLE
         }
+    }
+
+    private fun updateShareViaLinkVisibility() {
+        val shouldShowShareViaLinkSection = isShareApiEnabled && isPublicShareEnabled && !remoteBaseUrl.isNullOrEmpty()
+        binding.shareViaLinkSection.isVisible = shouldShowShareViaLinkSection
     }
 
     /**
@@ -515,7 +540,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
 
     override fun copyOrSendPublicLink(share: OCShare) {
         //GetLink from the server and show ShareLinkToDialog
-        listener?.copyOrSendPublicLink(share)
+        listener?.copyOrSendPublicLink(share, remoteBaseUrl)
     }
 
     /**

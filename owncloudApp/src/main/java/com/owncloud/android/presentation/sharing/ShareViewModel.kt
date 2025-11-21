@@ -23,10 +23,13 @@ package com.owncloud.android.presentation.sharing
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.owncloud.android.domain.capabilities.model.OCCapability
 import com.owncloud.android.domain.capabilities.usecases.GetStoredCapabilitiesUseCase
+import com.owncloud.android.domain.device.GetCurrentDevicePathsUseCase
+import com.owncloud.android.domain.device.model.DevicePathType
 import com.owncloud.android.domain.sharing.shares.model.OCShare
 import com.owncloud.android.domain.sharing.shares.model.ShareType
 import com.owncloud.android.domain.sharing.shares.usecases.CreatePrivateShareAsyncUseCase
@@ -59,6 +62,7 @@ class ShareViewModel(
     private val editPublicShareUseCase: EditPublicShareAsyncUseCase,
     private val deletePublicShareUseCase: DeleteShareAsyncUseCase,
     private val getStoredCapabilitiesUseCase: GetStoredCapabilitiesUseCase,
+    private val getCurrentDevicePathsUseCase: GetCurrentDevicePathsUseCase,
     private val coroutineDispatcherProvider: CoroutinesDispatcherProvider
 ) : ViewModel() {
 
@@ -89,6 +93,9 @@ class ShareViewModel(
     private val _publicShareEditionStatus = MediatorLiveData<Event<UIResult<Unit>>>()
     val publicShareEditionStatus: LiveData<Event<UIResult<Unit>>> = _publicShareEditionStatus
 
+    private val _remoteBaseUrl = MutableLiveData<String?>()
+    val remoteBaseUrl: LiveData<String?> = _remoteBaseUrl
+
 
 
     init {
@@ -98,12 +105,21 @@ class ShareViewModel(
 
         refreshSharesFromNetwork()
 
+        fetchRemoteBaseUrl()
+
         viewModelScope.launch(coroutineDispatcherProvider.io) {
             capabilities = getStoredCapabilitiesUseCase(
                 GetStoredCapabilitiesUseCase.Params(
                     accountName = accountName
                 )
             )
+        }
+    }
+
+    private fun fetchRemoteBaseUrl() {
+        viewModelScope.launch(coroutineDispatcherProvider.io) {
+            val remoteBaseUrl = getCurrentDevicePathsUseCase()[DevicePathType.REMOTE]
+            _remoteBaseUrl.postValue(remoteBaseUrl)
         }
     }
 

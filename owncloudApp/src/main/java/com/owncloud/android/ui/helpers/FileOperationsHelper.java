@@ -31,6 +31,7 @@ import android.accounts.AccountManager;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
+import android.text.TextUtils;
 import android.webkit.MimeTypeMap;
 
 import com.owncloud.android.R;
@@ -46,7 +47,10 @@ import com.owncloud.android.usecases.synchronization.SynchronizeFolderUseCase;
 import com.owncloud.android.utils.UriUtilsKt;
 import kotlin.Lazy;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import timber.log.Timber;
+
+import java.net.URI;
 
 import static org.koin.java.KoinJavaComponent.inject;
 
@@ -131,7 +135,7 @@ public class FileOperationsHelper {
      *
      * @param file @param file {@link OCFile} which will be shared with internal users
      */
-    public void copyOrSendPrivateLink(OCFile file) {
+    public void copyOrSendPrivateLink(OCFile file, @Nullable String remoteBaseUrl) {
 
         // Parse remoteId
         String privateLink = file.getPrivateLink();
@@ -143,7 +147,7 @@ public class FileOperationsHelper {
             return;
         }
 
-        shareLink(privateLink);
+        shareLink(applyRemoteBaseUrl(privateLink, remoteBaseUrl));
     }
 
     /**
@@ -152,16 +156,16 @@ public class FileOperationsHelper {
      *
      * @param share {@link OCShare} which link will be sent to the app chosen by the user.
      */
-    public void copyOrSendPublicLink(OCShare share) {
+    public void copyOrSendPublicLink(OCShare share, @Nullable String remoteBaseUrl) {
         String link = share.getShareLink();
-        if (link.length() <= 0) {
+        if (link == null || link.length() <= 0) {
             mFileActivity.showSnackMessage(
                     mFileActivity.getString(R.string.share_no_link_in_this_share)
             );
             return;
         }
 
-        shareLink(link);
+        shareLink(applyRemoteBaseUrl(link, remoteBaseUrl));
     }
 
     /**
@@ -269,5 +273,35 @@ public class FileOperationsHelper {
         );
 
         mFileActivity.startActivity(shareSheetIntent);
+    }
+
+    private String applyRemoteBaseUrl(String originalLink, @Nullable String remoteBaseUrl) {
+        if (TextUtils.isEmpty(originalLink) || TextUtils.isEmpty(remoteBaseUrl)) {
+            return originalLink;
+        }
+
+        try {
+            URI originalUri = new URI(originalLink);
+            URI remoteUri = new URI(remoteBaseUrl);
+
+            if (remoteUri.getHost() == null) {
+                return originalLink;
+            }
+
+            URI rebuiltUri = new URI(
+                    remoteUri.getScheme() != null ? remoteUri.getScheme() : originalUri.getScheme(),
+                    remoteUri.getUserInfo(),
+                    remoteUri.getHost(),
+                    remoteUri.getPort(),
+                    originalUri.getPath(),
+                    originalUri.getRawQuery(),
+                    originalUri.getRawFragment()
+            );
+
+            return rebuiltUri.toString();
+        } catch (java.net.URISyntaxException e) {
+            Timber.w(e, "Unable to rebuild link using remote base url %s", remoteBaseUrl);
+            return originalLink;
+        }
     }
 }

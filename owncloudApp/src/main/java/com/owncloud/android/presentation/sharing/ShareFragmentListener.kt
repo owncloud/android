@@ -37,7 +37,7 @@ import com.owncloud.android.domain.sharing.shares.model.OCShare
  * See the Android docs [Communicating with fragments](https://developer.android.com/guide/fragments/communicate) for more information.
  */
 interface ShareFragmentListener {
-    fun copyOrSendPrivateLink(file: OCFile)
+    fun copyOrSendPrivateLink(file: OCFile, remoteBaseUrl: String?)
 
     fun deleteShare(remoteId: String)
 
@@ -55,7 +55,7 @@ interface ShareFragmentListener {
 
     fun showRemoveShare(share: OCShare)
 
-    fun copyOrSendPublicLink(share: OCShare)
+    fun copyOrSendPublicLink(share: OCShare, remoteBaseUrl: String?)
 
     /**************************************************************************************************************
      *********************************************** PRIVATE SHARES ***********************************************

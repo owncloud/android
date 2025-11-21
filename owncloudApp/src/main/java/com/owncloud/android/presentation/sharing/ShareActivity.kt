@@ -220,8 +220,8 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
         )
     }
 
-    override fun copyOrSendPrivateLink(file: OCFile) {
-        fileOperationsHelper.copyOrSendPrivateLink(file)
+    override fun copyOrSendPrivateLink(file: OCFile, remoteBaseUrl: String?) {
+        fileOperationsHelper.copyOrSendPrivateLink(file, remoteBaseUrl)
     }
 
     /**************************************************************************************************************
@@ -289,8 +289,8 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
         shareViewModel.deleteShare(remoteId)
     }
 
-    override fun copyOrSendPublicLink(share: OCShare) {
-        fileOperationsHelper.copyOrSendPublicLink(share)
+    override fun copyOrSendPublicLink(share: OCShare, remoteBaseUrl: String?) {
+        fileOperationsHelper.copyOrSendPublicLink(share, remoteBaseUrl)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

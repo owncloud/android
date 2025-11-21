@@ -40,7 +40,7 @@ class TestShareFileActivity : SingleFragmentActivity(), ShareFragmentListener, C
 
     fun getTestFragment(): Fragment? = supportFragmentManager.findFragmentByTag(TEST_FRAGMENT_TAG)
 
-    override fun copyOrSendPrivateLink(file: OCFile) {
+    override fun copyOrSendPrivateLink(file: OCFile, remoteBaseUrl: String?) {
     }
 
     override fun deleteShare(remoteId: String) {
@@ -61,7 +61,7 @@ class TestShareFileActivity : SingleFragmentActivity(), ShareFragmentListener, C
     override fun showRemoveShare(share: OCShare) {
     }
 
-    override fun copyOrSendPublicLink(share: OCShare) {
+    override fun copyOrSendPublicLink(share: OCShare, remoteBaseUrl: String?) {
     }
 
     override fun showSearchUsersAndGroups() {
