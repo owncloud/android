@@ -31,7 +31,9 @@ import com.owncloud.android.R
 import com.owncloud.android.data.executeRemoteOperation
 import com.owncloud.android.domain.automaticuploads.model.UploadBehavior
 import com.owncloud.android.domain.capabilities.usecases.GetStoredCapabilitiesUseCase
+import com.owncloud.android.domain.exceptions.CancelledException
 import com.owncloud.android.domain.exceptions.LocalFileNotFoundException
+import com.owncloud.android.domain.exceptions.NoNetworkConnectionException
 import com.owncloud.android.domain.exceptions.UnauthorizedException
 import com.owncloud.android.domain.files.model.OCFile.Companion.PATH_SEPARATOR
 import com.owncloud.android.domain.files.usecases.CleanConflictUseCase
@@ -120,9 +122,14 @@ class UploadFileFromFileSystemWorker(
             Result.success()
         } catch (throwable: Throwable) {
             Timber.e(throwable)
-            showNotification(throwable)
-            updateUploadsDatabaseWithResult(throwable)
-            Result.failure()
+            if (throwable is NoNetworkConnectionException) {
+                Timber.i("Upload network error, scheduling retry")
+                Result.retry()
+            } else {
+                showNotification(throwable)
+                updateUploadsDatabaseWithResult(throwable)
+                Result.failure()
+            }
         }
     }
 

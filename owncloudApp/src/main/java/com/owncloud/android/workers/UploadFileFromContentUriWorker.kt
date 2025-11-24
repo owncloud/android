@@ -35,7 +35,9 @@ import com.owncloud.android.data.executeRemoteOperation
 import com.owncloud.android.data.providers.LocalStorageProvider
 import com.owncloud.android.domain.automaticuploads.model.UploadBehavior
 import com.owncloud.android.domain.capabilities.usecases.GetStoredCapabilitiesUseCase
+import com.owncloud.android.domain.exceptions.CancelledException
 import com.owncloud.android.domain.exceptions.LocalFileNotFoundException
+import com.owncloud.android.domain.exceptions.NetworkErrorException
 import com.owncloud.android.domain.exceptions.UnauthorizedException
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.files.usecases.GetWebDavUrlForSpaceUseCase
@@ -124,9 +126,14 @@ class UploadFileFromContentUriWorker(
             Result.success()
         } catch (throwable: Throwable) {
             Timber.e(throwable)
-            showNotification(throwable)
-            updateUploadsDatabaseWithResult(throwable)
-            Result.failure()
+            if (throwable is NetworkErrorException) {
+                Timber.i("Upload network error, scheduling retry")
+                Result.retry()
+            } else {
+                showNotification(throwable)
+                updateUploadsDatabaseWithResult(throwable)
+                Result.failure()
+            }
         }
     }
 
