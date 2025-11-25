@@ -73,6 +73,7 @@ import com.owncloud.android.utils.DisplayUtils
 import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.presentation.spaces.createspace.CreateSpaceDialogFragment
 import com.owncloud.android.presentation.transfers.TransfersViewModel
+import com.owncloud.android.presentation.spaces.setspaceicon.SetSpaceIconDialogFragment
 import kotlinx.coroutines.flow.SharedFlow
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -444,7 +445,10 @@ class SpacesListFragment :
                         }
                         editSpaceImageLauncher.launch(action)
                     }
-                    SpaceMenuOption.SET_ICON -> { }
+                    SpaceMenuOption.SET_ICON -> {
+                        val setIconDialog = SetSpaceIconDialogFragment.newInstance()
+                        setIconDialog.show(requireActivity().supportFragmentManager, DIALOG_SET_ICON)
+                    }
                 }
             }
         }
@@ -468,6 +472,7 @@ class SpacesListFragment :
         const val SPACE_CONFIG_DIR = "/.space/"
 
         private const val DIALOG_CREATE_SPACE = "DIALOG_CREATE_SPACE"
+        private const val DIALOG_SET_ICON = "DIALOG_SET_ICON"
 
         fun newInstance(
             showPersonalSpace: Boolean,
