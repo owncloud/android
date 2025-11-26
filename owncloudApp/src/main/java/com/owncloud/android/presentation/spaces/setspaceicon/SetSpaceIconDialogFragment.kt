@@ -57,7 +57,7 @@ class SetSpaceIconDialogFragment : DialogFragment() {
 
     private fun convertEmojiToImageFile(emoji: String): File {
         val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-            textSize = 250f
+            textSize = EMOJI_SIZE
             textAlign = Paint.Align.CENTER
         }
         val bitmap = Bitmap.createBitmap(ICON_WIDTH, ICON_HEIGHT, Bitmap.Config.ARGB_8888)
@@ -83,6 +83,7 @@ class SetSpaceIconDialogFragment : DialogFragment() {
     companion object {
         private const val ICON_HEIGHT = 405
         private const val ICON_WIDTH = 720
+        private const val EMOJI_SIZE = 250f
         private const val EMOJI_FILE_NAME = "emoji.png"
 
         fun newInstance(
