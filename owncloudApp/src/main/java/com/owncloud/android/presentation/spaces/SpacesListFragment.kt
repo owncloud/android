@@ -83,7 +83,8 @@ class SpacesListFragment :
     SpacesListAdapter.SpacesListAdapterListener,
     Fragment(),
     SearchView.OnQueryTextListener,
-    CreateSpaceDialogFragment.CreateSpaceListener
+    CreateSpaceDialogFragment.CreateSpaceListener,
+    SetSpaceIconDialogFragment.SetIconListener
 {
     private var _binding: SpacesListFragmentBinding? = null
     private val binding get() = _binding!!
@@ -91,8 +92,7 @@ class SpacesListFragment :
     private var isMultiPersonal = false
     private var userPermissions = mutableSetOf<UserPermissions>()
     private var editQuotaPermission = false
-    private var lastUpdatedRemotePath: String? = null
-    private var selectedImageName: String? = null
+    private var selectedImagePath: String? = null
     private lateinit var currentSpace: OCSpace
 
     private val spacesListViewModel: SpacesListViewModel by viewModel {
@@ -115,7 +115,7 @@ class SpacesListFragment :
             val selectedImageUri = result.data?.data ?: return@registerForActivityResult
             val accountName = requireArguments().getString(BUNDLE_ACCOUNT_NAME) ?: return@registerForActivityResult
             val documentFile = DocumentFile.fromSingleUri(requireContext(), selectedImageUri) ?: return@registerForActivityResult
-            selectedImageName = documentFile.name
+            selectedImagePath = SPACE_CONFIG_DIR + documentFile.name
 
             transfersViewModel.uploadFilesFromContentUri(
                 accountName = accountName,
@@ -248,14 +248,15 @@ class SpacesListFragment :
         }
 
         collectLatestLifecycleFlow(transfersViewModel.transfersWithSpaceStateFlow) { transfersWithSpace ->
-            val remotePath = SPACE_CONFIG_DIR + selectedImageName
-            val matchedTransfer = transfersWithSpace.map { it.first }.find { it.remotePath == remotePath }
+            val matchedTransfer = transfersWithSpace.map { it.first }.find { it.remotePath == selectedImagePath }
 
-            if (matchedTransfer != null && lastUpdatedRemotePath != matchedTransfer.remotePath) {
+            matchedTransfer?.let {
                 when(matchedTransfer.status) {
                     TransferStatus.TRANSFER_SUCCEEDED -> {
                         spacesListViewModel.editSpaceImage(currentSpace.id, matchedTransfer.remotePath)
-                        lastUpdatedRemotePath = matchedTransfer.remotePath
+                        matchedTransfer.id?.let {
+                            transfersViewModel.clearSuccessfulTransferById(it)
+                        }
                     }
                     TransferStatus.TRANSFER_FAILED -> {
                         showMessageInSnackbar(getString(R.string.edit_space_image_failed))
@@ -327,6 +328,17 @@ class SpacesListFragment :
 
     override fun editSpace(spaceId: String, spaceName: String, spaceSubtitle: String, spaceQuota: Long?) {
         spacesListViewModel.editSpace(spaceId, spaceName, spaceSubtitle, spaceQuota)
+    }
+
+    override fun setSpaceIcon(fileName: String, localPath: String) {
+        selectedImagePath = SPACE_CONFIG_DIR + fileName
+        transfersViewModel.uploadFilesFromSystem(
+            accountName = requireArguments().getString(BUNDLE_ACCOUNT_NAME) ?: "",
+            listOfLocalPaths = listOf(localPath),
+            uploadFolderPath = SPACE_CONFIG_DIR,
+            spaceId = currentSpace.id,
+            forceOverwrite = true
+        )
     }
 
     fun setSearchListener(searchView: SearchView) {
@@ -446,7 +458,7 @@ class SpacesListFragment :
                         editSpaceImageLauncher.launch(action)
                     }
                     SpaceMenuOption.SET_ICON -> {
-                        val setIconDialog = SetSpaceIconDialogFragment.newInstance()
+                        val setIconDialog = SetSpaceIconDialogFragment.newInstance(listener = this@SpacesListFragment)
                         setIconDialog.show(requireActivity().supportFragmentManager, DIALOG_SET_ICON)
                     }
                 }

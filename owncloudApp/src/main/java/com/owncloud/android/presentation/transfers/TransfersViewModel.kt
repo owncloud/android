@@ -2,8 +2,9 @@
  * ownCloud Android client application
  *
  * @author Juan Carlos Garrote Gascón
+ * @author Jorge Aguado Recio
  *
- * Copyright (C) 2023 ownCloud GmbH.
+ * Copyright (C) 2025 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -30,6 +31,7 @@ import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.spaces.model.OCSpace
 import com.owncloud.android.domain.spaces.usecases.GetSpacesFromEveryAccountUseCaseAsStream
 import com.owncloud.android.domain.transfers.model.OCTransfer
+import com.owncloud.android.domain.transfers.usecases.ClearSuccessfulTransferByIdUseCase
 import com.owncloud.android.domain.transfers.usecases.ClearSuccessfulTransfersUseCase
 import com.owncloud.android.domain.transfers.usecases.GetAllTransfersAsStreamUseCase
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
@@ -61,6 +63,7 @@ class TransfersViewModel(
     private val retryFailedUploadsForAccountUseCase: RetryFailedUploadsForAccountUseCase,
     private val clearFailedTransfersUseCase: ClearFailedTransfersUseCase,
     private val retryFailedUploadsUseCase: RetryFailedUploadsUseCase,
+    private val clearSuccessfulTransferByIdUseCase: ClearSuccessfulTransferByIdUseCase,
     private val clearSuccessfulTransfersUseCase: ClearSuccessfulTransfersUseCase,
     getAllTransfersAsStreamUseCase: GetAllTransfersAsStreamUseCase,
     private val cancelDownloadForFileUseCase: CancelDownloadForFileUseCase,
@@ -120,6 +123,7 @@ class TransfersViewModel(
         listOfLocalPaths: List<String>,
         uploadFolderPath: String,
         spaceId: String?,
+        forceOverwrite: Boolean = false
     ) {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
             uploadFilesFromSystemUseCase(
@@ -128,6 +132,7 @@ class TransfersViewModel(
                     listOfLocalPaths = listOfLocalPaths,
                     uploadFolderPath = uploadFolderPath,
                     spaceId = spaceId,
+                    forceOverwrite = forceOverwrite
                 )
             )
         }
@@ -194,6 +199,12 @@ class TransfersViewModel(
     fun clearSuccessfulTransfers() {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
             clearSuccessfulTransfersUseCase(Unit)
+        }
+    }
+
+    fun clearSuccessfulTransferById(id: Long) {
+        viewModelScope.launch(coroutinesDispatcherProvider.io) {
+            clearSuccessfulTransferByIdUseCase(ClearSuccessfulTransferByIdUseCase.Params(id))
         }
     }
 }

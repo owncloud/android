@@ -39,6 +39,7 @@ import java.io.File
  * - Share with oC - Plain Text
  * - Share with oC - Files
  * - Conflicts - Keep both
+ * - Set emoji as space image
  *
  * It stores the upload in the database and then enqueue a new worker to upload the single file
  */
@@ -61,6 +62,7 @@ class UploadFilesFromSystemUseCase(
                 uploadPath = params.uploadFolderPath.plus(localFile.name),
                 accountName = params.accountName,
                 spaceId = params.spaceId,
+                forceOverWrite = params.forceOverwrite
             )
 
             enqueueSingleUpload(
@@ -78,6 +80,7 @@ class UploadFilesFromSystemUseCase(
         uploadPath: String,
         accountName: String,
         spaceId: String?,
+        forceOverWrite: Boolean
     ): Long {
         val ocTransfer = OCTransfer(
             localPath = localFile.absolutePath,
@@ -86,7 +89,7 @@ class UploadFilesFromSystemUseCase(
             fileSize = localFile.length(),
             status = TransferStatus.TRANSFER_QUEUED,
             localBehaviour = UploadBehavior.MOVE,
-            forceOverwrite = false,
+            forceOverwrite = forceOverWrite,
             createdBy = UploadEnqueuedBy.ENQUEUED_BY_USER,
             spaceId = spaceId,
         )
@@ -120,5 +123,6 @@ class UploadFilesFromSystemUseCase(
         val listOfLocalPaths: List<String>,
         val uploadFolderPath: String,
         val spaceId: String?,
+        val forceOverwrite: Boolean = false,
     )
 }

@@ -36,6 +36,8 @@ class SetSpaceIconDialogFragment : DialogFragment() {
     private var _binding: SetSpaceIconDialogBinding? = null
     private val binding get() = _binding!!
 
+    private lateinit var setIconListener: SetIconListener
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = SetSpaceIconDialogBinding.inflate(inflater, container, false)
         return binding.root
@@ -47,6 +49,7 @@ class SetSpaceIconDialogFragment : DialogFragment() {
             cancelSetSpaceIconButton.setOnClickListener { dialog?.dismiss() }
             emojiPicker.setOnEmojiPickedListener { emojiItem ->
                 val emojiFile = convertEmojiToImageFile(emojiItem.emoji)
+                setIconListener.setSpaceIcon(emojiFile.name, emojiFile.absolutePath)
                 dialog?.dismiss()
             }
         }
@@ -73,13 +76,20 @@ class SetSpaceIconDialogFragment : DialogFragment() {
         return file
     }
 
+    interface SetIconListener {
+        fun setSpaceIcon(fileName: String, localPath: String)
+    }
+
     companion object {
         private const val ICON_HEIGHT = 405
         private const val ICON_WIDTH = 720
         private const val EMOJI_FILE_NAME = "emoji.png"
 
-        fun newInstance(): SetSpaceIconDialogFragment =
+        fun newInstance(
+            listener: SetIconListener
+        ): SetSpaceIconDialogFragment =
             SetSpaceIconDialogFragment().apply {
+                setIconListener = listener
                 arguments = Bundle()
             }
     }
