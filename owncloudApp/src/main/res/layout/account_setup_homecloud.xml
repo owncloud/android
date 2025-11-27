@@ -49,7 +49,7 @@
 
             <androidx.constraintlayout.widget.Group
                 android:id="@+id/login_state_group"
-                app:constraint_referenced_ids="hostUrlInputLayout,account_password_container,reset_password_link"
+                app:constraint_referenced_ids="hostUrlInputLayout,account_password_container,reset_password_link,cant_find_device"
                 android:layout_width="0dp"
                 android:layout_height="0dp" />
 
@@ -80,6 +80,16 @@
                     android:inputType="textUri"
                     android:textColorHint="@color/homecloud_input_placeholder" />
             </com.google.android.material.textfield.TextInputLayout>
+
+            <Button
+                android:id="@+id/cant_find_device"
+                style="@style/Button.Borderless"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:contentDescription="@string/setup_btn_login"
+                android:text="@string/homecloud_cant_find_device"
+                app:layout_constraintTop_toBottomOf="@id/hostUrlInputLayout"
+                app:layout_constraintStart_toStartOf="parent" />
 
             <ImageView
                 android:id="@+id/servers_refresh_button"
@@ -169,7 +179,7 @@
                 app:hintAnimationEnabled="true"
                 app:expandedHintEnabled="true"
                 app:hintEnabled="true"
-                app:layout_constraintTop_toBottomOf="@id/hostUrlInputLayout"
+                app:layout_constraintTop_toBottomOf="@id/cant_find_device"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent">
                 <com.google.android.material.textfield.TextInputEditText
@@ -187,13 +197,10 @@
                 style="@style/Button.Borderless"
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
-                android:layout_marginTop="16dp"
                 android:contentDescription="@string/setup_btn_login"
                 android:text="@string/homecloud_reset_password"
                 app:layout_constraintTop_toBottomOf="@id/account_password_container"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0" />
+                app:layout_constraintStart_toStartOf="parent" />
 
             <TextView
                 android:id="@+id/error_message"
@@ -287,4 +294,12 @@
         android:src="@drawable/ic_settings"
         android:text="@string/actionbar_settings"
         app:tint="?attr/colorOnSecondaryContainer" />
+
+    <include
+        android:id="@+id/unable_to_connect_layout"
+        layout="@layout/layout_unable_to_connect"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
 </FrameLayout>

@@ -2,8 +2,13 @@ package com.owncloud.android.presentation.authentication.homecloud
 
 import android.accounts.AccountManager
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.text.SpannableStringBuilder
 import android.text.TextWatcher
+import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
+import android.text.style.ForegroundColorSpan
 import android.util.Patterns
 import android.view.View
 import androidx.activity.addCallback
@@ -91,6 +96,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
             })
         }
         setupListeners()
+        setupUnableToConnectContent()
     }
 
     private fun handleDeepLink() {
@@ -120,6 +126,9 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         binding.resetPasswordLink.setOnClickListener {
             showMessageInSnackbar(message = "Not implemented yet")
         }
+        binding.cantFindDevice.setOnClickListener {
+            showMessageInSnackbar(message = "Not implemented yet")
+        }
         binding.actionButton.setOnClickListener {
             loginViewModel.onActionClicked()
         }
@@ -135,6 +144,63 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         binding.serversRefreshButton.setOnClickListener {
             loginViewModel.refreshServers()
         }
+
+        binding.unableToConnectLayout.unableToConnectBackButton.setOnClickListener {
+            loginViewModel.onBackPressed()
+        }
+        binding.unableToConnectLayout.unableToConnectRetryButton.setOnClickListener {
+            loginViewModel.onRetryClicked()
+        }
+    }
+
+    //TODO: The styling of description and text is a subject to change in nearest future. To be defined....
+    private fun setupUnableToConnectContent() {
+        val linkColor = ContextCompat.getColor(this, R.color.homecloud_color_accent)
+
+        val description = getString(R.string.homecloud_unable_to_connect_description)
+        val items = listOf(
+            getString(R.string.homecloud_unable_to_connect_item_1),
+            getString(R.string.homecloud_unable_to_connect_item_2),
+            getString(R.string.homecloud_unable_to_connect_item_3),
+            getString(R.string.homecloud_unable_to_connect_item_4),
+            getString(R.string.homecloud_unable_to_connect_item_5),
+            getString(R.string.homecloud_unable_to_connect_item_6)
+        )
+        val supportPrefix = getString(R.string.homecloud_unable_to_connect_support)
+        val supportLink = getString(R.string.homecloud_unable_to_connect_support_link)
+        val supportSuffix = getString(R.string.homecloud_unable_to_connect_support_suffix)
+
+        val builder = SpannableStringBuilder()
+        builder.append(description)
+
+        // Add numbered items
+        items.forEachIndexed { index, item ->
+            builder.append("\n\n")
+            val numberText = " ${index + 1}. "
+            builder.append(numberText)
+            builder.append(item)
+        }
+
+        // Add support text with clickable link
+        builder.append("\n\n")
+        builder.append(supportPrefix)
+        builder.append(" ")
+
+        val linkStart = builder.length
+        builder.append(supportLink)
+        builder.setSpan(object : ClickableSpan() {
+            override fun onClick(widget: View) {
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(SUPPORT_LINK))
+                startActivity(intent)
+            }
+        }, linkStart, builder.length, SpannableStringBuilder.SPAN_EXCLUSIVE_EXCLUSIVE)
+        builder.setSpan(ForegroundColorSpan(linkColor), linkStart, builder.length, SpannableStringBuilder.SPAN_EXCLUSIVE_EXCLUSIVE)
+
+        builder.append(" ")
+        builder.append(supportSuffix)
+
+        binding.unableToConnectLayout.unableToConnectContent.text = builder
+        binding.unableToConnectLayout.unableToConnectContent.movementMethod = LinkMovementMethod.getInstance()
     }
 
     private fun handleEvents(event: LoginViewModel.LoginEvent) {
@@ -199,6 +265,10 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
 
         when (state) {
             is LoginScreenState.EmailState -> {
+                // Show main scroll view, hide unable to connect
+                binding.scrollView.visibility = View.VISIBLE
+                binding.unableToConnectLayout.unableToConnectContainer.visibility = View.GONE
+
                 // Show email input, hide email text
                 binding.accountUsernameContainer.visibility = View.VISIBLE
                 binding.accountUsernameText.visibility = View.GONE
@@ -238,37 +308,48 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
             }
 
             is LoginScreenState.LoginState -> {
-                // Hide email input, show email text
-                binding.accountUsernameContainer.visibility = View.GONE
-                binding.accountUsernameText.visibility = View.VISIBLE
-                binding.accountUsernameText.text = state.username
-
-                binding.backButton.visibility = View.VISIBLE
-                updateDevices(state.devices)
-                binding.accountPassword.updateTextIfDiffers(state.password)
-                binding.hostUrlInput.removeTextChangedListener(connectFieldTextWatcher)
-                if (state.selectedDevice == null) {
-                    binding.hostUrlInput.updateTextIfDiffers(state.serverUrl)
-                } else {
-                    binding.hostUrlInput.updateTextIfDiffers(state.selectedDevice.name)
-                }
-                connectFieldTextWatcher?.let {  binding.hostUrlInput.addTextChangedListener(it) }
-                binding.serversRefreshButton.visibility = if (state.isRefreshServersLoading) View.INVISIBLE else View.VISIBLE
-                binding.serversRefreshLoading.visibility = if (state.isRefreshServersLoading) View.VISIBLE else View.GONE
-                if (state.isLoading) {
+                if (state.isUnableToConnect) {
+                    // Hide main scroll view, show unable to connect
+                    binding.scrollView.visibility = View.GONE
                     binding.backButton.visibility = View.GONE
-                    binding.loadingLayout.visibility = View.VISIBLE
-                    binding.actionGroup.visibility = View.GONE
-                    binding.loginStateGroup.visibility = View.GONE
-                    binding.serversRefreshButton.visibility = View.INVISIBLE
+                    binding.unableToConnectLayout.unableToConnectContainer.visibility = View.VISIBLE
                 } else {
+                    // Show main scroll view, hide unable to connect
+                    binding.scrollView.visibility = View.VISIBLE
+                    binding.unableToConnectLayout.unableToConnectContainer.visibility = View.GONE
+
+                    // Hide email input, show email text
+                    binding.accountUsernameContainer.visibility = View.GONE
+                    binding.accountUsernameText.visibility = View.VISIBLE
+                    binding.accountUsernameText.text = state.username
+
                     binding.backButton.visibility = View.VISIBLE
-                    binding.loadingLayout.visibility = View.GONE
-                    binding.actionGroup.visibility = View.VISIBLE
-                    binding.loginStateGroup.visibility = View.VISIBLE
-                    binding.actionButton.setText(R.string.setup_btn_login)
-                    binding.actionButton.isEnabled = state.username.isNotEmpty() && state.password.isNotEmpty() &&
-                            (state.selectedDevice != null || state.serverUrl.isNotEmpty()) && Patterns.EMAIL_ADDRESS.matcher(state.username).matches()
+                    updateDevices(state.devices)
+                    binding.accountPassword.updateTextIfDiffers(state.password)
+                    binding.hostUrlInput.removeTextChangedListener(connectFieldTextWatcher)
+                    if (state.selectedDevice == null) {
+                        binding.hostUrlInput.updateTextIfDiffers(state.serverUrl)
+                    } else {
+                        binding.hostUrlInput.updateTextIfDiffers(state.selectedDevice.name)
+                    }
+                    connectFieldTextWatcher?.let { binding.hostUrlInput.addTextChangedListener(it) }
+                    binding.serversRefreshButton.visibility = if (state.isRefreshServersLoading) View.INVISIBLE else View.VISIBLE
+                    binding.serversRefreshLoading.visibility = if (state.isRefreshServersLoading) View.VISIBLE else View.GONE
+                    if (state.isLoading) {
+                        binding.backButton.visibility = View.GONE
+                        binding.loadingLayout.visibility = View.VISIBLE
+                        binding.actionGroup.visibility = View.GONE
+                        binding.loginStateGroup.visibility = View.GONE
+                        binding.serversRefreshButton.visibility = View.INVISIBLE
+                    } else {
+                        binding.backButton.visibility = View.VISIBLE
+                        binding.loadingLayout.visibility = View.GONE
+                        binding.actionGroup.visibility = View.VISIBLE
+                        binding.loginStateGroup.visibility = View.VISIBLE
+                        binding.actionButton.setText(R.string.setup_btn_login)
+                        binding.actionButton.isEnabled = state.username.isNotEmpty() && state.password.isNotEmpty() &&
+                                (state.selectedDevice != null || state.serverUrl.isNotEmpty()) && Patterns.EMAIL_ADDRESS.matcher(state.username).matches()
+                    }
                 }
             }
         }
@@ -296,5 +377,9 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
 
     override fun optionLockSelected(type: LockType) {
         manageOptionLockSelected(type)
+    }
+
+    companion object {
+        private const val SUPPORT_LINK = "https://www.seagate.com/es/es/support/"
     }
 }

@@ -11,6 +11,7 @@
     <string name="homecloud_login_server_address_input_hint">No device detected</string>
     <string name="homecloud_login_password_input_hint">Enter password</string>
     <string name="homecloud_reset_password">Reset Password</string>
+    <string name="homecloud_cant_find_device">Can’t find your device?</string>
     <string name="homecloud_login_loading">Logging in to your account</string>
     <string name="homecloud_login_auth_unauthorized">Incorrect email or password</string>
     <string name="homecloud_login_server_connection_error">An error occurred while connecting to the server.</string>
@@ -45,4 +46,18 @@
     <string name="homecloud_incorrect_code">Incorrect code.</string>
     <string name="homecloud_code_unknown_error">Something went wrong.</string>
     <string name="homecloud_login_invalid_email_message">Incorrect email</string>
+
+    <!-- Unable to connect state -->
+    <string name="homecloud_unable_to_connect_title">Unable to connect</string>
+    <string name="homecloud_unable_to_connect_description">We are unable to detect your device. Please ensure the following:</string>
+    <string name="homecloud_unable_to_connect_item_1">Verify that Personal Cloud is properly connected to your home network</string>
+    <string name="homecloud_unable_to_connect_item_2">Confirm that your internet has access to the web</string>
+    <string name="homecloud_unable_to_connect_item_3">Make sure Personal Cloud is powered on</string>
+    <string name="homecloud_unable_to_connect_item_4">Confirm that there are no firewall settings that block access to the internet</string>
+    <string name="homecloud_unable_to_connect_item_5">If Personal Cloud is attempting to connect via Wi-Fi, confirm that it is in range of your home router</string>
+    <string name="homecloud_unable_to_connect_item_6">Personal Cloud and your mobile device must be on the same network during the initial setup</string>
+    <string name="homecloud_unable_to_connect_support">If you continue to experience issues, please contact our</string>
+    <string name="homecloud_unable_to_connect_support_link">Support team</string>
+    <string name="homecloud_unable_to_connect_support_suffix">for further assistance.</string>
+    <string name="homecloud_retry">Retry</string>
 </resources>
