@@ -461,6 +461,7 @@ class SpacesListFragment :
                         val setIconDialog = SetSpaceIconDialogFragment.newInstance(listener = this@SpacesListFragment)
                         setIconDialog.show(requireActivity().supportFragmentManager, DIALOG_SET_ICON)
                     }
+                    SpaceMenuOption.MEMBERS -> { }
                 }
             }
         }
