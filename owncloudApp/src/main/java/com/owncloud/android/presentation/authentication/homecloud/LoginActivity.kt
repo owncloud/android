@@ -5,10 +5,12 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.text.SpannableStringBuilder
+import android.text.Spanned
 import android.text.TextWatcher
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.text.style.ForegroundColorSpan
+import android.text.style.LeadingMarginSpan
 import android.util.Patterns
 import android.view.View
 import androidx.activity.addCallback
@@ -156,7 +158,6 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
     //TODO: The styling of description and text is a subject to change in nearest future. To be defined....
     private fun setupUnableToConnectContent() {
         val linkColor = ContextCompat.getColor(this, R.color.homecloud_color_accent)
-
         val description = getString(R.string.homecloud_unable_to_connect_description)
         val items = listOf(
             getString(R.string.homecloud_unable_to_connect_item_1),
@@ -173,12 +174,27 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         val builder = SpannableStringBuilder()
         builder.append(description)
 
-        // Add numbered items
+        val numberIndent = resources.getDimensionPixelSize(R.dimen.standard_padding)
+        val textView = binding.unableToConnectLayout.unableToConnectContent
+        val paint = textView.paint
+
         items.forEachIndexed { index, item ->
             builder.append("\n\n")
-            val numberText = " ${index + 1}. "
+            val itemStart = builder.length
+            val numberText = "${index + 1}. "
             builder.append(numberText)
             builder.append(item)
+            val itemEnd = builder.length
+
+            val numberTextWidth = paint.measureText(numberText).toInt()
+            val textIndent = numberIndent + numberTextWidth
+
+            builder.setSpan(
+                LeadingMarginSpan.Standard(numberIndent, textIndent),
+                itemStart,
+                itemEnd,
+                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
         }
 
         // Add support text with clickable link
@@ -193,7 +209,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse(SUPPORT_LINK))
                 startActivity(intent)
             }
-        }, linkStart, builder.length, SpannableStringBuilder.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }, linkStart, builder.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
         builder.setSpan(ForegroundColorSpan(linkColor), linkStart, builder.length, SpannableStringBuilder.SPAN_EXCLUSIVE_EXCLUSIVE)
 
         builder.append(" ")
