@@ -8,6 +8,7 @@ androidxBiometric = "1.1.0"
 androidxBrowser = "1.5.0"
 androidxContraintLayout = "2.1.4"
 androidxCore = "1.10.1"
+androidxEmojiPicker = "1.6.0"
 androidxEnterpriseFeedback = "1.1.0"
 androidxEspresso = "3.5.1"
 androidxFragment = "1.5.7"
@@ -55,6 +56,7 @@ androidx-biometric = { group = "androidx.biometric", name = "biometric", version
 androidx-browser = { group = "androidx.browser", name = "browser", version.ref = "androidxBrowser" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "androidxContraintLayout" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "androidxCore" }
+androidx-emoji2-emojipicker = { group = "androidx.emoji2", name = "emoji2-emojipicker", version.ref = "androidxEmojiPicker" }
 androidx-enterprise-feedback = { group = "androidx.enterprise", name = "enterprise-feedback", version.ref = "androidxEnterpriseFeedback" }
 androidx-fragment-ktx = { group = "androidx.fragment", name = "fragment-ktx", version.ref = "androidxFragment" }
 androidx-fragment-testing = { group = "androidx.fragment", name = "fragment-testing", version.ref = "androidxFragment" }

@@ -995,7 +995,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
                 fileToUpload.add(filePath);
                 @NotNull Lazy<TransfersViewModel> transfersViewModelLazy = inject(TransfersViewModel.class);
                 TransfersViewModel transfersViewModel = transfersViewModelLazy.getValue();
-                transfersViewModel.uploadFilesFromSystem(getAccount().name, fileToUpload, mUploadPath, currentSpaceId);
+                transfersViewModel.uploadFilesFromSystem(getAccount().name, fileToUpload, mUploadPath, currentSpaceId, false);
                 finish();
 
                 inputLayout.setErrorEnabled(error != null);

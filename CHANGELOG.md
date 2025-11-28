@@ -41,6 +41,7 @@ ownCloud admins and users.
 ## Summary
 
 * Change - Migrate tests to the new kotlinx-coroutines-test API: [#4710](https://github.com/owncloud/android/issues/4710)
+* Enhancement - Set emoji as space image: [#4707](https://github.com/owncloud/android/issues/4707)
 
 ## Details
 
@@ -51,6 +52,15 @@ ownCloud admins and users.
 
    https://github.com/owncloud/android/issues/4710
    https://github.com/owncloud/android/pull/4722
+
+* Enhancement - Set emoji as space image: [#4707](https://github.com/owncloud/android/issues/4707)
+
+   A new option to set an emoji as space image has been added to the bottom sheet,
+   available only to users with the required permissions when the three-dot menu
+   button is tapped.
+
+   https://github.com/owncloud/android/issues/4707
+   https://github.com/owncloud/android/pull/4708
 
 # Changelog for ownCloud Android Client [4.7.0] (2025-11-17)
 

@@ -54,6 +54,11 @@ class ReleaseNotesViewModel(
                 type = ReleaseNoteType.ENHANCEMENT
             ),
             ReleaseNote(
+                title = R.string.release_notes_4_8_0_title_set_emoji_as_space_image,
+                subtitle = R.string.release_notes_4_8_0_subtitle_set_emoji_as_space_image,
+                type = ReleaseNoteType.ENHANCEMENT
+            ),
+            ReleaseNote(
                 title = R.string.release_notes_bugfixes_title,
                 subtitle = R.string.release_notes_bugfixes_subtitle,
                 type = ReleaseNoteType.BUGFIX
