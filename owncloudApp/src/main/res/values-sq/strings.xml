@@ -687,6 +687,8 @@
   <string name="release_notes_4_7_0_subtitle_new_layout_for_spaces">Një skemë e re grafike për përdorues Infinite Scale te lista e hapësirave, me një buton me tre pika në secilën kartë hapësire që hap një menu opsionesh, kur klikohet mbi të</string>
   <string name="release_notes_4_7_0_title_space_management">Administrim hapësirash</string>
   <string name="release_notes_4_7_0_subtitle_space_management">Përdorues Infinite Scale me lejet e duhura tani mund të administrojnë (krijojnë, përpunojnë, çaktivizojnë, aktivizojnë dhe fshijnë) hapësira drejt e nga aplikacioni</string>
+  <string name="release_notes_4_8_0_title_set_emoji_as_space_image">Caktoni emoxhi si figurë hapësire</string>
+  <string name="release_notes_4_8_0_subtitle_set_emoji_as_space_image">Përdorues Infinite Scale me lejet e duhura mund të caktojnë tani e tutje një emoxhi si figurë hapësire</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Hape në web</string>
   <string name="ic_action_open_with_web">Hape në %1$s (web)</string>
@@ -802,6 +804,7 @@
   <string name="delete_space_dialog_message">Nëse fshihni hapësirën e përzgjedhur, s’mund të përdoret më dhe kartelat te shërbyesi do të fshihen.</string>
   <string name="delete_space_correctly">Hapësira u fshi saktë</string>
   <string name="delete_space_failed">Hapësira s’u fshi dot</string>
+  <string name="set_space_icon">Cakton ikonë</string>
   <string name="feedback_dialog_get_in_contact_description"><![CDATA[ Kërkoni ndihmë te <a href="%1$s"><b>forumi</b></a> ynë, ose kontribuoni te <a href="%2$s"><b>depoja jonë GitHub</b></a>]]></string>
   <string name="link_role_accessibility">Lidhje</string>
   <string name="button_role_accessibility">Buton</string>

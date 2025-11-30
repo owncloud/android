@@ -82,6 +82,8 @@
   <string name="prefs_subsection_advanced">Avançado</string>
   <string name="prefs_subsection_notifications">Manage notifications</string>
   <string name="prefs_show_hidden_files">Mostrar arquivos escondidos</string>
+  <string name="prefs_show_disabled_spaces">Mostrar vagas para deficientes</string>
+  <string name="prefs_show_disabled_spaces_summary">Aplica-se somente a gestores de espaço em contas Infinite Scale.</string>
   <string name="prefs_log_open_logs_list_view">Arquivos log</string>
   <string name="prefs_log_no_logs_list_view">Pasta de log vazia! </string>
   <string name="prefs_log_empty_subtitle">Ative o registro e os arquivos de registro serão exibidos aqui.</string>
@@ -683,9 +685,12 @@
   <string name="release_notes_icon">Ícone de nota de lançamento</string>
   <string name="release_notes_bugfixes_title">Pequenas correções de bugs</string>
   <string name="release_notes_bugfixes_subtitle">Alguns bugs foram corrigidos para melhorar a experiência no aplicativo</string>
+  <string name="release_notes_4_7_0_title_new_layout_for_spaces">Novo design para a lista de espaços</string>
   <string name="release_notes_4_7_0_subtitle_new_layout_for_spaces">Um novo design para usuários do Infinite Scale na lista de espaços, com um botão de três pontos em cada cartão de espaço que abre um menu de opções quando clicado</string>
   <string name="release_notes_4_7_0_title_space_management">Gestão de espaço</string>
   <string name="release_notes_4_7_0_subtitle_space_management">Usuários do Infinite Scale com permissões corretas agora podem gerenciar espaços (criar, editar, desabilitar, habilitar e excluir) diretamente do aplicativo</string>
+  <string name="release_notes_4_8_0_title_set_emoji_as_space_image">Definir emoji como imagem espacial</string>
+  <string name="release_notes_4_8_0_subtitle_set_emoji_as_space_image">Usuários do Infinite Scale com as permissões adequadas agora podem definir um emoji como imagem espacial.</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Abrir na web</string>
   <string name="ic_action_open_with_web">Abrir em%1$s (web)</string>
@@ -782,6 +787,9 @@
   <string name="edit_space">Editar espaço</string>
   <string name="edit_space_correctly">Espaço atualizado corretamente</string>
   <string name="edit_space_failed">O espaço não pôde ser atualizado</string>
+  <string name="edit_space_image">Editar imagem</string>
+  <string name="edit_space_image_correctly">Imagem atualizada corretamente</string>
+  <string name="edit_space_image_failed">Não foi possível atualizar a imagem.</string>
   <string name="disable_space">Desativar espaço</string>
   <string name="disable_space_dialog_title">Você realmente deseja desativar o espaço: %1$s?</string>
   <string name="disable_space_dialog_message">Se você desativar o espaço selecionado, ele não poderá mais ser acessado. Somente os administradores do espaço ainda terão acesso. Observação: nenhum arquivo será excluído do servidor.</string>
@@ -798,6 +806,7 @@
   <string name="delete_space_dialog_message">Se você excluir o espaço selecionado, ele não poderá mais ser acessado e os arquivos serão excluídos do servidor.</string>
   <string name="delete_space_correctly">Espaço excluído corretamente</string>
   <string name="delete_space_failed">Não foi possível excluir espaço.</string>
+  <string name="set_space_icon">Definir ícone</string>
   <string name="feedback_dialog_get_in_contact_description"><![CDATA[ Peça ajuda em nosso <a href="%1$s"><b>fórum</b></a> ou contribua em nosso <a href="%2$s"><b>repositório do GitHub</b></a>]]></string>
   <string name="link_role_accessibility">Linque</string>
   <string name="button_role_accessibility">Botão</string>
