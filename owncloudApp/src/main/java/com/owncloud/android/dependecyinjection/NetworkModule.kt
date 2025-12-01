@@ -2,11 +2,11 @@ package com.owncloud.android.dependecyinjection
 
 import com.owncloud.android.data.connectivity.NetworkStateObserver
 import com.owncloud.android.data.mdnsdiscovery.HCDeviceVerificationClient
+import com.owncloud.android.lib.common.network.AssetsCertificateReader
 import com.owncloud.android.lib.common.network.PinnedCertificateTrustManager
 import com.squareup.moshi.Moshi
 import okhttp3.OkHttpClient
 import org.koin.android.ext.koin.androidContext
-import org.koin.core.module.dsl.factoryOf
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import java.security.SecureRandom
@@ -23,7 +23,9 @@ internal object NetworkModuleQualifiers {
 
 val networkModule = module {
 
-    factoryOf(::PinnedCertificateTrustManager)
+    factory {
+        PinnedCertificateTrustManager(AssetsCertificateReader(androidContext().assets))
+    }
 
     // Moshi instance for JSON serialization
     factory { Moshi.Builder().build() }
@@ -70,7 +72,7 @@ val networkModule = module {
     // Device Verification Client for mDNS
     single {
         HCDeviceVerificationClient(
-            okHttpClient = get<OkHttpClient>(named(NetworkModuleQualifiers.OKHTTP_CLIENT_TRUST_ALL)),
+            okHttpClient = get<OkHttpClient>(named(NetworkModuleQualifiers.OKHTTP_CLIENT_PINNED_CERTS)),
             moshi = get()
         )
     }

@@ -40,6 +40,9 @@ import androidx.media3.extractor.DefaultExtractorsFactory;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.domain.files.usecases.GetWebDavUrlForSpaceUseCase;
+import com.owncloud.android.lib.common.OwnCloudAccount;
+import com.owncloud.android.lib.common.OwnCloudClient;
+import com.owncloud.android.lib.common.SingleSessionManager;
 import com.owncloud.android.lib.common.accounts.AccountUtils;
 import com.owncloud.android.lib.common.authentication.OwnCloudBasicCredentials;
 import com.owncloud.android.lib.common.authentication.OwnCloudBearerCredentials;
@@ -126,6 +129,7 @@ public class PrepareVideoPlayerAsyncTask extends AsyncTask<Object, Void, MediaSo
 
     /**
      * Returns a new HttpDataSource factory.
+     * Uses OkHttpClient with custom X509TrustManager for SSL certificate validation.
      *
      * @param bandwidthMeter Whether to set {@link #BANDWIDTH_METER} as a listener to the new
      *                       DataSource factory.
@@ -149,7 +153,7 @@ public class PrepareVideoPlayerAsyncTask extends AsyncTask<Object, Void, MediaSo
 
                 if (credentials instanceof OwnCloudBasicCredentials) { // Basic auth
                     String cred = login + ":" + password;
-                    String auth = "Basic " + Base64.encodeToString(cred.getBytes(), Base64.URL_SAFE);
+                    String auth = "Basic " + Base64.encodeToString(cred.getBytes(), Base64.NO_WRAP);
                     params.put("Authorization", auth);
                 } else if (credentials instanceof OwnCloudBearerCredentials) { // OAuth
                     String bearerToken = credentials.getAuthToken();
@@ -157,9 +161,13 @@ public class PrepareVideoPlayerAsyncTask extends AsyncTask<Object, Void, MediaSo
                     params.put("Authorization", auth);
                 }
 
-                return new CustomHttpDataSourceFactory(MainApp.Companion.getUserAgent(), bandwidthMeter, params);
+                OwnCloudClient  ownCloudClient = SingleSessionManager.getDefaultSingleton().getClientFor(
+                        new OwnCloudAccount(account, mContext), mContext
+                );
 
-            } catch (AuthenticatorException | IOException | OperationCanceledException e) {
+                return new CustomHttpDataSourceFactory(ownCloudClient.getOkHttpClient(), MainApp.Companion.getUserAgent(), bandwidthMeter, params);
+
+            } catch (AuthenticatorException | IOException | OperationCanceledException | AccountUtils.AccountNotFoundException e) {
                 Timber.e(e);
             }
         }

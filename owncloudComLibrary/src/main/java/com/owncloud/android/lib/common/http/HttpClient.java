@@ -28,6 +28,8 @@ import android.content.Context;
 
 import com.owncloud.android.lib.common.http.logging.LogInterceptor;
 import com.owncloud.android.lib.common.network.AdvancedX509TrustManager;
+import com.owncloud.android.lib.common.network.AssetsCertificateReader;
+import com.owncloud.android.lib.common.network.CertificateReader;
 import com.owncloud.android.lib.common.network.NetworkUtils;
 import okhttp3.Cookie;
 import okhttp3.CookieJar;
@@ -41,7 +43,11 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
+import java.io.IOException;
+import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -60,19 +66,33 @@ public class HttpClient {
 
     private OkHttpClient mOkHttpClient = null;
 
+    private final CertificateReader certificateReader;
+
     protected HttpClient(Context context) {
         if (context == null) {
             Timber.e("Context may not be NULL!");
             throw new NullPointerException("Context may not be NULL!");
         }
         mContext = context;
+        certificateReader = new AssetsCertificateReader(mContext.getAssets());
+    }
+
+    private void initKeyStore() {
+        try {
+            List<X509Certificate> certificates = certificateReader.readCertificates();
+            for (X509Certificate certificate : certificates) {
+                NetworkUtils.addCertToKnownServersStore(certificate, mContext);
+            }
+        } catch (CertificateException | KeyStoreException | NoSuchAlgorithmException | IOException e) {
+            Timber.e(e, "Could not read certificates from assets.");
+        }
     }
 
     public OkHttpClient getOkHttpClient() {
         if (mOkHttpClient == null) {
             try {
-                final X509TrustManager trustManager = new AdvancedX509TrustManager(
-                        NetworkUtils.getKnownServersStore(mContext));
+                initKeyStore();
+                final X509TrustManager trustManager = new AdvancedX509TrustManager(NetworkUtils.getKnownServersStore(mContext));
 
                 final SSLContext sslContext = buildSSLContext();
                 sslContext.init(null, new TrustManager[]{trustManager}, null);
