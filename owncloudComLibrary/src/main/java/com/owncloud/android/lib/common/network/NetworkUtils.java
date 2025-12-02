@@ -70,11 +70,10 @@ public class NetworkUtils {
             File localTrustStoreFile = new File(context.getFilesDir(), LOCAL_TRUSTSTORE_FILENAME);
             Timber.d("Searching known-servers store at %s", localTrustStoreFile.getAbsolutePath());
             if (localTrustStoreFile.exists()) {
-                InputStream in = new FileInputStream(localTrustStoreFile);
-                try {
+                try (InputStream in = new FileInputStream(localTrustStoreFile)) {
                     mKnownServersStore.load(in, LOCAL_TRUSTSTORE_PASSWORD.toCharArray());
-                } finally {
-                    in.close();
+                } catch (Throwable e) {
+                    Timber.e(e, "Error loading known servers store");
                 }
             } else {
                 // next is necessary to initialize an empty KeyStore instance
