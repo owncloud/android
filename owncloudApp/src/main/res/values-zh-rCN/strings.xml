@@ -5,6 +5,7 @@
   <string name="global_date">日期</string>
   <string name="global_size">大小</string>
   <string name="actionbar_search">在此文件夹搜索</string>
+  <string name="actionbar_search_space">搜尋空間</string>
   <string name="actionbar_sync">刷新帐户</string>
   <string name="actionbar_upload">上传</string>
   <string name="actionbar_upload_from_apps">来自其它应用的内容</string>
@@ -150,6 +151,8 @@
   <string name="uploader_error_message_source_file_not_copied">将文件复制到临时目录时出现错误。请尝试重新发送。</string>
   <string name="file_list_seconds_ago">几秒前</string>
   <string name="file_list_empty_title_all_files">无文件</string>
+  <string name="spaces_list_empty_title">沒有儲存空間</string>
+  <string name="space_label">空間:</string>
   <string name="file_list_empty_title_available_offline">没有可用的离线文件</string>
   <string name="file_list_empty_title_shared_by_links">无分享链接</string>
   <string name="file_list_empty_subtitle_all_files">上传一些内容或者与设备同步!</string>
@@ -463,6 +466,7 @@
   <string name="prefs_category_accounts">账号</string>
   <string name="prefs_add_account">添加账号</string>
   <string name="drawer_manage_accounts">管理账号</string>
+  <string name="manage_accounts_quota">%1$s / %2$s</string>
   <string name="auth_redirect_non_secure_connection_title">安全连接是通过一个非安全路由定向的。</string>
   <string name="actionbar_logger">日志</string>
   <string name="log_send_history_button">发送历史日志</string>
@@ -610,7 +614,9 @@
   <!--oCIS accounts warning-->
   <string name="ocis_accounts_warning_checkbox_message">不再显示</string>
   <string name="tab_label_ascii">文本</string>
+  <string name="go_to_download_folder">前往下載</string>
   <!--DeepLinks-->
+  <string name="invalid_deep_link_format">無效的連結格式</string>
   <string name="fab_refresh_text">刷新</string>
   <string name="prefs_delete_local_files_entries_never">从不</string>
   <string name="insecure_http_url_continue_button">继续</string>
@@ -621,9 +627,11 @@
   <string name="create_shortcut_dialog_url">URL</string>
   <string name="open_shortcut_title">开放链接</string>
   <string name="create_space_dialog_name">名称</string>
+  <string name="create_space_dialog_subtitle">字幕</string>
   <string name="create_space_dialog_quota">配额</string>
   <string name="disabled_space_label">禁用</string>
   <string name="link_role_accessibility">链接</string>
+  <string name="passcode_label">密碼</string>
   <string name="pattern_label">模式</string>
   <string name="image_preview_label">图片预览</string>
   <string name="login_label">登录</string>

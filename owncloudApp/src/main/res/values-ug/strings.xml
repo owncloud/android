@@ -394,6 +394,7 @@
   <string name="prefs_category_accounts">ھېساباتلار</string>
   <string name="prefs_add_account">ھېسابات قوشۇڭ</string>
   <string name="drawer_manage_accounts">ھېساباتنى باشقۇرۇش</string>
+  <string name="manage_accounts_quota">% @ of% @</string>
   <string name="actionbar_logger">خاتىرە</string>
   <string name="log_send_history_button">تارىخ ئەۋەتىڭ</string>
   <string name="log_send_no_mail_app">خاتىرە ئەۋەتىدىغان ئەپ تېپىلمىدى. خەت ئەپى قاچىلاڭ.</string>

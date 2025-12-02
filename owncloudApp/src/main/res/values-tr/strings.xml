@@ -436,6 +436,7 @@
   <string name="prefs_category_accounts">Hesaplar</string>
   <string name="prefs_add_account">Hesap ekle</string>
   <string name="drawer_manage_accounts">Hesapları yönet</string>
+  <string name="manage_accounts_quota">%1$s/%2$s</string>
   <string name="used_quota_title_manage_accounts">Kullanılan:</string>
   <string name="auth_redirect_non_secure_connection_title">Güvenli bağlantı, güvenli olmayan bir rotaya yönlendiriliyor.</string>
   <string name="actionbar_logger">Günlükler</string>

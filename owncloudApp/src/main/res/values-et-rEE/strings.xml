@@ -689,6 +689,8 @@
   <string name="release_notes_4_7_0_subtitle_new_layout_for_spaces">Ruumide nimekirja uus disain Infinite Scale kasutajatele koos kolme-punkti nupuga igal ruumi kaardil, mis klikkides avavad valikute menüü</string>
   <string name="release_notes_4_7_0_title_space_management">Ruumide haldamine</string>
   <string name="release_notes_4_7_0_subtitle_space_management">Korrektsete õigustega Inifinite Scale kasutajad saavad nüüd ruume hallata (luua, muuta, sisse ja välja lüllitada ning kustutada) otse rakendusest</string>
+  <string name="release_notes_4_8_0_title_set_emoji_as_space_image">Emoji määramine ruumi pildiks</string>
+  <string name="release_notes_4_8_0_subtitle_set_emoji_as_space_image">Korrektse õigustega Infinite Scale kasutajad saavad nüüd ruumi pildiks valida ka emoji</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Ava veebis</string>
   <string name="ic_action_open_with_web">Ava %1$s (veebis)</string>
@@ -804,6 +806,7 @@
   <string name="delete_space_dialog_message">Kui sa kustutad valitud ruumi, siis ligipääs failidele kaob ning failid kustutatakse serverist.</string>
   <string name="delete_space_correctly">Ruum kustutati korrektselt</string>
   <string name="delete_space_failed">Ruumi kustutamine ebaõnnestus</string>
+  <string name="set_space_icon">Määra ikoon</string>
   <string name="feedback_dialog_get_in_contact_description"><![CDATA[ Küsi abi meie <a href="%1$s"><b>foorumist</b></a> või anna oma panus <a href="%2$s"><b>GitHub reposse</b></a>]]></string>
   <string name="link_role_accessibility">Link</string>
   <string name="button_role_accessibility">Nupp</string>

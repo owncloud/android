@@ -689,6 +689,8 @@
   <string name="release_notes_4_7_0_subtitle_new_layout_for_spaces">Ein neues Design für Infinite Scale-Benutzer in der Space Liste, mit einer Drei-Punkte-Schaltfläche auf jeder Space Karte, die beim Anklicken ein Optionsmenü öffnet.</string>
   <string name="release_notes_4_7_0_title_space_management">Space Management</string>
   <string name="release_notes_4_7_0_subtitle_space_management">Benutzer von Infinite Scale mit den entsprechenden Berechtigungen können nun direkt über die App Spaces verwalten (erstellen, bearbeiten, deaktivieren, aktivieren und löschen)</string>
+  <string name="release_notes_4_8_0_title_set_emoji_as_space_image">Ein Emoji als Space-Bild festlegen</string>
+  <string name="release_notes_4_8_0_subtitle_set_emoji_as_space_image">Benutzer von Infinite Scale mit den entsprechenden Berechtigungen können nun ein Emoji als Space-Bild festlegen.</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Öffnen im Webbrowser</string>
   <string name="ic_action_open_with_web">Öffnen in %1$s (web)</string>
@@ -804,6 +806,7 @@
   <string name="delete_space_dialog_message">Wenn Sie den ausgewählten Space löschen, kann nicht mehr darauf zugegriffen werden und die Dateien werden vom Server gelöscht.</string>
   <string name="delete_space_correctly">Der Space wurde korrekt gelöscht</string>
   <string name="delete_space_failed">Der Space konnte nicht gelöscht werden</string>
+  <string name="set_space_icon">Setze ein Icon</string>
   <string name="feedback_dialog_get_in_contact_description"><![CDATA[ Fragen Sie für Hilfe in unserem <a href="%1$s"><b>Forum</b></a> oder machen Sie einen Beitrag in unserem <a href="%2$s"><b>GitHub repo</b></a>]]></string>
   <string name="link_role_accessibility">Link</string>
   <string name="button_role_accessibility">Schaltfläche</string>
