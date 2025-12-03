@@ -151,14 +151,7 @@ class HCLocalMdnsDiscoveryDataSource(
                 val port = serviceInfo.port
 
                 if (host != null && port > 0) {
-                    // Determine protocol based on service type or port
-                    val protocol = when {
-                        serviceInfo.serviceType.contains("https", ignoreCase = true) -> "https"
-                        port == 443 -> "https"
-                        else -> "http"
-                    }
-
-                    val deviceUrl = "$protocol://$host:$port"
+                    val deviceUrl = "https://$host:$port"
                     Timber.d("Resolved device URL: $deviceUrl")
                     onServiceResolved(deviceUrl)
                 } else {
