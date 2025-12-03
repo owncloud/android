@@ -33,7 +33,12 @@ import com.owncloud.android.domain.UseCaseResult
 import com.owncloud.android.domain.appregistry.usecases.CreateFileWithAppProviderUseCase
 import com.owncloud.android.domain.availableoffline.usecases.SetFilesAsAvailableOfflineUseCase
 import com.owncloud.android.domain.availableoffline.usecases.UnsetFilesAsAvailableOfflineUseCase
+import com.owncloud.android.domain.device.usecases.UpdateBaseUrlUseCase
+import com.owncloud.android.domain.exceptions.NoConnectionWithServerException
 import com.owncloud.android.domain.exceptions.NoNetworkConnectionException
+import com.owncloud.android.domain.exceptions.ServerConnectionTimeoutException
+import com.owncloud.android.domain.exceptions.ServerNotReachableException
+import com.owncloud.android.domain.exceptions.ServerResponseTimeoutException
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.files.usecases.CopyFileUseCase
 import com.owncloud.android.domain.files.usecases.CreateFolderAsyncUseCase
@@ -73,6 +78,7 @@ class FileOperationsViewModel(
     private val manageDeepLinkUseCase: ManageDeepLinkUseCase,
     private val setLastUsageFileUseCase: SetLastUsageFileUseCase,
     private val isAnyFileAvailableLocallyAndNotAvailableOfflineUseCase: IsAnyFileAvailableLocallyAndNotAvailableOfflineUseCase,
+    private val updateBaseUrlUseCase: UpdateBaseUrlUseCase,
     private val contextProvider: ContextProvider,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
 ) : ViewModel() {
@@ -115,8 +121,28 @@ class FileOperationsViewModel(
     private val _disableSelectionModeEvent = MutableSharedFlow<Unit>()
     val disableSelectionModeEvent: SharedFlow<Unit> = _disableSelectionModeEvent
 
+    private val _updateBaseUrlDialog = MutableSharedFlow<Unit>()
+    val updateBaseUrlDialog: SharedFlow<Unit> = _updateBaseUrlDialog
+
+
     // Used to save the last operation folder
     private var lastTargetFolder: OCFile? = null
+
+    private val networkErrorHandler: (Throwable) -> Unit = { throwable ->
+        val throwableTypes = listOf(
+            NoNetworkConnectionException::class.java,
+            ServerResponseTimeoutException::class.java,
+            ServerConnectionTimeoutException::class.java,
+            NoConnectionWithServerException::class.java,
+            ServerNotReachableException::class.java
+        )
+
+        if (throwableTypes.any { it.isInstance(throwable) }) {
+                viewModelScope.launch {
+                    _updateBaseUrlDialog.emit(Unit)
+                }
+            }
+        }
 
     fun performOperation(fileOperation: FileOperation) {
         when (fileOperation) {
@@ -134,6 +160,10 @@ class FileOperationsViewModel(
         }
     }
 
+    fun handleBaseUrlUpdate() {
+        updateBaseUrlUseCase.execute()
+    }
+
     fun showRemoveDialog(filesToRemove: List<OCFile>) {
         runUseCaseWithResult(
             coroutineDispatcher = coroutinesDispatcherProvider.io,
@@ -141,7 +171,7 @@ class FileOperationsViewModel(
             sharedFlow = _checkIfFileIsLocalAndNotAvailableOfflineSharedFlow,
             useCase = isAnyFileAvailableLocallyAndNotAvailableOfflineUseCase,
             useCaseParams = IsAnyFileAvailableLocallyAndNotAvailableOfflineUseCase.Params(filesToRemove),
-            requiresConnection = false
+            requiresConnection = false,
         )
     }
 
@@ -196,6 +226,7 @@ class FileOperationsViewModel(
                     isUserLogged = fileOperation.isUserLogged,
                 ),
                 showLoading = true,
+                errorHandler = networkErrorHandler,
             )
         }
     }
@@ -219,6 +250,7 @@ class FileOperationsViewModel(
                     isUserLogged = fileOperation.isUserLogged,
                 ),
                 showLoading = true,
+                errorHandler = networkErrorHandler,
             )
         }
     }
@@ -251,7 +283,8 @@ class FileOperationsViewModel(
             requiresConnection = true,
             liveData = _syncFileLiveData,
             useCase = synchronizeFileUseCase,
-            useCaseParams = SynchronizeFileUseCase.Params(fileOperation.fileToSync)
+            useCaseParams = SynchronizeFileUseCase.Params(fileOperation.fileToSync),
+            errorHandler = networkErrorHandler,
         )
     }
 
@@ -267,7 +300,8 @@ class FileOperationsViewModel(
                 spaceId = fileOperation.folderToSync.spaceId,
                 syncMode = SynchronizeFolderUseCase.SyncFolderMode.SYNC_FOLDER_RECURSIVELY,
                 isActionSetFolderAvailableOfflineOrSynchronize = fileOperation.isActionSetFolderAvailableOfflineOrSynchronize,
-            )
+            ),
+            errorHandler = networkErrorHandler,
         )
     }
 
@@ -283,7 +317,8 @@ class FileOperationsViewModel(
                 spaceId = fileOperation.folderToRefresh.spaceId,
                 syncMode = if (fileOperation.shouldSyncContents) SynchronizeFolderUseCase.SyncFolderMode.SYNC_CONTENTS
                 else SynchronizeFolderUseCase.SyncFolderMode.REFRESH_FOLDER
-            )
+            ),
+            errorHandler = networkErrorHandler,
         )
     }
 
@@ -340,6 +375,7 @@ class FileOperationsViewModel(
                 }
 
                 is UseCaseResult.Error -> {
+                    networkErrorHandler(useCaseResult.throwable)
                     liveData.postValue(Event(UIResult.Error(error = useCaseResult.throwable)))
                 }
             }

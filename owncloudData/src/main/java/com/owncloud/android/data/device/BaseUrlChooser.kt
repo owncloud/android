@@ -2,6 +2,7 @@ package com.owncloud.android.data.device
 
 import com.owncloud.android.data.connectivity.NetworkStateObserver
 import com.owncloud.android.domain.device.model.DevicePathType
+import com.owncloud.android.domain.device.usecases.UpdateBaseUrlUseCase
 import com.owncloud.android.domain.server.usecases.DeviceUrlResolver
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -21,6 +22,7 @@ class BaseUrlChooser(
     private val networkStateObserver: NetworkStateObserver,
     private val currentDeviceStorage: CurrentDeviceStorage,
     private val deviceUrlResolver: DeviceUrlResolver,
+    private val updateBaseUrlUseCase: UpdateBaseUrlUseCase
 ) {
 
     /**
@@ -37,15 +39,19 @@ class BaseUrlChooser(
             .map { connectivity ->
                 Timber.d("BaseUrlChooser: Network state changed: $connectivity, resolving available base URL")
 
-                if (!connectivity.hasAnyNetwork()) {
-                    Timber.d("BaseUrlChooser: No network available, returning null")
+                if (!connectivity.hasAnyNetwork() || updateBaseUrlUseCase.hasScheduled()) {
+                    Timber.d("BaseUrlChooser: No network available or base url update scheduled, returning null")
                     return@map null
                 }
 
-                val devicePaths = buildDevicePathsList()
-                deviceUrlResolver.resolveAvailableBaseUrl(devicePaths)
+                chooseBestAvailableBaseUrl()
             }
             .distinctUntilChanged()
+    }
+
+    suspend fun chooseBestAvailableBaseUrl(): String? {
+        val devicePaths = buildDevicePathsList()
+        return deviceUrlResolver.resolveAvailableBaseUrl(devicePaths)
     }
 
     /**

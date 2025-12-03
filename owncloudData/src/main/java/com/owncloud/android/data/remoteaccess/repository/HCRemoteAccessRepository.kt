@@ -4,6 +4,7 @@ import com.owncloud.android.data.device.CurrentDeviceStorage
 import com.owncloud.android.data.mdnsdiscovery.HCDeviceVerificationClient
 import com.owncloud.android.data.remoteaccess.RemoteAccessTokenStorage
 import com.owncloud.android.data.remoteaccess.datasources.RemoteAccessService
+import com.owncloud.android.data.remoteaccess.remote.RemoteAccessDeviceResponse
 import com.owncloud.android.data.remoteaccess.remote.RemoteAccessInitiateRequest
 import com.owncloud.android.data.remoteaccess.remote.RemoteAccessTokenRequest
 import com.owncloud.android.domain.device.model.Device
@@ -63,33 +64,44 @@ class HCRemoteAccessRepository(
 
     override suspend fun getAvailableDevices(): List<Device> {
         return remoteAccessService.getDevices().mapNotNull { deviceResponse ->
-            val remoteDevicePaths = remoteAccessService.getDeviceById(deviceResponse.seagateDeviceId).paths
-
-            val availablePaths = mutableMapOf<DevicePathType, String>()
-            var certificateCommonName = ""
-
-            for (remoteDevicePath in remoteDevicePaths) {
-                val devicePathType = remoteDevicePath.type.mapToDomain()
-                val deviceFilesUrl = remoteDevicePath.getDeviceBaseUrl()
-                val baseUrl = deviceFilesUrl.removeSuffix("/files")
-                if (certificateCommonName.isEmpty()) {
-                    certificateCommonName = deviceVerificationClient.getCertificateCommonName(baseUrl).orEmpty()
-                }
-
-                availablePaths[devicePathType] = deviceFilesUrl
-            }
-
-            if (availablePaths.isNotEmpty()) {
-                Device(
-                    id = deviceResponse.seagateDeviceId,
-                    name = deviceResponse.friendlyName,
-                    availablePaths = availablePaths,
-                    certificateCommonName = certificateCommonName
-                )
-            } else {
-                null
-            }
+            getVerifiedDevice(deviceResponse)
         }
+    }
+
+    private suspend fun getVerifiedDevice(deviceResponse: RemoteAccessDeviceResponse): Device? {
+        val remoteDevicePaths = remoteAccessService.getDeviceById(deviceResponse.seagateDeviceId).paths
+
+        val availablePaths = mutableMapOf<DevicePathType, String>()
+        var certificateCommonName = ""
+
+        for (remoteDevicePath in remoteDevicePaths) {
+            val devicePathType = remoteDevicePath.type.mapToDomain()
+            val deviceFilesUrl = remoteDevicePath.getDeviceBaseUrl()
+            val baseUrl = deviceFilesUrl.removeSuffix("/files")
+            if (certificateCommonName.isEmpty()) {
+                certificateCommonName = deviceVerificationClient.getCertificateCommonName(baseUrl).orEmpty()
+            }
+
+            availablePaths[devicePathType] = deviceFilesUrl
+        }
+
+        return if (availablePaths.isNotEmpty()) {
+            Device(
+                id = deviceResponse.seagateDeviceId,
+                name = deviceResponse.friendlyName,
+                availablePaths = availablePaths,
+                certificateCommonName = certificateCommonName
+            )
+        } else {
+            null
+        }
+    }
+
+    override suspend fun getCurrentDevice(): Device? {
+        val deviceResponse = remoteAccessService.getDevices().firstOrNull { deviceResponse ->
+            deviceResponse.certificateCommonName == currentDeviceStorage.getCertificateCommonName()
+        }
+        return deviceResponse?.let { getVerifiedDevice(deviceResponse = it) }
     }
 
     override fun clearDevicePaths() {

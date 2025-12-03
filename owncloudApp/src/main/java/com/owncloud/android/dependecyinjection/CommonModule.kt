@@ -22,6 +22,7 @@ package com.owncloud.android.dependecyinjection
 
 import androidx.work.WorkManager
 import com.owncloud.android.data.lifecycle.AppLifecycleObserver
+import com.owncloud.android.domain.device.usecases.DynamicUrlSwitchingController
 import com.owncloud.android.presentation.avatar.AvatarManager
 import com.owncloud.android.providers.AccountProvider
 import com.owncloud.android.providers.ContextProvider
@@ -30,6 +31,8 @@ import com.owncloud.android.providers.LogsProvider
 import com.owncloud.android.providers.MdmProvider
 import com.owncloud.android.providers.WorkManagerProvider
 import com.owncloud.android.providers.implementation.OCContextProvider
+import com.owncloud.android.usecases.device.DynamicUrlSwitchingControllerImpl
+import kotlinx.coroutines.MainScope
 import org.koin.android.ext.koin.androidApplication
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
@@ -47,4 +50,14 @@ val commonModule = module {
     
     // App Lifecycle Observer - tracks foreground/background state
     single { AppLifecycleObserver() }
+
+    single<DynamicUrlSwitchingController> {
+        val mainScope = MainScope()
+        DynamicUrlSwitchingControllerImpl(
+            get(),
+            get(),
+            mainScope,
+            get(),
+        )
+    }
 }

@@ -35,6 +35,8 @@ interface RemoteAccessRepository {
      */
     suspend fun getAvailableDevices(): List<Device>
 
+    suspend fun getCurrentDevice(): Device?
+
     /**
      * Clear all stored device paths
      */

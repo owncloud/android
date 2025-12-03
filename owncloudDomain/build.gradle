@@ -34,6 +34,8 @@ android {
 
 dependencies {
     implementation libs.androidx.appcompat
+    implementation libs.androidx.work.runtime.ktx
+    implementation libs.koin.core
 
     // Kotlin
     implementation libs.kotlin.stdlib

@@ -9,5 +9,8 @@ class GetRemoteAvailableDevicesUseCase(
 
     suspend fun execute(): List<Device> =
         remoteAccessRepository.getAvailableDevices()
+
+    suspend fun currentDevice(): Device? =
+        remoteAccessRepository.getCurrentDevice()
 }
 

@@ -8,10 +8,11 @@ class HCCurrentDeviceRepository(
     private val currentDeviceStorage: CurrentDeviceStorage
 ) : CurrentDeviceRepository {
 
-    override fun saveCurrentDevicePaths(device: Device) {
+    override fun saveCurrentDevice(device: Device) {
         device.availablePaths.forEach {
             currentDeviceStorage.saveDeviceBaseUrl(pathType = it.key.name, baseUrl = it.value)
         }
+        currentDeviceStorage.saveCertificateCommonName(device.certificateCommonName)
     }
 
     override fun getCurrentDevicePaths(): Map<DevicePathType, String> {

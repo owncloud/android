@@ -8,7 +8,10 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.isActive
+import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.coroutines.withTimeoutOrNull
 import timber.log.Timber
+import kotlin.coroutines.resume
 import kotlin.time.Duration
 
 class HCLocalMdnsDiscoveryDataSource(
@@ -65,6 +68,44 @@ class HCLocalMdnsDiscoveryDataSource(
                 }
             }
         }
+    }
+
+    override suspend fun discoverDevicesOneShot(
+        serviceType: String,
+        serviceName: String,
+        timeout: Duration,
+    ): String? {
+        return withTimeoutOrNull(timeout) {
+            getDeviceBaseUrl(serviceName, serviceType)
+        }
+    }
+
+    private suspend fun getDeviceBaseUrl(serviceName: String, serviceType: String): String = suspendCancellableCoroutine { continuation ->
+        var discoveryListener: NsdManager.DiscoveryListener? = null
+        val onServiceFound: (NsdServiceInfo) -> Unit = { service ->
+            // Filter by service name if provided
+            if (serviceName.isNotEmpty() && !service.serviceName.contains(serviceName, ignoreCase = true)) {
+                Timber.d("Service name doesn't match filter, skipping: ${service.serviceName}")
+            } else {
+                nsdManager?.resolveService(
+                    service = service,
+                    onServiceResolved = { serviceUrl ->
+                        discoveryListener?.let { nsdManager.stopServiceDiscovery(it) }
+                        continuation.resume(serviceUrl)
+                    }
+                )
+            }
+        }
+
+        discoveryListener = getDiscoveryListener(
+            doOnServiceFound = onServiceFound,
+        )
+
+        continuation.invokeOnCancellation {
+            nsdManager?.stopServiceDiscovery(discoveryListener)
+        }
+
+        nsdManager?.discoverServices(serviceType, NsdManager.PROTOCOL_DNS_SD, discoveryListener)
     }
 
     private fun getDiscoveryListener(

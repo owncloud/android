@@ -20,4 +20,10 @@ interface LocalMdnsDiscoveryDataSource {
         serviceName: String,
         duration: Duration,
     ): Flow<String>
+
+    suspend fun discoverDevicesOneShot(
+        serviceType: String,
+        serviceName: String,
+        timeout: Duration,
+    ): String?
 }

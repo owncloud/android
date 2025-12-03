@@ -52,7 +52,7 @@ import com.owncloud.android.domain.capabilities.usecases.GetStoredCapabilitiesUs
 import com.owncloud.android.domain.capabilities.usecases.RefreshCapabilitiesFromServerAsyncUseCase
 import com.owncloud.android.domain.device.GetCurrentDevicePathsUseCase
 import com.owncloud.android.domain.device.SaveCurrentDeviceUseCase
-import com.owncloud.android.domain.device.usecases.ManageDynamicUrlSwitchingUseCase
+import com.owncloud.android.domain.device.usecases.UpdateBaseUrlUseCase
 import com.owncloud.android.domain.files.usecases.CleanConflictUseCase
 import com.owncloud.android.domain.files.usecases.CleanWorkersUUIDUseCase
 import com.owncloud.android.domain.files.usecases.CopyFileUseCase
@@ -127,7 +127,6 @@ import com.owncloud.android.domain.user.usecases.RefreshUserQuotaFromServerAsync
 import com.owncloud.android.domain.webfinger.usecases.GetOwnCloudInstanceFromWebFingerUseCase
 import com.owncloud.android.domain.webfinger.usecases.GetOwnCloudInstancesFromAuthenticatedWebFingerUseCase
 import com.owncloud.android.usecases.accounts.RemoveAccountUseCase
-import com.owncloud.android.usecases.device.ManageDynamicUrlSwitchingUseCaseImpl
 import com.owncloud.android.usecases.files.FilterFileMenuOptionsUseCase
 import com.owncloud.android.usecases.files.RemoveLocalFilesForAccountUseCase
 import com.owncloud.android.usecases.files.RemoveLocallyFilesWithLastUsageOlderThanGivenTimeUseCase
@@ -153,7 +152,6 @@ import com.owncloud.android.usecases.transfers.uploads.UploadFileFromSystemUseCa
 import com.owncloud.android.usecases.transfers.uploads.UploadFileInConflictUseCase
 import com.owncloud.android.usecases.transfers.uploads.UploadFilesFromContentUriUseCase
 import com.owncloud.android.usecases.transfers.uploads.UploadFilesFromSystemUseCase
-import kotlinx.coroutines.MainScope
 import org.koin.core.module.dsl.factoryOf
 import org.koin.dsl.module
 
@@ -314,16 +312,8 @@ val useCaseModule = module {
     // mDNS Discovery
     factoryOf(::DiscoverLocalNetworkDevicesUseCase)
 
-    // Device Management
-    single<ManageDynamicUrlSwitchingUseCase> {
-        val mainScope = MainScope()
-        ManageDynamicUrlSwitchingUseCaseImpl(
-            get(),
-            get(),
-            mainScope,
-            get(),
-        )
-    }
+    // Device / Base URL
+    factoryOf(::UpdateBaseUrlUseCase)
 
     factoryOf(::GetAvailableServerInfoUseCase)
 

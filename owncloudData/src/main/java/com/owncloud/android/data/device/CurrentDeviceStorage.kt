@@ -23,6 +23,14 @@ class CurrentDeviceStorage(
         sharedPreferencesProvider.putString(key, baseUrl)
     }
 
+    fun saveCertificateCommonName(commonName: String) {
+        sharedPreferencesProvider.putString(KEY_CERTIFICATE_COMMON_NAME, commonName)
+    }
+
+    fun getCertificateCommonName(): String? {
+        return sharedPreferencesProvider.getString(KEY_CERTIFICATE_COMMON_NAME, null)
+    }
+
     /**
      * Get device base URL by type
      * @param pathType Type of the path (LOCAL, PUBLIC, REMOTE)
@@ -40,6 +48,7 @@ class CurrentDeviceStorage(
         DevicePathType.entries.forEach { type ->
             sharedPreferencesProvider.removePreference(buildKey(type.name))
         }
+        sharedPreferencesProvider.removePreference(KEY_CERTIFICATE_COMMON_NAME)
     }
 
     /**
@@ -51,6 +60,7 @@ class CurrentDeviceStorage(
 
     companion object {
         private const val KEY_PREFIX = "KEY_DEVICE_PATH"
+        private const val KEY_CERTIFICATE_COMMON_NAME = "KEY_CERTIFICATE_COMMON_NAME"
 
     }
 }

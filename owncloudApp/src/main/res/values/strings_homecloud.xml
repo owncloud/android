@@ -60,4 +60,6 @@
     <string name="homecloud_unable_to_connect_support_link">Support team</string>
     <string name="homecloud_unable_to_connect_support_suffix">for further assistance.</string>
     <string name="homecloud_retry">Retry</string>
+    <string name="homecloud_device_update">Device update</string>
+    <string name="homecloud_device_sync_error">Your device may be disconnected or address has changed. Do you want to try to sync device?</string>
 </resources>

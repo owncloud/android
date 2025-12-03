@@ -26,5 +26,12 @@ interface MdnsDiscoveryRepository {
         serviceName: String,
         duration: Duration
     ): Flow<Device>
+
+    suspend fun discoverAndVerifyDevice(
+        serviceType: String,
+        serviceName: String,
+        duration: Duration
+    ): Device?
+
 }
 

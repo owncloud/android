@@ -50,7 +50,8 @@ object ViewModelExt : KoinComponent {
         useCase: BaseUseCaseWithResult<T, Params>,
         useCaseParams: Params,
         postSuccess: Boolean = true,
-        postSuccessWithData: Boolean = true
+        postSuccessWithData: Boolean = true,
+        errorHandler: ((Throwable) -> Unit)? = null,
     ) {
         viewModelScope.launch(coroutineDispatcher) {
             if (showLoading) {
@@ -75,7 +76,11 @@ object ViewModelExt : KoinComponent {
                     liveData.postValue(Event(UIResult.Success()))
                 }
             } else if (useCaseResult.isError) {
-                liveData.postValue(Event(UIResult.Error(error = useCaseResult.getThrowableOrNull())))
+                val throwable = useCaseResult.getThrowableOrNull()
+                if (errorHandler != null && throwable != null) {
+                    errorHandler.invoke(throwable)
+                }
+                liveData.postValue(Event(UIResult.Error(error = throwable)))
             }
         }
     }
@@ -126,7 +131,7 @@ object ViewModelExt : KoinComponent {
         useCase: BaseUseCaseWithResult<T, Params>,
         useCaseParams: Params,
         postSuccess: Boolean = true,
-        postSuccessWithData: Boolean = true
+        postSuccessWithData: Boolean = true,
     ) {
         viewModelScope.launch(coroutineDispatcher) {
             if (showLoading) {

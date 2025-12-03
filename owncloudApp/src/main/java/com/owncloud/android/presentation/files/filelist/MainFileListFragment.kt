@@ -193,6 +193,8 @@ class MainFileListFragment : Fragment(),
     private var succeededTransfers: List<OCTransfer>? = null
     private var numberOfUploadsRefreshed: Int = 0
 
+    private var baseUrlsUpdateDialog: AlertDialog? = null
+
     private val actionModeCallback: ActionMode.Callback = object : ActionMode.Callback {
 
         override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
@@ -331,6 +333,12 @@ class MainFileListFragment : Fragment(),
         subscribeToViewModels()
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        baseUrlsUpdateDialog?.dismiss()
+        baseUrlsUpdateDialog = null
+    }
+
     override fun onResume() {
         super.onResume()
         if (browserOpened) {
@@ -372,7 +380,10 @@ class MainFileListFragment : Fragment(),
         // Set view and footer correctly
         if (mainFileListViewModel.isGridModeSetAsPreferred()) {
             layoutManager =
-                StaggeredGridLayoutManager(ColumnQuantity(requireContext(), R.layout.grid_item).calculateNoOfColumns(binding.root), RecyclerView.VERTICAL)
+                StaggeredGridLayoutManager(
+                    ColumnQuantity(requireContext(), R.layout.grid_item).calculateNoOfColumns(binding.root),
+                    RecyclerView.VERTICAL
+                )
             viewType = ViewType.VIEW_TYPE_GRID
         } else {
             layoutManager = StaggeredGridLayoutManager(1, RecyclerView.VERTICAL)
@@ -487,6 +498,30 @@ class MainFileListFragment : Fragment(),
 
         observeClearSelectionEvents()
 
+        observeBaseUrlUpdate()
+    }
+
+    private fun observeBaseUrlUpdate() {
+        collectLatestLifecycleFlow(fileOperationsViewModel.updateBaseUrlDialog) {
+            showBaseUrlUpdateDialog()
+        }
+    }
+
+    private fun showBaseUrlUpdateDialog() {
+        if (baseUrlsUpdateDialog == null) {
+            baseUrlsUpdateDialog = MaterialAlertDialogBuilder(requireContext())
+                .setTitle(getString(R.string.homecloud_device_update))
+                .setMessage(getString(R.string.homecloud_device_sync_error))
+                .setNegativeButton(R.string.common_no) { dialog, _ ->
+                    dialog.dismiss()
+                }
+                .setPositiveButton(R.string.common_yes) { dialog, _ ->
+                    fileOperationsViewModel.handleBaseUrlUpdate()
+                    dialog.dismiss()
+                }
+                .create()
+        }
+        baseUrlsUpdateDialog?.show()
     }
 
     private fun observeCurrentFolderDisplayed() {
@@ -521,6 +556,7 @@ class MainFileListFragment : Fragment(),
             }
         }
     }
+
     private fun observeAppRegistryToCreateFiles() {
         collectLatestLifecycleFlow(mainFileListViewModel.appRegistryToCreateFiles) { listAppRegistry ->
             binding.fabNewfile.isVisible = listAppRegistry.isNotEmpty()
@@ -641,9 +677,10 @@ class MainFileListFragment : Fragment(),
 
                 val fileLastModBottomSheet = fileOptionsBottomSheetSingleFile.findViewById<TextView>(R.id.file_last_mod_bottom_sheet)
                 fileLastModBottomSheet.text = DisplayUtils.getRelativeTimestamp(requireContext(), file.modificationTimestamp)
-                fileLastModBottomSheet.layoutParams = (fileLastModBottomSheet.layoutParams as ViewGroup.MarginLayoutParams).also {
-                        params -> params.marginStart = if (isFolderInKw) 0 else
-                    requireContext().resources.getDimensionPixelSize(R.dimen.standard_quarter_margin) }
+                fileLastModBottomSheet.layoutParams = (fileLastModBottomSheet.layoutParams as ViewGroup.MarginLayoutParams).also { params ->
+                    params.marginStart = if (isFolderInKw) 0 else
+                        requireContext().resources.getDimensionPixelSize(R.dimen.standard_quarter_margin)
+                }
 
                 fileOptionsBottomSheetSingleFileLayout = fileOptionsBottomSheetSingleFile.findViewById(R.id.file_options_bottom_sheet_layout)
                 menuOptions.forEach { menuOption ->
@@ -807,7 +844,8 @@ class MainFileListFragment : Fragment(),
 
             binding.spaceHeader.root.apply {
                 if ((fileListUiState.space?.isProject == true || (fileListUiState.space?.isPersonal == true && isMultiPersonal)) &&
-                    fileListUiState.folderToDisplay?.remotePath == ROOT_PATH && fileListUiState.fileListOption != FileListOption.AV_OFFLINE) {
+                    fileListUiState.folderToDisplay?.remotePath == ROOT_PATH && fileListUiState.fileListOption != FileListOption.AV_OFFLINE
+                ) {
                     isVisible = true
                     animate().translationY(0f).duration = 100
                 } else {
@@ -870,6 +908,7 @@ class MainFileListFragment : Fragment(),
                 is UIResult.Loading -> {
                     fileActivity.showLoadingDialog(R.string.common_loading)
                 }
+
                 is UIResult.Success -> {
                     fileActivity.dismissLoadingDialog()
                     it.data?.let { result -> onShowRemoveDialog(filesToRemove, result) }
@@ -1026,7 +1065,8 @@ class MainFileListFragment : Fragment(),
      */
     private fun showOrHideFab(newFileListOption: FileListOption, currentFolder: OCFile) {
         if (!newFileListOption.isAllFiles() || isPickingAFolder() ||
-            (!currentFolder.hasAddFilePermission && !currentFolder.hasAddSubdirectoriesPermission)) {
+            (!currentFolder.hasAddFilePermission && !currentFolder.hasAddSubdirectoriesPermission)
+        ) {
             toggleFabVisibility(false)
         } else {
             toggleFabVisibility(true)
@@ -1181,7 +1221,7 @@ class MainFileListFragment : Fragment(),
                 }
                 setOnClickListener {
                     showFilenameTextDialog(appRegistry.ext)
-                    currentDefaultApplication = appRegistry.appProviders.find { it.productName == appRegistry.defaultApplication}?.name
+                    currentDefaultApplication = appRegistry.appProviders.find { it.productName == appRegistry.defaultApplication }?.name
                         ?: appRegistry.defaultApplication
                     dialog.hide()
                 }

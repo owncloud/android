@@ -33,33 +33,51 @@ class HCMdnsDiscoveryRepository(
             serviceName = serviceName,
             duration = duration
         ).mapNotNull { baseUrl ->
-            // Verify each discovered device independently
-            Timber.d("Device discovered via mDNS: $baseUrl - verifying...")
+            verifyDeviceBaseUrl(baseUrl)
+        }
+    }
 
-            val isVerified = deviceVerificationClient.verifyDevice(baseUrl)
+    override suspend fun discoverAndVerifyDevice(
+        serviceType: String,
+        serviceName: String,
+        duration: Duration
+    ): Device? {
+        return localMdnsDiscoveryDataSource.discoverDevicesOneShot(
+            serviceType = serviceType,
+            serviceName = serviceName,
+            timeout = duration
+        )?.let {
+            verifyDeviceBaseUrl(it)
+        }
+    }
 
-            if (isVerified) {
-                Timber.d("Device verified: $baseUrl")
+    private suspend fun verifyDeviceBaseUrl(baseUrl: String): Device? {
+        // Verify each discovered device independently
+        Timber.d("Device discovered via mDNS: $baseUrl - verifying...")
 
-                // Get certificate common name
-                val certificateCommonName = deviceVerificationClient.getCertificateCommonName(baseUrl).orEmpty()
-                Timber.d("Device certificate common name: $certificateCommonName")
-                val deviceUrl = "$baseUrl/files"
+        val isVerified = deviceVerificationClient.verifyDevice(baseUrl)
 
-                // Emit device
+        return if (isVerified) {
+            Timber.d("Device verified: $baseUrl")
 
-                Device(
-                    id = deviceUrl,
-                    name = deviceUrl,
-                    availablePaths = mapOf(
-                        DevicePathType.LOCAL to deviceUrl
-                    ),
-                    certificateCommonName = certificateCommonName
-                )
-            } else {
-                Timber.d("Device verification failed, skipping: $baseUrl")
-                null
-            }
+            // Get certificate common name
+            val certificateCommonName = deviceVerificationClient.getCertificateCommonName(baseUrl).orEmpty()
+            Timber.d("Device certificate common name: $certificateCommonName")
+            val deviceUrl = "$baseUrl/files"
+
+            // Emit device
+
+            Device(
+                id = deviceUrl,
+                name = deviceUrl,
+                availablePaths = mapOf(
+                    DevicePathType.LOCAL to deviceUrl
+                ),
+                certificateCommonName = certificateCommonName
+            )
+        } else {
+            Timber.d("Device verification failed, skipping: $baseUrl")
+            null
         }
     }
 }

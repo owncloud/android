@@ -7,6 +7,6 @@ class SaveCurrentDeviceUseCase(
 ) {
 
     operator fun invoke(device: Device) {
-        currentDeviceRepository.saveCurrentDevicePaths(device)
+        currentDeviceRepository.saveCurrentDevice(device)
     }
 }
