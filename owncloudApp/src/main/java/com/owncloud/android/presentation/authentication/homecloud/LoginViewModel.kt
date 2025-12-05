@@ -162,8 +162,7 @@ class LoginViewModel(
                     handleCodeError(it)
                 },
                 completeBlock = {
-                    val currentState = _state.value
-                    when (currentState) {
+                    when (val currentState = _state.value) {
                         is LoginScreenState.EmailState -> _state.update { currentState.copy(isAllowLoading = false) }
                         is LoginScreenState.LoginState -> {} // Already switched
                     }
@@ -292,7 +291,7 @@ class LoginViewModel(
                     }
                 },
                 exceptionHandlerBlock = {
-
+                    Timber.e(it, it.message)
                 },
                 completeBlock = {
                     _state.update { currentState ->

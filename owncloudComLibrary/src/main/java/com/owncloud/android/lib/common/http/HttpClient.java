@@ -68,7 +68,7 @@ public class HttpClient {
 
     private final CertificateReader certificateReader;
 
-    protected HttpClient(Context context) {
+    public HttpClient(Context context) {
         if (context == null) {
             Timber.e("Context may not be NULL!");
             throw new NullPointerException("Context may not be NULL!");

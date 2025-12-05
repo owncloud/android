@@ -105,9 +105,9 @@ val remoteAccessModule = module {
     }
 
     single(named(RemoteAccessQualifiers.OKHTTP_CLIENT)) {
-        val trustAllClient = get<OkHttpClient>(named(NetworkModuleQualifiers.OKHTTP_CLIENT_TRUST_ALL))
+        val okHttpClient = get<OkHttpClient>(named(NetworkModuleQualifiers.OKHTTP_CLIENT_PINNED_HC_CERT))
 
-        trustAllClient.newBuilder()
+        okHttpClient.newBuilder()
             .addInterceptor(get<RemoteAccessAuthInterceptor>(named(RemoteAccessQualifiers.AUTH_INTERCEPTOR)))
             .addInterceptor(get<RemoteAccessTokenRefreshInterceptor>(named(RemoteAccessQualifiers.TOKEN_REFRESH_INTERCEPTOR)))
             .addInterceptor(get<HttpLoggingInterceptor>(named(RemoteAccessQualifiers.LOGGING_INTERCEPTOR)))

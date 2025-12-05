@@ -45,17 +45,14 @@ class PinnedCertificateTrustManager(
         val keyStore = KeyStore.getInstance(KeyStore.getDefaultType())
         keyStore.load(null, null)
 
-        assetsCertificateReader.readCertificates().forEachIndexed { index, certificate ->
-            val alias = try {
-                certificate.subjectX500Principal.name.take(50)
-            } catch (e: Exception) {
-                "cert_$index"
-            }
-
-            keyStore.setCertificateEntry(alias, certificate)
-
-            Timber.d("Loaded certificate: (Subject: ${certificate.subjectX500Principal.name})")
+        val certificate = assetsCertificateReader.readCertificate("hc.test.server.pem")
+        val alias = try {
+            certificate.subjectX500Principal.name.take(50)
+        } catch (e: Exception) {
+            "cert_hc"
         }
+        keyStore.setCertificateEntry(alias, certificate)
+        Timber.d("Loaded certificate: (Subject: ${certificate.subjectX500Principal.name})")
         return keyStore
     }
 

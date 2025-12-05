@@ -34,4 +34,10 @@ class AssetsCertificateReader(private val assetManager: AssetManager) : Certific
         }
         return certificates
     }
+
+    override fun readCertificate(certificatePath: String): X509Certificate {
+        return assetManager.open("${CERT_FOLDER}/$certificatePath").use { inputStream ->
+            certificateFactory.generateCertificate(inputStream) as X509Certificate
+        }
+    }
 }
