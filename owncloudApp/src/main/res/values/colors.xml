@@ -34,6 +34,7 @@
     <color name="black">#000000</color>
     <color name="white">#FFFFFF</color>
     <color name="white_transparent">#4DFFFFFF</color>
+    <color name="black_transparent">#4D000000</color>
     <color name="fab_white">#fafafa</color>
     <color name="white_pressed">#f1f1f1</color>
     <color name="half_black">#808080</color>

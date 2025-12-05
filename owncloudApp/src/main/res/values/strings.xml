@@ -686,16 +686,20 @@
 
     <!-- Welcome to oC intro features -->
     <string name="welcome_feature_skip_button">Skip</string>
-    <string name="welcome_feature_1_title">Manage all your synced files</string>
-    <string name="welcome_feature_1_text">You can copy, move, delete</string>
-    <string name="welcome_feature_2_title">Share files and folders</string>
-    <string name="welcome_feature_2_text">You can share privately or publicly</string>
-    <string name="welcome_feature_3_title">Multi account</string>
-    <string name="welcome_feature_3_text">Connect to all your Curator Files servers</string>
-    <string name="welcome_feature_4_title">Camera uploads</string>
-    <string name="welcome_feature_4_text">Your pictures/videos automatically uploaded</string>
-    <string name="welcome_feature_5_title">Video streaming</string>
-    <string name="welcome_feature_5_text">Play your videos without downloading them</string>
+    <string name="welcome_feature_1_title">Welcome to Personal Cloud Files</string>
+    <string name="welcome_feature_1_text">Securely upload, manage, and share your files with Personal Cloud Files, your private gateway to personal
+        storage. \n\nWhether you\'re organizing files or sharing documents with family and friends, Personal Cloud Files keeps your data safe with
+        simple access.</string>
+    <string name="welcome_feature_2_title">Sync your files to Personal Cloud</string>
+    <string name="welcome_feature_2_text">Use the desktop app to upload files directly from your computer to Personal Cloud Files. \n\nEnsure your
+        files are synced and backed up to Personal Cloud for easy access across all your devices.</string>
+    <string name="welcome_feature_3_title">File deduplication</string>
+    <string name="welcome_feature_3_text">Identify and manage duplicate files uploaded to your account.
+\n\nSee exactly how many copies exist and access them all from the Duplicates page.</string>
+    <string name="welcome_feature_4_title">Quickly find what you need</string>
+    <string name="welcome_feature_4_text">Search files on Personal Cloud by name, date, type, size, and folder.</string>
+    <string name="welcome_feature_5_title">Secure sharing made simple</string>
+    <string name="welcome_feature_5_text">Share files and folders securely with family and friends. You can control access by setting expiration dates for shared links so that files remain private over time.</string>
     <string name="no_browser_installed_alert">No browser installed. Please install a browser in order to allow a secure login.</string>
     <string name="common_not_found">it was not found</string>
 

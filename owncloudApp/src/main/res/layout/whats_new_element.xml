@@ -3,8 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="24dp"
-    tools:background="@drawable/bg_welcome">
+    android:padding="24dp">
 
     <LinearLayout
         android:layout_width="@dimen/whats_new_text_width"
@@ -27,8 +26,7 @@
             android:layout_gravity="center_horizontal"
             android:gravity="start"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="@color/white"
-            android:textSize="24sp"
+            android:textSize="34sp"
             android:textStyle="bold"
             tools:text="@string/welcome_feature_6_title" />
 
@@ -40,9 +38,15 @@
             android:layout_marginVertical="@dimen/standard_margin"
             android:gravity="start"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="@color/white"
             android:textSize="16sp"
             tools:text="@string/welcome_feature_6_text" />
+
+        <ImageView
+            android:id="@+id/whatsNewExtraImage"
+            android:layout_width="150dp"
+            android:layout_height="50dp"
+            android:layout_gravity="start"
+            android:visibility="gone" />
 
     </LinearLayout>
 </ScrollView>

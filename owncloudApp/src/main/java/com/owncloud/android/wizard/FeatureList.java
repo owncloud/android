@@ -34,18 +34,16 @@ public class FeatureList {
 
     static final private FeatureItem[] featuresList = {
             // Basic features showed on first install
-            new FeatureItem("sync", R.drawable.whats_new_placeholder, R.string.welcome_feature_1_title,
+            new FeatureItem("intro", R.drawable.ic_whats_new_intro, R.string.welcome_feature_1_title,
                     R.string.welcome_feature_1_text),
-            new FeatureItem("share", R.drawable.whats_new_placeholder, R.string.welcome_feature_2_title,
-                    R.string.welcome_feature_2_text),
-//            new FeatureItem(R.drawable.whats_new_accounts, R.string.welcome_feature_3_title,
-//                    R.string.welcome_feature_3_text),
-            new FeatureItem("camera_uploads", R.drawable.whats_new_placeholder, R.string.welcome_feature_4_title,
+            new FeatureItem("desktop_uploads", R.drawable.ic_whats_new_desktop_upload, R.string.welcome_feature_2_title,
+                    R.string.welcome_feature_2_text, R.drawable.ic_desktop_app),
+            new FeatureItem("file_deduplication", R.drawable.ic_whats_new_file_deduplication, R.string.welcome_feature_3_title,
+                    R.string.welcome_feature_3_text),
+            new FeatureItem("search", R.drawable.ic_whats_new_search, R.string.welcome_feature_4_title,
                     R.string.welcome_feature_4_text),
-            new FeatureItem("video_streaming", R.drawable.whats_new_placeholder, R.string.welcome_feature_5_title,
+            new FeatureItem("sharing", R.drawable.ic_whats_new_sharing, R.string.welcome_feature_5_title,
                     R.string.welcome_feature_5_text),
-//            new FeatureItem(R.drawable.whats_new_placeholder, R.string.welcome_feature_6_title,
-//                    R.string.welcome_feature_6_text)
     };
 
     static public FeatureItem[] get() {
@@ -59,16 +57,24 @@ public class FeatureList {
         private final int contentText;
         private final String id;
 
+        private final int extraImage;
+
         private FeatureItem(String id, int image, int titleText, int contentText) {
+            this(id, image, titleText, contentText, DO_NOT_SHOW);
+        }
+
+        private FeatureItem(String id, int image, int titleText, int contentText, int extraImage) {
             this.image = image;
             this.titleText = titleText;
             this.contentText = contentText;
             this.id = id;
+            this.extraImage = extraImage;
         }
 
         public String getId() {
             return id;
         }
+
         public boolean shouldShowImage() {
             return image != DO_NOT_SHOW;
         }
@@ -93,6 +99,15 @@ public class FeatureList {
             return contentText;
         }
 
+        public int getExtraImage() {
+            return extraImage;
+        }
+
+        public boolean shouldShowExtraImage() {
+            return extraImage != DO_NOT_SHOW;
+        }
+
+
         @Override
         public int describeContents() {
             return 0;
@@ -104,6 +119,7 @@ public class FeatureList {
             dest.writeInt(image);
             dest.writeInt(titleText);
             dest.writeInt(contentText);
+            dest.writeInt(extraImage);
         }
 
         private FeatureItem(Parcel p) {
@@ -111,6 +127,7 @@ public class FeatureList {
             image = p.readInt();
             titleText = p.readInt();
             contentText = p.readInt();
+            extraImage = p.readInt();
         }
 
         public static final Parcelable.Creator CREATOR =

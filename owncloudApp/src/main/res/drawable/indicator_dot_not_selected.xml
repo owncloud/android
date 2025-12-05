@@ -26,7 +26,7 @@
 
         <shape
             android:shape="oval">
-            <solid android:color="@color/white_transparent" />
+            <solid android:color="@color/homecloud_dot_unselected" />
             <size
                 android:width="8dp"
                 android:height="8dp" />

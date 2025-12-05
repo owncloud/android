@@ -25,7 +25,7 @@
         android:left="5dp">
         <shape
             android:shape="oval">
-            <solid android:color="@color/white" />
+            <solid android:color="@color/homecloud_primary" />
             <size
                 android:width="8dp"
                 android:height="8dp" />

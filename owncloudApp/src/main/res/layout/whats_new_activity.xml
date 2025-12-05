@@ -5,12 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="centerCrop"
-        android:src="@drawable/bg_welcome" />
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -43,8 +37,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical|center_horizontal"
                 android:layout_weight="1"
-                android:text="@string/welcome_feature_skip_button"
-                android:textColor="@color/white" />
+                android:textColor="@color/homecloud_primary"
+                android:text="@string/welcome_feature_skip_button" />
 
             <com.owncloud.android.wizard.ProgressIndicator
                 android:id="@+id/progressIndicator"
@@ -66,7 +60,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:text="@string/welcome_feature_done_button"
-                    android:textColor="@color/white"
+                    android:textColor="@color/homecloud_primary"
                     tools:visibility="gone" />
 
                 <ImageButton
@@ -76,6 +70,7 @@
                     android:layout_height="48dp"
                     android:layout_gravity="center"
                     android:padding="@dimen/standard_padding"
+                    android:tint="@color/homecloud_primary"
                     android:src="@drawable/ic_arrow_forward" />
 
             </FrameLayout>

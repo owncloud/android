@@ -66,4 +66,5 @@
     <color name="homecloud_signin_logo_text_color">@color/white</color>
 
     <color name="homecloud_toolbar_icon_tint">@color/homecloud_blue_lighten_2</color>
+    <color name="homecloud_dot_unselected">@color/white_transparent</color>
 </resources>

@@ -5,7 +5,7 @@
  * @author Christian Schabesberger
  * @author David Crespo Ríos
  * @author Jorge Aguado Recio
- *
+ * <p>
  * Copyright (C) 2020 Bartosz Przybylski
  * Copyright (C) 2025 ownCloud GmbH.
  * <p>
@@ -254,6 +254,13 @@ public class WhatsNewActivity extends FragmentActivity {
             tv2 = bindingElement.whatsNewText;
             if (mItem.shouldShowContentText()) {
                 tv2.setText(mItem.getContentText());
+            }
+
+            if (mItem.shouldShowExtraImage()) {
+                bindingElement.whatsNewExtraImage.setVisibility(View.VISIBLE);
+                bindingElement.whatsNewExtraImage.setImageResource(mItem.getExtraImage());
+            } else {
+                bindingElement.whatsNewExtraImage.setVisibility(View.GONE);
             }
 
             return bindingElement.getRoot();
