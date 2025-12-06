@@ -618,6 +618,7 @@
   <string name="fab_refresh_text">Yenile</string>
   <string name="fab_refresh_sync_in_progress">Senkronizasyon hâlihazırda devam ediyor</string>
   <string name="password_policy_min_characters">En az %1$d karakter uzunluğunda</string>
+  <string name="password_policy_min_digits">En az %1$d sayı</string>
   <string name="prefs_delete_local_files_entries_never">Asla</string>
   <string name="prefs_delete_local_files_entries_1hour">1 saat</string>
   <string name="prefs_delete_local_files_entries_12hours">12 saat</string>

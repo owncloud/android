@@ -169,7 +169,9 @@
   <string name="local_file_list_search_with_no_matches">沒有合適結果</string>
   <string name="upload_list_empty">無上傳</string>
   <string name="upload_list_empty_subtitle">你上传的文件将在此显示</string>
+  <string name="file_list_folder">文件夹</string>
   <string name="file_list_folders">文件夹</string>
+  <string name="file_list_file">文件</string>
   <string name="file_list_files">文件</string>
   <string name="filedetails_select_file">按一下文件顯示更多資料。</string>
   <string name="upload_to">上傳到%1$s</string>
@@ -428,6 +430,7 @@
   <string name="placeholder_filesize">389 KB</string>
   <string name="placeholder_timestamp">2012/05/18 12:23 PM</string>
   <string name="placeholder_media_time">12:23:45</string>
+  <string name="confirmation_disable_camera_uploads_title">確認</string>
   <string name="confirmation_disable_pictures_upload_message">你确定要禁用这项功能吗？未上传的图片将不会被上传</string>
   <string name="confirmation_disable_videos_upload_message">确定要禁用这项功能吗？未上传的视频将不会被上传</string>
   <string name="conflict_title">文件冲突</string>
@@ -614,6 +617,7 @@
   <!--DeepLinks-->
   <string name="invalid_deep_link_format">無效的連結格式</string>
   <string name="fab_refresh_text">重新整理</string>
+  <string name="password_policy_min_digits">至少 %1$d 个数字</string>
   <string name="prefs_delete_local_files_entries_never">从不</string>
   <string name="insecure_http_url_continue_button">繼續</string>
   <string name="content_description_menu">菜单</string>

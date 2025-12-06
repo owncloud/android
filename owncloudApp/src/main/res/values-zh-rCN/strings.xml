@@ -618,6 +618,7 @@
   <!--DeepLinks-->
   <string name="invalid_deep_link_format">無效的連結格式</string>
   <string name="fab_refresh_text">刷新</string>
+  <string name="password_policy_min_digits">至少 %1$d 个数字</string>
   <string name="prefs_delete_local_files_entries_never">从不</string>
   <string name="insecure_http_url_continue_button">继续</string>
   <string name="content_description_menu">菜单</string>
