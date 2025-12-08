@@ -50,11 +50,9 @@ class HCDeviceVerificationClient(
                     return@withContext false
                 }
 
-                // Verify that the device is in ready state with OOBE completed
-                val isReady = statusResponse.state == "ready" &&
-                        statusResponse.oobe.done &&
-                        statusResponse.apps.files == "ready" &&
-                        statusResponse.apps.photos == "ready"
+                // Verify that the device's files is in ready state with OOBE completed
+                val isReady = statusResponse.oobe.done &&
+                        statusResponse.apps.files == "ready"
 
                 if (isReady) {
                     Timber.d("Device verified successfully: $deviceUrl")
