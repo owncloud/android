@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:parentTag="android.widget.FrameLayout">
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/loading_button_content"
+        style="@style/Widget.Material3.Button.UnelevatedButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:insetBottom="0dp"
+        android:insetLeft="0dp"
+        android:insetRight="0dp"
+        android:insetTop="0dp"
+        android:minHeight="@dimen/loading_button_min_height"
+        android:minWidth="0dp"
+        android:paddingEnd="0dp"
+        android:paddingStart="0dp"
+        android:textAllCaps="false"
+        android:textColor="@color/selector_button_primary_text"
+        app:backgroundTint="@color/selector_button_primary_background"
+        app:cornerRadius="28dp"
+        app:iconPadding="0dp" />
+
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/loading_button_progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:indeterminate="true"
+        android:visibility="gone"
+        app:indicatorColor="@color/homecloud_button_primary_text"
+        app:indicatorSize="24dp"
+        app:trackColor="@android:color/transparent"
+        app:trackThickness="2dp" />
+
+</merge>
+

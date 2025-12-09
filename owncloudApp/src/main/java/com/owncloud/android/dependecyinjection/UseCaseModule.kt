@@ -84,7 +84,7 @@ import com.owncloud.android.domain.files.usecases.SortFilesUseCase
 import com.owncloud.android.domain.files.usecases.SortFilesWithSyncInfoUseCase
 import com.owncloud.android.domain.files.usecases.UpdateAlreadyDownloadedFilesPathUseCase
 import com.owncloud.android.domain.mdnsdiscovery.usecases.DiscoverLocalNetworkDevicesUseCase
-import com.owncloud.android.domain.remoteaccess.usecases.GetExistingRemoveAccessUserUseCase
+import com.owncloud.android.domain.remoteaccess.usecases.GetExistingRemoteAccessUserUseCase
 import com.owncloud.android.domain.remoteaccess.usecases.GetRemoteAccessTokenUseCase
 import com.owncloud.android.domain.remoteaccess.usecases.GetRemoteAvailableDevicesUseCase
 import com.owncloud.android.domain.remoteaccess.usecases.InitiateRemoteAccessAuthenticationUseCase
@@ -305,7 +305,7 @@ val useCaseModule = module {
     factoryOf(::GetRemoteAccessTokenUseCase)
     factoryOf(::GetRemoteAvailableDevicesUseCase)
     factoryOf(::GetAvailableDevicesUseCase)
-    factoryOf(::GetExistingRemoveAccessUserUseCase)
+    factoryOf(::GetExistingRemoteAccessUserUseCase)
     factoryOf(::SaveCurrentDeviceUseCase)
     factoryOf(::GetCurrentDevicePathsUseCase)
 

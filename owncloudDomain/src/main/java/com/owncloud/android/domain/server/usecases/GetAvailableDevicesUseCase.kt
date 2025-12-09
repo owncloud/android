@@ -33,6 +33,7 @@ class GetAvailableDevicesUseCase(
         scope: CoroutineScope,
         discoverLocalNetworkDevicesParams: DiscoverLocalNetworkDevicesUseCase.Params
     ): StateFlow<List<Device>> {
+        remoteAccessDevicesFlow.update { emptyList() }
         val localNetworkDevicesFlow = discoverLocalNetworkDevicesUseCase.execute(discoverLocalNetworkDevicesParams)
             .stateIn(scope, SharingStarted.WhileSubscribed(5000), null)
 
@@ -78,7 +79,7 @@ class GetAvailableDevicesUseCase(
             mutableDevices
         }.stateIn(
             scope = scope,
-            started = SharingStarted.WhileSubscribed(5000),
+            started = SharingStarted.Eagerly,
             initialValue = emptyList()
         )
     }

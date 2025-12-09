@@ -219,14 +219,13 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
 
-            <Button
+            <com.owncloud.android.ui.custom.LoadingButton
                 android:id="@+id/actionButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:contentDescription="@string/setup_btn_login"
-                android:text="@string/setup_btn_login"
-                android:theme="@style/Button.Primary"
+                app:buttonText="@string/setup_btn_login"
                 app:layout_constraintTop_toBottomOf="@id/error_message"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />

@@ -2,7 +2,7 @@ package com.owncloud.android.domain.remoteaccess.usecases
 
 import com.owncloud.android.domain.remoteaccess.RemoteAccessRepository
 
-class GetExistingRemoveAccessUserUseCase(
+class GetExistingRemoteAccessUserUseCase(
     private val remoteAccessRepository: RemoteAccessRepository
 ) {
 

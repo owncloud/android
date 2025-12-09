@@ -12,4 +12,9 @@
 
     <dimen name="homecloud_toolbar_height">56dp</dimen>
 
+    <!-- Loading Button -->
+    <dimen name="loading_button_indicator_size">24dp</dimen>
+    <dimen name="loading_button_min_height">40dp</dimen>
+    <dimen name="loading_button_corner_radius">28dp</dimen>
+
 </resources>

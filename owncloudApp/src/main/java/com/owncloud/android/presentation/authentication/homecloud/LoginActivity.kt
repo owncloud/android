@@ -39,6 +39,7 @@ import com.owncloud.android.presentation.security.LockType
 import com.owncloud.android.presentation.security.SecurityEnforced
 import com.owncloud.android.presentation.settings.SettingsActivity
 import com.owncloud.android.ui.activity.FileDisplayActivity
+import com.owncloud.android.ui.custom.LoadingButton
 import com.owncloud.android.ui.dialog.SslUntrustedCertDialog
 import com.owncloud.android.utils.PreferenceUtils
 import kotlinx.coroutines.launch
@@ -295,7 +296,18 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
                 binding.loginStateGroup.visibility = View.GONE
                 binding.actionButton.setText(R.string.homecloud_action_button_next)
                 // Enable button only if username is not empty and is a valid email
-                binding.actionButton.isEnabled = state.username.isNotEmpty() && Patterns.EMAIL_ADDRESS.matcher(state.username).matches()
+                if (state.isActionButtonLoading) {
+                    binding.actionButton.setState(LoadingButton.State.LOADING)
+                } else {
+                    val state =
+                        if (state.username.isNotEmpty() && Patterns.EMAIL_ADDRESS.matcher(state.username).matches()) {
+                            LoadingButton.State.ENABLED
+                        } else {
+                            LoadingButton.State.DISABLED
+                        }
+                    binding.actionButton.setState(state)
+                }
+
                 binding.serversRefreshButton.visibility = View.INVISIBLE
                 binding.serversRefreshLoading.visibility = View.GONE
                 when {
@@ -363,8 +375,21 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
                         binding.actionGroup.visibility = View.VISIBLE
                         binding.loginStateGroup.visibility = View.VISIBLE
                         binding.actionButton.setText(R.string.setup_btn_login)
-                        binding.actionButton.isEnabled = state.username.isNotEmpty() && state.password.isNotEmpty() &&
-                                (state.selectedDevice != null || state.serverUrl.isNotEmpty()) && Patterns.EMAIL_ADDRESS.matcher(state.username).matches()
+                        if (state.isActionButtonLoading) {
+                            binding.actionButton.setState(LoadingButton.State.LOADING)
+                        } else {
+                            val state =
+                                if (state.username.isNotEmpty() && state.password.isNotEmpty() &&
+                                    (state.selectedDevice != null || state.serverUrl.isNotEmpty()) &&
+                                    Patterns.EMAIL_ADDRESS.matcher(state.username)
+                                        .matches()
+                                ) {
+                                    LoadingButton.State.ENABLED
+                                } else {
+                                    LoadingButton.State.DISABLED
+                                }
+                            binding.actionButton.setState(state)
+                        }
                     }
                 }
             }

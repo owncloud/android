@@ -32,6 +32,8 @@ class HCRemoteAccessRepository(
             clientFriendlyName = clientFriendlyName
         )
 
+        tokenStorage.clearTokens()
+        currentDeviceStorage.clearDevicePaths()
         return remoteAccessService.initiateAuthentication(request = request).reference
     }
 

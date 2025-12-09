@@ -27,4 +27,12 @@
         <attr name="cursorColor" format="color" />
     </declare-styleable>
 
+    <declare-styleable name="LoadingButton">
+        <attr name="buttonText" format="string" />
+        <attr name="isLoading" format="boolean" />
+        <attr name="loadingIndicatorColor" format="color" />
+        <attr name="loadingBackgroundColor" format="color" />
+        <attr name="loadingIndicatorSize" format="dimension" />
+    </declare-styleable>
+
 </resources>
