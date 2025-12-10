@@ -100,6 +100,7 @@ class LoadingButton @JvmOverloads constructor(
             State.DISABLED -> {
                 setLoading(false)
                 isEnabled = false
+                button.isEnabled = false
             }
         }
     }

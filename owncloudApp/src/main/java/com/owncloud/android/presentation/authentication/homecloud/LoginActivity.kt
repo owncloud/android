@@ -17,7 +17,6 @@ import androidx.activity.addCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -53,6 +52,10 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
     private val dialogBinding by lazy { AccountDialogCodeBinding.inflate(layoutInflater) }
 
     private var connectFieldTextWatcher: TextWatcher? = null
+
+    private val unableToDetectMessage: SpannableStringBuilder by lazy {
+        createUnableToDetectMessage()
+    }
 
     private val adapter by lazy {
         DeviceAddressAdapter(
@@ -99,7 +102,6 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
             })
         }
         setupListeners()
-        setupUnableToConnectContent()
     }
 
     private fun handleDeepLink() {
@@ -130,7 +132,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
             showMessageInSnackbar(message = "Not implemented yet")
         }
         binding.cantFindDevice.setOnClickListener {
-            showMessageInSnackbar(message = "Not implemented yet")
+            loginViewModel.onCantFindDeviceClicked()
         }
         binding.actionButton.setOnClickListener {
             loginViewModel.onActionClicked()
@@ -157,7 +159,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
     }
 
     //TODO: The styling of description and text is a subject to change in nearest future. To be defined....
-    private fun setupUnableToConnectContent() {
+    private fun createUnableToConnectMessage(): SpannableStringBuilder {
         val linkColor = ContextCompat.getColor(this, R.color.homecloud_color_accent)
         val description = getString(R.string.homecloud_unable_to_connect_description)
         val items = listOf(
@@ -215,8 +217,23 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
 
         builder.append(" ")
         builder.append(supportSuffix)
+        return builder
+    }
 
-        binding.unableToConnectLayout.unableToConnectContent.text = builder
+    private fun createUnableToDetectMessage(): SpannableStringBuilder {
+        // TODO: temporary the same as unable to connect
+        return createUnableToConnectMessage()
+    }
+
+    private fun setupUnableToDetectContent() {
+        binding.unableToConnectLayout.unableToConnectTitle.text = getString(R.string.homecloud_unable_to_detect_title)
+        binding.unableToConnectLayout.unableToConnectContent.text = unableToDetectMessage
+        binding.unableToConnectLayout.unableToConnectContent.movementMethod = LinkMovementMethod.getInstance()
+    }
+
+    private fun setupUnableToConnectContent() {
+        binding.unableToConnectLayout.unableToConnectTitle.text = getString(R.string.homecloud_unable_to_connect_title)
+        binding.unableToConnectLayout.unableToConnectContent.text = unableToDetectMessage
         binding.unableToConnectLayout.unableToConnectContent.movementMethod = LinkMovementMethod.getInstance()
     }
 
@@ -277,9 +294,6 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
     }
 
     private fun updateLoginState(state: LoginScreenState) {
-        binding.errorMessage.text = state.errorMessage
-        binding.errorMessage.isVisible = !state.errorMessage.isNullOrBlank()
-
         when (state) {
             is LoginScreenState.EmailState -> {
                 // Show main scroll view, hide unable to connect
@@ -336,10 +350,14 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
             }
 
             is LoginScreenState.LoginState -> {
-                if (state.isUnableToConnect) {
-                    // Hide main scroll view, show unable to connect
+                if (state.isUnableToDetect || !state.errorMessage.isNullOrBlank()) {
                     binding.scrollView.visibility = View.GONE
                     binding.backButton.visibility = View.GONE
+                    if (!state.errorMessage.isNullOrBlank()) {
+                        setupUnableToConnectContent()
+                    } else if (state.isUnableToDetect) {
+                        setupUnableToDetectContent()
+                    }
                     binding.unableToConnectLayout.unableToConnectContainer.visibility = View.VISIBLE
                 } else {
                     // Show main scroll view, hide unable to connect

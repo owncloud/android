@@ -48,6 +48,7 @@
     <string name="homecloud_login_invalid_email_message">Incorrect email</string>
 
     <!-- Unable to connect state -->
+    <string name="homecloud_unable_to_detect_title">Unable to detect</string>
     <string name="homecloud_unable_to_connect_title">Unable to connect</string>
     <string name="homecloud_unable_to_connect_description">We are unable to detect your device. Please ensure the following:</string>
     <string name="homecloud_unable_to_connect_item_1">Verify that Personal Cloud is properly connected to your home network</string>

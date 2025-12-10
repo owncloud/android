@@ -8,5 +8,7 @@ class GetRemoteAccessTokenUseCase(
 
     suspend fun execute(reference: String, code: String, username: String) =
         remoteAccessRepository.getToken(reference, code, username)
+
+    fun hasToken(): Boolean = remoteAccessRepository.hasAccessToken()
 }
 

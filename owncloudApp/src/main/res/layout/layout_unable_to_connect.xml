@@ -32,7 +32,6 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:gravity="center_horizontal"
-            android:text="@string/homecloud_unable_to_connect_title"
             android:textColor="@color/homecloud_primary"
             android:textSize="20sp"
             android:textStyle="bold"
