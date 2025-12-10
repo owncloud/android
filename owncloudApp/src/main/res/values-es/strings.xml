@@ -690,6 +690,8 @@ Póngase en contacto con su administrador</string>
   <string name="release_notes_4_7_0_subtitle_new_layout_for_spaces">Un nuevo diseño para la lista de spaces disponible para usuarios de Infinite Scale con un menú en cada space que abre la lista de opciones</string>
   <string name="release_notes_4_7_0_title_space_management">Gestión de spaces</string>
   <string name="release_notes_4_7_0_subtitle_space_management">Usuarios de Infinite Scale con permisos adecuados podrán ahora gestionar spaces (crear, editar, deshabilitar, editar y borrar) directamente en la app</string>
+  <string name="release_notes_4_8_0_title_set_emoji_as_space_image">Emoji como imagen de space</string>
+  <string name="release_notes_4_8_0_subtitle_set_emoji_as_space_image">Usuarios de Infinite Scale con permisos pueden configurar un emoji como imagen de un space</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Abrir en web</string>
   <string name="ic_action_open_with_web">Open in %1$s (web)</string>
@@ -806,6 +808,7 @@ Póngase en contacto con su administrador</string>
   <string name="delete_space_dialog_message">Si borra el space seleccionado, no podrá volver a acceder y los ficheros serán borrados del servidor.</string>
   <string name="delete_space_correctly">Space borrado correctamente</string>
   <string name="delete_space_failed">El space no se pudo borrar</string>
+  <string name="set_space_icon">Emoji</string>
   <string name="feedback_dialog_get_in_contact_description"><![CDATA[ Solicita ayuda en nuestro <a href="%1$s"><b>foro</b></a> o contribuye con nosotros en nuestro <a href="%2$s"><b>repositorio GitHub</b></a>]]></string>
   <string name="link_role_accessibility">Enlace</string>
   <string name="button_role_accessibility">Botón</string>
