@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ownCloud Android client application
+
+  Copyright (C) 2025 ownCloud GmbH.
+
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License version 2,
+  as published by the Free Software Foundation.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:filterTouchesWhenObscured="true"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/standard_quarter_margin"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/member_icon"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="@dimen/standard_half_margin"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/ic_user" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/member_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/standard_half_margin"
+                android:layout_marginStart="@dimen/standard_half_margin"
+                android:layout_gravity="center_vertical"
+                android:text="@string/placeholder_filename"
+                android:textSize="@dimen/two_line_primary_text_size"
+                android:textColor="@color/textColor"
+                android:textStyle="bold"
+                android:ellipsize="middle"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/member_role"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/standard_half_margin"
+                    android:layout_marginEnd="@dimen/standard_half_margin"
+                    android:layout_marginBottom="@dimen/standard_half_margin"
+                    android:text="@string/placeholder_sentence"
+                    android:textSize="13sp"
+                    android:textColor="@color/textColor"/>
+
+                <ImageView
+                    android:id="@+id/expiration_calendar_icon"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginEnd="@dimen/standard_half_margin"
+                    android:src="@drawable/file_calendar"
+                    android:visibility="gone"
+                    tools:visibility="visible"/>
+
+                <TextView
+                    android:id="@+id/expiration_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/placeholder_sentence"
+                    android:textSize="13sp"
+                    android:textColor="@color/textColor"
+                    android:ellipsize="middle"
+                    android:visibility="gone"
+                    tools:visibility="visible"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="@dimen/standard_quarter_margin"
+        android:background="@android:color/darker_gray"
+        android:alpha="0.5"/>
+
+</LinearLayout>
