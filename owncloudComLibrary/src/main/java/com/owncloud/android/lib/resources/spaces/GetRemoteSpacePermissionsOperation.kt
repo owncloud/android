@@ -26,18 +26,17 @@ import com.owncloud.android.lib.common.http.methods.nonwebdav.GetMethod
 import com.owncloud.android.lib.common.operations.RemoteOperation
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode
-import com.squareup.moshi.Json
+import com.owncloud.android.lib.resources.spaces.responses.SpacePermissionsResponse
 import com.squareup.moshi.JsonAdapter
-import com.squareup.moshi.JsonClass
 import com.squareup.moshi.Moshi
 import timber.log.Timber
 import java.net.URL
 
 class GetRemoteSpacePermissionsOperation(
     private val spaceId: String
-): RemoteOperation<List<String>>() {
-    override fun run(client: OwnCloudClient): RemoteOperationResult<List<String>> {
-        var result: RemoteOperationResult<List<String>>
+): RemoteOperation<SpacePermissionsResponse>() {
+    override fun run(client: OwnCloudClient): RemoteOperationResult<SpacePermissionsResponse> {
+        var result: RemoteOperationResult<SpacePermissionsResponse>
         try {
             val requestUri = client.baseUri.buildUpon().apply {
                 appendEncodedPath(GRAPH_API_SPACES_PATH)
@@ -55,10 +54,10 @@ class GetRemoteSpacePermissionsOperation(
                 Timber.d("Successful response: $response")
 
                 val moshi: Moshi = Moshi.Builder().build()
-                val adapter: JsonAdapter<SpacePermissionsListResponse> = moshi.adapter(SpacePermissionsListResponse::class.java)
+                val adapter: JsonAdapter<SpacePermissionsResponse> = moshi.adapter(SpacePermissionsResponse::class.java)
 
                 result = RemoteOperationResult(ResultCode.OK)
-                result.data = getMethod.getResponseBodyAsString().let { adapter.fromJson(it)?.permissions ?: emptyList() }
+                result.data = getMethod.getResponseBodyAsString().let { adapter.fromJson(it) }
 
                 Timber.d("Get space permissions for user completed and parsed to ${result.data}")
             } else {
@@ -71,12 +70,6 @@ class GetRemoteSpacePermissionsOperation(
         }
         return result
     }
-
-    @JsonClass(generateAdapter = true)
-    data class SpacePermissionsListResponse(
-        @Json(name = "@libre.graph.permissions.actions.allowedValues")
-        val permissions: List<String>
-    )
 
     companion object {
         private const val GRAPH_API_SPACES_PATH = "graph/v1beta1/drives/"

@@ -27,13 +27,17 @@ import com.owncloud.android.data.spaces.datasources.RemoteSpacesDataSource
 import com.owncloud.android.domain.spaces.model.OCSpace
 import com.owncloud.android.domain.spaces.model.SpaceDeleted
 import com.owncloud.android.domain.spaces.model.SpaceFile
+import com.owncloud.android.domain.spaces.model.SpaceMember
+import com.owncloud.android.domain.spaces.model.SpaceMembers
 import com.owncloud.android.domain.spaces.model.SpaceOwner
 import com.owncloud.android.domain.spaces.model.SpaceQuota
+import com.owncloud.android.domain.spaces.model.SpaceRole
 import com.owncloud.android.domain.spaces.model.SpaceRoot
 import com.owncloud.android.domain.spaces.model.SpaceSpecial
 import com.owncloud.android.domain.spaces.model.SpaceSpecialFolder
 import com.owncloud.android.domain.spaces.model.SpaceUser
 import com.owncloud.android.lib.resources.spaces.responses.RootResponse
+import com.owncloud.android.lib.resources.spaces.responses.SpacePermissionsResponse
 import com.owncloud.android.lib.resources.spaces.responses.SpaceResponse
 
 class OCRemoteSpacesDataSource(
@@ -54,8 +58,18 @@ class OCRemoteSpacesDataSource(
         return spaceResponse.toModel(accountName)
     }
 
-    override fun getSpacePermissions(accountName: String, spaceId: String): List<String> =
-        executeRemoteOperation { clientManager.getSpacesService(accountName).getSpacePermissions(spaceId) }
+    override fun getSpaceMembers(accountName: String, spaceId: String): SpaceMembers {
+        val spacePermissionsResponse = executeRemoteOperation {
+            clientManager.getSpacesService(accountName).getSpacePermissions(spaceId)
+        }
+        return spacePermissionsResponse.toModel()
+    }
+
+    override fun getSpacePermissions(accountName: String, spaceId: String): List<String> {
+        val spacePermissionsResponse = executeRemoteOperation {
+            clientManager.getSpacesService(accountName).getSpacePermissions(spaceId) }
+        return spacePermissionsResponse.actions
+    }
 
     override fun editSpace(accountName: String, spaceId: String, spaceName: String, spaceSubtitle: String, spaceQuota: Long?): OCSpace {
         val spaceResponse = executeRemoteOperation {
@@ -177,6 +191,26 @@ class OCRemoteSpacesDataSource(
                     )
                 }
             )
+
+        @VisibleForTesting
+        fun SpacePermissionsResponse.toModel(): SpaceMembers =
+            SpaceMembers(
+                roles = roles.map { spaceRoleResponse ->
+                    SpaceRole(
+                        id = spaceRoleResponse.id,
+                        displayName = spaceRoleResponse.displayName
+                    )
+                },
+                members = members.map { spaceMemberResponse ->
+                    SpaceMember (
+                        id = spaceMemberResponse.id ?: "",
+                        expirationDateTime = spaceMemberResponse.expirationDateTime,
+                        displayName = spaceMemberResponse.grantedToV2.user?.displayName ?: spaceMemberResponse.grantedToV2.group?.displayName ?: "",
+                        roles = spaceMemberResponse.roles
+                    )
+                }
+            )
+
 
         private fun getRoleForUser(root: RootResponse, userId: String, userGroups: List<String>): String? {
             val priorityOrder = listOf(MANAGER_ROLE, EDITOR_ROLE, VIEWER_ROLE)

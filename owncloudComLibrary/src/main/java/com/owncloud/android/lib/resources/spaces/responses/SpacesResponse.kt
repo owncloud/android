@@ -23,6 +23,7 @@
 
 package com.owncloud.android.lib.resources.spaces.responses
 
+import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
@@ -81,7 +82,8 @@ data class SpecialResponse(
 
 @JsonClass(generateAdapter = true)
 data class UserResponse(
-    val id: String
+    val id: String,
+    val displayName: String
 )
 
 @JsonClass(generateAdapter = true)
@@ -101,7 +103,9 @@ data class SpecialFolderResponse(
 
 @JsonClass(generateAdapter = true)
 data class PermissionsResponse(
+    val expirationDateTime: String?,
     val grantedToV2: GrantedToV2Response,
+    val id: String?,
     val roles: List<String>
 )
 
@@ -113,5 +117,22 @@ data class GrantedToV2Response(
 
 @JsonClass(generateAdapter = true)
 data class GroupResponse(
+    val id: String,
+    val displayName: String
+)
+
+@JsonClass(generateAdapter = true)
+data class SpacePermissionsResponse(
+    @Json(name = "@libre.graph.permissions.actions.allowedValues")
+    val actions: List<String>,
+    @Json(name = "@libre.graph.permissions.roles.allowedValues")
+    val roles: List<SpaceRoleResponse>,
+    @Json(name = "value")
+    val members: List<PermissionsResponse>
+)
+
+@JsonClass(generateAdapter = true)
+data class SpaceRoleResponse(
+    val displayName: String,
     val id: String
 )

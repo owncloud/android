@@ -24,12 +24,13 @@ package com.owncloud.android.lib.resources.spaces.services
 
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.Service
+import com.owncloud.android.lib.resources.spaces.responses.SpacePermissionsResponse
 import com.owncloud.android.lib.resources.spaces.responses.SpaceResponse
 
 interface SpacesService : Service {
     fun getSpaces(): RemoteOperationResult<List<SpaceResponse>>
     fun createSpace(spaceName: String, spaceSubtitle: String, spaceQuota: Long): RemoteOperationResult<SpaceResponse>
-    fun getSpacePermissions(spaceId: String): RemoteOperationResult<List<String>>
+    fun getSpacePermissions(spaceId: String): RemoteOperationResult<SpacePermissionsResponse>
     fun editSpace(spaceId: String, spaceName: String, spaceSubtitle: String, spaceQuota: Long?): RemoteOperationResult<SpaceResponse>
     fun editSpaceImage(spaceId: String, imageId: String): RemoteOperationResult<SpaceResponse>
     fun disableSpace(spaceId: String, deleteMode: Boolean): RemoteOperationResult<Unit>

@@ -23,6 +23,7 @@
 package com.owncloud.android.domain.spaces
 
 import com.owncloud.android.domain.spaces.model.OCSpace
+import com.owncloud.android.domain.spaces.model.SpaceMembers
 import kotlinx.coroutines.flow.Flow
 
 interface SpacesRepository {
@@ -33,6 +34,7 @@ interface SpacesRepository {
     fun getPersonalAndProjectSpacesForAccount(accountName: String): List<OCSpace>
     fun getSpaceWithSpecialsByIdForAccount(spaceId: String?, accountName: String): OCSpace
     fun getSpaceByIdForAccount(spaceId: String?, accountName: String): OCSpace?
+    fun getSpaceMembers(accountName: String, spaceId: String): SpaceMembers
     fun getSpacePermissions(accountName: String, spaceId: String): List<String>
     fun getWebDavUrlForSpace(accountName: String, spaceId: String?): String?
     fun createSpace(accountName: String, spaceName: String, spaceSubtitle: String, spaceQuota: Long)
