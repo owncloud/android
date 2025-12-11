@@ -890,5 +890,6 @@
     <string name="audio_preview_label">Audio preview</string>
     <string name="details_label">Details</string>
     <string name="text_preview_label">Text preview</string>
+    <string name="space_members_label">Space members</string>
 
 </resources>

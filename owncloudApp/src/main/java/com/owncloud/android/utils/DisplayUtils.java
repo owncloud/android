@@ -42,10 +42,14 @@ import java.math.MathContext;
 import java.math.RoundingMode;
 import java.net.IDN;
 import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
+import java.util.TimeZone;
 
 /**
  * A helper class for some string operations.
@@ -56,6 +60,9 @@ public class DisplayUtils {
 
     public static final String[] sizeSuffixes = {"B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"};
     private static final int[] sizeScales = {0, 0, 1, 1, 1, 2, 2, 2, 2};
+
+    private static final String DATE_FORMAT_DISPLAY = "dd/MM/yyyy HH:mm";
+    private static final String DATE_FORMAT_ISO = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
 
     private static Map<String, String> mimeType2HumanReadable;
 
@@ -278,5 +285,13 @@ public class DisplayUtils {
         }
 
         return new Pair<>(value.stripTrailingZeros().toPlainString(), sizeSuffixes[unitIndex]);
+    }
+
+    public static String displayDateToHumanReadable(String date) throws ParseException {
+        SimpleDateFormat parser = new SimpleDateFormat(DATE_FORMAT_ISO, Locale.getDefault());
+        parser.setTimeZone(TimeZone.getTimeZone("UTC"));
+        Date dateParsed = parser.parse(date);
+        SimpleDateFormat formatter = new SimpleDateFormat(DATE_FORMAT_DISPLAY, Locale.getDefault());
+        return formatter.format(dateParsed);
     }
 }

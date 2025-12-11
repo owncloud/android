@@ -72,6 +72,7 @@ import com.owncloud.android.presentation.common.BottomSheetFragmentItemView
 import com.owncloud.android.utils.DisplayUtils
 import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.presentation.spaces.createspace.CreateSpaceDialogFragment
+import com.owncloud.android.presentation.spaces.members.SpaceMembersActivity
 import com.owncloud.android.presentation.transfers.TransfersViewModel
 import com.owncloud.android.presentation.spaces.setspaceicon.SetSpaceIconDialogFragment
 import kotlinx.coroutines.flow.SharedFlow
@@ -461,7 +462,11 @@ class SpacesListFragment :
                         val setIconDialog = SetSpaceIconDialogFragment.newInstance(listener = this@SpacesListFragment)
                         setIconDialog.show(requireActivity().supportFragmentManager, DIALOG_SET_ICON)
                     }
-                    SpaceMenuOption.MEMBERS -> { }
+                    SpaceMenuOption.MEMBERS -> {
+                        val intent = Intent(requireActivity(), SpaceMembersActivity::class.java)
+                        intent.putExtra(SpaceMembersActivity.EXTRA_SPACE, currentSpace)
+                        startActivity(intent)
+                    }
                 }
             }
         }
