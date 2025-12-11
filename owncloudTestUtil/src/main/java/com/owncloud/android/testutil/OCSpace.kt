@@ -40,7 +40,9 @@ import com.owncloud.android.lib.resources.spaces.responses.GrantedToV2Response
 import com.owncloud.android.lib.resources.spaces.responses.PermissionsResponse
 import com.owncloud.android.lib.resources.spaces.responses.QuotaResponse
 import com.owncloud.android.lib.resources.spaces.responses.RootResponse
+import com.owncloud.android.lib.resources.spaces.responses.SpacePermissionsResponse
 import com.owncloud.android.lib.resources.spaces.responses.SpaceResponse
+import com.owncloud.android.lib.resources.spaces.responses.SpaceRoleResponse
 import com.owncloud.android.lib.resources.spaces.responses.UserResponse
 
 const val WEB_DAV_URL = "https://server.url/dav/spaces/8871f4f3-fc6f-4a66-8bed-62f175f76f3805bca744-d89f-4e9c-a990-25a0d7f03fe9"
@@ -314,8 +316,10 @@ val SPACE_RESPONSE =
             deleted = null,
             permissions = listOf(
                 PermissionsResponse(
-                    grantedToV2 = GrantedToV2Response(UserResponse(id = OC_CLIENT_ID), null),
-                    roles = listOf("manager")
+                    expirationDateTime = null,
+                    grantedToV2 = GrantedToV2Response(UserResponse(id = OC_USER_ID, displayName = OC_USER_INFO.displayName), null),
+                    id = null,
+                    roles = listOf("manager"),
                 )
             )
         ),
@@ -328,7 +332,19 @@ val SPACE_RESPONSE =
         special = null,
         )
 
-val SPACE_PERMISSIONS = listOf(
-    "libre.graph/driveItem/permissions/delete",
-    "libre.graph/driveItem/permissions/update"
+val SPACE_PERMISSIONS_RESPONSE = SpacePermissionsResponse(
+    actions = listOf("libre.graph/driveItem/permissions/delete", "libre.graph/driveItem/permissions/update"),
+    roles = listOf(
+        SpaceRoleResponse(displayName = "Can view", id = "a8d5fe5e-96e3-418d-825b-534dbdf22b99"),
+        SpaceRoleResponse(displayName = "Can edit", id = "58c63c02-1d89-4572-916a-870abc5a1b7d"),
+        SpaceRoleResponse(displayName = "Can manage", id = "312c0871-5ef7-4b3a-85b6-0e4074c64049")
+    ),
+    members = listOf(
+        PermissionsResponse(
+            expirationDateTime = null,
+            grantedToV2 = GrantedToV2Response(UserResponse(id = OC_USER_ID, displayName = OC_USER_INFO.displayName), null),
+            id = "u:$OC_USER_ID",
+            roles = listOf("312c0871-5ef7-4b3a-85b6-0e4074c64049"),
+        ),
+    )
 )
