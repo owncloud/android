@@ -55,6 +55,7 @@ import com.owncloud.android.presentation.settings.more.SettingsMoreViewModel
 import com.owncloud.android.presentation.settings.security.SettingsSecurityViewModel
 import com.owncloud.android.presentation.sharing.ShareViewModel
 import com.owncloud.android.presentation.spaces.SpacesListViewModel
+import com.owncloud.android.presentation.spaces.members.SpaceMembersViewModel
 import com.owncloud.android.presentation.transfers.TransfersViewModel
 import com.owncloud.android.ui.ReceiveExternalFilesViewModel
 import com.owncloud.android.ui.preview.PreviewImageViewModel
@@ -84,6 +85,7 @@ val viewModelModule = module {
     viewModelOf(::SettingsSecurityViewModel)
     viewModelOf(::SettingsVideoUploadsViewModel)
     viewModelOf(::SettingsViewModel)
+    viewModelOf(::SpaceMembersViewModel)
     viewModelOf(::FileOperationsViewModel)
 
     viewModel { (accountName: String) -> CapabilityViewModel(accountName, get(), get(), get(), get()) }
