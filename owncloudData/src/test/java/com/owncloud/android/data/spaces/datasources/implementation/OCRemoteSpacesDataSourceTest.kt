@@ -30,7 +30,7 @@ import com.owncloud.android.testutil.OC_SPACE_PROJECT_WITH_IMAGE
 import com.owncloud.android.testutil.OC_SPACE_SPECIAL_IMAGE
 import com.owncloud.android.testutil.OC_USER_GROUPS
 import com.owncloud.android.testutil.OC_USER_ID
-import com.owncloud.android.testutil.SPACE_PERMISSIONS
+import com.owncloud.android.testutil.SPACE_PERMISSIONS_RESPONSE
 import com.owncloud.android.testutil.SPACE_RESPONSE
 import com.owncloud.android.utils.createRemoteOperationResultMock
 import io.mockk.every
@@ -63,7 +63,7 @@ class OCRemoteSpacesDataSourceTest {
 
         val resultActual = ocRemoteSpacesDataSource.refreshSpacesForAccount(OC_ACCOUNT_NAME, OC_USER_ID, OC_USER_GROUPS)
 
-        assertEquals(listOf(SPACE_RESPONSE.toModel(OC_ACCOUNT_NAME)), resultActual)
+        assertEquals(listOf(SPACE_RESPONSE.toModel(OC_ACCOUNT_NAME, OC_USER_ID, OC_USER_GROUPS)), resultActual)
 
         verify(exactly = 1) {
             clientManager.getSpacesService(OC_ACCOUNT_NAME)
@@ -103,14 +103,14 @@ class OCRemoteSpacesDataSourceTest {
 
     @Test
     fun `getSpacePermissions returns a list of String with project space permissions`() {
-        val getSpacePermissionsResult = createRemoteOperationResultMock(SPACE_PERMISSIONS, isSuccess = true)
+        val getSpacePermissionsResult = createRemoteOperationResultMock(SPACE_PERMISSIONS_RESPONSE, isSuccess = true)
 
         every {
             ocSpaceService.getSpacePermissions(OC_SPACE_PROJECT_WITH_IMAGE.id)
         } returns getSpacePermissionsResult
 
         val spacePermissions = ocRemoteSpacesDataSource.getSpacePermissions(OC_ACCOUNT_NAME, OC_SPACE_PROJECT_WITH_IMAGE.id)
-        assertEquals(SPACE_PERMISSIONS, spacePermissions)
+        assertEquals(SPACE_PERMISSIONS_RESPONSE.actions, spacePermissions)
 
         verify(exactly = 1) {
             clientManager.getSpacesService(OC_ACCOUNT_NAME)
