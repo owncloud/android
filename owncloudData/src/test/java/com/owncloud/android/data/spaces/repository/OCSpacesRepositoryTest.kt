@@ -37,6 +37,7 @@ import com.owncloud.android.testutil.OC_USER_ID
 import com.owncloud.android.testutil.OC_USER_QUOTA_LIMITED
 import com.owncloud.android.testutil.OC_USER_QUOTA_UNLIMITED
 import com.owncloud.android.testutil.OC_USER_QUOTA_WITHOUT_PERSONAL
+import com.owncloud.android.testutil.SPACE_MEMBERS
 import com.owncloud.android.testutil.SPACE_PERMISSIONS_RESPONSE
 import io.mockk.every
 import io.mockk.mockk
@@ -247,6 +248,20 @@ class OCSpacesRepositoryTest {
 
         verify(exactly = 1) {
             localSpacesDataSource.getSpaceByIdForAccount(OC_SPACE_PROJECT_WITH_IMAGE.id, OC_ACCOUNT_NAME)
+        }
+    }
+
+    @Test
+    fun `getSpaceMembers returns a SpaceMembers`() {
+        every {
+            remoteSpacesDataSource.getSpaceMembers(OC_ACCOUNT_NAME, OC_SPACE_PROJECT_WITH_IMAGE.id)
+        } returns SPACE_MEMBERS
+
+        val spaceMembers = ocSpacesRepository.getSpaceMembers(OC_ACCOUNT_NAME, OC_SPACE_PROJECT_WITH_IMAGE.id)
+        assertEquals(SPACE_MEMBERS, spaceMembers)
+
+        verify(exactly = 1) {
+            remoteSpacesDataSource.getSpaceMembers(OC_ACCOUNT_NAME, OC_SPACE_PROJECT_WITH_IMAGE.id)
         }
     }
 
