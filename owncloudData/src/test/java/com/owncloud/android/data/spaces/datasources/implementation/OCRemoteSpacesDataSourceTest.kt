@@ -102,6 +102,23 @@ class OCRemoteSpacesDataSourceTest {
     }
 
     @Test
+    fun `getSpaceMembers returns a SpaceMembers for a project space`() {
+        val getSpaceMembersResult = createRemoteOperationResultMock(SPACE_PERMISSIONS_RESPONSE, isSuccess = true)
+
+        every {
+            ocSpaceService.getSpacePermissions(OC_SPACE_PROJECT_WITH_IMAGE.id)
+        } returns getSpaceMembersResult
+
+        val spaceMembers = ocRemoteSpacesDataSource.getSpaceMembers(OC_ACCOUNT_NAME, OC_SPACE_PROJECT_WITH_IMAGE.id)
+        assertEquals(SPACE_PERMISSIONS_RESPONSE.toModel(), spaceMembers)
+
+        verify(exactly = 1) {
+            clientManager.getSpacesService(OC_ACCOUNT_NAME)
+            ocSpaceService.getSpacePermissions(OC_SPACE_PROJECT_WITH_IMAGE.id)
+        }
+    }
+
+    @Test
     fun `getSpacePermissions returns a list of String with project space permissions`() {
         val getSpacePermissionsResult = createRemoteOperationResultMock(SPACE_PERMISSIONS_RESPONSE, isSuccess = true)
 
