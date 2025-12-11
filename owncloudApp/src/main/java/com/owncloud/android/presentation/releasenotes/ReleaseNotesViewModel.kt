@@ -44,6 +44,11 @@ class ReleaseNotesViewModel(
     companion object {
         val releaseNotesList = listOf(
             ReleaseNote(
+                title = R.string.release_notes_4_8_0_title_space_membership,
+                subtitle = R.string.release_notes_4_8_0_subtitle_space_membership,
+                type = ReleaseNoteType.ENHANCEMENT
+            ),
+            ReleaseNote(
                 title = R.string.release_notes_4_8_0_title_set_emoji_as_space_image,
                 subtitle = R.string.release_notes_4_8_0_subtitle_set_emoji_as_space_image,
                 type = ReleaseNoteType.ENHANCEMENT
