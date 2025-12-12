@@ -288,10 +288,10 @@ public class DisplayUtils {
     }
 
     public static String displayDateToHumanReadable(String date) throws ParseException {
-        SimpleDateFormat parser = new SimpleDateFormat(DATE_FORMAT_ISO, Locale.getDefault());
+        SimpleDateFormat parser = new SimpleDateFormat(DATE_FORMAT_ISO, Locale.ROOT);
         parser.setTimeZone(TimeZone.getTimeZone("UTC"));
         Date dateParsed = parser.parse(date);
-        SimpleDateFormat formatter = new SimpleDateFormat(DATE_FORMAT_DISPLAY, Locale.getDefault());
+        SimpleDateFormat formatter = new SimpleDateFormat(DATE_FORMAT_DISPLAY, Locale.ROOT);
         return formatter.format(dateParsed);
     }
 }
