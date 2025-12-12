@@ -41,6 +41,7 @@ ownCloud admins and users.
 ## Summary
 
 * Change - Migrate tests to the new kotlinx-coroutines-test API: [#4710](https://github.com/owncloud/android/issues/4710)
+* Enhancement - Show members of a space: [#4612](https://github.com/owncloud/android/issues/4612)
 * Enhancement - Set emoji as space image: [#4707](https://github.com/owncloud/android/issues/4707)
 
 ## Details
@@ -52,6 +53,16 @@ ownCloud admins and users.
 
    https://github.com/owncloud/android/issues/4710
    https://github.com/owncloud/android/pull/4722
+
+* Enhancement - Show members of a space: [#4612](https://github.com/owncloud/android/issues/4612)
+
+   A new option to view all members of a space has been added to the bottom sheet,
+   available when the three-dot menu button is tapped. This new option opens a new
+   view that shows information like member names, roles, and expiration dates (if
+   available).
+
+   https://github.com/owncloud/android/issues/4612
+   https://github.com/owncloud/android/pull/4728
 
 * Enhancement - Set emoji as space image: [#4707](https://github.com/owncloud/android/issues/4707)
 
