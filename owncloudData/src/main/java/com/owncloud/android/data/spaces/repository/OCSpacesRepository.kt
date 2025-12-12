@@ -28,6 +28,7 @@ import com.owncloud.android.data.spaces.datasources.RemoteSpacesDataSource
 import com.owncloud.android.data.user.datasources.LocalUserDataSource
 import com.owncloud.android.domain.spaces.SpacesRepository
 import com.owncloud.android.domain.spaces.model.OCSpace
+import com.owncloud.android.domain.spaces.model.SpaceMembers
 import com.owncloud.android.domain.user.model.UserQuotaState
 import com.owncloud.android.domain.user.model.UserQuota
 
@@ -73,6 +74,9 @@ class OCSpacesRepository(
 
     override fun getSpaceByIdForAccount(spaceId: String?, accountName: String): OCSpace? =
         localSpacesDataSource.getSpaceByIdForAccount(spaceId = spaceId, accountName = accountName)
+
+    override fun getSpaceMembers(accountName: String, spaceId: String): SpaceMembers =
+        remoteSpacesDataSource.getSpaceMembers(accountName, spaceId)
 
     override fun getSpacePermissions(accountName: String, spaceId: String): List<String> =
         remoteSpacesDataSource.getSpacePermissions(accountName, spaceId)

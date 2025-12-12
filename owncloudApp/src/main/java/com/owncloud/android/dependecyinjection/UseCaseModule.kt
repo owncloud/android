@@ -105,6 +105,7 @@ import com.owncloud.android.domain.spaces.usecases.GetSpacePermissionsAsyncUseCa
 import com.owncloud.android.domain.spaces.usecases.GetSpaceWithSpecialsByIdForAccountUseCase
 import com.owncloud.android.domain.spaces.usecases.GetSpacesFromEveryAccountUseCaseAsStream
 import com.owncloud.android.domain.spaces.usecases.RefreshSpacesFromServerAsyncUseCase
+import com.owncloud.android.domain.spaces.usecases.GetSpaceMembersUseCase
 import com.owncloud.android.domain.transfers.usecases.ClearSuccessfulTransferByIdUseCase
 import com.owncloud.android.domain.transfers.usecases.ClearSuccessfulTransfersUseCase
 import com.owncloud.android.domain.transfers.usecases.GetAllTransfersAsStreamUseCase
@@ -241,6 +242,7 @@ val useCaseModule = module {
     factoryOf(::GetPersonalSpacesWithSpecialsForAccountAsStreamUseCase)
     factoryOf(::GetProjectSpacesWithSpecialsForAccountAsStreamUseCase)
     factoryOf(::GetSpaceByIdForAccountUseCase)
+    factoryOf(::GetSpaceMembersUseCase)
     factoryOf(::GetSpacePermissionsAsyncUseCase)
     factoryOf(::GetSpaceWithSpecialsByIdForAccountUseCase)
     factoryOf(::GetSpacesFromEveryAccountUseCaseAsStream)

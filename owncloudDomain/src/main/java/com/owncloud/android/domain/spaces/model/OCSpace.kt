@@ -121,3 +121,24 @@ data class SpaceFile(
 data class SpaceSpecialFolder(
     val name: String
 ) : Parcelable
+
+@Parcelize
+data class SpaceMembers(
+    val roles: List<SpaceRole>,
+    val members: List<SpaceMember>
+) : Parcelable
+
+@Parcelize
+data class SpaceMember(
+    val id: String,
+    val expirationDateTime: String?,
+    val displayName: String,
+    val roles: List<String>
+) : Parcelable
+
+@Parcelize
+data class SpaceRole(
+    val id: String,
+    val displayName: String
+) : Parcelable
+
