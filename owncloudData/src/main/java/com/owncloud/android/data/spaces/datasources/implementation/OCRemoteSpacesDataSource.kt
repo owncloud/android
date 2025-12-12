@@ -67,7 +67,8 @@ class OCRemoteSpacesDataSource(
 
     override fun getSpacePermissions(accountName: String, spaceId: String): List<String> {
         val spacePermissionsResponse = executeRemoteOperation {
-            clientManager.getSpacesService(accountName).getSpacePermissions(spaceId) }
+            clientManager.getSpacesService(accountName).getSpacePermissions(spaceId)
+        }
         return spacePermissionsResponse.actions
     }
 

@@ -64,7 +64,17 @@ class SpaceMembersFragment : Fragment() {
             adapter = spaceMembersAdapter
         }
 
-        subscribeToViewModels()
+        collectLatestLifecycleFlow(spaceMembersViewModel.spaceMembers) { event ->
+            event?.let {
+                when (val uiResult = event.peekContent()) {
+                    is UIResult.Success -> {
+                        uiResult.data?.let { spaceMembersAdapter.setSpaceMembers(it) }
+                    }
+                    is UIResult.Loading -> { }
+                    is UIResult.Error -> { }
+                }
+            }
+        }
 
         val currentSpace = requireArguments().getParcelable<OCSpace>(ARG_CURRENT_SPACE) ?: return
         binding.apply {
@@ -80,21 +90,6 @@ class SpaceMembersFragment : Fragment() {
                         DisplayUtils.bytesToHumanReadable(usedQuota, requireContext(), true),
                         DisplayUtils.bytesToHumanReadable(totalQuota, requireContext(), true),
                         quota.getRelative().toString())
-                }
-            }
-        }
-
-    }
-
-    private fun subscribeToViewModels() {
-        collectLatestLifecycleFlow(spaceMembersViewModel.spaceMembers) { event ->
-            event?.let {
-                when (val uiResult = event.peekContent()) {
-                    is UIResult.Success -> {
-                        uiResult.data?.let { spaceMembersAdapter.setSpaceMembers(it) }
-                    }
-                    is UIResult.Loading -> { }
-                    is UIResult.Error -> { }
                 }
             }
         }
