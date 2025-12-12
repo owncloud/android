@@ -109,17 +109,6 @@
                 android:visibility="visible"
                 tools:visibility="visible"/>
 
-            <TextView
-                android:id="@+id/members_list_empty"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingBottom="@dimen/standard_padding"
-                android:paddingStart="@dimen/standard_half_padding"
-                android:paddingTop="@dimen/standard_padding"
-                android:text="@string/share_no_users"
-                android:textSize="15sp"
-                android:visibility="gone"/>
-
         </LinearLayout>
 
     </LinearLayout>
