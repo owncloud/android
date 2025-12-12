@@ -685,10 +685,6 @@
   <string name="release_notes_icon">Symbol für Veröffentlichungsnotizen</string>
   <string name="release_notes_bugfixes_title">Geringfügige Fehler behoben</string>
   <string name="release_notes_bugfixes_subtitle">Einige Fehler wurden behoben, um die Benutzung der App zu verbessern.</string>
-  <string name="release_notes_4_7_0_title_new_layout_for_spaces">Neues Design für die Sapces Auflistung</string>
-  <string name="release_notes_4_7_0_subtitle_new_layout_for_spaces">Ein neues Design für Infinite Scale-Benutzer in der Space Liste, mit einer Drei-Punkte-Schaltfläche auf jeder Space Karte, die beim Anklicken ein Optionsmenü öffnet.</string>
-  <string name="release_notes_4_7_0_title_space_management">Space Management</string>
-  <string name="release_notes_4_7_0_subtitle_space_management">Benutzer von Infinite Scale mit den entsprechenden Berechtigungen können nun direkt über die App Spaces verwalten (erstellen, bearbeiten, deaktivieren, aktivieren und löschen)</string>
   <string name="release_notes_4_8_0_title_set_emoji_as_space_image">Ein Emoji als Space-Bild festlegen</string>
   <string name="release_notes_4_8_0_subtitle_set_emoji_as_space_image">Benutzer von Infinite Scale mit den entsprechenden Berechtigungen können nun ein Emoji als Space-Bild festlegen.</string>
   <!--Open in web-->

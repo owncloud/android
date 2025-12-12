@@ -683,10 +683,6 @@
   <string name="release_notes_icon">Ikonë shënimesh hedhjeje në qarkullim</string>
   <string name="release_notes_bugfixes_title">Ndreqje të metash të vockla</string>
   <string name="release_notes_bugfixes_subtitle">U ndreqën disa të meta, për të përmirësuar punimin te aplikacioni</string>
-  <string name="release_notes_4_7_0_title_new_layout_for_spaces">Skemë e re grafike për listën e hapësirave</string>
-  <string name="release_notes_4_7_0_subtitle_new_layout_for_spaces">Një skemë e re grafike për përdorues Infinite Scale te lista e hapësirave, me një buton me tre pika në secilën kartë hapësire që hap një menu opsionesh, kur klikohet mbi të</string>
-  <string name="release_notes_4_7_0_title_space_management">Administrim hapësirash</string>
-  <string name="release_notes_4_7_0_subtitle_space_management">Përdorues Infinite Scale me lejet e duhura tani mund të administrojnë (krijojnë, përpunojnë, çaktivizojnë, aktivizojnë dhe fshijnë) hapësira drejt e nga aplikacioni</string>
   <string name="release_notes_4_8_0_title_set_emoji_as_space_image">Caktoni emoxhi si figurë hapësire</string>
   <string name="release_notes_4_8_0_subtitle_set_emoji_as_space_image">Përdorues Infinite Scale me lejet e duhura mund të caktojnë tani e tutje një emoxhi si figurë hapësire</string>
   <!--Open in web-->

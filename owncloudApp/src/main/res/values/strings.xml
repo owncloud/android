@@ -741,10 +741,6 @@
     <string name="release_notes_icon">Release note icon</string>
     <string name="release_notes_bugfixes_title">Minor bugfixes</string>
     <string name="release_notes_bugfixes_subtitle">Some bugs were fixed to improve experience in the app</string>
-    <string name="release_notes_4_7_0_title_new_layout_for_spaces">New design for the spaces list</string>
-    <string name="release_notes_4_7_0_subtitle_new_layout_for_spaces">A new design for Infinite Scale users in the spaces list, with a three-dot button on each space card that opens an options menu when clicked</string>
-    <string name="release_notes_4_7_0_title_space_management">Space management</string>
-    <string name="release_notes_4_7_0_subtitle_space_management">Infinite Scale users with right permissions can now manage spaces (create, edit, disable, enable and delete) directly from the app</string>
     <string name="release_notes_4_8_0_title_set_emoji_as_space_image">Set emoji as space image</string>
     <string name="release_notes_4_8_0_subtitle_set_emoji_as_space_image">Infinite Scale users with right permissions can now set an emoji as space image</string>
     <!-- Open in web -->

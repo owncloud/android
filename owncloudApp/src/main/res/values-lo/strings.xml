@@ -680,9 +680,6 @@
   <string name="release_notes_icon">ໄອຄອນบันทึกประจำรุ่น</string>
   <string name="release_notes_bugfixes_title">การแก้ไขข้อบกพร่อง</string>
   <string name="release_notes_bugfixes_subtitle">ແອັບຕອນນີ້เสถียรและเชื่อถือได้มากขึ้น. สำหรับรายการการเปลี่ยนแปลงทั้งหมด, เยี่ยมชม owncloud.com</string>
-  <string name="release_notes_4_7_0_subtitle_new_layout_for_spaces">ຕອນนี้คุณสามารถสลับระหว่างมุมมองรายการและตารางสำหรับพื้นที่ของคุณได้แล้ว</string>
-  <string name="release_notes_4_7_0_title_space_management">ການຈັດການພື້ນທີ່</string>
-  <string name="release_notes_4_7_0_subtitle_space_management">ເປີດໃຊ້, ປິດໃຊ້ และลบพื้นที่ของคุณโดยตรงจากแอป ownCloud</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">ເປີດໃນເບຣົາເຊີ</string>
   <string name="ic_action_open_with_web">ເປີດດ້ວຍ...</string>
