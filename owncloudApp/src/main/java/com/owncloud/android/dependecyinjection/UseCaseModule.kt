@@ -79,6 +79,7 @@ import com.owncloud.android.domain.files.usecases.SetLastUsageFileUseCase
 import com.owncloud.android.domain.files.usecases.SortFilesUseCase
 import com.owncloud.android.domain.files.usecases.SortFilesWithSyncInfoUseCase
 import com.owncloud.android.domain.files.usecases.UpdateAlreadyDownloadedFilesPathUseCase
+import com.owncloud.android.domain.roles.usecases.GetRolesAsyncUseCase
 import com.owncloud.android.domain.server.usecases.GetServerInfoAsyncUseCase
 import com.owncloud.android.domain.sharing.sharees.GetShareesAsyncUseCase
 import com.owncloud.android.domain.sharing.shares.usecases.CreatePrivateShareAsyncUseCase
@@ -302,4 +303,7 @@ val useCaseModule = module {
 
     // Accounts
     factoryOf(::RemoveAccountUseCase)
+
+    // Roles
+    factoryOf(::GetRolesAsyncUseCase)
 }

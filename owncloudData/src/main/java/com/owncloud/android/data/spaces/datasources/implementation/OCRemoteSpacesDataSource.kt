@@ -24,6 +24,7 @@ import androidx.annotation.VisibleForTesting
 import com.owncloud.android.data.ClientManager
 import com.owncloud.android.data.executeRemoteOperation
 import com.owncloud.android.data.spaces.datasources.RemoteSpacesDataSource
+import com.owncloud.android.domain.roles.model.OCRole
 import com.owncloud.android.domain.spaces.model.OCSpace
 import com.owncloud.android.domain.spaces.model.SpaceDeleted
 import com.owncloud.android.domain.spaces.model.SpaceFile
@@ -31,7 +32,6 @@ import com.owncloud.android.domain.spaces.model.SpaceMember
 import com.owncloud.android.domain.spaces.model.SpaceMembers
 import com.owncloud.android.domain.spaces.model.SpaceOwner
 import com.owncloud.android.domain.spaces.model.SpaceQuota
-import com.owncloud.android.domain.spaces.model.SpaceRole
 import com.owncloud.android.domain.spaces.model.SpaceRoot
 import com.owncloud.android.domain.spaces.model.SpaceSpecial
 import com.owncloud.android.domain.spaces.model.SpaceSpecialFolder
@@ -197,7 +197,7 @@ class OCRemoteSpacesDataSource(
         fun SpacePermissionsResponse.toModel(): SpaceMembers =
             SpaceMembers(
                 roles = roles.map { spaceRoleResponse ->
-                    SpaceRole(
+                    OCRole(
                         id = spaceRoleResponse.id,
                         displayName = spaceRoleResponse.displayName
                     )

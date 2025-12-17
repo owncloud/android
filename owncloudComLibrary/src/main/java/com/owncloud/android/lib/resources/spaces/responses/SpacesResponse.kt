@@ -23,6 +23,7 @@
 
 package com.owncloud.android.lib.resources.spaces.responses
 
+import com.owncloud.android.lib.resources.roles.responses.RoleResponse
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
@@ -126,13 +127,8 @@ data class SpacePermissionsResponse(
     @Json(name = "@libre.graph.permissions.actions.allowedValues")
     val actions: List<String>,
     @Json(name = "@libre.graph.permissions.roles.allowedValues")
-    val roles: List<SpaceRoleResponse>,
+    val roles: List<RoleResponse>,
     @Json(name = "value")
     val members: List<PermissionsResponse>
 )
 
-@JsonClass(generateAdapter = true)
-data class SpaceRoleResponse(
-    val displayName: String,
-    val id: String
-)
