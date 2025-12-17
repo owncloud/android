@@ -26,6 +26,7 @@ import com.owncloud.android.data.spaces.db.SpaceRootEntity
 import com.owncloud.android.data.spaces.db.SpaceSpecialEntity
 import com.owncloud.android.data.spaces.db.SpacesEntity
 import com.owncloud.android.data.spaces.db.SpacesWithSpecials
+import com.owncloud.android.domain.roles.model.OCRole
 import com.owncloud.android.domain.spaces.model.OCSpace
 import com.owncloud.android.domain.spaces.model.OCSpace.Companion.SPACE_ID_SHARES
 import com.owncloud.android.domain.spaces.model.SpaceDeleted
@@ -34,18 +35,17 @@ import com.owncloud.android.domain.spaces.model.SpaceMember
 import com.owncloud.android.domain.spaces.model.SpaceMembers
 import com.owncloud.android.domain.spaces.model.SpaceOwner
 import com.owncloud.android.domain.spaces.model.SpaceQuota
-import com.owncloud.android.domain.spaces.model.SpaceRole
 import com.owncloud.android.domain.spaces.model.SpaceRoot
 import com.owncloud.android.domain.spaces.model.SpaceSpecial
 import com.owncloud.android.domain.spaces.model.SpaceSpecialFolder
 import com.owncloud.android.domain.spaces.model.SpaceUser
+import com.owncloud.android.lib.resources.roles.responses.RoleResponse
 import com.owncloud.android.lib.resources.spaces.responses.GrantedToV2Response
 import com.owncloud.android.lib.resources.spaces.responses.PermissionsResponse
 import com.owncloud.android.lib.resources.spaces.responses.QuotaResponse
 import com.owncloud.android.lib.resources.spaces.responses.RootResponse
 import com.owncloud.android.lib.resources.spaces.responses.SpacePermissionsResponse
 import com.owncloud.android.lib.resources.spaces.responses.SpaceResponse
-import com.owncloud.android.lib.resources.spaces.responses.SpaceRoleResponse
 import com.owncloud.android.lib.resources.spaces.responses.UserResponse
 
 const val WEB_DAV_URL = "https://server.url/dav/spaces/8871f4f3-fc6f-4a66-8bed-62f175f76f3805bca744-d89f-4e9c-a990-25a0d7f03fe9"
@@ -338,9 +338,9 @@ val SPACE_RESPONSE =
 val SPACE_PERMISSIONS_RESPONSE = SpacePermissionsResponse(
     actions = listOf("libre.graph/driveItem/permissions/delete", "libre.graph/driveItem/permissions/update"),
     roles = listOf(
-        SpaceRoleResponse(displayName = "Can view", id = "a8d5fe5e-96e3-418d-825b-534dbdf22b99"),
-        SpaceRoleResponse(displayName = "Can edit", id = "58c63c02-1d89-4572-916a-870abc5a1b7d"),
-        SpaceRoleResponse(displayName = "Can manage", id = "312c0871-5ef7-4b3a-85b6-0e4074c64049")
+        RoleResponse(displayName = "Can view", id = "a8d5fe5e-96e3-418d-825b-534dbdf22b99"),
+        RoleResponse(displayName = "Can edit", id = "58c63c02-1d89-4572-916a-870abc5a1b7d"),
+        RoleResponse(displayName = "Can manage", id = "312c0871-5ef7-4b3a-85b6-0e4074c64049")
     ),
     members = listOf(
         PermissionsResponse(
@@ -354,9 +354,9 @@ val SPACE_PERMISSIONS_RESPONSE = SpacePermissionsResponse(
 
 val SPACE_MEMBERS = SpaceMembers(
     roles = listOf(
-        SpaceRole(displayName = "Can view", id = "a8d5fe5e-96e3-418d-825b-534dbdf22b99"),
-        SpaceRole(displayName = "Can edit", id = "58c63c02-1d89-4572-916a-870abc5a1b7d"),
-        SpaceRole(displayName = "Can manage", id = "312c0871-5ef7-4b3a-85b6-0e4074c64049")
+        OCRole(displayName = "Can view", id = "a8d5fe5e-96e3-418d-825b-534dbdf22b99"),
+        OCRole(displayName = "Can edit", id = "58c63c02-1d89-4572-916a-870abc5a1b7d"),
+        OCRole(displayName = "Can manage", id = "312c0871-5ef7-4b3a-85b6-0e4074c64049")
     ),
     members = listOf(
         SpaceMember(
