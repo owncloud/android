@@ -55,11 +55,6 @@ class GetRemoteRolesOperation: RemoteOperation<List<RoleResponse>>() {
                 val type = Types.newParameterizedType(List::class.java, RoleResponse::class.java)
                 val adapter: JsonAdapter<List<RoleResponse>> = moshi.adapter(type)
 
-                val roles = adapter.fromJson(response)
-
-                result = RemoteOperationResult(ResultCode.OK)
-                result.data = roles ?: emptyList()
-
                 result = RemoteOperationResult(ResultCode.OK)
                 result.data = getMethod.getResponseBodyAsString().let { adapter.fromJson(it) }
 
