@@ -51,14 +51,20 @@ class SpaceMembersAdapter: RecyclerView.Adapter<SpaceMembersAdapter.SpaceMembers
         val roleNames = member.roles.mapNotNull { rolesMap[it] }
 
         holder.binding.apply {
-            memberIcon.setImageResource(if (member.id.startsWith(GROUP_PREFIX)) R.drawable.ic_group else R.drawable.ic_user)
+            val isGroup = member.id.startsWith(GROUP_PREFIX)
+            memberIcon.setImageResource(if (isGroup) R.drawable.ic_group else R.drawable.ic_user)
             memberName.text = member.displayName
+            memberName.contentDescription = holder.itemView.context.getString(
+                if (isGroup) R.string.content_description_member_group else R.string.content_description_member_user, member.displayName
+            )
             memberRole.text = roleNames.joinToString(", ")
 
             member.expirationDateTime?.let {
                 expirationCalendarIcon.visibility = View.VISIBLE
                 expirationDate.visibility = View.VISIBLE
                 expirationDate.text = DisplayUtils.displayDateToHumanReadable(it)
+                expirationDate.contentDescription =
+                    holder.itemView.context.getString(R.string.content_description_member_expiration_date, expirationDate.text)
             }
         }
     }
