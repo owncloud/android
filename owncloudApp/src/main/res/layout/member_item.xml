@@ -53,7 +53,8 @@
                 android:textSize="@dimen/two_line_primary_text_size"
                 android:textColor="@color/textColor"
                 android:textStyle="bold"
-                android:ellipsize="middle"/>
+                android:ellipsize="middle"
+                android:maxLines="1"/>
 
             <LinearLayout
                 android:layout_width="wrap_content"
