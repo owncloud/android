@@ -29,6 +29,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.owncloud.android.R
 import com.owncloud.android.databinding.MembersFragmentBinding
+import com.owncloud.android.domain.roles.model.OCRole
 import com.owncloud.android.domain.spaces.model.OCSpace
 import com.owncloud.android.extensions.collectLatestLifecycleFlow
 import com.owncloud.android.presentation.common.UIResult
@@ -49,6 +50,7 @@ class SpaceMembersFragment : Fragment() {
 
     private lateinit var spaceMembersAdapter: SpaceMembersAdapter
     private lateinit var recyclerView: RecyclerView
+    private lateinit var roles: List<OCRole>
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = MembersFragmentBinding.inflate(inflater, container, false)
@@ -68,7 +70,22 @@ class SpaceMembersFragment : Fragment() {
             event?.let {
                 when (val uiResult = event.peekContent()) {
                     is UIResult.Success -> {
-                        uiResult.data?.let { spaceMembersAdapter.setSpaceMembers(it) }
+                        uiResult.data?.let { spaceMembersAdapter.setSpaceMembers(it, roles) }
+                    }
+                    is UIResult.Loading -> { }
+                    is UIResult.Error -> { }
+                }
+            }
+        }
+
+        collectLatestLifecycleFlow(spaceMembersViewModel.roles) { event ->
+            event?.let {
+                when (val uiResult = event.peekContent()) {
+                    is UIResult.Success -> {
+                        uiResult.data?.let {
+                            roles = it
+                            spaceMembersViewModel.getSpaceMembers()
+                        }
                     }
                     is UIResult.Loading -> { }
                     is UIResult.Error -> { }

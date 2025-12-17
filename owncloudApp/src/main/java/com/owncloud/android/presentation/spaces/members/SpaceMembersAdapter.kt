@@ -26,6 +26,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.owncloud.android.R
 import com.owncloud.android.databinding.MemberItemBinding
+import com.owncloud.android.domain.roles.model.OCRole
 import com.owncloud.android.domain.spaces.model.SpaceMember
 import com.owncloud.android.domain.spaces.model.SpaceMembers
 import com.owncloud.android.utils.DisplayUtils
@@ -64,9 +65,9 @@ class SpaceMembersAdapter: RecyclerView.Adapter<SpaceMembersAdapter.SpaceMembers
 
     override fun getItemCount(): Int = members.size
 
-    fun setSpaceMembers(spaceMembers: SpaceMembers) {
-        this.rolesMap = spaceMembers.roles.associate { it.id to it.displayName }
-        this.members = spaceMembers.members.sortedByDescending { member -> spaceMembers.roles.indexOfFirst { it.id in member.roles } }
+    fun setSpaceMembers(spaceMembers: SpaceMembers, roles: List<OCRole>) {
+        this.rolesMap = roles.associate { it.id to it.displayName }
+        this.members = spaceMembers.members.sortedByDescending { member -> roles.indexOfFirst { it.id in member.roles } }
         notifyDataSetChanged()
     }
 

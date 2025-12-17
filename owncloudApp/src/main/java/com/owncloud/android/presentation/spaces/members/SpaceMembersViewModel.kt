@@ -21,9 +21,11 @@
 package com.owncloud.android.presentation.spaces.members
 
 import androidx.lifecycle.ViewModel
+import com.owncloud.android.domain.roles.model.OCRole
 import com.owncloud.android.domain.spaces.model.OCSpace
 import com.owncloud.android.domain.spaces.model.SpaceMembers
 import com.owncloud.android.domain.spaces.usecases.GetSpaceMembersUseCase
+import com.owncloud.android.domain.roles.usecases.GetRolesAsyncUseCase
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.ViewModelExt.runUseCaseWithResult
 import com.owncloud.android.presentation.common.UIResult
@@ -32,11 +34,15 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 class SpaceMembersViewModel(
+    private val getRolesAsyncUseCase: GetRolesAsyncUseCase,
     private val getSpaceMembersUseCase: GetSpaceMembersUseCase,
     private val accountName: String,
     private val space: OCSpace,
     private val coroutineDispatcherProvider: CoroutinesDispatcherProvider
 ): ViewModel() {
+
+    private val _roles = MutableStateFlow<Event<UIResult<List<OCRole>>>?>(null)
+    val roles: StateFlow<Event<UIResult<List<OCRole>>>?> = _roles
 
     private val _spaceMembers = MutableStateFlow<Event<UIResult<SpaceMembers>>?>(null)
     val spaceMembers: StateFlow<Event<UIResult<SpaceMembers>>?> = _spaceMembers
@@ -44,12 +50,21 @@ class SpaceMembersViewModel(
     init {
         runUseCaseWithResult(
             coroutineDispatcher = coroutineDispatcherProvider.io,
-            flow = _spaceMembers,
-            useCase = getSpaceMembersUseCase,
-            useCaseParams = GetSpaceMembersUseCase.Params(accountName = accountName, spaceId = space.id),
+            flow = _roles,
+            useCase = getRolesAsyncUseCase,
+            useCaseParams = GetRolesAsyncUseCase.Params(accountName = accountName),
             showLoading = false,
             requiresConnection = true
         )
     }
+
+    fun getSpaceMembers() = runUseCaseWithResult(
+        coroutineDispatcher = coroutineDispatcherProvider.io,
+        flow = _spaceMembers,
+        useCase = getSpaceMembersUseCase,
+        useCaseParams = GetSpaceMembersUseCase.Params(accountName = accountName, spaceId = space.id),
+        showLoading = false,
+        requiresConnection = true
+    )
 
 }
