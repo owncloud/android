@@ -50,7 +50,8 @@ class SpaceMembersFragment : Fragment() {
 
     private lateinit var spaceMembersAdapter: SpaceMembersAdapter
     private lateinit var recyclerView: RecyclerView
-    private lateinit var roles: List<OCRole>
+
+    private var roles: List<OCRole> = emptyList()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = MembersFragmentBinding.inflate(inflater, container, false)
