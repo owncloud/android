@@ -323,6 +323,9 @@ val SPACE_RESPONSE =
                     grantedToV2 = GrantedToV2Response(UserResponse(id = OC_USER_ID, displayName = OC_USER_INFO.displayName), null),
                     id = null,
                     roles = listOf("manager"),
+                    createDateTime = null,
+                    hasPassword = null,
+                    link = null,
                 )
             )
         ),
@@ -348,6 +351,9 @@ val SPACE_PERMISSIONS_RESPONSE = SpacePermissionsResponse(
             grantedToV2 = GrantedToV2Response(UserResponse(id = OC_USER_ID, displayName = OC_USER_INFO.displayName), null),
             id = "u:$OC_USER_ID",
             roles = listOf("312c0871-5ef7-4b3a-85b6-0e4074c64049"),
+            createDateTime = null,
+            hasPassword = null,
+            link = null
         ),
     )
 )
