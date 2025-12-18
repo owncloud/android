@@ -104,10 +104,16 @@ data class SpecialFolderResponse(
 
 @JsonClass(generateAdapter = true)
 data class PermissionsResponse(
+    // Member response
     val expirationDateTime: String?,
-    val grantedToV2: GrantedToV2Response,
+    val grantedToV2: GrantedToV2Response?,
     val id: String?,
-    val roles: List<String>
+    val roles: List<String>?,
+
+    // Link response
+    val createDateTime: String?,
+    val hasPassword: Boolean?,
+    val link: LinkInfoResponse?
 )
 
 @JsonClass(generateAdapter = true)
@@ -130,5 +136,16 @@ data class SpacePermissionsResponse(
     val roles: List<RoleResponse>,
     @Json(name = "value")
     val members: List<PermissionsResponse>
+)
+
+@JsonClass(generateAdapter = true)
+data class LinkInfoResponse(
+    @Json(name = "@libre.graph.displayName")
+    val displayName: String,
+    @Json(name = "@libre.graph.quickLink")
+    val quickLink: Boolean,
+    val preventsDownload: Boolean,
+    val type: String,
+    val webUrl: String,
 )
 

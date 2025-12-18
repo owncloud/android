@@ -202,12 +202,13 @@ class OCRemoteSpacesDataSource(
                         displayName = spaceRoleResponse.displayName
                     )
                 },
-                members = members.map { spaceMemberResponse ->
+                members = members.filter { it.grantedToV2 != null }.map { spaceMemberResponse ->
                     SpaceMember (
                         id = spaceMemberResponse.id ?: "",
                         expirationDateTime = spaceMemberResponse.expirationDateTime,
-                        displayName = spaceMemberResponse.grantedToV2.user?.displayName ?: spaceMemberResponse.grantedToV2.group?.displayName ?: "",
-                        roles = spaceMemberResponse.roles
+                        displayName = spaceMemberResponse.grantedToV2?.user?.displayName
+                            ?: spaceMemberResponse.grantedToV2?.group?.displayName ?: "",
+                        roles = spaceMemberResponse.roles ?: emptyList()
                     )
                 }
             )
@@ -216,9 +217,9 @@ class OCRemoteSpacesDataSource(
         private fun getRoleForUser(root: RootResponse, userId: String, userGroups: List<String>): String? {
             val priorityOrder = listOf(MANAGER_ROLE, EDITOR_ROLE, VIEWER_ROLE)
             val matchingPermissions = root.permissions.orEmpty().filter { permission ->
-                permission.grantedToV2.user?.id == userId || permission.grantedToV2.group?.id in userGroups
+                permission.grantedToV2?.user?.id == userId || permission.grantedToV2?.group?.id in userGroups
             }
-            return matchingPermissions.flatMap { it.roles }.minByOrNull { priorityOrder.indexOf(it) }
+            return matchingPermissions.flatMap { it.roles.orEmpty() }.minByOrNull { priorityOrder.indexOf(it) }
         }
     }
 }
