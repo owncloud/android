@@ -67,18 +67,6 @@ class SpaceMembersFragment : Fragment() {
             adapter = spaceMembersAdapter
         }
 
-        collectLatestLifecycleFlow(spaceMembersViewModel.spaceMembers) { event ->
-            event?.let {
-                when (val uiResult = event.peekContent()) {
-                    is UIResult.Success -> {
-                        uiResult.data?.let { spaceMembersAdapter.setSpaceMembers(it, roles) }
-                    }
-                    is UIResult.Loading -> { }
-                    is UIResult.Error -> { }
-                }
-            }
-        }
-
         collectLatestLifecycleFlow(spaceMembersViewModel.roles) { event ->
             event?.let {
                 when (val uiResult = event.peekContent()) {
@@ -86,6 +74,20 @@ class SpaceMembersFragment : Fragment() {
                         uiResult.data?.let {
                             roles = it
                             spaceMembersViewModel.getSpaceMembers()
+                        }
+                    }
+                    is UIResult.Loading -> { }
+                    is UIResult.Error -> { }
+                }
+            }
+        }
+
+        collectLatestLifecycleFlow(spaceMembersViewModel.spaceMembers) { event ->
+            event?.let {
+                when (val uiResult = event.peekContent()) {
+                    is UIResult.Success -> {
+                        uiResult.data?.let {
+                            if (roles.isNotEmpty()) { spaceMembersAdapter.setSpaceMembers(it, roles) }
                         }
                     }
                     is UIResult.Loading -> { }
