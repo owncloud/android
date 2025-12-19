@@ -79,6 +79,7 @@ import com.owncloud.android.domain.files.usecases.SetLastUsageFileUseCase
 import com.owncloud.android.domain.files.usecases.SortFilesUseCase
 import com.owncloud.android.domain.files.usecases.SortFilesWithSyncInfoUseCase
 import com.owncloud.android.domain.files.usecases.UpdateAlreadyDownloadedFilesPathUseCase
+import com.owncloud.android.domain.roles.usecases.GetRolesAsyncUseCase
 import com.owncloud.android.domain.server.usecases.GetServerInfoAsyncUseCase
 import com.owncloud.android.domain.sharing.sharees.GetShareesAsyncUseCase
 import com.owncloud.android.domain.sharing.shares.usecases.CreatePrivateShareAsyncUseCase
@@ -105,6 +106,7 @@ import com.owncloud.android.domain.spaces.usecases.GetSpacePermissionsAsyncUseCa
 import com.owncloud.android.domain.spaces.usecases.GetSpaceWithSpecialsByIdForAccountUseCase
 import com.owncloud.android.domain.spaces.usecases.GetSpacesFromEveryAccountUseCaseAsStream
 import com.owncloud.android.domain.spaces.usecases.RefreshSpacesFromServerAsyncUseCase
+import com.owncloud.android.domain.spaces.usecases.GetSpaceMembersUseCase
 import com.owncloud.android.domain.transfers.usecases.ClearSuccessfulTransferByIdUseCase
 import com.owncloud.android.domain.transfers.usecases.ClearSuccessfulTransfersUseCase
 import com.owncloud.android.domain.transfers.usecases.GetAllTransfersAsStreamUseCase
@@ -241,6 +243,7 @@ val useCaseModule = module {
     factoryOf(::GetPersonalSpacesWithSpecialsForAccountAsStreamUseCase)
     factoryOf(::GetProjectSpacesWithSpecialsForAccountAsStreamUseCase)
     factoryOf(::GetSpaceByIdForAccountUseCase)
+    factoryOf(::GetSpaceMembersUseCase)
     factoryOf(::GetSpacePermissionsAsyncUseCase)
     factoryOf(::GetSpaceWithSpecialsByIdForAccountUseCase)
     factoryOf(::GetSpacesFromEveryAccountUseCaseAsStream)
@@ -300,4 +303,7 @@ val useCaseModule = module {
 
     // Accounts
     factoryOf(::RemoveAccountUseCase)
+
+    // Roles
+    factoryOf(::GetRolesAsyncUseCase)
 }

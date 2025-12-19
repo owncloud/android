@@ -26,20 +26,25 @@ import com.owncloud.android.data.spaces.db.SpaceRootEntity
 import com.owncloud.android.data.spaces.db.SpaceSpecialEntity
 import com.owncloud.android.data.spaces.db.SpacesEntity
 import com.owncloud.android.data.spaces.db.SpacesWithSpecials
+import com.owncloud.android.domain.roles.model.OCRole
 import com.owncloud.android.domain.spaces.model.OCSpace
 import com.owncloud.android.domain.spaces.model.OCSpace.Companion.SPACE_ID_SHARES
 import com.owncloud.android.domain.spaces.model.SpaceDeleted
 import com.owncloud.android.domain.spaces.model.SpaceFile
+import com.owncloud.android.domain.spaces.model.SpaceMember
+import com.owncloud.android.domain.spaces.model.SpaceMembers
 import com.owncloud.android.domain.spaces.model.SpaceOwner
 import com.owncloud.android.domain.spaces.model.SpaceQuota
 import com.owncloud.android.domain.spaces.model.SpaceRoot
 import com.owncloud.android.domain.spaces.model.SpaceSpecial
 import com.owncloud.android.domain.spaces.model.SpaceSpecialFolder
 import com.owncloud.android.domain.spaces.model.SpaceUser
+import com.owncloud.android.lib.resources.roles.responses.RoleResponse
 import com.owncloud.android.lib.resources.spaces.responses.GrantedToV2Response
 import com.owncloud.android.lib.resources.spaces.responses.PermissionsResponse
 import com.owncloud.android.lib.resources.spaces.responses.QuotaResponse
 import com.owncloud.android.lib.resources.spaces.responses.RootResponse
+import com.owncloud.android.lib.resources.spaces.responses.SpacePermissionsResponse
 import com.owncloud.android.lib.resources.spaces.responses.SpaceResponse
 import com.owncloud.android.lib.resources.spaces.responses.UserResponse
 
@@ -314,8 +319,13 @@ val SPACE_RESPONSE =
             deleted = null,
             permissions = listOf(
                 PermissionsResponse(
-                    grantedToV2 = GrantedToV2Response(UserResponse(id = OC_CLIENT_ID), null),
-                    roles = listOf("manager")
+                    expirationDateTime = null,
+                    grantedToV2 = GrantedToV2Response(UserResponse(id = OC_USER_ID, displayName = OC_USER_INFO.displayName), null),
+                    id = null,
+                    roles = listOf("manager"),
+                    createDateTime = null,
+                    hasPassword = null,
+                    link = null,
                 )
             )
         ),
@@ -328,7 +338,44 @@ val SPACE_RESPONSE =
         special = null,
         )
 
-val SPACE_PERMISSIONS = listOf(
-    "libre.graph/driveItem/permissions/delete",
-    "libre.graph/driveItem/permissions/update"
+val SPACE_PERMISSIONS_RESPONSE = SpacePermissionsResponse(
+    actions = listOf("libre.graph/driveItem/permissions/delete", "libre.graph/driveItem/permissions/update"),
+    roles = listOf(
+        RoleResponse(displayName = "Can view", id = "a8d5fe5e-96e3-418d-825b-534dbdf22b99"),
+        RoleResponse(displayName = "Can edit", id = "58c63c02-1d89-4572-916a-870abc5a1b7d"),
+        RoleResponse(displayName = "Can manage", id = "312c0871-5ef7-4b3a-85b6-0e4074c64049")
+    ),
+    members = listOf(
+        PermissionsResponse(
+            expirationDateTime = null,
+            grantedToV2 = GrantedToV2Response(UserResponse(id = OC_USER_ID, displayName = OC_USER_INFO.displayName), null),
+            id = "u:$OC_USER_ID",
+            roles = listOf("312c0871-5ef7-4b3a-85b6-0e4074c64049"),
+            createDateTime = null,
+            hasPassword = null,
+            link = null
+        ),
+    )
+)
+
+val SPACE_MEMBERS = SpaceMembers(
+    roles = listOf(
+        OCRole(displayName = "Can view", id = "a8d5fe5e-96e3-418d-825b-534dbdf22b99"),
+        OCRole(displayName = "Can edit", id = "58c63c02-1d89-4572-916a-870abc5a1b7d"),
+        OCRole(displayName = "Can manage", id = "312c0871-5ef7-4b3a-85b6-0e4074c64049")
+    ),
+    members = listOf(
+        SpaceMember(
+            id = "u:$OC_USER_ID",
+            expirationDateTime = null,
+            displayName = OC_USER_INFO.displayName,
+            roles = listOf("312c0871-5ef7-4b3a-85b6-0e4074c64049")
+        ),
+        SpaceMember(
+            id = "g:${OC_USER_GROUPS[0]}",
+            expirationDateTime = "2025-07-03T12:09:43.364Z",
+            displayName = "group-1",
+            roles = listOf("a8d5fe5e-96e3-418d-825b-534dbdf22b99")
+        )
+    )
 )

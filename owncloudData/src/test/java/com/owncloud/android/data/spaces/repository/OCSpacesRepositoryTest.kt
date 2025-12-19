@@ -37,7 +37,8 @@ import com.owncloud.android.testutil.OC_USER_ID
 import com.owncloud.android.testutil.OC_USER_QUOTA_LIMITED
 import com.owncloud.android.testutil.OC_USER_QUOTA_UNLIMITED
 import com.owncloud.android.testutil.OC_USER_QUOTA_WITHOUT_PERSONAL
-import com.owncloud.android.testutil.SPACE_PERMISSIONS
+import com.owncloud.android.testutil.SPACE_MEMBERS
+import com.owncloud.android.testutil.SPACE_PERMISSIONS_RESPONSE
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -251,13 +252,27 @@ class OCSpacesRepositoryTest {
     }
 
     @Test
+    fun `getSpaceMembers returns a SpaceMembers`() {
+        every {
+            remoteSpacesDataSource.getSpaceMembers(OC_ACCOUNT_NAME, OC_SPACE_PROJECT_WITH_IMAGE.id)
+        } returns SPACE_MEMBERS
+
+        val spaceMembers = ocSpacesRepository.getSpaceMembers(OC_ACCOUNT_NAME, OC_SPACE_PROJECT_WITH_IMAGE.id)
+        assertEquals(SPACE_MEMBERS, spaceMembers)
+
+        verify(exactly = 1) {
+            remoteSpacesDataSource.getSpaceMembers(OC_ACCOUNT_NAME, OC_SPACE_PROJECT_WITH_IMAGE.id)
+        }
+    }
+
+    @Test
     fun `getSpacePermissions returns a list of String with space permissions`() {
         every {
             remoteSpacesDataSource.getSpacePermissions(OC_ACCOUNT_NAME, OC_SPACE_PROJECT_WITH_IMAGE.id)
-        } returns SPACE_PERMISSIONS
+        } returns SPACE_PERMISSIONS_RESPONSE.actions
 
         val spacePermissions = ocSpacesRepository.getSpacePermissions(OC_ACCOUNT_NAME, OC_SPACE_PROJECT_WITH_IMAGE.id)
-        assertEquals(SPACE_PERMISSIONS, spacePermissions)
+        assertEquals(SPACE_PERMISSIONS_RESPONSE.actions, spacePermissions)
 
         verify(exactly = 1) {
             remoteSpacesDataSource.getSpacePermissions(OC_ACCOUNT_NAME, OC_SPACE_PROJECT_WITH_IMAGE.id)

@@ -18,8 +18,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.domain.spaces.model
+package com.owncloud.android.lib.resources.roles.responses
 
-enum class SpaceMenuOption {
-    EDIT, EDIT_IMAGE, DISABLE, ENABLE, DELETE, SET_ICON, MEMBERS
-}
+import com.squareup.moshi.JsonClass
+
+@JsonClass(generateAdapter = true)
+data class RoleResponse(
+    val id: String,
+    val displayName: String
+)

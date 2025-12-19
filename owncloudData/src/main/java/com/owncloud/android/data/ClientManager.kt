@@ -2,7 +2,9 @@
  * ownCloud Android client application
  *
  * @author Abel García de Prada
- * Copyright (C) 2023 ownCloud GmbH.
+ * @author Jorge Aguado Recio
+ *
+ * Copyright (C) 2025 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -34,6 +36,8 @@ import com.owncloud.android.lib.resources.appregistry.services.AppRegistryServic
 import com.owncloud.android.lib.resources.appregistry.services.OCAppRegistryService
 import com.owncloud.android.lib.resources.files.services.FileService
 import com.owncloud.android.lib.resources.files.services.implementation.OCFileService
+import com.owncloud.android.lib.resources.roles.services.OCRolesService
+import com.owncloud.android.lib.resources.roles.services.RolesService
 import com.owncloud.android.lib.resources.shares.services.ShareService
 import com.owncloud.android.lib.resources.shares.services.ShareeService
 import com.owncloud.android.lib.resources.shares.services.implementation.OCShareService
@@ -159,5 +163,10 @@ class ClientManager(
     fun getAppRegistryService(accountName: String): AppRegistryService {
         val ownCloudClient = getClientForAccount(accountName)
         return OCAppRegistryService(client = ownCloudClient)
+    }
+
+    fun getRolesService(accountName: String): RolesService {
+        val ownCloudClient = getClientForAccount(accountName)
+        return OCRolesService(client = ownCloudClient)
     }
 }

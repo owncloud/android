@@ -23,6 +23,7 @@
 package com.owncloud.android.domain.spaces.model
 
 import android.os.Parcelable
+import com.owncloud.android.domain.roles.model.OCRole
 import kotlinx.parcelize.Parcelize
 import kotlin.math.roundToLong
 
@@ -120,4 +121,18 @@ data class SpaceFile(
 @Parcelize
 data class SpaceSpecialFolder(
     val name: String
+) : Parcelable
+
+@Parcelize
+data class SpaceMembers(
+    val roles: List<OCRole>,
+    val members: List<SpaceMember>
+) : Parcelable
+
+@Parcelize
+data class SpaceMember(
+    val id: String,
+    val expirationDateTime: String?,
+    val displayName: String,
+    val roles: List<String>
 ) : Parcelable

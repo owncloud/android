@@ -23,6 +23,8 @@
 
 package com.owncloud.android.lib.resources.spaces.responses
 
+import com.owncloud.android.lib.resources.roles.responses.RoleResponse
+import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
@@ -81,7 +83,8 @@ data class SpecialResponse(
 
 @JsonClass(generateAdapter = true)
 data class UserResponse(
-    val id: String
+    val id: String,
+    val displayName: String
 )
 
 @JsonClass(generateAdapter = true)
@@ -101,8 +104,16 @@ data class SpecialFolderResponse(
 
 @JsonClass(generateAdapter = true)
 data class PermissionsResponse(
-    val grantedToV2: GrantedToV2Response,
-    val roles: List<String>
+    // Member response
+    val expirationDateTime: String?,
+    val grantedToV2: GrantedToV2Response?,
+    val id: String?,
+    val roles: List<String>?,
+
+    // Link response
+    val createDateTime: String?,
+    val hasPassword: Boolean?,
+    val link: LinkInfoResponse?
 )
 
 @JsonClass(generateAdapter = true)
@@ -113,5 +124,28 @@ data class GrantedToV2Response(
 
 @JsonClass(generateAdapter = true)
 data class GroupResponse(
-    val id: String
+    val id: String,
+    val displayName: String
 )
+
+@JsonClass(generateAdapter = true)
+data class SpacePermissionsResponse(
+    @Json(name = "@libre.graph.permissions.actions.allowedValues")
+    val actions: List<String>,
+    @Json(name = "@libre.graph.permissions.roles.allowedValues")
+    val roles: List<RoleResponse>,
+    @Json(name = "value")
+    val members: List<PermissionsResponse>
+)
+
+@JsonClass(generateAdapter = true)
+data class LinkInfoResponse(
+    @Json(name = "@libre.graph.displayName")
+    val displayName: String,
+    @Json(name = "@libre.graph.quickLink")
+    val quickLink: Boolean,
+    val preventsDownload: Boolean,
+    val type: String,
+    val webUrl: String,
+)
+

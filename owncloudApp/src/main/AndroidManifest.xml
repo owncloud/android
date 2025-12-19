@@ -227,6 +227,12 @@
                 android:resource="@xml/users_and_groups_searchable" />
         </activity>
         <activity
+            android:name=".presentation.spaces.members.SpaceMembersActivity"
+            android:exported="false"
+            android:label="@string/space_members_label"
+            android:launchMode="singleTop"
+            android:theme="@style/Theme.ownCloud.Toolbar"/>
+        <activity
             android:name=".presentation.security.pattern.PatternActivity"
             android:screenOrientation="portrait"
             android:label="@string/pattern_label"

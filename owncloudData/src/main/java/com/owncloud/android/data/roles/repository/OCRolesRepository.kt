@@ -18,8 +18,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.domain.spaces.model
+package com.owncloud.android.data.roles.repository
 
-enum class SpaceMenuOption {
-    EDIT, EDIT_IMAGE, DISABLE, ENABLE, DELETE, SET_ICON, MEMBERS
+import com.owncloud.android.data.roles.datasources.RemoteRolesDataSource
+import com.owncloud.android.domain.roles.RolesRepository
+import com.owncloud.android.domain.roles.model.OCRole
+
+class OCRolesRepository(
+    private val remoteRolesDataSource: RemoteRolesDataSource
+): RolesRepository {
+
+    override fun getRoles(accountName: String): List<OCRole> =
+        remoteRolesDataSource.getRoles(accountName)
+
 }

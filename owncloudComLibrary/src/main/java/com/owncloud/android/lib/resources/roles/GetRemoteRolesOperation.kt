@@ -18,7 +18,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.lib.resources.spaces
+package com.owncloud.android.lib.resources.roles
 
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.http.HttpConstants
@@ -26,27 +26,25 @@ import com.owncloud.android.lib.common.http.methods.nonwebdav.GetMethod
 import com.owncloud.android.lib.common.operations.RemoteOperation
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode
-import com.owncloud.android.lib.resources.spaces.responses.SpacePermissionsResponse
+import com.owncloud.android.lib.resources.roles.responses.RoleResponse
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
+import com.squareup.moshi.Types
 import timber.log.Timber
 import java.net.URL
 
-class GetRemoteSpacePermissionsOperation(
-    private val spaceId: String
-): RemoteOperation<SpacePermissionsResponse>() {
-    override fun run(client: OwnCloudClient): RemoteOperationResult<SpacePermissionsResponse> {
-        var result: RemoteOperationResult<SpacePermissionsResponse>
+class GetRemoteRolesOperation: RemoteOperation<List<RoleResponse>>() {
+    override fun run(client: OwnCloudClient): RemoteOperationResult<List<RoleResponse>> {
+        var result: RemoteOperationResult<List<RoleResponse>>
         try {
             val requestUri = client.baseUri.buildUpon().apply {
-                appendEncodedPath(GRAPH_API_SPACES_PATH)
-                appendEncodedPath(spaceId)
-                appendEncodedPath(SPACE_PERMISSIONS_ENDPOINT)
+                appendEncodedPath(GRAPH_API_ROLE_DEFINITIONS_PATH)
                 build()
             }
+
             val getMethod = GetMethod(URL(requestUri.toString()))
 
-            val status = client.executeHttpMethod(getMethod)
+             val status = client.executeHttpMethod(getMethod)
 
             val response = getMethod.getResponseBodyAsString()
 
@@ -54,25 +52,25 @@ class GetRemoteSpacePermissionsOperation(
                 Timber.d("Successful response: $response")
 
                 val moshi: Moshi = Moshi.Builder().build()
-                val adapter: JsonAdapter<SpacePermissionsResponse> = moshi.adapter(SpacePermissionsResponse::class.java)
+                val type = Types.newParameterizedType(List::class.java, RoleResponse::class.java)
+                val adapter: JsonAdapter<List<RoleResponse>> = moshi.adapter(type)
 
                 result = RemoteOperationResult(ResultCode.OK)
                 result.data = getMethod.getResponseBodyAsString().let { adapter.fromJson(it) }
 
-                Timber.d("Get space permissions for user completed and parsed to ${result.data}")
+                Timber.d("Get roles completed and parsed to ${result.data}")
             } else {
                 result = RemoteOperationResult(getMethod)
-                Timber.e("Failed response while getting space permissions; status code: $status, response: $response")
+                Timber.e("Failed response while getting roles; status code: $status, response: $response")
             }
         } catch (e: Exception) {
             result = RemoteOperationResult(e)
-            Timber.e(e, "Exception while getting space permissions for user")
+            Timber.e(e, "Exception while getting roles")
         }
         return result
     }
 
     companion object {
-        private const val GRAPH_API_SPACES_PATH = "graph/v1beta1/drives/"
-        private const val SPACE_PERMISSIONS_ENDPOINT = "root/permissions"
+        private const val GRAPH_API_ROLE_DEFINITIONS_PATH = "graph/v1beta1/roleManagement/permissions/roleDefinitions"
     }
 }

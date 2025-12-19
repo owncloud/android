@@ -18,8 +18,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.domain.spaces.model
+package com.owncloud.android.domain.roles.usecases
 
-enum class SpaceMenuOption {
-    EDIT, EDIT_IMAGE, DISABLE, ENABLE, DELETE, SET_ICON, MEMBERS
+import com.owncloud.android.domain.BaseUseCaseWithResult
+import com.owncloud.android.domain.roles.RolesRepository
+import com.owncloud.android.domain.roles.model.OCRole
+
+class GetRolesAsyncUseCase(
+    private val rolesRepository: RolesRepository
+): BaseUseCaseWithResult<List<OCRole>, GetRolesAsyncUseCase.Params>() {
+
+    override fun run(params: Params) = rolesRepository.getRoles(params.accountName)
+
+    data class Params(val accountName: String)
 }

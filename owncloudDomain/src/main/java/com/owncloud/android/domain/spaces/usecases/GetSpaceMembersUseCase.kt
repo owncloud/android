@@ -18,8 +18,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.domain.spaces.model
+package com.owncloud.android.domain.spaces.usecases
 
-enum class SpaceMenuOption {
-    EDIT, EDIT_IMAGE, DISABLE, ENABLE, DELETE, SET_ICON, MEMBERS
+import com.owncloud.android.domain.BaseUseCaseWithResult
+import com.owncloud.android.domain.spaces.SpacesRepository
+import com.owncloud.android.domain.spaces.model.SpaceMembers
+
+class GetSpaceMembersUseCase(
+    private val spacesRepository: SpacesRepository
+): BaseUseCaseWithResult<SpaceMembers, GetSpaceMembersUseCase.Params>() {
+
+    override fun run(params: Params) = spacesRepository.getSpaceMembers(params.accountName, params.spaceId)
+
+    data class Params(val accountName: String, val spaceId: String)
 }

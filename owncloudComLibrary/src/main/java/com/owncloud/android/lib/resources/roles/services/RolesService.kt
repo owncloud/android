@@ -18,8 +18,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.domain.spaces.model
+package com.owncloud.android.lib.resources.roles.services
 
-enum class SpaceMenuOption {
-    EDIT, EDIT_IMAGE, DISABLE, ENABLE, DELETE, SET_ICON, MEMBERS
+import com.owncloud.android.lib.common.operations.RemoteOperationResult
+import com.owncloud.android.lib.resources.Service
+import com.owncloud.android.lib.resources.roles.responses.RoleResponse
+
+interface RolesService: Service {
+    fun getRoles(): RemoteOperationResult<List<RoleResponse>>
 }

@@ -45,6 +45,10 @@ class FilterSpaceMenuOptionsUseCase(
 
         val editImagePermission = hasSpacePermission(spacePermissionsResult, DRIVES_MANAGE_PERMISSION)
 
+        if (spacePermissionsResult is UseCaseResult.Success) {
+            optionsToShow.add(SpaceMenuOption.MEMBERS)
+        }
+
         if (editPermission || isSpaceManager) {
             optionsToShow.add(SpaceMenuOption.EDIT)
         }

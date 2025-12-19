@@ -2,7 +2,9 @@
  * ownCloud Android client application
  *
  * @author David González Verdugo
- * Copyright (C) 2020 ownCloud GmbH.
+ * @author Jorge Aguado Recio
+ *
+ * Copyright (C) 2025 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -33,6 +35,8 @@ import com.owncloud.android.data.files.datasources.RemoteFileDataSource
 import com.owncloud.android.data.files.datasources.implementation.OCRemoteFileDataSource
 import com.owncloud.android.data.oauth.datasources.RemoteOAuthDataSource
 import com.owncloud.android.data.oauth.datasources.implementation.OCRemoteOAuthDataSource
+import com.owncloud.android.data.roles.datasources.RemoteRolesDataSource
+import com.owncloud.android.data.roles.datasources.implementation.OCRemoteRolesDataSource
 import com.owncloud.android.data.server.datasources.RemoteServerInfoDataSource
 import com.owncloud.android.data.server.datasources.implementation.OCRemoteServerInfoDataSource
 import com.owncloud.android.data.sharing.sharees.datasources.RemoteShareeDataSource
@@ -73,6 +77,7 @@ val remoteDataSourceModule = module {
     singleOf(::OCRemoteCapabilitiesDataSource) bind RemoteCapabilitiesDataSource::class
     singleOf(::OCRemoteFileDataSource) bind RemoteFileDataSource::class
     singleOf(::OCRemoteOAuthDataSource) bind RemoteOAuthDataSource::class
+    singleOf(::OCRemoteRolesDataSource) bind RemoteRolesDataSource::class
     singleOf(::OCRemoteServerInfoDataSource) bind RemoteServerInfoDataSource::class
     singleOf(::OCRemoteShareDataSource) bind RemoteShareDataSource::class
     singleOf(::OCRemoteShareeDataSource) bind RemoteShareeDataSource::class
