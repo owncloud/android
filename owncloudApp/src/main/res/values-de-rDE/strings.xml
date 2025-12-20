@@ -803,6 +803,7 @@
   <string name="delete_space_correctly">Der Space wurde korrekt gelöscht</string>
   <string name="delete_space_failed">Der Space konnte nicht gelöscht werden</string>
   <string name="set_space_icon">Setze ein Icon</string>
+  <string name="space_members">Mitglieder</string>
   <string name="feedback_dialog_get_in_contact_description"><![CDATA[ Bitten Sie in unserem <a href="%1$s"><b>Forum</b></a> um Hilfe oder unterstützen Sie in unserem <a href="%2$s"><b>GitHub-Repository</b></a>]]></string>
   <string name="link_role_accessibility">Link</string>
   <string name="button_role_accessibility">Schaltfläche</string>

@@ -746,6 +746,7 @@
   <string name="create_space_dialog_subtitle">サブタイトル</string>
   <string name="create_space_dialog_quota">クォータ</string>
   <string name="disabled_space_label">無効</string>
+  <string name="space_members">メンバー</string>
   <string name="link_role_accessibility">リンク</string>
   <string name="button_role_accessibility">ボタン</string>
   <string name="folder_picker_label">フォルダピッカー</string>

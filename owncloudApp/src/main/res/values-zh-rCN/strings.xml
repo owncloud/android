@@ -631,6 +631,7 @@
   <string name="create_space_dialog_subtitle">字幕</string>
   <string name="create_space_dialog_quota">配额</string>
   <string name="disabled_space_label">禁用</string>
+  <string name="space_members">成员</string>
   <string name="link_role_accessibility">链接</string>
   <string name="passcode_label">密碼</string>
   <string name="pattern_label">模式</string>

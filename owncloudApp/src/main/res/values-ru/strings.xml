@@ -743,6 +743,7 @@
   <string name="create_space_dialog_subtitle">подзаголовок</string>
   <string name="create_space_dialog_quota">Квота</string>
   <string name="disabled_space_label">Отключена</string>
+  <string name="space_members">Участники</string>
   <string name="link_role_accessibility">Ссылка</string>
   <string name="button_role_accessibility">Кнопка</string>
   <string name="folder_picker_label">Выбор папки</string>

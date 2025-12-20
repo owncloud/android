@@ -805,6 +805,7 @@ Póngase en contacto con su administrador</string>
   <string name="delete_space_correctly">Space borrado correctamente</string>
   <string name="delete_space_failed">El space no se pudo borrar</string>
   <string name="set_space_icon">Emoji</string>
+  <string name="space_members">Miembros</string>
   <string name="feedback_dialog_get_in_contact_description"><![CDATA[ Solicita ayuda en nuestro <a href="%1$s"><b>foro</b></a> o contribuye con nosotros en nuestro <a href="%2$s"><b>repositorio GitHub</b></a>]]></string>
   <string name="link_role_accessibility">Enlace</string>
   <string name="button_role_accessibility">Botón</string>
