@@ -685,6 +685,8 @@
   <string name="release_notes_bugfixes_subtitle">U ndreqën disa të meta, për të përmirësuar punimin te aplikacioni</string>
   <string name="release_notes_4_8_0_title_set_emoji_as_space_image">Caktoni emoxhi si figurë hapësire</string>
   <string name="release_notes_4_8_0_subtitle_set_emoji_as_space_image">Përdorues Infinite Scale me lejet e duhura mund të caktojnë tani e tutje një emoxhi si figurë hapësire</string>
+  <string name="release_notes_4_8_0_title_space_membership">Anëtarësi hapësire</string>
+  <string name="release_notes_4_8_0_subtitle_space_membership">Përdorues të Infinite Scale-it mund të shohin krejt anëtarët e një hapësire dhe të administrojnë leje të drejtash për ta</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Hape në web</string>
   <string name="ic_action_open_with_web">Hape në %1$s (web)</string>
@@ -757,6 +759,9 @@
   <string name="content_description_create_button">Buton krijimi</string>
   <string name="content_description_cancel_button">Buton anulimi</string>
   <string name="content_description_quota_switch">Kuota hapësire</string>
+  <string name="content_description_member_user">Përdorues %1$s</string>
+  <string name="content_description_member_group">Grup %1$s</string>
+  <string name="content_description_member_expiration_date">Skadon më %1$s</string>
   <string name="create_shortcut_dialog_title">Krijoni një shkurtore</string>
   <string name="create_shortcut_dialog_url">URL</string>
   <string name="create_shortcut_dialog_url_information">URL-ja duhet të fillojë me https:// ose http:// , që të mund të hapet në shfletues</string>
@@ -817,4 +822,5 @@
   <string name="audio_preview_label">Paradëgjim audioje</string>
   <string name="details_label">Hollësi</string>
   <string name="text_preview_label">Paraparje teksti</string>
+  <string name="space_members_label">Anëtarë hapësire</string>
 </resources>
