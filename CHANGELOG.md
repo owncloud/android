@@ -41,6 +41,7 @@ ownCloud admins and users.
 ## Summary
 
 * Change - Migrate tests to the new kotlinx-coroutines-test API: [#4710](https://github.com/owncloud/android/issues/4710)
+* Change - Increase rating dialog delay: [#4744](https://github.com/owncloud/android/pull/4744)
 * Enhancement - Show members of a space: [#4612](https://github.com/owncloud/android/issues/4612)
 * Enhancement - Set emoji as space image: [#4707](https://github.com/owncloud/android/issues/4707)
 
@@ -53,6 +54,13 @@ ownCloud admins and users.
 
    https://github.com/owncloud/android/issues/4710
    https://github.com/owncloud/android/pull/4722
+
+* Change - Increase rating dialog delay: [#4744](https://github.com/owncloud/android/pull/4744)
+
+   The time before the rating dialog appears has been increased to 7 days, in order
+   to make it less intrusive for the user.
+
+   https://github.com/owncloud/android/pull/4744
 
 * Enhancement - Show members of a space: [#4612](https://github.com/owncloud/android/issues/4612)
 
