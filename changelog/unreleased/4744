@@ -1,0 +1,5 @@
+Change: Increase rating dialog delay
+
+The time before the rating dialog appears has been increased to 7 days, in order to make it less intrusive for the user.
+
+https://github.com/owncloud/android/pull/4744
