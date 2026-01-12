@@ -68,7 +68,7 @@ jobs:
 
       # Checkout the repo
       - name: Checkout current repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           repository: owncloud/android
           ref: ${{ inputs.version }}
@@ -83,7 +83,7 @@ jobs:
  
       # Set Java-JDK version
       - name: Setup JDK
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: 'temurin'
           java-version: '17'
