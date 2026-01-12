@@ -1,0 +1,6 @@
+Bugfix: Edit space option available when there is no connection
+
+A new condition has been added to hide the edit space option when no network connection is available.
+
+https://github.com/owncloud/android/issues/4742
+https://github.com/owncloud/android/pull/4750
