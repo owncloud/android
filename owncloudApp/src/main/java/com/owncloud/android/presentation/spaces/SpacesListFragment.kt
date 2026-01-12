@@ -5,7 +5,7 @@
  * @author Jorge Aguado Recio
  * @author Aitor Ballesteros Pavón
  *
- * Copyright (C) 2025 ownCloud GmbH.
+ * Copyright (C) 2026 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -94,6 +94,7 @@ class SpacesListFragment :
     private var userPermissions = mutableSetOf<UserPermissions>()
     private var editQuotaPermission = false
     private var selectedImagePath: String? = null
+    private var accountId: String? = null
     private lateinit var currentSpace: OCSpace
 
     private val spacesListViewModel: SpacesListViewModel by viewModel {
@@ -205,7 +206,10 @@ class SpacesListFragment :
                 when (val uiResult = event.peekContent()) {
                     is UIResult.Success -> {
                         Timber.d("The account id for $accountName is: ${uiResult.data}")
-                        uiResult.data?.let { spacesListViewModel.getUserPermissions(it) }
+                        uiResult.data?.let {
+                            accountId = it
+                            spacesListViewModel.getUserPermissions(it)
+                        }
                     }
                     is UIResult.Loading -> { }
                     is UIResult.Error -> {
@@ -231,6 +235,7 @@ class SpacesListFragment :
                     is UIResult.Loading -> { }
                     is UIResult.Error -> {
                         Timber.e(uiResult.error, "Failed to retrieve user permissions for account $accountName")
+                        userPermissions.clear()
                         binding.fabCreateSpace.isVisible = false
                     }
                 }
@@ -304,6 +309,7 @@ class SpacesListFragment :
 
     override fun onThreeDotButtonClick(ocSpace: OCSpace) {
         currentSpace = ocSpace
+        accountId?.let { spacesListViewModel.getUserPermissions(it) }
         spacesListViewModel.filterMenuOptions(ocSpace, userPermissions)
     }
 
