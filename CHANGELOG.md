@@ -44,6 +44,7 @@ ownCloud admins and users.
 * Change - Increase rating dialog delay: [#4744](https://github.com/owncloud/android/pull/4744)
 * Enhancement - Show members of a space: [#4612](https://github.com/owncloud/android/issues/4612)
 * Enhancement - Set emoji as space image: [#4707](https://github.com/owncloud/android/issues/4707)
+* Enhancement - Workflow to build APK: [#4751](https://github.com/owncloud/android/pull/4751)
 
 ## Details
 
@@ -80,6 +81,13 @@ ownCloud admins and users.
 
    https://github.com/owncloud/android/issues/4707
    https://github.com/owncloud/android/pull/4708
+
+* Enhancement - Workflow to build APK: [#4751](https://github.com/owncloud/android/pull/4751)
+
+   A new workflow to build unsigned APKs has been added, using variant and version
+   as inputs and generating the artifact and commit hash as outputs.
+
+   https://github.com/owncloud/android/pull/4751
 
 # Changelog for ownCloud Android Client [4.7.0] (2025-11-17)
 

@@ -1,0 +1,140 @@
+name: Build apk
+
+on:
+  workflow_dispatch:
+    inputs:
+      build_variant:
+        description: "Variant to build"
+        type: choice
+        required: true
+        default: "originalRelease"
+        options:
+          - originalDebug
+          - originalRelease
+          - mdmDebug
+          - mdmRelease
+          - qaDebug
+          - qaRelease
+      version:
+        description: "Version to build (commit, branch or tag)"
+        type: string
+        default: "master"
+
+  # This workflow can be reused via workflow_call.
+  # It builds an APK from the owncloud/android repository at the requested version
+  # and exposes the generated artifact name and commit hash as outputs.
+  workflow_call:
+    inputs:
+      build_variant:
+        description: Variant to build
+        type: string
+        default: "originalRelease"
+      version:
+        description: "Version to build (commit, branch or tag)"
+        type: string
+        default: "master"
+    outputs:
+      artifact_name:
+        description: "Generated APK artifact name"
+        value: ${{ jobs.build_apk.outputs.artifact_name }}
+      commit_hash:
+        description: "Commit hash of the artifact"
+        value: ${{ jobs.build_apk.outputs.commit_hash }}
+
+permissions:
+  contents: read
+
+# NOTE:
+# This workflow intentionally builds unsigned APKs for internal usage.
+# No signing step is performed as part of this workflow.
+
+jobs:
+  # Builds the requested app variant and publishes the generated APK as an artifact
+  build_apk:
+    name: Build APK
+    runs-on: ubuntu-latest
+    outputs:
+      artifact_name: ${{ steps.set_artifact.outputs.artifact_name }}
+      commit_hash: ${{ steps.commit.outputs.commit_hash }}
+
+    steps:
+      # Validate build variant (mainly for workflow_call usage)
+      - name: Validate build variant
+        run: |
+          case "${{ inputs.build_variant }}" in
+            originalDebug|originalRelease|mdmDebug|mdmRelease|qaDebug|qaRelease) ;;
+            *) echo "Invalid build_variant: ${{ inputs.build_variant }}" && exit 1 ;;
+          esac
+
+      # Checkout the repo
+      - name: Checkout current repo
+        uses: actions/checkout@v5
+        with:
+          repository: owncloud/android
+          ref: ${{ inputs.version }}
+
+      # Retrieve and expose the app commit hash as a workflow output
+      - name: Get commit hash
+        id: commit
+        run: |
+          COMMIT_HASH=$(git rev-parse HEAD)
+          echo "Commit hash: $COMMIT_HASH"
+          echo "commit_hash=$COMMIT_HASH" >> $GITHUB_OUTPUT
+ 
+      # Set Java-JDK version
+      - name: Setup JDK
+        uses: actions/setup-java@v5
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      # Cache gradle
+      - name: Cache Gradle
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      # Build the apk with the given variant
+      - name: Build APK
+        run: ./gradlew clean assemble${{ inputs.build_variant }}
+
+      # Name the output artifact with date, commit, and variant
+      - name: Set artifact name
+        id: set_artifact
+        run: |
+          DATE=$(date +%Y%m%d_%H%M)
+          COMMIT=$(git rev-parse --short HEAD)
+          VARIANT="${{ inputs.build_variant }}"
+
+          # Extract flavor and build type from variant (e.g. qaRelease -> qa / release)
+          FLAVOR=$(echo "$VARIANT" | sed -E 's/(Release|Debug)//' | tr '[:upper:]' '[:lower:]')
+          BUILD_TYPE=$(echo "$VARIANT" | grep -qi debug && echo debug || echo release)
+          NAME="ownCloud-${{ inputs.build_variant }}-${COMMIT}-${DATE}.apk"
+
+          APK_PATH=$(find ./owncloudApp/build/outputs/apk/$FLAVOR/$BUILD_TYPE/ -name "*.apk")
+
+          echo "$APK_PATH"
+
+          # Verify that apk exists
+          if [ -z "$APK_PATH" ]; then
+            echo "❌ APK not found in ./owncloudApp/build/outputs/apk/$FLAVOR/$BUILD_TYPE/"
+            exit 1
+          fi
+
+          # Copy to root for an easier handling
+          cp "$APK_PATH" "./$NAME"
+
+          # Publish as output
+          echo "artifact_name=$NAME" >> $GITHUB_OUTPUT
+
+      # Publish the artifact
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.set_artifact.outputs.artifact_name }}
+          path: ./${{ steps.set_artifact.outputs.artifact_name }}
