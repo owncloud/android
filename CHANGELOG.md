@@ -40,6 +40,7 @@ ownCloud admins and users.
 
 ## Summary
 
+* Bugfix - Edit space option available when there is no connection: [#4742](https://github.com/owncloud/android/issues/4742)
 * Change - Migrate tests to the new kotlinx-coroutines-test API: [#4710](https://github.com/owncloud/android/issues/4710)
 * Change - Increase rating dialog delay: [#4744](https://github.com/owncloud/android/pull/4744)
 * Enhancement - Show members of a space: [#4612](https://github.com/owncloud/android/issues/4612)
@@ -47,6 +48,14 @@ ownCloud admins and users.
 * Enhancement - Workflow to build APK: [#4751](https://github.com/owncloud/android/pull/4751)
 
 ## Details
+
+* Bugfix - Edit space option available when there is no connection: [#4742](https://github.com/owncloud/android/issues/4742)
+
+   A new condition has been added to hide the edit space option when no network
+   connection is available.
+
+   https://github.com/owncloud/android/issues/4742
+   https://github.com/owncloud/android/pull/4750
 
 * Change - Migrate tests to the new kotlinx-coroutines-test API: [#4710](https://github.com/owncloud/android/issues/4710)
 
