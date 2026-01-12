@@ -1,0 +1,5 @@
+Enhancement: Workflow to build APK
+
+A new workflow to build unsigned APKs has been added, using variant and version as inputs and generating the artifact and commit hash as outputs.
+
+https://github.com/owncloud/android/pull/4751
