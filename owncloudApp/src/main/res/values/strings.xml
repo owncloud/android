@@ -830,6 +830,7 @@
     <string name="content_description_member_user">User %1$s</string>
     <string name="content_description_member_group">Group %1$s</string>
     <string name="content_description_member_expiration_date">Expires %1$s</string>
+    <string name="content_description_add_member">Add new member</string>
 
     <string name="create_shortcut_dialog_title">Create a shortcut</string>
     <string name="create_shortcut_dialog_url">URL</string>
