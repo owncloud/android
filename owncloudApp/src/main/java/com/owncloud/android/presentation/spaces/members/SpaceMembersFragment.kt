@@ -27,13 +27,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.owncloud.android.R
 import com.owncloud.android.databinding.MembersFragmentBinding
 import com.owncloud.android.domain.roles.model.OCRole
 import com.owncloud.android.domain.spaces.model.OCSpace
 import com.owncloud.android.extensions.collectLatestLifecycleFlow
 import com.owncloud.android.presentation.common.UIResult
-import com.owncloud.android.utils.DisplayUtils
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
@@ -106,24 +104,6 @@ class SpaceMembersFragment : Fragment() {
                     }
                     is UIResult.Loading -> { }
                     is UIResult.Error -> { }
-                }
-            }
-        }
-
-        val currentSpace = requireArguments().getParcelable<OCSpace>(ARG_CURRENT_SPACE) ?: return
-        binding.apply {
-            itemName.text = currentSpace.name
-            currentSpace.quota?.let { quota ->
-                val usedQuota = quota.used
-                val totalQuota = quota.total
-                itemSize.text = when {
-                    usedQuota == null -> getString(R.string.drawer_unavailable_used_storage)
-                    totalQuota == 0L -> DisplayUtils.bytesToHumanReadable(usedQuota, requireContext(), true)
-                    else -> getString(
-                        R.string.drawer_quota,
-                        DisplayUtils.bytesToHumanReadable(usedQuota, requireContext(), true),
-                        DisplayUtils.bytesToHumanReadable(totalQuota, requireContext(), true),
-                        quota.getRelative().toString())
                 }
             }
         }
