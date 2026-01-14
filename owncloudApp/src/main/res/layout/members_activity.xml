@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?><!--
   ownCloud Android client application
 
-  Copyright (C) 2025 ownCloud GmbH.
+  Copyright (C) 2026 ownCloud GmbH.
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License version 2,
@@ -16,8 +16,8 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/members_activity_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -25,6 +25,49 @@
     android:orientation="vertical">
 
     <include layout="@layout/owncloud_toolbar" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/item_header_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/standard_padding">
+
+        <ImageView
+            android:id="@+id/item_icon"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/ic_menu_space"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <TextView
+            android:id="@+id/item_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/standard_half_margin"
+            android:layout_marginStart="@dimen/standard_half_margin"
+            android:ellipsize="middle"
+            android:singleLine="true"
+            android:text="@string/placeholder_filename"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:layout_constraintStart_toEndOf="@id/item_icon"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <TextView
+            android:id="@+id/item_size"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/standard_half_margin"
+            android:text="@string/placeholder_filesize"
+            android:textColor="@color/list_item_lastmod_and_filesize_text"
+            android:textSize="14sp"
+            app:layout_constraintStart_toEndOf="@id/item_icon"
+            app:layout_constraintTop_toBottomOf="@+id/item_name"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <FrameLayout
         android:layout_width="match_parent"

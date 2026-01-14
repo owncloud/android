@@ -25,106 +25,56 @@
     tools:context=".presentation.spaces.members.SpaceMembersActivity">
 
     <LinearLayout
+        android:id="@+id/members_section"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/item_header_container"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/standard_padding">
-
-            <ImageView
-                android:id="@+id/item_icon"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_gravity="center_vertical"
-                android:src="@drawable/ic_menu_space"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"/>
+            android:layout_height="match_parent"
+            android:background="@color/actionbar_start_color">
 
             <TextView
-                android:id="@+id/item_name"
+                android:id="@+id/members_title"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/standard_half_margin"
+                android:layout_height="50dp"
+                android:layout_centerVertical="true"
+                android:gravity="center"
+                android:text="@string/space_members"
                 android:layout_marginStart="@dimen/standard_half_margin"
-                android:ellipsize="middle"
-                android:singleLine="true"
-                android:text="@string/placeholder_filename"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                app:layout_constraintStart_toEndOf="@id/item_icon"
+                android:textAllCaps="true"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:accessibilityHeading="true"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"/>
 
-            <TextView
-                android:id="@+id/item_size"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/standard_half_margin"
-                android:text="@string/placeholder_filesize"
-                android:textColor="@color/list_item_lastmod_and_filesize_text"
-                android:textSize="14sp"
-                app:layout_constraintStart_toEndOf="@id/item_icon"
-                app:layout_constraintTop_toBottomOf="@+id/item_name"/>
+            <ImageButton
+                android:id="@+id/add_member_button"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:padding="@dimen/standard_padding"
+                android:background="@color/transparent"
+                android:src="@drawable/ic_add"
+                android:contentDescription="@string/content_description_add_member"
+                android:visibility="gone"
+                android:focusable="true"
+                android:clickable="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:visibility="visible"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <LinearLayout
-            android:id="@+id/members_section"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/members_recycler_view"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/actionbar_start_color">
-
-                <TextView
-                    android:id="@+id/members_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="50dp"
-                    android:layout_centerVertical="true"
-                    android:gravity="center"
-                    android:text="@string/space_members"
-                    android:layout_marginStart="@dimen/standard_half_margin"
-                    android:textAllCaps="true"
-                    android:textColor="@color/white"
-                    android:textStyle="bold"
-                    android:accessibilityHeading="true"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"/>
-
-                <ImageButton
-                    android:id="@+id/add_member_button"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:padding="@dimen/standard_padding"
-                    android:background="@color/transparent"
-                    android:src="@drawable/ic_add"
-                    android:contentDescription="@string/content_description_add_member"
-                    android:visibility="gone"
-                    android:focusable="true"
-                    android:clickable="true"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:visibility="visible"/>
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/members_recycler_view"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:scrollbars="vertical"
-                android:visibility="visible"
-                tools:visibility="visible"/>
-
-        </LinearLayout>
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:scrollbars="vertical"
+            android:visibility="visible"
+            tools:visibility="visible"/>
 
     </LinearLayout>
 
