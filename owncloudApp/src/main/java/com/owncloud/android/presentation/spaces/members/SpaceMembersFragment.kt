@@ -3,7 +3,7 @@
  *
  * @author Jorge Aguado Recio
  *
- * Copyright (C) 2025 ownCloud GmbH.
+ * Copyright (C) 2026 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -96,6 +96,20 @@ class SpaceMembersFragment : Fragment() {
             }
         }
 
+        collectLatestLifecycleFlow(spaceMembersViewModel.spacePermissions) { event ->
+            event?.let {
+                when (val uiResult = event.peekContent()) {
+                    is UIResult.Success -> {
+                        uiResult.data?.let { spacePermissions ->
+                            if (DRIVES_CREATE_PERMISSION in spacePermissions) { binding.addMemberButton.visibility = View.VISIBLE }
+                        }
+                    }
+                    is UIResult.Loading -> { }
+                    is UIResult.Error -> { }
+                }
+            }
+        }
+
         val currentSpace = requireArguments().getParcelable<OCSpace>(ARG_CURRENT_SPACE) ?: return
         binding.apply {
             itemName.text = currentSpace.name
@@ -118,6 +132,7 @@ class SpaceMembersFragment : Fragment() {
     companion object {
         private const val ARG_CURRENT_SPACE = "CURRENT_SPACE"
         private const val ARG_ACCOUNT_NAME = "ACCOUNT_NAME"
+        private const val DRIVES_CREATE_PERMISSION = "libre.graph/driveItem/permissions/create"
 
         fun newInstance(
             accountName: String,

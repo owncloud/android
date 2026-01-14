@@ -3,7 +3,7 @@
  *
  * @author Jorge Aguado Recio
  *
- * Copyright (C) 2025 ownCloud GmbH.
+ * Copyright (C) 2026 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -26,6 +26,7 @@ import com.owncloud.android.domain.spaces.model.OCSpace
 import com.owncloud.android.domain.spaces.model.SpaceMembers
 import com.owncloud.android.domain.spaces.usecases.GetSpaceMembersUseCase
 import com.owncloud.android.domain.roles.usecases.GetRolesAsyncUseCase
+import com.owncloud.android.domain.spaces.usecases.GetSpacePermissionsAsyncUseCase
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.ViewModelExt.runUseCaseWithResult
 import com.owncloud.android.presentation.common.UIResult
@@ -36,6 +37,7 @@ import kotlinx.coroutines.flow.StateFlow
 class SpaceMembersViewModel(
     private val getRolesAsyncUseCase: GetRolesAsyncUseCase,
     private val getSpaceMembersUseCase: GetSpaceMembersUseCase,
+    private val getSpacePermissionsAsyncUseCase: GetSpacePermissionsAsyncUseCase,
     private val accountName: String,
     private val space: OCSpace,
     private val coroutineDispatcherProvider: CoroutinesDispatcherProvider
@@ -47,6 +49,9 @@ class SpaceMembersViewModel(
     private val _spaceMembers = MutableStateFlow<Event<UIResult<SpaceMembers>>?>(null)
     val spaceMembers: StateFlow<Event<UIResult<SpaceMembers>>?> = _spaceMembers
 
+    private val _spacePermissions = MutableStateFlow<Event<UIResult<List<String>>>?>(null)
+    val spacePermissions: StateFlow<Event<UIResult<List<String>>>?> = _spacePermissions
+
     init {
         runUseCaseWithResult(
             coroutineDispatcher = coroutineDispatcherProvider.io,
@@ -56,6 +61,16 @@ class SpaceMembersViewModel(
             showLoading = false,
             requiresConnection = true
         )
+
+        runUseCaseWithResult(
+            coroutineDispatcher = coroutineDispatcherProvider.io,
+            flow = _spacePermissions,
+            useCase = getSpacePermissionsAsyncUseCase,
+            useCaseParams = GetSpacePermissionsAsyncUseCase.Params(accountName = accountName, spaceId = space.id),
+            showLoading = false,
+            requiresConnection = true
+        )
+
     }
 
     fun getSpaceMembers() = runUseCaseWithResult(
