@@ -30,7 +30,7 @@ import com.owncloud.android.domain.spaces.model.OCSpace
 import com.owncloud.android.ui.activity.FileActivity
 import com.owncloud.android.utils.DisplayUtils
 
-class SpaceMembersActivity: FileActivity() {
+class SpaceMembersActivity: FileActivity(), SpaceMembersFragment.SpaceMemberFragmentListener {
 
     private lateinit var binding: MembersActivityBinding
 
@@ -80,8 +80,17 @@ class SpaceMembersActivity: FileActivity() {
             super.onOptionsItemSelected(item)
         }
 
+    override fun addMember(space: OCSpace) {
+        supportFragmentManager.transaction {
+            val fragment = AddMemberFragment.newInstance()
+            replace(R.id.members_fragment_container, fragment, TAG_ADD_MEMBER_FRAGMENT)
+            addToBackStack(null)
+        }
+    }
+
     companion object {
         private const val TAG_SPACE_MEMBERS_FRAGMENT = "SPACE_MEMBERS_FRAGMENT"
+        private const val TAG_ADD_MEMBER_FRAGMENT ="ADD_MEMBER_FRAGMENT"
         const val EXTRA_SPACE = "EXTRA_SPACE"
     }
 
