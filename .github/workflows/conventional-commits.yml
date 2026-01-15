@@ -1,0 +1,73 @@
+name: Conventional Commits
+
+on:
+  pull_request:
+    # Just some events that could involve commit messages
+    types: [opened, synchronize, reopened]
+
+permissions:
+  # Only need read access to repository contents
+  contents: read
+
+jobs:
+  validate-commit-names:
+    name: Check Commit Names
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the repository
+      - name: Checkout repository
+        uses: actions/checkout@v5
+        with:
+          # Limit of validation to skip fetching all existing commits
+          fetch-depth: 100
+
+      # Validate commit messages
+      - name: Validate all commit messages
+        run: |
+          echo "Validating all commit names in PR #${{ github.event.pull_request.number }}"
+
+          # Get the base branch and the PR branch
+          BASE_BRANCH="${{ github.event.pull_request.base.ref }}"
+
+          # Fetch the base branch with no verbosity
+          git fetch --quiet origin "$BASE_BRANCH"
+
+          # Get all commits in the PR (not the base branch ones)
+          # --pretty=format:"%s" gets only the commit message
+          mapfile -t commits_array < <(git log origin/$BASE_BRANCH..HEAD --pretty=format:'%s')
+
+          # Regex pattern for valid Conventional Commit
+          regex='^(docs|fix|feat|chore|refactor|test|style|build|ci): [a-z].{9,}$'
+
+          # Variable to count errors
+          fail=0
+
+          echo "Commit list and validation:"
+
+          # Print and validate
+          for commitmsg in "${commits_array[@]}"; do
+            echo "$commitmsg"
+
+            # Skip merge and [tx] commits
+            if [[ "$commitmsg" =~ ^Merge ]] || [[ "$commitmsg" =~ ^\[tx\] ]]; then
+              echo "  🚫 Ignored commit"
+              continue
+            fi
+
+            # Validate Conventional Commit
+            if ! [[ "$commitmsg" =~ $regex ]]; then
+              echo "  ❌ Invalid commit"
+              fail=$((fail+1))
+            else
+              echo "  ✅ Valid commit"
+            fi
+          done
+
+          # Fail the job if there are any invalid commits
+          if [[ $fail -gt 0 ]]; then
+            echo "❌ $fail commit(s) do(es) not follow the Conventional Commits convention"
+            exit 1
+          else
+            echo "✅ All commits follow the Conventional Commits convention"
+          fi
