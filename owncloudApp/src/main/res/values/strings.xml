@@ -879,6 +879,8 @@
     <string name="set_space_icon">Set icon</string>
     <string name="space_members">Members</string>
     <string name="add_member">Add member</string>
+    <string name="search_members_failed">No results found</string>
+    <string name="member_user">User</string>
 
     <string name="feedback_dialog_get_in_contact_description"><![CDATA[ Ask for help in our <a href=\"%1$s\"><b>forum</b></a> or contribute in our <a href=\"%2$s\"><b>GitHub repo</b></a>]]></string>
 

@@ -6,7 +6,7 @@
  * @author Juan Carlos Garrote Gascón
  * @author Jorge Aguado Recio
  *
- * Copyright (C) 2025 ownCloud GmbH.
+ * Copyright (C) 2026 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -28,6 +28,7 @@ import com.owncloud.android.data.authentication.repository.OCAuthenticationRepos
 import com.owncloud.android.data.capabilities.repository.OCCapabilityRepository
 import com.owncloud.android.data.files.repository.OCFileRepository
 import com.owncloud.android.data.folderbackup.repository.OCFolderBackupRepository
+import com.owncloud.android.data.members.repository.OCMembersRepository
 import com.owncloud.android.data.oauth.repository.OCOAuthRepository
 import com.owncloud.android.data.roles.repository.OCRolesRepository
 import com.owncloud.android.data.server.repository.OCServerInfoRepository
@@ -43,6 +44,7 @@ import com.owncloud.android.domain.authentication.oauth.OAuthRepository
 import com.owncloud.android.domain.automaticuploads.FolderBackupRepository
 import com.owncloud.android.domain.capabilities.CapabilityRepository
 import com.owncloud.android.domain.files.FileRepository
+import com.owncloud.android.domain.members.MembersRepository
 import com.owncloud.android.domain.roles.RolesRepository
 import com.owncloud.android.domain.server.ServerInfoRepository
 import com.owncloud.android.domain.sharing.sharees.ShareeRepository
@@ -61,6 +63,7 @@ val repositoryModule = module {
     factoryOf(::OCCapabilityRepository) bind CapabilityRepository::class
     factoryOf(::OCFileRepository) bind FileRepository::class
     factoryOf(::OCFolderBackupRepository) bind FolderBackupRepository::class
+    factoryOf(::OCMembersRepository) bind MembersRepository::class
     factoryOf(::OCOAuthRepository) bind OAuthRepository::class
     factoryOf(::OCRolesRepository) bind RolesRepository::class
     factoryOf(::OCServerInfoRepository) bind ServerInfoRepository::class

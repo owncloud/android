@@ -21,12 +21,14 @@
 package com.owncloud.android.presentation.spaces.members
 
 import androidx.lifecycle.ViewModel
+import com.owncloud.android.domain.members.model.OCMember
 import com.owncloud.android.domain.roles.model.OCRole
 import com.owncloud.android.domain.spaces.model.OCSpace
 import com.owncloud.android.domain.spaces.model.SpaceMembers
 import com.owncloud.android.domain.spaces.usecases.GetSpaceMembersUseCase
 import com.owncloud.android.domain.roles.usecases.GetRolesAsyncUseCase
 import com.owncloud.android.domain.spaces.usecases.GetSpacePermissionsAsyncUseCase
+import com.owncloud.android.domain.members.usecases.SearchUsersUseCase
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.ViewModelExt.runUseCaseWithResult
 import com.owncloud.android.presentation.common.UIResult
@@ -38,6 +40,7 @@ class SpaceMembersViewModel(
     private val getRolesAsyncUseCase: GetRolesAsyncUseCase,
     private val getSpaceMembersUseCase: GetSpaceMembersUseCase,
     private val getSpacePermissionsAsyncUseCase: GetSpacePermissionsAsyncUseCase,
+    private val searchUsersUseCase: SearchUsersUseCase,
     private val accountName: String,
     private val space: OCSpace,
     private val coroutineDispatcherProvider: CoroutinesDispatcherProvider
@@ -51,6 +54,9 @@ class SpaceMembersViewModel(
 
     private val _spacePermissions = MutableStateFlow<Event<UIResult<List<String>>>?>(null)
     val spacePermissions: StateFlow<Event<UIResult<List<String>>>?> = _spacePermissions
+
+    private val _users = MutableStateFlow<Event<UIResult<List<OCMember>>>?>(null)
+    val users: StateFlow<Event<UIResult<List<OCMember>>>?> = _users
 
     init {
         runUseCaseWithResult(
@@ -81,5 +87,18 @@ class SpaceMembersViewModel(
         showLoading = false,
         requiresConnection = true
     )
+
+    fun searchUsers(query: String) = runUseCaseWithResult(
+        coroutineDispatcher = coroutineDispatcherProvider.io,
+        flow = _users,
+        useCase = searchUsersUseCase,
+        useCaseParams = SearchUsersUseCase.Params(accountName = accountName, query = query),
+        showLoading = false,
+        requiresConnection = true
+    )
+
+    fun clearSearch() {
+        _users.value = Event(UIResult.Success(emptyList()))
+    }
 
 }
