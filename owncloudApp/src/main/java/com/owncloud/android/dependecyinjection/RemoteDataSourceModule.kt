@@ -4,7 +4,7 @@
  * @author David González Verdugo
  * @author Jorge Aguado Recio
  *
- * Copyright (C) 2025 ownCloud GmbH.
+ * Copyright (C) 2026 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -33,6 +33,8 @@ import com.owncloud.android.data.capabilities.datasources.implementation.OCRemot
 import com.owncloud.android.data.capabilities.datasources.mapper.RemoteCapabilityMapper
 import com.owncloud.android.data.files.datasources.RemoteFileDataSource
 import com.owncloud.android.data.files.datasources.implementation.OCRemoteFileDataSource
+import com.owncloud.android.data.members.datasources.RemoteMembersDataSource
+import com.owncloud.android.data.members.datasources.implementation.OCRemoteMembersDataSource
 import com.owncloud.android.data.oauth.datasources.RemoteOAuthDataSource
 import com.owncloud.android.data.oauth.datasources.implementation.OCRemoteOAuthDataSource
 import com.owncloud.android.data.roles.datasources.RemoteRolesDataSource
@@ -76,6 +78,7 @@ val remoteDataSourceModule = module {
     singleOf(::OCRemoteAuthenticationDataSource) bind RemoteAuthenticationDataSource::class
     singleOf(::OCRemoteCapabilitiesDataSource) bind RemoteCapabilitiesDataSource::class
     singleOf(::OCRemoteFileDataSource) bind RemoteFileDataSource::class
+    singleOf(::OCRemoteMembersDataSource) bind RemoteMembersDataSource::class
     singleOf(::OCRemoteOAuthDataSource) bind RemoteOAuthDataSource::class
     singleOf(::OCRemoteRolesDataSource) bind RemoteRolesDataSource::class
     singleOf(::OCRemoteServerInfoDataSource) bind RemoteServerInfoDataSource::class
