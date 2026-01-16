@@ -25,12 +25,33 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.owncloud.android.R
 import com.owncloud.android.databinding.AddMemberFragmentBinding
+import com.owncloud.android.domain.members.model.OCMember
+import com.owncloud.android.domain.spaces.model.OCSpace
+import com.owncloud.android.extensions.collectLatestLifecycleFlow
+import com.owncloud.android.extensions.showErrorInSnackbar
+import com.owncloud.android.presentation.common.UIResult
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
 class AddMemberFragment: Fragment() {
     private var _binding: AddMemberFragmentBinding? = null
     private val binding get() = _binding!!
+
+    private val spaceMembersViewModel: SpaceMembersViewModel by viewModel {
+        parametersOf(
+            requireArguments().getString(ARG_ACCOUNT_NAME),
+            requireArguments().getParcelable<OCSpace>(ARG_CURRENT_SPACE)
+        )
+    }
+
+    private lateinit var searchMembersAdapter: SearchMembersAdapter
+    private lateinit var recyclerView: RecyclerView
+
+    private var listOfUsers = emptyList<OCMember>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = AddMemberFragmentBinding.inflate(inflater, container, false)
@@ -39,7 +60,57 @@ class AddMemberFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.searchBar.requestFocus()
+        searchMembersAdapter = SearchMembersAdapter()
+        recyclerView = binding.membersRecyclerView
+        recyclerView.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = searchMembersAdapter
+        }
+
+        collectLatestLifecycleFlow(spaceMembersViewModel.users) { event ->
+            event?.let {
+                when (val uiResult = event.peekContent()) {
+                    is UIResult.Success -> {
+                        uiResult.data?.let {
+                            listOfUsers = it
+                            spaceMembersViewModel.getSpaceMembers()
+                        }
+                    }
+                    is UIResult.Loading -> { }
+                    is UIResult.Error -> {
+                        showErrorInSnackbar(R.string.search_members_failed, uiResult.error)
+                    }
+                }
+            }
+        }
+
+        collectLatestLifecycleFlow(spaceMembersViewModel.spaceMembers) { event ->
+            event?.let {
+                when (val uiResult = event.peekContent()) {
+                    is UIResult.Success -> {
+                        uiResult.data?.let {
+                            listOfUsers = listOfUsers.filter { user -> !it.members.any { member -> member.id == "u:${user.id}" } }
+                            searchMembersAdapter.addUserMembers(listOfUsers)
+                        }
+                    }
+                    is UIResult.Loading -> { }
+                    is UIResult.Error -> { }
+                }
+            }
+        }
+
+
+        binding.searchBar.apply {
+            requestFocus()
+            setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String): Boolean = true
+
+                override fun onQueryTextChange(newText: String): Boolean {
+                    if (newText.length > 2) { spaceMembersViewModel.searchUsers(newText) } else { spaceMembersViewModel.clearSearch() }
+                    return true
+                }
+            })
+        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -48,8 +119,20 @@ class AddMemberFragment: Fragment() {
     }
 
     companion object {
-        fun newInstance(): AddMemberFragment {
-            return AddMemberFragment()
+        private const val ARG_ACCOUNT_NAME = "ACCOUNT_NAME"
+        private const val ARG_CURRENT_SPACE = "CURRENT_SPACE"
+
+        fun newInstance(
+            accountName: String,
+            currentSpace: OCSpace
+        ): AddMemberFragment {
+            val args = Bundle().apply {
+                putString(ARG_ACCOUNT_NAME, accountName)
+                putParcelable(ARG_CURRENT_SPACE, currentSpace)
+            }
+            return AddMemberFragment().apply {
+                arguments = args
+            }
         }
     }
 }

@@ -82,7 +82,7 @@ class SpaceMembersActivity: FileActivity(), SpaceMembersFragment.SpaceMemberFrag
 
     override fun addMember(space: OCSpace) {
         supportFragmentManager.transaction {
-            val fragment = AddMemberFragment.newInstance()
+            val fragment = AddMemberFragment.newInstance(account.name, space)
             replace(R.id.members_fragment_container, fragment, TAG_ADD_MEMBER_FRAGMENT)
             addToBackStack(null)
         }

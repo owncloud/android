@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?><!--
   ownCloud Android client application
 
-  Copyright (C) 2025 ownCloud GmbH.
+  Copyright (C) 2026 ownCloud GmbH.
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License version 2,
@@ -70,7 +70,9 @@
                     android:layout_marginBottom="@dimen/standard_half_margin"
                     android:text="@string/placeholder_sentence"
                     android:textSize="13sp"
-                    android:textColor="@color/textColor"/>
+                    android:textColor="@color/textColor"
+                    android:ellipsize="middle"
+                    android:maxLines="1"/>
 
                 <ImageView
                     android:id="@+id/expiration_calendar_icon"
