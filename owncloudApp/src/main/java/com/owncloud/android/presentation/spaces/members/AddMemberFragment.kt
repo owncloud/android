@@ -36,6 +36,7 @@ import com.owncloud.android.extensions.showErrorInSnackbar
 import com.owncloud.android.presentation.common.UIResult
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
+import timber.log.Timber
 
 class AddMemberFragment: Fragment() {
     private var _binding: AddMemberFragmentBinding? = null
@@ -78,6 +79,7 @@ class AddMemberFragment: Fragment() {
                     }
                     is UIResult.Loading -> { }
                     is UIResult.Error -> {
+                        Timber.e(uiResult.error, "Failed to retrieve available users and groups")
                         showErrorInSnackbar(R.string.search_members_failed, uiResult.error)
                     }
                 }
@@ -96,7 +98,10 @@ class AddMemberFragment: Fragment() {
                         }
                     }
                     is UIResult.Loading -> { }
-                    is UIResult.Error -> { }
+                    is UIResult.Error -> {
+                        val currentSpace = requireArguments().getParcelable<OCSpace>(ARG_CURRENT_SPACE)
+                        Timber.e(uiResult.error, "Failed to retrieve space members for space: ${currentSpace?.name} (${currentSpace?.id})")
+                    }
                 }
             }
         }

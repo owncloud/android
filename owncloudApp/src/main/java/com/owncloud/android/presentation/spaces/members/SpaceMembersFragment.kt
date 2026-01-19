@@ -69,6 +69,8 @@ class SpaceMembersFragment : Fragment() {
             adapter = spaceMembersAdapter
         }
 
+        val currentSpace = requireArguments().getParcelable<OCSpace>(ARG_CURRENT_SPACE) ?: return
+
         collectLatestLifecycleFlow(spaceMembersViewModel.roles) { event ->
             event?.let {
                 when (val uiResult = event.peekContent()) {
@@ -79,7 +81,9 @@ class SpaceMembersFragment : Fragment() {
                         }
                     }
                     is UIResult.Loading -> { }
-                    is UIResult.Error -> { }
+                    is UIResult.Error -> {
+                        Timber.e(uiResult.error, "Failed to retrieve platform roles")
+                    }
                 }
             }
         }
@@ -93,7 +97,9 @@ class SpaceMembersFragment : Fragment() {
                         }
                     }
                     is UIResult.Loading -> { }
-                    is UIResult.Error -> { }
+                    is UIResult.Error -> {
+                        Timber.e(uiResult.error, "Failed to retrieve space members for space: ${currentSpace.id} (${currentSpace?.id})")
+                    }
                 }
             }
         }
@@ -107,12 +113,13 @@ class SpaceMembersFragment : Fragment() {
                         }
                     }
                     is UIResult.Loading -> { }
-                    is UIResult.Error -> { }
+                    is UIResult.Error -> {
+                        Timber.e(uiResult.error, "Failed to retrieve space permissions for space: ${currentSpace.id} (${currentSpace?.id})")
+                    }
                 }
             }
         }
 
-        val currentSpace = requireArguments().getParcelable<OCSpace>(ARG_CURRENT_SPACE) ?: return
         binding.addMemberButton.setOnClickListener {
             listener?.addMember(currentSpace)
         }
