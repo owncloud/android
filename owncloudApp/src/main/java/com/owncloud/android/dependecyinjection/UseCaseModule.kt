@@ -107,7 +107,7 @@ import com.owncloud.android.domain.spaces.usecases.GetSpaceWithSpecialsByIdForAc
 import com.owncloud.android.domain.spaces.usecases.GetSpacesFromEveryAccountUseCaseAsStream
 import com.owncloud.android.domain.spaces.usecases.RefreshSpacesFromServerAsyncUseCase
 import com.owncloud.android.domain.spaces.usecases.GetSpaceMembersUseCase
-import com.owncloud.android.domain.members.usecases.SearchUsersUseCase
+import com.owncloud.android.domain.members.usecases.SearchMembersUseCase
 import com.owncloud.android.domain.transfers.usecases.ClearSuccessfulTransferByIdUseCase
 import com.owncloud.android.domain.transfers.usecases.ClearSuccessfulTransfersUseCase
 import com.owncloud.android.domain.transfers.usecases.GetAllTransfersAsStreamUseCase
@@ -309,5 +309,5 @@ val useCaseModule = module {
     factoryOf(::GetRolesAsyncUseCase)
 
     // Members
-    factoryOf(::SearchUsersUseCase)
+    factoryOf(::SearchMembersUseCase)
 }

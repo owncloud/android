@@ -24,11 +24,11 @@ import com.owncloud.android.domain.BaseUseCaseWithResult
 import com.owncloud.android.domain.members.MembersRepository
 import com.owncloud.android.domain.members.model.OCMember
 
-class SearchUsersUseCase(
+class SearchMembersUseCase(
     private val membersRepository: MembersRepository
-): BaseUseCaseWithResult<List<OCMember>, SearchUsersUseCase.Params>() {
+): BaseUseCaseWithResult<List<OCMember>, SearchMembersUseCase.Params>() {
 
-    override fun run(params: Params): List<OCMember> = membersRepository.searchUsers(params.accountName, params.query)
+    override fun run(params: Params): List<OCMember> = membersRepository.searchMembers(params.accountName, params.query)
 
     data class Params(val accountName: String, val query: String)
 }

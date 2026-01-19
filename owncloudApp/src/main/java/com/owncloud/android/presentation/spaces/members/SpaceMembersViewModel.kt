@@ -28,7 +28,7 @@ import com.owncloud.android.domain.spaces.model.SpaceMembers
 import com.owncloud.android.domain.spaces.usecases.GetSpaceMembersUseCase
 import com.owncloud.android.domain.roles.usecases.GetRolesAsyncUseCase
 import com.owncloud.android.domain.spaces.usecases.GetSpacePermissionsAsyncUseCase
-import com.owncloud.android.domain.members.usecases.SearchUsersUseCase
+import com.owncloud.android.domain.members.usecases.SearchMembersUseCase
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.ViewModelExt.runUseCaseWithResult
 import com.owncloud.android.presentation.common.UIResult
@@ -40,7 +40,7 @@ class SpaceMembersViewModel(
     private val getRolesAsyncUseCase: GetRolesAsyncUseCase,
     private val getSpaceMembersUseCase: GetSpaceMembersUseCase,
     private val getSpacePermissionsAsyncUseCase: GetSpacePermissionsAsyncUseCase,
-    private val searchUsersUseCase: SearchUsersUseCase,
+    private val searchMembersUseCase: SearchMembersUseCase,
     private val accountName: String,
     private val space: OCSpace,
     private val coroutineDispatcherProvider: CoroutinesDispatcherProvider
@@ -55,8 +55,8 @@ class SpaceMembersViewModel(
     private val _spacePermissions = MutableStateFlow<Event<UIResult<List<String>>>?>(null)
     val spacePermissions: StateFlow<Event<UIResult<List<String>>>?> = _spacePermissions
 
-    private val _users = MutableStateFlow<Event<UIResult<List<OCMember>>>?>(null)
-    val users: StateFlow<Event<UIResult<List<OCMember>>>?> = _users
+    private val _members = MutableStateFlow<Event<UIResult<List<OCMember>>>?>(null)
+    val members: StateFlow<Event<UIResult<List<OCMember>>>?> = _members
 
     init {
         runUseCaseWithResult(
@@ -88,17 +88,17 @@ class SpaceMembersViewModel(
         requiresConnection = true
     )
 
-    fun searchUsers(query: String) = runUseCaseWithResult(
+    fun searchMembers(query: String) = runUseCaseWithResult(
         coroutineDispatcher = coroutineDispatcherProvider.io,
-        flow = _users,
-        useCase = searchUsersUseCase,
-        useCaseParams = SearchUsersUseCase.Params(accountName = accountName, query = query),
+        flow = _members,
+        useCase = searchMembersUseCase,
+        useCaseParams = SearchMembersUseCase.Params(accountName = accountName, query = query),
         showLoading = false,
         requiresConnection = true
     )
 
     fun clearSearch() {
-        _users.value = Event(UIResult.Success(emptyList()))
+        _members.value = Event(UIResult.Success(emptyList()))
     }
 
 }

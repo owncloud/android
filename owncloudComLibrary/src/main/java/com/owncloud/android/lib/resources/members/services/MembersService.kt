@@ -25,5 +25,6 @@ import com.owncloud.android.lib.resources.Service
 import com.owncloud.android.lib.resources.members.responses.MemberResponse
 
 interface MembersService: Service {
+    fun searchGroups(query: String): RemoteOperationResult<List<MemberResponse>>
     fun searchUsers(query: String): RemoteOperationResult<List<MemberResponse>>
 }

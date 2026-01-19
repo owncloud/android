@@ -51,7 +51,7 @@ class AddMemberFragment: Fragment() {
     private lateinit var searchMembersAdapter: SearchMembersAdapter
     private lateinit var recyclerView: RecyclerView
 
-    private var listOfUsers = emptyList<OCMember>()
+    private var listOfMembers = emptyList<OCMember>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = AddMemberFragmentBinding.inflate(inflater, container, false)
@@ -67,12 +67,12 @@ class AddMemberFragment: Fragment() {
             adapter = searchMembersAdapter
         }
 
-        collectLatestLifecycleFlow(spaceMembersViewModel.users) { event ->
+        collectLatestLifecycleFlow(spaceMembersViewModel.members) { event ->
             event?.let {
                 when (val uiResult = event.peekContent()) {
                     is UIResult.Success -> {
                         uiResult.data?.let {
-                            listOfUsers = it
+                            listOfMembers = it
                             spaceMembersViewModel.getSpaceMembers()
                         }
                     }
@@ -89,8 +89,10 @@ class AddMemberFragment: Fragment() {
                 when (val uiResult = event.peekContent()) {
                     is UIResult.Success -> {
                         uiResult.data?.let {
-                            listOfUsers = listOfUsers.filter { user -> !it.members.any { member -> member.id == "u:${user.id}" } }
-                            searchMembersAdapter.addUserMembers(listOfUsers)
+                            val listOfMembersFiltered = listOfMembers.filter { member -> !it.members.any {
+                                spaceMember -> spaceMember.id == "u:${member.id}" || spaceMember.id == "g:${member.id}" }
+                            }
+                            searchMembersAdapter.setMembers(listOfMembersFiltered)
                         }
                     }
                     is UIResult.Loading -> { }
@@ -106,7 +108,7 @@ class AddMemberFragment: Fragment() {
                 override fun onQueryTextSubmit(query: String): Boolean = true
 
                 override fun onQueryTextChange(newText: String): Boolean {
-                    if (newText.length > 2) { spaceMembersViewModel.searchUsers(newText) } else { spaceMembersViewModel.clearSearch() }
+                    if (newText.length > 2) { spaceMembersViewModel.searchMembers(newText) } else { spaceMembersViewModel.clearSearch() }
                     return true
                 }
             })

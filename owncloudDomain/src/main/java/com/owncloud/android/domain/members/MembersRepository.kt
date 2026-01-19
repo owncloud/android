@@ -23,5 +23,5 @@ package com.owncloud.android.domain.members
 import com.owncloud.android.domain.members.model.OCMember
 
 interface MembersRepository {
-    fun searchUsers(accountName: String, query: String): List<OCMember>
+    fun searchMembers(accountName: String, query: String): List<OCMember>
 }

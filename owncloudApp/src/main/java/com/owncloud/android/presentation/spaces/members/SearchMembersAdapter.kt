@@ -23,6 +23,7 @@ package com.owncloud.android.presentation.spaces.members
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.owncloud.android.R
 import com.owncloud.android.databinding.MemberItemBinding
@@ -31,7 +32,7 @@ import com.owncloud.android.utils.PreferenceUtils
 
 class SearchMembersAdapter: RecyclerView.Adapter<SearchMembersAdapter.SearchMembersViewHolder>() {
 
-    private var members: List<OCMember> = emptyList()
+    private var members = mutableListOf<OCMember>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchMembersViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -46,18 +47,28 @@ class SearchMembersAdapter: RecyclerView.Adapter<SearchMembersAdapter.SearchMemb
         val member = members[position]
 
         holder.binding.apply {
-            memberIcon.setImageResource(R.drawable.ic_user)
+            val isGroup = member.surname == GROUP_SURNAME
+            memberIcon.setImageResource(if (isGroup) R.drawable.ic_group else R.drawable.ic_user)
             memberName.text = member.displayName
-            memberName.contentDescription = holder.itemView.context.getString(R.string.content_description_member_user, member.displayName)
-            memberRole.text = if (member.surname == USER_SURNAME) holder.itemView.context.getString(R.string.member_user) else member.surname
+            memberName.contentDescription = holder.itemView.context.getString(
+                if (isGroup) R.string.content_description_member_group else R.string.content_description_member_user, member.displayName
+            )
+            memberRole.text = if (isGroup) {
+                holder.itemView.context.getString(R.string.member_group)
+            } else {
+                if (member.surname == USER_SURNAME) holder.itemView.context.getString(R.string.member_user) else member.surname
+            }
         }
     }
 
     override fun getItemCount(): Int = members.size
 
-    fun addUserMembers(members: List<OCMember>) {
-        this.members = members
-        notifyDataSetChanged()
+    fun setMembers(members: List<OCMember>) {
+        val diffCallback = SpaceMembersDiffUtil(this.members, members)
+        val diffResult = DiffUtil.calculateDiff(diffCallback)
+        this.members.clear()
+        this.members.addAll(members)
+        diffResult.dispatchUpdatesTo(this)
     }
 
     class SearchMembersViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -66,6 +77,7 @@ class SearchMembersAdapter: RecyclerView.Adapter<SearchMembersAdapter.SearchMemb
 
     companion object {
         private const val USER_SURNAME = "User"
+        private const val GROUP_SURNAME = "Group"
     }
 
 }
