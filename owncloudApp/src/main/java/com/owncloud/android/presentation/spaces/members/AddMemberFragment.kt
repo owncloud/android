@@ -80,7 +80,7 @@ class AddMemberFragment: Fragment() {
                     is UIResult.Loading -> { }
                     is UIResult.Error -> {
                         Timber.e(uiResult.error, "Failed to retrieve available users and groups")
-                        showErrorInSnackbar(R.string.search_members_failed, uiResult.error)
+                        showErrorInSnackbar(R.string.members_search_failed, uiResult.error)
                     }
                 }
             }
@@ -122,7 +122,7 @@ class AddMemberFragment: Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        requireActivity().setTitle(R.string.add_member)
+        requireActivity().setTitle(R.string.members_add)
     }
 
     companion object {

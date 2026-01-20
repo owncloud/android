@@ -54,9 +54,9 @@ class SearchMembersAdapter: RecyclerView.Adapter<SearchMembersAdapter.SearchMemb
                 if (isGroup) R.string.content_description_member_group else R.string.content_description_member_user, member.displayName
             )
             memberRole.text = if (isGroup) {
-                holder.itemView.context.getString(R.string.member_group)
+                holder.itemView.context.getString(R.string.member_type_group)
             } else {
-                if (member.surname == USER_SURNAME) holder.itemView.context.getString(R.string.member_user) else member.surname
+                if (member.surname == USER_SURNAME) holder.itemView.context.getString(R.string.member_type_user) else member.surname
             }
         }
     }

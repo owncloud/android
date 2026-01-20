@@ -41,7 +41,7 @@
                 android:layout_height="50dp"
                 android:layout_centerVertical="true"
                 android:gravity="center"
-                android:text="@string/space_members"
+                android:text="@string/members_title"
                 android:layout_marginStart="@dimen/standard_half_margin"
                 android:textAllCaps="true"
                 android:textColor="@color/white"

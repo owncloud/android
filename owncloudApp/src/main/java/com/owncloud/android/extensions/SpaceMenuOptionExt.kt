@@ -31,7 +31,7 @@ fun SpaceMenuOption.toStringResId() =
         SpaceMenuOption.ENABLE -> R.string.enable_space
         SpaceMenuOption.DELETE -> R.string.delete_space
         SpaceMenuOption.SET_ICON -> R.string.set_space_icon
-        SpaceMenuOption.MEMBERS -> R.string.space_members
+        SpaceMenuOption.MEMBERS -> R.string.members_title
     }
 
 fun SpaceMenuOption.toDrawableResId() =
