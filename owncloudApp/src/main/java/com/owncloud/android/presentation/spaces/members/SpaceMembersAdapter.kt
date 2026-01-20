@@ -73,7 +73,9 @@ class SpaceMembersAdapter: RecyclerView.Adapter<SpaceMembersAdapter.SpaceMembers
 
     fun setSpaceMembers(spaceMembers: SpaceMembers, roles: List<OCRole>) {
         this.rolesMap = roles.associate { it.id to it.displayName }
-        this.members = spaceMembers.members.sortedByDescending { member -> roles.indexOfFirst { it.id in member.roles } }
+        this.members = spaceMembers.members.sortedWith(compareByDescending<SpaceMember> {
+                member -> roles.indexOfFirst { it.id in member.roles } }.thenBy { member -> member.displayName }
+        )
         notifyDataSetChanged()
     }
 
