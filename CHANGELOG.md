@@ -46,6 +46,7 @@ ownCloud admins and users.
 * Enhancement - Show members of a space: [#4612](https://github.com/owncloud/android/issues/4612)
 * Enhancement - Set emoji as space image: [#4707](https://github.com/owncloud/android/issues/4707)
 * Enhancement - Workflow to build APK: [#4751](https://github.com/owncloud/android/pull/4751)
+* Enhancement - Workflow to check Conventional Commits: [#4759](https://github.com/owncloud/android/pull/4759)
 
 ## Details
 
@@ -97,6 +98,13 @@ ownCloud admins and users.
    as inputs and generating the artifact and commit hash as outputs.
 
    https://github.com/owncloud/android/pull/4751
+
+* Enhancement - Workflow to check Conventional Commits: [#4759](https://github.com/owncloud/android/pull/4759)
+
+   A new workflow has been added to check that commit names in a PR fits the
+   Conventional Commits convention.
+
+   https://github.com/owncloud/android/pull/4759
 
 # Changelog for ownCloud Android Client [4.7.0] (2025-11-17)
 
