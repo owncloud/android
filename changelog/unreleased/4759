@@ -1,0 +1,5 @@
+Enhancement: Workflow to check Conventional Commits
+
+A new workflow has been added to check that commit names in a PR fits the Conventional Commits convention.
+
+https://github.com/owncloud/android/pull/4759
