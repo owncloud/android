@@ -100,5 +100,4 @@ class SpaceMembersViewModel(
     fun clearSearch() {
         _members.value = Event(UIResult.Success(emptyList()))
     }
-
 }

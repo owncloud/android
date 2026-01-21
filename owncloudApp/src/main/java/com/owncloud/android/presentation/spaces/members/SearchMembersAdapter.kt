@@ -79,5 +79,4 @@ class SearchMembersAdapter: RecyclerView.Adapter<SearchMembersAdapter.SearchMemb
         private const val USER_SURNAME = "User"
         private const val GROUP_SURNAME = "Group"
     }
-
 }

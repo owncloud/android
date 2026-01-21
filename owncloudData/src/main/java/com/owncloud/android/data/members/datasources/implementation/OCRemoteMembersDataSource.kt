@@ -51,6 +51,5 @@ class OCRemoteMembersDataSource (
                 displayName = displayName,
                 surname = surname ?: if (isGroup) GROUP_SURNAME else USER_SURNAME
             )
-
     }
 }

@@ -67,7 +67,6 @@ class OCRemoteMembersDataSourceTest {
             clientManager.getMembersService(OC_ACCOUNT_NAME)
             ocMembersService.searchGroups(query)
         }
-
     }
 
     @Test
@@ -86,5 +85,4 @@ class OCRemoteMembersDataSourceTest {
             ocMembersService.searchUsers(query)
         }
     }
-
 }

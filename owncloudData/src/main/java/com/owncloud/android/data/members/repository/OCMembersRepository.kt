@@ -30,6 +30,4 @@ class OCMembersRepository(
 
     override fun searchMembers(accountName: String, query: String): List<OCMember> =
         remoteMembersDataSource.searchUsers(accountName, query) + remoteMembersDataSource.searchGroups(accountName, query)
-
-
 }

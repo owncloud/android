@@ -65,7 +65,7 @@
             android:textColor="@color/list_item_lastmod_and_filesize_text"
             android:textSize="14sp"
             app:layout_constraintStart_toEndOf="@id/item_icon"
-            app:layout_constraintTop_toBottomOf="@+id/item_name"/>
+            app:layout_constraintTop_toBottomOf="@id/item_name"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
