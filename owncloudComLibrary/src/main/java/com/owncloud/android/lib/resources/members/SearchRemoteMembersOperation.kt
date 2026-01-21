@@ -44,7 +44,7 @@ class SearchRemoteMembersOperation(
 
             val uriBuilder = client.baseUri.buildUpon().apply {
                 appendEncodedPath(if (searchGroups) GRAPH_API_GROUPS_PATH else GRAPH_API_USERS_PATH)
-                appendQueryParameter(SEARCH_QUERY, query)
+                appendQueryParameter(SEARCH_QUERY, "\"$query\"")
                 appendQueryParameter(ORDER_BY_QUERY, ORDER_BY_QUERY_VALUE)
             }
 
