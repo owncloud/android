@@ -19,11 +19,10 @@
  */
 
 
-package com.owncloud.android.data.members
+package com.owncloud.android.data.members.datasources.implementation
 
 import com.owncloud.android.data.ClientManager
 import com.owncloud.android.data.members.datasources.RemoteMembersDataSource
-import com.owncloud.android.data.members.datasources.implementation.OCRemoteMembersDataSource
 import com.owncloud.android.data.members.datasources.implementation.OCRemoteMembersDataSource.Companion.toModel
 import com.owncloud.android.lib.resources.members.services.OCMembersService
 import com.owncloud.android.testutil.GROUP_MEMBER_RESPONSE

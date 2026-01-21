@@ -18,10 +18,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.data.members
+package com.owncloud.android.data.members.repository
 
 import com.owncloud.android.data.members.datasources.RemoteMembersDataSource
-import com.owncloud.android.data.members.repository.OCMembersRepository
 import com.owncloud.android.testutil.OC_ACCOUNT_NAME
 import com.owncloud.android.testutil.OC_GROUP_MEMBER
 import com.owncloud.android.testutil.OC_USER_MEMBER
