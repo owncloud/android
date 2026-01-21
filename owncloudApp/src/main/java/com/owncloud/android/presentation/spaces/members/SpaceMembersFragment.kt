@@ -32,6 +32,7 @@ import com.owncloud.android.R
 import com.owncloud.android.databinding.MembersFragmentBinding
 import com.owncloud.android.domain.roles.model.OCRole
 import com.owncloud.android.domain.spaces.model.OCSpace
+import com.owncloud.android.domain.spaces.model.SpaceMember
 import com.owncloud.android.extensions.collectLatestLifecycleFlow
 import com.owncloud.android.presentation.common.UIResult
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -53,6 +54,7 @@ class SpaceMembersFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
 
     private var roles: List<OCRole> = emptyList()
+    private var spaceMembers: List<SpaceMember> = emptyList()
     private var listener: SpaceMemberFragmentListener? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -93,7 +95,10 @@ class SpaceMembersFragment : Fragment() {
                 when (val uiResult = event.peekContent()) {
                     is UIResult.Success -> {
                         uiResult.data?.let {
-                            if (roles.isNotEmpty()) { spaceMembersAdapter.setSpaceMembers(it, roles) }
+                            if (roles.isNotEmpty()) {
+                                spaceMembersAdapter.setSpaceMembers(it, roles)
+                                spaceMembers = it.members
+                            }
                         }
                     }
                     is UIResult.Loading -> { }
@@ -121,7 +126,7 @@ class SpaceMembersFragment : Fragment() {
         }
 
         binding.addMemberButton.setOnClickListener {
-            listener?.addMember(currentSpace)
+            listener?.addMember(currentSpace, spaceMembers)
         }
     }
 
@@ -141,7 +146,7 @@ class SpaceMembersFragment : Fragment() {
     }
 
     interface SpaceMemberFragmentListener {
-        fun addMember(space: OCSpace)
+        fun addMember(space: OCSpace, spaceMembers: List<SpaceMember>)
     }
 
     companion object {

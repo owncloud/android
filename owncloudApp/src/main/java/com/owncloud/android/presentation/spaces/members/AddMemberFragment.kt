@@ -29,8 +29,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.owncloud.android.R
 import com.owncloud.android.databinding.AddMemberFragmentBinding
-import com.owncloud.android.domain.members.model.OCMember
 import com.owncloud.android.domain.spaces.model.OCSpace
+import com.owncloud.android.domain.spaces.model.SpaceMember
 import com.owncloud.android.extensions.collectLatestLifecycleFlow
 import com.owncloud.android.extensions.showErrorInSnackbar
 import com.owncloud.android.presentation.common.UIResult
@@ -52,8 +52,6 @@ class AddMemberFragment: Fragment() {
     private lateinit var searchMembersAdapter: SearchMembersAdapter
     private lateinit var recyclerView: RecyclerView
 
-    private var listOfMembers = emptyList<OCMember>()
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = AddMemberFragmentBinding.inflate(inflater, container, false)
         return binding.root
@@ -68,13 +66,18 @@ class AddMemberFragment: Fragment() {
             adapter = searchMembersAdapter
         }
 
+        val spaceMembers = requireArguments().getParcelableArrayList<SpaceMember>(ARG_SPACE_MEMBERS) ?: arrayListOf()
+
         collectLatestLifecycleFlow(spaceMembersViewModel.members) { event ->
             event?.let {
                 when (val uiResult = event.peekContent()) {
                     is UIResult.Success -> {
-                        uiResult.data?.let {
-                            listOfMembers = it
-                            spaceMembersViewModel.getSpaceMembers()
+                        uiResult.data?.let { listOfMembers ->
+                            val listOfMembersFiltered = listOfMembers.filter { member ->
+                                !spaceMembers.any { spaceMember ->
+                                    spaceMember.id == "u:${member.id}" || spaceMember.id == "g:${member.id}" }
+                            }
+                            searchMembersAdapter.setMembers(listOfMembersFiltered)
                         }
                     }
                     is UIResult.Loading -> { }
@@ -85,29 +88,6 @@ class AddMemberFragment: Fragment() {
                 }
             }
         }
-
-        collectLatestLifecycleFlow(spaceMembersViewModel.spaceMembers) { event ->
-            event?.let {
-                when (val uiResult = event.peekContent()) {
-                    is UIResult.Success -> {
-                        uiResult.data?.let {
-                            val listOfMembersFiltered = listOfMembers.filter { member ->
-                                !it.members.any { spaceMember ->
-                                    spaceMember.id == "u:${member.id}" || spaceMember.id == "g:${member.id}"
-                                }
-                            }
-                            searchMembersAdapter.setMembers(listOfMembersFiltered)
-                        }
-                    }
-                    is UIResult.Loading -> { }
-                    is UIResult.Error -> {
-                        val currentSpace = requireArguments().getParcelable<OCSpace>(ARG_CURRENT_SPACE)
-                        Timber.e(uiResult.error, "Failed to retrieve space members for space: ${currentSpace?.name} (${currentSpace?.id})")
-                    }
-                }
-            }
-        }
-
 
         binding.searchBar.apply {
             requestFocus()
@@ -130,14 +110,17 @@ class AddMemberFragment: Fragment() {
     companion object {
         private const val ARG_ACCOUNT_NAME = "ACCOUNT_NAME"
         private const val ARG_CURRENT_SPACE = "CURRENT_SPACE"
+        private const val ARG_SPACE_MEMBERS = "SPACE_MEMBERS"
 
         fun newInstance(
             accountName: String,
-            currentSpace: OCSpace
+            currentSpace: OCSpace,
+            spaceMembers: List<SpaceMember>
         ): AddMemberFragment {
             val args = Bundle().apply {
                 putString(ARG_ACCOUNT_NAME, accountName)
                 putParcelable(ARG_CURRENT_SPACE, currentSpace)
+                putParcelableArrayList(ARG_SPACE_MEMBERS, ArrayList(spaceMembers))
             }
             return AddMemberFragment().apply {
                 arguments = args

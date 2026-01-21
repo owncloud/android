@@ -27,6 +27,7 @@ import androidx.fragment.app.transaction
 import com.owncloud.android.R
 import com.owncloud.android.databinding.MembersActivityBinding
 import com.owncloud.android.domain.spaces.model.OCSpace
+import com.owncloud.android.domain.spaces.model.SpaceMember
 import com.owncloud.android.ui.activity.FileActivity
 import com.owncloud.android.utils.DisplayUtils
 
@@ -80,8 +81,8 @@ class SpaceMembersActivity: FileActivity(), SpaceMembersFragment.SpaceMemberFrag
             super.onOptionsItemSelected(item)
         }
 
-    override fun addMember(space: OCSpace) {
-        val addMemberFragment = AddMemberFragment.newInstance(account.name, space)
+    override fun addMember(space: OCSpace, spaceMembers: List<SpaceMember>) {
+        val addMemberFragment = AddMemberFragment.newInstance(account.name, space, spaceMembers)
         val transaction = supportFragmentManager.beginTransaction()
         transaction.apply {
             replace(R.id.members_fragment_container, addMemberFragment, TAG_ADD_MEMBER_FRAGMENT)
