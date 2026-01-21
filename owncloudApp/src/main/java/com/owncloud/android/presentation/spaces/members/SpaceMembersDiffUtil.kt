@@ -42,6 +42,6 @@ class SpaceMembersDiffUtil(
         val oldItem = oldList[oldItemPosition]
         val newItem = newList[newItemPosition]
 
-        return !((oldItem.id != newItem.id) || (oldItem.displayName != newItem.displayName) || (oldItem.surname != newItem.surname))
+        return ((oldItem.id == newItem.id) && (oldItem.displayName == newItem.displayName) && (oldItem.surname == newItem.surname))
     }
 }

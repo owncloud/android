@@ -91,8 +91,10 @@ class AddMemberFragment: Fragment() {
                 when (val uiResult = event.peekContent()) {
                     is UIResult.Success -> {
                         uiResult.data?.let {
-                            val listOfMembersFiltered = listOfMembers.filter { member -> !it.members.any {
-                                spaceMember -> spaceMember.id == "u:${member.id}" || spaceMember.id == "g:${member.id}" }
+                            val listOfMembersFiltered = listOfMembers.filter { member ->
+                                !it.members.any { spaceMember ->
+                                    spaceMember.id == "u:${member.id}" || spaceMember.id == "g:${member.id}"
+                                }
                             }
                             searchMembersAdapter.setMembers(listOfMembersFiltered)
                         }
