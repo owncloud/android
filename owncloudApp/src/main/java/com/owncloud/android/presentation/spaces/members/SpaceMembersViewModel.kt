@@ -95,21 +95,23 @@ class SpaceMembersViewModel(
 
     fun searchMembers(query: String) {
         viewModelScope.launch(coroutineDispatcherProvider.io) {
+            _members.emit(MembersUIState(members = emptyList(), isLoading = true , error = null))
             when (val result = searchMembersUseCase(SearchMembersUseCase.Params(accountName, query))) {
-                is UseCaseResult.Success -> _members.emit(MembersUIState(members = result.data, error = null))
-                is UseCaseResult.Error -> _members.emit(MembersUIState(members = emptyList(), error = result.getThrowableOrNull()))
+                is UseCaseResult.Success -> _members.emit(MembersUIState(members = result.data, isLoading = false, error = null))
+                is UseCaseResult.Error -> _members.emit(MembersUIState(members = emptyList(), isLoading = false, error = result.getThrowableOrNull()))
             }
         }
     }
 
     fun clearSearch() {
         viewModelScope.launch(coroutineDispatcherProvider.io) {
-            _members.emit(MembersUIState(members = emptyList(), error = null))
+            _members.emit(MembersUIState(members = emptyList(), isLoading = false , error = null))
         }
     }
 
     data class MembersUIState (
         val members: List<OCMember>,
+        val isLoading: Boolean,
         val error: Throwable?
     )
 }

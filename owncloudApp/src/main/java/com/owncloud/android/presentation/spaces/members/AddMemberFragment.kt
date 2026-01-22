@@ -69,16 +69,21 @@ class AddMemberFragment: Fragment() {
         val spaceMembers = requireArguments().getParcelableArrayList<SpaceMember>(ARG_SPACE_MEMBERS) ?: arrayListOf()
 
         collectLatestLifecycleFlow(spaceMembersViewModel.members) { uiState ->
-            val listOfMembersFiltered = uiState.members.filter { member ->
-                !spaceMembers.any { spaceMember ->
-                    spaceMember.id == "u:${member.id}" || spaceMember.id == "g:${member.id}" }
-            }
-            val hasMembers = listOfMembersFiltered.isNotEmpty()
-            showOrHideEmptyView(hasMembers)
-            if (hasMembers) searchMembersAdapter.setMembers(listOfMembersFiltered)
-            uiState.error?.let {
-                Timber.e(uiState.error, "Failed to retrieve available users and groups")
-                showErrorInSnackbar(R.string.members_search_failed, uiState.error)
+            if (uiState.isLoading) {
+                binding.indeterminateProgressBar.visibility = View.VISIBLE
+            } else {
+                binding.indeterminateProgressBar.visibility = View.GONE
+                val listOfMembersFiltered = uiState.members.filter { member ->
+                    !spaceMembers.any { spaceMember ->
+                        spaceMember.id == "u:${member.id}" || spaceMember.id == "g:${member.id}" }
+                }
+                val hasMembers = listOfMembersFiltered.isNotEmpty()
+                showOrHideEmptyView(hasMembers)
+                if (hasMembers) searchMembersAdapter.setMembers(listOfMembersFiltered)
+                uiState.error?.let {
+                    Timber.e(uiState.error, "Failed to retrieve available users and groups")
+                    showErrorInSnackbar(R.string.members_search_failed, uiState.error)
+                }
             }
         }
 

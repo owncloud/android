@@ -38,6 +38,16 @@
             app:queryHint="@string/search_users_and_groups_hint"
             app:iconifiedByDefault="false"/>
 
+        <ProgressBar
+            android:id="@+id/indeterminate_progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:indeterminate="true"
+            android:visibility="gone"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/members_recycler_view"
             android:layout_width="match_parent"
