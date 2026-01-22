@@ -24,6 +24,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -33,7 +34,6 @@ import com.owncloud.android.domain.spaces.model.OCSpace
 import com.owncloud.android.domain.spaces.model.SpaceMember
 import com.owncloud.android.extensions.collectLatestLifecycleFlow
 import com.owncloud.android.extensions.showErrorInSnackbar
-import com.owncloud.android.presentation.common.UIResult
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import timber.log.Timber
@@ -68,24 +68,17 @@ class AddMemberFragment: Fragment() {
 
         val spaceMembers = requireArguments().getParcelableArrayList<SpaceMember>(ARG_SPACE_MEMBERS) ?: arrayListOf()
 
-        collectLatestLifecycleFlow(spaceMembersViewModel.members) { event ->
-            event?.let {
-                when (val uiResult = event.peekContent()) {
-                    is UIResult.Success -> {
-                        uiResult.data?.let { listOfMembers ->
-                            val listOfMembersFiltered = listOfMembers.filter { member ->
-                                !spaceMembers.any { spaceMember ->
-                                    spaceMember.id == "u:${member.id}" || spaceMember.id == "g:${member.id}" }
-                            }
-                            searchMembersAdapter.setMembers(listOfMembersFiltered)
-                        }
-                    }
-                    is UIResult.Loading -> { }
-                    is UIResult.Error -> {
-                        Timber.e(uiResult.error, "Failed to retrieve available users and groups")
-                        showErrorInSnackbar(R.string.members_search_failed, uiResult.error)
-                    }
-                }
+        collectLatestLifecycleFlow(spaceMembersViewModel.members) { uiState ->
+            val listOfMembersFiltered = uiState.members.filter { member ->
+                !spaceMembers.any { spaceMember ->
+                    spaceMember.id == "u:${member.id}" || spaceMember.id == "g:${member.id}" }
+            }
+            val hasMembers = listOfMembersFiltered.isNotEmpty()
+            showOrHideEmptyView(hasMembers)
+            if (hasMembers) searchMembersAdapter.setMembers(listOfMembersFiltered)
+            uiState.error?.let {
+                Timber.e(uiState.error, "Failed to retrieve available users and groups")
+                showErrorInSnackbar(R.string.members_search_failed, uiState.error)
             }
         }
 
@@ -99,6 +92,19 @@ class AddMemberFragment: Fragment() {
                     return true
                 }
             })
+        }
+    }
+
+    private fun showOrHideEmptyView(hasMembers: Boolean) {
+        binding.membersRecyclerView.isVisible = hasMembers
+        binding.emptyDataParent.apply {
+            val shouldShow = !hasMembers && binding.searchBar.query.length > 2
+            root.isVisible = shouldShow
+            if (shouldShow) {
+                listEmptyDatasetIcon.setImageResource(R.drawable.ic_share_generic_white)
+                listEmptyDatasetTitle.setText(R.string.members_search_failed)
+                listEmptyDatasetSubTitle.setText(R.string.members_search_empty)
+            }
         }
     }
 

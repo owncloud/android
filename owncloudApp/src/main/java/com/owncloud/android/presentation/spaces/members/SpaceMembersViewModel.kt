@@ -21,6 +21,8 @@
 package com.owncloud.android.presentation.spaces.members
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.owncloud.android.domain.UseCaseResult
 import com.owncloud.android.domain.members.model.OCMember
 import com.owncloud.android.domain.roles.model.OCRole
 import com.owncloud.android.domain.spaces.model.OCSpace
@@ -33,8 +35,11 @@ import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.ViewModelExt.runUseCaseWithResult
 import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 
 class SpaceMembersViewModel(
     private val getRolesAsyncUseCase: GetRolesAsyncUseCase,
@@ -55,8 +60,8 @@ class SpaceMembersViewModel(
     private val _spacePermissions = MutableStateFlow<Event<UIResult<List<String>>>?>(null)
     val spacePermissions: StateFlow<Event<UIResult<List<String>>>?> = _spacePermissions
 
-    private val _members = MutableStateFlow<Event<UIResult<List<OCMember>>>?>(null)
-    val members: StateFlow<Event<UIResult<List<OCMember>>>?> = _members
+    private val _members: MutableSharedFlow<MembersUIState> = MutableSharedFlow()
+    val members: SharedFlow<MembersUIState> = _members
 
     init {
         runUseCaseWithResult(
@@ -88,16 +93,23 @@ class SpaceMembersViewModel(
         requiresConnection = true
     )
 
-    fun searchMembers(query: String) = runUseCaseWithResult(
-        coroutineDispatcher = coroutineDispatcherProvider.io,
-        flow = _members,
-        useCase = searchMembersUseCase,
-        useCaseParams = SearchMembersUseCase.Params(accountName = accountName, query = query),
-        showLoading = false,
-        requiresConnection = true
-    )
+    fun searchMembers(query: String) {
+        viewModelScope.launch(coroutineDispatcherProvider.io) {
+            when (val result = searchMembersUseCase(SearchMembersUseCase.Params(accountName, query))) {
+                is UseCaseResult.Success -> _members.emit(MembersUIState(members = result.data, error = null))
+                is UseCaseResult.Error -> _members.emit(MembersUIState(members = emptyList(), error = result.getThrowableOrNull()))
+            }
+        }
+    }
 
     fun clearSearch() {
-        _members.value = Event(UIResult.Success(emptyList()))
+        viewModelScope.launch(coroutineDispatcherProvider.io) {
+            _members.emit(MembersUIState(members = emptyList(), error = null))
+        }
     }
+
+    data class MembersUIState (
+        val members: List<OCMember>,
+        val error: Throwable?
+    )
 }

@@ -880,6 +880,7 @@
     <string name="members_title">Members</string>
     <string name="members_add">Add member</string>
     <string name="members_search_failed">No results found</string>
+    <string name="members_search_empty">No user or groups matches your search</string>
     <string name="member_type_user">User</string>
     <string name="member_type_group">Group</string>
 
