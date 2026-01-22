@@ -687,6 +687,8 @@
   <string name="release_notes_bugfixes_subtitle">Alguns bugs foram corrigidos para melhorar a experiência no aplicativo</string>
   <string name="release_notes_4_8_0_title_set_emoji_as_space_image">Definir emoji como imagem espacial</string>
   <string name="release_notes_4_8_0_subtitle_set_emoji_as_space_image">Usuários do Infinite Scale com as permissões adequadas agora podem definir um emoji como imagem espacial.</string>
+  <string name="release_notes_4_8_0_title_space_membership">Associação ao espaço</string>
+  <string name="release_notes_4_8_0_subtitle_space_membership">Usuários Escala Infinita podem ver todos os membros de um espaço</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Abrir na web</string>
   <string name="ic_action_open_with_web">Abrir em%1$s (web)</string>
@@ -759,6 +761,9 @@
   <string name="content_description_create_button">Botão Criar</string>
   <string name="content_description_cancel_button">Botão Cancelar</string>
   <string name="content_description_quota_switch">Cota de espaço</string>
+  <string name="content_description_member_user">Usuário %1$s</string>
+  <string name="content_description_member_group">Grupo %1$s</string>
+  <string name="content_description_member_expiration_date">Expira %1$s</string>
   <string name="create_shortcut_dialog_title">Crie um atalho</string>
   <string name="create_shortcut_dialog_url">URL</string>
   <string name="create_shortcut_dialog_url_information">A URL deve começar com https:// ou http:// para que possa ser aberta no navegador</string>
@@ -819,4 +824,5 @@
   <string name="audio_preview_label">Pré-visualição de áudio</string>
   <string name="details_label">Detalhes</string>
   <string name="text_preview_label">Pré-visualição de texto</string>
+  <string name="space_members_label">Membros do espaço</string>
 </resources>
