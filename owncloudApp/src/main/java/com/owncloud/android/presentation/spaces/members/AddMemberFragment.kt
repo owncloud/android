@@ -71,6 +71,8 @@ class AddMemberFragment: Fragment() {
         collectLatestLifecycleFlow(spaceMembersViewModel.members) { uiState ->
             if (uiState.isLoading) {
                 binding.indeterminateProgressBar.visibility = View.VISIBLE
+                binding.emptyDataParent.root.visibility = View.GONE
+                binding.membersRecyclerView.visibility = View.GONE
             } else {
                 binding.indeterminateProgressBar.visibility = View.GONE
                 val listOfMembersFiltered = uiState.members.filter { member ->
