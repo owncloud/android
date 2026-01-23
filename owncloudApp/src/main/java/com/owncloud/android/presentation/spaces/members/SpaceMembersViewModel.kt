@@ -35,6 +35,7 @@ import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.ViewModelExt.runUseCaseWithResult
 import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -62,6 +63,8 @@ class SpaceMembersViewModel(
 
     private val _members: MutableSharedFlow<MembersUIState> = MutableSharedFlow()
     val members: SharedFlow<MembersUIState> = _members
+
+    private var searchJob: Job? = null
 
     init {
         runUseCaseWithResult(
@@ -94,7 +97,8 @@ class SpaceMembersViewModel(
     )
 
     fun searchMembers(query: String) {
-        viewModelScope.launch(coroutineDispatcherProvider.io) {
+        searchJob?.cancel()
+        searchJob = viewModelScope.launch(coroutineDispatcherProvider.io) {
             _members.emit(MembersUIState(members = emptyList(), isLoading = true , error = null))
             when (val result = searchMembersUseCase(SearchMembersUseCase.Params(accountName, query))) {
                 is UseCaseResult.Success -> _members.emit(MembersUIState(members = result.data, isLoading = false, error = null))
