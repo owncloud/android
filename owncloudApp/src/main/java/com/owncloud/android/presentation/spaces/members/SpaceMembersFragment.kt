@@ -3,7 +3,7 @@
  *
  * @author Jorge Aguado Recio
  *
- * Copyright (C) 2025 ownCloud GmbH.
+ * Copyright (C) 2026 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -20,6 +20,7 @@
 
 package com.owncloud.android.presentation.spaces.members
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -31,11 +32,12 @@ import com.owncloud.android.R
 import com.owncloud.android.databinding.MembersFragmentBinding
 import com.owncloud.android.domain.roles.model.OCRole
 import com.owncloud.android.domain.spaces.model.OCSpace
+import com.owncloud.android.domain.spaces.model.SpaceMember
 import com.owncloud.android.extensions.collectLatestLifecycleFlow
 import com.owncloud.android.presentation.common.UIResult
-import com.owncloud.android.utils.DisplayUtils
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
+import timber.log.Timber
 
 class SpaceMembersFragment : Fragment() {
     private var _binding: MembersFragmentBinding? = null
@@ -52,6 +54,8 @@ class SpaceMembersFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
 
     private var roles: List<OCRole> = emptyList()
+    private var spaceMembers: List<SpaceMember> = emptyList()
+    private var listener: SpaceMemberFragmentListener? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = MembersFragmentBinding.inflate(inflater, container, false)
@@ -67,6 +71,8 @@ class SpaceMembersFragment : Fragment() {
             adapter = spaceMembersAdapter
         }
 
+        val currentSpace = requireArguments().getParcelable<OCSpace>(ARG_CURRENT_SPACE) ?: return
+
         collectLatestLifecycleFlow(spaceMembersViewModel.roles) { event ->
             event?.let {
                 when (val uiResult = event.peekContent()) {
@@ -77,7 +83,9 @@ class SpaceMembersFragment : Fragment() {
                         }
                     }
                     is UIResult.Loading -> { }
-                    is UIResult.Error -> { }
+                    is UIResult.Error -> {
+                        Timber.e(uiResult.error, "Failed to retrieve platform roles")
+                    }
                 }
             }
         }
@@ -87,37 +95,64 @@ class SpaceMembersFragment : Fragment() {
                 when (val uiResult = event.peekContent()) {
                     is UIResult.Success -> {
                         uiResult.data?.let {
-                            if (roles.isNotEmpty()) { spaceMembersAdapter.setSpaceMembers(it, roles) }
+                            if (roles.isNotEmpty()) {
+                                spaceMembersAdapter.setSpaceMembers(it, roles)
+                                spaceMembers = it.members
+                            }
                         }
                     }
                     is UIResult.Loading -> { }
-                    is UIResult.Error -> { }
+                    is UIResult.Error -> {
+                        Timber.e(uiResult.error, "Failed to retrieve space members for space: ${currentSpace.id} (${currentSpace?.id})")
+                    }
                 }
             }
         }
 
-        val currentSpace = requireArguments().getParcelable<OCSpace>(ARG_CURRENT_SPACE) ?: return
-        binding.apply {
-            itemName.text = currentSpace.name
-            currentSpace.quota?.let { quota ->
-                val usedQuota = quota.used
-                val totalQuota = quota.total
-                itemSize.text = when {
-                    usedQuota == null -> getString(R.string.drawer_unavailable_used_storage)
-                    totalQuota == 0L -> DisplayUtils.bytesToHumanReadable(usedQuota, requireContext(), true)
-                    else -> getString(
-                        R.string.drawer_quota,
-                        DisplayUtils.bytesToHumanReadable(usedQuota, requireContext(), true),
-                        DisplayUtils.bytesToHumanReadable(totalQuota, requireContext(), true),
-                        quota.getRelative().toString())
+        collectLatestLifecycleFlow(spaceMembersViewModel.spacePermissions) { event ->
+            event?.let {
+                when (val uiResult = event.peekContent()) {
+                    is UIResult.Success -> {
+                        uiResult.data?.let { spacePermissions ->
+                            if (DRIVES_CREATE_PERMISSION in spacePermissions) { binding.addMemberButton.visibility = View.VISIBLE }
+                        }
+                    }
+                    is UIResult.Loading -> { }
+                    is UIResult.Error -> {
+                        Timber.e(uiResult.error, "Failed to retrieve space permissions for space: ${currentSpace.id} (${currentSpace?.id})")
+                    }
                 }
             }
         }
+
+        binding.addMemberButton.setOnClickListener {
+            listener?.addMember(currentSpace, spaceMembers)
+        }
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        requireActivity().setTitle(R.string.space_members_label)
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        try {
+            listener = context as SpaceMemberFragmentListener?
+        } catch (e: ClassCastException) {
+            Timber.e(e, "The activity attached does not implement SpaceMemberFragmentListener")
+            throw ClassCastException(activity.toString() + " must implement SpaceMemberFragmentListener")
+        }
+    }
+
+    interface SpaceMemberFragmentListener {
+        fun addMember(space: OCSpace, spaceMembers: List<SpaceMember>)
     }
 
     companion object {
         private const val ARG_CURRENT_SPACE = "CURRENT_SPACE"
         private const val ARG_ACCOUNT_NAME = "ACCOUNT_NAME"
+        private const val DRIVES_CREATE_PERMISSION = "libre.graph/driveItem/permissions/create"
 
         fun newInstance(
             accountName: String,

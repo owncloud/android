@@ -3,7 +3,7 @@
  *
  * @author Jorge Aguado Recio
  *
- * Copyright (C) 2025 ownCloud GmbH.
+ * Copyright (C) 2026 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -23,67 +23,60 @@ package com.owncloud.android.presentation.spaces.members
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.owncloud.android.R
 import com.owncloud.android.databinding.MemberItemBinding
-import com.owncloud.android.domain.roles.model.OCRole
-import com.owncloud.android.domain.spaces.model.SpaceMember
-import com.owncloud.android.domain.spaces.model.SpaceMembers
-import com.owncloud.android.utils.DisplayUtils
+import com.owncloud.android.domain.members.model.OCMember
 import com.owncloud.android.utils.PreferenceUtils
 
-class SpaceMembersAdapter: RecyclerView.Adapter<SpaceMembersAdapter.SpaceMembersViewHolder>() {
+class SearchMembersAdapter: RecyclerView.Adapter<SearchMembersAdapter.SearchMembersViewHolder>() {
 
-    private var members: List<SpaceMember> = emptyList()
-    private var rolesMap: Map<String, String> = emptyMap()
+    private var members = mutableListOf<OCMember>()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SpaceMembersViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchMembersViewHolder {
         val inflater = LayoutInflater.from(parent.context)
 
         val view = inflater.inflate(R.layout.member_item, parent, false)
         view.filterTouchesWhenObscured = PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(parent.context)
 
-        return SpaceMembersViewHolder(view)
+        return SearchMembersViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: SpaceMembersViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: SearchMembersViewHolder, position: Int) {
         val member = members[position]
-        val roleNames = member.roles.mapNotNull { rolesMap[it] }
 
         holder.binding.apply {
-            val isGroup = member.id.startsWith(GROUP_PREFIX)
+            val isGroup = member.surname == GROUP_SURNAME
             memberIcon.setImageResource(if (isGroup) R.drawable.ic_group else R.drawable.ic_user)
             memberName.text = member.displayName
             memberName.contentDescription = holder.itemView.context.getString(
                 if (isGroup) R.string.content_description_member_group else R.string.content_description_member_user, member.displayName
             )
-            memberRole.text = roleNames.joinToString(", ")
-
-            member.expirationDateTime?.let {
-                expirationCalendarIcon.visibility = View.VISIBLE
-                expirationDate.visibility = View.VISIBLE
-                expirationDate.text = DisplayUtils.displayDateToHumanReadable(it)
-                expirationDate.contentDescription =
-                    holder.itemView.context.getString(R.string.content_description_member_expiration_date, expirationDate.text)
+            memberRole.text = if (isGroup) {
+                holder.itemView.context.getString(R.string.member_type_group)
+            } else {
+                if (member.surname == USER_SURNAME) holder.itemView.context.getString(R.string.member_type_user) else member.surname
             }
         }
     }
 
     override fun getItemCount(): Int = members.size
 
-    fun setSpaceMembers(spaceMembers: SpaceMembers, roles: List<OCRole>) {
-        this.rolesMap = roles.associate { it.id to it.displayName }
-        this.members = spaceMembers.members.sortedWith(compareByDescending<SpaceMember> {
-                member -> roles.indexOfFirst { it.id in member.roles } }.thenBy { member -> member.displayName }
-        )
-        notifyDataSetChanged()
+    fun setMembers(members: List<OCMember>) {
+        val diffCallback = SpaceMembersDiffUtil(this.members, members)
+        val diffResult = DiffUtil.calculateDiff(diffCallback)
+        this.members.clear()
+        this.members.addAll(members)
+        diffResult.dispatchUpdatesTo(this)
     }
 
-    class SpaceMembersViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class SearchMembersViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val binding = MemberItemBinding.bind(itemView)
     }
 
     companion object {
-        const val GROUP_PREFIX = "g:"
+        private const val USER_SURNAME = "User"
+        private const val GROUP_SURNAME = "Group"
     }
 }

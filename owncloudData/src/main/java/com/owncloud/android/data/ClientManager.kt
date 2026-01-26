@@ -4,7 +4,7 @@
  * @author Abel García de Prada
  * @author Jorge Aguado Recio
  *
- * Copyright (C) 2025 ownCloud GmbH.
+ * Copyright (C) 2026 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -36,6 +36,8 @@ import com.owncloud.android.lib.resources.appregistry.services.AppRegistryServic
 import com.owncloud.android.lib.resources.appregistry.services.OCAppRegistryService
 import com.owncloud.android.lib.resources.files.services.FileService
 import com.owncloud.android.lib.resources.files.services.implementation.OCFileService
+import com.owncloud.android.lib.resources.members.services.MembersService
+import com.owncloud.android.lib.resources.members.services.OCMembersService
 import com.owncloud.android.lib.resources.roles.services.OCRolesService
 import com.owncloud.android.lib.resources.roles.services.RolesService
 import com.owncloud.android.lib.resources.shares.services.ShareService
@@ -168,5 +170,10 @@ class ClientManager(
     fun getRolesService(accountName: String): RolesService {
         val ownCloudClient = getClientForAccount(accountName)
         return OCRolesService(client = ownCloudClient)
+    }
+
+    fun getMembersService(accountName: String): MembersService {
+        val ownCloudClient = getClientForAccount(accountName)
+        return OCMembersService(client = ownCloudClient)
     }
 }

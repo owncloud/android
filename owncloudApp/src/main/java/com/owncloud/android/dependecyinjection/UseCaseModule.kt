@@ -7,7 +7,7 @@
  * @author Aitor Ballesteros Pavón
  * @author Jorge Aguado Recio
  *
- * Copyright (C) 2025 ownCloud GmbH.
+ * Copyright (C) 2026 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -107,6 +107,7 @@ import com.owncloud.android.domain.spaces.usecases.GetSpaceWithSpecialsByIdForAc
 import com.owncloud.android.domain.spaces.usecases.GetSpacesFromEveryAccountUseCaseAsStream
 import com.owncloud.android.domain.spaces.usecases.RefreshSpacesFromServerAsyncUseCase
 import com.owncloud.android.domain.spaces.usecases.GetSpaceMembersUseCase
+import com.owncloud.android.domain.members.usecases.SearchMembersUseCase
 import com.owncloud.android.domain.transfers.usecases.ClearSuccessfulTransferByIdUseCase
 import com.owncloud.android.domain.transfers.usecases.ClearSuccessfulTransfersUseCase
 import com.owncloud.android.domain.transfers.usecases.GetAllTransfersAsStreamUseCase
@@ -306,4 +307,7 @@ val useCaseModule = module {
 
     // Roles
     factoryOf(::GetRolesAsyncUseCase)
+
+    // Members
+    factoryOf(::SearchMembersUseCase)
 }
