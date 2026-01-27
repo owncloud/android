@@ -669,6 +669,8 @@ správce systému.</string>
   <string name="disabled_space_label">Zakázáno</string>
   <string name="members_title">Členové</string>
   <string name="members_add">Přidat člena</string>
+  <string name="member_type_user">Uživatel</string>
+  <string name="member_type_group">Skupina</string>
   <string name="feedback_dialog_get_in_contact_description"><![CDATA[ Zeptejte se na našem <a href="%1$s"><b>fóru</b></a> nebo přispějte na našem  <a href="%2$s"><b>GitHubu</b></a>]]></string>
   <string name="link_role_accessibility">Odkaz</string>
   <string name="pattern_label">Maska</string>
