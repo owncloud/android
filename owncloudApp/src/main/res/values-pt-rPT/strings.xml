@@ -808,7 +808,10 @@
   <string name="delete_space_correctly">Espaço excluído corretamente</string>
   <string name="delete_space_failed">Não foi possível excluir espaço.</string>
   <string name="set_space_icon">Definir ícone</string>
-  <string name="space_members">Membros</string>
+  <string name="members_title">Membros</string>
+  <string name="members_add">Adicionar membro</string>
+  <string name="member_type_user">Utilizador</string>
+  <string name="member_type_group">Grupo</string>
   <string name="feedback_dialog_get_in_contact_description"><![CDATA[ Peça ajuda em nosso <a href="%1$s"><b>fórum</b></a> ou contribua em nosso <a href="%2$s"><b>repositório do GitHub</b></a>]]></string>
   <string name="link_role_accessibility">Linque</string>
   <string name="button_role_accessibility">Botão</string>

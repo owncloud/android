@@ -630,7 +630,10 @@
   <string name="create_space_dialog_subtitle">字幕</string>
   <string name="create_space_dialog_quota">容量限制</string>
   <string name="disabled_space_label">停用</string>
-  <string name="space_members">成员</string>
+  <string name="members_title">成员</string>
+  <string name="members_add">新增會員</string>
+  <string name="member_type_user">用户</string>
+  <string name="member_type_group">群組</string>
   <string name="link_role_accessibility">連結</string>
   <string name="passcode_label">密碼</string>
   <string name="pattern_label">模式</string>

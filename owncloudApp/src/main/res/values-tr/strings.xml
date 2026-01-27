@@ -652,7 +652,10 @@
   <string name="create_space_dialog_subtitle">Alt başlık</string>
   <string name="create_space_dialog_quota">Kota</string>
   <string name="disabled_space_label">Devre Dışı</string>
-  <string name="space_members">Üyeler</string>
+  <string name="members_title">Üyeler</string>
+  <string name="members_add">Üye ekle</string>
+  <string name="member_type_user">Kullanıcı</string>
+  <string name="member_type_group">Grup</string>
   <string name="link_role_accessibility">Bağlantı</string>
   <string name="button_role_accessibility">Tuş</string>
   <string name="folder_picker_label">Klasör seçici</string>

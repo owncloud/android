@@ -747,7 +747,10 @@
   <string name="create_space_dialog_subtitle">Aliotsikko</string>
   <string name="create_space_dialog_quota">Kiintiö</string>
   <string name="disabled_space_label">Ei käytössä</string>
-  <string name="space_members">Jäsenet</string>
+  <string name="members_title">Jäsenet</string>
+  <string name="members_add">Lisää jäsen</string>
+  <string name="member_type_user">Käyttäjä</string>
+  <string name="member_type_group">Ryhmä</string>
   <string name="link_role_accessibility">Linkki</string>
   <string name="button_role_accessibility">Painike</string>
   <string name="folder_picker_label">Kansion valitsin</string>

@@ -795,6 +795,9 @@
   <string name="delete_space_dialog_message">ທ່ານແນ່ໃຈບໍ່ວ່າຕ້ອງການລຶບພື້ນທີ່ນີ້?</string>
   <string name="delete_space_correctly">ລຶບພື້ນທີ່ສຳເລັດ</string>
   <string name="delete_space_failed">ບໍ່ສາມາດລຶບພື້ນທີ່ໄດ້</string>
+  <string name="members_add">ເພີ່ມສະມາຊິກ</string>
+  <string name="member_type_user">ຜູ້ໃຊ້</string>
+  <string name="member_type_group">ກຸ່ມ</string>
   <string name="feedback_dialog_get_in_contact_description">ມີปัญหากับการติดตั้ง ownCloud ของคุณหรือไม่? ติดต่อทีมงานของเราสำหรับຂໍ້ມູນเพิ่มเติม</string>
   <string name="link_role_accessibility">ລິ້ງ</string>
   <string name="button_role_accessibility">ປຸ່ມ</string>

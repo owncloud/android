@@ -83,6 +83,7 @@
   <string name="prefs_subsection_notifications">Manage notifications</string>
   <string name="prefs_show_hidden_files">Show hidden files</string>
   <string name="prefs_show_disabled_spaces">Show disabled spaces</string>
+  <string name="prefs_show_disabled_spaces_summary">Applies only to space managers in Infinite Scale accounts</string>
   <string name="prefs_log_open_logs_list_view">Log files</string>
   <string name="prefs_log_no_logs_list_view">Empty log folder!</string>
   <string name="prefs_log_empty_subtitle">Enable logging and log files will show up here.</string>
@@ -684,6 +685,10 @@
   <string name="release_notes_icon">Release note icon</string>
   <string name="release_notes_bugfixes_title">Minor bugfixes</string>
   <string name="release_notes_bugfixes_subtitle">Some bugs were fixed to improve experience in the app</string>
+  <string name="release_notes_4_8_0_title_set_emoji_as_space_image">Set emoji as space image</string>
+  <string name="release_notes_4_8_0_subtitle_set_emoji_as_space_image">Infinite Scale users with right permissions can now set an emoji as space image</string>
+  <string name="release_notes_4_8_0_title_space_membership">Space membership</string>
+  <string name="release_notes_4_8_0_subtitle_space_membership">Infinite Scale users can see all members of a space and manage them with right permissions</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Open in web</string>
   <string name="ic_action_open_with_web">Open in %1$s (web)</string>
@@ -756,6 +761,9 @@
   <string name="content_description_create_button">Create button</string>
   <string name="content_description_cancel_button">Cancel button</string>
   <string name="content_description_quota_switch">Space quota</string>
+  <string name="content_description_member_user">User %1$s</string>
+  <string name="content_description_member_group">Group %1$s</string>
+  <string name="content_description_member_expiration_date">Expires %1$s</string>
   <string name="create_shortcut_dialog_title">Create a shortcut</string>
   <string name="create_shortcut_dialog_url">URL</string>
   <string name="create_shortcut_dialog_url_information">The URL must start with https:// or http:// so that it can be opened in the browser</string>
@@ -799,7 +807,9 @@
   <string name="delete_space_dialog_message">If you delete the selected space, it can no longer be accessed and files will be deleted from the server.</string>
   <string name="delete_space_correctly">Space deleted correctly</string>
   <string name="delete_space_failed">Space could not be deleted</string>
-  <string name="space_members">Members</string>
+  <string name="set_space_icon">Set icon</string>
+  <string name="members_title">Members</string>
+  <string name="members_add">Add member</string>
   <string name="feedback_dialog_get_in_contact_description"><![CDATA[ Ask for help in our <a href="%1$s"><b>forum</b></a> or contribute in our <a href="%2$s"><b>GitHub repo</b></a>]]></string>
   <string name="link_role_accessibility">Link</string>
   <string name="button_role_accessibility">Button</string>
@@ -815,4 +825,5 @@
   <string name="audio_preview_label">Audio preview</string>
   <string name="details_label">Details</string>
   <string name="text_preview_label">Text preview</string>
+  <string name="space_members_label">Space members</string>
 </resources>
