@@ -30,7 +30,9 @@ import com.owncloud.android.databinding.MemberItemBinding
 import com.owncloud.android.domain.members.model.OCMember
 import com.owncloud.android.utils.PreferenceUtils
 
-class SearchMembersAdapter: RecyclerView.Adapter<SearchMembersAdapter.SearchMembersViewHolder>() {
+class SearchMembersAdapter(
+    private val listener: SearchMembersAdapterListener
+) : RecyclerView.Adapter<SearchMembersAdapter.SearchMembersViewHolder>() {
 
     private var members = mutableListOf<OCMember>()
 
@@ -58,6 +60,10 @@ class SearchMembersAdapter: RecyclerView.Adapter<SearchMembersAdapter.SearchMemb
             } else {
                 if (member.surname == USER_SURNAME) holder.itemView.context.getString(R.string.member_type_user) else member.surname
             }
+
+            memberItemLayout.setOnClickListener {
+                listener.onMemberClick(member)
+            }
         }
     }
 
@@ -69,6 +75,10 @@ class SearchMembersAdapter: RecyclerView.Adapter<SearchMembersAdapter.SearchMemb
         this.members.clear()
         this.members.addAll(members)
         diffResult.dispatchUpdatesTo(this)
+    }
+
+    interface SearchMembersAdapterListener {
+        fun onMemberClick(member: OCMember)
     }
 
     class SearchMembersViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

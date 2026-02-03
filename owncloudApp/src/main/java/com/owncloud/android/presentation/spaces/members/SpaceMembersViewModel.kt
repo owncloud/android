@@ -40,6 +40,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class SpaceMembersViewModel(
@@ -63,6 +64,9 @@ class SpaceMembersViewModel(
 
     private val _members: MutableSharedFlow<MembersUIState> = MutableSharedFlow()
     val members: SharedFlow<MembersUIState> = _members
+
+    private val _addMemberUIState = MutableStateFlow<AddMemberUIState?>(null)
+    val addMemberUIState: StateFlow<AddMemberUIState?> = _addMemberUIState
 
     private var searchJob: Job? = null
 
@@ -113,9 +117,27 @@ class SpaceMembersViewModel(
         }
     }
 
+    fun onMemberSelected(member: OCMember) {
+        _addMemberUIState.value = AddMemberUIState(selectedMember = member)
+    }
+
+    fun onRoleSelected(role: OCRole) {
+        _addMemberUIState.update { it?.copy(selectedRole = role) }
+    }
+
+    fun onExpirationDateSelected(expirationDate: String?) {
+        _addMemberUIState.update { it?.copy(selectedExpirationDate = expirationDate) }
+    }
+
     data class MembersUIState (
         val members: List<OCMember>,
         val isLoading: Boolean,
         val error: Throwable?
+    )
+
+    data class AddMemberUIState(
+        val selectedMember: OCMember? = null,
+        val selectedRole: OCRole? = null,
+        val selectedExpirationDate: String? = null
     )
 }

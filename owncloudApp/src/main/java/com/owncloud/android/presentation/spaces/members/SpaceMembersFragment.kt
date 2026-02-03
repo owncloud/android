@@ -54,6 +54,7 @@ class SpaceMembersFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
 
     private var roles: List<OCRole> = emptyList()
+    private var addMemberRoles: List<OCRole> = emptyList()
     private var spaceMembers: List<SpaceMember> = emptyList()
     private var listener: SpaceMemberFragmentListener? = null
 
@@ -98,6 +99,7 @@ class SpaceMembersFragment : Fragment() {
                             if (roles.isNotEmpty()) {
                                 spaceMembersAdapter.setSpaceMembers(it, roles)
                                 spaceMembers = it.members
+                                addMemberRoles = it.roles
                             }
                         }
                     }
@@ -126,7 +128,7 @@ class SpaceMembersFragment : Fragment() {
         }
 
         binding.addMemberButton.setOnClickListener {
-            listener?.addMember(currentSpace, spaceMembers)
+            listener?.addMember(currentSpace, spaceMembers, addMemberRoles)
         }
     }
 
@@ -146,7 +148,7 @@ class SpaceMembersFragment : Fragment() {
     }
 
     interface SpaceMemberFragmentListener {
-        fun addMember(space: OCSpace, spaceMembers: List<SpaceMember>)
+        fun addMember(space: OCSpace, spaceMembers: List<SpaceMember>, roles: List<OCRole>)
     }
 
     companion object {

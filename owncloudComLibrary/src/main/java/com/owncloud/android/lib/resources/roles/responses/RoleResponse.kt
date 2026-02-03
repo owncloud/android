@@ -3,7 +3,7 @@
  *
  * @author Jorge Aguado Recio
  *
- * Copyright (C) 2025 ownCloud GmbH.
+ * Copyright (C) 2026 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -25,5 +25,6 @@ import com.squareup.moshi.JsonClass
 @JsonClass(generateAdapter = true)
 data class RoleResponse(
     val id: String,
-    val displayName: String
+    val displayName: String,
+    val description: String
 )
