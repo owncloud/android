@@ -81,7 +81,9 @@ ownCloud admins and users.
    available).
 
    https://github.com/owncloud/android/issues/4612
+   https://github.com/owncloud/android/issues/4763
    https://github.com/owncloud/android/pull/4728
+   https://github.com/owncloud/android/pull/4765
 
 * Enhancement - Set emoji as space image: [#4707](https://github.com/owncloud/android/issues/4707)
 
