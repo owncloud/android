@@ -70,7 +70,7 @@ class SearchMembersAdapter(
     override fun getItemCount(): Int = members.size
 
     fun setMembers(members: List<OCMember>) {
-        val diffCallback = SpaceMembersDiffUtil(this.members, members)
+        val diffCallback = SearchMembersDiffUtil(this.members, members)
         val diffResult = DiffUtil.calculateDiff(diffCallback)
         this.members.clear()
         this.members.addAll(members)

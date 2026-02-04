@@ -23,6 +23,7 @@ package com.owncloud.android.presentation.spaces.members
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.owncloud.android.R
 import com.owncloud.android.databinding.MemberItemBinding
@@ -73,10 +74,12 @@ class SpaceMembersAdapter: RecyclerView.Adapter<SpaceMembersAdapter.SpaceMembers
 
     fun setSpaceMembers(spaceMembers: SpaceMembers, roles: List<OCRole>) {
         this.rolesMap = roles.associate { it.id to it.displayName }
-        this.members = spaceMembers.members.sortedWith(compareByDescending<SpaceMember> {
-                member -> roles.indexOfFirst { it.id in member.roles } }.thenBy { member -> member.displayName }
-        )
-        notifyDataSetChanged()
+        val listOfMembersFiltered = spaceMembers.members.sortedWith(compareByDescending<SpaceMember> {
+                member -> roles.indexOfFirst { it.id in member.roles } }.thenBy { member -> member.displayName })
+        val diffCallback = SpaceMembersDiffUtil(this.members, listOfMembersFiltered)
+        val diffResult = DiffUtil.calculateDiff(diffCallback)
+        this.members = listOfMembersFiltered
+        diffResult.dispatchUpdatesTo(this)
     }
 
     class SpaceMembersViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

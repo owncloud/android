@@ -21,11 +21,11 @@
 package com.owncloud.android.presentation.spaces.members
 
 import androidx.recyclerview.widget.DiffUtil
-import com.owncloud.android.domain.spaces.model.SpaceMember
+import com.owncloud.android.domain.members.model.OCMember
 
-class SpaceMembersDiffUtil(
-    private val oldList: List<SpaceMember>,
-    private val newList: List<SpaceMember>
+class SearchMembersDiffUtil(
+    private val oldList: List<OCMember>,
+    private val newList: List<OCMember>
 ) : DiffUtil.Callback() {
     override fun getOldListSize(): Int = oldList.size
 
@@ -42,7 +42,6 @@ class SpaceMembersDiffUtil(
         val oldItem = oldList[oldItemPosition]
         val newItem = newList[newItemPosition]
 
-        return ((oldItem.id == newItem.id) && (oldItem.displayName == newItem.displayName) && (oldItem.roles == newItem.roles)
-                && (oldItem.expirationDateTime == newItem.expirationDateTime))
+        return ((oldItem.id == newItem.id) && (oldItem.displayName == newItem.displayName) && (oldItem.surname == newItem.surname))
     }
 }
