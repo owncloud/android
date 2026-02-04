@@ -23,7 +23,9 @@ package com.owncloud.android.data.members.repository
 import com.owncloud.android.data.members.datasources.RemoteMembersDataSource
 import com.owncloud.android.testutil.OC_ACCOUNT_NAME
 import com.owncloud.android.testutil.OC_GROUP_MEMBER
+import com.owncloud.android.testutil.OC_SPACE_PROJECT_WITH_IMAGE
 import com.owncloud.android.testutil.OC_USER_MEMBER
+import com.owncloud.android.testutil.SPACE_MEMBERS
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -36,6 +38,19 @@ class OCMembersRepositoryTest {
     private val ocMembersRepository = OCMembersRepository(remoteMembersDataSource)
 
     private val query = "dev"
+
+    @Test
+    fun `addMember adds a member to a space correctly`() {
+        every {
+            remoteMembersDataSource.addMember(OC_ACCOUNT_NAME, OC_SPACE_PROJECT_WITH_IMAGE.id, OC_USER_MEMBER, SPACE_MEMBERS.roles[0].id, null)
+        } returns Unit
+
+        ocMembersRepository.addMember(OC_ACCOUNT_NAME, OC_SPACE_PROJECT_WITH_IMAGE.id, OC_USER_MEMBER, SPACE_MEMBERS.roles[0].id, null)
+
+        verify(exactly = 1) {
+            remoteMembersDataSource.addMember(OC_ACCOUNT_NAME, OC_SPACE_PROJECT_WITH_IMAGE.id, OC_USER_MEMBER, SPACE_MEMBERS.roles[0].id, null)
+        }
+    }
 
     @Test
     fun `searchMembers returns a list of OCMember`() {

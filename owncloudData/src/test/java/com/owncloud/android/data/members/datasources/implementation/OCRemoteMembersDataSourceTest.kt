@@ -27,6 +27,9 @@ import com.owncloud.android.data.members.datasources.implementation.OCRemoteMemb
 import com.owncloud.android.lib.resources.members.services.OCMembersService
 import com.owncloud.android.testutil.GROUP_MEMBER_RESPONSE
 import com.owncloud.android.testutil.OC_ACCOUNT_NAME
+import com.owncloud.android.testutil.OC_SPACE_PROJECT_WITH_IMAGE
+import com.owncloud.android.testutil.OC_USER_MEMBER
+import com.owncloud.android.testutil.SPACE_MEMBERS
 import com.owncloud.android.testutil.USER_MEMBER_RESPONSE
 import com.owncloud.android.utils.createRemoteOperationResultMock
 import io.mockk.every
@@ -44,11 +47,28 @@ class OCRemoteMembersDataSourceTest {
     private val clientManager: ClientManager = mockk(relaxed = true)
 
     private val query = "dev"
+    private val userType = "user"
 
     @Before
     fun setUp() {
         ocRemoteMembersDataSource = OCRemoteMembersDataSource(clientManager)
         every { clientManager.getMembersService(OC_ACCOUNT_NAME) } returns ocMembersService
+    }
+
+    @Test
+    fun `addMember adds a member to a project space correctly`() {
+        val addMemberResult = createRemoteOperationResultMock(Unit, isSuccess = true)
+
+        every {
+            ocMembersService.addMember(OC_SPACE_PROJECT_WITH_IMAGE.id, OC_USER_MEMBER.id, userType, SPACE_MEMBERS.roles[0].id, null)
+        } returns addMemberResult
+
+        ocRemoteMembersDataSource.addMember(OC_ACCOUNT_NAME, OC_SPACE_PROJECT_WITH_IMAGE.id, OC_USER_MEMBER, SPACE_MEMBERS.roles[0].id, null)
+
+        verify(exactly = 1) {
+            clientManager.getMembersService(OC_ACCOUNT_NAME)
+            ocMembersService.addMember(OC_SPACE_PROJECT_WITH_IMAGE.id, OC_USER_MEMBER.id, userType, SPACE_MEMBERS.roles[0].id, null)
+        }
     }
 
     @Test
