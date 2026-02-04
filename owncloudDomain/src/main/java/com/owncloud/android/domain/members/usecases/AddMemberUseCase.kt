@@ -18,12 +18,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.data.members.datasources
+package com.owncloud.android.domain.members.usecases
 
+import com.owncloud.android.domain.BaseUseCaseWithResult
+import com.owncloud.android.domain.members.MembersRepository
 import com.owncloud.android.domain.members.model.OCMember
 
-interface RemoteMembersDataSource {
-    fun addMember(accountName: String, spaceId: String, member: OCMember, roleId: String, expirationDate: String?)
-    fun searchGroups(accountName: String, query: String): List<OCMember>
-    fun searchUsers(accountName: String, query: String): List<OCMember>
+class AddMemberUseCase(
+    private val membersRepository: MembersRepository
+): BaseUseCaseWithResult<Unit, AddMemberUseCase.Params>() {
+
+    override fun run(params: Params) {
+        membersRepository.addMember(params.accountName, params.spaceId, params.member, params.roleId, params.expirationDate)
+    }
+
+    data class Params(val accountName: String, val spaceId: String, val member: OCMember, val roleId: String, val expirationDate: String?)
 }

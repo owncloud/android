@@ -30,6 +30,11 @@ import com.owncloud.android.lib.resources.members.responses.MemberResponse
 class OCRemoteMembersDataSource (
     private val clientManager: ClientManager
 ): RemoteMembersDataSource {
+    override fun addMember(accountName: String, spaceId: String, member: OCMember, roleId: String, expirationDate: String?) {
+        val memberType = if (member.surname == GROUP_SURNAME) GROUP_SURNAME.lowercase() else USER_SURNAME.lowercase()
+        executeRemoteOperation { clientManager.getMembersService(accountName).addMember(spaceId, member.id, memberType, roleId, expirationDate) }
+    }
+
     override fun searchGroups(accountName: String, query: String): List<OCMember> {
         val groupsResponse = executeRemoteOperation { clientManager.getMembersService(accountName).searchGroups(query) }
         return groupsResponse.map { it.toModel(isGroup = true) }

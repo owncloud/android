@@ -28,6 +28,10 @@ class OCMembersRepository(
     private val remoteMembersDataSource: RemoteMembersDataSource
 ): MembersRepository {
 
+    override fun addMember(accountName: String, spaceId: String, member: OCMember, roleId: String, expirationDate: String?) {
+        remoteMembersDataSource.addMember(accountName, spaceId, member, roleId, expirationDate)
+    }
+
     override fun searchMembers(accountName: String, query: String): List<OCMember> =
         remoteMembersDataSource.searchUsers(accountName, query) + remoteMembersDataSource.searchGroups(accountName, query)
 }

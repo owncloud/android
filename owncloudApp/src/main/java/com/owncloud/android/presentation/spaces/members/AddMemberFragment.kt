@@ -38,9 +38,14 @@ import com.owncloud.android.domain.spaces.model.OCSpace
 import com.owncloud.android.domain.spaces.model.SpaceMember
 import com.owncloud.android.extensions.collectLatestLifecycleFlow
 import com.owncloud.android.extensions.showErrorInSnackbar
+import com.owncloud.android.presentation.common.UIResult
+import com.owncloud.android.utils.DisplayUtils
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import timber.log.Timber
+import java.text.SimpleDateFormat
+import java.util.Locale
+import java.util.TimeZone
 
 class AddMemberFragment: Fragment(), SearchMembersAdapter.SearchMembersAdapterListener {
     private var _binding: AddMemberFragmentBinding? = null
@@ -107,11 +112,29 @@ class AddMemberFragment: Fragment(), SearchMembersAdapter.SearchMembersAdapterLi
                 it.selectedExpirationDate?.let { expirationDate ->
                     binding.expirationDateLayout.expirationDateValue.apply {
                         visibility = View.VISIBLE
-                        text = expirationDate
+                        text = DisplayUtils.displayDateToHumanReadable(expirationDate)
                     }
                 }
                 bindRoles(uiState.selectedRole?.id)
                 bindDatePickerDialog()
+
+                binding.inviteMemberButton.setOnClickListener {
+                    uiState.selectedMember?.let { selectedMember ->
+                        uiState.selectedRole?.let { selectedRole ->
+                            spaceMembersViewModel.addMember(selectedMember, selectedRole.id, uiState.selectedExpirationDate)
+                        }
+                    }
+                }
+            }
+        }
+
+        collectLatestLifecycleFlow(spaceMembersViewModel.addMemberResultFlow) { event ->
+            event?.peekContent()?.let { uiResult ->
+                when (uiResult) {
+                    is UIResult.Loading -> { }
+                    is UIResult.Success -> requireActivity().onBackPressed()
+                    is UIResult.Error -> showErrorInSnackbar(R.string.members_add_failed, uiResult.error)
+                }
             }
         }
 
@@ -186,11 +209,15 @@ class AddMemberFragment: Fragment(), SearchMembersAdapter.SearchMembersAdapterLi
                 DatePickerDialog(
                     requireContext(),
                     { _, selectedYear, selectedMonth, selectedDay ->
-                        val selectedDate = String.format(DATE_FORMAT_DISPLAY, selectedDay, selectedMonth + 1, selectedYear)
-                        spaceMembersViewModel.onExpirationDateSelected(selectedDate)
+                        calendar.set(selectedYear, selectedMonth, selectedDay, 23, 59, 59)
+                        calendar.set(Calendar.MILLISECOND, 999)
+                        val formatter = SimpleDateFormat(DisplayUtils.DATE_FORMAT_ISO, Locale.ROOT)
+                        formatter.timeZone = TimeZone.getTimeZone("UTC")
+                        val isoExpirationDate = formatter.format(calendar.time)
+                        spaceMembersViewModel.onExpirationDateSelected(isoExpirationDate)
                         binding.expirationDateLayout.expirationDateValue.apply {
                             visibility = View.VISIBLE
-                            text = selectedDate
+                            text = DisplayUtils.displayDateToHumanReadable(isoExpirationDate)
                         }
                     },
                     calendar.get(Calendar.YEAR),
@@ -219,7 +246,6 @@ class AddMemberFragment: Fragment(), SearchMembersAdapter.SearchMembersAdapterLi
         private const val ARG_SPACE_MEMBERS = "SPACE_MEMBERS"
         private const val ARG_ROLES = "ROLES"
         private const val GROUP_SURNAME = "Group"
-        private const val DATE_FORMAT_DISPLAY = "%02d/%02d/%04d"
 
         fun newInstance(
             accountName: String,

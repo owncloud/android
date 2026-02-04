@@ -565,6 +565,7 @@ public class RemoteOperationResult<T>
         INVALID_LOCAL_FILE_NAME,
         INVALID_OVERWRITE,
         CONFLICT,
+        CONFLICT_MEMBER,
         OAUTH2_ERROR,
         SYNC_CONFLICT,
         LOCAL_STORAGE_FULL,
