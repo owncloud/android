@@ -98,5 +98,4 @@ class AddRemoteMemberOperation(
         private const val MEMBER_ID_BODY_PARAM = "objectId"
         private const val ROLES_BODY_PARAM = "roles"
     }
-
 }

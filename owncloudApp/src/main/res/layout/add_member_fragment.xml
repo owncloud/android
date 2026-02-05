@@ -58,9 +58,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:indeterminate="true"
-                    android:visibility="gone"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent" />
+                    android:visibility="gone"/>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/members_recycler_view"
@@ -72,9 +70,7 @@
                 <include
                     android:id="@+id/empty_data_parent"
                     layout="@layout/item_empty_dataset"
-                    android:visibility="gone"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:visibility="gone"/>
 
             </LinearLayout>
 
@@ -182,7 +178,6 @@
         android:text="@string/members_invite"
         android:textSize="15sp"
         android:enabled="false"
-        android:theme="@style/Button.Primary"
         android:visibility="gone"
         tools:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"

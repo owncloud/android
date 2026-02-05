@@ -58,7 +58,6 @@ class SpaceRolesAdapter(
                     val previousSelected = selectedRoleId
                     selectedRoleId = role.id
                     previousSelected?.let { previousId -> notifyItemChanged(roles.indexOfFirst { it.id == previousId }) }
-                    notifyItemChanged(position)
                     onRoleSelected?.invoke(role)
                 }
             }
@@ -82,12 +81,10 @@ class SpaceRolesAdapter(
 
     fun setRoles(roles: List<OCRole>) {
         this.roles = roles
-        notifyDataSetChanged()
     }
 
     fun setSelectedRole(id: String) {
         this.selectedRoleId = id
-        notifyDataSetChanged()
     }
 
     class SpaceRolesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
