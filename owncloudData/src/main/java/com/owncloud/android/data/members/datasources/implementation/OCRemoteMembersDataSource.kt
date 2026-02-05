@@ -25,13 +25,14 @@ import com.owncloud.android.data.ClientManager
 import com.owncloud.android.data.executeRemoteOperation
 import com.owncloud.android.data.members.datasources.RemoteMembersDataSource
 import com.owncloud.android.domain.members.model.OCMember
+import com.owncloud.android.domain.members.model.OCMemberType
 import com.owncloud.android.lib.resources.members.responses.MemberResponse
 
 class OCRemoteMembersDataSource (
     private val clientManager: ClientManager
 ): RemoteMembersDataSource {
     override fun addMember(accountName: String, spaceId: String, member: OCMember, roleId: String, expirationDate: String?) {
-        val memberType = if (member.surname == GROUP_SURNAME) GROUP_SURNAME.lowercase() else USER_SURNAME.lowercase()
+        val memberType = OCMemberType.toString(member.type).lowercase()
         executeRemoteOperation { clientManager.getMembersService(accountName).addMember(spaceId, member.id, memberType, roleId, expirationDate) }
     }
 
@@ -46,15 +47,16 @@ class OCRemoteMembersDataSource (
     }
 
     companion object {
-        private const val USER_SURNAME = "User"
-        private const val GROUP_SURNAME = "Group"
 
         @VisibleForTesting
-        fun MemberResponse.toModel(isGroup: Boolean): OCMember =
-            OCMember(
+        fun MemberResponse.toModel(isGroup: Boolean): OCMember {
+            val surname = surname ?: if (isGroup) OCMemberType.GROUP_TYPE_STRING else OCMemberType.USER_TYPE_STRING
+            return OCMember(
                 id = id,
                 displayName = displayName,
-                surname = surname ?: if (isGroup) GROUP_SURNAME else USER_SURNAME
+                surname = surname,
+                type = OCMemberType.parseFromString(surname)
             )
+        }
     }
 }

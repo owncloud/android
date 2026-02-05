@@ -33,6 +33,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.owncloud.android.R
 import com.owncloud.android.databinding.AddMemberFragmentBinding
 import com.owncloud.android.domain.members.model.OCMember
+import com.owncloud.android.domain.members.model.OCMemberType
 import com.owncloud.android.domain.roles.model.OCRole
 import com.owncloud.android.domain.spaces.model.OCSpace
 import com.owncloud.android.domain.spaces.model.SpaceMember
@@ -176,9 +177,8 @@ class AddMemberFragment: Fragment(), SearchMembersAdapter.SearchMembersAdapterLi
     }
 
     private fun bindSelectedMember(member: OCMember) {
-        val isGroup = member.surname == GROUP_SURNAME
         binding.selectedMemberLayout.apply {
-            memberIcon.setImageResource(if (isGroup) R.drawable.ic_group else R.drawable.ic_user)
+            memberIcon.setImageResource(if (member.type == OCMemberType.GROUP) R.drawable.ic_group else R.drawable.ic_user)
             memberName.text = member.displayName
             memberRole.text = member.surname
         }
@@ -245,7 +245,6 @@ class AddMemberFragment: Fragment(), SearchMembersAdapter.SearchMembersAdapterLi
         private const val ARG_CURRENT_SPACE = "CURRENT_SPACE"
         private const val ARG_SPACE_MEMBERS = "SPACE_MEMBERS"
         private const val ARG_ROLES = "ROLES"
-        private const val GROUP_SURNAME = "Group"
 
         fun newInstance(
             accountName: String,

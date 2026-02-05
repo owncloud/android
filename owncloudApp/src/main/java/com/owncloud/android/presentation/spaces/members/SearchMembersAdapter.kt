@@ -28,6 +28,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.owncloud.android.R
 import com.owncloud.android.databinding.MemberItemBinding
 import com.owncloud.android.domain.members.model.OCMember
+import com.owncloud.android.domain.members.model.OCMemberType
 import com.owncloud.android.utils.PreferenceUtils
 
 class SearchMembersAdapter(
@@ -49,7 +50,7 @@ class SearchMembersAdapter(
         val member = members[position]
 
         holder.binding.apply {
-            val isGroup = member.surname == GROUP_SURNAME
+            val isGroup = member.type == OCMemberType.GROUP
             memberIcon.setImageResource(if (isGroup) R.drawable.ic_group else R.drawable.ic_user)
             memberName.text = member.displayName
             memberName.contentDescription = holder.itemView.context.getString(
@@ -58,7 +59,7 @@ class SearchMembersAdapter(
             memberRole.text = if (isGroup) {
                 holder.itemView.context.getString(R.string.member_type_group)
             } else {
-                if (member.surname == USER_SURNAME) holder.itemView.context.getString(R.string.member_type_user) else member.surname
+                if (member.surname == OCMemberType.USER_TYPE_STRING) holder.itemView.context.getString(R.string.member_type_user) else member.surname
             }
 
             memberItemLayout.setOnClickListener {
@@ -83,10 +84,5 @@ class SearchMembersAdapter(
 
     class SearchMembersViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val binding = MemberItemBinding.bind(itemView)
-    }
-
-    companion object {
-        private const val USER_SURNAME = "User"
-        private const val GROUP_SURNAME = "Group"
     }
 }
