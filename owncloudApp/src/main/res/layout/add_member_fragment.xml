@@ -85,6 +85,7 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:focusable="true"
                     android:background="@color/actionbar_start_color">
 
                     <TextView
@@ -105,11 +106,13 @@
 
                 <include
                     android:id="@+id/selected_member_layout"
+                    android:focusable="true"
                     layout="@layout/member_item" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:focusable="true"
                     android:background="@color/actionbar_start_color">
 
                     <TextView
@@ -139,6 +142,7 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:focusable="true"
                     android:background="@color/actionbar_start_color">
 
                     <TextView

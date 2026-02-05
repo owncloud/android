@@ -52,6 +52,7 @@
                 android:textSize="@dimen/two_line_primary_text_size"
                 android:textColor="@color/textColor"
                 android:textStyle="bold"
+                android:focusable="true"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toTopOf="@id/expiration_date_value"
                 app:layout_constraintStart_toStartOf="parent"
@@ -67,6 +68,7 @@
                 android:textSize="13sp"
                 android:textColor="@color/textColor"
                 android:visibility="gone"
+                android:focusable="true"
                 tools:visibility="visible"
                 app:layout_constraintTop_toBottomOf="@id/expiration_date_title"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -77,6 +79,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/standard_quarter_margin"
+                android:contentDescription="@string/content_description_expiration_date_switch"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"/>
