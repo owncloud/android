@@ -44,6 +44,7 @@ ownCloud admins and users.
 * Change - Migrate tests to the new kotlinx-coroutines-test API: [#4710](https://github.com/owncloud/android/issues/4710)
 * Change - Increase rating dialog delay: [#4744](https://github.com/owncloud/android/pull/4744)
 * Enhancement - Show members of a space: [#4612](https://github.com/owncloud/android/issues/4612)
+* Enhancement - Add a member to a space: [#4613](https://github.com/owncloud/android/issues/4613)
 * Enhancement - Set emoji as space image: [#4707](https://github.com/owncloud/android/issues/4707)
 * Enhancement - Workflow to build APK: [#4751](https://github.com/owncloud/android/pull/4751)
 * Enhancement - Workflow to check Conventional Commits: [#4759](https://github.com/owncloud/android/pull/4759)
@@ -84,6 +85,16 @@ ownCloud admins and users.
    https://github.com/owncloud/android/issues/4763
    https://github.com/owncloud/android/pull/4728
    https://github.com/owncloud/android/pull/4765
+
+* Enhancement - Add a member to a space: [#4613](https://github.com/owncloud/android/issues/4613)
+
+   A new option to add members to a space has been added. It will be only visible
+   for users with proper permissions.
+
+   https://github.com/owncloud/android/issues/4613
+   https://github.com/owncloud/android/issues/4740
+   https://github.com/owncloud/android/pull/4754
+   https://github.com/owncloud/android/pull/4764
 
 * Enhancement - Set emoji as space image: [#4707](https://github.com/owncloud/android/issues/4707)
 
