@@ -5,7 +5,7 @@
  * @author Juan Carlos Garrote Gascón
  * @author Jorge Aguado Recio
  *
- * Copyright (C) 2025 ownCloud GmbH.
+ * Copyright (C) 2026 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -29,6 +29,7 @@ import com.owncloud.android.domain.exceptions.AccountNotTheSameException
 import com.owncloud.android.domain.exceptions.BadOcVersionException
 import com.owncloud.android.domain.exceptions.CancelledException
 import com.owncloud.android.domain.exceptions.ConflictException
+import com.owncloud.android.domain.exceptions.ConflictMemberException
 import com.owncloud.android.domain.exceptions.CopyIntoDescendantException
 import com.owncloud.android.domain.exceptions.DelayedForWifiException
 import com.owncloud.android.domain.exceptions.FileNotFoundException
@@ -117,6 +118,7 @@ private fun <T> handleRemoteOperationResult(
         RemoteOperationResult.ResultCode.INVALID_LOCAL_FILE_NAME -> throw InvalidLocalFileNameException()
         RemoteOperationResult.ResultCode.INVALID_OVERWRITE -> throw InvalidOverwriteException()
         RemoteOperationResult.ResultCode.CONFLICT -> throw ConflictException()
+        RemoteOperationResult.ResultCode.CONFLICT_MEMBER -> throw ConflictMemberException()
         RemoteOperationResult.ResultCode.SYNC_CONFLICT -> throw SyncConflictException()
         RemoteOperationResult.ResultCode.LOCAL_STORAGE_FULL -> throw LocalStorageFullException()
         RemoteOperationResult.ResultCode.LOCAL_STORAGE_NOT_MOVED -> throw LocalStorageNotMovedException()

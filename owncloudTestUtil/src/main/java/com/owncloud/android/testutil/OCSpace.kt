@@ -4,7 +4,7 @@
  * @author Juan Carlos Garrote Gascón
  * @author Jorge Aguado Recio
  *
- * Copyright (C) 2025 ownCloud GmbH.
+ * Copyright (C) 2026 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -341,9 +341,21 @@ val SPACE_RESPONSE =
 val SPACE_PERMISSIONS_RESPONSE = SpacePermissionsResponse(
     actions = listOf("libre.graph/driveItem/permissions/delete", "libre.graph/driveItem/permissions/update"),
     roles = listOf(
-        RoleResponse(displayName = "Can view", id = "a8d5fe5e-96e3-418d-825b-534dbdf22b99"),
-        RoleResponse(displayName = "Can edit", id = "58c63c02-1d89-4572-916a-870abc5a1b7d"),
-        RoleResponse(displayName = "Can manage", id = "312c0871-5ef7-4b3a-85b6-0e4074c64049")
+        RoleResponse(
+            displayName = "Can view",
+            id = "a8d5fe5e-96e3-418d-825b-534dbdf22b99",
+            description = "View and download."
+        ),
+        RoleResponse(
+            displayName = "Can edit",
+            id = "58c63c02-1d89-4572-916a-870abc5a1b7d",
+            description = "View, download, upload, edit, add, delete including the history."
+        ),
+        RoleResponse(
+            displayName = "Can manage",
+            id = "312c0871-5ef7-4b3a-85b6-0e4074c64049",
+            description = "View, download, upload, edit, add, delete and manage members."
+        )
     ),
     members = listOf(
         PermissionsResponse(
@@ -360,9 +372,21 @@ val SPACE_PERMISSIONS_RESPONSE = SpacePermissionsResponse(
 
 val SPACE_MEMBERS = SpaceMembers(
     roles = listOf(
-        OCRole(displayName = "Can view", id = "a8d5fe5e-96e3-418d-825b-534dbdf22b99"),
-        OCRole(displayName = "Can edit", id = "58c63c02-1d89-4572-916a-870abc5a1b7d"),
-        OCRole(displayName = "Can manage", id = "312c0871-5ef7-4b3a-85b6-0e4074c64049")
+        OCRole(
+            displayName = "Can view",
+            id = "a8d5fe5e-96e3-418d-825b-534dbdf22b99",
+            description = "View and download"
+        ),
+        OCRole(
+            displayName = "Can edit",
+            id = "58c63c02-1d89-4572-916a-870abc5a1b7d",
+            description = "View, download, upload, edit, add, delete including the history."
+        ),
+        OCRole(
+            displayName = "Can manage",
+            id = "312c0871-5ef7-4b3a-85b6-0e4074c64049",
+            description = "View, download, upload, edit, add, delete and manage members."
+        )
     ),
     members = listOf(
         SpaceMember(

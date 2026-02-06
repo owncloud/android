@@ -23,6 +23,7 @@ package com.owncloud.android.data.members.datasources
 import com.owncloud.android.domain.members.model.OCMember
 
 interface RemoteMembersDataSource {
+    fun addMember(accountName: String, spaceId: String, member: OCMember, roleId: String, expirationDate: String?)
     fun searchGroups(accountName: String, query: String): List<OCMember>
     fun searchUsers(accountName: String, query: String): List<OCMember>
 }

@@ -21,18 +21,21 @@
 package com.owncloud.android.testutil
 
 import com.owncloud.android.domain.members.model.OCMember
+import com.owncloud.android.domain.members.model.OCMemberType
 import com.owncloud.android.lib.resources.members.responses.MemberResponse
 
 val OC_USER_MEMBER = OCMember(
     id = "a9F3kL2mP7Qx",
     displayName = "ownCloud Developer",
-    surname = "ownCloudDeveloper"
+    surname = "ownCloudDeveloper",
+    type = OCMemberType.USER
 )
 
 val OC_GROUP_MEMBER = OCMember(
     id = "G7pQ2M9xL4A8",
     displayName = "ownCloud Developers",
-    surname = "Group"
+    surname = "Group",
+    type = OCMemberType.GROUP
 )
 
 val USER_MEMBER_RESPONSE = MemberResponse(

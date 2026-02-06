@@ -25,6 +25,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -54,6 +55,7 @@ class SpaceMembersFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
 
     private var roles: List<OCRole> = emptyList()
+    private var addMemberRoles: List<OCRole> = emptyList()
     private var spaceMembers: List<SpaceMember> = emptyList()
     private var listener: SpaceMemberFragmentListener? = null
 
@@ -98,6 +100,7 @@ class SpaceMembersFragment : Fragment() {
                             if (roles.isNotEmpty()) {
                                 spaceMembersAdapter.setSpaceMembers(it, roles)
                                 spaceMembers = it.members
+                                addMemberRoles = it.roles
                             }
                         }
                     }
@@ -114,7 +117,7 @@ class SpaceMembersFragment : Fragment() {
                 when (val uiResult = event.peekContent()) {
                     is UIResult.Success -> {
                         uiResult.data?.let { spacePermissions ->
-                            if (DRIVES_CREATE_PERMISSION in spacePermissions) { binding.addMemberButton.visibility = View.VISIBLE }
+                            binding.addMemberButton.isVisible = DRIVES_CREATE_PERMISSION in spacePermissions
                         }
                     }
                     is UIResult.Loading -> { }
@@ -126,7 +129,7 @@ class SpaceMembersFragment : Fragment() {
         }
 
         binding.addMemberButton.setOnClickListener {
-            listener?.addMember(currentSpace, spaceMembers)
+            listener?.addMember(currentSpace, spaceMembers, addMemberRoles)
         }
     }
 
@@ -145,8 +148,13 @@ class SpaceMembersFragment : Fragment() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        spaceMembersViewModel.getSpacePermissions()
+    }
+
     interface SpaceMemberFragmentListener {
-        fun addMember(space: OCSpace, spaceMembers: List<SpaceMember>)
+        fun addMember(space: OCSpace, spaceMembers: List<SpaceMember>, roles: List<OCRole>)
     }
 
     companion object {

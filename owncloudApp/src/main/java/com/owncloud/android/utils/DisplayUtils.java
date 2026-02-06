@@ -7,7 +7,7 @@
  * @author Jorge Aguado Recio
  *
  * Copyright (C) 2011  Bartek Przybylski
- * Copyright (C) 2025 ownCloud GmbH.
+ * Copyright (C) 2026 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -62,7 +62,7 @@ public class DisplayUtils {
     private static final int[] sizeScales = {0, 0, 1, 1, 1, 2, 2, 2, 2};
 
     private static final String DATE_FORMAT_DISPLAY = "dd/MM/yyyy HH:mm";
-    private static final String DATE_FORMAT_ISO = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
+    public static final String DATE_FORMAT_ISO = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
 
     private static Map<String, String> mimeType2HumanReadable;
 
