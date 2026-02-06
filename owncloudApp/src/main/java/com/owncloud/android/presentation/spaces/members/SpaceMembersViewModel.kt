@@ -84,17 +84,18 @@ class SpaceMembersViewModel(
             showLoading = false,
             requiresConnection = true
         )
-
-        runUseCaseWithResult(
-            coroutineDispatcher = coroutineDispatcherProvider.io,
-            flow = _spacePermissions,
-            useCase = getSpacePermissionsAsyncUseCase,
-            useCaseParams = GetSpacePermissionsAsyncUseCase.Params(accountName = accountName, spaceId = space.id),
-            showLoading = false,
-            requiresConnection = true
-        )
+        getSpacePermissions()
 
     }
+
+    fun getSpacePermissions() = runUseCaseWithResult(
+        coroutineDispatcher = coroutineDispatcherProvider.io,
+        flow = _spacePermissions,
+        useCase = getSpacePermissionsAsyncUseCase,
+        useCaseParams = GetSpacePermissionsAsyncUseCase.Params(accountName = accountName, spaceId = space.id),
+        showLoading = false,
+        requiresConnection = true
+    )
 
     fun getSpaceMembers() = runUseCaseWithResult(
         coroutineDispatcher = coroutineDispatcherProvider.io,

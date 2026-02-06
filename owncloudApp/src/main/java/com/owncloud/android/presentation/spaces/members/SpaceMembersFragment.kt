@@ -25,6 +25,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -116,7 +117,7 @@ class SpaceMembersFragment : Fragment() {
                 when (val uiResult = event.peekContent()) {
                     is UIResult.Success -> {
                         uiResult.data?.let { spacePermissions ->
-                            if (DRIVES_CREATE_PERMISSION in spacePermissions) { binding.addMemberButton.visibility = View.VISIBLE }
+                            binding.addMemberButton.isVisible = DRIVES_CREATE_PERMISSION in spacePermissions
                         }
                     }
                     is UIResult.Loading -> { }
@@ -145,6 +146,11 @@ class SpaceMembersFragment : Fragment() {
             Timber.e(e, "The activity attached does not implement SpaceMemberFragmentListener")
             throw ClassCastException(activity.toString() + " must implement SpaceMemberFragmentListener")
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        spaceMembersViewModel.getSpacePermissions()
     }
 
     interface SpaceMemberFragmentListener {
