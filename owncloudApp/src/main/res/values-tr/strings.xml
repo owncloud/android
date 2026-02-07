@@ -641,6 +641,7 @@
   <string name="content_description_logo">Logo</string>
   <string name="content_description_add_share">Paylaşım ekle</string>
   <string name="content_description_create_new_folder">Yeni klasör oluştur</string>
+  <string name="content_description_expiration_date_switch">Son kullanım tarihi</string>
   <string name="create_shortcut_dialog_title">Kısayol oluştur</string>
   <string name="create_shortcut_dialog_url">URL</string>
   <string name="create_shortcut_dialog_url_information">Bağlantı, tarayıcıda açılabilmesi için https:// veya http:// ile başlamalı</string>
@@ -654,6 +655,10 @@
   <string name="disabled_space_label">Devre Dışı</string>
   <string name="members_title">Üyeler</string>
   <string name="members_add">Üye ekle</string>
+  <string name="members_permissions">İzinler</string>
+  <string name="members_options">Seçenekler</string>
+  <string name="members_expiration_date">Son kullanım tarihi</string>
+  <string name="members_invite">Davet</string>
   <string name="member_type_user">Kullanıcı</string>
   <string name="member_type_group">Grup</string>
   <string name="link_role_accessibility">Bağlantı</string>

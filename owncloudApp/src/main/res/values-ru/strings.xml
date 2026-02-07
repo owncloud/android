@@ -745,6 +745,9 @@
   <string name="disabled_space_label">Отключена</string>
   <string name="members_title">Участники</string>
   <string name="members_add">Добавить члена</string>
+  <string name="members_permissions">Права доступа</string>
+  <string name="members_options">Опции</string>
+  <string name="members_invite">Пригласить</string>
   <string name="member_type_user">Пользователь</string>
   <string name="member_type_group">Группа</string>
   <string name="link_role_accessibility">Ссылка</string>

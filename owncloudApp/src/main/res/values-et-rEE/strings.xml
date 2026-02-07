@@ -759,6 +759,7 @@
   <string name="content_description_create_button">Loomise nupp</string>
   <string name="content_description_cancel_button">Tühistamise nupp</string>
   <string name="content_description_quota_switch">Ruumi mahupiirang</string>
+  <string name="content_description_expiration_date_switch">Aegumise kuupäev</string>
   <string name="create_shortcut_dialog_title">Loo otsetee</string>
   <string name="create_shortcut_dialog_url">URL</string>
   <string name="create_shortcut_dialog_url_information">Brauseris avamiseks peab URL alguses olema kas http:// või https://</string>
@@ -805,6 +806,10 @@
   <string name="set_space_icon">Määra ikoon</string>
   <string name="members_title">Liikmed</string>
   <string name="members_add">Lisa liige</string>
+  <string name="members_permissions">Õigused</string>
+  <string name="members_options">Valikud</string>
+  <string name="members_expiration_date">Aegumise kuupäev</string>
+  <string name="members_invite">Kutsu</string>
   <string name="member_type_user">Kasutaja</string>
   <string name="member_type_group">Grupp</string>
   <string name="feedback_dialog_get_in_contact_description"><![CDATA[ Küsi abi meie <a href="%1$s"><b>foorumist</b></a> või anna oma panus <a href="%2$s"><b>GitHub reposse</b></a>]]></string>

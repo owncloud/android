@@ -805,6 +805,8 @@
   <string name="set_space_icon">Setze ein Icon</string>
   <string name="members_title">Mitglieder</string>
   <string name="members_add">Mitglied hinzufügen</string>
+  <string name="members_options">Optionen</string>
+  <string name="members_invite">Einladung</string>
   <string name="member_type_user">Benutzer</string>
   <string name="member_type_group">Gruppe</string>
   <string name="feedback_dialog_get_in_contact_description"><![CDATA[ Fragen Sie für Hilfe in unserem <a href="%1$s"><b>Forum</b></a> oder machen Sie einen Beitrag in unserem <a href="%2$s"><b>GitHub repo</b></a>]]></string>

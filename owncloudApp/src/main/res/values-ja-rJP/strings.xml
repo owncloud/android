@@ -735,6 +735,7 @@
   <string name="content_description_sort_by_name_ascending">%1$s昇順で並べ替え</string>
   <string name="content_description_sort_by_name_descending">%1$s降順で並べ替え</string>
   <string name="content_description_create_new_folder">新しいフォルダーを作成</string>
+  <string name="content_description_expiration_date_switch">有効期限</string>
   <string name="create_shortcut_dialog_title">ショートカットを作成</string>
   <string name="create_shortcut_dialog_url">URL</string>
   <string name="create_shortcut_dialog_url_information">URLはブラウザーで開けるように、 http:// または https:// で始まる必要があります。</string>
@@ -748,6 +749,10 @@
   <string name="disabled_space_label">無効</string>
   <string name="members_title">メンバー</string>
   <string name="members_add">メンバーを追加</string>
+  <string name="members_permissions">許可</string>
+  <string name="members_options">オプション</string>
+  <string name="members_expiration_date">有効期限</string>
+  <string name="members_invite">招待</string>
   <string name="member_type_user">ユーザ</string>
   <string name="member_type_group">グループ</string>
   <string name="link_role_accessibility">リンク</string>

@@ -721,6 +721,7 @@
   <string name="content_description_add_share">공유 추가</string>
   <string name="content_description_file_operations">%1$s 작동</string>
   <string name="content_description_create_new_folder">새 폴더 만들기</string>
+  <string name="content_description_expiration_date_switch">만료 날짜</string>
   <string name="create_shortcut_dialog_title">바로가기 만들기</string>
   <string name="create_shortcut_dialog_url">URL</string>
   <string name="create_shortcut_dialog_url_information">URL은 브라우저에서 열릴 수 있도록 반드시 https:// 또는 http://으로 시작해야합니다.</string>
@@ -734,6 +735,9 @@
   <string name="disabled_space_label">비활성화됨</string>
   <string name="members_title">구성원</string>
   <string name="members_add">회원 추가</string>
+  <string name="members_permissions">권한</string>
+  <string name="members_options">옵션</string>
+  <string name="members_expiration_date">만료 날짜</string>
   <string name="member_type_user">사용자 이름</string>
   <string name="member_type_group">그룹</string>
   <string name="link_role_accessibility">링크</string>

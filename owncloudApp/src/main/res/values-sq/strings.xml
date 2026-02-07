@@ -763,6 +763,7 @@
   <string name="content_description_member_group">Grup %1$s</string>
   <string name="content_description_member_expiration_date">Skadon më %1$s</string>
   <string name="content_description_add_member">Shtoni anëtar të ri</string>
+  <string name="content_description_expiration_date_switch">Datë skadimi</string>
   <string name="create_shortcut_dialog_title">Krijoni një shkurtore</string>
   <string name="create_shortcut_dialog_url">URL</string>
   <string name="create_shortcut_dialog_url_information">URL-ja duhet të fillojë me https:// ose http:// , që të mund të hapet në shfletues</string>
@@ -811,6 +812,10 @@
   <string name="members_add">Shtoni anëtar</string>
   <string name="members_search_failed">S’u gjetën përfundime</string>
   <string name="members_search_empty">S’ka përdorues, ose grupe, që kanë përkim me kërkimin tuaj</string>
+  <string name="members_permissions">Leje</string>
+  <string name="members_options">Mundësi</string>
+  <string name="members_expiration_date">Datë skadimi</string>
+  <string name="members_invite">Ftoje</string>
   <string name="member_type_user">Përdorues</string>
   <string name="member_type_group">Grup</string>
   <string name="feedback_dialog_get_in_contact_description"><![CDATA[ Kërkoni ndihmë te <a href="%1$s"><b>forumi</b></a> ynë, ose kontribuoni te <a href="%2$s"><b>depoja jonë GitHub</b></a>]]></string>

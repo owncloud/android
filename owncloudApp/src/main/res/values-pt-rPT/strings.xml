@@ -764,6 +764,7 @@
   <string name="content_description_member_user">Usuário %1$s</string>
   <string name="content_description_member_group">Grupo %1$s</string>
   <string name="content_description_member_expiration_date">Expira %1$s</string>
+  <string name="content_description_expiration_date_switch">Data de expiração</string>
   <string name="create_shortcut_dialog_title">Crie um atalho</string>
   <string name="create_shortcut_dialog_url">URL</string>
   <string name="create_shortcut_dialog_url_information">A URL deve começar com https:// ou http:// para que possa ser aberta no navegador</string>
@@ -810,6 +811,10 @@
   <string name="set_space_icon">Definir ícone</string>
   <string name="members_title">Membros</string>
   <string name="members_add">Adicionar membro</string>
+  <string name="members_permissions">Permissões</string>
+  <string name="members_options">Opções</string>
+  <string name="members_expiration_date">Data de expiração</string>
+  <string name="members_invite">Convidar</string>
   <string name="member_type_user">Utilizador</string>
   <string name="member_type_group">Grupo</string>
   <string name="feedback_dialog_get_in_contact_description"><![CDATA[ Peça ajuda em nosso <a href="%1$s"><b>fórum</b></a> ou contribua em nosso <a href="%2$s"><b>repositório do GitHub</b></a>]]></string>

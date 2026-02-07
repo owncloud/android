@@ -625,6 +625,7 @@
   <string name="content_description_manage_accounts">管理账号</string>
   <string name="content_description_search">搜索</string>
   <string name="content_description_create_new_folder">创建新文件夹</string>
+  <string name="content_description_expiration_date_switch">过期日期</string>
   <string name="create_shortcut_dialog_url">URL</string>
   <string name="open_shortcut_title">开放链接</string>
   <string name="create_space_dialog_name">名称</string>
@@ -633,6 +634,10 @@
   <string name="disabled_space_label">禁用</string>
   <string name="members_title">成员</string>
   <string name="members_add">添加成员</string>
+  <string name="members_permissions">权限</string>
+  <string name="members_options">选项</string>
+  <string name="members_expiration_date">过期日期</string>
+  <string name="members_invite">邀請</string>
   <string name="member_type_user">用户</string>
   <string name="member_type_group">群組</string>
   <string name="link_role_accessibility">链接</string>
