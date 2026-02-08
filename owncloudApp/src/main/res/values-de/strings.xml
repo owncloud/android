@@ -759,6 +759,7 @@
   <string name="content_description_create_button">Erstellen-Schaltfläche</string>
   <string name="content_description_cancel_button">Abbruch-Schaltfläche</string>
   <string name="content_description_quota_switch">Space Kontingent</string>
+  <string name="content_description_expiration_date_switch">Ablaufdatum</string>
   <string name="create_shortcut_dialog_title">Verknüpfung erstellen</string>
   <string name="create_shortcut_dialog_url">URL</string>
   <string name="create_shortcut_dialog_url_information">Die URL muss mit https:// oder http:// beginnen, damit sie im Browser geöffnet werden kann.</string>
@@ -805,7 +806,9 @@
   <string name="set_space_icon">Setze ein Icon</string>
   <string name="members_title">Mitglieder</string>
   <string name="members_add">Mitglied hinzufügen</string>
+  <string name="members_permissions">Berechtigungen</string>
   <string name="members_options">Optionen</string>
+  <string name="members_expiration_date">Ablaufdatum</string>
   <string name="members_invite">Einladung</string>
   <string name="member_type_user">Benutzer</string>
   <string name="member_type_group">Gruppe</string>

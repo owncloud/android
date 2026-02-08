@@ -764,6 +764,7 @@
   <string name="content_description_member_user">User %1$s</string>
   <string name="content_description_member_group">Group %1$s</string>
   <string name="content_description_member_expiration_date">Expires %1$s</string>
+  <string name="content_description_expiration_date_switch">Expiration date</string>
   <string name="create_shortcut_dialog_title">Create a shortcut</string>
   <string name="create_shortcut_dialog_url">URL</string>
   <string name="create_shortcut_dialog_url_information">The URL must start with https:// or http:// so that it can be opened in the browser</string>
@@ -810,7 +811,9 @@
   <string name="set_space_icon">Set icon</string>
   <string name="members_title">Members</string>
   <string name="members_add">Add member</string>
+  <string name="members_permissions">Permissions</string>
   <string name="members_options">Options</string>
+  <string name="members_expiration_date">Expiration date</string>
   <string name="members_invite">Invite</string>
   <string name="member_type_user">User</string>
   <string name="member_type_group">Group</string>

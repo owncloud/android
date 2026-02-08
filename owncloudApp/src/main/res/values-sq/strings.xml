@@ -763,6 +763,7 @@
   <string name="content_description_member_group">Grup %1$s</string>
   <string name="content_description_member_expiration_date">Skadon më %1$s</string>
   <string name="content_description_add_member">Shtoni anëtar të ri</string>
+  <string name="content_description_invite_member_button">Ftoni anëtar</string>
   <string name="content_description_expiration_date_switch">Datë skadimi</string>
   <string name="create_shortcut_dialog_title">Krijoni një shkurtore</string>
   <string name="create_shortcut_dialog_url">URL</string>
@@ -810,6 +811,8 @@
   <string name="set_space_icon">Cakton ikonë</string>
   <string name="members_title">Anëtarë</string>
   <string name="members_add">Shtoni anëtar</string>
+  <string name="members_add_failed">Anëtari s’u ftua dot</string>
+  <string name="members_add_conflict_error">Është tashmë i ftuar te hapësira e përzgjedhur</string>
   <string name="members_search_failed">S’u gjetën përfundime</string>
   <string name="members_search_empty">S’ka përdorues, ose grupe, që kanë përkim me kërkimin tuaj</string>
   <string name="members_permissions">Leje</string>
