@@ -3,7 +3,7 @@
  *
  * @author Jorge Aguado Recio
  *
- * Copyright (C) 2025 ownCloud GmbH.
+ * Copyright (C) 2026 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -24,10 +24,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.owncloud.android.R
 import com.owncloud.android.databinding.MemberItemBinding
 import com.owncloud.android.domain.roles.model.OCRole
+import com.owncloud.android.domain.roles.model.OCRoleType
 import com.owncloud.android.domain.spaces.model.SpaceMember
 import com.owncloud.android.domain.spaces.model.SpaceMembers
 import com.owncloud.android.utils.DisplayUtils
@@ -37,6 +39,7 @@ class SpaceMembersAdapter: RecyclerView.Adapter<SpaceMembersAdapter.SpaceMembers
 
     private var members: List<SpaceMember> = emptyList()
     private var rolesMap: Map<String, String> = emptyMap()
+    private var canRemoveMembers = false
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SpaceMembersViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -60,6 +63,10 @@ class SpaceMembersAdapter: RecyclerView.Adapter<SpaceMembersAdapter.SpaceMembers
             )
             memberRole.text = roleNames.joinToString(", ")
 
+            val memberRole = OCRoleType.parseFromId(member.roles.first())
+            val numberOfManagers = members.count { it.roles.contains(OCRoleType.toString(OCRoleType.CAN_MANAGE)) }
+            removeMemberButton.isVisible = canRemoveMembers && !(memberRole == OCRoleType.CAN_MANAGE && numberOfManagers == 1)
+
             member.expirationDateTime?.let {
                 expirationCalendarIcon.visibility = View.VISIBLE
                 expirationDate.visibility = View.VISIBLE
@@ -72,7 +79,8 @@ class SpaceMembersAdapter: RecyclerView.Adapter<SpaceMembersAdapter.SpaceMembers
 
     override fun getItemCount(): Int = members.size
 
-    fun setSpaceMembers(spaceMembers: SpaceMembers, roles: List<OCRole>) {
+    fun setSpaceMembers(spaceMembers: SpaceMembers, roles: List<OCRole>, canRemoveMembers: Boolean) {
+        this.canRemoveMembers = canRemoveMembers
         this.rolesMap = roles.associate { it.id to it.displayName }
         val listOfMembersFiltered = spaceMembers.members.sortedWith(compareByDescending<SpaceMember> {
                 member -> roles.indexOfFirst { it.id in member.roles } }.thenBy { member -> member.displayName })
