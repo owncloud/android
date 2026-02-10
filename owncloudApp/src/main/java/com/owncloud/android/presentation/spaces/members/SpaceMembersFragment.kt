@@ -33,10 +33,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.owncloud.android.R
 import com.owncloud.android.databinding.MembersFragmentBinding
 import com.owncloud.android.domain.roles.model.OCRole
+import com.owncloud.android.domain.roles.model.OCRoleType
 import com.owncloud.android.domain.spaces.model.OCSpace
 import com.owncloud.android.domain.spaces.model.SpaceMember
 import com.owncloud.android.extensions.avoidScreenshotsIfNeeded
 import com.owncloud.android.extensions.collectLatestLifecycleFlow
+import com.owncloud.android.extensions.showErrorInSnackbar
 import com.owncloud.android.presentation.common.UIResult
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -102,7 +104,9 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
                     is UIResult.Success -> {
                         uiResult.data?.let {
                             if (roles.isNotEmpty()) {
-                                spaceMembersAdapter.setSpaceMembers(it, roles, canRemoveMembers)
+                                val numberOfManagers = it.members.count { spaceMember->
+                                    spaceMember.roles.contains(OCRoleType.toString(OCRoleType.CAN_MANAGE)) }
+                                spaceMembersAdapter.setSpaceMembers(it, roles, canRemoveMembers, numberOfManagers)
                                 spaceMembers = it.members
                                 addMemberRoles = it.roles
                             }
@@ -110,7 +114,8 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
                     }
                     is UIResult.Loading -> { }
                     is UIResult.Error -> {
-                        Timber.e(uiResult.error, "Failed to retrieve space members for space: ${currentSpace.id} (${currentSpace?.id})")
+                        requireActivity().finish()
+                        Timber.e(uiResult.error, "Failed to retrieve space members for space: ${currentSpace.id} (${currentSpace.id})")
                     }
                 }
             }
@@ -129,6 +134,17 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
                     is UIResult.Error -> {
                         Timber.e(uiResult.error, "Failed to retrieve space permissions for space: ${currentSpace.id} (${currentSpace?.id})")
                     }
+                }
+            }
+        }
+
+        collectLatestLifecycleFlow(spaceMembersViewModel.removeMemberResultFlow) { uiResult ->
+            when (uiResult) {
+                is UIResult.Loading -> { }
+                is UIResult.Success -> { spaceMembersViewModel.getSpaceMembers() }
+                is UIResult.Error -> {
+                    Timber.e(uiResult.error, "Failed to remove a member from space: ${currentSpace.id}")
+                    showErrorInSnackbar(R.string.members_remove_failed, uiResult.error)
                 }
             }
         }
@@ -166,7 +182,7 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
     override fun onRemoveMember(spaceMember: SpaceMember) {
         AlertDialog.Builder(requireContext())
             .setMessage(getString(R.string.members_remove_dialog_message, spaceMember.displayName))
-            .setPositiveButton(getString(R.string.common_yes)) { _, _ -> }
+            .setPositiveButton(getString(R.string.common_yes)) { _, _ -> spaceMembersViewModel.removeMember(spaceMember.id) }
             .setNegativeButton(getString(R.string.common_no)) { dialog, _ -> dialog.dismiss() }
             .show()
             .avoidScreenshotsIfNeeded()

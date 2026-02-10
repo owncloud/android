@@ -32,6 +32,10 @@ class OCMembersRepository(
         remoteMembersDataSource.addMember(accountName, spaceId, member, roleId, expirationDate)
     }
 
+    override fun removeMember(accountName: String, spaceId: String, memberId: String) {
+        remoteMembersDataSource.removeMember(accountName, spaceId, memberId)
+    }
+
     override fun searchMembers(accountName: String, query: String): List<OCMember> =
         remoteMembersDataSource.searchUsers(accountName, query) + remoteMembersDataSource.searchGroups(accountName, query)
 }

@@ -25,7 +25,9 @@ import com.owncloud.android.domain.spaces.model.SpaceMember
 
 class SpaceMembersDiffUtil(
     private val oldList: List<SpaceMember>,
-    private val newList: List<SpaceMember>
+    private val newList: List<SpaceMember>,
+    private val oldNumberOfManagers: Int,
+    private val newNumberOfManagers: Int
 ) : DiffUtil.Callback() {
     override fun getOldListSize(): Int = oldList.size
 
@@ -43,6 +45,6 @@ class SpaceMembersDiffUtil(
         val newItem = newList[newItemPosition]
 
         return ((oldItem.id == newItem.id) && (oldItem.displayName == newItem.displayName) && (oldItem.roles == newItem.roles)
-                && (oldItem.expirationDateTime == newItem.expirationDateTime))
+                && (oldItem.expirationDateTime == newItem.expirationDateTime) && (oldNumberOfManagers == newNumberOfManagers))
     }
 }

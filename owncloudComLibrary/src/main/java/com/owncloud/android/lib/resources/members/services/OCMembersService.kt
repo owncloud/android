@@ -23,6 +23,7 @@ package com.owncloud.android.lib.resources.members.services
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.members.AddRemoteMemberOperation
+import com.owncloud.android.lib.resources.members.RemoveRemoteMemberOperation
 import com.owncloud.android.lib.resources.members.SearchRemoteMembersOperation
 import com.owncloud.android.lib.resources.members.responses.MemberResponse
 
@@ -41,6 +42,9 @@ class OCMembersService(override val client: OwnCloudClient) : MembersService {
             roleId = roleId,
             expirationDate = expirationDate
         ).execute(client)
+
+    override fun removeMember(spaceId: String, memberId: String): RemoteOperationResult<Unit> =
+        RemoveRemoteMemberOperation(spaceId, memberId).execute(client)
 
     override fun searchGroups(query: String): RemoteOperationResult<List<MemberResponse>> =
         SearchRemoteMembersOperation(query, true).execute(client)

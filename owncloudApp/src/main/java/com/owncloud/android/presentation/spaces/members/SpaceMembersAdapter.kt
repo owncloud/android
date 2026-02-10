@@ -42,6 +42,7 @@ class SpaceMembersAdapter(
     private var members: List<SpaceMember> = emptyList()
     private var rolesMap: Map<String, String> = emptyMap()
     private var canRemoveMembers = false
+    private var numberOfManagers = 1
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SpaceMembersViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -86,14 +87,15 @@ class SpaceMembersAdapter(
 
     override fun getItemCount(): Int = members.size
 
-    fun setSpaceMembers(spaceMembers: SpaceMembers, roles: List<OCRole>, canRemoveMembers: Boolean) {
+    fun setSpaceMembers(spaceMembers: SpaceMembers, roles: List<OCRole>, canRemoveMembers: Boolean, numberOfManagers: Int) {
         this.canRemoveMembers = canRemoveMembers
         this.rolesMap = roles.associate { it.id to it.displayName }
         val listOfMembersFiltered = spaceMembers.members.sortedWith(compareByDescending<SpaceMember> {
                 member -> roles.indexOfFirst { it.id in member.roles } }.thenBy { member -> member.displayName })
-        val diffCallback = SpaceMembersDiffUtil(this.members, listOfMembersFiltered)
+        val diffCallback = SpaceMembersDiffUtil(this.members, listOfMembersFiltered, this.numberOfManagers, numberOfManagers)
         val diffResult = DiffUtil.calculateDiff(diffCallback)
         this.members = listOfMembersFiltered
+        this.numberOfManagers = numberOfManagers
         diffResult.dispatchUpdatesTo(this)
     }
 

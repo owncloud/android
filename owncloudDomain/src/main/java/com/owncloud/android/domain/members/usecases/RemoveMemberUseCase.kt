@@ -18,13 +18,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.data.members.datasources
+package com.owncloud.android.domain.members.usecases
 
-import com.owncloud.android.domain.members.model.OCMember
+import com.owncloud.android.domain.BaseUseCaseWithResult
+import com.owncloud.android.domain.members.MembersRepository
 
-interface RemoteMembersDataSource {
-    fun addMember(accountName: String, spaceId: String, member: OCMember, roleId: String, expirationDate: String?)
-    fun removeMember(accountName: String, spaceId: String, memberId: String)
-    fun searchGroups(accountName: String, query: String): List<OCMember>
-    fun searchUsers(accountName: String, query: String): List<OCMember>
+class RemoveMemberUseCase(
+    private val membersRepository: MembersRepository
+): BaseUseCaseWithResult<Unit, RemoveMemberUseCase.Params>() {
+
+    override fun run(params: Params) {
+        membersRepository.removeMember(params.accountName, params.spaceId, params.memberId)
+    }
+
+    data class Params(val accountName: String, val spaceId: String, val memberId: String)
+
 }
