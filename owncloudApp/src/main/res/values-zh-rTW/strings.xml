@@ -132,7 +132,7 @@
   <string name="auth_host_url">伺服器位址 https://...</string>
   <string name="auth_username">使用者名稱</string>
   <string name="auth_password">密碼</string>
-  <string name="auth_register">新增到 %1$s\?</string>
+  <string name="auth_register">新增到 %1$s?</string>
   <string name="sync_string_files">檔案</string>
   <string name="setup_btn_login">登入</string>
   <string name="uploader_btn_upload_text">上傳</string>
@@ -359,14 +359,14 @@
   <string name="confirmation_unset_available_offline">该文件已经成功设置非脱机访问</string>
   <string name="common_rename">重新命名</string>
   <string name="common_remove">移除</string>
-  <string name="confirmation_remove_file_alert">您真的要移除 %1$s \?</string>
-  <string name="confirmation_remove_folder_alert">您真的要移除 %1$s 與裡頭的檔案\?</string>
+  <string name="confirmation_remove_file_alert">您真的要移除 %1$s ?</string>
+  <string name="confirmation_remove_folder_alert">您真的要移除 %1$s 與裡頭的檔案?</string>
   <string name="confirmation_remove_local">只有本地</string>
-  <string name="confirmation_remove_account_alert">你是否真的要移除這個帳號 %1$s\?</string>
-  <string name="confirmation_remove_account_alert_camera_uploads">此帳號已附加相機上傳功能，刪除該帳號將停用相機上傳功能。 您真的要移除帳號嗎%1$s\?</string>
+  <string name="confirmation_remove_account_alert">你是否真的要移除這個帳號 %1$s?</string>
+  <string name="confirmation_remove_account_alert_camera_uploads">此帳號已附加相機上傳功能，刪除該帳號將停用相機上傳功能。 您真的要移除帳號嗎%1$s?</string>
   <string name="confirmation_remove_public_share_title">移除連結</string>
   <string name="confirmation_remove_private_share_title">移除私人的分享</string>
-  <string name="confirmation_remove_share_message">您真的要移除%1$s分享\?</string>
+  <string name="confirmation_remove_share_message">您真的要移除%1$s分享?</string>
   <string name="remove_success_msg">成功地移除</string>
   <string name="remove_fail_msg">刪除失敗</string>
   <string name="rename_dialog_title">輸入新名稱</string>
@@ -403,7 +403,7 @@
   <string name="ssl_validator_reason_cert_expired">- 服务器证书过期</string>
   <string name="ssl_validator_reason_cert_not_yet_valid">- 服务器证书时间比当前时间还晚</string>
   <string name="ssl_validator_reason_hostname_not_verified">- 這個伺服器的憑證與使用的伺服器名稱不一樣</string>
-  <string name="ssl_validator_question">你是否要信任這個伺服器的憑證\?</string>
+  <string name="ssl_validator_question">你是否要信任這個伺服器的憑證?</string>
   <string name="ssl_validator_not_saved">证书无法保存</string>
   <string name="ssl_validator_btn_details_see">詳細資料</string>
   <string name="ssl_validator_btn_details_hide">隱藏</string>
@@ -436,7 +436,7 @@
   <string name="confirmation_disable_videos_upload_message">确定要禁用这项功能吗？未上传的视频将不会被上传</string>
   <string name="conflict_title">文件冲突</string>
   <string name="conflict_description">冲突文件 %1$s，点击解决</string>
-  <string name="conflict_message">您要保留那個檔案\? 如果您同時選擇兩個版本, 本地的檔案將在檔案名稱後面會加上編號</string>
+  <string name="conflict_message">您要保留那個檔案? 如果您同時選擇兩個版本, 本地的檔案將在檔案名稱後面會加上編號</string>
   <string name="conflict_keep_both">都保留</string>
   <string name="conflict_use_local_version">本地版本</string>
   <string name="conflict_use_server_version">伺服器版本</string>
@@ -545,7 +545,7 @@
   <string name="action_upload_retry">重試</string>
   <string name="action_upload_clear">清除</string>
   <string name="local_file_not_found_toast">在本地的檔案系統中找不到這個檔案</string>
-  <string name="confirmation_remove_folders_alert">您真的要移除所選取的項目與裡面的文件\?</string>
+  <string name="confirmation_remove_folders_alert">您真的要移除所選取的項目與裡面的文件?</string>
   <string name="failed_upload_quota_exceeded_text">此帳戶無足夠儲存空間</string>
   <string name="auth_forbidden">禁用的驗證</string>
   <string name="actionbar_privacy_policy">隱私權聲明</string>

@@ -590,7 +590,7 @@
   <string name="action_upload_clear">クリア</string>
   <string name="local_file_not_found_toast">ローカルファイルにファイルがありません</string>
   <string name="confirmation_remove_files_alert">本当に%s個のファイルを削除しますか？</string>
-  <string name="confirmation_remove_folders_alert">選択したものとそのコンテンツを削除してよろしいですか\?</string>
+  <string name="confirmation_remove_folders_alert">選択したものとそのコンテンツを削除してよろしいですか?</string>
   <string name="failed_upload_quota_exceeded_text">アカウントに十分なスペースがありません</string>
   <string name="auth_forbidden">認証失敗</string>
   <string name="actionbar_privacy_policy">プライバシーポリシー</string>
@@ -778,7 +778,7 @@
   <string name="create_space_dialog_gb_unit">GB</string>
   <string name="create_space_dialog_empty_error">スペース名は空にできません</string>
   <string name="create_space_dialog_length_error">スペース名は255文字以内でなければなりません</string>
-  <string name="create_space_dialog_characters_error">禁止文字: / \\ . : \? * \" \' &gt; &lt; |</string>
+  <string name="create_space_dialog_characters_error">禁止文字: / \\ . : ? * \" \' &gt; &lt; |</string>
   <string name="create_space_dialog_quota_empty_error">スペース割り当ては空にできません</string>
   <string name="create_space_dialog_quota_zero_error">スペース割り当ては0より大きくなければなりません</string>
   <string name="create_space_dialog_quota_too_large_error">スペース割り当ては 1 PBを超えることはできません</string>
