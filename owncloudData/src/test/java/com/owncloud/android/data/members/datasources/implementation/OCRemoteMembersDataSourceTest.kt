@@ -72,6 +72,22 @@ class OCRemoteMembersDataSourceTest {
     }
 
     @Test
+    fun `removeMember removes a member from a project space correctly`() {
+        val removeMemberResult = createRemoteOperationResultMock(Unit, isSuccess = true)
+
+        every {
+            ocMembersService.removeMember(OC_SPACE_PROJECT_WITH_IMAGE.id, SPACE_MEMBERS.members[0].id)
+        } returns removeMemberResult
+
+        ocRemoteMembersDataSource.removeMember(OC_ACCOUNT_NAME, OC_SPACE_PROJECT_WITH_IMAGE.id, SPACE_MEMBERS.members[0].id)
+
+        verify(exactly = 1) {
+            clientManager.getMembersService(OC_ACCOUNT_NAME)
+            ocMembersService.removeMember(OC_SPACE_PROJECT_WITH_IMAGE.id, SPACE_MEMBERS.members[0].id)
+        }
+    }
+
+    @Test
     fun `searchGroups returns a list with all available groups from the server`() {
         val searchGroupsResult = createRemoteOperationResultMock(listOf(GROUP_MEMBER_RESPONSE), isSuccess = true)
 
