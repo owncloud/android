@@ -7,7 +7,7 @@
   <string name="actionbar_search">Etsi tästä kansiosta</string>
   <string name="actionbar_search_space">Etsi välilyöntejä</string>
   <string name="actionbar_sync">Päivitä tili</string>
-  <string name="actionbar_upload">Lähetä tiedosto</string>
+  <string name="actionbar_upload">Lähetä</string>
   <string name="actionbar_upload_from_apps">Sisältö toisista sovelluksista</string>
   <string name="actionbar_upload_files">Tiedostot</string>
   <string name="actionbar_open_with">Avaa sovelluksella</string>
@@ -24,7 +24,7 @@
   <string name="drawer_item_only_available_offline">Käytettävissä ilman verkkoyhteyttä</string>
   <string name="drawer_item_shared_by_link_files">Jaettu linkin kautta</string>
   <string name="drawer_item_settings">Asetukset</string>
-  <string name="drawer_item_uploads_list">Lataukset</string>
+  <string name="drawer_item_uploads_list">Lähetykset</string>
   <string name="drawer_close">Sulje</string>
   <string name="drawer_open">Avaa</string>
   <string name="drawer_loading_quota">Ladataan kiintiötä</string>
@@ -40,7 +40,7 @@
   <string name="prefs_subsection_logging">Tallennus tapahtumalokiin</string>
   <string name="prefs_subsection_more">Lisää</string>
   <string name="prefs_subsection_security">Tietoturva</string>
-  <string name="prefs_subsection_whatsnew">Mitä uutta viimeisimmässä versiossa?</string>
+  <string name="prefs_subsection_whatsnew">Mitä uutta viimeisimmässä versiossa\?</string>
   <string name="prefs_subsection_security_summary">Aseta sovelluksen lukitukset ja salli kosketukset muiden näkyvissä olevien ikkunoiden kanssa</string>
   <string name="prefs_subsection_logging_summary">Seuraa sovelluksen suorituksen tuottamia tapahtumalokeja</string>
   <string name="prefs_subsection_more_summary">Tietoja sovelluksesta, palautetta ja muuta</string>
@@ -58,7 +58,7 @@
   <string name="prefs_lock_access_from_document_provider_summary">Estä toisista sovelluksista pääsy tilin tiedostoihin Androidin omalla tiedostoselaimella.</string>
   <string name="prefs_touches_with_other_visible_windows">Kosketukset muiden näkyvien ikkunoiden kanssa</string>
   <string name="prefs_touches_with_other_visible_windows_summary">Salli kosketukset vaikka näkymä on toisen näkyvän ikkunan peittämä. Ota se käyttöön, jotta voit käyttää kevyitä suodattavia sovelluksia.</string>
-  <string name="confirmation_touches_with_other_windows_title">Haluatko todellakin ottaa tämän ominaisuuden käyttöön?</string>
+  <string name="confirmation_touches_with_other_windows_title">Haluatko todellakin ottaa tämän ominaisuuden käyttöön\?</string>
   <string name="confirmation_touches_with_other_windows_message">Käytät tätä ominaisuutta omalla vastuullasi! Vihamielinen sovellus voisi muita näkymiä käyttäen yrittää saada sinut tietämättäsi tekemään joitain toimintoja. </string>
   <string name="prefs_subsection_picture_uploads">Automaattinen kuvien lähetys</string>
   <string name="prefs_subsection_picture_uploads_summary">Hallitse automaattisesti lähetettyjen kuvien sijaintia ja käyttäytymistä</string>
@@ -138,7 +138,7 @@
   <string name="auth_host_url">Palvelinosoite https://…</string>
   <string name="auth_username">Käyttäjätunnus</string>
   <string name="auth_password">Salasana</string>
-  <string name="auth_register">Onko %1$s uusi tuttavuus sinulle?</string>
+  <string name="auth_register">Onko %1$s uusi tuttavuus sinulle\?</string>
   <string name="sync_string_files">Tiedostot</string>
   <string name="setup_btn_login">Kirjaudu sisään</string>
   <string name="uploader_btn_upload_text">Lähetä</string>
@@ -312,7 +312,7 @@
   <string name="biometric_not_enrolled">Tallenna ainakin yksi biometrinen tunnistustapa käyttääksesi tätä ominaisuutta.</string>
   <string name="biometric_prompt_title">Biometrinen kirjautuminen</string>
   <string name="biometric_prompt_subtitle">Kirjaudu käyttäen biometrista tunnistautumista.</string>
-  <string name="biometric_dialog_title">Haluatko lisäksi aktivoida biometrisen tunnistuksen?</string>
+  <string name="biometric_dialog_title">Haluatko lisäksi aktivoida biometrisen tunnistuksen\?</string>
   <string name="media_notif_ticker">%1$s-musiikkisoitin</string>
   <string name="media_state_playing">%1$s (toistetaan)</string>
   <string name="media_state_loading">%1$s (ladataan)</string>
@@ -357,8 +357,7 @@
   <string name="auth_expired_basic_auth_toast">Anna nykyinen salasana</string>
   <string name="auth_connecting_auth_server">Yhdistetään tunnistautumispalvelimeen…</string>
   <string name="auth_unsupported_auth_method">Palvelin ei tue tätä tunnistautumistapaa</string>
-  <string name="auth_fail_get_user_name">Palvelimesi ei palauta oikeata käyttäjä-ID:ta. Ota yhteys ylläpitäjään.
-	</string>
+  <string name="auth_fail_get_user_name">Palvelimesi ei palauta oikeata käyttäjä-ID:ta. Ota yhteys ylläpitäjään.\n\t</string>
   <string name="auth_can_not_auth_against_server">Tälle palvelimelle ei voi tunnistautua</string>
   <string name="auth_account_does_not_exist">Tiliä ei ole olemassa vielä laitteella</string>
   <string name="set_available_offline">Aseta käytettäväksi offline -tilassa</string>
@@ -367,14 +366,14 @@
   <string name="confirmation_unset_available_offline">Tiedosto asetettu oikein pois offline-tilakäytöstä</string>
   <string name="common_rename">Nimeä uudelleen</string>
   <string name="common_remove">Poista</string>
-  <string name="confirmation_remove_file_alert">Haluatko varmasti poistaa kohteen %1$s?</string>
-  <string name="confirmation_remove_folder_alert">Haluatko varmasti poistaa kohteen %1$s ja sen sisällön?</string>
+  <string name="confirmation_remove_file_alert">Haluatko varmasti poistaa kohteen %1$s\?</string>
+  <string name="confirmation_remove_folder_alert">Haluatko varmasti poistaa kohteen %1$s ja sen sisällön\?</string>
   <string name="confirmation_remove_local">Vain paikallinen</string>
-  <string name="confirmation_remove_account_alert">Haluatko varmasti poistaa tilin %1$s?</string>
-  <string name="confirmation_remove_account_alert_camera_uploads">Tähän tiliin on liitetty kameran kuvien lähetys. Tilin poistaminen poistaa käytöstä kameran kuvien lähettämisen. Haluatko todellakin poistaa tilin %1$s? </string>
+  <string name="confirmation_remove_account_alert">Haluatko varmasti poistaa tilin %1$s\?</string>
+  <string name="confirmation_remove_account_alert_camera_uploads">Tähän tiliin on liitetty kameran kuvien lähetys. Tilin poistaminen poistaa käytöstä kameran kuvien lähettämisen. Haluatko todellakin poistaa tilin %1$s\? </string>
   <string name="confirmation_remove_public_share_title">Poista linkki</string>
   <string name="confirmation_remove_private_share_title">Poista henkilökohtainen jako</string>
-  <string name="confirmation_remove_share_message">Haluatko todellakin poistaa %1$s jaon?</string>
+  <string name="confirmation_remove_share_message">Haluatko todellakin poistaa %1$s jaon\?</string>
   <string name="remove_success_msg">Poistettu onnistuneesti</string>
   <string name="remove_fail_msg">Poistamista ei voitu suorittaa loppuun asti</string>
   <string name="rename_dialog_title">Anna uusi nimi</string>
@@ -411,7 +410,7 @@
   <string name="ssl_validator_reason_cert_expired">- Palvelimen varmenne ei ole enää voimassa.</string>
   <string name="ssl_validator_reason_cert_not_yet_valid">- Palvelimen varmenteen voimassaoloajat ovat tulevaisuudessa.</string>
   <string name="ssl_validator_reason_hostname_not_verified">- Verkko-osoite ei vastaa varmenteessa mainittua isäntänimeä</string>
-  <string name="ssl_validator_question">Haluatko silti luottaa tähän varmenteeseen?</string>
+  <string name="ssl_validator_question">Haluatko silti luottaa tähän varmenteeseen\?</string>
   <string name="ssl_validator_not_saved">Varmennetta ei voitu tallentaa.</string>
   <string name="ssl_validator_btn_details_see">Tiedot</string>
   <string name="ssl_validator_btn_details_hide">Piilota</string>
@@ -440,11 +439,11 @@
   <string name="placeholder_timestamp">18.5.2012 12.23</string>
   <string name="placeholder_media_time">12:23:45</string>
   <string name="confirmation_disable_camera_uploads_title">Vahvista</string>
-  <string name="confirmation_disable_pictures_upload_message">Oletko varma, että haluat poistaa tämän ominaisuuden käytöstä? Lähetystä  odottavia kuvia ei lähetetä.</string>
-  <string name="confirmation_disable_videos_upload_message">Oletko varma, että haluat poistaa tämän ominaisuuden käytöstä? Lähetystä odottavia videoita ei lähetetä.</string>
+  <string name="confirmation_disable_pictures_upload_message">Oletko varma, että haluat poistaa tämän ominaisuuden käytöstä\? Lähetystä  odottavia kuvia ei lähetetä.</string>
+  <string name="confirmation_disable_videos_upload_message">Oletko varma, että haluat poistaa tämän ominaisuuden käytöstä\? Lähetystä odottavia videoita ei lähetetä.</string>
   <string name="conflict_title">Tiedostovirhe</string>
   <string name="conflict_description">Tiedoston %1$s osalta on konflikti, napauta ratkaistaksesi tilanteen.</string>
-  <string name="conflict_message">Mitkä tiedostot haluat säilyttää? Jos valitset kummatkin versiot, paikallisen version tiedoston nimeen lisätään numero.</string>
+  <string name="conflict_message">Mitkä tiedostot haluat säilyttää\? Jos valitset kummatkin versiot, paikallisen version tiedoston nimeen lisätään numero.</string>
   <string name="conflict_keep_both">Säilytä molemmat</string>
   <string name="conflict_use_local_version">paikallinen versio</string>
   <string name="conflict_use_server_version">palvelimen versio</string>
@@ -456,8 +455,7 @@
   <string name="get_shares_error">Jaettujen kansioiden hakeminen palvelimelta ei onnistunut.</string>
   <string name="get_sharees_error">Käyttäjien ja ryhmien hakeminen palvelimelta ei onnistunut.</string>
   <string name="get_capabilities_error">Palvelimen suorituskykytietojen hakeminen ei onnistunut.</string>
-  <string name="share_link_no_support_share_api">Jakaminen ei ole käytössä palvelimellasi. Ota yhteys
-		ylläpitäjään.</string>
+  <string name="share_link_no_support_share_api">Jakaminen ei ole käytössä palvelimellasi. Ota yhteys\n\t\tylläpitäjään.</string>
   <string name="share_link_file_error">Tämän tiedoston tai kansion jakaminen ei onnistunut</string>
   <string name="unshare_link_file_error">Tämän tiedoston tai kansion jakamisen poistaminen ei onnistunut</string>
   <string name="update_link_file_error">Tämän tiedoston tai kansion päivittäminen ei onnistunut</string>
@@ -573,8 +571,7 @@
   <string name="share_group_clarification">%1$s (ryhmä)</string>
   <string name="share_remote_clarification">%1$s (etä)</string>
   <string name="share_known_remote_clarification">%1$s ( %2$s :sta )</string>
-  <string name="share_sharee_unavailable">Pahoittelut, palvelimesi versio ei salli jakamista käyttäjien kesken
-          \nOta yhteys ylläpitäjään</string>
+  <string name="share_sharee_unavailable">Pahoittelut, palvelimesi versio ei salli jakamista käyttäjien kesken\n          \nOta yhteys ylläpitäjään</string>
   <string name="share_privilege_can_share">jaa</string>
   <string name="share_privilege_can_edit">voi muokata</string>
   <string name="share_privilege_can_edit_create">luo</string>
@@ -585,8 +582,8 @@
   <string name="action_upload_retry">Yritä uudelleen</string>
   <string name="action_upload_clear">Tyhjennä</string>
   <string name="local_file_not_found_toast">Tiedostoa ei löytynyt paikallisesta tiedostojärjestelmästä</string>
-  <string name="confirmation_remove_files_alert">Haluatko todellakin poistaa nämä %s kohdetta?</string>
-  <string name="confirmation_remove_folders_alert">Haluatko varmasti poistaa valitut kohteet ja niiden sisällön?</string>
+  <string name="confirmation_remove_files_alert">Haluatko todellakin poistaa nämä %s kohdetta\?</string>
+  <string name="confirmation_remove_folders_alert">Haluatko varmasti poistaa valitut kohteet ja niiden sisällön\?</string>
   <string name="failed_upload_quota_exceeded_text">Tällä tilillä ei ole riittävästi tilaa käytettävissä</string>
   <string name="auth_forbidden">Kielletty autentikoituminen</string>
   <string name="actionbar_privacy_policy">Yksityisyyskäytäntö</string>
@@ -599,7 +596,7 @@
   <string name="streaming_crossed_redirection">Striimaus ei ole sallittu risteävien uudelleenohjausten kautta.</string>
   <string name="previewing_video_common_error">Tätä videota ei voida luoda uudelleen.</string>
   <string name="previewing_video_not_supported">Videon esikatselu ei ole tuettu Android versiossasi. Tiedoston lataaminen käynnistyy automaattisesti.</string>
-  <string name="streaming_position_not_available">\"Positio ei ole käytettävissä\"</string>
+  <string name="streaming_position_not_available">"Positio ei ole käytettävissä"</string>
   <string name="error_no_network_connection">Laite ei ole kytkeytyneenä verkkoon.</string>
   <string name="share_no_public_links">Julkisia linkkejä ei ole vielä luotu.</string>
   <string name="share_no_link_in_this_share">Tähän jakoon ei ole linkkejä.</string>
@@ -624,7 +621,7 @@
   <string name="file_sync_conflict_notification_channel_description">Näytä tiedostokonfliktit kun niitä ilmenee.</string>
   <string name="clicks_to_be_developer">Olet %1$d klikkauksen päässä kehittäjävalikoiden avaamisesta käyttöön</string>
   <string name="rate_dialog_title">Arvioi %1$s sovellus!</string>
-  <string name="rate_dialog_description">Jos nautit tämän sovelluksen käytöstä, voisitko käyttää hetken arvioidaksesi se? Palautteesi on meille tärkeää.</string>
+  <string name="rate_dialog_description">Jos nautit tämän sovelluksen käytöstä, voisitko käyttää hetken arvioidaksesi se\? Palautteesi on meille tärkeää.</string>
   <string name="button_no_thanks_name">EI KIITOS</string>
   <string name="button_later_name">MYÖHEMMIN</string>
   <string name="button_rate_now_name">ARVIOI NYT</string>
@@ -736,7 +733,6 @@
   <string name="content_description_sort_by_name_ascending">Järjestä %1$s mukaan nousevasti</string>
   <string name="content_description_sort_by_name_descending">Järjestä %1$s mukaan laskevasti</string>
   <string name="content_description_create_new_folder">Luo uusi kansio</string>
-  <string name="content_description_expiration_date_switch">Päättymispäivä</string>
   <string name="create_shortcut_dialog_title">Luo oikopolku</string>
   <string name="create_shortcut_dialog_url">URL</string>
   <string name="create_shortcut_dialog_url_information">URL pitää alkaa joko https:// tai http:// jotta sen voi avata selaimessa</string>
@@ -749,13 +745,6 @@
   <string name="create_space_dialog_quota">Kiintiö</string>
   <string name="disabled_space_label">Ei käytössä</string>
   <string name="members_title">Jäsenet</string>
-  <string name="members_add">Lisää jäsen</string>
-  <string name="members_permissions">Oikeudet</string>
-  <string name="members_options">Valinnat</string>
-  <string name="members_expiration_date">Päättymispäivä</string>
-  <string name="members_invite">Kutsu</string>
-  <string name="member_type_user">Käyttäjä</string>
-  <string name="member_type_group">Ryhmä</string>
   <string name="link_role_accessibility">Linkki</string>
   <string name="button_role_accessibility">Painike</string>
   <string name="folder_picker_label">Kansion valitsin</string>
@@ -770,4 +759,4 @@
   <string name="audio_preview_label">Äänen esikuuntelu</string>
   <string name="details_label">Tiedot</string>
   <string name="text_preview_label">Tekstin esikatselu</string>
-</resources>
+  </resources>

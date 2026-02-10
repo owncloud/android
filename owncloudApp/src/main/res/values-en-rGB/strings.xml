@@ -41,7 +41,7 @@
   <string name="prefs_subsection_logging">Logging</string>
   <string name="prefs_subsection_more">More</string>
   <string name="prefs_subsection_security">Security</string>
-  <string name="prefs_subsection_whatsnew">What´s new in the latest version?</string>
+  <string name="prefs_subsection_whatsnew">What´s new in the latest version\?</string>
   <string name="prefs_subsection_security_summary">Set locks to access the app and allow touches with other visible windows</string>
   <string name="prefs_subsection_logging_summary">Keep track of logs produced by the execution of the app</string>
   <string name="prefs_subsection_more_summary">App info, feedback and others</string>
@@ -59,7 +59,7 @@
   <string name="prefs_lock_access_from_document_provider_summary">Lock access from other apps to the files of the accounts in the app via the Android native file explorer.</string>
   <string name="prefs_touches_with_other_visible_windows">Touches with other visible windows</string>
   <string name="prefs_touches_with_other_visible_windows_summary">Allow touches when the view is obscured by another visible window. Enable it to use light filtering apps.</string>
-  <string name="confirmation_touches_with_other_windows_title">Are you sure you want to enable this feature?</string>
+  <string name="confirmation_touches_with_other_windows_title">Are you sure you want to enable this feature\?</string>
   <string name="confirmation_touches_with_other_windows_message">Use this feature at your own risk. A malicious application could try to spoof you into unknowingly performing some actions, using other views.</string>
   <string name="prefs_subsection_picture_uploads">Automatic picture uploads</string>
   <string name="prefs_subsection_picture_uploads_summary">Manage location and behavior of the pictures uploaded automatically</string>
@@ -83,7 +83,6 @@
   <string name="prefs_subsection_notifications">Manage notifications</string>
   <string name="prefs_show_hidden_files">Show hidden files</string>
   <string name="prefs_show_disabled_spaces">Show disabled spaces</string>
-  <string name="prefs_show_disabled_spaces_summary">Applies only to space managers in Infinite Scale accounts</string>
   <string name="prefs_log_open_logs_list_view">Log files</string>
   <string name="prefs_log_no_logs_list_view">Empty log folder!</string>
   <string name="prefs_log_empty_subtitle">Enable logging and log files will show up here.</string>
@@ -141,7 +140,7 @@
   <string name="auth_host_url">Server address https://…</string>
   <string name="auth_username">Username</string>
   <string name="auth_password">Password</string>
-  <string name="auth_register">New to %1$s?</string>
+  <string name="auth_register">New to %1$s\?</string>
   <string name="sync_string_files">Files</string>
   <string name="setup_btn_login">Log in</string>
   <string name="uploader_btn_upload_text">Upload</string>
@@ -316,7 +315,7 @@
   <string name="biometric_not_enrolled">Register at least one biometric to use this feature.</string>
   <string name="biometric_prompt_title">Biometric log in</string>
   <string name="biometric_prompt_subtitle">Log in using your biometric credential.</string>
-  <string name="biometric_dialog_title">Do you want to additionally activate biometric security?</string>
+  <string name="biometric_dialog_title">Do you want to additionally activate biometric security\?</string>
   <string name="biometric_not_available">Biometric unlocking is not available because the system could not provide it</string>
   <string name="media_notif_ticker">%1$s music player</string>
   <string name="media_state_playing">%1$s (playing)</string>
@@ -362,8 +361,7 @@
   <string name="auth_expired_basic_auth_toast">Please enter the current password</string>
   <string name="auth_connecting_auth_server">Connecting to authentication server …</string>
   <string name="auth_unsupported_auth_method">The server does not support this authentication method</string>
-  <string name="auth_fail_get_user_name">Your server is not returning a correct user ID. Please contact an administrator.
-	</string>
+  <string name="auth_fail_get_user_name">Your server is not returning a correct user ID. Please contact an administrator.\n\t</string>
   <string name="auth_can_not_auth_against_server">Cannot authenticate to this server</string>
   <string name="auth_account_does_not_exist">Account does not exist in the device yet</string>
   <string name="set_available_offline">Set as available offline</string>
@@ -372,14 +370,14 @@
   <string name="confirmation_unset_available_offline">The file was unset as available offline correctly</string>
   <string name="common_rename">Rename</string>
   <string name="common_remove">Remove</string>
-  <string name="confirmation_remove_file_alert">Do you really want to remove %1$s?</string>
-  <string name="confirmation_remove_folder_alert">Do you really want to remove %1$s and its contents?</string>
+  <string name="confirmation_remove_file_alert">Do you really want to remove %1$s\?</string>
+  <string name="confirmation_remove_folder_alert">Do you really want to remove %1$s and its contents\?</string>
   <string name="confirmation_remove_local">Local only</string>
-  <string name="confirmation_remove_account_alert">Do you really want to remove the account %1$s?</string>
-  <string name="confirmation_remove_account_alert_camera_uploads">This account has camera uploads attached, removing the account will disable the camera uploads. Do you really want to remove the account %1$s?</string>
+  <string name="confirmation_remove_account_alert">Do you really want to remove the account %1$s\?</string>
+  <string name="confirmation_remove_account_alert_camera_uploads">This account has camera uploads attached, removing the account will disable the camera uploads. Do you really want to remove the account %1$s\?</string>
   <string name="confirmation_remove_public_share_title">Remove link</string>
   <string name="confirmation_remove_private_share_title">Remove private share</string>
-  <string name="confirmation_remove_share_message">Do you really want to remove %1$s share?</string>
+  <string name="confirmation_remove_share_message">Do you really want to remove %1$s share\?</string>
   <string name="remove_success_msg">Removal succeeded</string>
   <string name="remove_fail_msg">Removal failed</string>
   <string name="rename_dialog_title">Enter a new name</string>
@@ -416,7 +414,7 @@
   <string name="ssl_validator_reason_cert_expired">- The server certificate expired.</string>
   <string name="ssl_validator_reason_cert_not_yet_valid">- The server certificate valid dates are in the future.</string>
   <string name="ssl_validator_reason_hostname_not_verified">- The URL does not match the hostname in the certificate</string>
-  <string name="ssl_validator_question">Do you want to trust this certificate anyway?</string>
+  <string name="ssl_validator_question">Do you want to trust this certificate anyway\?</string>
   <string name="ssl_validator_not_saved">The certificate could not be saved.</string>
   <string name="ssl_validator_btn_details_see">Details</string>
   <string name="ssl_validator_btn_details_hide">Hide</string>
@@ -445,13 +443,13 @@
   <string name="placeholder_timestamp">2012/05/18 12:23 PM</string>
   <string name="placeholder_media_time">12:23:45</string>
   <string name="confirmation_disable_camera_uploads_title">Confirm</string>
-  <string name="confirmation_disable_pictures_upload_message">Are you sure you want to disable this feature? The pending pictures will not be uploaded.</string>
-  <string name="confirmation_disable_videos_upload_message">Are you sure you want to disable this feature? The pending videos will not be uploaded.</string>
+  <string name="confirmation_disable_pictures_upload_message">Are you sure you want to disable this feature\? The pending pictures will not be uploaded.</string>
+  <string name="confirmation_disable_videos_upload_message">Are you sure you want to disable this feature\? The pending videos will not be uploaded.</string>
   <string name="proper_pics_folder_warning_camera_upload">Please make sure the folder selected is where the camera you are using saves the pictures taken. Otherwise, the feature will not be able to detect your pictures. Keep in mind that pictures will be uploaded in at least 15 minutes after taking them. For a better performance, make sure in your device settings that %1$s is allowed to run in background.</string>
   <string name="proper_videos_folder_warning_camera_upload">Please make sure the folder selected is where the camera you are using saves the videos recorded. Otherwise, the feature will not be able to detect your videos. Keep in mind that videos will be uploaded in at least 15 minutes after recording them. For a better performance, make sure in your device settings that %1$s is allowed to run in background.</string>
   <string name="conflict_title">File in conflict</string>
   <string name="conflict_description">There is a conflict in file %1$s, tap to solve it.</string>
-  <string name="conflict_message">Which files do you want to keep? If you select both versions, the local file will have a number added to its name.</string>
+  <string name="conflict_message">Which files do you want to keep\? If you select both versions, the local file will have a number added to its name.</string>
   <string name="conflict_keep_both">Keep both</string>
   <string name="conflict_use_local_version">local version</string>
   <string name="conflict_use_server_version">server version</string>
@@ -463,8 +461,7 @@
   <string name="get_shares_error">It was not possible to retrieve the shares from the server</string>
   <string name="get_sharees_error">It was not possible to retrieve users and groups from the server</string>
   <string name="get_capabilities_error">It was not possible to retrieve the capabilities from the server</string>
-  <string name="share_link_no_support_share_api">Sorry, sharing is not enabled on your server. Please contact your
-		administrator.</string>
+  <string name="share_link_no_support_share_api">Sorry, sharing is not enabled on your server. Please contact your\n\t\tadministrator.</string>
   <string name="share_link_file_error">It was not possible to share this file or folder</string>
   <string name="unshare_link_file_error">It was not possible to unshare this file or folder</string>
   <string name="update_link_file_error">It was not possible to update this file or folder</string>
@@ -580,8 +577,7 @@
   <string name="share_group_clarification">%1$s (group)</string>
   <string name="share_remote_clarification">%1$s (remote)</string>
   <string name="share_known_remote_clarification">%1$s ( at %2$s )</string>
-  <string name="share_sharee_unavailable">Sorry, your server version does not allow sharing with users within clients.
-        \nPlease contact your administrator</string>
+  <string name="share_sharee_unavailable">Sorry, your server version does not allow sharing with users within clients.\n        \nPlease contact your administrator</string>
   <string name="share_privilege_can_share">can share</string>
   <string name="share_privilege_can_edit">can edit</string>
   <string name="share_privilege_can_edit_create">create</string>
@@ -592,8 +588,8 @@
   <string name="action_upload_retry">Retry</string>
   <string name="action_upload_clear">Clear</string>
   <string name="local_file_not_found_toast">The file was not found in the local file system</string>
-  <string name="confirmation_remove_files_alert">Do you really want to remove these %s items?</string>
-  <string name="confirmation_remove_folders_alert">Do you really want to remove the selected items and their contents?</string>
+  <string name="confirmation_remove_files_alert">Do you really want to remove these %s items\?</string>
+  <string name="confirmation_remove_folders_alert">Do you really want to remove the selected items and their contents\?</string>
   <string name="failed_upload_quota_exceeded_text">Not enough space in the account</string>
   <string name="auth_forbidden">Forbidden authentication</string>
   <string name="actionbar_privacy_policy">Privacy policy</string>
@@ -606,7 +602,7 @@
   <string name="streaming_crossed_redirection">Streaming is not allowed via crossed redirections.</string>
   <string name="previewing_video_common_error">This video cannot be reproduced.</string>
   <string name="previewing_video_not_supported">Video previewing is not supported in your Android version. File download will start automatically.</string>
-  <string name="streaming_position_not_available">\"Position not available\"</string>
+  <string name="streaming_position_not_available">"Position not available"</string>
   <string name="error_no_network_connection">Device is not connected to a network.</string>
   <string name="share_no_public_links">No public links created yet.</string>
   <string name="share_no_link_in_this_share">This share has no link.</string>
@@ -631,7 +627,7 @@
   <string name="file_sync_conflict_notification_channel_description">See file conflicts when they occur.</string>
   <string name="clicks_to_be_developer">You are %1$d clicks away to enable developer menus</string>
   <string name="rate_dialog_title">Rate %1$s app!</string>
-  <string name="rate_dialog_description">If you enjoy using this app, could you take a moment to rate it? Your feedback is very important for us. </string>
+  <string name="rate_dialog_description">If you enjoy using this app, could you take a moment to rate it\? Your feedback is very important for us. </string>
   <string name="button_no_thanks_name">NO, THANKS</string>
   <string name="button_later_name">LATER</string>
   <string name="button_rate_now_name">RATE NOW</string>
@@ -685,10 +681,6 @@
   <string name="release_notes_icon">Release note icon</string>
   <string name="release_notes_bugfixes_title">Minor bugfixes</string>
   <string name="release_notes_bugfixes_subtitle">Some bugs were fixed to improve experience in the app</string>
-  <string name="release_notes_4_8_0_title_set_emoji_as_space_image">Set emoji as space image</string>
-  <string name="release_notes_4_8_0_subtitle_set_emoji_as_space_image">Infinite Scale users with right permissions can now set an emoji as space image</string>
-  <string name="release_notes_4_8_0_title_space_membership">Space membership</string>
-  <string name="release_notes_4_8_0_subtitle_space_membership">Infinite Scale users can see all members of a space and manage them with right permissions</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Open in web</string>
   <string name="ic_action_open_with_web">Open in %1$s (web)</string>
@@ -761,10 +753,6 @@
   <string name="content_description_create_button">Create button</string>
   <string name="content_description_cancel_button">Cancel button</string>
   <string name="content_description_quota_switch">Space quota</string>
-  <string name="content_description_member_user">User %1$s</string>
-  <string name="content_description_member_group">Group %1$s</string>
-  <string name="content_description_member_expiration_date">Expires %1$s</string>
-  <string name="content_description_expiration_date_switch">Expiration date</string>
   <string name="create_shortcut_dialog_title">Create a shortcut</string>
   <string name="create_shortcut_dialog_url">URL</string>
   <string name="create_shortcut_dialog_url_information">The URL must start with https:// or http:// so that it can be opened in the browser</string>
@@ -780,7 +768,7 @@
   <string name="create_space_dialog_gb_unit">GB</string>
   <string name="create_space_dialog_empty_error">Space name must not be empty</string>
   <string name="create_space_dialog_length_error">Space name must not be longer than 255 characters</string>
-  <string name="create_space_dialog_characters_error">Forbidden characters: / \\ . : ? * \" \' &gt; &lt; |</string>
+  <string name="create_space_dialog_characters_error">Forbidden characters: / \\ . : \? * \" \' &gt; &lt; |</string>
   <string name="create_space_dialog_quota_empty_error">Space quota must not be empty</string>
   <string name="create_space_dialog_quota_zero_error">Space quota must be greater than zero</string>
   <string name="create_space_dialog_quota_too_large_error">Space quota cannot exceed 1 PB</string>
@@ -793,31 +781,23 @@
   <string name="edit_space_image_correctly">Image updated correctly</string>
   <string name="edit_space_image_failed">Image could not be updated</string>
   <string name="disable_space">Disable space</string>
-  <string name="disable_space_dialog_title">Do you really want to disable the space: %1$s?</string>
+  <string name="disable_space_dialog_title">Do you really want to disable the space: %1$s\?</string>
   <string name="disable_space_dialog_message">If you disable the selected space, it can no longer be accessed. Only Space managers will still have access. Note: No files will be deleted from the server.</string>
   <string name="disable_space_correctly">Space disabled correctly</string>
   <string name="disable_space_failed">Space could not be disabled</string>
   <string name="disabled_space_label">Disabled</string>
   <string name="enable_space">Enable space</string>
-  <string name="enable_space_dialog_title">Do you really want to enable the space: %1$s?</string>
+  <string name="enable_space_dialog_title">Do you really want to enable the space: %1$s\?</string>
   <string name="enable_space_dialog_message">If you enable the selected space, it can be accessed again.</string>
   <string name="enable_space_correctly">Space enabled correctly</string>
   <string name="enable_space_failed">Space could not be enabled</string>
   <string name="delete_space">Delete space</string>
-  <string name="delete_space_dialog_title">Do you really want to delete the space: %1$s?</string>
+  <string name="delete_space_dialog_title">Do you really want to delete the space: %1$s\?</string>
   <string name="delete_space_dialog_message">If you delete the selected space, it can no longer be accessed and files will be deleted from the server.</string>
   <string name="delete_space_correctly">Space deleted correctly</string>
   <string name="delete_space_failed">Space could not be deleted</string>
-  <string name="set_space_icon">Set icon</string>
   <string name="members_title">Members</string>
-  <string name="members_add">Add member</string>
-  <string name="members_permissions">Permissions</string>
-  <string name="members_options">Options</string>
-  <string name="members_expiration_date">Expiration date</string>
-  <string name="members_invite">Invite</string>
-  <string name="member_type_user">User</string>
-  <string name="member_type_group">Group</string>
-  <string name="feedback_dialog_get_in_contact_description"><![CDATA[ Ask for help in our <a href="%1$s"><b>forum</b></a> or contribute in our <a href="%2$s"><b>GitHub repo</b></a>]]></string>
+  <string name="feedback_dialog_get_in_contact_description"><![CDATA[ Ask for help in our <a href=\"%1$s\"><b>forum</b></a> or contribute in our <a href=\"%2$s\"><b>GitHub repo</b></a>]]></string>
   <string name="link_role_accessibility">Link</string>
   <string name="button_role_accessibility">Button</string>
   <string name="folder_picker_label">Folder picker</string>
@@ -832,5 +812,4 @@
   <string name="audio_preview_label">Audio preview</string>
   <string name="details_label">Details</string>
   <string name="text_preview_label">Text preview</string>
-  <string name="space_members_label">Space members</string>
-</resources>
+  </resources>

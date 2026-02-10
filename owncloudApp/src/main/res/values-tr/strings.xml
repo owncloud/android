@@ -40,7 +40,7 @@
   <string name="prefs_subsection_logging">Günlükleme</string>
   <string name="prefs_subsection_more">Daha fazla</string>
   <string name="prefs_subsection_security">Güvenlik</string>
-  <string name="prefs_subsection_whatsnew">En son sürümde neler var?</string>
+  <string name="prefs_subsection_whatsnew">En son sürümde neler var\?</string>
   <string name="prefs_subsection_security_summary">Uygulamaya erişmek ve diğer görünür pencerelerle dokunuşlara izin vermek için kilitleri ayarlayın</string>
   <string name="prefs_subsection_logging_summary">Uygulamanın yürütülmesi tarafından üretilen günlükleri takip edin</string>
   <string name="prefs_subsection_more_summary">Uygulama bilgisi, geri bildirim ve diğerleri</string>
@@ -58,7 +58,7 @@
   <string name="prefs_lock_access_from_document_provider_summary">Android yerel dosya gezgini aracılığıyla diğer uygulamalardan uygulamadaki hesapların dosyalarına erişimi kilitleyin.</string>
   <string name="prefs_touches_with_other_visible_windows">Diğer görünür pencerelerle birlikte dokunma</string>
   <string name="prefs_touches_with_other_visible_windows_summary">Başka bir görünür pencere tarafından gizlendiğinde dokunmalara izin ver. Uygulamaları hafif filtrelemek için etkinleştir.</string>
-  <string name="confirmation_touches_with_other_windows_title">Bu özelliği etkinleştirmek istediğinizden emin misiniz?</string>
+  <string name="confirmation_touches_with_other_windows_title">Bu özelliği etkinleştirmek istediğinizden emin misiniz\?</string>
   <string name="confirmation_touches_with_other_windows_message">Bu özelliği kendi riskinizi alarak kullanın. Kötü niyetli bir uygulama, sizi başka görünümler kullanarak bilmeden bazı eylemler yapmaya, kandırmaya çalışabilir.</string>
   <string name="prefs_subsection_picture_uploads">Otomatik resim çevirileri</string>
   <string name="prefs_subsection_picture_uploads_summary">Otomatik olarak yüklenen resimlerin konumunu ve davranışını yönetin</string>
@@ -126,7 +126,7 @@
   <string name="auth_host_url">Sunucu adresi https://…</string>
   <string name="auth_username">Kullanıcı Adı</string>
   <string name="auth_password">Parola</string>
-  <string name="auth_register">%1$s sizin için yeni mi?</string>
+  <string name="auth_register">%1$s sizin için yeni mi\?</string>
   <string name="sync_string_files">Dosyalar</string>
   <string name="setup_btn_login">Giriş yap</string>
   <string name="uploader_btn_upload_text">Yükle</string>
@@ -284,7 +284,7 @@
   <string name="lock_time_try_again">Lütfen, %1$s\'da tekrar deneyin</string>
   <string name="biometric_prompt_title">Biyometrik giriş yap</string>
   <string name="biometric_prompt_subtitle">Biyometrik kimlik bilgilerinizi kullanarak giriş yapın.</string>
-  <string name="biometric_dialog_title">Ek olarak biyometrik güvenliği etkinleştirmek istiyor musunuz?</string>
+  <string name="biometric_dialog_title">Ek olarak biyometrik güvenliği etkinleştirmek istiyor musunuz\?</string>
   <string name="media_notif_ticker">%1$s müzik çalar</string>
   <string name="media_state_playing">%1$s (oynatılıyor)</string>
   <string name="media_state_loading">%1$s (yükleniyor)</string>
@@ -333,14 +333,14 @@
   <string name="unset_available_offline">Çevrimdışı erişimden kaldır</string>
   <string name="common_rename">Yeniden adlandır</string>
   <string name="common_remove">Kaldır</string>
-  <string name="confirmation_remove_file_alert">Gerçekten %1$s dosyasını kaldırmak istiyor musunuz?</string>
-  <string name="confirmation_remove_folder_alert">Gerçekten %1$s ve içeriğini kaldırmak istediğinizden emin misiniz?</string>
+  <string name="confirmation_remove_file_alert">Gerçekten %1$s dosyasını kaldırmak istiyor musunuz\?</string>
+  <string name="confirmation_remove_folder_alert">Gerçekten %1$s ve içeriğini kaldırmak istediğinizden emin misiniz\?</string>
   <string name="confirmation_remove_local">Sadece yerel</string>
-  <string name="confirmation_remove_account_alert">%1$s hesabını gerçekten kaldırmak istiyor musunuz?</string>
-  <string name="confirmation_remove_account_alert_camera_uploads">Bu hesaba kamera yüklemeleri eklenmiş, hesabın kaldırılması kamera yüklemelerini devre dışı bırakacaktır. %1$s hesabını gerçekten kaldırmak istiyor musunuz?</string>
+  <string name="confirmation_remove_account_alert">%1$s hesabını gerçekten kaldırmak istiyor musunuz\?</string>
+  <string name="confirmation_remove_account_alert_camera_uploads">Bu hesaba kamera yüklemeleri eklenmiş, hesabın kaldırılması kamera yüklemelerini devre dışı bırakacaktır. %1$s hesabını gerçekten kaldırmak istiyor musunuz\?</string>
   <string name="confirmation_remove_public_share_title">Bağlantıyı sil</string>
   <string name="confirmation_remove_private_share_title">Özel paylaşımı kaldır</string>
-  <string name="confirmation_remove_share_message">Gerçekten %1$s paylaşımını kaldırmak istiyor musunuz?</string>
+  <string name="confirmation_remove_share_message">Gerçekten %1$s paylaşımını kaldırmak istiyor musunuz\?</string>
   <string name="remove_success_msg">Kaldırma başarılı</string>
   <string name="remove_fail_msg">Kaldırma başarısız</string>
   <string name="rename_dialog_title">Yeni bir isim girin</string>
@@ -373,7 +373,7 @@
   <string name="ssl_connection_not_secure">Bağlantı güvenli değil, http trafiğine izin verilmedi.</string>
   <string name="ssl_validator_reason_cert_expired">- Sunucu sertifikasının süresi dolmuş.</string>
   <string name="ssl_validator_reason_hostname_not_verified">- Adres, sertifikadaki sunucu adı ile eşleşmiyor</string>
-  <string name="ssl_validator_question">Sertifikaya yine de güvenmek istiyor musunuz?</string>
+  <string name="ssl_validator_question">Sertifikaya yine de güvenmek istiyor musunuz\?</string>
   <string name="ssl_validator_btn_details_see">Ayrıntılar</string>
   <string name="ssl_validator_btn_details_hide">Gizle</string>
   <string name="ssl_validator_label_subject">Verilen:</string>
@@ -401,7 +401,7 @@
   <string name="placeholder_media_time">12:23:45</string>
   <string name="confirmation_disable_camera_uploads_title">Onayla</string>
   <string name="conflict_title">Çakışan dosya</string>
-  <string name="conflict_message">Hangi dosyaları saklamak istiyorsunuz? Her ikisini de saklamayı seçerseniz yerel dosyanın adına bir sayı eklenecek.</string>
+  <string name="conflict_message">Hangi dosyaları saklamak istiyorsunuz\? Her ikisini de saklamayı seçerseniz yerel dosyanın adına bir sayı eklenecek.</string>
   <string name="conflict_keep_both">İkisini de koru</string>
   <string name="conflict_use_local_version">yerel sürüm</string>
   <string name="conflict_use_server_version">sunucu sürümü</string>
@@ -409,8 +409,7 @@
   <string name="preview_image_description">Resim önizleme</string>
   <string name="preview_image_error_unknown_format">Bu resim gösterilemiyor.</string>
   <string name="error__upload__local_file_not_copied">%1$s, %2$s yerel klasörüne kopyalanamadı.</string>
-  <string name="share_link_no_support_share_api">Üzgünüz, paylaşım sunucunuzda etkin değil. Lütfen yöneticinizle
-                iletişime geçin.</string>
+  <string name="share_link_no_support_share_api">Üzgünüz, paylaşım sunucunuzda etkin değil. Lütfen yöneticinizle\n                iletişime geçin.</string>
   <string name="share_link_file_error">Bu dosya veya klasör paylaşılamadı</string>
   <string name="unshare_link_file_error">Bu dosya veya klasör paylaşımdan kaldırılamadı</string>
   <string name="update_link_file_error">Bu dosya veya klasör güncellenemedi</string>
@@ -464,7 +463,7 @@
   <string name="auth_refresh_button">Bağlantıyı yenile</string>
   <string name="auth_host_address">Sunucu adresi</string>
   <string name="common_error_out_memory">Yeterli hafıza yok</string>
-  <string name="username">Kullanıcı adı</string>
+  <string name="username">Kullanıcı Adı</string>
   <string name="file_list__footer__folder">1 klasör</string>
   <string name="file_list__footer__folders">%1$d klasör</string>
   <string name="file_list__footer__file">1 dosya</string>
@@ -523,7 +522,7 @@
   <string name="action_upload_retry">Yeniden Dene</string>
   <string name="action_upload_clear">Temizle</string>
   <string name="local_file_not_found_toast">Dosya yerel dosya sisteminde bulunamadı</string>
-  <string name="confirmation_remove_folders_alert">Seçili nesneleri ve içeriklerini silmek istediğinize emin misiniz?</string>
+  <string name="confirmation_remove_folders_alert">Seçili nesneleri ve içeriklerini silmek istediğinize emin misiniz\?</string>
   <string name="failed_upload_quota_exceeded_text">Hesapta yeterli yer yok</string>
   <string name="auth_forbidden">Yasak kimlik doğrulaması</string>
   <string name="actionbar_privacy_policy">Mahremiyet politikası</string>
@@ -535,7 +534,7 @@
   <string name="streaming_file_not_found_error">Bu video dosyası artık sunucuda mevcut değil.</string>
   <string name="previewing_video_common_error">Bu video yeniden üretilemiyor.</string>
   <string name="previewing_video_not_supported">Video ön izlemesi sahip olduğunuz Android versiyonunda desteklenmemektedir. Dosya indirmesi otomatik başlayacak.</string>
-  <string name="streaming_position_not_available">\"Pozisyon müsait değil\"</string>
+  <string name="streaming_position_not_available">"Pozisyon müsait değil"</string>
   <string name="share_no_link_in_this_share">Bu paylaşımın bağlantısı yok.</string>
   <string name="share_warning_about_forwarding_public_links">Bağlantıya sahip herkes bu dosya/klasöre erişebilir.</string>
   <string name="share_via_link_default_password">*****</string>
@@ -552,7 +551,7 @@
   <string name="file_sync_notification_channel_description">Dosya eşitleme sonucunu gör</string>
   <string name="file_sync_conflict_notification_channel_name">Dosya çakışmaları</string>
   <string name="rate_dialog_title">%1$s uygulamasını oyla!</string>
-  <string name="rate_dialog_description">Bu uygulamayı kullanmaktan memnunsanız oylamak için birkaç dakikanızı ayırır mısınız? Geri dönüşünüz bizim için çok önemli.</string>
+  <string name="rate_dialog_description">Bu uygulamayı kullanmaktan memnunsanız oylamak için birkaç dakikanızı ayırır mısınız\? Geri dönüşünüz bizim için çok önemli.</string>
   <string name="button_no_thanks_name">HAYIR, TEŞEKKÜRLER</string>
   <string name="button_later_name">DAHA SONRA</string>
   <string name="button_rate_now_name">ŞİMDİ OYLA</string>
@@ -606,14 +605,12 @@
   <string name="ic_action_open_in_web">Web\'te aç</string>
   <string name="ic_action_open_with_web">%1$s\'da aç (web)</string>
   <string name="open_in_web_error_generic">Web\'te açılamadı</string>
-  <!--oCIS accounts warning-->
   <string name="ocis_accounts_warning_checkbox_message">Tekrar gösterme</string>
   <string name="ocis_accounts_warning_button">Anlaşıldı</string>
   <string name="tab_label_ascii">Metin</string>
   <string name="apply_to_all_conflicts">Tüm %1$s çakışma için uygula</string>
   <string name="log_file_downloaded">Kayıt dosyası indirildi</string>
   <string name="go_to_download_folder">İndirilenlere git</string>
-  <!--DeepLinks-->
   <string name="deep_link_loading">Bağlantıdan dosya açma</string>
   <string name="fab_refresh_text">Yenile</string>
   <string name="fab_refresh_sync_in_progress">Senkronizasyon hâlihazırda devam ediyor</string>
@@ -641,7 +638,6 @@
   <string name="content_description_logo">Logo</string>
   <string name="content_description_add_share">Paylaşım ekle</string>
   <string name="content_description_create_new_folder">Yeni klasör oluştur</string>
-  <string name="content_description_expiration_date_switch">Son kullanım tarihi</string>
   <string name="create_shortcut_dialog_title">Kısayol oluştur</string>
   <string name="create_shortcut_dialog_url">URL</string>
   <string name="create_shortcut_dialog_url_information">Bağlantı, tarayıcıda açılabilmesi için https:// veya http:// ile başlamalı</string>
@@ -654,13 +650,6 @@
   <string name="create_space_dialog_quota">Kota</string>
   <string name="disabled_space_label">Devre Dışı</string>
   <string name="members_title">Üyeler</string>
-  <string name="members_add">Üye ekle</string>
-  <string name="members_permissions">İzinler</string>
-  <string name="members_options">Seçenekler</string>
-  <string name="members_expiration_date">Son kullanım tarihi</string>
-  <string name="members_invite">Davet</string>
-  <string name="member_type_user">Kullanıcı</string>
-  <string name="member_type_group">Grup</string>
   <string name="link_role_accessibility">Bağlantı</string>
   <string name="button_role_accessibility">Tuş</string>
   <string name="folder_picker_label">Klasör seçici</string>
@@ -670,8 +659,8 @@
   <string name="release_notes_label">Sürüm notları</string>
   <string name="image_preview_label">Resim önizleme</string>
   <string name="login_label">Oturum Aç</string>
-  <string name="whats_new_label">Neler yeni?</string>
+  <string name="whats_new_label">Neler yeni\?</string>
   <string name="audio_preview_label">Ses önizlemesi</string>
   <string name="details_label">Ayrıntılar</string>
   <string name="text_preview_label">Metin önizlemesi</string>
-</resources>
+  </resources>

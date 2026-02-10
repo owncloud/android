@@ -41,13 +41,13 @@
   <string name="prefs_subsection_logging">Gravando no Log</string>
   <string name="prefs_subsection_more">Mais</string>
   <string name="prefs_subsection_security">Segurança</string>
-  <string name="prefs_subsection_whatsnew">O que há de novo na versão mais recente?</string>
+  <string name="prefs_subsection_whatsnew">O que há de novo na versão mais recente\?</string>
   <string name="prefs_subsection_security_summary">Defina segurança para acesso ao aplicativo e permitir toques com outras janelas visíveis</string>
   <string name="prefs_subsection_logging_summary">Acompanhe os logs produzidos pela execução do aplicativo</string>
   <string name="prefs_subsection_more_summary">Informações do aplicativo, retorno de informações e outros</string>
   <string name="prefs_accounts">Contas</string>
   <string name="prefs_manage_accounts">Gerir contas</string>
-  <string name="prefs_passcode">Proteção por código</string>
+  <string name="prefs_passcode">Bloqueio por código</string>
   <string name="prefs_biometric">Bloqueio biométrico</string>
   <string name="prefs_biometric_summary">Ativar senha ou bloqueio padrão para habilitar esta opção</string>
   <string name="prefs_lock_application">Bloquear aplicação</string>
@@ -59,7 +59,7 @@
   <string name="prefs_lock_access_from_document_provider_summary">Bloqueie o acesso de outros aplicativos aos arquivos das contas no aplicativo por meio do explorador de arquivos nativo do Android.</string>
   <string name="prefs_touches_with_other_visible_windows">Toques com outras janelas visíveis</string>
   <string name="prefs_touches_with_other_visible_windows_summary">Permitir toques quando a visualização é obscurecida por outra janela visível. Ativá-lo para usar aplicativos de filtragem de luz.</string>
-  <string name="confirmation_touches_with_other_windows_title">Tem certeza de que deseja ativar esse recurso?</string>
+  <string name="confirmation_touches_with_other_windows_title">Tem certeza de que deseja ativar esse recurso\?</string>
   <string name="confirmation_touches_with_other_windows_message">Use esse recurso por sua conta e risco. Um aplicativo malicioso pode tentar enganar você para que você execute algumas ações sem saber, usando outras visualizações.</string>
   <string name="prefs_subsection_picture_uploads">Upload automático de imagens</string>
   <string name="prefs_subsection_picture_uploads_summary">Gerencie a localização e o comportamento das fotos enviadas automaticamente</string>
@@ -139,9 +139,9 @@
   <string name="auth_oauth_failure_snackbar_action">Iniciar sessão</string>
   <string name="auth_check_server">Verificar servidor</string>
   <string name="auth_host_url">Endereço do servidor https://..</string>
-  <string name="auth_username">Nome de Utilizador</string>
+  <string name="auth_username">Nome de utilizador</string>
   <string name="auth_password">Palavra-passe</string>
-  <string name="auth_register">Novo em %1$s?</string>
+  <string name="auth_register">Novo em %1$s\?</string>
   <string name="sync_string_files">Ficheiros</string>
   <string name="setup_btn_login">Iniciar sessão</string>
   <string name="uploader_btn_upload_text">Enviar</string>
@@ -316,7 +316,7 @@
   <string name="biometric_not_enrolled">Cadastre pelo menos uma biometria para utilizar esse recurso.</string>
   <string name="biometric_prompt_title">Conexão biométrica</string>
   <string name="biometric_prompt_subtitle">Faça login usando sua credencial biométrica.</string>
-  <string name="biometric_dialog_title">Deseja ativar adicionalmente a segurança biométrica?</string>
+  <string name="biometric_dialog_title">Deseja ativar adicionalmente a segurança biométrica\?</string>
   <string name="biometric_not_available">O desbloqueio biométrico não está disponível porque o sistema não conseguiu fornecê-lo</string>
   <string name="media_notif_ticker">%1$s reprodutor de música</string>
   <string name="media_state_playing">%1$s (a reproduzir)</string>
@@ -362,8 +362,7 @@
   <string name="auth_expired_basic_auth_toast">Por favor, introduza a sua passe actual</string>
   <string name="auth_connecting_auth_server">A ligar ao servidor de autenticação...</string>
   <string name="auth_unsupported_auth_method">O servidor não suporta este método de autenticação</string>
-  <string name="auth_fail_get_user_name">Seu servidor não está retornando um ID de usuário correto. Entre em contato com um administrador.
-	</string>
+  <string name="auth_fail_get_user_name">Seu servidor não está retornando um ID de usuário correto. Entre em contato com um administrador.\n\t</string>
   <string name="auth_can_not_auth_against_server">Impossível autenticar neste servidor</string>
   <string name="auth_account_does_not_exist">A conta ainda não existe no dispositivo</string>
   <string name="set_available_offline">Seleccione como disponível desligado</string>
@@ -372,14 +371,14 @@
   <string name="confirmation_unset_available_offline">O arquivo foi desmarcado como disponível offline corretamente</string>
   <string name="common_rename">Renomear</string>
   <string name="common_remove">Remover</string>
-  <string name="confirmation_remove_file_alert">Tem a certeza que deseja remover %1$s ?</string>
-  <string name="confirmation_remove_folder_alert">Deseja realmente remover %1$s e o seu conteúdo?</string>
+  <string name="confirmation_remove_file_alert">Tem a certeza que deseja remover %1$s \?</string>
+  <string name="confirmation_remove_folder_alert">Deseja realmente remover %1$s e o seu conteúdo\?</string>
   <string name="confirmation_remove_local">Apenas localmente</string>
-  <string name="confirmation_remove_account_alert">Tem mesmo a certeza que pretende remover a conta %1$s?</string>
-  <string name="confirmation_remove_account_alert_camera_uploads">Esta conta tem envios de câmera anexados. Remover a conta desativará os uploads de câmera. Você realmente deseja remover a conta  %1$s?</string>
+  <string name="confirmation_remove_account_alert">Tem mesmo a certeza que pretende remover a conta %1$s\?</string>
+  <string name="confirmation_remove_account_alert_camera_uploads">Esta conta tem envios de câmera anexados. Remover a conta desativará os uploads de câmera. Você realmente deseja remover a conta  %1$s\?</string>
   <string name="confirmation_remove_public_share_title">Remover hiperligação</string>
   <string name="confirmation_remove_private_share_title">Remover compartilhamento privado</string>
-  <string name="confirmation_remove_share_message">Você realmente deseja remover este  %1$s compartilhamento?</string>
+  <string name="confirmation_remove_share_message">Você realmente deseja remover este  %1$s compartilhamento\?</string>
   <string name="remove_success_msg">Remoção bem sucedida</string>
   <string name="remove_fail_msg">Remoção falhou</string>
   <string name="rename_dialog_title">Introduza um novo nome</string>
@@ -416,7 +415,7 @@
   <string name="ssl_validator_reason_cert_expired">- O certificado do servidor expirou.</string>
   <string name="ssl_validator_reason_cert_not_yet_valid">- As datas de validade do certificado do servidor estão no futuro.</string>
   <string name="ssl_validator_reason_hostname_not_verified">- O URL não corresponde com o nome de anfitrião no certificado.</string>
-  <string name="ssl_validator_question">Mesmo assim, quer confiar neste certificado?</string>
+  <string name="ssl_validator_question">Mesmo assim, quer confiar neste certificado\?</string>
   <string name="ssl_validator_not_saved">O certificado não pôde ser salvo.</string>
   <string name="ssl_validator_btn_details_see">Detalhes</string>
   <string name="ssl_validator_btn_details_hide">Ocultar</string>
@@ -445,13 +444,13 @@
   <string name="placeholder_timestamp">2012/05/18 12:23</string>
   <string name="placeholder_media_time">12:23:45</string>
   <string name="confirmation_disable_camera_uploads_title">Confirme</string>
-  <string name="confirmation_disable_pictures_upload_message">Tem certeza de que deseja desativar esse recurso? As fotos pendentes não serão carregadas.</string>
-  <string name="confirmation_disable_videos_upload_message">Tem certeza de que deseja desativar esse recurso? Os vídeos pendentes não serão enviados.</string>
+  <string name="confirmation_disable_pictures_upload_message">Tem certeza de que deseja desativar esse recurso\? As fotos pendentes não serão carregadas.</string>
+  <string name="confirmation_disable_videos_upload_message">Tem certeza de que deseja desativar esse recurso\? Os vídeos pendentes não serão enviados.</string>
   <string name="proper_pics_folder_warning_camera_upload">Certifique-se de que a pasta selecionada seja onde a câmera que você está usando salva as fotos tiradas. Caso contrário, o recurso não conseguirá detectar suas fotos. Lembre-se de que as fotos serão carregadas em pelo menos 15 minutos após serem tiradas. Para um melhor desempenho, certifique-se nas configurações do seu dispositivo que %1$s  ele permite a execução em segundo plano.</string>
   <string name="proper_videos_folder_warning_camera_upload">Certifique-se de que a pasta selecionada seja onde a câmera que você está usando salva os vídeos gravados. Caso contrário, o recurso não conseguirá detectar seus vídeos. Lembre-se de que os vídeos serão carregados em pelo menos 15 minutos após a gravação. Para um melhor desempenho, certifique-se nas configurações do seu dispositivo %1$s que ele permite a execução em segundo plano.</string>
   <string name="conflict_title">Arquivo em conflito</string>
   <string name="conflict_description">Há um conflito no arquivo %1$s, toque para resolvê-lo.</string>
-  <string name="conflict_message">Quais os ficheiros que pretende manter? Se seleccionar ambas as versões, o ficheiro local irá ter um número adicionado ao seu nome.</string>
+  <string name="conflict_message">Quais os ficheiros que pretende manter\? Se seleccionar ambas as versões, o ficheiro local irá ter um número adicionado ao seu nome.</string>
   <string name="conflict_keep_both">Manter ambos</string>
   <string name="conflict_use_local_version">versão local</string>
   <string name="conflict_use_server_version">versão do servidor</string>
@@ -463,8 +462,7 @@
   <string name="get_shares_error">Não foi possível recuperar os compartilhamentos do servidor</string>
   <string name="get_sharees_error">Não foi possível recuperar usuários e grupos do servidor</string>
   <string name="get_capabilities_error">Não foi possível recuperar os recursos do servidor</string>
-  <string name="share_link_no_support_share_api">Desculpe, a partilha não está activada no seu servidor. Por favor entre em contacto com o seu
-		administrador.</string>
+  <string name="share_link_no_support_share_api">Desculpe, a partilha não está activada no seu servidor. Por favor entre em contacto com o seu\n\t\tadministrador.</string>
   <string name="share_link_file_error">Não foi possível compartilhar esse arquivo ou pasta</string>
   <string name="unshare_link_file_error">Não foi possível desfazer o compartilhamento desse arquivo ou pasta</string>
   <string name="update_link_file_error">Não foi possível atualizar esse arquivo ou pasta</string>
@@ -591,8 +589,8 @@
   <string name="action_upload_retry">Repetir</string>
   <string name="action_upload_clear">Limpar</string>
   <string name="local_file_not_found_toast">O ficheiro não foi encontrado no sistema de ficheiros local</string>
-  <string name="confirmation_remove_files_alert">Você realmente deseja remover estes %s itens?</string>
-  <string name="confirmation_remove_folders_alert">Tem a certeza que deseja remover os itens selecionados e os seus respetivos conteúdos?</string>
+  <string name="confirmation_remove_files_alert">Você realmente deseja remover estes %s itens\?</string>
+  <string name="confirmation_remove_folders_alert">Tem a certeza que deseja remover os itens selecionados e os seus respetivos conteúdos\?</string>
   <string name="failed_upload_quota_exceeded_text">Não existe espaço suficiente na conta</string>
   <string name="auth_forbidden">Autenticação proibida</string>
   <string name="actionbar_privacy_policy">Política de privacidade</string>
@@ -605,7 +603,7 @@
   <string name="streaming_crossed_redirection">O streaming não é permitido por meio de redirecionamentos cruzados.</string>
   <string name="previewing_video_common_error">Este vídeo não pode ser reproduzido.</string>
   <string name="previewing_video_not_supported">Pré-visualização de vídeo não é suportada na sua versão de Android. A transferência do ficheiro irá começar automaticamente.</string>
-  <string name="streaming_position_not_available">\"Posição não disponível\"</string>
+  <string name="streaming_position_not_available">"Posição não disponível"</string>
   <string name="error_no_network_connection">O dispositivo não está conectado a uma rede.</string>
   <string name="share_no_public_links">Nenhum link público criado ainda.</string>
   <string name="share_no_link_in_this_share">Este compartilhamento não tem link.</string>
@@ -630,7 +628,7 @@
   <string name="file_sync_conflict_notification_channel_description">Veja os conflitos de arquivo quando eles ocorrerem.</string>
   <string name="clicks_to_be_developer">Você está a %1$d cliques para ativar os menus do desenvolvedor</string>
   <string name="rate_dialog_title">Avalie o aplicativo %1$s !</string>
-  <string name="rate_dialog_description">Se você gosta de usar este aplicativo, você poderia ter um tempo para avaliá-lo? Seu feedback é muito importante para nós.</string>
+  <string name="rate_dialog_description">Se você gosta de usar este aplicativo, você poderia ter um tempo para avaliá-lo\? Seu feedback é muito importante para nós.</string>
   <string name="button_no_thanks_name">NÃO, OBRIGADO</string>
   <string name="button_later_name">MAIS TARDE</string>
   <string name="button_rate_now_name">AVALIAR AGORA</string>
@@ -687,8 +685,6 @@
   <string name="release_notes_bugfixes_subtitle">Alguns bugs foram corrigidos para melhorar a experiência no aplicativo</string>
   <string name="release_notes_4_8_0_title_set_emoji_as_space_image">Definir emoji como imagem espacial</string>
   <string name="release_notes_4_8_0_subtitle_set_emoji_as_space_image">Usuários do Infinite Scale com as permissões adequadas agora podem definir um emoji como imagem espacial.</string>
-  <string name="release_notes_4_8_0_title_space_membership">Associação ao espaço</string>
-  <string name="release_notes_4_8_0_subtitle_space_membership">Usuários Escala Infinita podem ver todos os membros de um espaço</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Abrir na web</string>
   <string name="ic_action_open_with_web">Abrir em%1$s (web)</string>
@@ -761,10 +757,6 @@
   <string name="content_description_create_button">Botão Criar</string>
   <string name="content_description_cancel_button">Botão Cancelar</string>
   <string name="content_description_quota_switch">Cota de espaço</string>
-  <string name="content_description_member_user">Usuário %1$s</string>
-  <string name="content_description_member_group">Grupo %1$s</string>
-  <string name="content_description_member_expiration_date">Expira %1$s</string>
-  <string name="content_description_expiration_date_switch">Data de expiração</string>
   <string name="create_shortcut_dialog_title">Crie um atalho</string>
   <string name="create_shortcut_dialog_url">URL</string>
   <string name="create_shortcut_dialog_url_information">A URL deve começar com https:// ou http:// para que possa ser aberta no navegador</string>
@@ -780,7 +772,7 @@
   <string name="create_space_dialog_gb_unit">GB</string>
   <string name="create_space_dialog_empty_error">O nome do espaço não deve estar vazio</string>
   <string name="create_space_dialog_length_error">O nome do espaço não deve ter mais de 255 caracteres</string>
-  <string name="create_space_dialog_characters_error">Caracteres proibidos: / \\ . : ? * \" \' &gt; &lt; |</string>
+  <string name="create_space_dialog_characters_error">Caracteres proibidos: / \\ . : \? * \" \' &gt; &lt; |</string>
   <string name="create_space_dialog_quota_empty_error">A cota de espaço não deve estar vazia</string>
   <string name="create_space_dialog_quota_zero_error">A cota de espaço deve ser maior que zero</string>
   <string name="create_space_dialog_quota_too_large_error">A cota de espaço não pode exceder 1 PB</string>
@@ -793,31 +785,24 @@
   <string name="edit_space_image_correctly">Imagem atualizada corretamente</string>
   <string name="edit_space_image_failed">Não foi possível atualizar a imagem.</string>
   <string name="disable_space">Desativar espaço</string>
-  <string name="disable_space_dialog_title">Você realmente deseja desativar o espaço: %1$s?</string>
+  <string name="disable_space_dialog_title">Você realmente deseja desativar o espaço: %1$s\?</string>
   <string name="disable_space_dialog_message">Se você desativar o espaço selecionado, ele não poderá mais ser acessado. Somente os administradores do espaço ainda terão acesso. Observação: nenhum arquivo será excluído do servidor.</string>
   <string name="disable_space_correctly">Espaço desativado corretamente</string>
   <string name="disable_space_failed">Não foi possível desativar o espaço.</string>
   <string name="disabled_space_label">Desativada</string>
   <string name="enable_space">Habilitar espaço</string>
-  <string name="enable_space_dialog_title">Você realmente deseja habilitar o espaço: %1$s?</string>
+  <string name="enable_space_dialog_title">Você realmente deseja habilitar o espaço: %1$s\?</string>
   <string name="enable_space_dialog_message">Se você habilitar o espaço selecionado, ele poderá ser acessado novamente.</string>
   <string name="enable_space_correctly">Espaço habilitado corretamente</string>
   <string name="enable_space_failed">Não foi possível ativar o espaço.</string>
   <string name="delete_space">Apague o espaço</string>
-  <string name="delete_space_dialog_title">Tem mesmo vontade de apagar o espaço: %1$s?</string>
+  <string name="delete_space_dialog_title">Tem mesmo vontade de apagar o espaço: %1$s\?</string>
   <string name="delete_space_dialog_message">Se você excluir o espaço selecionado, ele não poderá mais ser acessado e os arquivos serão excluídos do servidor.</string>
   <string name="delete_space_correctly">Espaço excluído corretamente</string>
   <string name="delete_space_failed">Não foi possível excluir espaço.</string>
   <string name="set_space_icon">Definir ícone</string>
   <string name="members_title">Membros</string>
-  <string name="members_add">Adicionar membro</string>
-  <string name="members_permissions">Permissões</string>
-  <string name="members_options">Opções</string>
-  <string name="members_expiration_date">Data de expiração</string>
-  <string name="members_invite">Convidar</string>
-  <string name="member_type_user">Utilizador</string>
-  <string name="member_type_group">Grupo</string>
-  <string name="feedback_dialog_get_in_contact_description"><![CDATA[ Peça ajuda em nosso <a href="%1$s"><b>fórum</b></a> ou contribua em nosso <a href="%2$s"><b>repositório do GitHub</b></a>]]></string>
+  <string name="feedback_dialog_get_in_contact_description"><![CDATA[ Peça ajuda em nosso <a href=\"%1$s\"><b>fórum</b></a> ou contribua em nosso <a href=\"%2$s\"><b>repositório do GitHub</b></a>]]></string>
   <string name="link_role_accessibility">Linque</string>
   <string name="button_role_accessibility">Botão</string>
   <string name="folder_picker_label">Selecionador de pastas</string>
@@ -832,5 +817,4 @@
   <string name="audio_preview_label">Pré-visualição de áudio</string>
   <string name="details_label">Detalhes</string>
   <string name="text_preview_label">Pré-visualição de texto</string>
-  <string name="space_members_label">Membros do espaço</string>
-</resources>
+  </resources>

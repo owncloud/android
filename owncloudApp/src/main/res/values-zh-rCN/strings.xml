@@ -132,7 +132,7 @@
   <string name="auth_host_url">服务器地址 https://...</string>
   <string name="auth_username">用户名</string>
   <string name="auth_password">密码</string>
-  <string name="auth_register">初次使用 %1$s?</string>
+  <string name="auth_register">初次使用 %1$s\?</string>
   <string name="sync_string_files">文件</string>
   <string name="setup_btn_login">登录</string>
   <string name="uploader_btn_upload_text">上传</string>
@@ -350,8 +350,7 @@
   <string name="auth_expired_basic_auth_toast">请输入当前的密码</string>
   <string name="auth_connecting_auth_server">连接认证服务器...</string>
   <string name="auth_unsupported_auth_method">服务器不支持这种验证方式</string>
-  <string name="auth_fail_get_user_name">您的服务器没有返回一个正确的用户ID，请联系管理员
-	</string>
+  <string name="auth_fail_get_user_name">您的服务器没有返回一个正确的用户ID，请联系管理员\n\t</string>
   <string name="auth_can_not_auth_against_server">无法连接认证服务器</string>
   <string name="auth_account_does_not_exist">设备中还未存在该帐号</string>
   <string name="set_available_offline">设置为离线可用</string>
@@ -610,8 +609,6 @@
   <string name="release_notes_footer">感谢您使用 %1$s.\n❤</string>
   <string name="release_notes_proceed">继续</string>
   <string name="release_notes_icon">发行说明图标</string>
-  <!--Open in web-->
-  <!--oCIS accounts warning-->
   <string name="ocis_accounts_warning_checkbox_message">不再显示</string>
   <string name="tab_label_ascii">文本</string>
   <string name="go_to_download_folder">前往下載</string>
@@ -625,7 +622,6 @@
   <string name="content_description_manage_accounts">管理账号</string>
   <string name="content_description_search">搜索</string>
   <string name="content_description_create_new_folder">创建新文件夹</string>
-  <string name="content_description_expiration_date_switch">过期日期</string>
   <string name="create_shortcut_dialog_url">URL</string>
   <string name="open_shortcut_title">开放链接</string>
   <string name="create_space_dialog_name">名称</string>
@@ -633,17 +629,10 @@
   <string name="create_space_dialog_quota">配额</string>
   <string name="disabled_space_label">禁用</string>
   <string name="members_title">成员</string>
-  <string name="members_add">添加成员</string>
-  <string name="members_permissions">权限</string>
-  <string name="members_options">选项</string>
-  <string name="members_expiration_date">过期日期</string>
-  <string name="members_invite">邀請</string>
-  <string name="member_type_user">用户</string>
-  <string name="member_type_group">群組</string>
   <string name="link_role_accessibility">链接</string>
   <string name="passcode_label">密碼</string>
   <string name="pattern_label">模式</string>
   <string name="image_preview_label">图片预览</string>
   <string name="login_label">登录</string>
   <string name="details_label">详细信息</string>
-</resources>
+  </resources>

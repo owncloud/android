@@ -41,7 +41,7 @@
   <string name="prefs_subsection_logging">Regjistrim</string>
   <string name="prefs_subsection_more">Më tepër</string>
   <string name="prefs_subsection_security">Siguri</string>
-  <string name="prefs_subsection_whatsnew">Ç’ka të re në versionin më të ri?</string>
+  <string name="prefs_subsection_whatsnew">Ç’ka të re në versionin më të ri\?</string>
   <string name="prefs_subsection_security_summary">Caktoni kyçje për hyrje në aplikacion dhe lejim prekjeje me dritare të tjera të dukshme</string>
   <string name="prefs_subsection_logging_summary">Ndiq regjistra të prodhuar nga ekzekutimi i aplikacionit</string>
   <string name="prefs_subsection_more_summary">Hollësi aplikacioni, përshtypje dhe të tjera</string>
@@ -59,7 +59,7 @@
   <string name="prefs_lock_access_from_document_provider_summary">Kyçni hyrje nga aplikacione të tjerë te kartelat e llogarive te aplikacioni përmes eksploruesit të brendshëm Android të kartelave.</string>
   <string name="prefs_touches_with_other_visible_windows">Prekje me dritare të tjera të dukshme</string>
   <string name="prefs_touches_with_other_visible_windows_summary">Lejo prekje, kur pamja është zënë nga një tjetër dritare e dukshme. Aktivizojeni, që të përdorni aplikacione filtrimi drite.</string>
-  <string name="confirmation_touches_with_other_windows_title">Jeni i sigurt se doni të aktivizohet kjo veçori?</string>
+  <string name="confirmation_touches_with_other_windows_title">Jeni i sigurt se doni të aktivizohet kjo veçori\?</string>
   <string name="confirmation_touches_with_other_windows_message">Përdoreni këtë veçori duke e mbajtur vetë përgjegjësinë. Një aplikacion dashakeq mund të përpiqej t\’ua hidhte duke ju bërë të kryeni, pa e kuptuar, disa veprime, ndërkohë që përdorni pamje të tjera.</string>
   <string name="prefs_subsection_picture_uploads">Ngarkime të automatizuara fotosh</string>
   <string name="prefs_subsection_picture_uploads_summary">Administroni vendndodhje dhe sjellje të fotove të ngarkuara automatikisht</string>
@@ -140,7 +140,7 @@
   <string name="auth_host_url">Adresë https://… e shërbyesit</string>
   <string name="auth_username">Emër përdoruesi</string>
   <string name="auth_password">Fjalëkalim</string>
-  <string name="auth_register">Rishtar te %1$s?</string>
+  <string name="auth_register">Rishtar te %1$s\?</string>
   <string name="sync_string_files">Kartela</string>
   <string name="setup_btn_login">Hyni</string>
   <string name="uploader_btn_upload_text">Ngarkoni</string>
@@ -238,7 +238,7 @@
   <string name="uploader_upload_video_upload_error">Shtegu i burimit të ngarkimit të videove s’është më i vlefshëm.</string>
   <string name="uploader_upload_available_offline_files">Po ngarkohen kartela për punim jashtë linje</string>
   <string name="uploader_upload_requested_from_wifi_files">Po ngarkohen të kërkuarat nga kartela wifi</string>
-  <string name="ssl_certificate_not_trusted">Dëshmia e shërbyesit s\’është e besuar.</string>
+  <string name="ssl_certificate_not_trusted">- Dëshmia e shërbyesit s\’është e besuar.</string>
   <string name="uploads_view_title">Ngarkime</string>
   <string name="uploads_view_group_current_uploads">Të tanishëm</string>
   <string name="uploads_view_group_failed_uploads">Dështoi (prekeni që të riprovohet)</string>
@@ -315,7 +315,7 @@
   <string name="biometric_not_enrolled">Që të përdorni këtë veçori, regjistroni të paktën një palë kredenciale biometrike.</string>
   <string name="biometric_prompt_title">Hyrje biometrike</string>
   <string name="biometric_prompt_subtitle">Bëni hyrjen duke përdorur kredencialet tuaja biometrike.</string>
-  <string name="biometric_dialog_title">Doni të aktivizohet edhe siguri bionetrike?</string>
+  <string name="biometric_dialog_title">Doni të aktivizohet edhe siguri bionetrike\?</string>
   <string name="biometric_not_available">S’është e mundshme shkyçje biometrike, ngaqë sistemi s’e ofroi dot.</string>
   <string name="media_notif_ticker">Lojtësi %1$s i muzikës</string>
   <string name="media_state_playing">%1$s (po luhet)</string>
@@ -361,8 +361,7 @@
   <string name="auth_expired_basic_auth_toast">Ju lutem, jepni fjalëkalimin e tanishëm</string>
   <string name="auth_connecting_auth_server">Po lidhet te shërbyesi i mirëfilltësimeve …</string>
   <string name="auth_unsupported_auth_method">Shërbyesi s\’e mbulon këtë metodë mirëfilltësimesh</string>
-  <string name="auth_fail_get_user_name">Shërbyesi juaj s\’po përgjigje me ID të saktë përdoruesi, ju lutemi, lidhuni me një përgjegjës.
-	</string>
+  <string name="auth_fail_get_user_name">Shërbyesi juaj s\’po përgjigje me ID të saktë përdoruesi, ju lutemi, lidhuni me një përgjegjës.\n\t</string>
   <string name="auth_can_not_auth_against_server">S\’kryhet dot mirëfilltësimi me këtë shërbyes</string>
   <string name="auth_account_does_not_exist">Llogaria s\’ekziston ende te pajisja</string>
   <string name="set_available_offline">Caktojeni si të passhëm jo në linjë</string>
@@ -371,14 +370,14 @@
   <string name="confirmation_unset_available_offline">Kartela u hoq me sukses si e pashme jashtë linje</string>
   <string name="common_rename">Riemërtojeni</string>
   <string name="common_remove">Hiqe</string>
-  <string name="confirmation_remove_file_alert">Doni vërtet të hiqet %1$s?</string>
-  <string name="confirmation_remove_folder_alert">Doni vërtet të hiqet %1$s dhe lënda e tij?</string>
+  <string name="confirmation_remove_file_alert">Doni vërtet të hiqet %1$s\?</string>
+  <string name="confirmation_remove_folder_alert">Doni vërtet të hiqet %1$s dhe lënda e tij\?</string>
   <string name="confirmation_remove_local">Vetëm vendorja</string>
-  <string name="confirmation_remove_account_alert">Doni vërtet të hiqet llogaria %1$s?</string>
-  <string name="confirmation_remove_account_alert_camera_uploads">Kjo llogari ka të bashkëngjitura ngarkime nga kamera, heqja e llogarisë do të çaktivizojë ngarkimet nga kamera. Doni vërtet të hiqet llogaria %1$s?</string>
+  <string name="confirmation_remove_account_alert">Doni vërtet të hiqet llogaria %1$s\?</string>
+  <string name="confirmation_remove_account_alert_camera_uploads">Kjo llogari ka të bashkëngjitura ngarkime nga kamera, heqja e llogarisë do të çaktivizojë ngarkimet nga kamera. Doni vërtet të hiqet llogaria %1$s\?</string>
   <string name="confirmation_remove_public_share_title">Hiqe lidhjen</string>
   <string name="confirmation_remove_private_share_title">Hiqe pjesën private</string>
-  <string name="confirmation_remove_share_message">Doni vërtet të hiqet ndarja %1$s?</string>
+  <string name="confirmation_remove_share_message">Doni vërtet të hiqet ndarja %1$s\?</string>
   <string name="remove_success_msg">Heqja doli me sukses</string>
   <string name="remove_fail_msg">Heqja dështoi</string>
   <string name="rename_dialog_title">Jepni një emër të ri</string>
@@ -415,7 +414,7 @@
   <string name="ssl_validator_reason_cert_expired">- Dëshmia e shërbyesit skadoi.</string>
   <string name="ssl_validator_reason_cert_not_yet_valid">- Datat e vlefshmërisë së dëshmisë së shërbyesit i përkasin të ardhmes.</string>
   <string name="ssl_validator_reason_hostname_not_verified">- URL-ja s\’përputhet me emrin e strehëemrit te dëshmia</string>
-  <string name="ssl_validator_question">Doni të besohet kjo dëshmi sido qoftë?</string>
+  <string name="ssl_validator_question">Doni të besohet kjo dëshmi sido qoftë\?</string>
   <string name="ssl_validator_not_saved">Dëshmia s\’u ruajt dot.</string>
   <string name="ssl_validator_btn_details_see">Hollësi</string>
   <string name="ssl_validator_btn_details_hide">Fshihe</string>
@@ -444,13 +443,13 @@
   <string name="placeholder_timestamp">2012/05/18 12:23 PM</string>
   <string name="placeholder_media_time">12:23:45</string>
   <string name="confirmation_disable_camera_uploads_title">Ripohojeni</string>
-  <string name="confirmation_disable_pictures_upload_message">Jeni i sigurt se doni të çaktivizohet kjo veçori? Fotot e mbetura nuk do të ngarkohen.</string>
-  <string name="confirmation_disable_videos_upload_message">Jeni i sigurt se doni të çaktivizohet kjo veçori? Videot e mbetura nuk do të ngarkohen.</string>
+  <string name="confirmation_disable_pictures_upload_message">Jeni i sigurt se doni të çaktivizohet kjo veçori\? Fotot e mbetura nuk do të ngarkohen.</string>
+  <string name="confirmation_disable_videos_upload_message">Jeni i sigurt se doni të çaktivizohet kjo veçori\? Videot e mbetura nuk do të ngarkohen.</string>
   <string name="proper_pics_folder_warning_camera_upload">Ju lutemi, garantoni se dosja e përzgjedhur gjendet atje ku kamera që po përdorni ruan fotot e bëra. Përndryshe, veçoria s’do të jetë në gjendje të pikasë fotot tuaja. Mbani parasysh se fotot do të ngarkohen të paktën 15 minuta pas bërjes së tyre. Për funksionim më të mirë, siguroni që te rregullimet e pajisjes tuaj %1$s të jetë lejuar të xhirojë në prapaskenë.</string>
   <string name="proper_videos_folder_warning_camera_upload">Ju lutemi, garantoni se dosja e përzgjedhur gjendet atje ku kamera që po përdorni ruan videot e bëra. Përndryshe, veçoria s’do të jetë në gjendje të pikasë videot tuaja. Mbani parasysh se videot do të ngarkohen të paktën 15 minuta pas regjistrimit të tyre. Për funksionim më të mirë, siguroni që te rregullimet e pajisjes tuaj %1$s të jetë lejuar të xhirojë në prapaskenë.</string>
   <string name="conflict_title">Kartelë me përplasje</string>
   <string name="conflict_description">Ka një kundërshti në kartelën %1$s, prekeni që të zgjidhet.</string>
-  <string name="conflict_message">Cilat kartela doni të mbani? Nëse përzgjidhni të dy versionet, kartelës vendore do t\’i shtohet një numër te emri.</string>
+  <string name="conflict_message">Cilat kartela doni të mbani\? Nëse përzgjidhni të dy versionet, kartelës vendore do t\’i shtohet një numër te emri.</string>
   <string name="conflict_keep_both">Mbaji të dyja</string>
   <string name="conflict_use_local_version">versionin vendor</string>
   <string name="conflict_use_server_version">versionin e shërbyesit</string>
@@ -578,8 +577,7 @@
   <string name="share_group_clarification">%1$s (grup)</string>
   <string name="share_remote_clarification">%1$s (i largët)</string>
   <string name="share_known_remote_clarification">%1$s ( te %2$s )</string>
-  <string name="share_sharee_unavailable">Na ndjeni, versioni juaj i shërbyesit nuk lejon ndarje me përdorues brenda klientësh.
-        \nJu lutemi, lidhuni me përgjegjësin tuaj</string>
+  <string name="share_sharee_unavailable">Na ndjeni, versioni juaj i shërbyesit nuk lejon ndarje me përdorues brenda klientësh.\n        \nJu lutemi, lidhuni me përgjegjësin tuaj</string>
   <string name="share_privilege_can_share">mund të ndajë me të tjerë</string>
   <string name="share_privilege_can_edit">mund të përpunojnë</string>
   <string name="share_privilege_can_edit_create">krijoje</string>
@@ -590,8 +588,8 @@
   <string name="action_upload_retry">Riprovo</string>
   <string name="action_upload_clear">Spastroje</string>
   <string name="local_file_not_found_toast">Kartela s\’u gjet te sistemi vendor i kartelave</string>
-  <string name="confirmation_remove_files_alert">Doni vërtet të hiqet këta %s objekte?</string>
-  <string name="confirmation_remove_folders_alert">Doni vërtet të hiqen objektet e përzgjedhur dhe lënda e tyre?</string>
+  <string name="confirmation_remove_files_alert">Doni vërtet të hiqet këta %s objekte\?</string>
+  <string name="confirmation_remove_folders_alert">Doni vërtet të hiqen objektet e përzgjedhur dhe lënda e tyre\?</string>
   <string name="failed_upload_quota_exceeded_text">Hapësirë e pamjaftueshme te llogaria</string>
   <string name="auth_forbidden">Mirëfilltësim i ndaluar</string>
   <string name="actionbar_privacy_policy">Rregulla privatësie</string>
@@ -629,7 +627,7 @@
   <string name="file_sync_conflict_notification_channel_description">Shihni përplasje kartelash, kur ndodhin.</string>
   <string name="clicks_to_be_developer">Jeni %1$d klikime larg nga aktivizimi i menuve të zhvilluesit</string>
   <string name="rate_dialog_title">Vlerësojeni aplikacionin %1$s!</string>
-  <string name="rate_dialog_description">Nëse ju pëlqen ta përdorni këtë aplikacion, do të harxhonit një çast për ta vlerësuar atë? Përshtypjet tuaja janë shumë të rëndësishme për ne. </string>
+  <string name="rate_dialog_description">Nëse ju pëlqen ta përdorni këtë aplikacion, do të harxhonit një çast për ta vlerësuar atë\? Përshtypjet tuaja janë shumë të rëndësishme për ne. </string>
   <string name="button_no_thanks_name">JO, FALEMINDERIT</string>
   <string name="button_later_name">MË VONË</string>
   <string name="button_rate_now_name">VLERËSOJENI TANI</string>
@@ -762,9 +760,6 @@
   <string name="content_description_member_user">Përdorues %1$s</string>
   <string name="content_description_member_group">Grup %1$s</string>
   <string name="content_description_member_expiration_date">Skadon më %1$s</string>
-  <string name="content_description_add_member">Shtoni anëtar të ri</string>
-  <string name="content_description_invite_member_button">Ftoni anëtar</string>
-  <string name="content_description_expiration_date_switch">Datë skadimi</string>
   <string name="create_shortcut_dialog_title">Krijoni një shkurtore</string>
   <string name="create_shortcut_dialog_url">URL</string>
   <string name="create_shortcut_dialog_url_information">URL-ja duhet të fillojë me https:// ose http:// , që të mund të hapet në shfletues</string>
@@ -780,7 +775,7 @@
   <string name="create_space_dialog_gb_unit">GB</string>
   <string name="create_space_dialog_empty_error">Emri i hapësirës s’mund të jetë i zbrazët</string>
   <string name="create_space_dialog_length_error">Emri i hapësirës s’mund të jetë më i gjatë se 255 shenja</string>
-  <string name="create_space_dialog_characters_error">Shenja të ndaluara: / \\ . : ? * \" \' &gt; &lt; |</string>
+  <string name="create_space_dialog_characters_error">Shenja të ndaluara: / \\ . : \? * \" \' &gt; &lt; |</string>
   <string name="create_space_dialog_quota_empty_error">Kuotat e hapësirës s’duhet të jenë të zbrazëta</string>
   <string name="create_space_dialog_quota_zero_error">Kuotat e hapësirës duhet të jenë më të mëdha se zero</string>
   <string name="create_space_dialog_quota_too_large_error">Kuotat e hapësirës s’mund të tejkalojnë 1 PB</string>
@@ -793,35 +788,24 @@
   <string name="edit_space_image_correctly">Figura u përditësua saktë</string>
   <string name="edit_space_image_failed">Figura s’u përditësua dot</string>
   <string name="disable_space">Çaktivizoje hapësirën</string>
-  <string name="disable_space_dialog_title">Doni vërtet të çaktivizohet hapësira: %1$s?</string>
+  <string name="disable_space_dialog_title">Doni vërtet të çaktivizohet hapësira: %1$s\?</string>
   <string name="disable_space_dialog_message">Nëse çaktivizoni hapësirën e përzgjedhur, s’mund të përdoret më. Vetëm përgjegjës Hapësirash do të munden ende të hyjnë në të. Shënim: S’do të fshihen kartela në shërbyes.</string>
   <string name="disable_space_correctly">Hapësira u çaktivizua saktë</string>
   <string name="disable_space_failed">Hapësira s’u çaktivizua dot</string>
   <string name="disabled_space_label">I çaktivizuar</string>
   <string name="enable_space">Aktivizo hapësirën</string>
-  <string name="enable_space_dialog_title">Doni vërtet të aktivizohet hapësira: %1$s?</string>
+  <string name="enable_space_dialog_title">Doni vërtet të aktivizohet hapësira: %1$s\?</string>
   <string name="enable_space_dialog_message">Nëse aktivizoni hapësirën e përzgjedhur, mund të përdoret sërish.</string>
   <string name="enable_space_correctly">Hapësira u aktivizua saktë</string>
   <string name="enable_space_failed">Hapësira s’u aktivizua dot</string>
   <string name="delete_space">Fshije hapësirën</string>
-  <string name="delete_space_dialog_title">Doni vërtet të fshihet hapësira: %1$s?</string>
+  <string name="delete_space_dialog_title">Doni vërtet të fshihet hapësira: %1$s\?</string>
   <string name="delete_space_dialog_message">Nëse fshihni hapësirën e përzgjedhur, s’mund të përdoret më dhe kartelat te shërbyesi do të fshihen.</string>
   <string name="delete_space_correctly">Hapësira u fshi saktë</string>
   <string name="delete_space_failed">Hapësira s’u fshi dot</string>
   <string name="set_space_icon">Cakton ikonë</string>
   <string name="members_title">Anëtarë</string>
-  <string name="members_add">Shtoni anëtar</string>
-  <string name="members_add_failed">Anëtari s’u ftua dot</string>
-  <string name="members_add_conflict_error">Është tashmë i ftuar te hapësira e përzgjedhur</string>
-  <string name="members_search_failed">S’u gjetën përfundime</string>
-  <string name="members_search_empty">S’ka përdorues, ose grupe, që kanë përkim me kërkimin tuaj</string>
-  <string name="members_permissions">Leje</string>
-  <string name="members_options">Mundësi</string>
-  <string name="members_expiration_date">Datë skadimi</string>
-  <string name="members_invite">Ftoje</string>
-  <string name="member_type_user">Përdorues</string>
-  <string name="member_type_group">Grup</string>
-  <string name="feedback_dialog_get_in_contact_description"><![CDATA[ Kërkoni ndihmë te <a href="%1$s"><b>forumi</b></a> ynë, ose kontribuoni te <a href="%2$s"><b>depoja jonë GitHub</b></a>]]></string>
+  <string name="feedback_dialog_get_in_contact_description"><![CDATA[ Kërkoni ndihmë te <a href=\"%1$s\"><b>forumi</b></a> ynë, ose kontribuoni te <a href=\"%2$s\"><b>depoja jonë GitHub</b></a>]]></string>
   <string name="link_role_accessibility">Lidhje</string>
   <string name="button_role_accessibility">Buton</string>
   <string name="folder_picker_label">Zgjedhës dosjeje</string>

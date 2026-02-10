@@ -612,12 +612,10 @@ správce systému.</string>
   <string name="prefs_http_logs">Logovat HTTP požadavky a odpovědi</string>
   <string name="prefs_logs_summary">Log může obsahovat citlivé informace. Sdílení je pouze na vaší zodpovědnosti.</string>
   <string name="synchronizing_account">Synchronizuji účet</string>
-  <!--Scoped storage migration wizard-->
   <string name="scoped_storage_wizard_intro_button">Začněme</string>
   <string name="scoped_storage_wizard_migrate_and_clean_button">Migrovat nyní</string>
   <string name="scoped_storage_wizard_migration_completed">Migrace úspěšně skončila. Vaše soubory jsou nyní uložené bezpečněji.</string>
   <string name="scoped_storage_wizard_migration_in_progress_button">Pracuji... Chvíli strpení</string>
-  <!--Security Enforced-->
   <string name="security_enforced_first_option">Zámek bezpečnostního kódu</string>
   <string name="security_enforced_second_option">Zámek gestem</string>
   <string name="folder_upload_some_content_or_sync_devices">Nahrajte nějaký obsah nebo synchronizujte se svými přístroji!</string>
@@ -632,13 +630,11 @@ správce systému.</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Otevřít na webu</string>
   <string name="open_in_web_error_generic">Nepodařilo se otevřít na webu</string>
-  <!--oCIS accounts warning-->
   <string name="ocis_accounts_warning_checkbox_message">Znovu neukazovat</string>
   <string name="ocis_accounts_warning_button">Rozumím</string>
   <string name="tab_label_ascii">Text</string>
   <string name="apply_to_all_conflicts">Použij na všechny %1$s konflikty</string>
   <string name="log_file_downloaded">Log stažen</string>
-  <!--DeepLinks-->
   <string name="fab_refresh_text">Obnovit</string>
   <string name="password_policy_min_characters">Alespoň %1$d znaků dlouhé</string>
   <string name="password_policy_max_characters">Nanejvýš %1$d znaků dlouhé</string>
@@ -676,7 +672,7 @@ správce systému.</string>
   <string name="members_invite">Pozvat</string>
   <string name="member_type_user">Uživatel</string>
   <string name="member_type_group">Skupina</string>
-  <string name="feedback_dialog_get_in_contact_description"><![CDATA[ Zeptejte se na našem <a href="%1$s"><b>fóru</b></a> nebo přispějte na našem  <a href="%2$s"><b>GitHubu</b></a>]]></string>
+  <string name="feedback_dialog_get_in_contact_description"><![CDATA[ Zeptejte se na našem <a href=\"%1$s\"><b>fóru</b></a> nebo přispějte na našem  <a href=\"%2$s\"><b>GitHubu</b></a>]]></string>
   <string name="link_role_accessibility">Odkaz</string>
   <string name="pattern_label">Maska</string>
   <string name="video_preview_label">Náhled videa</string>
@@ -685,4 +681,4 @@ správce systému.</string>
   <string name="whats_new_label">Novinky</string>
   <string name="details_label">Podrobnosti</string>
   <string name="text_preview_label">Náhled textu</string>
-</resources>
+  </resources>

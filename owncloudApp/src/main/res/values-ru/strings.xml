@@ -37,7 +37,7 @@
   <string name="prefs_subsection_logging">Журналирование</string>
   <string name="prefs_subsection_more">Больше</string>
   <string name="prefs_subsection_security">Безопасность</string>
-  <string name="prefs_subsection_whatsnew">Что нового в этой версии?</string>
+  <string name="prefs_subsection_whatsnew">Что нового в этой версии\?</string>
   <string name="prefs_subsection_security_summary">Установка блокировок на доступ к приложению и разрешение на соприкосновение с другими видимыми окнами</string>
   <string name="prefs_subsection_logging_summary">Отслеживание журналов, создаваемых при выполнении приложения</string>
   <string name="prefs_subsection_more_summary">Информация о приложении, обратная связь, и прочее</string>
@@ -55,7 +55,7 @@
   <string name="prefs_lock_access_from_document_provider_summary">Блокировка доступа к файлам в аккаунтах ownCloud другим приложениям через стандартный файловый менеджер.</string>
   <string name="prefs_touches_with_other_visible_windows">Разрешить работу под прозрачными окнами других приложений</string>
   <string name="prefs_touches_with_other_visible_windows_summary">Разрешает взаимодействие, когда есть перекрытие другим видимым или прозрачным окном. Это нужно, если вы используете приложения для фильтрации света от экрана. Перекрывающее приложение сможет получать информацию о взаимодействии.</string>
-  <string name="confirmation_touches_with_other_windows_title">Вы уверены, что хотите включить эту функцию?</string>
+  <string name="confirmation_touches_with_other_windows_title">Вы уверены, что хотите включить эту функцию\?</string>
   <string name="confirmation_touches_with_other_windows_message">Используйте эту функцию на свой страх и риск. Вредоносное приложение может попытаться обманом заставить вас выполнить какие-либо действия, используя другие представления.</string>
   <string name="prefs_subsection_picture_uploads">Автоматическая загрузка изображений</string>
   <string name="prefs_subsection_picture_uploads_summary">Управляйте местоположением и поведением автоматически загружаемых фотографий</string>
@@ -123,8 +123,7 @@
   <string name="bottom_nav_links">Ссылки</string>
   <string name="bottom_nav_shares">События обмена файлами</string>
   <string name="recommend_subject">Попробуйте %1$s на вашем смартфоне!</string>
-  <string name="recommend_text">Хочу предложить вам использовать %1$s на смартфоне!\nЗагрузить можно здесь: %2$s
-	</string>
+  <string name="recommend_text">Хочу предложить вам использовать %1$s на смартфоне!\nЗагрузить можно здесь: %2$s\n\t</string>
   <string name="error_reason">поскольку</string>
   <string name="auth_failure_snackbar">Не удалось выполнить аутентификацию. Войдите в систему еще раз, чтобы восстановить доступ.</string>
   <string name="server_not_supported">Версия вашего сервера ниже 10й, и поэтому не поддерживается. Пожалуйста, обновите ваш сервер до последней версии.</string>
@@ -135,7 +134,7 @@
   <string name="auth_host_url">Адрес сервера https://...</string>
   <string name="auth_username">Имя пользователя</string>
   <string name="auth_password">Пароль</string>
-  <string name="auth_register">Незнакомы с %1$s?</string>
+  <string name="auth_register">Незнакомы с %1$s\?</string>
   <string name="sync_string_files">Файлы</string>
   <string name="setup_btn_login">Войти</string>
   <string name="uploader_btn_upload_text">Загрузить</string>
@@ -308,7 +307,7 @@
   <string name="biometric_not_enrolled">Чтобы пользоваться этой возможностью, зарегистрируйте хотя-бы одну биометрию</string>
   <string name="biometric_prompt_title">Биометрический вход</string>
   <string name="biometric_prompt_subtitle">Вход с использованием ваших индивидуальных биометрических данных</string>
-  <string name="biometric_dialog_title">Хотите дополнительно активировать биометрическую защиту?</string>
+  <string name="biometric_dialog_title">Хотите дополнительно активировать биометрическую защиту\?</string>
   <string name="media_notif_ticker">%1$s аудиоплеер</string>
   <string name="media_state_playing">%1$s (проигрывается)</string>
   <string name="media_state_loading">%1$s (загружается)</string>
@@ -353,8 +352,7 @@
   <string name="auth_expired_basic_auth_toast">Пожалуйста укажите текущий пароль</string>
   <string name="auth_connecting_auth_server">Подключение к серверу авторизации ...</string>
   <string name="auth_unsupported_auth_method">Сервер не поддерживает выбранный метод аутентификации</string>
-  <string name="auth_fail_get_user_name">Сервер вернул некорректный пользовательский идентификатор. Пожалуйста, свяжитесь с вашим администратором
-	</string>
+  <string name="auth_fail_get_user_name">Сервер вернул некорректный пользовательский идентификатор. Пожалуйста, свяжитесь с вашим администратором\n\t</string>
   <string name="auth_can_not_auth_against_server">Не удается авторизоваться на этом сервере</string>
   <string name="auth_account_does_not_exist">Аккаунт ещё не существует на устройстве</string>
   <string name="set_available_offline">Сделать доступным автономно</string>
@@ -363,14 +361,14 @@
   <string name="confirmation_unset_available_offline">Файл был успешно снят с оффлайн-доступа</string>
   <string name="common_rename">Переименовать</string>
   <string name="common_remove">Удалить</string>
-  <string name="confirmation_remove_file_alert">Вы действительно хотите удалить %1$s?</string>
-  <string name="confirmation_remove_folder_alert">Вы действительно хотите удалить %1$s и его содержимое?</string>
+  <string name="confirmation_remove_file_alert">Вы действительно хотите удалить %1$s\?</string>
+  <string name="confirmation_remove_folder_alert">Вы действительно хотите удалить %1$s и его содержимое\?</string>
   <string name="confirmation_remove_local">Только локально</string>
-  <string name="confirmation_remove_account_alert">Вы действительно хотите удалить аккаунт %1$s?</string>
-  <string name="confirmation_remove_account_alert_camera_uploads">К этой учётной записи привязаны закачки из камеры; удаление записи отключит закачки из камеры. Вы действительно хотите удалить учётную запись %1$s?</string>
+  <string name="confirmation_remove_account_alert">Вы действительно хотите удалить аккаунт %1$s\?</string>
+  <string name="confirmation_remove_account_alert_camera_uploads">К этой учётной записи привязаны закачки из камеры; удаление записи отключит закачки из камеры. Вы действительно хотите удалить учётную запись %1$s\?</string>
   <string name="confirmation_remove_public_share_title">Удалить ссылку</string>
   <string name="confirmation_remove_private_share_title">Удалить общий доступ</string>
-  <string name="confirmation_remove_share_message">Вы действительно хотите удалить общий доступ %1$s?</string>
+  <string name="confirmation_remove_share_message">Вы действительно хотите удалить общий доступ %1$s\?</string>
   <string name="remove_success_msg">Удаление завершено</string>
   <string name="remove_fail_msg">Ошибка удаления</string>
   <string name="rename_dialog_title">Введите новое имя</string>
@@ -407,7 +405,7 @@
   <string name="ssl_validator_reason_cert_expired">- Срок действия сертификата сервера истёк</string>
   <string name="ssl_validator_reason_cert_not_yet_valid">- Сертификат сервера слишком новый</string>
   <string name="ssl_validator_reason_hostname_not_verified">- URL не совпадает с именем сервера в сертификате</string>
-  <string name="ssl_validator_question">Доверять этому сертификату в любом случае?</string>
+  <string name="ssl_validator_question">Доверять этому сертификату в любом случае\?</string>
   <string name="ssl_validator_not_saved">Сертификат не может быть сохранён</string>
   <string name="ssl_validator_btn_details_see">Подробно</string>
   <string name="ssl_validator_btn_details_hide">Скрыть</string>
@@ -436,11 +434,11 @@
   <string name="placeholder_timestamp">2012/05/18 12:23 PM</string>
   <string name="placeholder_media_time">12:23:45</string>
   <string name="confirmation_disable_camera_uploads_title">Подтвердите</string>
-  <string name="confirmation_disable_pictures_upload_message">Вы уверены, что хотите отключить эту возможность? Последующие изображения не будут загружены</string>
-  <string name="confirmation_disable_videos_upload_message">Вы уверены, что хотите отключить эту возможность? Последующие видеозаписи не будут загружены</string>
+  <string name="confirmation_disable_pictures_upload_message">Вы уверены, что хотите отключить эту возможность\? Последующие изображения не будут загружены</string>
+  <string name="confirmation_disable_videos_upload_message">Вы уверены, что хотите отключить эту возможность\? Последующие видеозаписи не будут загружены</string>
   <string name="conflict_title">Файл в конфликте</string>
   <string name="conflict_description">Конфликт в файле %1$s, нажмите чтобы разрешить его</string>
-  <string name="conflict_message">Какие файлы Вы хотите сохранить? При выборе обеих версий, к названию локального файла будет добавлена цифра</string>
+  <string name="conflict_message">Какие файлы Вы хотите сохранить\? При выборе обеих версий, к названию локального файла будет добавлена цифра</string>
   <string name="conflict_keep_both">Сохранить оба</string>
   <string name="conflict_use_local_version">локальная версия</string>
   <string name="conflict_use_server_version">удаленная версия</string>
@@ -452,8 +450,7 @@
   <string name="get_shares_error">Не удалось запросить с сервера список ресурсов общего доступа</string>
   <string name="get_sharees_error">Не удалось запросить с сервера список пользователей и групп</string>
   <string name="get_capabilities_error">Не удалось запросить с сервера список возможностей</string>
-  <string name="share_link_no_support_share_api">Механизм общего доступа не включен на данном сервере. Пожалуйста, свяжитесь с вашим
-⇥⇥администратором.</string>
+  <string name="share_link_no_support_share_api">Механизм общего доступа не включен на данном сервере. Пожалуйста, свяжитесь с вашим\n⇥⇥администратором.</string>
   <string name="share_link_file_error">Не удалось предоставить доступ к этому файлу или каталогу</string>
   <string name="unshare_link_file_error">Не удалось убрать общий доступ с этого файла или каталога</string>
   <string name="update_link_file_error">Не удалось обновить этот файл или каталог</string>
@@ -579,8 +576,8 @@
   <string name="action_upload_retry">Повторить</string>
   <string name="action_upload_clear">Очистить</string>
   <string name="local_file_not_found_toast">Файл не был найден в локальной файловой системе</string>
-  <string name="confirmation_remove_files_alert">Вы действительно хотите удалить выбранные %s элементы?</string>
-  <string name="confirmation_remove_folders_alert">Вы действительно хотите удалить выбранные элементы вместе с их содержимым?</string>
+  <string name="confirmation_remove_files_alert">Вы действительно хотите удалить выбранные %s элементы\?</string>
+  <string name="confirmation_remove_folders_alert">Вы действительно хотите удалить выбранные элементы вместе с их содержимым\?</string>
   <string name="failed_upload_quota_exceeded_text">Недостаточно места в учётной записи</string>
   <string name="auth_forbidden">Запрещённая аутентификация</string>
   <string name="actionbar_privacy_policy">Политика конфиденциальности</string>
@@ -593,7 +590,7 @@
   <string name="streaming_crossed_redirection">Потоковая передача не разрешена через перекрёстные перенаправления</string>
   <string name="previewing_video_common_error">Это видео невозможно воспроизвести.</string>
   <string name="previewing_video_not_supported">Предпросмотр видео не поддерживается в вашей версии Андроида. Скачивание файла начнётся автоматически.</string>
-  <string name="streaming_position_not_available">\"Позиция недоступна\"</string>
+  <string name="streaming_position_not_available">"Позиция недоступна"</string>
   <string name="error_no_network_connection">Устройство не подключено к сети</string>
   <string name="share_no_public_links">Ещё не создано ни одной общедоступной ссылки.</string>
   <string name="share_no_link_in_this_share">У этого общего ресурса нет ссылки.</string>
@@ -618,7 +615,7 @@
   <string name="file_sync_conflict_notification_channel_description">Смотрите конфликты файлов, когда они происходят</string>
   <string name="clicks_to_be_developer">Вам ещё остается %1$d кликов, чтобы включить меню разработчика</string>
   <string name="rate_dialog_title">Оцените приложение %1$s!</string>
-  <string name="rate_dialog_description">Если вам нравится пользоваться этим приложением, не уделите ли вы минутку, чтобы оценить его? Ваш отзыв очень важен для нас.</string>
+  <string name="rate_dialog_description">Если вам нравится пользоваться этим приложением, не уделите ли вы минутку, чтобы оценить его\? Ваш отзыв очень важен для нас.</string>
   <string name="button_no_thanks_name">НЕТ, СПАСИБО</string>
   <string name="button_later_name">ПОЗЖЕ</string>
   <string name="button_rate_now_name">ОЦЕНИТЬ СЕЙЧАС</string>
@@ -744,12 +741,6 @@
   <string name="create_space_dialog_quota">Квота</string>
   <string name="disabled_space_label">Отключена</string>
   <string name="members_title">Участники</string>
-  <string name="members_add">Добавить члена</string>
-  <string name="members_permissions">Права доступа</string>
-  <string name="members_options">Опции</string>
-  <string name="members_invite">Пригласить</string>
-  <string name="member_type_user">Пользователь</string>
-  <string name="member_type_group">Группа</string>
   <string name="link_role_accessibility">Ссылка</string>
   <string name="button_role_accessibility">Кнопка</string>
   <string name="folder_picker_label">Выбор папки</string>
@@ -764,4 +755,4 @@
   <string name="audio_preview_label">Предварительный просмотр аудио</string>
   <string name="details_label">Подробно</string>
   <string name="text_preview_label">Предварительный просмотр текст файла</string>
-</resources>
+  </resources>

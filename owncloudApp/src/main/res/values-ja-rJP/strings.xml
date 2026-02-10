@@ -20,6 +20,7 @@
   <string name="actionbar_sort_title">ソート: </string>
   <string name="fab_new_file">新しいドキュメント</string>
   <string name="fab_new_shortcut">新しいショートカット</string>
+  <string name="fab_new_space">新規スペース</string>
   <string name="drawer_item_all_files">すべてのファイル</string>
   <string name="drawer_item_only_available_offline">オフラインが利用可能です</string>
   <string name="drawer_item_shared_by_link_files">URLリンクで共有中</string>
@@ -51,9 +52,9 @@
   <string name="prefs_biometric_summary">パスコードまたはパターンロックを有効にする</string>
   <string name="prefs_lock_application">アプリをロックする</string>
   <string name="prefs_lock_application_entries_immediately">即時</string>
-  <string name="prefs_lock_application_entries_1minute">１分後</string>
-  <string name="prefs_lock_application_entries_5minutes">５分後</string>
-  <string name="prefs_lock_application_entries_30minutes">３０分後</string>
+  <string name="prefs_lock_application_entries_1minute">1 分後</string>
+  <string name="prefs_lock_application_entries_5minutes">5 分後</string>
+  <string name="prefs_lock_application_entries_30minutes">30 分後</string>
   <string name="prefs_lock_access_from_document_provider">文書プロバイダーからのアクセスをロックする</string>
   <string name="prefs_lock_access_from_document_provider_summary">Androidネイティブのファイルエクスプローラを介して、アプリ内のアカウントのファイルへの他のアプリからのアクセスをロックします。</string>
   <string name="prefs_touches_with_other_visible_windows">他の窓との接触</string>
@@ -81,6 +82,8 @@
   <string name="prefs_subsection_advanced">詳細設定</string>
   <string name="prefs_subsection_notifications">通知の管理</string>
   <string name="prefs_show_hidden_files">隠しファイルを表示</string>
+  <string name="prefs_show_disabled_spaces">無効なスペースを表示</string>
+  <string name="prefs_show_disabled_spaces_summary">Infinite Scale アカウントのスペース管理者にのみ適用されます</string>
   <string name="prefs_log_open_logs_list_view">ログファイル</string>
   <string name="prefs_log_no_logs_list_view">ログフォルダーを空にしてください!</string>
   <string name="prefs_log_empty_subtitle">記録を有効にすると、ログファイルがここに表示されます。</string>
@@ -108,7 +111,7 @@
   <string name="pattern_enter_pattern">パターンを入力してください</string>
   <string name="pattern_configure_pattern">パターンを入力</string>
   <string name="pattern_remove_pattern">パターンを削除</string>
-  <string name="pattern_incorrect_pattern">まターンが間違っています</string>
+  <string name="pattern_incorrect_pattern">パターンが正しくありません</string>
   <string name="pattern_reenter_pattern">パターンを再入力してください。</string>
   <string name="pattern_not_same_pattern">模様は同じではありません。</string>
   <string name="pattern_error_set">パターンロックの設定中にエラーが発生しました。</string>
@@ -127,8 +130,7 @@
   <string name="bottom_nav_links">リンク</string>
   <string name="bottom_nav_shares">共有</string>
   <string name="recommend_subject">スマートフォンで %1$s を試してください！</string>
-  <string name="recommend_text">スマートフォンで %1$s を利用してみませんか！
-ここからダウンロードしてください: %2$s</string>
+  <string name="recommend_text">スマートフォンで %1$s を利用してみませんか！\nここからダウンロードしてください: %2$s</string>
   <string name="error_reason">だから</string>
   <string name="auth_failure_snackbar">認証に失敗しました。再度アクセスするにはもう一度サインインしてください。</string>
   <string name="server_not_supported">サーバーのバージョンが10より低いため、サポートされていません。</string>
@@ -164,7 +166,7 @@
   <string name="file_list_empty_title_shared_by_links">共有リンクはありません</string>
   <string name="file_list_empty_subtitle_all_files">何かコンテンツをアップロードするか、デバイスからファイルを同期してください。</string>
   <string name="light_users_subtitle">個人スペースは利用できません</string>
-  <string name="shares_list_empty_title">株式なし</string>
+  <string name="shares_list_empty_title">共有なし</string>
   <string name="shares_list_empty_subtitle">他人のリソースで共同作業をしているわけではない。</string>
   <string name="spaces_list_empty_subtitle">スペースにアクセスできない！</string>
   <string name="file_list_empty_subtitle_available_offline">オフラインで利用可能なファイルやフォルダは、ここに表示されます。</string>
@@ -256,6 +258,7 @@
   <string name="uploads_view_upload_status_failed_localfile_error">ローカルファイルがありません</string>
   <string name="uploads_view_upload_status_failed_permission_error">権限エラー</string>
   <string name="uploads_view_upload_status_failed_firewall_error">ファイアウォールによりアクセスが禁止されました</string>
+  <string name="uploads_view_upload_status_failed_payload_error">ファイルが大きすぎてアップロードできません</string>
   <string name="uploads_view_upload_status_conflict">競合</string>
   <string name="uploads_view_upload_status_service_interrupted">強制終了されました</string>
   <string name="uploads_view_upload_status_unknown_fail">不明なエラー</string>
@@ -281,7 +284,7 @@
   <string name="sync_fail_ticker">同期の失敗</string>
   <string name="sync_fail_ticker_unauthorized">同期に失敗しました。もう一度ログインしてください。</string>
   <string name="sync_fail_content">%1$sの同期が完了しませんでした。</string>
-  <string name="sync_fail_content_unauthorized">1$sの無効なパスワード</string>
+  <string name="sync_fail_content_unauthorized">%1$sのパスワードが無効です</string>
   <string name="sync_conflicts_in_favourites_ticker">競合が見つかりました</string>
   <string name="sync_conflicts_in_favourites_content">%1$d 同期ファイルを同期できませんでした</string>
   <string name="sync_fail_in_favourites_ticker">ファイルの同期に失敗しました</string>
@@ -314,6 +317,7 @@
   <string name="biometric_prompt_title">生体認証ログイン</string>
   <string name="biometric_prompt_subtitle">生体認証クレデンシャルを使用してログインします。</string>
   <string name="biometric_dialog_title">さらにバイオメトリック・セキュリティを有効にしますか？</string>
+  <string name="biometric_not_available">システムで生体認証ロック解除が提供されていないため利用できません</string>
   <string name="media_notif_ticker">%1$s ミュージックプレーヤー</string>
   <string name="media_state_playing">%1$s (プレイ中)</string>
   <string name="media_state_loading">%1$s (読込中)</string>
@@ -442,6 +446,8 @@
   <string name="confirmation_disable_camera_uploads_title">確認</string>
   <string name="confirmation_disable_pictures_upload_message">本当にこの機能を無効にしますか？保留中の写真はアップロードされません。</string>
   <string name="confirmation_disable_videos_upload_message">本当にこの機能を無効にしますか？保留中のビデオはアップロードされません。</string>
+  <string name="proper_pics_folder_warning_camera_upload">選択したフォルダが、お使いのカメラで撮影した写真を保存するフォルダであることをご確認ください。そうでない場合、この機能は写真を認識できません。写真は撮影後少なくとも15分後にアップロードされますのでご注意ください。パフォーマンスを向上させるには、デバイスの設定で%1$sがバックグラウンドで実行されるように設定してください。</string>
+  <string name="proper_videos_folder_warning_camera_upload">選択したフォルダが、お使いのカメラで録画した動画を保存するフォルダであることをご確認ください。そうでない場合、この機能は動画を認識できません。動画は録画後少なくとも15分後にアップロードされますのでご注意ください。パフォーマンスを向上させるには、デバイスの設定で%1$sがバックグラウンドで実行されるように設定してください。</string>
   <string name="conflict_title">競合ファイル</string>
   <string name="conflict_description">ファイル %1$s に他の競合バージョンがあります。クリックして解決します。</string>
   <string name="conflict_message">どちらのファイルを保存したいですか？両方のバージョンを選択した場合は、ファイル名の後ろに数字を追加したファイルのコピーを作成します。</string>
@@ -456,8 +462,7 @@
   <string name="get_shares_error">サーバーから共有を取得できませんでした。</string>
   <string name="get_sharees_error">サーバーからユーザーとグループを取得できませんでした。</string>
   <string name="get_capabilities_error">サーバーから能力を取得できませんでした。</string>
-  <string name="share_link_no_support_share_api">すみませんが、サーバーで共有が有効になっていません。
-		管理者に問い合わせてください。</string>
+  <string name="share_link_no_support_share_api">すみませんが、サーバーで共有が有効になっていません。\n\t\t管理者に問い合わせてください。</string>
   <string name="share_link_file_error">このファイルまたはフォルダーを共有することができませんでした</string>
   <string name="unshare_link_file_error">このファイルまたはフォルダーの共有を解除することができませんでした</string>
   <string name="update_link_file_error">このファイルまたはフォルダーをアップデートすることができませんでした</string>
@@ -540,7 +545,7 @@
   <string name="prefs_camera_upload_behaviour_dialog_title">オリジナルファイルは</string>
   <string name="prefs_camera_upload_behaviour_title">オリジナルファイルは</string>
   <string name="prefs_camera_upload_last_sync_title">最終同期</string>
-  <string name="notifications_permission_denied">設定]で設定を更新できます。</string>
+  <string name="notifications_permission_denied">設定からお好みの設定に変更できます</string>
   <string name="upload_copy_files">ファイルをコピー</string>
   <string name="upload_move_files">ファイルを移動</string>
   <string name="pref_behaviour_entries_keep_file">元のフォルダーに保持</string>
@@ -549,7 +554,7 @@
   <string name="share_file">%1$s を共有</string>
   <string name="share_with_user_section_title">ユーザーとグループ</string>
   <string name="share_no_users">ユーザーと共有されているデータはありません</string>
-  <string name="share_incompatible_version">他のユーザーと共有するには、サーバーバージョンが 8.2 以上である必要があります。</string>
+  <string name="share_incompatible_version">他のユーザーと共有するには、サーバーバージョンが 8.2 以上である必要があります</string>
   <string name="share_add_user_or_group">ユーザーかグループを追加</string>
   <string name="share_via_link_section_title">公開リンク</string>
   <string name="share_via_link_create_title">共有リンクを作成</string>
@@ -573,8 +578,7 @@
   <string name="share_group_clarification">%1$s (グループ)</string>
   <string name="share_remote_clarification">%1$s (リモート)</string>
   <string name="share_known_remote_clarification">%1$s ( %2$s で)</string>
-  <string name="share_sharee_unavailable">サーバーのバージョンでは、クライアント内のユーザーと共有することができません。
-管理者にお問い合わせください。</string>
+  <string name="share_sharee_unavailable">サーバーのバージョンでは、クライアント内のユーザーと共有することができません。\n管理者にお問い合わせください。</string>
   <string name="share_privilege_can_share">共有可</string>
   <string name="share_privilege_can_edit">編集を許可</string>
   <string name="share_privilege_can_edit_create">作成</string>
@@ -586,7 +590,7 @@
   <string name="action_upload_clear">クリア</string>
   <string name="local_file_not_found_toast">ローカルファイルにファイルがありません</string>
   <string name="confirmation_remove_files_alert">本当に%s個のファイルを削除しますか？</string>
-  <string name="confirmation_remove_folders_alert">選択したものとそのコンテンツを削除してよろしいですか?</string>
+  <string name="confirmation_remove_folders_alert">選択したものとそのコンテンツを削除してよろしいですか\?</string>
   <string name="failed_upload_quota_exceeded_text">アカウントに十分なスペースがありません</string>
   <string name="auth_forbidden">認証失敗</string>
   <string name="actionbar_privacy_policy">プライバシーポリシー</string>
@@ -599,14 +603,14 @@
   <string name="streaming_crossed_redirection">交差リダイレクトによるストリーミングは禁止されている。</string>
   <string name="previewing_video_common_error">このビデオは再生できません。</string>
   <string name="previewing_video_not_supported">お使いの端末では動画のプレビューがサポートされていません。ファイルは自動でダウンロードされます。</string>
-  <string name="streaming_position_not_available">\"ポジションはありません\"</string>
+  <string name="streaming_position_not_available">「ポジションが利用できません」</string>
   <string name="error_no_network_connection">デバイスがネットワークに接続されていない。</string>
   <string name="share_no_public_links">公開リンクはまだ作成されていない。</string>
   <string name="share_no_link_in_this_share">このシェアにはリンクがない。</string>
   <string name="share_warning_about_forwarding_public_links">リンクがあれば誰でもそのファイル/フォルダにアクセスできる。</string>
   <string name="share_via_link_default_password">*****</string>
   <string name="share_via_link_password_enforced_label">パスワード *</string>
-  <string name="share_via_link_expiration_date_enforced_label">有効期限*</string>
+  <string name="share_via_link_expiration_date_enforced_label">有効期限 *</string>
   <string name="share_via_link_expiration_date_explanation_label">公開リンクの有効期限は、作成%1$d日以内です。</string>
   <string name="share_via_link_default_name_template">%1$sリンク</string>
   <string name="share_via_link_empty_password">パスワードが入力されていません。</string>
@@ -624,7 +628,7 @@
   <string name="file_sync_conflict_notification_channel_description">ファイルの競合が発生したときに確認します。</string>
   <string name="clicks_to_be_developer">デベロッパーになるまで、あと%1$dステップです。</string>
   <string name="rate_dialog_title">%1$s アプリの評価</string>
-  <string name="rate_dialog_description">もしあなたがこのアプリを気に入ったのであれば評価をお願いします。 私たちにはあなたの意見が必要です。</string>
+  <string name="rate_dialog_description">このアプリを気に入っていただけましたら、ぜひ評価をお願いします。皆様からのフィードバックは私たちにとって大変貴重です。</string>
   <string name="button_no_thanks_name">いいえ、結構です</string>
   <string name="button_later_name">あとで</string>
   <string name="button_rate_now_name">今すぐ評価する</string>
@@ -672,11 +676,15 @@
   <string name="error_webfinger_username_empty">ユーザー名が指定されていません</string>
   <!--Release Notes-->
   <string name="release_notes_header">%1$sでの新しい機能</string>
-  <string name="release_notes_footer">%1$sのご利用ありがとうございます。</string>
+  <string name="release_notes_footer">%1$sのご利用ありがとうございます。\n❤</string>
   <string name="release_notes_proceed">続行</string>
   <string name="release_notes_icon">リリースノートのアイコン</string>
   <string name="release_notes_bugfixes_title">軽微なバグ修正</string>
   <string name="release_notes_bugfixes_subtitle">アプリの使い心地を向上するため、いくつかのバグを修正しました</string>
+  <string name="release_notes_4_8_0_title_set_emoji_as_space_image">絵文字をスペース用画像として設定する</string>
+  <string name="release_notes_4_8_0_subtitle_set_emoji_as_space_image">適切な権限を持つInfinite Scaleユーザーは、絵文字をスペース用画像として設定できるようになりました</string>
+  <string name="release_notes_4_8_0_title_space_membership">スペースのメンバーシップ</string>
+  <string name="release_notes_4_8_0_subtitle_space_membership">Infinite Scaleユーザーは、スペースのすべてのメンバーを確認し、適切な権限で管理できます</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Webで開く</string>
   <string name="ic_action_open_with_web">%1$s(Web) で開く</string>
@@ -687,7 +695,7 @@
   <string name="ocis_accounts_warning_title">Infinite Scale アカウントの警告</string>
   <string name="ocis_accounts_warning_message">スペース機能にアクセスするにはこのアカウントを一度削除して再度ログインしてください。</string>
   <string name="ocis_accounts_warning_checkbox_message">今後表示しない</string>
-  <string name="ocis_accounts_warning_button">理解しました&lt;br&gt;</string>
+  <string name="ocis_accounts_warning_button">理解しました</string>
   <string name="tab_label_ascii">テキスト</string>
   <string name="apply_to_all_conflicts">合計 %1$s 個の競合に適用する</string>
   <string name="log_file_downloaded">ログファイルをダウンロードしました</string>
@@ -727,14 +735,33 @@
   <string name="content_description_image_previewed">画像をプレビューしています</string>
   <string name="content_description_add_public_link">公開リンクを追加</string>
   <string name="content_description_get_private_link">限定公開リンクを取得</string>
+  <string name="content_description_get_public_link">%1$sの公開リンクを取得</string>
+  <string name="content_description_delete_public_link">%1$sの公開リンクを削除</string>
+  <string name="content_description_edit_public_link">%1$sの公開リンクを編集</string>
+  <string name="content_description_remove_account">アカウント %1$s を削除</string>
   <string name="content_description_add_new_content">新しいコンテンツを追加</string>
   <string name="content_description_add_new_content_expanded">新しいコンテンツを追加</string>
-  <string name="content_description_logo">ロゴ&lt;br&gt;</string>
+  <string name="content_description_clean_account_storage">%1$sのアカウントストレージをクリア</string>
+  <string name="content_description_logo">ロゴ</string>
   <string name="content_description_add_share">共有を追加</string>
+  <string name="content_description_edit_share">%1$sへの共有を編集</string>
+  <string name="content_description_delete_share">%1$sへの共有を削除</string>
   <string name="content_description_file_operations">%1$s個の操作</string>
   <string name="content_description_sort_by_name_ascending">%1$s昇順で並べ替え</string>
   <string name="content_description_sort_by_name_descending">%1$s降順で並べ替え</string>
   <string name="content_description_create_new_folder">新しいフォルダーを作成</string>
+  <string name="content_description_space_image">スペース用画像</string>
+  <string name="content_description_space_name">%1$sスペース名</string>
+  <string name="content_description_space_three_dot_menu">%1$sスペースメニュー</string>
+  <string name="content_description_space_subtitle">%1$sスペースサブタイトル</string>
+  <string name="content_description_create_button">作成ボタン</string>
+  <string name="content_description_cancel_button">キャンセルボタン</string>
+  <string name="content_description_quota_switch">スペース割り当て</string>
+  <string name="content_description_member_user">ユーザー %1$s</string>
+  <string name="content_description_member_group">グループ %1$s</string>
+  <string name="content_description_member_expiration_date">有効期限 %1$s</string>
+  <string name="content_description_add_member">新しいメンバーを追加</string>
+  <string name="content_description_invite_member_button">メンバーを招待</string>
   <string name="content_description_expiration_date_switch">有効期限</string>
   <string name="create_shortcut_dialog_title">ショートカットを作成</string>
   <string name="create_shortcut_dialog_url">URL</string>
@@ -743,18 +770,56 @@
   <string name="create_shortcut_dialog_url_extension">.url</string>
   <string name="open_shortcut_description">このショートカットは次のファイルにリンクされています: </string>
   <string name="open_shortcut_title">リンクを開く</string>
+  <string name="create_space_dialog_title">スペースを作成</string>
   <string name="create_space_dialog_name">名前</string>
   <string name="create_space_dialog_subtitle">サブタイトル</string>
   <string name="create_space_dialog_quota">クォータ</string>
+  <string name="create_space_dialog_no_restriction">制限なし</string>
+  <string name="create_space_dialog_gb_unit">GB</string>
+  <string name="create_space_dialog_empty_error">スペース名は空にできません</string>
+  <string name="create_space_dialog_length_error">スペース名は255文字以内でなければなりません</string>
+  <string name="create_space_dialog_characters_error">禁止文字: / \\ . : \? * \" \' &gt; &lt; |</string>
+  <string name="create_space_dialog_quota_empty_error">スペース割り当ては空にできません</string>
+  <string name="create_space_dialog_quota_zero_error">スペース割り当ては0より大きくなければなりません</string>
+  <string name="create_space_dialog_quota_too_large_error">スペース割り当ては 1 PBを超えることはできません</string>
+  <string name="create_space_correctly">スペースが正しく作成されました</string>
+  <string name="create_space_failed">スペースを作成できませんでした</string>
+  <string name="edit_space">スペース編集</string>
+  <string name="edit_space_correctly">スペースが正しく更新されました</string>
+  <string name="edit_space_failed">スペースを更新できませんでした</string>
+  <string name="edit_space_image">画像編集</string>
+  <string name="edit_space_image_correctly">画像が正しく更新されました</string>
+  <string name="edit_space_image_failed">画像を更新できませんでした</string>
+  <string name="disable_space">スペースの無効化</string>
+  <string name="disable_space_dialog_title">本当にスペース: %1$s を無効にしますか？</string>
+  <string name="disable_space_dialog_message">選択したスペースを無効にすると、アクセスできなくなります。スペース管理者のみが引き続きアクセスできます。注記: サーバーからファイルは削除されません。</string>
+  <string name="disable_space_correctly">スペースが正しく無効化されました</string>
+  <string name="disable_space_failed">スペースを無効にできませんでした</string>
   <string name="disabled_space_label">無効</string>
+  <string name="enable_space">スペースの有効化</string>
+  <string name="enable_space_dialog_title">本当にスペース: %1$s を有効にしますか？</string>
+  <string name="enable_space_dialog_message">選択したスペースを有効にすると、再度アクセスできるようになります。</string>
+  <string name="enable_space_correctly">スペースが正しく有効化されました</string>
+  <string name="enable_space_failed">スペースを有効にできませんでした</string>
+  <string name="delete_space">スペースの削除</string>
+  <string name="delete_space_dialog_title">本当にスペース: %1$s を削除しますか？</string>
+  <string name="delete_space_dialog_message">選択したスペースを削除すると、そのスペースにはアクセスできなくなり、ファイルはサーバーから削除されます。</string>
+  <string name="delete_space_correctly">スペースは正しく削除されました</string>
+  <string name="delete_space_failed">スペースを削除できませんでした</string>
+  <string name="set_space_icon">アイコンを設定</string>
   <string name="members_title">メンバー</string>
-  <string name="members_add">メンバーを追加</string>
-  <string name="members_permissions">許可</string>
+  <string name="members_add">メンバー追加</string>
+  <string name="members_add_failed">メンバーを招待できませんでした</string>
+  <string name="members_add_conflict_error">選択したスペースにすでに招待されています</string>
+  <string name="members_search_failed">結果が見つかりませんでした</string>
+  <string name="members_search_empty">検索に一致するユーザーまたはグループは見つかりません</string>
+  <string name="members_permissions">権限</string>
   <string name="members_options">オプション</string>
   <string name="members_expiration_date">有効期限</string>
-  <string name="members_invite">招待</string>
-  <string name="member_type_user">ユーザ</string>
+  <string name="members_invite">招待する</string>
+  <string name="member_type_user">ユーザー</string>
   <string name="member_type_group">グループ</string>
+  <string name="feedback_dialog_get_in_contact_description"><![CDATA[ <a href=\"%1$s\"><b>フォーラム</b></a>で質問するか、<a href=\"%2$s\"><b>GitHubリポジトリ</b></a>に貢献してください]]></string>
   <string name="link_role_accessibility">リンク</string>
   <string name="button_role_accessibility">ボタン</string>
   <string name="folder_picker_label">フォルダピッカー</string>
@@ -769,4 +834,5 @@
   <string name="audio_preview_label">音声プレビュー</string>
   <string name="details_label">詳細</string>
   <string name="text_preview_label">文章プレビュー</string>
+  <string name="space_members_label">スペースのメンバー</string>
 </resources>

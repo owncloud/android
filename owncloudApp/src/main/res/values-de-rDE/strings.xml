@@ -7,7 +7,7 @@
   <string name="actionbar_search">Ordner durchsuchen</string>
   <string name="actionbar_search_space">Suche in Spaces</string>
   <string name="actionbar_sync">Konto aktualisieren</string>
-  <string name="actionbar_upload">Datei hochladen</string>
+  <string name="actionbar_upload">Hochladen</string>
   <string name="actionbar_upload_from_apps">Inhalt von anderen Apps</string>
   <string name="actionbar_upload_files">Dateien</string>
   <string name="actionbar_open_with">Öffnen mit</string>
@@ -25,7 +25,7 @@
   <string name="drawer_item_only_available_offline">Offline verfügbar</string>
   <string name="drawer_item_shared_by_link_files">Über einen Link geteilt</string>
   <string name="drawer_item_settings">Einstellungen</string>
-  <string name="drawer_item_uploads_list">Uploads</string>
+  <string name="drawer_item_uploads_list">Hochgeladenes</string>
   <string name="drawer_close">Schließen</string>
   <string name="drawer_open">Öffnen</string>
   <string name="drawer_loading_quota">Kontingent zum Hochladen</string>
@@ -41,7 +41,7 @@
   <string name="prefs_subsection_logging">Protokollierung</string>
   <string name="prefs_subsection_more">Mehr</string>
   <string name="prefs_subsection_security">Sicherheit</string>
-  <string name="prefs_subsection_whatsnew">Was hat sich seit der letzten Version geändert?</string>
+  <string name="prefs_subsection_whatsnew">Was hat sich seit der letzten Version geändert\?</string>
   <string name="prefs_subsection_security_summary">Legen Sie Sperren fest, um auf die App zuzugreifen, und erlauben Sie Berührungen mit anderen sichtbaren Fenstern.</string>
   <string name="prefs_subsection_logging_summary">Protokolle verfolgen, die durch die Ausführung der App erstellt wurden.</string>
   <string name="prefs_subsection_more_summary">App-Info, Feedback und mehr</string>
@@ -59,7 +59,7 @@
   <string name="prefs_lock_access_from_document_provider_summary">Sperren Sie den Zugriff von anderen Apps auf die Dateien der Konten in dieser App über den eingebauten Dateimanager von Android.</string>
   <string name="prefs_touches_with_other_visible_windows">Berührungen mit anderen sichtbaren Fenstern</string>
   <string name="prefs_touches_with_other_visible_windows_summary">Berührungen zulassen, wenn die Ansicht von einem anderen sichtbaren Fenster verdeckt wird. Aktivieren Sie es, um Lichtfilter-Apps zu verwenden.</string>
-  <string name="confirmation_touches_with_other_windows_title">Wollen Sie diese Funktion wirklich einschalten?</string>
+  <string name="confirmation_touches_with_other_windows_title">Wollen Sie diese Funktion wirklich einschalten\?</string>
   <string name="confirmation_touches_with_other_windows_message">Verwenden Sie diese Funktion auf eigene Verantwortung. Eine bösartige Anwendung könnte versuchen, Sie unwissentlich in anderen Ansichten Aktionen ausführen zu lassen.</string>
   <string name="prefs_subsection_picture_uploads">Automatischer Bilder-Upload</string>
   <string name="prefs_subsection_picture_uploads_summary">Verwalten des Speicherortes und des Verhaltens der automatisch hochgeladenen Fotos</string>
@@ -141,7 +141,7 @@
   <string name="auth_host_url">Server-Adresse https://…</string>
   <string name="auth_username">Benutzername</string>
   <string name="auth_password">Passwort</string>
-  <string name="auth_register">Ist %1$s neu für Sie?</string>
+  <string name="auth_register">Ist %1$s neu für Sie\?</string>
   <string name="sync_string_files">Dateien</string>
   <string name="setup_btn_login">Anmelden</string>
   <string name="uploader_btn_upload_text">Hochladen</string>
@@ -240,7 +240,7 @@
   <string name="uploader_upload_available_offline_files">Offline-Dateien werden übertragen</string>
   <string name="uploader_upload_requested_from_wifi_files">Hochladen von angeforderten WLAN-Dateien</string>
   <string name="ssl_certificate_not_trusted">Zertifikat des Servers ist nicht vertrauenswürdig.</string>
-  <string name="uploads_view_title">Uploads</string>
+  <string name="uploads_view_title">Hochgeladenes</string>
   <string name="uploads_view_group_current_uploads">Aktuell</string>
   <string name="uploads_view_group_failed_uploads">Fehlgeschlagen (Tippen zum Wiederholen)</string>
   <string name="uploads_view_group_finished_uploads">Hochgeladen</string>
@@ -275,7 +275,7 @@
   <string name="downloader_download_succeeded_ticker">Herunterladen erfolgreich</string>
   <string name="downloader_download_succeeded_content">%1$s wurde erfolgreich heruntergeladen</string>
   <string name="downloader_download_failed_ticker">Herunterladen fehlgeschlagen</string>
-  <string name="downloader_preview_failed_ticker">Datei kann nicht dargestellt werden.</string>
+  <string name="downloader_preview_failed_ticker">Datei kann nicht dargestellt werden</string>
   <string name="downloader_download_failed_content">Herunterladen von %1$s konnte nicht abgeschlossen werden.</string>
   <string name="downloader_not_downloaded_yet">Noch nicht heruntergeladen</string>
   <string name="downloader_download_failed_credentials_error">Herunterladen fehlgeschlagen, Sie müssen sich erneut anmelden.</string>
@@ -316,7 +316,7 @@
   <string name="biometric_not_enrolled">Registrieren Sie mindestens ein biometrisches Merkmal, um diese Funktion zu nutzen.</string>
   <string name="biometric_prompt_title">Biometrisches Einloggen</string>
   <string name="biometric_prompt_subtitle">Anmeldung mit biometrischem Merkmal</string>
-  <string name="biometric_dialog_title">Möchten Sie die biometrische Sicherheit zusätzlich aktivieren?</string>
+  <string name="biometric_dialog_title">Möchten Sie die biometrische Sicherheit zusätzlich aktivieren\?</string>
   <string name="biometric_not_available">Die biometrische Entsperrung ist nicht verfügbar, da das System sie nicht bereitstellen konnte.</string>
   <string name="media_notif_ticker">%1$s Musik-Player</string>
   <string name="media_state_playing">%1$s (abspielend)</string>
@@ -362,8 +362,7 @@
   <string name="auth_expired_basic_auth_toast">Bitte das aktuelle Passwort eingeben</string>
   <string name="auth_connecting_auth_server">Verbinde mit dem Authentifizierung-Server…</string>
   <string name="auth_unsupported_auth_method">Der Server unterstützt diese Authentifizierungsmethode nicht.</string>
-  <string name="auth_fail_get_user_name">Der Server gibt keine korrekte Benutzer-ID zurück. Bitte kontaktieren Sie Ihre Administration.
-	</string>
+  <string name="auth_fail_get_user_name">Der Server gibt keine korrekte Benutzer-ID zurück. Bitte kontaktieren Sie Ihre Administration.\n\t</string>
   <string name="auth_can_not_auth_against_server">Eine Authentifizierung ist bei diesem Server nicht möglich.</string>
   <string name="auth_account_does_not_exist">Das Benutzerkonto ist noch nicht auf dem Gerät vorhanden.</string>
   <string name="set_available_offline">Als offline verfügbar markieren</string>
@@ -372,14 +371,14 @@
   <string name="confirmation_unset_available_offline">Die Offline-Verfügbarkeit der Datei wurde korrekt ausgeschaltet</string>
   <string name="common_rename">Umbenennen</string>
   <string name="common_remove">Löschen</string>
-  <string name="confirmation_remove_file_alert">Möchten Sie %1$s wirklich löschen?</string>
-  <string name="confirmation_remove_folder_alert">Möchten Sie wirklich %1$s und dessen Inhalte entfernen?</string>
+  <string name="confirmation_remove_file_alert">Möchten Sie %1$s wirklich löschen\?</string>
+  <string name="confirmation_remove_folder_alert">Möchten Sie wirklich %1$s und dessen Inhalte entfernen\?</string>
   <string name="confirmation_remove_local">Nur lokal</string>
-  <string name="confirmation_remove_account_alert">Möchten Sie das Konto von %1$s wirklich löschen?</string>
-  <string name="confirmation_remove_account_alert_camera_uploads">Für dieses Konto sind Kamera-Uploads eingerichtet. Wenn Sie das Konto entfernen, werden die Kamera-Uploads deaktiviert. Möchten Sie das Konto %1$s wirklich entfernen? </string>
+  <string name="confirmation_remove_account_alert">Möchten Sie das Konto von %1$s wirklich löschen\?</string>
+  <string name="confirmation_remove_account_alert_camera_uploads">Für dieses Konto sind Kamera-Uploads eingerichtet. Wenn Sie das Konto entfernen, werden die Kamera-Uploads deaktiviert. Möchten Sie das Konto %1$s wirklich entfernen\? </string>
   <string name="confirmation_remove_public_share_title">Link entfernen</string>
   <string name="confirmation_remove_private_share_title">Private Freigabe entfernen</string>
-  <string name="confirmation_remove_share_message">Möchten Sie die Freigabe %1$s wirklich löschen?</string>
+  <string name="confirmation_remove_share_message">Möchten Sie die Freigabe %1$s wirklich löschen\?</string>
   <string name="remove_success_msg">Erfolgreich gelöscht</string>
   <string name="remove_fail_msg">Löschvorgang fehlgeschlagen.</string>
   <string name="rename_dialog_title">Geben Sie einen neuen Namen ein</string>
@@ -416,7 +415,7 @@
   <string name="ssl_validator_reason_cert_expired">- Das Zertifikat des Servers ist abgelaufen.</string>
   <string name="ssl_validator_reason_cert_not_yet_valid">- Das Gültigkeitsdatum des Serverzertifikats liegt in der Zukunft.</string>
   <string name="ssl_validator_reason_hostname_not_verified">- Die URL stimmt nicht mit dem Hostnamen im Zertifikat überein.</string>
-  <string name="ssl_validator_question">Möchten Sie diesem Zertifikat trotzdem vertrauen?</string>
+  <string name="ssl_validator_question">Möchten Sie diesem Zertifikat trotzdem vertrauen\?</string>
   <string name="ssl_validator_not_saved">Das Zertifikat konnte nicht gespeichert werden.</string>
   <string name="ssl_validator_btn_details_see">Details</string>
   <string name="ssl_validator_btn_details_hide">Ausblenden</string>
@@ -445,13 +444,13 @@
   <string name="placeholder_timestamp">2012/05/18 12:23</string>
   <string name="placeholder_media_time">12:23:45</string>
   <string name="confirmation_disable_camera_uploads_title">Bestätigen</string>
-  <string name="confirmation_disable_pictures_upload_message">Sind Sie sicher, dass Sie dieses Feature deaktivieren möchten? Bilder in der Warteschlange werden nicht hochgeladen.</string>
-  <string name="confirmation_disable_videos_upload_message">Sind Sie sicher, dass Sie diese Funktion deaktivieren möchten? Videos in der Warteschlange werden nicht hochgeladen.</string>
+  <string name="confirmation_disable_pictures_upload_message">Sind Sie sicher, dass Sie dieses Feature deaktivieren möchten\? Bilder in der Warteschlange werden nicht hochgeladen.</string>
+  <string name="confirmation_disable_videos_upload_message">Sind Sie sicher, dass Sie diese Funktion deaktivieren möchten\? Videos in der Warteschlange werden nicht hochgeladen.</string>
   <string name="proper_pics_folder_warning_camera_upload">Bitte stellen Sie sicher, dass der ausgewählte Ordner derjenige ist, in dem die von Ihnen verwendete Kamera die aufgenommenen Bilder speichert. Andernfalls kann die Funktion Ihre Bilder nicht erkennen. Beachten Sie, dass die Bilder frühestens 15 Minuten nach der Aufnahme hochgeladen werden. Um eine bessere Leistung zu erzielen, stellen Sie in Ihren Geräteeinstellungen sicher, dass %1$s im Hintergrund ausgeführt werden darf.</string>
   <string name="proper_videos_folder_warning_camera_upload">Bitte stellen Sie sicher, dass der ausgewählte Ordner derjenige ist, in dem die von Ihnen verwendete Kamera die aufgenommenen Videos speichert. Andernfalls kann die Funktion Ihre Videos nicht erkennen. Beachten Sie, dass Videos frühestens 15 Minuten nach der Aufnahme hochgeladen werden. Um eine bessere Leistung zu erzielen, stellen Sie in Ihren Geräteeinstellungen sicher, dass %1$s im Hintergrund ausgeführt werden darf.</string>
   <string name="conflict_title">Dateikonflikt</string>
   <string name="conflict_description">Ein Konflikt ist in der Datei %1$s aufgetreten. Hier tippen, um das Problem zu lösen.</string>
-  <string name="conflict_message">Welche Datei möchten Sie behalten? Wenn Sie beide Versionen auswählen, wird der lokalen Datei eine Zahl ans Ende ihres Dateinamens angehängt.</string>
+  <string name="conflict_message">Welche Datei möchten Sie behalten\? Wenn Sie beide Versionen auswählen, wird der lokalen Datei eine Zahl ans Ende ihres Dateinamens angehängt.</string>
   <string name="conflict_keep_both">Beide behalten</string>
   <string name="conflict_use_local_version">lokale Version</string>
   <string name="conflict_use_server_version">Server Version</string>
@@ -463,8 +462,7 @@
   <string name="get_shares_error">Es war nicht möglich, die Freigaben vom Server abzurufen.</string>
   <string name="get_sharees_error">Es war nicht möglich, Benutzer und Gruppen vom Server abzurufen.</string>
   <string name="get_capabilities_error">Es war nicht möglich, die Funktionalitäten des Servers abzurufen.</string>
-  <string name="share_link_no_support_share_api">Entschuldigung, Freigaben sind auf Ihrem Server nicht aktiviert. Bitte kontaktieren Sie Ihren
-⇥⇥Administrator.</string>
+  <string name="share_link_no_support_share_api">Entschuldigung, Freigaben sind auf Ihrem Server nicht aktiviert. Bitte kontaktieren Sie Ihren\n⇥⇥Administrator.</string>
   <string name="share_link_file_error">Es war nicht möglich, diese Datei oder diesen Ordner freizugeben.</string>
   <string name="unshare_link_file_error">Es war nicht möglich, die Freigabe dieser Datei oder dieses Ordners aufzuheben.</string>
   <string name="update_link_file_error">Es war nicht möglich, diese Datei oder diesen Ordner zu aktualisieren.</string>
@@ -580,8 +578,7 @@
   <string name="share_group_clarification">%1$s (group)</string>
   <string name="share_remote_clarification">%1$s (entfernte Freigabe)</string>
   <string name="share_known_remote_clarification">%1$s ( auf %2$s )</string>
-  <string name="share_sharee_unavailable">Entschuldigung, Ihre Serverversion erlaubt das Teilen mit Nutzern innerhalb der Clients nicht.
-\nBitte die Administration kontaktieren.</string>
+  <string name="share_sharee_unavailable">Entschuldigung, Ihre Serverversion erlaubt das Teilen mit Nutzern innerhalb der Clients nicht.\n\nBitte die Administration kontaktieren.</string>
   <string name="share_privilege_can_share">kann teilen</string>
   <string name="share_privilege_can_edit">kann bearbeiten</string>
   <string name="share_privilege_can_edit_create">erstellen</string>
@@ -592,8 +589,8 @@
   <string name="action_upload_retry">Wiederholen</string>
   <string name="action_upload_clear">Leeren</string>
   <string name="local_file_not_found_toast">Die Datei wurde im lokalen Dateisystem nicht gefunden.</string>
-  <string name="confirmation_remove_files_alert">Wollen Sie wirklich diese %s Elemente löschen?</string>
-  <string name="confirmation_remove_folders_alert">Möchten Sie die ausgewählten Elemente und deren Inhalte wirklich löschen?</string>
+  <string name="confirmation_remove_files_alert">Wollen Sie wirklich diese %s Elemente löschen\?</string>
+  <string name="confirmation_remove_folders_alert">Möchten Sie die ausgewählten Elemente und deren Inhalte wirklich löschen\?</string>
   <string name="failed_upload_quota_exceeded_text">Nicht genügend Speicherplatz im Konto verfügbar</string>
   <string name="auth_forbidden">Authentifizierung verweigert</string>
   <string name="actionbar_privacy_policy">Datenschutzerklärung</string>
@@ -606,7 +603,7 @@
   <string name="streaming_crossed_redirection">Streaming ist über gekreuzte Weiterleitungen nicht erlaubt.</string>
   <string name="previewing_video_common_error">Dieses Video kann nicht wiedergegeben werden.</string>
   <string name="previewing_video_not_supported">Die Videovorschau wird auf dieser Android-Version nicht unterstützt. Das Herunterladen der Datei startet automatisch.</string>
-  <string name="streaming_position_not_available">\"Position nicht verfügbar\"</string>
+  <string name="streaming_position_not_available">"Position nicht verfügbar"</string>
   <string name="error_no_network_connection">Gerät ist mit keinem Netzwerk verbunden.</string>
   <string name="share_no_public_links">Bisher wurde kein öffentlicher Link erstellt.</string>
   <string name="share_no_link_in_this_share">Diese Freigabe hat keinen Link.</string>
@@ -782,7 +779,7 @@
   <string name="create_space_dialog_gb_unit">GB</string>
   <string name="create_space_dialog_empty_error">Der Space Name darf nicht leer sein</string>
   <string name="create_space_dialog_length_error">Der Space Name darf nicht länger als 255 Zeichen lang sein</string>
-  <string name="create_space_dialog_characters_error">Verbotene Zeichen: / \\ . : ? * \" \' &gt; &lt; |</string>
+  <string name="create_space_dialog_characters_error">Verbotene Zeichen: / \\ . : \? * \" \' &gt; &lt; |</string>
   <string name="create_space_dialog_quota_empty_error">Das Space Kontingent darf nicht leer sein</string>
   <string name="create_space_dialog_quota_zero_error">Das Space Kontingent muss größer als null sein</string>
   <string name="create_space_dialog_quota_too_large_error">Das Space Kontingent darf nicht größer als 1 PB sein</string>
@@ -795,25 +792,25 @@
   <string name="edit_space_image_correctly">Das Bild wurde korrekt aktualisiert</string>
   <string name="edit_space_image_failed">Das Bild konnte nicht aktualisiert werden</string>
   <string name="disable_space">Space deaktivieren</string>
-  <string name="disable_space_dialog_title">Wollen Sie den Space: %1$s wirklich deaktivieren?</string>
+  <string name="disable_space_dialog_title">Wollen Sie den Space: %1$s wirklich deaktivieren\?</string>
   <string name="disable_space_dialog_message">Wenn Sie den ausgewählten Space deaktivieren, kann nicht mehr darauf zugegriffen werden. Nur Bereichsmanager haben weiterhin Zugriff. Hinweis: Es werden keine Dateien vom Server gelöscht.</string>
   <string name="disable_space_correctly">Der Space wurde korrekt deaktiviert</string>
   <string name="disable_space_failed">Der Space konnte nicht deaktiviert werden</string>
   <string name="disabled_space_label">Deaktiviert</string>
   <string name="enable_space">Aktiviere den Space</string>
-  <string name="enable_space_dialog_title">Wollen Sie den Space: %1$s wirklich aktivieren?</string>
+  <string name="enable_space_dialog_title">Wollen Sie den Space: %1$s wirklich aktivieren\?</string>
   <string name="enable_space_dialog_message">Wenn Sie den ausgewählten Space aktivieren, kann wieder darauf zugegriffen werden.</string>
   <string name="enable_space_correctly">Der Space wurde korrekt aktiviert</string>
   <string name="enable_space_failed">Der Space konnte nicht korrekt aktiviert werden</string>
   <string name="delete_space">Space löschen</string>
-  <string name="delete_space_dialog_title">Wollen Sie wirklich den Space: %1$s löschen?</string>
+  <string name="delete_space_dialog_title">Wollen Sie wirklich den Space: %1$s löschen\?</string>
   <string name="delete_space_dialog_message">Wenn Sie den ausgewählten Space löschen, kann nicht mehr darauf zugegriffen werden und die Dateien werden vom Server gelöscht.</string>
   <string name="delete_space_correctly">Der Space wurde korrekt gelöscht</string>
   <string name="delete_space_failed">Der Space konnte nicht gelöscht werden</string>
   <string name="set_space_icon">Setze ein Icon</string>
   <string name="members_title">Mitglieder</string>
   <string name="members_add">Mitglied hinzufügen</string>
-  <string name="members_add_failed">Das Mitglied kann nicht eingeladen werden</string>
+  <string name="members_add_failed">Das Benutzer kann nicht eingeladen werden</string>
   <string name="members_add_conflict_error">Wurde bereits in den ausgewählten Sapce eingeladen</string>
   <string name="members_search_failed">Keine Ergebnisse gefunden</string>
   <string name="members_search_empty">Es gibt keine Benutzer oder Gruppen, die Ihrer Suche entsprechen</string>
@@ -823,7 +820,7 @@
   <string name="members_invite">Einladung</string>
   <string name="member_type_user">Benutzer</string>
   <string name="member_type_group">Gruppe</string>
-  <string name="feedback_dialog_get_in_contact_description"><![CDATA[ Bitten Sie in unserem <a href="%1$s"><b>Forum</b></a> um Hilfe oder unterstützen Sie in unserem <a href="%2$s"><b>GitHub-Repository</b></a>]]></string>
+  <string name="feedback_dialog_get_in_contact_description"><![CDATA[ Bitten Sie in unserem <a href=\"%1$s\"><b>Forum</b></a> um Hilfe oder unterstützen Sie in unserem <a href=\"%2$s\"><b>GitHub-Repository</b></a>]]></string>
   <string name="link_role_accessibility">Link</string>
   <string name="button_role_accessibility">Schaltfläche</string>
   <string name="folder_picker_label">Ordnerauswahl</string>
