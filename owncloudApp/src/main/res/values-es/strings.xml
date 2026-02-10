@@ -767,6 +767,7 @@ Póngase en contacto con su administrador</string>
   <string name="content_description_member_group">Grupo %1$s</string>
   <string name="content_description_member_expiration_date">Expira %1$s</string>
   <string name="content_description_add_member">Añadir nuevo miembro</string>
+  <string name="content_description_invite_member_button">Invitar miembro</string>
   <string name="content_description_expiration_date_switch">Fecha de expiración</string>
   <string name="create_shortcut_dialog_title">Crear un acceso directo</string>
   <string name="create_shortcut_dialog_url">URL</string>
@@ -814,6 +815,8 @@ Póngase en contacto con su administrador</string>
   <string name="set_space_icon">Emoji</string>
   <string name="members_title">Miembros</string>
   <string name="members_add">Agregar miembro</string>
+  <string name="members_add_failed">El miembro no pudo ser invitado</string>
+  <string name="members_add_conflict_error">ha sido ya invitado al space seleccionado</string>
   <string name="members_search_failed">No se encontraron resultados</string>
   <string name="members_search_empty">No se encontraron usuarios o grupos que encajen con su búsqueda</string>
   <string name="members_permissions">Permisos</string>

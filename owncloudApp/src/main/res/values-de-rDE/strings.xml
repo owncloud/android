@@ -687,6 +687,8 @@
   <string name="release_notes_bugfixes_subtitle">Einige Fehler wurden behoben, um die Benutzung der App zu verbessern.</string>
   <string name="release_notes_4_8_0_title_set_emoji_as_space_image">Ein Emoji als Space-Bild festlegen</string>
   <string name="release_notes_4_8_0_subtitle_set_emoji_as_space_image">Benutzer von Infinite Scale mit den entsprechenden Berechtigungen können nun ein Emoji als Space-Bild festlegen.</string>
+  <string name="release_notes_4_8_0_title_space_membership">Space Mitgliedschaft</string>
+  <string name="release_notes_4_8_0_subtitle_space_membership">Benutzer von Infinite Scale können alle Mitglieder eines Spaces sehen und sie mit den entsprechenden Berechtigungen verwalten</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Öffnen im Webbrowser</string>
   <string name="ic_action_open_with_web">Öffnen in %1$s (web)</string>
@@ -759,6 +761,11 @@
   <string name="content_description_create_button">Erstellen-Schaltfläche</string>
   <string name="content_description_cancel_button">Abbruch-Schaltfläche</string>
   <string name="content_description_quota_switch">Space Kontingent</string>
+  <string name="content_description_member_user">Benutzer %1$s</string>
+  <string name="content_description_member_group">Gruppe %1$s</string>
+  <string name="content_description_member_expiration_date">Läuft ab %1$s</string>
+  <string name="content_description_add_member">Neues Mitglied hinzufügen</string>
+  <string name="content_description_invite_member_button">Mitglied einladen</string>
   <string name="content_description_expiration_date_switch">Ablaufdatum</string>
   <string name="create_shortcut_dialog_title">Verknüpfung erstellen</string>
   <string name="create_shortcut_dialog_url">URL</string>
@@ -806,6 +813,10 @@
   <string name="set_space_icon">Setze ein Icon</string>
   <string name="members_title">Mitglieder</string>
   <string name="members_add">Mitglied hinzufügen</string>
+  <string name="members_add_failed">Das Mitglied kann nicht eingeladen werden</string>
+  <string name="members_add_conflict_error">Wurde bereits in den ausgewählten Sapce eingeladen</string>
+  <string name="members_search_failed">Keine Ergebnisse gefunden</string>
+  <string name="members_search_empty">Es gibt keine Benutzer oder Gruppen, die Ihrer Suche entsprechen</string>
   <string name="members_permissions">Berechtigungen</string>
   <string name="members_options">Optionen</string>
   <string name="members_expiration_date">Ablaufdatum</string>
@@ -827,4 +838,5 @@
   <string name="audio_preview_label">Audiovorschau</string>
   <string name="details_label">Details</string>
   <string name="text_preview_label">Textvorschau</string>
+  <string name="space_members_label">Space Mitglieder</string>
 </resources>
