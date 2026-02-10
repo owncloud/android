@@ -39,6 +39,7 @@ import com.owncloud.android.domain.spaces.model.SpaceMember
 import com.owncloud.android.extensions.avoidScreenshotsIfNeeded
 import com.owncloud.android.extensions.collectLatestLifecycleFlow
 import com.owncloud.android.extensions.showErrorInSnackbar
+import com.owncloud.android.extensions.showMessageInSnackbar
 import com.owncloud.android.presentation.common.UIResult
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -141,7 +142,10 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
         collectLatestLifecycleFlow(spaceMembersViewModel.removeMemberResultFlow) { uiResult ->
             when (uiResult) {
                 is UIResult.Loading -> { }
-                is UIResult.Success -> { spaceMembersViewModel.getSpaceMembers() }
+                is UIResult.Success -> {
+                    showMessageInSnackbar(getString(R.string.members_remove_correctly))
+                    spaceMembersViewModel.getSpaceMembers()
+                }
                 is UIResult.Error -> {
                     Timber.e(uiResult.error, "Failed to remove a member from space: ${currentSpace.id}")
                     showErrorInSnackbar(R.string.members_remove_failed, uiResult.error)
