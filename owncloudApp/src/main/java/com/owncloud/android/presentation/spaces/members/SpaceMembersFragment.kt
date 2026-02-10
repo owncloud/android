@@ -20,6 +20,7 @@
 
 package com.owncloud.android.presentation.spaces.members
 
+import android.app.AlertDialog
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -34,13 +35,14 @@ import com.owncloud.android.databinding.MembersFragmentBinding
 import com.owncloud.android.domain.roles.model.OCRole
 import com.owncloud.android.domain.spaces.model.OCSpace
 import com.owncloud.android.domain.spaces.model.SpaceMember
+import com.owncloud.android.extensions.avoidScreenshotsIfNeeded
 import com.owncloud.android.extensions.collectLatestLifecycleFlow
 import com.owncloud.android.presentation.common.UIResult
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import timber.log.Timber
 
-class SpaceMembersFragment : Fragment() {
+class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapterListener {
     private var _binding: MembersFragmentBinding? = null
     private val binding get() = _binding!!
 
@@ -67,7 +69,7 @@ class SpaceMembersFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        spaceMembersAdapter = SpaceMembersAdapter()
+        spaceMembersAdapter = SpaceMembersAdapter(this)
         recyclerView = binding.membersRecyclerView
         recyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext())
@@ -159,6 +161,15 @@ class SpaceMembersFragment : Fragment() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putBoolean(CAN_REMOVE_MEMBERS, canRemoveMembers)
+    }
+
+    override fun onRemoveMember(spaceMember: SpaceMember) {
+        AlertDialog.Builder(requireContext())
+            .setMessage(getString(R.string.members_remove_dialog_message, spaceMember.displayName))
+            .setPositiveButton(getString(R.string.common_yes)) { _, _ -> }
+            .setNegativeButton(getString(R.string.common_no)) { dialog, _ -> dialog.dismiss() }
+            .show()
+            .avoidScreenshotsIfNeeded()
     }
 
     interface SpaceMemberFragmentListener {

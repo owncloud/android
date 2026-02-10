@@ -35,7 +35,9 @@ import com.owncloud.android.domain.spaces.model.SpaceMembers
 import com.owncloud.android.utils.DisplayUtils
 import com.owncloud.android.utils.PreferenceUtils
 
-class SpaceMembersAdapter: RecyclerView.Adapter<SpaceMembersAdapter.SpaceMembersViewHolder>() {
+class SpaceMembersAdapter(
+    private val listener: SpaceMembersAdapterListener
+): RecyclerView.Adapter<SpaceMembersAdapter.SpaceMembersViewHolder>() {
 
     private var members: List<SpaceMember> = emptyList()
     private var rolesMap: Map<String, String> = emptyMap()
@@ -65,7 +67,12 @@ class SpaceMembersAdapter: RecyclerView.Adapter<SpaceMembersAdapter.SpaceMembers
 
             val memberRole = OCRoleType.parseFromId(member.roles.first())
             val numberOfManagers = members.count { it.roles.contains(OCRoleType.toString(OCRoleType.CAN_MANAGE)) }
-            removeMemberButton.isVisible = canRemoveMembers && !(memberRole == OCRoleType.CAN_MANAGE && numberOfManagers == 1)
+            removeMemberButton.apply {
+                isVisible = canRemoveMembers && !(memberRole == OCRoleType.CAN_MANAGE && numberOfManagers == 1)
+                setOnClickListener {
+                    listener.onRemoveMember(member)
+                }
+            }
 
             member.expirationDateTime?.let {
                 expirationCalendarIcon.visibility = View.VISIBLE
@@ -92,6 +99,10 @@ class SpaceMembersAdapter: RecyclerView.Adapter<SpaceMembersAdapter.SpaceMembers
 
     class SpaceMembersViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val binding = MemberItemBinding.bind(itemView)
+    }
+
+    interface SpaceMembersAdapterListener {
+        fun onRemoveMember(spaceMember: SpaceMember)
     }
 
     companion object {
