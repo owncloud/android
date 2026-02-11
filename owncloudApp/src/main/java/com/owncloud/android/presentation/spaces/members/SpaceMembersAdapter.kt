@@ -69,6 +69,7 @@ class SpaceMembersAdapter(
             val memberRole = OCRoleType.parseFromId(member.roles.first())
             val numberOfManagers = members.count { it.roles.contains(OCRoleType.toString(OCRoleType.CAN_MANAGE)) }
             removeMemberButton.apply {
+                contentDescription = holder.itemView.context.getString(R.string.content_description_remove_member_button, member.displayName)
                 isVisible = canRemoveMembers && !(memberRole == OCRoleType.CAN_MANAGE && numberOfManagers == 1)
                 setOnClickListener {
                     listener.onRemoveMember(member)

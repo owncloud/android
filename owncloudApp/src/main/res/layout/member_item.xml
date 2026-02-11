@@ -112,7 +112,6 @@
             android:background="?android:attr/selectableItemBackground"
             android:focusable="true"
             android:src="@drawable/ic_action_delete_grey"
-            android:contentDescription="@string/content_description_remove_member_button"
             android:visibility="gone"
             tools:visibility="visible" />
 
