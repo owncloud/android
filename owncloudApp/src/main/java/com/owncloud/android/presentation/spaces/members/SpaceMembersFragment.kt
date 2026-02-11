@@ -20,6 +20,7 @@
 
 package com.owncloud.android.presentation.spaces.members
 
+import android.app.AlertDialog
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -32,15 +33,19 @@ import androidx.recyclerview.widget.RecyclerView
 import com.owncloud.android.R
 import com.owncloud.android.databinding.MembersFragmentBinding
 import com.owncloud.android.domain.roles.model.OCRole
+import com.owncloud.android.domain.roles.model.OCRoleType
 import com.owncloud.android.domain.spaces.model.OCSpace
 import com.owncloud.android.domain.spaces.model.SpaceMember
+import com.owncloud.android.extensions.avoidScreenshotsIfNeeded
 import com.owncloud.android.extensions.collectLatestLifecycleFlow
+import com.owncloud.android.extensions.showErrorInSnackbar
+import com.owncloud.android.extensions.showMessageInSnackbar
 import com.owncloud.android.presentation.common.UIResult
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import timber.log.Timber
 
-class SpaceMembersFragment : Fragment() {
+class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapterListener {
     private var _binding: MembersFragmentBinding? = null
     private val binding get() = _binding!!
 
@@ -58,6 +63,7 @@ class SpaceMembersFragment : Fragment() {
     private var addMemberRoles: List<OCRole> = emptyList()
     private var spaceMembers: List<SpaceMember> = emptyList()
     private var listener: SpaceMemberFragmentListener? = null
+    private var canRemoveMembers = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = MembersFragmentBinding.inflate(inflater, container, false)
@@ -66,7 +72,7 @@ class SpaceMembersFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        spaceMembersAdapter = SpaceMembersAdapter()
+        spaceMembersAdapter = SpaceMembersAdapter(this)
         recyclerView = binding.membersRecyclerView
         recyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext())
@@ -74,6 +80,7 @@ class SpaceMembersFragment : Fragment() {
         }
 
         val currentSpace = requireArguments().getParcelable<OCSpace>(ARG_CURRENT_SPACE) ?: return
+        savedInstanceState?.let { canRemoveMembers = it.getBoolean(CAN_REMOVE_MEMBERS, false) }
 
         collectLatestLifecycleFlow(spaceMembersViewModel.roles) { event ->
             event?.let {
@@ -98,7 +105,9 @@ class SpaceMembersFragment : Fragment() {
                     is UIResult.Success -> {
                         uiResult.data?.let {
                             if (roles.isNotEmpty()) {
-                                spaceMembersAdapter.setSpaceMembers(it, roles)
+                                val numberOfManagers = it.members.count { spaceMember ->
+                                    spaceMember.roles.contains(OCRoleType.toString(OCRoleType.CAN_MANAGE)) }
+                                spaceMembersAdapter.setSpaceMembers(it, roles, canRemoveMembers, numberOfManagers)
                                 spaceMembers = it.members
                                 addMemberRoles = it.roles
                             }
@@ -106,7 +115,8 @@ class SpaceMembersFragment : Fragment() {
                     }
                     is UIResult.Loading -> { }
                     is UIResult.Error -> {
-                        Timber.e(uiResult.error, "Failed to retrieve space members for space: ${currentSpace.id} (${currentSpace?.id})")
+                        requireActivity().finish()
+                        Timber.e(uiResult.error, "Failed to retrieve space members for space: ${currentSpace.id} (${currentSpace.id})")
                     }
                 }
             }
@@ -118,12 +128,27 @@ class SpaceMembersFragment : Fragment() {
                     is UIResult.Success -> {
                         uiResult.data?.let { spacePermissions ->
                             binding.addMemberButton.isVisible = DRIVES_CREATE_PERMISSION in spacePermissions
+                            canRemoveMembers = DRIVES_DELETE_PERMISSION in spacePermissions
                         }
                     }
                     is UIResult.Loading -> { }
                     is UIResult.Error -> {
                         Timber.e(uiResult.error, "Failed to retrieve space permissions for space: ${currentSpace.id} (${currentSpace?.id})")
                     }
+                }
+            }
+        }
+
+        collectLatestLifecycleFlow(spaceMembersViewModel.removeMemberResultFlow) { uiResult ->
+            when (uiResult) {
+                is UIResult.Loading -> { }
+                is UIResult.Success -> {
+                    showMessageInSnackbar(getString(R.string.members_remove_correctly))
+                    spaceMembersViewModel.getSpaceMembers()
+                }
+                is UIResult.Error -> {
+                    Timber.e(uiResult.error, "Failed to remove a member from space: ${currentSpace.id}")
+                    showErrorInSnackbar(R.string.members_remove_failed, uiResult.error)
                 }
             }
         }
@@ -153,6 +178,20 @@ class SpaceMembersFragment : Fragment() {
         spaceMembersViewModel.getSpacePermissions()
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putBoolean(CAN_REMOVE_MEMBERS, canRemoveMembers)
+    }
+
+    override fun onRemoveMember(spaceMember: SpaceMember) {
+        AlertDialog.Builder(requireContext())
+            .setMessage(getString(R.string.members_remove_dialog_message, spaceMember.displayName))
+            .setPositiveButton(getString(R.string.common_yes)) { _, _ -> spaceMembersViewModel.removeMember(spaceMember.id) }
+            .setNegativeButton(getString(R.string.common_no)) { dialog, _ -> dialog.dismiss() }
+            .show()
+            .avoidScreenshotsIfNeeded()
+    }
+
     interface SpaceMemberFragmentListener {
         fun addMember(space: OCSpace, spaceMembers: List<SpaceMember>, roles: List<OCRole>)
     }
@@ -161,6 +200,8 @@ class SpaceMembersFragment : Fragment() {
         private const val ARG_CURRENT_SPACE = "CURRENT_SPACE"
         private const val ARG_ACCOUNT_NAME = "ACCOUNT_NAME"
         private const val DRIVES_CREATE_PERMISSION = "libre.graph/driveItem/permissions/create"
+        private const val DRIVES_DELETE_PERMISSION = "libre.graph/driveItem/permissions/delete"
+        private const val CAN_REMOVE_MEMBERS = "CAN_REMOVE_MEMBERS"
 
         fun newInstance(
             accountName: String,

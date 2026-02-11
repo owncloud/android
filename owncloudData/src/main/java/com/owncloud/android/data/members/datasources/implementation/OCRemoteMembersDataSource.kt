@@ -36,6 +36,10 @@ class OCRemoteMembersDataSource (
         executeRemoteOperation { clientManager.getMembersService(accountName).addMember(spaceId, member.id, memberType, roleId, expirationDate) }
     }
 
+    override fun removeMember(accountName: String, spaceId: String, memberId: String) {
+        executeRemoteOperation { clientManager.getMembersService(accountName).removeMember(spaceId, memberId) }
+    }
+
     override fun searchGroups(accountName: String, query: String): List<OCMember> {
         val groupsResponse = executeRemoteOperation { clientManager.getMembersService(accountName).searchGroups(query) }
         return groupsResponse.map { it.toModel(isGroup = true) }

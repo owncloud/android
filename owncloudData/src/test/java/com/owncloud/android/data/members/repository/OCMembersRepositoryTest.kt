@@ -53,6 +53,19 @@ class OCMembersRepositoryTest {
     }
 
     @Test
+    fun `removeMember removes a member from a space correctly`() {
+        every {
+            remoteMembersDataSource.removeMember(OC_ACCOUNT_NAME, OC_SPACE_PROJECT_WITH_IMAGE.id, SPACE_MEMBERS.members[0].id)
+        } returns Unit
+
+        ocMembersRepository.removeMember(OC_ACCOUNT_NAME, OC_SPACE_PROJECT_WITH_IMAGE.id, SPACE_MEMBERS.members[0].id)
+
+        verify(exactly = 1) {
+            remoteMembersDataSource.removeMember(OC_ACCOUNT_NAME, OC_SPACE_PROJECT_WITH_IMAGE.id, SPACE_MEMBERS.members[0].id)
+        }
+    }
+
+    @Test
     fun `searchMembers returns a list of OCMember`() {
         every {
             remoteMembersDataSource.searchUsers(OC_ACCOUNT_NAME, query)

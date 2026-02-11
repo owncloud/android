@@ -26,6 +26,7 @@ import com.owncloud.android.lib.resources.members.responses.MemberResponse
 
 interface MembersService: Service {
     fun addMember(spaceId: String, memberId: String, memberType: String, roleId: String, expirationDate: String?): RemoteOperationResult<Unit>
+    fun removeMember(spaceId: String, memberId: String): RemoteOperationResult<Unit>
     fun searchGroups(query: String): RemoteOperationResult<List<MemberResponse>>
     fun searchUsers(query: String): RemoteOperationResult<List<MemberResponse>>
 }

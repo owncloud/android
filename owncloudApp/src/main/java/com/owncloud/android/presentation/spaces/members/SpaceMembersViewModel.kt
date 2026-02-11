@@ -25,6 +25,7 @@ import androidx.lifecycle.viewModelScope
 import com.owncloud.android.domain.UseCaseResult
 import com.owncloud.android.domain.members.model.OCMember
 import com.owncloud.android.domain.members.usecases.AddMemberUseCase
+import com.owncloud.android.domain.members.usecases.RemoveMemberUseCase
 import com.owncloud.android.domain.roles.model.OCRole
 import com.owncloud.android.domain.spaces.model.OCSpace
 import com.owncloud.android.domain.spaces.model.SpaceMembers
@@ -49,6 +50,7 @@ class SpaceMembersViewModel(
     private val getRolesAsyncUseCase: GetRolesAsyncUseCase,
     private val getSpaceMembersUseCase: GetSpaceMembersUseCase,
     private val getSpacePermissionsAsyncUseCase: GetSpacePermissionsAsyncUseCase,
+    private val removeMemberUseCase: RemoveMemberUseCase,
     private val searchMembersUseCase: SearchMembersUseCase,
     private val accountName: String,
     private val space: OCSpace,
@@ -72,6 +74,9 @@ class SpaceMembersViewModel(
 
     private val _addMemberResultFlow = MutableStateFlow<Event<UIResult<Unit>>?>(null)
     val addMemberResultFlow: StateFlow<Event<UIResult<Unit>>?> = _addMemberResultFlow
+
+    private val _removeMemberResultFlow = MutableSharedFlow<UIResult<Unit>>()
+    val removeMemberResultFlow: SharedFlow<UIResult<Unit>> = _removeMemberResultFlow
 
     private var searchJob: Job? = null
 
@@ -146,6 +151,19 @@ class SpaceMembersViewModel(
                 member = member,
                 roleId = roleId,
                 expirationDate = expirationDate
+            )
+        )
+    }
+
+    fun removeMember(memberId: String) {
+        runUseCaseWithResult(
+            coroutineDispatcher = coroutineDispatcherProvider.io,
+            sharedFlow = _removeMemberResultFlow,
+            useCase = removeMemberUseCase,
+            useCaseParams = RemoveMemberUseCase.Params(
+                accountName = accountName,
+                spaceId = space.id,
+                memberId = memberId
             )
         )
     }

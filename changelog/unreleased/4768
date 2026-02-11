@@ -1,0 +1,6 @@
+Enhancement: Remove a space member
+
+A new option to remove members from a space has been added. It will be only visible for users with proper permissions.
+
+https://github.com/owncloud/android/issues/4725
+https://github.com/owncloud/android/pull/4768

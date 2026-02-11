@@ -833,6 +833,7 @@
     <string name="content_description_add_member">Add new member</string>
     <string name="content_description_invite_member_button">Invite member</string>
     <string name="content_description_expiration_date_switch">Expiration date</string>
+    <string name="content_description_remove_member_button">Remove member %1$s</string>
 
     <string name="create_shortcut_dialog_title">Create a shortcut</string>
     <string name="create_shortcut_dialog_url">URL</string>
@@ -889,6 +890,9 @@
     <string name="members_options">Options</string>
     <string name="members_expiration_date">Expiration date</string>
     <string name="members_invite">Invite</string>
+    <string name="members_remove_dialog_message">Do you really want to remove the member: %1$s?</string>
+    <string name="members_remove_correctly">Member removed correctly</string>
+    <string name="members_remove_failed">Member could not be removed</string>
     <string name="member_type_user">User</string>
     <string name="member_type_group">Group</string>
 

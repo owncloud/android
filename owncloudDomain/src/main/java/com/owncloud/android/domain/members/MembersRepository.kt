@@ -24,5 +24,6 @@ import com.owncloud.android.domain.members.model.OCMember
 
 interface MembersRepository {
     fun addMember(accountName: String, spaceId: String, member: OCMember, roleId: String, expirationDate: String?)
+    fun removeMember(accountName: String, spaceId: String, memberId: String)
     fun searchMembers(accountName: String, query: String): List<OCMember>
 }
