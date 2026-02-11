@@ -49,7 +49,7 @@ class RemoveRemoteMemberOperation(
 
             val response = deleteMethod.getResponseBodyAsString()
 
-            if (status == HttpConstants.HTTP_NO_CONTENT || status == HttpConstants.HTTP_INTERNAL_SERVER_ERROR) {
+            if (status == HttpConstants.HTTP_NO_CONTENT) {
                 Timber.d("Successful response: $response")
                 result = RemoteOperationResult(ResultCode.OK)
             } else {

@@ -105,7 +105,7 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
                     is UIResult.Success -> {
                         uiResult.data?.let {
                             if (roles.isNotEmpty()) {
-                                val numberOfManagers = it.members.count { spaceMember->
+                                val numberOfManagers = it.members.count { spaceMember ->
                                     spaceMember.roles.contains(OCRoleType.toString(OCRoleType.CAN_MANAGE)) }
                                 spaceMembersAdapter.setSpaceMembers(it, roles, canRemoveMembers, numberOfManagers)
                                 spaceMembers = it.members
