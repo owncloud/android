@@ -102,6 +102,18 @@
         </LinearLayout>
 
         <ImageButton
+            android:id="@+id/edit_member_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:padding="@dimen/standard_half_padding"
+            android:background="?android:attr/selectableItemBackground"
+            android:focusable="true"
+            android:src="@drawable/ic_lead_pencil_grey"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
+        <ImageButton
             android:id="@+id/remove_member_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

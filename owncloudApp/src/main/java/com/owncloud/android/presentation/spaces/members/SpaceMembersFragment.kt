@@ -64,6 +64,7 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
     private var spaceMembers: List<SpaceMember> = emptyList()
     private var listener: SpaceMemberFragmentListener? = null
     private var canRemoveMembers = false
+    private var canEditMembers = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = MembersFragmentBinding.inflate(inflater, container, false)
@@ -80,7 +81,10 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
         }
 
         val currentSpace = requireArguments().getParcelable<OCSpace>(ARG_CURRENT_SPACE) ?: return
-        savedInstanceState?.let { canRemoveMembers = it.getBoolean(CAN_REMOVE_MEMBERS, false) }
+        savedInstanceState?.let {
+            canRemoveMembers = it.getBoolean(CAN_REMOVE_MEMBERS, false)
+            canEditMembers = it.getBoolean(CAN_EDIT_MEMBERS, false)
+        }
 
         collectLatestLifecycleFlow(spaceMembersViewModel.roles) { event ->
             event?.let {
@@ -107,7 +111,7 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
                             if (roles.isNotEmpty()) {
                                 val numberOfManagers = it.members.count { spaceMember ->
                                     spaceMember.roles.contains(OCRoleType.toString(OCRoleType.CAN_MANAGE)) }
-                                spaceMembersAdapter.setSpaceMembers(it, roles, canRemoveMembers, numberOfManagers)
+                                spaceMembersAdapter.setSpaceMembers(it, roles, canRemoveMembers, canEditMembers, numberOfManagers)
                                 spaceMembers = it.members
                                 addMemberRoles = it.roles
                             }
@@ -129,6 +133,7 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
                         uiResult.data?.let { spacePermissions ->
                             binding.addMemberButton.isVisible = DRIVES_CREATE_PERMISSION in spacePermissions
                             canRemoveMembers = DRIVES_DELETE_PERMISSION in spacePermissions
+                            canEditMembers = DRIVES_UPDATE_PERMISSION in spacePermissions
                         }
                     }
                     is UIResult.Loading -> { }
@@ -181,6 +186,7 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putBoolean(CAN_REMOVE_MEMBERS, canRemoveMembers)
+        outState.putBoolean(CAN_EDIT_MEMBERS, canEditMembers)
     }
 
     override fun onRemoveMember(spaceMember: SpaceMember) {
@@ -201,7 +207,9 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
         private const val ARG_ACCOUNT_NAME = "ACCOUNT_NAME"
         private const val DRIVES_CREATE_PERMISSION = "libre.graph/driveItem/permissions/create"
         private const val DRIVES_DELETE_PERMISSION = "libre.graph/driveItem/permissions/delete"
+        private const val DRIVES_UPDATE_PERMISSION = "libre.graph/driveItem/permissions/update"
         private const val CAN_REMOVE_MEMBERS = "CAN_REMOVE_MEMBERS"
+        private const val CAN_EDIT_MEMBERS = "CAN_EDIT_MEMBERS"
 
         fun newInstance(
             accountName: String,

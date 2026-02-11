@@ -42,6 +42,7 @@ class SpaceMembersAdapter(
     private var members: List<SpaceMember> = emptyList()
     private var rolesMap: Map<String, String> = emptyMap()
     private var canRemoveMembers = false
+    private var canEditMembers = false
     private var numberOfManagers = 1
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SpaceMembersViewHolder {
@@ -68,12 +69,17 @@ class SpaceMembersAdapter(
 
             val memberRole = OCRoleType.parseFromId(member.roles.first())
             val numberOfManagers = members.count { it.roles.contains(OCRoleType.toString(OCRoleType.CAN_MANAGE)) }
+            val isTheLastManager = memberRole == OCRoleType.CAN_MANAGE && numberOfManagers == 1
             removeMemberButton.apply {
                 contentDescription = holder.itemView.context.getString(R.string.content_description_remove_member_button, member.displayName)
-                isVisible = canRemoveMembers && !(memberRole == OCRoleType.CAN_MANAGE && numberOfManagers == 1)
+                isVisible = canRemoveMembers && !isTheLastManager
                 setOnClickListener {
                     listener.onRemoveMember(member)
                 }
+            }
+            editMemberButton.apply {
+                contentDescription = holder.itemView.context.getString(R.string.content_description_edit_member_button, member.displayName)
+                isVisible = canEditMembers && !isTheLastManager
             }
 
             member.expirationDateTime?.let {
@@ -88,8 +94,9 @@ class SpaceMembersAdapter(
 
     override fun getItemCount(): Int = members.size
 
-    fun setSpaceMembers(spaceMembers: SpaceMembers, roles: List<OCRole>, canRemoveMembers: Boolean, numberOfManagers: Int) {
+    fun setSpaceMembers(spaceMembers: SpaceMembers, roles: List<OCRole>, canRemoveMembers: Boolean, canEditMembers: Boolean, numberOfManagers: Int) {
         this.canRemoveMembers = canRemoveMembers
+        this.canEditMembers = canEditMembers
         this.rolesMap = roles.associate { it.id to it.displayName }
         val listOfMembersFiltered = spaceMembers.members.sortedWith(compareByDescending<SpaceMember> {
                 member -> roles.indexOfFirst { it.id in member.roles } }.thenBy { member -> member.displayName })
