@@ -33,8 +33,10 @@ import com.owncloud.android.domain.spaces.usecases.GetSpaceMembersUseCase
 import com.owncloud.android.domain.roles.usecases.GetRolesAsyncUseCase
 import com.owncloud.android.domain.spaces.usecases.GetSpacePermissionsAsyncUseCase
 import com.owncloud.android.domain.members.usecases.SearchMembersUseCase
+import com.owncloud.android.domain.spaces.model.SpaceMember
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.ViewModelExt.runUseCaseWithResult
+import com.owncloud.android.extensions.toOCMember
 import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import kotlinx.coroutines.Job
@@ -130,6 +132,10 @@ class SpaceMembersViewModel(
 
     fun onMemberSelected(member: OCMember) {
         _addMemberUIState.value = AddMemberUIState(selectedMember = member)
+    }
+
+    fun onMemberSelected(member: SpaceMember) {
+        onMemberSelected(member.toOCMember())
     }
 
     fun onRoleSelected(role: OCRole) {

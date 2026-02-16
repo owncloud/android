@@ -159,7 +159,13 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
         }
 
         binding.addMemberButton.setOnClickListener {
-            listener?.addMember(currentSpace, spaceMembers, addMemberRoles)
+            listener?.addMember(
+                space = currentSpace,
+                spaceMembers = spaceMembers,
+                roles = addMemberRoles,
+                editMode = false,
+                selectedMember = null
+            )
         }
     }
 
@@ -198,8 +204,19 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
             .avoidScreenshotsIfNeeded()
     }
 
+    override fun onEditMember(spaceMember: SpaceMember) {
+        val currentSpace = requireArguments().getParcelable<OCSpace>(ARG_CURRENT_SPACE) ?: return
+        listener?.addMember(
+            space = currentSpace,
+            spaceMembers = spaceMembers,
+            roles = addMemberRoles,
+            editMode = true,
+            selectedMember = spaceMember
+        )
+    }
+
     interface SpaceMemberFragmentListener {
-        fun addMember(space: OCSpace, spaceMembers: List<SpaceMember>, roles: List<OCRole>)
+        fun addMember(space: OCSpace, spaceMembers: List<SpaceMember>, roles: List<OCRole>, editMode: Boolean, selectedMember: SpaceMember?)
     }
 
     companion object {

@@ -82,8 +82,8 @@ class SpaceMembersActivity: FileActivity(), SpaceMembersFragment.SpaceMemberFrag
             super.onOptionsItemSelected(item)
         }
 
-    override fun addMember(space: OCSpace, spaceMembers: List<SpaceMember>, roles: List<OCRole>) {
-        val addMemberFragment = AddMemberFragment.newInstance(account.name, space, spaceMembers, roles)
+    override fun addMember(space: OCSpace, spaceMembers: List<SpaceMember>, roles: List<OCRole>, editMode: Boolean, selectedMember: SpaceMember?) {
+        val addMemberFragment = AddMemberFragment.newInstance(account.name, space, spaceMembers, roles, editMode, selectedMember)
         val transaction = supportFragmentManager.beginTransaction()
         transaction.apply {
             replace(R.id.members_fragment_container, addMemberFragment, TAG_ADD_MEMBER_FRAGMENT)

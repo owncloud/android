@@ -80,6 +80,9 @@ class SpaceMembersAdapter(
             editMemberButton.apply {
                 contentDescription = holder.itemView.context.getString(R.string.content_description_edit_member_button, member.displayName)
                 isVisible = canEditMembers && !isTheLastManager
+                setOnClickListener {
+                    listener.onEditMember(member)
+                }
             }
 
             member.expirationDateTime?.let {
@@ -113,6 +116,7 @@ class SpaceMembersAdapter(
 
     interface SpaceMembersAdapterListener {
         fun onRemoveMember(spaceMember: SpaceMember)
+        fun onEditMember(spaceMember: SpaceMember)
     }
 
     companion object {
