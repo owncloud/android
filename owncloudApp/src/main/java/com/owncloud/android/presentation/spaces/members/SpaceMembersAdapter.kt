@@ -31,7 +31,6 @@ import com.owncloud.android.databinding.MemberItemBinding
 import com.owncloud.android.domain.roles.model.OCRole
 import com.owncloud.android.domain.roles.model.OCRoleType
 import com.owncloud.android.domain.spaces.model.SpaceMember
-import com.owncloud.android.domain.spaces.model.SpaceMembers
 import com.owncloud.android.utils.DisplayUtils
 import com.owncloud.android.utils.PreferenceUtils
 
@@ -97,13 +96,23 @@ class SpaceMembersAdapter(
 
     override fun getItemCount(): Int = members.size
 
-    fun setSpaceMembers(spaceMembers: SpaceMembers, roles: List<OCRole>, canRemoveMembers: Boolean, canEditMembers: Boolean, numberOfManagers: Int) {
+    fun setSpaceMembers(
+        spaceMembers: List<SpaceMember>,
+        roles: List<OCRole>,
+        canRemoveMembers: Boolean,
+        canEditMembers: Boolean,
+        numberOfManagers: Int
+    ) {
+
+        val userPermissionsChanged = this.canEditMembers != canEditMembers
+        val numberOfManagersChanged = this.numberOfManagers != numberOfManagers
+
         this.canRemoveMembers = canRemoveMembers
         this.canEditMembers = canEditMembers
         this.rolesMap = roles.associate { it.id to it.displayName }
-        val listOfMembersFiltered = spaceMembers.members.sortedWith(compareByDescending<SpaceMember> {
+        val listOfMembersFiltered = spaceMembers.sortedWith(compareByDescending<SpaceMember> {
                 member -> roles.indexOfFirst { it.id in member.roles } }.thenBy { member -> member.displayName })
-        val diffCallback = SpaceMembersDiffUtil(this.members, listOfMembersFiltered, this.numberOfManagers, numberOfManagers)
+        val diffCallback = SpaceMembersDiffUtil(this.members, listOfMembersFiltered, numberOfManagersChanged, userPermissionsChanged)
         val diffResult = DiffUtil.calculateDiff(diffCallback)
         this.members = listOfMembersFiltered
         this.numberOfManagers = numberOfManagers

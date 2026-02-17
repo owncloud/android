@@ -66,6 +66,7 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
     private var listener: SpaceMemberFragmentListener? = null
     private var canRemoveMembers = false
     private var canEditMembers = false
+    private var numberOfManagers = 1
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = MembersFragmentBinding.inflate(inflater, container, false)
@@ -172,11 +173,11 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
                     is UIResult.Success -> {
                         uiResult.data?.let {
                             if (roles.isNotEmpty()) {
-                                val numberOfManagers = it.members.count { spaceMember ->
+                                numberOfManagers = it.members.count { spaceMember ->
                                     spaceMember.roles.contains(OCRoleType.toString(OCRoleType.CAN_MANAGE)) }
-                                spaceMembersAdapter.setSpaceMembers(it, roles, canRemoveMembers, canEditMembers, numberOfManagers)
                                 spaceMembers = it.members
                                 addMemberRoles = it.roles
+                                spaceMembersAdapter.setSpaceMembers(spaceMembers, roles, canRemoveMembers, canEditMembers, numberOfManagers)
                             }
                         }
                     }
@@ -197,6 +198,7 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
                             binding.addMemberButton.isVisible = DRIVES_CREATE_PERMISSION in spacePermissions
                             canRemoveMembers = DRIVES_DELETE_PERMISSION in spacePermissions
                             canEditMembers = DRIVES_UPDATE_PERMISSION in spacePermissions
+                            spaceMembersAdapter.setSpaceMembers(spaceMembers, roles, canRemoveMembers, canEditMembers, numberOfManagers)
                         }
                     }
                     is UIResult.Loading -> { }
