@@ -41,7 +41,7 @@ import com.owncloud.android.extensions.collectLatestLifecycleFlow
 import com.owncloud.android.extensions.showErrorInSnackbar
 import com.owncloud.android.extensions.showMessageInSnackbar
 import com.owncloud.android.presentation.common.UIResult
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import org.koin.core.parameter.parametersOf
 import timber.log.Timber
 
@@ -49,7 +49,7 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
     private var _binding: MembersFragmentBinding? = null
     private val binding get() = _binding!!
 
-    private val spaceMembersViewModel: SpaceMembersViewModel by viewModel {
+    private val spaceMembersViewModel: SpaceMembersViewModel by activityViewModel {
         parametersOf(
             requireArguments().getString(ARG_ACCOUNT_NAME),
             requireArguments().getParcelable<OCSpace>(ARG_CURRENT_SPACE)
@@ -158,7 +158,21 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
             }
         }
 
+        collectLatestLifecycleFlow(spaceMembersViewModel.editMemberResultFlow) { event ->
+            event?.peekContent()?.let { uiResult ->
+                when (uiResult) {
+                    is UIResult.Loading -> { }
+                    is UIResult.Success -> {
+                        showMessageInSnackbar(getString(R.string.members_edit_correctly))
+                        spaceMembersViewModel.resetViewModel()
+                    }
+                    is UIResult.Error -> { }
+                }
+            }
+        }
+
         binding.addMemberButton.setOnClickListener {
+            spaceMembersViewModel.resetViewModel()
             listener?.addMember(
                 space = currentSpace,
                 spaceMembers = spaceMembers,
@@ -205,6 +219,7 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
     }
 
     override fun onEditMember(spaceMember: SpaceMember) {
+        spaceMembersViewModel.resetViewModel()
         val currentSpace = requireArguments().getParcelable<OCSpace>(ARG_CURRENT_SPACE) ?: return
         listener?.addMember(
             space = currentSpace,

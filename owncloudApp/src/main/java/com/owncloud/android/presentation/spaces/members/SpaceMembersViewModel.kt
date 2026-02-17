@@ -194,6 +194,12 @@ class SpaceMembersViewModel(
         )
     }
 
+    fun resetViewModel() {
+        _editMemberResultFlow.value = null
+        _addMemberResultFlow.value = null
+        _addMemberUIState.value = null
+    }
+
     data class MembersUIState (
         val members: List<OCMember>,
         val isLoading: Boolean,

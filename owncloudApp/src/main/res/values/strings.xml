@@ -895,6 +895,7 @@
     <string name="members_remove_correctly">Member removed correctly</string>
     <string name="members_remove_failed">Member could not be removed</string>
     <string name="members_edit">Edit member</string>
+    <string name="members_edit_correctly">Member edited correctly</string>
     <string name="members_edit_failed">Member could not be edited</string>
     <string name="member_type_user">User</string>
     <string name="member_type_group">Group</string>

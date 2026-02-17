@@ -41,7 +41,7 @@ import com.owncloud.android.extensions.collectLatestLifecycleFlow
 import com.owncloud.android.extensions.showErrorInSnackbar
 import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.utils.DisplayUtils
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import org.koin.core.parameter.parametersOf
 import timber.log.Timber
 import java.text.SimpleDateFormat
@@ -52,7 +52,7 @@ class AddMemberFragment: Fragment(), SearchMembersAdapter.SearchMembersAdapterLi
     private var _binding: AddMemberFragmentBinding? = null
     private val binding get() = _binding!!
 
-    private val spaceMembersViewModel: SpaceMembersViewModel by viewModel {
+    private val spaceMembersViewModel: SpaceMembersViewModel by activityViewModel {
         parametersOf(
             requireArguments().getString(ARG_ACCOUNT_NAME),
             requireArguments().getParcelable<OCSpace>(ARG_CURRENT_SPACE)
@@ -201,7 +201,7 @@ class AddMemberFragment: Fragment(), SearchMembersAdapter.SearchMembersAdapterLi
             event?.peekContent()?.let { uiResult ->
                 when (uiResult) {
                     is UIResult.Loading -> { }
-                    is UIResult.Success -> requireActivity().onBackPressed()
+                    is UIResult.Success -> parentFragmentManager.popBackStack()
                     is UIResult.Error -> showErrorInSnackbar(R.string.members_add_failed, uiResult.error)
                 }
             }
@@ -211,7 +211,7 @@ class AddMemberFragment: Fragment(), SearchMembersAdapter.SearchMembersAdapterLi
             event?.peekContent()?.let { uiResult ->
                 when (uiResult) {
                     is UIResult.Loading -> { }
-                    is UIResult.Success -> requireActivity().onBackPressed()
+                    is UIResult.Success -> parentFragmentManager.popBackStack()
                     is UIResult.Error -> showErrorInSnackbar(R.string.members_edit_failed, uiResult.error)
                 }
             }
