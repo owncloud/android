@@ -171,12 +171,12 @@ class AddMemberFragment: Fragment(), SearchMembersAdapter.SearchMembersAdapterLi
                     }
                 }
                 bindRoles(uiState.selectedRole?.id)
-                bindDatePickerDialog()
+                bindDatePickerDialog(uiState.selectedExpirationDate)
 
                 binding.expirationDateLayout.apply {
                     expirationDateLayout.setOnClickListener {
                         if (uiState.selectedExpirationDate != null) {
-                            openDatePickerDialog()
+                            openDatePickerDialog(uiState.selectedExpirationDate)
                         } else {
                             expirationDateSwitch.isChecked = true
                         }
@@ -241,10 +241,10 @@ class AddMemberFragment: Fragment(), SearchMembersAdapter.SearchMembersAdapterLi
         }
     }
 
-    private fun bindDatePickerDialog() {
+    private fun bindDatePickerDialog(expirationDate: String?) {
         binding.expirationDateLayout.expirationDateSwitch.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
-                openDatePickerDialog()
+                openDatePickerDialog(expirationDate)
             } else {
                 binding.expirationDateLayout.expirationDateValue.visibility = View.GONE
                 spaceMembersViewModel.onExpirationDateSelected(null)
@@ -252,7 +252,7 @@ class AddMemberFragment: Fragment(), SearchMembersAdapter.SearchMembersAdapterLi
         }
     }
 
-    private fun openDatePickerDialog() {
+    private fun openDatePickerDialog(expirationDate: String?) {
         val calendar = Calendar.getInstance()
 
         DatePickerDialog(
@@ -276,10 +276,8 @@ class AddMemberFragment: Fragment(), SearchMembersAdapter.SearchMembersAdapterLi
             datePicker.minDate = calendar.timeInMillis
             show()
             setOnCancelListener {
-                spaceMembersViewModel.onExpirationDateSelected(null)
-                binding.expirationDateLayout.apply {
-                    expirationDateSwitch.isChecked = false
-                    expirationDateValue.visibility = View.GONE
+                if (expirationDate == null) {
+                    binding.expirationDateLayout.expirationDateSwitch.isChecked = false
                 }
             }
         }
