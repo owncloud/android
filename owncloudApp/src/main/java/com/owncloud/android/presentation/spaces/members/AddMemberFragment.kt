@@ -93,7 +93,6 @@ class AddMemberFragment: Fragment(), SearchMembersAdapter.SearchMembersAdapterLi
 
         subscribeToViewModels()
 
-
         binding.searchBar.apply {
             if (savedInstanceState == null && !editMode) {
                 requestFocus()
