@@ -1,0 +1,6 @@
+Enhancement: Edit a space member
+
+A new option to edit members from a space has been added. It will be only visible for users with proper permissions.
+
+https://github.com/owncloud/android/issues/4724
+https://github.com/owncloud/android/pull/4774
