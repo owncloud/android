@@ -58,6 +58,7 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
 
     private lateinit var spaceMembersAdapter: SpaceMembersAdapter
     private lateinit var recyclerView: RecyclerView
+    private lateinit var currentSpace: OCSpace
 
     private var roles: List<OCRole> = emptyList()
     private var addMemberRoles: List<OCRole> = emptyList()
@@ -80,12 +81,74 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
             adapter = spaceMembersAdapter
         }
 
-        val currentSpace = requireArguments().getParcelable<OCSpace>(ARG_CURRENT_SPACE) ?: return
+        currentSpace = requireArguments().getParcelable<OCSpace>(ARG_CURRENT_SPACE) ?: return
         savedInstanceState?.let {
             canRemoveMembers = it.getBoolean(CAN_REMOVE_MEMBERS, false)
             canEditMembers = it.getBoolean(CAN_EDIT_MEMBERS, false)
         }
 
+        subscribeToViewModels()
+
+        binding.addMemberButton.setOnClickListener {
+            spaceMembersViewModel.resetViewModel()
+            listener?.addMember(
+                space = currentSpace,
+                spaceMembers = spaceMembers,
+                roles = addMemberRoles,
+                editMode = false,
+                selectedMember = null
+            )
+        }
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        requireActivity().setTitle(R.string.space_members_label)
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        try {
+            listener = context as SpaceMemberFragmentListener?
+        } catch (e: ClassCastException) {
+            Timber.e(e, "The activity attached does not implement SpaceMemberFragmentListener")
+            throw ClassCastException(activity.toString() + " must implement SpaceMemberFragmentListener")
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        spaceMembersViewModel.getSpacePermissions()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putBoolean(CAN_REMOVE_MEMBERS, canRemoveMembers)
+        outState.putBoolean(CAN_EDIT_MEMBERS, canEditMembers)
+    }
+
+    override fun onRemoveMember(spaceMember: SpaceMember) {
+        AlertDialog.Builder(requireContext())
+            .setMessage(getString(R.string.members_remove_dialog_message, spaceMember.displayName))
+            .setPositiveButton(getString(R.string.common_yes)) { _, _ -> spaceMembersViewModel.removeMember(spaceMember.id) }
+            .setNegativeButton(getString(R.string.common_no)) { dialog, _ -> dialog.dismiss() }
+            .show()
+            .avoidScreenshotsIfNeeded()
+    }
+
+    override fun onEditMember(spaceMember: SpaceMember) {
+        spaceMembersViewModel.resetViewModel()
+        val currentSpace = requireArguments().getParcelable<OCSpace>(ARG_CURRENT_SPACE) ?: return
+        listener?.addMember(
+            space = currentSpace,
+            spaceMembers = spaceMembers,
+            roles = addMemberRoles,
+            editMode = true,
+            selectedMember = spaceMember
+        )
+    }
+
+    private fun subscribeToViewModels() {
         collectLatestLifecycleFlow(spaceMembersViewModel.roles) { event ->
             event?.let {
                 when (val uiResult = event.peekContent()) {
@@ -170,64 +233,6 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
                 }
             }
         }
-
-        binding.addMemberButton.setOnClickListener {
-            spaceMembersViewModel.resetViewModel()
-            listener?.addMember(
-                space = currentSpace,
-                spaceMembers = spaceMembers,
-                roles = addMemberRoles,
-                editMode = false,
-                selectedMember = null
-            )
-        }
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        requireActivity().setTitle(R.string.space_members_label)
-    }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        try {
-            listener = context as SpaceMemberFragmentListener?
-        } catch (e: ClassCastException) {
-            Timber.e(e, "The activity attached does not implement SpaceMemberFragmentListener")
-            throw ClassCastException(activity.toString() + " must implement SpaceMemberFragmentListener")
-        }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        spaceMembersViewModel.getSpacePermissions()
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putBoolean(CAN_REMOVE_MEMBERS, canRemoveMembers)
-        outState.putBoolean(CAN_EDIT_MEMBERS, canEditMembers)
-    }
-
-    override fun onRemoveMember(spaceMember: SpaceMember) {
-        AlertDialog.Builder(requireContext())
-            .setMessage(getString(R.string.members_remove_dialog_message, spaceMember.displayName))
-            .setPositiveButton(getString(R.string.common_yes)) { _, _ -> spaceMembersViewModel.removeMember(spaceMember.id) }
-            .setNegativeButton(getString(R.string.common_no)) { dialog, _ -> dialog.dismiss() }
-            .show()
-            .avoidScreenshotsIfNeeded()
-    }
-
-    override fun onEditMember(spaceMember: SpaceMember) {
-        spaceMembersViewModel.resetViewModel()
-        val currentSpace = requireArguments().getParcelable<OCSpace>(ARG_CURRENT_SPACE) ?: return
-        listener?.addMember(
-            space = currentSpace,
-            spaceMembers = spaceMembers,
-            roles = addMemberRoles,
-            editMode = true,
-            selectedMember = spaceMember
-        )
     }
 
     interface SpaceMemberFragmentListener {
