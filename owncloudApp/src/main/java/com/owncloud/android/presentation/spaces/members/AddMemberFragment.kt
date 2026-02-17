@@ -65,6 +65,7 @@ class AddMemberFragment: Fragment(), SearchMembersAdapter.SearchMembersAdapterLi
     private lateinit var roles: List<OCRole>
 
     private var editMode = false
+    private var selectedMemberId = ""
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = AddMemberFragmentBinding.inflate(inflater, container, false)
@@ -80,7 +81,6 @@ class AddMemberFragment: Fragment(), SearchMembersAdapter.SearchMembersAdapterLi
             adapter = searchMembersAdapter
         }
 
-        val spaceMembers = requireArguments().getParcelableArrayList<SpaceMember>(ARG_SPACE_MEMBERS) ?: arrayListOf()
         editMode = requireArguments().getBoolean(ARG_EDIT_MODE, false)
         roles = requireArguments().getParcelableArrayList<OCRole>(ARG_ROLES) ?: arrayListOf()
 
@@ -90,6 +90,49 @@ class AddMemberFragment: Fragment(), SearchMembersAdapter.SearchMembersAdapterLi
                 bindEditMode(it, roles)
             }
         }
+
+        subscribeToViewModels()
+
+
+        binding.searchBar.apply {
+            if (savedInstanceState == null && !editMode) {
+                requestFocus()
+            }
+            setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String): Boolean = true
+
+                override fun onQueryTextChange(newText: String): Boolean {
+                    if (newText.length > 2) { spaceMembersViewModel.searchMembers(newText) } else { spaceMembersViewModel.clearSearch() }
+                    return true
+                }
+            })
+        }
+    }
+
+    private fun showOrHideEmptyView(hasMembers: Boolean) {
+        binding.membersRecyclerView.isVisible = hasMembers
+        binding.emptyDataParent.apply {
+            val shouldShow = !hasMembers && binding.searchBar.query.length > 2
+            root.isVisible = shouldShow
+            if (shouldShow) {
+                listEmptyDatasetIcon.setImageResource(R.drawable.ic_share_generic_white)
+                listEmptyDatasetTitle.setText(R.string.members_search_failed)
+                listEmptyDatasetSubTitle.setText(R.string.members_search_empty)
+            }
+        }
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        requireActivity().setTitle(if (editMode) R.string.members_edit else R.string.members_add)
+    }
+
+    override fun onMemberClick(member: OCMember) {
+        spaceMembersViewModel.onMemberSelected(member)
+    }
+
+    private fun subscribeToViewModels() {
+        val spaceMembers = requireArguments().getParcelableArrayList<SpaceMember>(ARG_SPACE_MEMBERS) ?: arrayListOf()
 
         collectLatestLifecycleFlow(spaceMembersViewModel.members) { uiState ->
             if (uiState.isLoading) {
@@ -143,7 +186,11 @@ class AddMemberFragment: Fragment(), SearchMembersAdapter.SearchMembersAdapterLi
                 binding.inviteMemberButton.setOnClickListener {
                     uiState.selectedMember?.let { selectedMember ->
                         uiState.selectedRole?.let { selectedRole ->
-                            spaceMembersViewModel.addMember(selectedMember, selectedRole.id, uiState.selectedExpirationDate)
+                            if (editMode) {
+                                spaceMembersViewModel.editMember(selectedMemberId, selectedRole.id, uiState.selectedExpirationDate)
+                            } else {
+                                spaceMembersViewModel.addMember(selectedMember, selectedRole.id, uiState.selectedExpirationDate)
+                            }
                         }
                     }
                 }
@@ -160,41 +207,15 @@ class AddMemberFragment: Fragment(), SearchMembersAdapter.SearchMembersAdapterLi
             }
         }
 
-        binding.searchBar.apply {
-            if (savedInstanceState == null && !editMode) {
-                requestFocus()
-            }
-            setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener {
-                override fun onQueryTextSubmit(query: String): Boolean = true
-
-                override fun onQueryTextChange(newText: String): Boolean {
-                    if (newText.length > 2) { spaceMembersViewModel.searchMembers(newText) } else { spaceMembersViewModel.clearSearch() }
-                    return true
+        collectLatestLifecycleFlow(spaceMembersViewModel.editMemberResultFlow) { event ->
+            event?.peekContent()?.let { uiResult ->
+                when (uiResult) {
+                    is UIResult.Loading -> { }
+                    is UIResult.Success -> requireActivity().onBackPressed()
+                    is UIResult.Error -> showErrorInSnackbar(R.string.members_edit_failed, uiResult.error)
                 }
-            })
-        }
-    }
-
-    private fun showOrHideEmptyView(hasMembers: Boolean) {
-        binding.membersRecyclerView.isVisible = hasMembers
-        binding.emptyDataParent.apply {
-            val shouldShow = !hasMembers && binding.searchBar.query.length > 2
-            root.isVisible = shouldShow
-            if (shouldShow) {
-                listEmptyDatasetIcon.setImageResource(R.drawable.ic_share_generic_white)
-                listEmptyDatasetTitle.setText(R.string.members_search_failed)
-                listEmptyDatasetSubTitle.setText(R.string.members_search_empty)
             }
         }
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        requireActivity().setTitle(if (editMode) R.string.members_edit else R.string.members_add)
-    }
-
-    override fun onMemberClick(member: OCMember) {
-        spaceMembersViewModel.onMemberSelected(member)
     }
 
     private fun bindSelectedMember(member: OCMember) {
@@ -256,6 +277,7 @@ class AddMemberFragment: Fragment(), SearchMembersAdapter.SearchMembersAdapterLi
             datePicker.minDate = calendar.timeInMillis
             show()
             setOnCancelListener {
+                spaceMembersViewModel.onExpirationDateSelected(null)
                 binding.expirationDateLayout.apply {
                     expirationDateSwitch.isChecked = false
                     expirationDateValue.visibility = View.GONE
@@ -265,6 +287,7 @@ class AddMemberFragment: Fragment(), SearchMembersAdapter.SearchMembersAdapterLi
     }
 
     private fun bindEditMode(member: SpaceMember, roles: List<OCRole>) {
+        selectedMemberId = member.id
         spaceMembersViewModel.onMemberSelected(member)
 
         val selectedRole = roles.first { it.id == member.roles[0] }

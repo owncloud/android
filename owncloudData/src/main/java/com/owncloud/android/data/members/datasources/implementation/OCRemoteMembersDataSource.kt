@@ -36,6 +36,10 @@ class OCRemoteMembersDataSource (
         executeRemoteOperation { clientManager.getMembersService(accountName).addMember(spaceId, member.id, memberType, roleId, expirationDate) }
     }
 
+    override fun editMember(accountName: String, spaceId: String, memberId: String, roleId: String, expirationDate: String?) {
+        executeRemoteOperation { clientManager.getMembersService(accountName).editMember(spaceId, memberId, roleId, expirationDate) }
+    }
+
     override fun removeMember(accountName: String, spaceId: String, memberId: String) {
         executeRemoteOperation { clientManager.getMembersService(accountName).removeMember(spaceId, memberId) }
     }

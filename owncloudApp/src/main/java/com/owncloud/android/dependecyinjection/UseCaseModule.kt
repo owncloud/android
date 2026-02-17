@@ -80,6 +80,7 @@ import com.owncloud.android.domain.files.usecases.SortFilesUseCase
 import com.owncloud.android.domain.files.usecases.SortFilesWithSyncInfoUseCase
 import com.owncloud.android.domain.files.usecases.UpdateAlreadyDownloadedFilesPathUseCase
 import com.owncloud.android.domain.members.usecases.AddMemberUseCase
+import com.owncloud.android.domain.members.usecases.EditMemberUseCase
 import com.owncloud.android.domain.members.usecases.RemoveMemberUseCase
 import com.owncloud.android.domain.members.usecases.SearchMembersUseCase
 import com.owncloud.android.domain.roles.usecases.GetRolesAsyncUseCase
@@ -312,6 +313,7 @@ val useCaseModule = module {
 
     // Members
     factoryOf(::AddMemberUseCase)
+    factoryOf(::EditMemberUseCase)
     factoryOf(::RemoveMemberUseCase)
     factoryOf(::SearchMembersUseCase)
 }

@@ -25,6 +25,7 @@ import androidx.lifecycle.viewModelScope
 import com.owncloud.android.domain.UseCaseResult
 import com.owncloud.android.domain.members.model.OCMember
 import com.owncloud.android.domain.members.usecases.AddMemberUseCase
+import com.owncloud.android.domain.members.usecases.EditMemberUseCase
 import com.owncloud.android.domain.members.usecases.RemoveMemberUseCase
 import com.owncloud.android.domain.roles.model.OCRole
 import com.owncloud.android.domain.spaces.model.OCSpace
@@ -49,6 +50,7 @@ import kotlinx.coroutines.launch
 
 class SpaceMembersViewModel(
     private val addMemberUseCase: AddMemberUseCase,
+    private val editMemberUseCase: EditMemberUseCase,
     private val getRolesAsyncUseCase: GetRolesAsyncUseCase,
     private val getSpaceMembersUseCase: GetSpaceMembersUseCase,
     private val getSpacePermissionsAsyncUseCase: GetSpacePermissionsAsyncUseCase,
@@ -79,6 +81,9 @@ class SpaceMembersViewModel(
 
     private val _removeMemberResultFlow = MutableSharedFlow<UIResult<Unit>>()
     val removeMemberResultFlow: SharedFlow<UIResult<Unit>> = _removeMemberResultFlow
+
+    private val _editMemberResultFlow = MutableStateFlow<Event<UIResult<Unit>>?>(null)
+    val editMemberResultFlow: StateFlow<Event<UIResult<Unit>>?> = _editMemberResultFlow
 
     private var searchJob: Job? = null
 
@@ -170,6 +175,21 @@ class SpaceMembersViewModel(
                 accountName = accountName,
                 spaceId = space.id,
                 memberId = memberId
+            )
+        )
+    }
+
+    fun editMember(memberId: String, roleId: String, expirationDate: String?) {
+        runUseCaseWithResult(
+            coroutineDispatcher = coroutineDispatcherProvider.io,
+            flow = _editMemberResultFlow,
+            useCase = editMemberUseCase,
+            useCaseParams = EditMemberUseCase.Params(
+                accountName = accountName,
+                spaceId = space.id,
+                memberId = memberId,
+                roleId = roleId,
+                expirationDate = expirationDate
             )
         )
     }
