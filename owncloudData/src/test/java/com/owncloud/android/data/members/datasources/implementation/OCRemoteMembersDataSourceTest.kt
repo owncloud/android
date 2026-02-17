@@ -72,6 +72,28 @@ class OCRemoteMembersDataSourceTest {
     }
 
     @Test
+    fun `editMember edits a member from a project space correctly`() {
+        val editMemberResult = createRemoteOperationResultMock(Unit, isSuccess = true)
+
+        every {
+            ocMembersService.editMember(OC_SPACE_PROJECT_WITH_IMAGE.id, SPACE_MEMBERS.members[0].id, SPACE_MEMBERS.roles[0].id, null)
+        } returns editMemberResult
+
+        ocRemoteMembersDataSource.editMember(
+            accountName = OC_ACCOUNT_NAME,
+            spaceId = OC_SPACE_PROJECT_WITH_IMAGE.id,
+            memberId = SPACE_MEMBERS.members[0].id,
+            roleId = SPACE_MEMBERS.roles[0].id,
+            expirationDate = null
+        )
+
+        verify(exactly = 1) {
+            clientManager.getMembersService(OC_ACCOUNT_NAME)
+            ocMembersService.editMember(OC_SPACE_PROJECT_WITH_IMAGE.id, SPACE_MEMBERS.members[0].id, SPACE_MEMBERS.roles[0].id, null)
+        }
+    }
+
+    @Test
     fun `removeMember removes a member from a project space correctly`() {
         val removeMemberResult = createRemoteOperationResultMock(Unit, isSuccess = true)
 
