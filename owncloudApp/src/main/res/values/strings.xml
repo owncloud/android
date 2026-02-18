@@ -883,6 +883,7 @@
     <string name="set_space_icon">Set icon</string>
     <string name="members_title">Members</string>
     <string name="members_add">Add member</string>
+    <string name="members_add_correctly">Member invited correctly</string>
     <string name="members_add_failed">Member could not be invited</string>
     <string name="members_add_conflict_error">Is already invited in the selected space</string>
     <string name="members_search_failed">No results found</string>

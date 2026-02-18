@@ -209,6 +209,19 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
             }
         }
 
+        collectLatestLifecycleFlow(spaceMembersViewModel.addMemberResultFlow) { event ->
+            event?.peekContent()?.let { uiResult ->
+                when (uiResult) {
+                    is UIResult.Loading -> { }
+                    is UIResult.Success -> {
+                        showMessageInSnackbar(getString(R.string.members_add_correctly))
+                        spaceMembersViewModel.resetViewModel()
+                    }
+                    is UIResult.Error -> { }
+                }
+            }
+        }
+
         collectLatestLifecycleFlow(spaceMembersViewModel.removeMemberResultFlow) { uiResult ->
             when (uiResult) {
                 is UIResult.Loading -> { }
