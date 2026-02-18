@@ -38,8 +38,6 @@ import androidx.core.content.edit
  */
 class TestPreferencesProvider : ContentProvider() {
 
-    private val prefsName = "com.owncloud.android_preferences"
-
     override fun onCreate(): Boolean = true
 
     override fun call(
@@ -48,8 +46,8 @@ class TestPreferencesProvider : ContentProvider() {
         extras: Bundle?
     ): Bundle {
 
-        val prefs = context!!.getSharedPreferences(prefsName, Context.MODE_PRIVATE)
-        if (method == "set_boolean") {
+        val prefs = context!!.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        if (method == SET_BOOLEAN) {
                 prefs.edit {
                     putBoolean(arg!!, extras!!.getBoolean("value"))
                 }
@@ -67,10 +65,12 @@ class TestPreferencesProvider : ContentProvider() {
 
     override fun delete(uri: Uri, selection: String?, selectionArgs: Array<out String>?): Int = 0
 
-    override fun update(
-        uri: Uri, values: ContentValues?,
-        selection: String?, selectionArgs: Array<out String>?
-    ): Int = 0
+    override fun update(uri: Uri, values: ContentValues?, selection: String?, selectionArgs: Array<out String>?): Int = 0
 
     override fun getType(uri: Uri): String? = null
+
+    companion object {
+        private const val SET_BOOLEAN = "set_boolean"
+        private const val PREFS_NAME = "com.owncloud.android_preferences"
+    }
 }
