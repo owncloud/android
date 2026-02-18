@@ -1,0 +1,5 @@
+Enhancement: QA Content Provider
+
+A new content provider has been added to the QA variant in order to work with the sharing preferences with testing purposes.
+
+https://github.com/owncloud/android/pull/4776
