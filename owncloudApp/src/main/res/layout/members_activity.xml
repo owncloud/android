@@ -67,6 +67,19 @@
             app:layout_constraintStart_toEndOf="@id/item_icon"
             app:layout_constraintTop_toBottomOf="@id/item_name"/>
 
+        <ImageButton
+            android:id="@+id/permanent_link_button"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="@dimen/standard_quarter_margin"
+            android:padding="@dimen/standard_half_padding"
+            android:src="@drawable/copy_link"
+            android:scaleType="centerCrop"
+            android:background="@color/transparent"
+            android:contentDescription="@string/content_description_permanent_link_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <FrameLayout

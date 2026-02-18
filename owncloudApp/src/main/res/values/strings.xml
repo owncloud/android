@@ -835,6 +835,7 @@
     <string name="content_description_expiration_date_switch">Expiration date</string>
     <string name="content_description_remove_member_button">Remove member %1$s</string>
     <string name="content_description_edit_member_button">Edit member %1$s</string>
+    <string name="content_description_permanent_link_button">Get permanent link</string>
 
     <string name="create_shortcut_dialog_title">Create a shortcut</string>
     <string name="create_shortcut_dialog_url">URL</string>
