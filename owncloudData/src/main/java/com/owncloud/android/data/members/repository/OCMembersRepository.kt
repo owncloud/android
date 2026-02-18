@@ -32,6 +32,10 @@ class OCMembersRepository(
         remoteMembersDataSource.addMember(accountName, spaceId, member, roleId, expirationDate)
     }
 
+    override fun editMember(accountName: String, spaceId: String, memberId: String, roleId: String, expirationDate: String?) {
+        remoteMembersDataSource.editMember(accountName, spaceId, memberId, roleId, expirationDate)
+    }
+
     override fun removeMember(accountName: String, spaceId: String, memberId: String) {
         remoteMembersDataSource.removeMember(accountName, spaceId, memberId)
     }

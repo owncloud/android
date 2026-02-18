@@ -46,6 +46,7 @@ ownCloud admins and users.
 * Enhancement - Show members of a space: [#4612](https://github.com/owncloud/android/issues/4612)
 * Enhancement - Add a member to a space: [#4613](https://github.com/owncloud/android/issues/4613)
 * Enhancement - Set emoji as space image: [#4707](https://github.com/owncloud/android/issues/4707)
+* Enhancement - Edit a space member: [#4724](https://github.com/owncloud/android/issues/4724)
 * Enhancement - Remove a space member: [#4725](https://github.com/owncloud/android/issues/4725)
 * Enhancement - Workflow to build APK: [#4751](https://github.com/owncloud/android/pull/4751)
 * Enhancement - Workflow to check Conventional Commits: [#4759](https://github.com/owncloud/android/pull/4759)
@@ -105,6 +106,14 @@ ownCloud admins and users.
 
    https://github.com/owncloud/android/issues/4707
    https://github.com/owncloud/android/pull/4708
+
+* Enhancement - Edit a space member: [#4724](https://github.com/owncloud/android/issues/4724)
+
+   A new option to edit members from a space has been added. It will be only
+   visible for users with proper permissions.
+
+   https://github.com/owncloud/android/issues/4724
+   https://github.com/owncloud/android/pull/4774
 
 * Enhancement - Remove a space member: [#4725](https://github.com/owncloud/android/issues/4725)
 

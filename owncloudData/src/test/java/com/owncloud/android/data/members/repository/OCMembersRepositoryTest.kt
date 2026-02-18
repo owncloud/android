@@ -53,6 +53,37 @@ class OCMembersRepositoryTest {
     }
 
     @Test
+    fun `editMember edits a member from a space correctly`() {
+        every {
+            remoteMembersDataSource.editMember(
+                accountName = OC_ACCOUNT_NAME,
+                spaceId = OC_SPACE_PROJECT_WITH_IMAGE.id,
+                memberId = SPACE_MEMBERS.members[0].id,
+                roleId = SPACE_MEMBERS.roles[0].id,
+                expirationDate = null
+            )
+        } returns Unit
+
+        ocMembersRepository.editMember(
+            accountName = OC_ACCOUNT_NAME,
+            spaceId = OC_SPACE_PROJECT_WITH_IMAGE.id,
+            memberId = SPACE_MEMBERS.members[0].id,
+            roleId = SPACE_MEMBERS.roles[0].id,
+            expirationDate = null
+        )
+
+        verify(exactly = 1) {
+            remoteMembersDataSource.editMember(
+                accountName = OC_ACCOUNT_NAME,
+                spaceId = OC_SPACE_PROJECT_WITH_IMAGE.id,
+                memberId = SPACE_MEMBERS.members[0].id,
+                roleId = SPACE_MEMBERS.roles[0].id,
+                expirationDate = null
+            )
+        }
+    }
+
+    @Test
     fun `removeMember removes a member from a space correctly`() {
         every {
             remoteMembersDataSource.removeMember(OC_ACCOUNT_NAME, OC_SPACE_PROJECT_WITH_IMAGE.id, SPACE_MEMBERS.members[0].id)

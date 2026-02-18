@@ -25,6 +25,7 @@ import androidx.lifecycle.viewModelScope
 import com.owncloud.android.domain.UseCaseResult
 import com.owncloud.android.domain.members.model.OCMember
 import com.owncloud.android.domain.members.usecases.AddMemberUseCase
+import com.owncloud.android.domain.members.usecases.EditMemberUseCase
 import com.owncloud.android.domain.members.usecases.RemoveMemberUseCase
 import com.owncloud.android.domain.roles.model.OCRole
 import com.owncloud.android.domain.spaces.model.OCSpace
@@ -33,8 +34,10 @@ import com.owncloud.android.domain.spaces.usecases.GetSpaceMembersUseCase
 import com.owncloud.android.domain.roles.usecases.GetRolesAsyncUseCase
 import com.owncloud.android.domain.spaces.usecases.GetSpacePermissionsAsyncUseCase
 import com.owncloud.android.domain.members.usecases.SearchMembersUseCase
+import com.owncloud.android.domain.spaces.model.SpaceMember
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.ViewModelExt.runUseCaseWithResult
+import com.owncloud.android.extensions.toOCMember
 import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import kotlinx.coroutines.Job
@@ -47,6 +50,7 @@ import kotlinx.coroutines.launch
 
 class SpaceMembersViewModel(
     private val addMemberUseCase: AddMemberUseCase,
+    private val editMemberUseCase: EditMemberUseCase,
     private val getRolesAsyncUseCase: GetRolesAsyncUseCase,
     private val getSpaceMembersUseCase: GetSpaceMembersUseCase,
     private val getSpacePermissionsAsyncUseCase: GetSpacePermissionsAsyncUseCase,
@@ -77,6 +81,9 @@ class SpaceMembersViewModel(
 
     private val _removeMemberResultFlow = MutableSharedFlow<UIResult<Unit>>()
     val removeMemberResultFlow: SharedFlow<UIResult<Unit>> = _removeMemberResultFlow
+
+    private val _editMemberResultFlow = MutableStateFlow<Event<UIResult<Unit>>?>(null)
+    val editMemberResultFlow: StateFlow<Event<UIResult<Unit>>?> = _editMemberResultFlow
 
     private var searchJob: Job? = null
 
@@ -132,6 +139,10 @@ class SpaceMembersViewModel(
         _addMemberUIState.value = AddMemberUIState(selectedMember = member)
     }
 
+    fun onMemberSelected(member: SpaceMember) {
+        onMemberSelected(member.toOCMember())
+    }
+
     fun onRoleSelected(role: OCRole) {
         _addMemberUIState.update { it?.copy(selectedRole = role) }
     }
@@ -166,6 +177,27 @@ class SpaceMembersViewModel(
                 memberId = memberId
             )
         )
+    }
+
+    fun editMember(memberId: String, roleId: String, expirationDate: String?) {
+        runUseCaseWithResult(
+            coroutineDispatcher = coroutineDispatcherProvider.io,
+            flow = _editMemberResultFlow,
+            useCase = editMemberUseCase,
+            useCaseParams = EditMemberUseCase.Params(
+                accountName = accountName,
+                spaceId = space.id,
+                memberId = memberId,
+                roleId = roleId,
+                expirationDate = expirationDate
+            )
+        )
+    }
+
+    fun resetViewModel() {
+        _editMemberResultFlow.value = null
+        _addMemberResultFlow.value = null
+        _addMemberUIState.value = null
     }
 
     data class MembersUIState (

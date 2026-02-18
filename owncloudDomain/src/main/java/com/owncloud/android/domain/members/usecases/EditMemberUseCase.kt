@@ -18,13 +18,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.domain.members
+package com.owncloud.android.domain.members.usecases
 
-import com.owncloud.android.domain.members.model.OCMember
+import com.owncloud.android.domain.BaseUseCaseWithResult
+import com.owncloud.android.domain.members.MembersRepository
 
-interface MembersRepository {
-    fun addMember(accountName: String, spaceId: String, member: OCMember, roleId: String, expirationDate: String?)
-    fun editMember(accountName: String, spaceId: String, memberId: String, roleId: String, expirationDate: String?)
-    fun removeMember(accountName: String, spaceId: String, memberId: String)
-    fun searchMembers(accountName: String, query: String): List<OCMember>
+class EditMemberUseCase(
+    private val membersRepository: MembersRepository
+): BaseUseCaseWithResult<Unit, EditMemberUseCase.Params>() {
+
+    override fun run(params: Params) {
+        membersRepository.editMember(params.accountName, params.spaceId, params.memberId, params.roleId, params.expirationDate)
+    }
+
+    data class Params(val accountName: String, val spaceId: String, val memberId: String, val roleId: String, val expirationDate: String?)
 }

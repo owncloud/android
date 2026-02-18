@@ -41,7 +41,7 @@ import com.owncloud.android.extensions.collectLatestLifecycleFlow
 import com.owncloud.android.extensions.showErrorInSnackbar
 import com.owncloud.android.extensions.showMessageInSnackbar
 import com.owncloud.android.presentation.common.UIResult
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import org.koin.core.parameter.parametersOf
 import timber.log.Timber
 
@@ -49,7 +49,7 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
     private var _binding: MembersFragmentBinding? = null
     private val binding get() = _binding!!
 
-    private val spaceMembersViewModel: SpaceMembersViewModel by viewModel {
+    private val spaceMembersViewModel: SpaceMembersViewModel by activityViewModel {
         parametersOf(
             requireArguments().getString(ARG_ACCOUNT_NAME),
             requireArguments().getParcelable<OCSpace>(ARG_CURRENT_SPACE)
@@ -58,12 +58,15 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
 
     private lateinit var spaceMembersAdapter: SpaceMembersAdapter
     private lateinit var recyclerView: RecyclerView
+    private lateinit var currentSpace: OCSpace
 
     private var roles: List<OCRole> = emptyList()
     private var addMemberRoles: List<OCRole> = emptyList()
     private var spaceMembers: List<SpaceMember> = emptyList()
     private var listener: SpaceMemberFragmentListener? = null
     private var canRemoveMembers = false
+    private var canEditMembers = false
+    private var numberOfManagers = 1
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = MembersFragmentBinding.inflate(inflater, container, false)
@@ -79,82 +82,23 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
             adapter = spaceMembersAdapter
         }
 
-        val currentSpace = requireArguments().getParcelable<OCSpace>(ARG_CURRENT_SPACE) ?: return
-        savedInstanceState?.let { canRemoveMembers = it.getBoolean(CAN_REMOVE_MEMBERS, false) }
-
-        collectLatestLifecycleFlow(spaceMembersViewModel.roles) { event ->
-            event?.let {
-                when (val uiResult = event.peekContent()) {
-                    is UIResult.Success -> {
-                        uiResult.data?.let {
-                            roles = it
-                            spaceMembersViewModel.getSpaceMembers()
-                        }
-                    }
-                    is UIResult.Loading -> { }
-                    is UIResult.Error -> {
-                        Timber.e(uiResult.error, "Failed to retrieve platform roles")
-                    }
-                }
-            }
+        currentSpace = requireArguments().getParcelable<OCSpace>(ARG_CURRENT_SPACE) ?: return
+        savedInstanceState?.let {
+            canRemoveMembers = it.getBoolean(CAN_REMOVE_MEMBERS, false)
+            canEditMembers = it.getBoolean(CAN_EDIT_MEMBERS, false)
         }
 
-        collectLatestLifecycleFlow(spaceMembersViewModel.spaceMembers) { event ->
-            event?.let {
-                when (val uiResult = event.peekContent()) {
-                    is UIResult.Success -> {
-                        uiResult.data?.let {
-                            if (roles.isNotEmpty()) {
-                                val numberOfManagers = it.members.count { spaceMember ->
-                                    spaceMember.roles.contains(OCRoleType.toString(OCRoleType.CAN_MANAGE)) }
-                                spaceMembersAdapter.setSpaceMembers(it, roles, canRemoveMembers, numberOfManagers)
-                                spaceMembers = it.members
-                                addMemberRoles = it.roles
-                            }
-                        }
-                    }
-                    is UIResult.Loading -> { }
-                    is UIResult.Error -> {
-                        requireActivity().finish()
-                        Timber.e(uiResult.error, "Failed to retrieve space members for space: ${currentSpace.id} (${currentSpace.id})")
-                    }
-                }
-            }
-        }
-
-        collectLatestLifecycleFlow(spaceMembersViewModel.spacePermissions) { event ->
-            event?.let {
-                when (val uiResult = event.peekContent()) {
-                    is UIResult.Success -> {
-                        uiResult.data?.let { spacePermissions ->
-                            binding.addMemberButton.isVisible = DRIVES_CREATE_PERMISSION in spacePermissions
-                            canRemoveMembers = DRIVES_DELETE_PERMISSION in spacePermissions
-                        }
-                    }
-                    is UIResult.Loading -> { }
-                    is UIResult.Error -> {
-                        Timber.e(uiResult.error, "Failed to retrieve space permissions for space: ${currentSpace.id} (${currentSpace?.id})")
-                    }
-                }
-            }
-        }
-
-        collectLatestLifecycleFlow(spaceMembersViewModel.removeMemberResultFlow) { uiResult ->
-            when (uiResult) {
-                is UIResult.Loading -> { }
-                is UIResult.Success -> {
-                    showMessageInSnackbar(getString(R.string.members_remove_correctly))
-                    spaceMembersViewModel.getSpaceMembers()
-                }
-                is UIResult.Error -> {
-                    Timber.e(uiResult.error, "Failed to remove a member from space: ${currentSpace.id}")
-                    showErrorInSnackbar(R.string.members_remove_failed, uiResult.error)
-                }
-            }
-        }
+        subscribeToViewModels()
 
         binding.addMemberButton.setOnClickListener {
-            listener?.addMember(currentSpace, spaceMembers, addMemberRoles)
+            spaceMembersViewModel.resetViewModel()
+            listener?.addMember(
+                space = currentSpace,
+                spaceMembers = spaceMembers,
+                roles = addMemberRoles,
+                editMode = false,
+                selectedMember = null
+            )
         }
     }
 
@@ -181,6 +125,7 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putBoolean(CAN_REMOVE_MEMBERS, canRemoveMembers)
+        outState.putBoolean(CAN_EDIT_MEMBERS, canEditMembers)
     }
 
     override fun onRemoveMember(spaceMember: SpaceMember) {
@@ -192,8 +137,108 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
             .avoidScreenshotsIfNeeded()
     }
 
+    override fun onEditMember(spaceMember: SpaceMember) {
+        spaceMembersViewModel.resetViewModel()
+        val currentSpace = requireArguments().getParcelable<OCSpace>(ARG_CURRENT_SPACE) ?: return
+        listener?.addMember(
+            space = currentSpace,
+            spaceMembers = spaceMembers,
+            roles = addMemberRoles,
+            editMode = true,
+            selectedMember = spaceMember
+        )
+    }
+
+    private fun subscribeToViewModels() {
+        collectLatestLifecycleFlow(spaceMembersViewModel.roles) { event ->
+            event?.let {
+                when (val uiResult = event.peekContent()) {
+                    is UIResult.Success -> {
+                        uiResult.data?.let {
+                            roles = it
+                            spaceMembersViewModel.getSpaceMembers()
+                        }
+                    }
+                    is UIResult.Loading -> { }
+                    is UIResult.Error -> {
+                        Timber.e(uiResult.error, "Failed to retrieve platform roles")
+                    }
+                }
+            }
+        }
+
+        collectLatestLifecycleFlow(spaceMembersViewModel.spaceMembers) { event ->
+            event?.let {
+                when (val uiResult = event.peekContent()) {
+                    is UIResult.Success -> {
+                        uiResult.data?.let {
+                            if (roles.isNotEmpty()) {
+                                numberOfManagers = it.members.count { spaceMember ->
+                                    spaceMember.roles.contains(OCRoleType.toString(OCRoleType.CAN_MANAGE)) }
+                                spaceMembers = it.members
+                                addMemberRoles = it.roles
+                                spaceMembersAdapter.setSpaceMembers(spaceMembers, roles, canRemoveMembers, canEditMembers, numberOfManagers)
+                            }
+                        }
+                    }
+                    is UIResult.Loading -> { }
+                    is UIResult.Error -> {
+                        requireActivity().finish()
+                        Timber.e(uiResult.error, "Failed to retrieve space members for space: ${currentSpace.id} (${currentSpace.id})")
+                    }
+                }
+            }
+        }
+
+        collectLatestLifecycleFlow(spaceMembersViewModel.spacePermissions) { event ->
+            event?.let {
+                when (val uiResult = event.peekContent()) {
+                    is UIResult.Success -> {
+                        uiResult.data?.let { spacePermissions ->
+                            binding.addMemberButton.isVisible = DRIVES_CREATE_PERMISSION in spacePermissions
+                            canRemoveMembers = DRIVES_DELETE_PERMISSION in spacePermissions
+                            canEditMembers = DRIVES_UPDATE_PERMISSION in spacePermissions
+                            spaceMembersAdapter.setSpaceMembers(spaceMembers, roles, canRemoveMembers, canEditMembers, numberOfManagers)
+                        }
+                    }
+                    is UIResult.Loading -> { }
+                    is UIResult.Error -> {
+                        Timber.e(uiResult.error, "Failed to retrieve space permissions for space: ${currentSpace.id} (${currentSpace?.id})")
+                    }
+                }
+            }
+        }
+
+        collectLatestLifecycleFlow(spaceMembersViewModel.removeMemberResultFlow) { uiResult ->
+            when (uiResult) {
+                is UIResult.Loading -> { }
+                is UIResult.Success -> {
+                    showMessageInSnackbar(getString(R.string.members_remove_correctly))
+                    spaceMembersViewModel.getSpaceMembers()
+                }
+                is UIResult.Error -> {
+                    Timber.e(uiResult.error, "Failed to remove a member from space: ${currentSpace.id}")
+                    showErrorInSnackbar(R.string.members_remove_failed, uiResult.error)
+                }
+            }
+        }
+
+        collectLatestLifecycleFlow(spaceMembersViewModel.editMemberResultFlow) { event ->
+            event?.peekContent()?.let { uiResult ->
+                when (uiResult) {
+                    is UIResult.Loading -> { }
+                    is UIResult.Success -> {
+                        showMessageInSnackbar(getString(R.string.members_edit_correctly))
+                        spaceMembersViewModel.resetViewModel()
+                    }
+                    is UIResult.Error -> { }
+                }
+            }
+        }
+    }
+
     interface SpaceMemberFragmentListener {
-        fun addMember(space: OCSpace, spaceMembers: List<SpaceMember>, roles: List<OCRole>)
+        fun addMember(space: OCSpace, spaceMembers: List<SpaceMember>, roles: List<OCRole>, editMode: Boolean, selectedMember: SpaceMember?)
     }
 
     companion object {
@@ -201,7 +246,9 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
         private const val ARG_ACCOUNT_NAME = "ACCOUNT_NAME"
         private const val DRIVES_CREATE_PERMISSION = "libre.graph/driveItem/permissions/create"
         private const val DRIVES_DELETE_PERMISSION = "libre.graph/driveItem/permissions/delete"
+        private const val DRIVES_UPDATE_PERMISSION = "libre.graph/driveItem/permissions/update"
         private const val CAN_REMOVE_MEMBERS = "CAN_REMOVE_MEMBERS"
+        private const val CAN_EDIT_MEMBERS = "CAN_EDIT_MEMBERS"
 
         fun newInstance(
             accountName: String,

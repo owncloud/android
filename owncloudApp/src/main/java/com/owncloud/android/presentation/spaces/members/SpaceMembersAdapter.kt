@@ -31,7 +31,6 @@ import com.owncloud.android.databinding.MemberItemBinding
 import com.owncloud.android.domain.roles.model.OCRole
 import com.owncloud.android.domain.roles.model.OCRoleType
 import com.owncloud.android.domain.spaces.model.SpaceMember
-import com.owncloud.android.domain.spaces.model.SpaceMembers
 import com.owncloud.android.utils.DisplayUtils
 import com.owncloud.android.utils.PreferenceUtils
 
@@ -42,6 +41,7 @@ class SpaceMembersAdapter(
     private var members: List<SpaceMember> = emptyList()
     private var rolesMap: Map<String, String> = emptyMap()
     private var canRemoveMembers = false
+    private var canEditMembers = false
     private var numberOfManagers = 1
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SpaceMembersViewHolder {
@@ -68,11 +68,19 @@ class SpaceMembersAdapter(
 
             val memberRole = OCRoleType.parseFromId(member.roles.first())
             val numberOfManagers = members.count { it.roles.contains(OCRoleType.toString(OCRoleType.CAN_MANAGE)) }
+            val isTheLastManager = memberRole == OCRoleType.CAN_MANAGE && numberOfManagers == 1
             removeMemberButton.apply {
                 contentDescription = holder.itemView.context.getString(R.string.content_description_remove_member_button, member.displayName)
-                isVisible = canRemoveMembers && !(memberRole == OCRoleType.CAN_MANAGE && numberOfManagers == 1)
+                isVisible = canRemoveMembers && !isTheLastManager
                 setOnClickListener {
                     listener.onRemoveMember(member)
+                }
+            }
+            editMemberButton.apply {
+                contentDescription = holder.itemView.context.getString(R.string.content_description_edit_member_button, member.displayName)
+                isVisible = canEditMembers && !isTheLastManager
+                setOnClickListener {
+                    listener.onEditMember(member)
                 }
             }
 
@@ -88,12 +96,23 @@ class SpaceMembersAdapter(
 
     override fun getItemCount(): Int = members.size
 
-    fun setSpaceMembers(spaceMembers: SpaceMembers, roles: List<OCRole>, canRemoveMembers: Boolean, numberOfManagers: Int) {
+    fun setSpaceMembers(
+        spaceMembers: List<SpaceMember>,
+        roles: List<OCRole>,
+        canRemoveMembers: Boolean,
+        canEditMembers: Boolean,
+        numberOfManagers: Int
+    ) {
+
+        val userPermissionsChanged = this.canEditMembers != canEditMembers
+        val numberOfManagersChanged = this.numberOfManagers != numberOfManagers
+
         this.canRemoveMembers = canRemoveMembers
+        this.canEditMembers = canEditMembers
         this.rolesMap = roles.associate { it.id to it.displayName }
-        val listOfMembersFiltered = spaceMembers.members.sortedWith(compareByDescending<SpaceMember> {
+        val listOfMembersFiltered = spaceMembers.sortedWith(compareByDescending<SpaceMember> {
                 member -> roles.indexOfFirst { it.id in member.roles } }.thenBy { member -> member.displayName })
-        val diffCallback = SpaceMembersDiffUtil(this.members, listOfMembersFiltered, this.numberOfManagers, numberOfManagers)
+        val diffCallback = SpaceMembersDiffUtil(this.members, listOfMembersFiltered, numberOfManagersChanged, userPermissionsChanged)
         val diffResult = DiffUtil.calculateDiff(diffCallback)
         this.members = listOfMembersFiltered
         this.numberOfManagers = numberOfManagers
@@ -106,6 +125,7 @@ class SpaceMembersAdapter(
 
     interface SpaceMembersAdapterListener {
         fun onRemoveMember(spaceMember: SpaceMember)
+        fun onEditMember(spaceMember: SpaceMember)
     }
 
     companion object {
