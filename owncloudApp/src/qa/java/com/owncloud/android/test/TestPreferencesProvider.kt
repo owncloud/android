@@ -46,12 +46,16 @@ class TestPreferencesProvider : ContentProvider() {
         extras: Bundle?
     ): Bundle {
 
-        val prefs = context!!.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        val prefs = context?.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
         if (method == SET_BOOLEAN) {
-                prefs.edit {
-                    putBoolean(arg!!, extras!!.getBoolean("value"))
+            prefs?.edit {
+                arg?.let { setting ->
+                    extras?.let { extra ->
+                        putBoolean(setting, extra.getBoolean("value"))
+                    }
                 }
             }
+        }
         return Bundle()
     }
 
