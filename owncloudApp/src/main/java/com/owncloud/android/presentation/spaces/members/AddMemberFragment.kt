@@ -254,14 +254,19 @@ class AddMemberFragment: Fragment(), SearchMembersAdapter.SearchMembersAdapterLi
 
     private fun openDatePickerDialog(expirationDate: String?) {
         val calendar = Calendar.getInstance()
+        val formatter = SimpleDateFormat(DisplayUtils.DATE_FORMAT_ISO, Locale.ROOT).apply {
+            timeZone = TimeZone.getTimeZone("UTC")
+        }
+
+        expirationDate?.let {
+            calendar.time = formatter.parse(it)
+        }
 
         DatePickerDialog(
             requireContext(),
             { _, selectedYear, selectedMonth, selectedDay ->
                 calendar.set(selectedYear, selectedMonth, selectedDay, 23, 59, 59)
                 calendar.set(Calendar.MILLISECOND, 999)
-                val formatter = SimpleDateFormat(DisplayUtils.DATE_FORMAT_ISO, Locale.ROOT)
-                formatter.timeZone = TimeZone.getTimeZone("UTC")
                 val isoExpirationDate = formatter.format(calendar.time)
                 spaceMembersViewModel.onExpirationDateSelected(isoExpirationDate)
                 binding.expirationDateLayout.expirationDateValue.apply {
@@ -273,7 +278,7 @@ class AddMemberFragment: Fragment(), SearchMembersAdapter.SearchMembersAdapterLi
             calendar.get(Calendar.MONTH),
             calendar.get(Calendar.DAY_OF_MONTH)
         ).apply {
-            datePicker.minDate = calendar.timeInMillis
+            datePicker.minDate = Calendar.getInstance().timeInMillis
             show()
             setOnCancelListener {
                 if (expirationDate == null) {
