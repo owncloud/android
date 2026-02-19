@@ -1,0 +1,6 @@
+Enhancement: Copy permanent link of a space
+
+A new option to copy and share the permanent link of a space has been added next to the space header in the members section.
+
+https://github.com/owncloud/android/issues/4758
+https://github.com/owncloud/android/pull/4778

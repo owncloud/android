@@ -745,6 +745,9 @@
     <string name="release_notes_4_8_0_subtitle_set_emoji_as_space_image">Infinite Scale users with right permissions can now set an emoji as space image</string>
     <string name="release_notes_4_8_0_title_space_membership">Space membership</string>
     <string name="release_notes_4_8_0_subtitle_space_membership">Infinite Scale users can see all members of a space and manage them with right permissions</string>
+    <string name="release_notes_4_8_0_title_spaces_permanent_links">Permanent links for spaces</string>
+    <string name="release_notes_4_8_0_subtitle_spaces_permanent_links">Infinite Scale users can now get a permanent link for a space and share it with other members</string>
+
     <!-- Open in web -->
     <string name="ic_action_open_in_web">Open in web</string>
     <string name="ic_action_open_with_web">Open in %1$s (web)</string>
@@ -835,6 +838,7 @@
     <string name="content_description_expiration_date_switch">Expiration date</string>
     <string name="content_description_remove_member_button">Remove member %1$s</string>
     <string name="content_description_edit_member_button">Edit member %1$s</string>
+    <string name="content_description_permanent_link_button">Get permanent link</string>
 
     <string name="create_shortcut_dialog_title">Create a shortcut</string>
     <string name="create_shortcut_dialog_url">URL</string>

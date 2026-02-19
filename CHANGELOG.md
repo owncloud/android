@@ -49,6 +49,7 @@ ownCloud admins and users.
 * Enhancement - Edit a space member: [#4724](https://github.com/owncloud/android/issues/4724)
 * Enhancement - Remove a space member: [#4725](https://github.com/owncloud/android/issues/4725)
 * Enhancement - Workflow to build APK: [#4751](https://github.com/owncloud/android/pull/4751)
+* Enhancement - Copy permanent link of a space: [#4758](https://github.com/owncloud/android/issues/4758)
 * Enhancement - Workflow to check Conventional Commits: [#4759](https://github.com/owncloud/android/pull/4759)
 * Enhancement - QA Content Provider: [#4776](https://github.com/owncloud/android/pull/4776)
 
@@ -132,6 +133,14 @@ ownCloud admins and users.
    as inputs and generating the artifact and commit hash as outputs.
 
    https://github.com/owncloud/android/pull/4751
+
+* Enhancement - Copy permanent link of a space: [#4758](https://github.com/owncloud/android/issues/4758)
+
+   A new option to copy and share the permanent link of a space has been added next
+   to the space header in the members section.
+
+   https://github.com/owncloud/android/issues/4758
+   https://github.com/owncloud/android/pull/4778
 
 * Enhancement - Workflow to check Conventional Commits: [#4759](https://github.com/owncloud/android/pull/4759)
 

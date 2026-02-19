@@ -20,6 +20,8 @@
 
 package com.owncloud.android.presentation.spaces.members
 
+import android.accounts.AccountManager
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -29,6 +31,7 @@ import com.owncloud.android.databinding.MembersActivityBinding
 import com.owncloud.android.domain.roles.model.OCRole
 import com.owncloud.android.domain.spaces.model.OCSpace
 import com.owncloud.android.domain.spaces.model.SpaceMember
+import com.owncloud.android.presentation.common.ShareSheetHelper
 import com.owncloud.android.ui.activity.FileActivity
 import com.owncloud.android.utils.DisplayUtils
 
@@ -62,6 +65,10 @@ class SpaceMembersActivity: FileActivity(), SpaceMembersFragment.SpaceMemberFrag
                         quota.getRelative().toString())
                 }
             }
+
+            permanentLinkButton.setOnClickListener {
+                copyOrSendPermanentLink(currentSpace.webUrl, currentSpace.name)
+            }
         }
 
         supportFragmentManager.transaction {
@@ -92,9 +99,32 @@ class SpaceMembersActivity: FileActivity(), SpaceMembersFragment.SpaceMemberFrag
         }
     }
 
+    private fun copyOrSendPermanentLink(permanentLink: String?, spaceName: String) {
+        permanentLink?.let {
+            val displayName = AccountManager.get(this).getUserData(account, KEY_DISPLAY_NAME)
+
+            val intentToSharePermanentLink = Intent(Intent.ACTION_SEND).apply {
+                type = TYPE_PLAIN
+                putExtra(Intent.EXTRA_TEXT, it)
+                putExtra(Intent.EXTRA_SUBJECT, getString(R.string.subject_user_shared_with_you, displayName, spaceName))
+            }
+
+            val shareSheetIntent = ShareSheetHelper().getShareSheetIntent(
+                intent = intentToSharePermanentLink,
+                context = this,
+                title = R.string.activity_chooser_title,
+                packagesToExclude = arrayOf(packageName)
+            )
+            startActivity(shareSheetIntent)
+        }
+    }
+
     companion object {
         private const val TAG_SPACE_MEMBERS_FRAGMENT = "SPACE_MEMBERS_FRAGMENT"
         private const val TAG_ADD_MEMBER_FRAGMENT ="ADD_MEMBER_FRAGMENT"
+        private const val TYPE_PLAIN = "text/plain"
+        private const val KEY_DISPLAY_NAME = "oc_display_name"
+
         const val EXTRA_SPACE = "EXTRA_SPACE"
     }
 
