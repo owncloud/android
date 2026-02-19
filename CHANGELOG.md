@@ -50,6 +50,7 @@ ownCloud admins and users.
 * Enhancement - Remove a space member: [#4725](https://github.com/owncloud/android/issues/4725)
 * Enhancement - Workflow to build APK: [#4751](https://github.com/owncloud/android/pull/4751)
 * Enhancement - Workflow to check Conventional Commits: [#4759](https://github.com/owncloud/android/pull/4759)
+* Enhancement - QA Content Provider: [#4776](https://github.com/owncloud/android/pull/4776)
 
 ## Details
 
@@ -138,6 +139,13 @@ ownCloud admins and users.
    Conventional Commits convention.
 
    https://github.com/owncloud/android/pull/4759
+
+* Enhancement - QA Content Provider: [#4776](https://github.com/owncloud/android/pull/4776)
+
+   A new content provider has been added to the QA variant in order to work with
+   the sharing preferences with testing purposes.
+
+   https://github.com/owncloud/android/pull/4776
 
 # Changelog for ownCloud Android Client [4.7.0] (2025-11-17)
 
