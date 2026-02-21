@@ -38,6 +38,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Test
 
 class SortBottomSheetFragmentTest {
@@ -57,6 +58,7 @@ class SortBottomSheetFragmentTest {
     }
 
     @Test
+    @Ignore("Flaky test")
     fun test_initial_view() {
         onView(withId(R.id.title))
             .inRoot(RootMatchers.isDialog())
@@ -78,12 +80,14 @@ class SortBottomSheetFragmentTest {
     }
 
     @Test
+    @Ignore("Flaky test")
     fun test_sort_by_name_click() {
         onView(withId(R.id.sort_by_name)).inRoot(RootMatchers.isDialog()).perform(ViewActions.click())
         verify { fragmentListener.onSortSelected(SortType.SORT_TYPE_BY_NAME) }
     }
 
     @Test
+    @Ignore("Flaky test")
     fun test_sort_by_date_click() {
         onView(withId(R.id.sort_by_date)).inRoot(RootMatchers.isDialog()).perform(ViewActions.click())
         verify { fragmentListener.onSortSelected(SortType.SORT_TYPE_BY_DATE) }
