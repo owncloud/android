@@ -94,6 +94,7 @@ class MainFileListViewModel(
     fileListOptionParam: FileListOption,
 ) : ViewModel() {
 
+    var lastVisibleItemPositions: IntArray? = null
     private val showHiddenFiles: Boolean = sharedPreferencesProvider.getBoolean(PREF_SHOW_HIDDEN_FILES, false)
 
     val currentFolderDisplayed: MutableStateFlow<OCFile> = MutableStateFlow(initialFolderToDisplay)
