@@ -5,8 +5,9 @@
  * @author Christian Schabesberger (@theScrabi)
  * @author Juan Carlos Garrote Gascón (@JuancaG05)
  * @author David Crespo Ríos (@davcres)
+ * @author Aitor Ballesteros Pavón (@Aitorbp)
  *
- * Copyright (C) 2021 ownCloud GmbH.
+ * Copyright (C) 2024 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -38,12 +39,12 @@ import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.owncloud.android.R
 import com.owncloud.android.db.PreferenceManager
 import com.owncloud.android.domain.utils.Event
+import com.owncloud.android.presentation.security.biometric.BiometricViewModel
 import com.owncloud.android.presentation.security.passcode.PassCodeActivity
+import com.owncloud.android.presentation.security.passcode.PassCodeViewModel
 import com.owncloud.android.presentation.security.passcode.PasscodeAction
 import com.owncloud.android.presentation.security.passcode.PasscodeType
 import com.owncloud.android.presentation.security.passcode.Status
-import com.owncloud.android.presentation.security.biometric.BiometricViewModel
-import com.owncloud.android.presentation.security.passcode.PassCodeViewModel
 import com.owncloud.android.testutil.security.OC_PASSCODE_4_DIGITS
 import com.owncloud.android.utils.matchers.isDisplayed
 import com.owncloud.android.utils.matchers.withChildCountAndId
@@ -352,6 +353,6 @@ class PassCodeActivityTest {
         val intent = Intent(context, PassCodeActivity::class.java).apply {
             action = mode
         }
-        activityScenario = ActivityScenario.launch(intent)
+        activityScenario = ActivityScenario.launchActivityForResult(intent)
     }
 }
