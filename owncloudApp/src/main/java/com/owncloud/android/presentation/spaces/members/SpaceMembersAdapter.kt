@@ -35,7 +35,8 @@ import com.owncloud.android.utils.DisplayUtils
 import com.owncloud.android.utils.PreferenceUtils
 
 class SpaceMembersAdapter(
-    private val listener: SpaceMembersAdapterListener
+    private val listener: SpaceMembersAdapterListener,
+    private val accountId: String?
 ): RecyclerView.Adapter<SpaceMembersAdapter.SpaceMembersViewHolder>() {
 
     private var members: List<SpaceMember> = emptyList()
@@ -59,8 +60,13 @@ class SpaceMembersAdapter(
 
         holder.binding.apply {
             val isGroup = member.id.startsWith(GROUP_PREFIX)
+            val isMyAccount = accountId?.let { member.id.contains(it) }
             memberIcon.setImageResource(if (isGroup) R.drawable.ic_group else R.drawable.ic_user)
-            memberName.text = member.displayName
+            memberName.text = if (isMyAccount == true) {
+                "${member.displayName} ${holder.itemView.context.getString(R.string.current_user_label)}"
+            } else {
+                member.displayName
+            }
             memberName.contentDescription = holder.itemView.context.getString(
                 if (isGroup) R.string.content_description_member_group else R.string.content_description_member_user, member.displayName
             )

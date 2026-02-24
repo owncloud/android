@@ -73,7 +73,8 @@ class SpaceMembersActivity: FileActivity(), SpaceMembersFragment.SpaceMemberFrag
 
         supportFragmentManager.transaction {
             if (savedInstanceState == null && currentSpace != null) {
-                val fragment = SpaceMembersFragment.newInstance(account.name, currentSpace)
+                val accountId = AccountManager.get(baseContext).getUserData(account, KEY_UUID)
+                val fragment = SpaceMembersFragment.newInstance(account.name, accountId, currentSpace)
                 replace(R.id.members_fragment_container, fragment, TAG_SPACE_MEMBERS_FRAGMENT)
             }
         }
@@ -124,6 +125,7 @@ class SpaceMembersActivity: FileActivity(), SpaceMembersFragment.SpaceMemberFrag
         private const val TAG_ADD_MEMBER_FRAGMENT ="ADD_MEMBER_FRAGMENT"
         private const val TYPE_PLAIN = "text/plain"
         private const val KEY_DISPLAY_NAME = "oc_display_name"
+        private const val KEY_UUID = "oc_uuid"
 
         const val EXTRA_SPACE = "EXTRA_SPACE"
     }
