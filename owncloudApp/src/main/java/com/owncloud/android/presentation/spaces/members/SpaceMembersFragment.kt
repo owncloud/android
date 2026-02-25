@@ -75,7 +75,8 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        spaceMembersAdapter = SpaceMembersAdapter(this)
+        val accountId = requireArguments().getString(ARG_ACCOUNT_ID)
+        spaceMembersAdapter = SpaceMembersAdapter(this, accountId)
         recyclerView = binding.membersRecyclerView
         recyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext())
@@ -257,6 +258,7 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
     companion object {
         private const val ARG_CURRENT_SPACE = "CURRENT_SPACE"
         private const val ARG_ACCOUNT_NAME = "ACCOUNT_NAME"
+        private const val ARG_ACCOUNT_ID = "ACCOUNT_ID"
         private const val DRIVES_CREATE_PERMISSION = "libre.graph/driveItem/permissions/create"
         private const val DRIVES_DELETE_PERMISSION = "libre.graph/driveItem/permissions/delete"
         private const val DRIVES_UPDATE_PERMISSION = "libre.graph/driveItem/permissions/update"
@@ -265,10 +267,12 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
 
         fun newInstance(
             accountName: String,
-            currentSpace: OCSpace
+            accountId: String,
+            currentSpace: OCSpace,
         ): SpaceMembersFragment {
             val args = Bundle().apply {
                 putString(ARG_ACCOUNT_NAME, accountName)
+                putString(ARG_ACCOUNT_ID, accountId)
                 putParcelable(ARG_CURRENT_SPACE, currentSpace)
             }
             return SpaceMembersFragment().apply {
