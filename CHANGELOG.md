@@ -91,6 +91,7 @@ ownCloud admins and users.
    https://github.com/owncloud/android/pull/4728
    https://github.com/owncloud/android/pull/4765
    https://github.com/owncloud/android/pull/4779
+   https://github.com/owncloud/android/pull/4784
 
 * Enhancement - Add a member to a space: [#4613](https://github.com/owncloud/android/issues/4613)
 
