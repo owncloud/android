@@ -90,10 +90,11 @@ class SpaceMembersAdapter(
                 }
             }
 
-            member.expirationDateTime?.let {
-                expirationCalendarIcon.visibility = View.VISIBLE
-                expirationDate.visibility = View.VISIBLE
-                expirationDate.text = DisplayUtils.displayDateToHumanReadable(it)
+            val hasExpirationDate = member.expirationDateTime != null
+            expirationCalendarIcon.isVisible = hasExpirationDate
+            expirationDate.isVisible = hasExpirationDate
+            if (hasExpirationDate) {
+                expirationDate.text = DisplayUtils.displayDateToHumanReadable(member.expirationDateTime)
                 expirationDate.contentDescription =
                     holder.itemView.context.getString(R.string.content_description_member_expiration_date, expirationDate.text)
             }
