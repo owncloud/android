@@ -1,0 +1,8 @@
+Change: Fix "Copy here" button visibility after rotation in folder picker
+
+The "Copy here" button could stay visible when showing the space list after a device rotation.
+It now updates correctly and is only shown when browsing inside a space (MainFileListFragment),
+not when viewing the space list (SpacesListFragment).
+
+https://github.com/owncloud/android/issues/4178
+https://github.com/owncloud/android/pull/4786
