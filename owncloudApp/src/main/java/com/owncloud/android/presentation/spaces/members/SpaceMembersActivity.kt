@@ -67,7 +67,7 @@ class SpaceMembersActivity: FileActivity(), SpaceMembersFragment.SpaceMemberFrag
             }
 
             permanentLinkButton.setOnClickListener {
-                copyOrSendPermanentLink(currentSpace.webUrl, currentSpace.name)
+                copyOrSendLink(currentSpace.webUrl, currentSpace.name)
             }
         }
 
@@ -100,18 +100,22 @@ class SpaceMembersActivity: FileActivity(), SpaceMembersFragment.SpaceMemberFrag
         }
     }
 
-    private fun copyOrSendPermanentLink(permanentLink: String?, spaceName: String) {
-        permanentLink?.let {
+    override fun copyOrSendPublicLink(publicLinkUrl: String, spaceName: String) {
+        copyOrSendLink(publicLinkUrl, spaceName)
+    }
+
+    private fun copyOrSendLink(link: String?, spaceName: String) {
+        link?.let {
             val displayName = AccountManager.get(this).getUserData(account, KEY_DISPLAY_NAME)
 
-            val intentToSharePermanentLink = Intent(Intent.ACTION_SEND).apply {
+            val intentToShareLink = Intent(Intent.ACTION_SEND).apply {
                 type = TYPE_PLAIN
                 putExtra(Intent.EXTRA_TEXT, it)
                 putExtra(Intent.EXTRA_SUBJECT, getString(R.string.subject_user_shared_with_you, displayName, spaceName))
             }
 
             val shareSheetIntent = ShareSheetHelper().getShareSheetIntent(
-                intent = intentToSharePermanentLink,
+                intent = intentToShareLink,
                 context = this,
                 title = R.string.activity_chooser_title,
                 packagesToExclude = arrayOf(packageName)
