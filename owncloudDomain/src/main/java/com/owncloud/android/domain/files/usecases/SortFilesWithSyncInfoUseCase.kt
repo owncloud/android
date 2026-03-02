@@ -22,6 +22,8 @@ package com.owncloud.android.domain.files.usecases
 
 import com.owncloud.android.domain.BaseUseCase
 import com.owncloud.android.domain.files.model.OCFileWithSyncInfo
+import java.text.Collator
+import java.util.Locale
 
 class SortFilesWithSyncInfoUseCase : BaseUseCase<List<OCFileWithSyncInfo>, SortFilesWithSyncInfoUseCase.Params>() {
 
@@ -33,12 +35,20 @@ class SortFilesWithSyncInfoUseCase : BaseUseCase<List<OCFileWithSyncInfo>, SortF
         }
 
     private fun sortByName(listOfFiles: List<OCFileWithSyncInfo>, ascending: Boolean): List<OCFileWithSyncInfo> {
-        val newListOfFiles =
-            if (ascending) listOfFiles.sortedBy { it.file.fileName.lowercase() }
-            else listOfFiles.sortedByDescending { it.file.fileName.lowercase() }
+        val collator = Collator.getInstance(Locale("en", "US")).apply {
+            strength = Collator.PRIMARY   // Ignore accents and case
+        }
 
-        // Show first the folders when sorting by name
-        return newListOfFiles.sortedByDescending { it.file.isFolder }
+        val comparator = compareByDescending<OCFileWithSyncInfo> { it.file.isFolder }
+            .thenComparator { a, b ->
+                if (ascending) {
+                    collator.compare(a.file.fileName, b.file.fileName)
+                } else {
+                    collator.compare(b.file.fileName, a.file.fileName)
+                }
+            }
+
+        return listOfFiles.sortedWith(comparator)
     }
 
     private fun sortBySize(listOfFiles: List<OCFileWithSyncInfo>, ascending: Boolean): List<OCFileWithSyncInfo> =
