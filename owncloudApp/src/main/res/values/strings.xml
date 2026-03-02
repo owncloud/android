@@ -658,6 +658,7 @@
     <string name="share_no_public_links">No public links created yet.</string>
     <string name="share_no_link_in_this_share">This share has no link.</string>
     <string name="share_warning_about_forwarding_public_links">Anyone with the link has access to the file/folder.</string>
+    <string name="share_warning_about_forwarding_space_public_links">Anyone with the link has access to the space.</string>
     <string name="share_via_link_default_password">*****</string>
     <string name="share_via_link_password_enforced_label">"Password *"</string>
     <string name="share_via_link_expiration_date_enforced_label">"Expiration *"</string>
@@ -747,6 +748,8 @@
     <string name="release_notes_4_8_0_subtitle_space_membership">Infinite Scale users can see all members of a space and manage them with right permissions</string>
     <string name="release_notes_4_8_0_title_spaces_permanent_links">Permanent links for spaces</string>
     <string name="release_notes_4_8_0_subtitle_spaces_permanent_links">Infinite Scale users can now get a permanent link for a space and share it with other members</string>
+    <string name="release_notes_4_8_0_title_space_public_links">Space public links</string>
+    <string name="release_notes_4_8_0_subtitle_space_public_links">Infinite Scale users can see all public links of a space and manage them with right permissions</string>
 
     <!-- Open in web -->
     <string name="ic_action_open_in_web">Open in web</string>
@@ -905,6 +908,11 @@
     <string name="member_type_user">User</string>
     <string name="member_type_group">Group</string>
     <string name="current_user_label">(me)</string>
+    <string name="public_link_view">Can view</string>
+    <string name="public_link_edit">Can edit</string>
+    <string name="public_link_upload">Can upload</string>
+    <string name="public_link_create_only">Secret file drop</string>
+    <string name="public_link_internal">Invited people</string>
 
     <string name="feedback_dialog_get_in_contact_description"><![CDATA[ Ask for help in our <a href=\"%1$s\"><b>forum</b></a> or contribute in our <a href=\"%2$s\"><b>GitHub repo</b></a>]]></string>
 

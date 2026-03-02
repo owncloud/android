@@ -29,9 +29,9 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.owncloud.android.R
 import com.owncloud.android.databinding.MembersFragmentBinding
+import com.owncloud.android.domain.links.model.OCLink
 import com.owncloud.android.domain.roles.model.OCRole
 import com.owncloud.android.domain.roles.model.OCRoleType
 import com.owncloud.android.domain.spaces.model.OCSpace
@@ -41,11 +41,16 @@ import com.owncloud.android.extensions.collectLatestLifecycleFlow
 import com.owncloud.android.extensions.showErrorInSnackbar
 import com.owncloud.android.extensions.showMessageInSnackbar
 import com.owncloud.android.presentation.common.UIResult
+import com.owncloud.android.presentation.spaces.links.SpaceLinksAdapter
+import com.owncloud.android.utils.DisplayUtils
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import org.koin.core.parameter.parametersOf
 import timber.log.Timber
+import java.text.SimpleDateFormat
+import java.util.Locale
+import java.util.TimeZone
 
-class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapterListener {
+class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapterListener, SpaceLinksAdapter.SpaceLinksAdapterListener {
     private var _binding: MembersFragmentBinding? = null
     private val binding get() = _binding!!
 
@@ -57,7 +62,7 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
     }
 
     private lateinit var spaceMembersAdapter: SpaceMembersAdapter
-    private lateinit var recyclerView: RecyclerView
+    private lateinit var spaceLinksAdapter: SpaceLinksAdapter
     private lateinit var currentSpace: OCSpace
 
     private var roles: List<OCRole> = emptyList()
@@ -77,10 +82,15 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
         super.onViewCreated(view, savedInstanceState)
         val accountId = requireArguments().getString(ARG_ACCOUNT_ID)
         spaceMembersAdapter = SpaceMembersAdapter(this, accountId)
-        recyclerView = binding.membersRecyclerView
-        recyclerView.apply {
+        binding.membersRecyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = spaceMembersAdapter
+        }
+
+        spaceLinksAdapter = SpaceLinksAdapter(this)
+        binding.publicLinksRecyclerView.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = spaceLinksAdapter
         }
 
         currentSpace = requireArguments().getParcelable<OCSpace>(ARG_CURRENT_SPACE) ?: return
@@ -150,6 +160,10 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
         )
     }
 
+    override fun onCopyOrSendPublicLink(publicLinkUrl: String) {
+        listener?.copyOrSendPublicLink(publicLinkUrl, currentSpace.name)
+    }
+
     private fun subscribeToViewModels() {
         collectLatestLifecycleFlow(spaceMembersViewModel.roles) { event ->
             event?.let {
@@ -179,6 +193,9 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
                                 spaceMembers = it.members
                                 addMemberRoles = it.roles
                                 spaceMembersAdapter.setSpaceMembers(spaceMembers, roles, canRemoveMembers, canEditMembers, numberOfManagers)
+                                val hasLinks = it.links.isNotEmpty()
+                                showOrHideEmptyView(hasLinks)
+                                if (hasLinks) { showSpaceLinks(it.links) }
                             }
                         }
                     }
@@ -251,8 +268,25 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
         }
     }
 
+    private fun showOrHideEmptyView(hasLinks: Boolean) {
+        binding.apply {
+            publicLinksRecyclerView.isVisible = hasLinks
+            noPublicLinksMessage.isVisible = !hasLinks
+        }
+    }
+
+    private fun showSpaceLinks(spaceLinks: List<OCLink>) {
+        val formatter = SimpleDateFormat(DisplayUtils.DATE_FORMAT_ISO, Locale.ROOT).apply {
+            timeZone = TimeZone.getTimeZone("UTC")
+        }
+        spaceLinksAdapter.setSpaceLinks(spaceLinks.sortedByDescending { spaceLink ->
+            formatter.parse(spaceLink.createdDateTime)
+        })
+    }
+
     interface SpaceMemberFragmentListener {
         fun addMember(space: OCSpace, spaceMembers: List<SpaceMember>, roles: List<OCRole>, editMode: Boolean, selectedMember: SpaceMember?)
+        fun copyOrSendPublicLink(publicLinkUrl: String, spaceName: String)
     }
 
     companion object {

@@ -70,11 +70,63 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/members_recycler_view"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_height="wrap_content"
             android:scrollbars="vertical"
             android:visibility="visible"
             tools:visibility="visible"/>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/actionbar_start_color">
+
+            <TextView
+                android:id="@+id/public_links_title"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_centerVertical="true"
+                android:gravity="center"
+                android:text="@string/share_via_link_section_title"
+                android:layout_marginStart="@dimen/standard_half_margin"
+                android:textAllCaps="true"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:accessibilityHeading="true"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/public_links_warning"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/warning_background_color"
+            android:paddingTop="@dimen/standard_padding"
+            android:paddingBottom="@dimen/standard_padding"
+            android:paddingStart="@dimen/standard_half_padding"
+            android:paddingEnd="@dimen/standard_half_padding"
+            android:text="@string/share_warning_about_forwarding_space_public_links"
+            android:textColor="@color/warning_grey_text"
+            android:textSize="15sp" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/public_links_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="vertical" />
+
+        <TextView
+            android:id="@+id/no_public_links_message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/standard_padding"
+            android:paddingBottom="@dimen/standard_padding"
+            android:paddingStart="@dimen/standard_half_padding"
+            android:paddingEnd="@dimen/standard_half_padding"
+            android:text="@string/share_no_public_links"
+            android:textSize="15sp"
+            android:visibility="gone"/>
 
     </LinearLayout>
 

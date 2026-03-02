@@ -1,0 +1,7 @@
+Enhancement: List links over a space
+
+The list of all available space public links has been added below the list of space members.
+This new section shows information like public link names, types and expiration date (if available).
+
+https://github.com/owncloud/android/issues/4752
+https://github.com/owncloud/android/pull/4783
