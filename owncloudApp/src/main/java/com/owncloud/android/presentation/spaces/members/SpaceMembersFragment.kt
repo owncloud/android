@@ -50,7 +50,7 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 import java.util.TimeZone
 
-class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapterListener {
+class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapterListener, SpaceLinksAdapter.SpaceLinksAdapterListener {
     private var _binding: MembersFragmentBinding? = null
     private val binding get() = _binding!!
 
@@ -87,7 +87,7 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
             adapter = spaceMembersAdapter
         }
 
-        spaceLinksAdapter = SpaceLinksAdapter()
+        spaceLinksAdapter = SpaceLinksAdapter(this)
         binding.publicLinksRecyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = spaceLinksAdapter
@@ -158,6 +158,10 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
             editMode = true,
             selectedMember = spaceMember
         )
+    }
+
+    override fun onCopyOrSendPublicLink(publicLinkUrl: String) {
+        listener?.copyOrSendPublicLink(publicLinkUrl, currentSpace.name)
     }
 
     private fun subscribeToViewModels() {
@@ -282,6 +286,7 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
 
     interface SpaceMemberFragmentListener {
         fun addMember(space: OCSpace, spaceMembers: List<SpaceMember>, roles: List<OCRole>, editMode: Boolean, selectedMember: SpaceMember?)
+        fun copyOrSendPublicLink(publicLinkUrl: String, spaceName: String)
     }
 
     companion object {

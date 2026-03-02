@@ -33,7 +33,9 @@ import com.owncloud.android.extensions.toStringResId
 import com.owncloud.android.utils.DisplayUtils
 import com.owncloud.android.utils.PreferenceUtils
 
-class SpaceLinksAdapter: RecyclerView.Adapter<SpaceLinksAdapter.SpaceLinksViewHolder>() {
+class SpaceLinksAdapter(
+    private val listener: SpaceLinksAdapterListener
+): RecyclerView.Adapter<SpaceLinksAdapter.SpaceLinksViewHolder>() {
 
     private var spaceLinks: List<OCLink> = emptyList()
 
@@ -61,6 +63,9 @@ class SpaceLinksAdapter: RecyclerView.Adapter<SpaceLinksAdapter.SpaceLinksViewHo
                     contentDescription = holder.itemView.context.getString(R.string.content_description_member_expiration_date, expirationDate.text)
                 }
             }
+            copyPublicLinkButton.setOnClickListener {
+                listener.onCopyOrSendPublicLink(spaceLink.webUrl)
+            }
         }
     }
 
@@ -75,5 +80,9 @@ class SpaceLinksAdapter: RecyclerView.Adapter<SpaceLinksAdapter.SpaceLinksViewHo
 
     class SpaceLinksViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val binding = PublicLinkItemBinding.bind(itemView)
+    }
+
+    interface SpaceLinksAdapterListener {
+        fun onCopyOrSendPublicLink(publicLinkUrl: String)
     }
 }
