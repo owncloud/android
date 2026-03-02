@@ -130,6 +130,7 @@ open class FolderPickerActivity : FileActivity(),
     override fun onResume() {
         super.onResume()
         updateToolbar(null, mainFileListFragment?.getCurrentSpace())
+        updateChooseButtonVisibilityForCurrentFragment()
     }
 
     /**
@@ -347,6 +348,27 @@ open class FolderPickerActivity : FileActivity(),
         currentFolder.hasAddFilePermission.let {
             binding.folderPickerBtnChoose.isVisible = it
             binding.folderPickerNoPermissionsMessage.isVisible = !it
+        }
+    }
+
+    /**
+     * Updates the "Copy here" button visibility based on the currently displayed fragment.
+     * The button should only be visible when inside a space (MainFileListFragment),
+     * not when showing the space list (SpacesListFragment).
+     */
+    private fun updateChooseButtonVisibilityForCurrentFragment() {
+        if (mainFileListFragment == null) {
+            // SpacesListFragment is displayed - hide the button
+            binding.folderPickerBtnChoose.isVisible = false
+            binding.folderPickerNoPermissionsMessage.isVisible = false
+        } else {
+            // MainFileListFragment is displayed - show button and update per permissions
+            mainFileListFragment?.getCurrentFile()?.let { currentFolder ->
+                updateButtonsVisibilityAccordingToPermissions(currentFolder)
+            } ?: run {
+                binding.folderPickerBtnChoose.isVisible = true
+                binding.folderPickerNoPermissionsMessage.isVisible = false
+            }
         }
     }
 
