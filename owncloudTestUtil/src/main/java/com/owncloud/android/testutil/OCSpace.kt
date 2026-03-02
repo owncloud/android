@@ -26,6 +26,8 @@ import com.owncloud.android.data.spaces.db.SpaceRootEntity
 import com.owncloud.android.data.spaces.db.SpaceSpecialEntity
 import com.owncloud.android.data.spaces.db.SpacesEntity
 import com.owncloud.android.data.spaces.db.SpacesWithSpecials
+import com.owncloud.android.domain.links.model.OCLink
+import com.owncloud.android.domain.links.model.OCLinkType
 import com.owncloud.android.domain.roles.model.OCRole
 import com.owncloud.android.domain.spaces.model.OCSpace
 import com.owncloud.android.domain.spaces.model.OCSpace.Companion.SPACE_ID_SHARES
@@ -323,8 +325,7 @@ val SPACE_RESPONSE =
                     grantedToV2 = GrantedToV2Response(UserResponse(id = OC_USER_ID, displayName = OC_USER_INFO.displayName), null),
                     id = null,
                     roles = listOf("manager"),
-                    createDateTime = null,
-                    hasPassword = null,
+                    createdDateTime = null,
                     link = null,
                 )
             )
@@ -363,8 +364,7 @@ val SPACE_PERMISSIONS_RESPONSE = SpacePermissionsResponse(
             grantedToV2 = GrantedToV2Response(UserResponse(id = OC_USER_ID, displayName = OC_USER_INFO.displayName), null),
             id = "u:$OC_USER_ID",
             roles = listOf("312c0871-5ef7-4b3a-85b6-0e4074c64049"),
-            createDateTime = null,
-            hasPassword = null,
+            createdDateTime = null,
             link = null
         ),
     )
@@ -400,6 +400,16 @@ val SPACE_MEMBERS = SpaceMembers(
             expirationDateTime = "2025-07-03T12:09:43.364Z",
             displayName = "group-1",
             roles = listOf("a8d5fe5e-96e3-418d-825b-534dbdf22b99")
+        )
+    ),
+    links = listOf(
+        OCLink(
+            id = "jGjfJjubYXPHtGn",
+            createdDateTime = "2026-01-12T10:08:39.764335893Z",
+            expirationDateTime = null,
+            displayName = "Public link",
+            type = OCLinkType.CAN_VIEW,
+            webUrl = "https://server.com/s/OquwFbuGPeZOWgF"
         )
     )
 )
