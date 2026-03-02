@@ -24,6 +24,8 @@ import androidx.annotation.VisibleForTesting
 import com.owncloud.android.data.ClientManager
 import com.owncloud.android.data.executeRemoteOperation
 import com.owncloud.android.data.spaces.datasources.RemoteSpacesDataSource
+import com.owncloud.android.domain.links.model.OCLink
+import com.owncloud.android.domain.links.model.OCLinkType
 import com.owncloud.android.domain.roles.model.OCRole
 import com.owncloud.android.domain.spaces.model.OCSpace
 import com.owncloud.android.domain.spaces.model.SpaceDeleted
@@ -210,6 +212,16 @@ class OCRemoteSpacesDataSource(
                         displayName = spaceMemberResponse.grantedToV2?.user?.displayName
                             ?: spaceMemberResponse.grantedToV2?.group?.displayName ?: "",
                         roles = spaceMemberResponse.roles ?: emptyList()
+                    )
+                },
+                links = members.filter { it.grantedToV2 == null }.map { spaceLinkResponse ->
+                    OCLink(
+                        id = spaceLinkResponse.id.orEmpty(),
+                        createdDateTime = spaceLinkResponse.createdDateTime.orEmpty(),
+                        expirationDateTime = spaceLinkResponse.expirationDateTime,
+                        displayName = spaceLinkResponse.link?.displayName.orEmpty(),
+                        type = OCLinkType.parseFromString(spaceLinkResponse.link?.type.orEmpty()),
+                        webUrl = spaceLinkResponse.link?.webUrl.orEmpty()
                     )
                 }
             )

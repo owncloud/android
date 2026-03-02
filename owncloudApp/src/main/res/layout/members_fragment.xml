@@ -125,7 +125,8 @@
             android:paddingStart="@dimen/standard_half_padding"
             android:paddingEnd="@dimen/standard_half_padding"
             android:text="@string/share_no_public_links"
-            android:textSize="15sp" />
+            android:textSize="15sp"
+            android:visibility="gone"/>
 
     </LinearLayout>
 
