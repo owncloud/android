@@ -748,6 +748,8 @@
     <string name="release_notes_4_8_0_subtitle_space_membership">Infinite Scale users can see all members of a space and manage them with right permissions</string>
     <string name="release_notes_4_8_0_title_spaces_permanent_links">Permanent links for spaces</string>
     <string name="release_notes_4_8_0_subtitle_spaces_permanent_links">Infinite Scale users can now get a permanent link for a space and share it with other members</string>
+    <string name="release_notes_4_8_0_title_space_public_links">Space public links</string>
+    <string name="release_notes_4_8_0_subtitle_space_public_links">Infinite Scale users can see all public links of a space and manage them with right permissions</string>
 
     <!-- Open in web -->
     <string name="ic_action_open_in_web">Open in web</string>
