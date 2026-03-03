@@ -1,0 +1,6 @@
+Bugfix: Sort is not alphabetically correct
+
+Locale-aware collation has been applied to file sorting by name to handle accented characters correctly.
+
+https://github.com/owncloud/android/issues/4760
+https://github.com/owncloud/android/pull/4785
