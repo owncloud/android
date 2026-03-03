@@ -47,6 +47,7 @@ import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import org.koin.core.parameter.parametersOf
 import timber.log.Timber
 import java.text.SimpleDateFormat
+import java.util.Date
 import java.util.Locale
 import java.util.TimeZone
 
@@ -280,7 +281,11 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
             timeZone = TimeZone.getTimeZone("UTC")
         }
         spaceLinksAdapter.setSpaceLinks(spaceLinks.sortedByDescending { spaceLink ->
-            formatter.parse(spaceLink.createdDateTime)
+            if (spaceLink.createdDateTime.isNotEmpty()) {
+                formatter.parse(spaceLink.createdDateTime)
+            } else {
+                Date(0)
+            }
         })
     }
 
