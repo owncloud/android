@@ -20,6 +20,8 @@ package com.owncloud.android.utils
 
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.presentation.files.SortType
+import java.text.Collator
+import java.util.Locale
 
 class SortFilesUtils {
     fun sortFiles(
@@ -34,12 +36,16 @@ class SortFilesUtils {
         }
 
     private fun sortByName(listOfFiles: List<OCFile>, ascending: Boolean): List<OCFile> {
-        val newListOfFiles =
-            if (ascending) listOfFiles.sortedBy { it.fileName.lowercase() }
-            else listOfFiles.sortedByDescending { it.fileName.lowercase() }
+        val collator = Collator.getInstance(Locale.getDefault()).apply {
+            strength = Collator.PRIMARY   // Ignore accents and case
+        }
+
+        val nameComparator =
+            if (ascending) compareBy<OCFile, String>(collator) { it.fileName }
+            else compareByDescending(collator) { it.fileName }
 
         // Show first the folders when sorting by name
-        return newListOfFiles.sortedByDescending { it.isFolder }
+        return listOfFiles.sortedWith(compareByDescending<OCFile> { it.isFolder }.then(nameComparator))
     }
 
     private fun sortBySize(listOfFiles: List<OCFile>, ascending: Boolean): List<OCFile> =
