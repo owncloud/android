@@ -113,6 +113,7 @@ data class PermissionsResponse(
 
     // Link response
     val createdDateTime: String?,
+    val hasPassword: Boolean?,
     val link: LinkInfoResponse?
 )
 

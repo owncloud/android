@@ -219,6 +219,7 @@ class OCRemoteSpacesDataSource(
                         id = spaceLinkResponse.id.orEmpty(),
                         createdDateTime = spaceLinkResponse.createdDateTime.orEmpty(),
                         expirationDateTime = spaceLinkResponse.expirationDateTime,
+                        hasPassword = spaceLinkResponse.hasPassword ?: false,
                         displayName = spaceLinkResponse.link?.displayName.orEmpty(),
                         type = OCLinkType.parseFromString(spaceLinkResponse.link?.type.orEmpty()),
                         webUrl = spaceLinkResponse.link?.webUrl.orEmpty()

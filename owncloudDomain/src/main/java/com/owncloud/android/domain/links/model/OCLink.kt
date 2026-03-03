@@ -28,6 +28,7 @@ data class OCLink(
     val id: String,
     val createdDateTime: String,
     val expirationDateTime: String?,
+    val hasPassword: Boolean,
     val displayName: String,
     val type: OCLinkType,
     val webUrl: String
@@ -37,7 +38,6 @@ enum class OCLinkType {
     CAN_VIEW, CAN_EDIT, CAN_UPLOAD, CREATE_ONLY, INTERNAL;
 
     companion object {
-
         fun parseFromString(type: String): OCLinkType =
             when (type) {
                 "view" -> CAN_VIEW
