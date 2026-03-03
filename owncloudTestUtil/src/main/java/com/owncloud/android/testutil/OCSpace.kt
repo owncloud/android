@@ -326,6 +326,7 @@ val SPACE_RESPONSE =
                     id = null,
                     roles = listOf("manager"),
                     createdDateTime = null,
+                    hasPassword = null,
                     link = null,
                 )
             )
@@ -365,6 +366,7 @@ val SPACE_PERMISSIONS_RESPONSE = SpacePermissionsResponse(
             id = "u:$OC_USER_ID",
             roles = listOf("312c0871-5ef7-4b3a-85b6-0e4074c64049"),
             createdDateTime = null,
+            hasPassword = null,
             link = null
         ),
     )
@@ -407,6 +409,7 @@ val SPACE_MEMBERS = SpaceMembers(
             id = "jGjfJjubYXPHtGn",
             createdDateTime = "2026-01-12T10:08:39.764335893Z",
             expirationDateTime = null,
+            hasPassword = true,
             displayName = "Public link",
             type = OCLinkType.CAN_VIEW,
             webUrl = "https://server.com/s/OquwFbuGPeZOWgF"
