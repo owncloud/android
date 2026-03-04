@@ -5,7 +5,7 @@
  * @author Juan Carlos Garrote Gascón
  * @author Jorge Aguado Recio
  *
- * Copyright (C) 2025 ownCloud GmbH.
+ * Copyright (C) 2026 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -23,6 +23,7 @@
 package com.owncloud.android.domain.spaces.model
 
 import android.os.Parcelable
+import com.owncloud.android.domain.links.model.OCLink
 import com.owncloud.android.domain.roles.model.OCRole
 import kotlinx.parcelize.Parcelize
 import kotlin.math.roundToLong
@@ -126,7 +127,8 @@ data class SpaceSpecialFolder(
 @Parcelize
 data class SpaceMembers(
     val roles: List<OCRole>,
-    val members: List<SpaceMember>
+    val members: List<SpaceMember>,
+    val links: List<OCLink>
 ) : Parcelable
 
 @Parcelize

@@ -41,6 +41,7 @@ ownCloud admins and users.
 ## Summary
 
 * Bugfix - Edit space option available when there is no connection: [#4742](https://github.com/owncloud/android/issues/4742)
+* Bugfix - Sort is not alphabetically correct: [#4760](https://github.com/owncloud/android/issues/4760)
 * Change - Migrate tests to the new kotlinx-coroutines-test API: [#4710](https://github.com/owncloud/android/issues/4710)
 * Change - Increase rating dialog delay: [#4744](https://github.com/owncloud/android/pull/4744)
 * Enhancement - Show members of a space: [#4612](https://github.com/owncloud/android/issues/4612)
@@ -49,6 +50,7 @@ ownCloud admins and users.
 * Enhancement - Edit a space member: [#4724](https://github.com/owncloud/android/issues/4724)
 * Enhancement - Remove a space member: [#4725](https://github.com/owncloud/android/issues/4725)
 * Enhancement - Workflow to build APK: [#4751](https://github.com/owncloud/android/pull/4751)
+* Enhancement - List links over a space: [#4752](https://github.com/owncloud/android/issues/4752)
 * Enhancement - Copy permanent link of a space: [#4758](https://github.com/owncloud/android/issues/4758)
 * Enhancement - Workflow to check Conventional Commits: [#4759](https://github.com/owncloud/android/pull/4759)
 * Enhancement - QA Content Provider: [#4776](https://github.com/owncloud/android/pull/4776)
@@ -62,6 +64,14 @@ ownCloud admins and users.
 
    https://github.com/owncloud/android/issues/4742
    https://github.com/owncloud/android/pull/4750
+
+* Bugfix - Sort is not alphabetically correct: [#4760](https://github.com/owncloud/android/issues/4760)
+
+   Locale-aware collation has been applied to file sorting by name to handle
+   accented characters correctly.
+
+   https://github.com/owncloud/android/issues/4760
+   https://github.com/owncloud/android/pull/4785
 
 * Change - Migrate tests to the new kotlinx-coroutines-test API: [#4710](https://github.com/owncloud/android/issues/4710)
 
@@ -136,6 +146,15 @@ ownCloud admins and users.
    as inputs and generating the artifact and commit hash as outputs.
 
    https://github.com/owncloud/android/pull/4751
+
+* Enhancement - List links over a space: [#4752](https://github.com/owncloud/android/issues/4752)
+
+   The list of all available space public links has been added below the list of
+   space members. This new section shows information like public link names, types
+   and expiration date (if available).
+
+   https://github.com/owncloud/android/issues/4752
+   https://github.com/owncloud/android/pull/4783
 
 * Enhancement - Copy permanent link of a space: [#4758](https://github.com/owncloud/android/issues/4758)
 

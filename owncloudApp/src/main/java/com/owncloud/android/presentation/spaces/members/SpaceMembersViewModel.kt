@@ -114,7 +114,7 @@ class SpaceMembersViewModel(
         flow = _spaceMembers,
         useCase = getSpaceMembersUseCase,
         useCaseParams = GetSpaceMembersUseCase.Params(accountName = accountName, spaceId = space.id),
-        showLoading = false,
+        showLoading = true,
         requiresConnection = true
     )
 
