@@ -63,8 +63,11 @@ class SpaceLinksAdapter(
                     contentDescription = holder.itemView.context.getString(R.string.content_description_member_expiration_date, expirationDate.text)
                 }
             }
-            copyPublicLinkButton.setOnClickListener {
-                listener.onCopyOrSendPublicLink(spaceLink.webUrl)
+            copyPublicLinkButton.apply {
+                contentDescription = holder.itemView.context.getString(R.string.content_description_get_public_link, spaceLink.displayName)
+                setOnClickListener {
+                    listener.onCopyOrSendPublicLink(spaceLink.webUrl)
+                }
             }
         }
     }
