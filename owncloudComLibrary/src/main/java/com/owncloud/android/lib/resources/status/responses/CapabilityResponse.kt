@@ -77,6 +77,8 @@ data class CapabilityResponse(
         filesSharingPublicExpireDateEnforced = CapabilityBooleanType.fromBooleanValue(
             capabilities?.fileSharingCapabilities?.fileSharingPublic?.fileSharingPublicExpireDate?.enforced
         ),
+        filesSharingSearchMinLength = capabilities?.fileSharingCapabilities?.fileSharingSearchMinLenght
+            ?: capabilities?.fileSharingCapabilities?.fileSharingSearchMinLength,
         filesBigFileChunking = CapabilityBooleanType.fromBooleanValue(capabilities?.fileCapabilities?.bigfilechunking),
         filesUndelete = CapabilityBooleanType.fromBooleanValue(capabilities?.fileCapabilities?.undelete),
         filesVersioning = CapabilityBooleanType.fromBooleanValue(capabilities?.fileCapabilities?.versioning),
@@ -123,6 +125,10 @@ data class FileSharingCapabilities(
     val fileSharingPublic: FileSharingPublic?,
     @Json(name = "resharing")
     val fileSharingReSharing: Boolean?,
+    @Json(name = "search_min_lenght")
+    val fileSharingSearchMinLenght: Int?,
+    @Json(name = "search_min_length")
+    val fileSharingSearchMinLength: Int?,
     @Json(name = "federation")
     val fileSharingFederation: FileSharingFederation?,
     @Json(name = "user")

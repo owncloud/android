@@ -38,6 +38,7 @@ import android.provider.BaseColumns
 import android.widget.Toast
 import com.owncloud.android.MainApp
 import com.owncloud.android.R
+import com.owncloud.android.domain.capabilities.model.OCCapability
 import com.owncloud.android.presentation.authentication.AccountUtils
 import com.owncloud.android.domain.capabilities.usecases.GetStoredCapabilitiesUseCase
 import com.owncloud.android.domain.sharing.sharees.GetShareesAsyncUseCase
@@ -134,6 +135,12 @@ class UsersAndGroupsSearchProvider : ContentProvider() {
                 accountName = account.name
             )
         )
+        val minSearchLength = capabilities?.getFilesSharingSearchMinLength()
+            ?: OCCapability.DEFAULT_FILES_SHARING_SEARCH_MIN_LENGTH
+
+        if (userQuery.length < minSearchLength) {
+            return MatrixCursor(COLUMNS)
+        }
 
         val getShareesAsyncUseCase: GetShareesAsyncUseCase by inject()
 

@@ -44,6 +44,7 @@ data class OCCapability(
     val filesSharingPublicMultiple: CapabilityBooleanType,
     val filesSharingPublicSupportsUploadOnly: CapabilityBooleanType,
     val filesSharingResharing: CapabilityBooleanType,
+    val filesSharingSearchMinLength: Int?,
     val filesSharingFederationOutgoing: CapabilityBooleanType,
     val filesSharingFederationIncoming: CapabilityBooleanType,
     val filesSharingUserProfilePicture: CapabilityBooleanType,
@@ -68,6 +69,13 @@ data class OCCapability(
     fun isSpacesAllowed(): Boolean = spaces?.enabled == true
 
     fun isSpacesProjectsAllowed(): Boolean = spaces?.projects == true
+
+    fun getFilesSharingSearchMinLength(): Int =
+        filesSharingSearchMinLength?.takeIf { it > 0 } ?: DEFAULT_FILES_SHARING_SEARCH_MIN_LENGTH
+
+    companion object {
+        const val DEFAULT_FILES_SHARING_SEARCH_MIN_LENGTH = 3
+    }
 
     data class AppProviders(
         val enabled: Boolean,

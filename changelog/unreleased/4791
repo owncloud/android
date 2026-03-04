@@ -1,0 +1,5 @@
+Enhancement: Make share search minimum length capability-driven
+
+The minimum number of characters required to search users for sharing and members for joining has been made configurable through the files_sharing.search_min_lenght capability.
+
+https://github.com/owncloud/android/pull/4791

@@ -49,6 +49,7 @@ import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_SHA
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_SUPPORTS_UPLOAD_ONLY
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_UPLOAD
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_SHARING_RESHARING
+import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_SHARING_SEARCH_MIN_LENGTH
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_SHARING_USER_PROFILE_PICTURE
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_SPACES_PREFIX
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_TABLE_NAME
@@ -108,6 +109,8 @@ data class OCCapabilityEntity(
     val filesSharingPublicSupportsUploadOnly: Int,
     @ColumnInfo(name = CAPABILITIES_SHARING_RESHARING, defaultValue = capabilityBooleanTypeUnknownString)
     val filesSharingResharing: Int,
+    @ColumnInfo(name = CAPABILITIES_SHARING_SEARCH_MIN_LENGTH)
+    val filesSharingSearchMinLength: Int?,
     @ColumnInfo(name = CAPABILITIES_SHARING_FEDERATION_OUTGOING, defaultValue = capabilityBooleanTypeUnknownString)
     val filesSharingFederationOutgoing: Int,
     @ColumnInfo(name = CAPABILITIES_SHARING_FEDERATION_INCOMING, defaultValue = capabilityBooleanTypeUnknownString)
@@ -155,6 +158,9 @@ data class OCCapabilityEntity(
                 it.getInt(it.getColumnIndexOrThrow(CAPABILITIES_SHARING_PUBLIC_MULTIPLE)),
                 it.getInt(it.getColumnIndexOrThrow(CAPABILITIES_SHARING_PUBLIC_SUPPORTS_UPLOAD_ONLY)),
                 it.getInt(it.getColumnIndexOrThrow(CAPABILITIES_SHARING_RESHARING)),
+                it.getColumnIndex(CAPABILITIES_SHARING_SEARCH_MIN_LENGTH).takeUnless { index -> index < 0 }?.let { index ->
+                    if (it.isNull(index)) null else it.getInt(index)
+                },
                 it.getInt(it.getColumnIndexOrThrow(CAPABILITIES_SHARING_FEDERATION_OUTGOING)),
                 it.getInt(it.getColumnIndexOrThrow(CAPABILITIES_SHARING_FEDERATION_INCOMING)),
                 it.getInt(it.getColumnIndexOrThrow(CAPABILITIES_SHARING_USER_PROFILE_PICTURE)),

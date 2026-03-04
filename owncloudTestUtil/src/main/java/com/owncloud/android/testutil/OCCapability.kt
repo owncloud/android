@@ -46,6 +46,7 @@ val OC_CAPABILITY =
         filesSharingPublicMultiple = CapabilityBooleanType.FALSE,
         filesSharingPublicSupportsUploadOnly = CapabilityBooleanType.FALSE,
         filesSharingResharing = CapabilityBooleanType.FALSE,
+        filesSharingSearchMinLength = 3,
         filesSharingFederationOutgoing = CapabilityBooleanType.FALSE,
         filesSharingFederationIncoming = CapabilityBooleanType.FALSE,
         filesSharingUserProfilePicture = CapabilityBooleanType.FALSE,
