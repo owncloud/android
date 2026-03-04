@@ -747,6 +747,8 @@
     <string name="release_notes_4_8_0_subtitle_space_membership">Infinite Scale users can see all members of a space and manage them with right permissions</string>
     <string name="release_notes_4_8_0_title_spaces_permanent_links">Permanent links for spaces</string>
     <string name="release_notes_4_8_0_subtitle_spaces_permanent_links">Infinite Scale users can now get a permanent link for a space and share it with other members</string>
+    <string name="release_notes_4_8_0_title_search_minimum_length">Configurable minimum search length</string>
+    <string name="release_notes_4_8_0_subtitle_search_minimum_length">The minimum number of characters before searching users and members is now configured by server capabilities</string>
 
     <!-- Open in web -->
     <string name="ic_action_open_in_web">Open in web</string>
