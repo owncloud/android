@@ -63,6 +63,7 @@ data class RemoteCapability(
     var filesSharingPublicMultiple: CapabilityBooleanType = CapabilityBooleanType.UNKNOWN,
     var filesSharingPublicSupportsUploadOnly: CapabilityBooleanType = CapabilityBooleanType.UNKNOWN,
     var filesSharingResharing: CapabilityBooleanType = CapabilityBooleanType.UNKNOWN,
+    var filesSharingSearchMinLength: Int? = null,
     var filesSharingFederationOutgoing: CapabilityBooleanType = CapabilityBooleanType.UNKNOWN,
     var filesSharingFederationIncoming: CapabilityBooleanType = CapabilityBooleanType.UNKNOWN,
     var filesSharingUserProfilePicture: CapabilityBooleanType = CapabilityBooleanType.UNKNOWN,

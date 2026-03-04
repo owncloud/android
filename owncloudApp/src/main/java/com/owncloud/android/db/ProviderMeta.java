@@ -147,6 +147,7 @@ public class ProviderMeta {
         public static final String CAPABILITIES_SHARING_PUBLIC_MULTIPLE = "sharing_public_multiple";
         public static final String CAPABILITIES_SHARING_PUBLIC_SUPPORTS_UPLOAD_ONLY = "supports_upload_only";
         public static final String CAPABILITIES_SHARING_RESHARING = "sharing_resharing";
+        public static final String CAPABILITIES_SHARING_SEARCH_MIN_LENGTH = "search_min_length";
         public static final String CAPABILITIES_SHARING_FEDERATION_OUTGOING = "sharing_federation_outgoing";
         public static final String CAPABILITIES_SHARING_FEDERATION_INCOMING = "sharing_federation_incoming";
         public static final String CAPABILITIES_FILES_BIGFILECHUNKING = "files_bigfilechunking";

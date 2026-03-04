@@ -32,6 +32,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.owncloud.android.R
 import com.owncloud.android.databinding.AddMemberFragmentBinding
+import com.owncloud.android.domain.capabilities.model.OCCapability
+import com.owncloud.android.domain.capabilities.usecases.GetStoredCapabilitiesUseCase
 import com.owncloud.android.domain.members.model.OCMember
 import com.owncloud.android.domain.members.model.OCMemberType
 import com.owncloud.android.domain.roles.model.OCRole
@@ -41,6 +43,7 @@ import com.owncloud.android.extensions.collectLatestLifecycleFlow
 import com.owncloud.android.extensions.showErrorInSnackbar
 import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.utils.DisplayUtils
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import org.koin.core.parameter.parametersOf
 import timber.log.Timber
@@ -51,6 +54,7 @@ import java.util.TimeZone
 class AddMemberFragment: Fragment(), SearchMembersAdapter.SearchMembersAdapterListener {
     private var _binding: AddMemberFragmentBinding? = null
     private val binding get() = _binding!!
+    private val getStoredCapabilitiesUseCase: GetStoredCapabilitiesUseCase by inject()
 
     private val spaceMembersViewModel: SpaceMembersViewModel by activityViewModel {
         parametersOf(
@@ -66,6 +70,7 @@ class AddMemberFragment: Fragment(), SearchMembersAdapter.SearchMembersAdapterLi
 
     private var editMode = false
     private var selectedMemberId = ""
+    private var minimumSearchLength = OCCapability.DEFAULT_FILES_SHARING_SEARCH_MIN_LENGTH
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = AddMemberFragmentBinding.inflate(inflater, container, false)
@@ -91,6 +96,7 @@ class AddMemberFragment: Fragment(), SearchMembersAdapter.SearchMembersAdapterLi
             }
         }
 
+        initSearchMinLength()
         subscribeToViewModels()
 
         binding.searchBar.apply {
@@ -101,7 +107,11 @@ class AddMemberFragment: Fragment(), SearchMembersAdapter.SearchMembersAdapterLi
                 override fun onQueryTextSubmit(query: String): Boolean = true
 
                 override fun onQueryTextChange(newText: String): Boolean {
-                    if (newText.length > 2) { spaceMembersViewModel.searchMembers(newText) } else { spaceMembersViewModel.clearSearch() }
+                    if (newText.length >= minimumSearchLength) {
+                        spaceMembersViewModel.searchMembers(newText)
+                    } else {
+                        spaceMembersViewModel.clearSearch()
+                    }
                     return true
                 }
             })
@@ -111,7 +121,7 @@ class AddMemberFragment: Fragment(), SearchMembersAdapter.SearchMembersAdapterLi
     private fun showOrHideEmptyView(hasMembers: Boolean) {
         binding.membersRecyclerView.isVisible = hasMembers
         binding.emptyDataParent.apply {
-            val shouldShow = !hasMembers && binding.searchBar.query.length > 2
+            val shouldShow = !hasMembers && binding.searchBar.query.length >= minimumSearchLength
             root.isVisible = shouldShow
             if (shouldShow) {
                 listEmptyDatasetIcon.setImageResource(R.drawable.ic_share_generic_white)
@@ -119,6 +129,13 @@ class AddMemberFragment: Fragment(), SearchMembersAdapter.SearchMembersAdapterLi
                 listEmptyDatasetSubTitle.setText(R.string.members_search_empty)
             }
         }
+    }
+
+    private fun initSearchMinLength() {
+        val accountName = requireArguments().getString(ARG_ACCOUNT_NAME) ?: return
+        minimumSearchLength = getStoredCapabilitiesUseCase(
+            GetStoredCapabilitiesUseCase.Params(accountName = accountName)
+        )?.getFilesSharingSearchMinLength() ?: OCCapability.DEFAULT_FILES_SHARING_SEARCH_MIN_LENGTH
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

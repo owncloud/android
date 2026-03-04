@@ -82,4 +82,22 @@ class OCCapabilityTest {
         val item2 = OC_CAPABILITY.copy(filesAppProviders = null)
         assertFalse(item2.isOpenInWebAllowed())
     }
+
+    @Test
+    fun `getFilesSharingSearchMinLength returns capability value when positive`() {
+        val item = OC_CAPABILITY.copy(filesSharingSearchMinLength = 5)
+
+        assertEquals(5, item.getFilesSharingSearchMinLength())
+    }
+
+    @Test
+    fun `getFilesSharingSearchMinLength returns default when null or invalid`() {
+        val itemWithNull = OC_CAPABILITY.copy(filesSharingSearchMinLength = null)
+        val itemWithZero = OC_CAPABILITY.copy(filesSharingSearchMinLength = 0)
+        val itemWithNegative = OC_CAPABILITY.copy(filesSharingSearchMinLength = -1)
+
+        assertEquals(OCCapability.DEFAULT_FILES_SHARING_SEARCH_MIN_LENGTH, itemWithNull.getFilesSharingSearchMinLength())
+        assertEquals(OCCapability.DEFAULT_FILES_SHARING_SEARCH_MIN_LENGTH, itemWithZero.getFilesSharingSearchMinLength())
+        assertEquals(OCCapability.DEFAULT_FILES_SHARING_SEARCH_MIN_LENGTH, itemWithNegative.getFilesSharingSearchMinLength())
+    }
 }
