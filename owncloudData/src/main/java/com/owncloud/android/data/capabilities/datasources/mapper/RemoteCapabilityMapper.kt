@@ -59,6 +59,7 @@ class RemoteCapabilityMapper : RemoteMapper<OCCapability, RemoteCapability> {
                 filesSharingPublicSupportsUploadOnly =
                 CapabilityBooleanType.fromValue(remote.filesSharingPublicSupportsUploadOnly.value),
                 filesSharingResharing = CapabilityBooleanType.fromValue(remote.filesSharingResharing.value),
+                filesSharingSearchMinLength = remote.filesSharingSearchMinLength,
                 filesSharingFederationOutgoing =
                 CapabilityBooleanType.fromValue(remote.filesSharingFederationOutgoing.value),
                 filesSharingFederationIncoming =
@@ -105,6 +106,7 @@ class RemoteCapabilityMapper : RemoteMapper<OCCapability, RemoteCapability> {
                 filesSharingPublicSupportsUploadOnly =
                 RemoteCapabilityBooleanType.fromValue(model.filesSharingPublicSupportsUploadOnly.value)!!,
                 filesSharingResharing = RemoteCapabilityBooleanType.fromValue(model.filesSharingResharing.value)!!,
+                filesSharingSearchMinLength = model.filesSharingSearchMinLength,
                 filesSharingFederationOutgoing =
                 RemoteCapabilityBooleanType.fromValue(model.filesSharingFederationOutgoing.value)!!,
                 filesSharingFederationIncoming =

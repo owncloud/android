@@ -1478,6 +1478,8 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                 ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_SUPPORTS_UPLOAD_ONLY
             capabilityProjectionMap[ProviderTableMeta.CAPABILITIES_SHARING_RESHARING] =
                 ProviderTableMeta.CAPABILITIES_SHARING_RESHARING
+            capabilityProjectionMap[ProviderTableMeta.CAPABILITIES_SHARING_SEARCH_MIN_LENGTH] =
+                ProviderTableMeta.CAPABILITIES_SHARING_SEARCH_MIN_LENGTH
             capabilityProjectionMap[ProviderTableMeta.CAPABILITIES_SHARING_FEDERATION_OUTGOING] =
                 ProviderTableMeta.CAPABILITIES_SHARING_FEDERATION_OUTGOING
             capabilityProjectionMap[ProviderTableMeta.CAPABILITIES_SHARING_FEDERATION_INCOMING] =
