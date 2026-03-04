@@ -197,10 +197,11 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
                                 val hasLinks = it.links.isNotEmpty()
                                 showOrHideEmptyView(hasLinks)
                                 if (hasLinks) { showSpaceLinks(it.links) }
+                                binding.indeterminateProgressBar.isVisible = false
                             }
                         }
                     }
-                    is UIResult.Loading -> { }
+                    is UIResult.Loading -> { binding.indeterminateProgressBar.isVisible = true }
                     is UIResult.Error -> {
                         requireActivity().finish()
                         Timber.e(uiResult.error, "Failed to retrieve space members for space: ${currentSpace.id} (${currentSpace.id})")
