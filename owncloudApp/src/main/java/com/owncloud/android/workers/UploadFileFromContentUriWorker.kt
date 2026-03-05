@@ -184,13 +184,11 @@ class UploadFileFromContentUriWorker(
         }
         cacheFile.createNewFile()
 
-        val inputStream = appContext.contentResolver.openInputStream(contentUri)
-        val outputStream = FileOutputStream(cachePath)
-        outputStream.use { fileOut ->
-            inputStream?.copyTo(fileOut)
+        appContext.contentResolver.openInputStream(contentUri)?.use { inputStream ->
+            FileOutputStream(cachePath).use { outputStream ->
+                inputStream.copyTo(outputStream)
+            }
         }
-        inputStream?.close()
-        outputStream.close()
 
         transferRepository.updateTransferSourcePath(uploadIdInStorageManager, contentUri.toString())
         transferRepository.updateTransferLocalPath(uploadIdInStorageManager, cachePath)
