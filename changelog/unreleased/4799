@@ -1,0 +1,6 @@
+Change: Stream handling and double-close in UploadFileFromContentUriWorker
+
+Both the content resolver input stream and the file output stream from UploadFileFromContentUriWorker have been closed via use blocks, and the redundant double-close of the output stream has been removed.
+
+https://github.com/owncloud/android/issues/4798
+https://github.com/owncloud/android/pull/4799
