@@ -16,13 +16,18 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/shareScroll"
+    android:id="@+id/swipe_refresh_members"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".presentation.spaces.members.SpaceMembersActivity">
+    android:layout_height="match_parent">
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/shareScroll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".presentation.spaces.members.SpaceMembersActivity">
 
     <LinearLayout
         android:id="@+id/members_section"
@@ -138,4 +143,6 @@
 
     </LinearLayout>
 
-</androidx.core.widget.NestedScrollView>
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
