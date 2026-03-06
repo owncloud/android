@@ -142,6 +142,7 @@
     <string name="auth_oauth_failure">El token de acceso ha expirado o es inválido. Inicie sesión de nuevo para volver a tener acceso</string>
     <string name="auth_oauth_failure_snackbar_action">Registrarse</string>
     <string name="auth_check_server">Verificar servidor</string>
+    <string name="auth_host_url">Dirección del servidor https://...</string>
     <string name="auth_username">Nombre de usuario</string>
     <string name="auth_password">Contraseña</string>
     <string name="auth_register">¿Nuevo en %1$s?</string>
@@ -174,6 +175,7 @@
     <string name="spaces_list_empty_subtitle">¡No tienes acceso a ningún espacio!</string>
     <string name="file_list_empty_subtitle_available_offline">Los ficheros y carpetas marcados como disponibles offline aparecerán aquí</string>
     <string name="file_list_empty_subtitle_shared_by_links">Los ficheros y las carpetas que usted compartió serán mostrados aquí.</string>
+    <string name="file_list_loading">Cargando...</string>
     <string name="file_list_no_app_for_file_type">No se han encontrado apps para ese tipo de archivos</string>
     <string name="file_list_no_app_for_perform_action">No se encuentra aplicación para esta acción</string>
     <string name="local_file_list_empty">No hay archivos en esta carpeta.</string>
@@ -211,6 +213,7 @@
     <string name="common_back">Volver</string>
     <string name="common_save_exit">Guardar &amp; salir</string>
     <string name="common_error">Error</string>
+    <string name="common_loading">Cargando...</string>
     <string name="common_unknown">desconocido</string>
     <string name="common_error_unknown">error desconocido</string>
     <string name="common_pending">Pendiente</string>
@@ -220,6 +223,7 @@
     <string name="create_account">Crear cuenta</string>
     <string name="upload_chooser_title">Subir desde</string>
     <string name="uploader_info_dirname">Nombre de la carpeta</string>
+    <string name="uploader_upload_in_progress_ticker">Subiendo...</string>
     <string name="uploader_upload_in_progress_content">%1$d%% Subiendo %2$s</string>
     <string name="uploader_upload_succeeded_ticker">Subido con éxito</string>
     <string name="uploader_upload_succeeded_content_single">%1$s subido</string>
@@ -270,6 +274,7 @@
     <string name="uploader_upload_canceled_ticker">Subida cancelada</string>
     <string name="downloader_download_canceled_ticker">Descarga cancelada</string>
     <string name="downloader_download_enqueued_ticker">La descarga de %1$s se ha puesto en cola</string>
+    <string name="downloader_download_in_progress_ticker">Descargando...</string>
     <string name="downloader_download_in_progress_content">%1$d%% Descargado de %2$s</string>
     <string name="downloader_download_succeeded_ticker">Descarga completa</string>
     <string name="downloader_download_succeeded_content">%1$s descargado</string>
@@ -343,6 +348,8 @@
     <string name="media_forward_description">Botón avance rápido</string>
     <string name="upload_from_camera_title">Imagen de la cámara</string>
 
+    <string name="auth_getting_authorization">Obteniendo autorización...</string>
+    <string name="auth_trying_to_login">Intentando loguear...</string>
     <string name="auth_no_net_conn_title">Sin conexión de red</string>
     <string name="auth_nossl_plain_ok_title">Conexión segura no disponible.</string>
     <string name="auth_connection_established">Conexión establecida</string>
@@ -520,6 +527,8 @@
     <string name="log_send_history_button">Mandar historial.</string>
     <string name="log_send_no_mail_app">Aplicación para enviar registros no encontrada. Por favor instale una aplicación de correo.</string>
     <string name="log_send_mail_subject">Se han encontrado %1$s logs de la app Android</string>
+    <string name="log_progress_dialog_text">Cargando datos...</string>
+
     <string name="actionbar_select_all">Seleccionar todo</string>
     <string name="actionbar_select_inverse">Seleccionar inverso</string>
 
@@ -646,6 +655,7 @@
     <string name="share_no_public_links">No se crearon aún enlaces públicos.</string>
     <string name="share_no_link_in_this_share">Esta compartición no tiene enlace.</string>
     <string name="share_warning_about_forwarding_public_links">Cualquiera que disponga del enlace tiene acceso al fichero/carpeta.</string>
+    <string name="share_warning_about_forwarding_space_public_links">Cualquiera que posea el enlace puede acceder al space.</string>
     <string name="share_via_link_default_password">*****</string>
     <string name="share_via_link_password_enforced_label">Contraseña *</string>
     <string name="share_via_link_expiration_date_enforced_label">Caducidad *</string>
@@ -704,6 +714,7 @@
     <string name="scoped_storage_wizard_explanation">Se encontraron %1$s de datos en su almacenamiento externo. Se moverá al almacenamiento seguro en su dispositivo. Los archivos restantes se limpiarán de su almacenamiento externo después de la migración para evitar duplicados y vulnerabilidades.</string>
     <string name="scoped_storage_wizard_intro">Su aplicación ha sido actualizada. Esta actualización migra sus archivos a una ubicación más segura en su dispositivo. Esta migración de datos única es necesaria y puede tardar hasta un minuto o más.</string>
     <string name="scoped_storage_wizard_intro_button">Empecemos</string>
+    <string name="scoped_storage_wizard_not_enough_space_warning">&amp;#9888;️ El espacio libre en su dispositivo es limitado. Algunos ficheros no se migrarán, por favor compruebe todos los ficheros descargados se mantienen descargados después que el proceso se haya completado.</string>
     <string name="scoped_storage_wizard_migrate_and_clean_button">Migrar ahora</string>
     <string name="scoped_storage_wizard_migration_completed">La migración se completó satisfactoriamente. Sus ficheros están ahora más seguros que nunca.</string>
     <string name="scoped_storage_wizard_migration_completed_access_files_button">Acceder a sus archivos</string>
@@ -724,6 +735,7 @@
 
     <!-- Release Notes -->
     <string name="release_notes_header">Nuevo en %1$s</string>
+    <string name="release_notes_footer">Gracias por usar %1$s\n&amp;#10084;</string>
     <string name="release_notes_proceed">Proceder</string>
     <string name="release_notes_icon">Icono notas de lanzamiento</string>
     <string name="release_notes_bugfixes_title">Solución de problemas</string>
@@ -732,6 +744,11 @@
     <string name="release_notes_4_8_0_subtitle_set_emoji_as_space_image">Usuarios de Infinite Scale con permisos pueden configurar un emoji como imagen de un space</string>
     <string name="release_notes_4_8_0_title_space_membership">Membresía a espacio</string>
     <string name="release_notes_4_8_0_subtitle_space_membership">Los usuarios de Infinite Scale pueden ver todos los miembros de una escala y gestionarlos con los permisos adecuados</string>
+    <string name="release_notes_4_8_0_title_spaces_permanent_links">Enlaces permanentes para spaces</string>
+    <string name="release_notes_4_8_0_subtitle_spaces_permanent_links">Usuarios de Infinite Scale pueden ahora obtener un enlace permanence a un space y compartirlo con otros miembros</string>
+    <string name="release_notes_4_8_0_title_space_public_links">Enlaces públicos a spaces</string>
+    <string name="release_notes_4_8_0_subtitle_space_public_links">Usuarios de Infinite Scale pueden ahora ver todos los enlaces a un space y gestionarlos si tienen los permisos adecuados.</string>
+
     <!-- Open in web -->
     <string name="ic_action_open_in_web">Abrir en web</string>
     <string name="ic_action_open_with_web">Open in %1$s (web)</string>
@@ -820,6 +837,10 @@
     <string name="content_description_add_member">Añadir nuevo miembro</string>
     <string name="content_description_invite_member_button">Invitar a un miembro</string>
     <string name="content_description_expiration_date_switch">Fecha de caducidad</string>
+    <string name="content_description_remove_member_button">Eliminar miembro %1$s</string>
+    <string name="content_description_edit_member_button">Editar miembro %1$s</string>
+    <string name="content_description_permanent_link_button">Obtener enlace permanente</string>
+
     <string name="create_shortcut_dialog_title">Crear un acceso directo</string>
     <string name="create_shortcut_dialog_url">URL</string>
     <string name="create_shortcut_dialog_url_information">La URL tiene que empezar con https:// o http:// para que pueda ser abierta por el navegador</string>
@@ -836,6 +857,7 @@
     <string name="create_space_dialog_gb_unit">GB</string>
     <string name="create_space_dialog_empty_error">El nombre del space no puede estar vacío</string>
     <string name="create_space_dialog_length_error">El nombre del space no puede exceder 255 caracteres</string>
+    <string name="create_space_dialog_characters_error">Caracteres prohibidos: / \\ . : \? * &amp;quot; \' &gt; &lt; |</string>
     <string name="create_space_dialog_quota_empty_error">La cuota del space no puede estar vacía</string>
     <string name="create_space_dialog_quota_zero_error">La cuota del space tiene que ser mayor que cero</string>
     <string name="create_space_dialog_quota_too_large_error">La cuota del space no puede exceder 1PB</string>
@@ -866,6 +888,7 @@
     <string name="set_space_icon">Emoji</string>
     <string name="members_title">Miembros</string>
     <string name="members_add">Añadir miembro</string>
+    <string name="members_add_correctly">Miembro invitado correctamente</string>
     <string name="members_add_failed">No se pudo invitar al miembro</string>
     <string name="members_add_conflict_error">Ya está invitado al espacio seleccionado</string>
     <string name="members_search_failed">No se ha encontrado ningún resultado</string>
@@ -874,8 +897,21 @@
     <string name="members_options">Opciones</string>
     <string name="members_expiration_date">Fecha de caducidad</string>
     <string name="members_invite">Invitar</string>
+    <string name="members_remove_dialog_message">Quiere realmente eliminar el miembro %1$s\?</string>
+    <string name="members_remove_correctly">Miembro eliminado correctamente</string>
+    <string name="members_remove_failed">El miembro no pudo ser eliminado</string>
+    <string name="members_edit">Editar miembro</string>
+    <string name="members_edit_correctly">Miembro editado correctamente</string>
+    <string name="members_edit_failed">El miembro no pudo ser editado</string>
     <string name="member_type_user">Usuario</string>
     <string name="member_type_group">Grupo</string>
+    <string name="current_user_label">(yo)</string>
+    <string name="public_link_view">Puede ver</string>
+    <string name="public_link_edit">Puede editar</string>
+    <string name="public_link_upload">Puede cargar</string>
+    <string name="public_link_create_only">Subida secreta de fichero</string>
+    <string name="public_link_internal">Personas invitadas</string>
+
     <string name="feedback_dialog_get_in_contact_description"><![CDATA[ Solicita ayuda en nuestro <a href=\"%1$s\"><b>foro</b></a> o contribuye con nosotros en nuestro <a href=\"%2$s\"><b>repositorio GitHub</b></a>]]></string>
 
     <string name="link_role_accessibility">Enlace</string>
