@@ -1,0 +1,6 @@
+Bugfix: Add margin in members list for long display names in all cases
+
+An extra margin has been added to the right side in the list of members when the display name is long, preventing the text from overflowing.
+
+https://github.com/owncloud/android/issues/4781
+https://github.com/owncloud/android/pull/4800
