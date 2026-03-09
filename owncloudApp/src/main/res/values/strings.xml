@@ -133,7 +133,7 @@
     <string name="bottom_nav_shares">Shares</string>
 
     <string name="recommend_subject">Try %1$s on your smartphone!</string>
-    <string name="recommend_text">"I want to invite you to use %1$s on your smartphone!\nDownload here: %2$s"</string>
+    <string name="recommend_text">I want to invite you to use %1$s on your smartphone!\nDownload here: %2$s</string>
 
     <string name="error_reason">because</string>
     <string name="auth_failure_snackbar">Authentication failed. Sign in again to regain access.</string>
@@ -395,8 +395,8 @@
     <string name="remove_fail_msg">Removal failed</string>
     <string name="rename_dialog_title">Enter a new name</string>
     <string name="available_offline_inherited_msg">A folder containing this file is available offline.</string>
-    <string name="rename_local_fail_msg">"Local copy could not be renamed; try a different name"</string>
-    <string name="rename_server_fail_msg">"Rename could not be completed"</string>
+    <string name="rename_local_fail_msg">Local copy could not be renamed; try a different name</string>
+    <string name="rename_server_fail_msg">Rename could not be completed</string>
     <string name="file_already_exists">File already exists</string>
     <string name="folder_already_exists">Folder already exists</string>
     <string name="file_already_exists_description">File with name %1$s already exists.</string>
@@ -415,7 +415,7 @@
     <string name="filename_too_long">File name cannot be that long</string>
     <string name="wait_a_moment">Wait a moment</string>
     <string name="wait_checking_credentials">Checking stored credentials</string>
-    <string name="filedisplay_unexpected_bad_get_content">"Unexpected problem; please select the file from a different app"</string>
+    <string name="filedisplay_unexpected_bad_get_content">Unexpected problem; please select the file from a different app</string>
     <string name="filedisplay_no_file_selected">No file was selected</string>
     <string name="activity_chooser_title">Send link to</string>
     <string name="wait_for_tmp_copy_from_private_storage">Copying file from private storage</string>
@@ -660,8 +660,8 @@
     <string name="share_warning_about_forwarding_public_links">Anyone with the link has access to the file/folder.</string>
     <string name="share_warning_about_forwarding_space_public_links">Anyone with the link has access to the space.</string>
     <string name="share_via_link_default_password">*****</string>
-    <string name="share_via_link_password_enforced_label">"Password *"</string>
-    <string name="share_via_link_expiration_date_enforced_label">"Expiration *"</string>
+    <string name="share_via_link_password_enforced_label">Password *</string>
+    <string name="share_via_link_expiration_date_enforced_label">Expiration *</string>
     <string name="share_via_link_expiration_date_explanation_label">The public link will expire no later than %1$d days after it has been created.</string>
     <string name="share_via_link_default_name_template">%1$s link</string>
     <string name="share_via_link_empty_password">The password is empty.</string>
@@ -859,7 +859,7 @@
     <string name="create_space_dialog_gb_unit">GB</string>
     <string name="create_space_dialog_empty_error">Space name must not be empty</string>
     <string name="create_space_dialog_length_error">Space name must not be longer than 255 characters</string>
-    <string name="create_space_dialog_characters_error">Forbidden characters: / \\ . : ? * &quot; ' &gt; &lt; |</string>
+    <string name="create_space_dialog_characters_error">Forbidden characters: / \\ . : \? * &quot; \' &gt; &lt; |</string>
     <string name="create_space_dialog_quota_empty_error">Space quota must not be empty</string>
     <string name="create_space_dialog_quota_zero_error">Space quota must be greater than zero</string>
     <string name="create_space_dialog_quota_too_large_error">Space quota cannot exceed 1 PB</string>
