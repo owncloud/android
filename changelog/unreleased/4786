@@ -1,0 +1,6 @@
+Bugfix: Option "Copy here" in spaces list after rotating device
+
+The "Copy here" button has been prevented from being displayed after device rotation in the spaces list.
+
+https://github.com/owncloud/android/issues/4178
+https://github.com/owncloud/android/pull/4786

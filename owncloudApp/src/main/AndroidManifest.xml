@@ -210,6 +210,7 @@
             android:icon="@drawable/copy_link"
             android:label="@string/copy_link" />
         <activity android:name=".ui.activity.FolderPickerActivity"
+            android:configChanges="orientation|screenSize"
             android:label="@string/folder_picker_label"/>
         <activity
             android:name=".presentation.sharing.ShareActivity"
