@@ -29,6 +29,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
+import android.content.res.Configuration
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
@@ -325,6 +326,20 @@ class MainFileListFragment : Fragment(),
         isMultiPersonal = capabilityViewModel.checkMultiPersonal()
         initViews()
         subscribeToViewModels()
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        updateSpaceHeaderSize()
+    }
+
+    private fun updateSpaceHeaderSize() {
+        val cardSize = resources.getDimensionPixelSize(R.dimen.spaces_header_card_height)
+        binding.spaceHeader.spaceHeaderCard.layoutParams.apply {
+            width = cardSize
+            height = cardSize
+        }
+        binding.spaceHeader.spaceHeaderCard.requestLayout()
     }
 
     override fun onResume() {
