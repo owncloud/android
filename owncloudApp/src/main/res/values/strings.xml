@@ -551,6 +551,9 @@
     <string name="copy_file_invalid_into_descendent">It is not possible to copy a folder into a descendant.</string>
     <string name="copy_file_invalid_overwrite">The file exists already in the destination folder.</string>
     <string name="copy_file_error">An error occurred while trying to copy this file or folder.</string>
+    <string name="copy_success_msg">The file has been copied</string>
+    <string name="move_success_msg">The file has been moved</string>
+    <string name="go_to_destination_folder">Go to target folder</string>
     <string name="forbidden_permissions_copy">to copy this file</string>
 
     <string name="prefs_category_camera_upload">Camera uploads</string>
