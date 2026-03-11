@@ -330,16 +330,23 @@ class MainFileListFragment : Fragment(),
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
-        updateSpaceHeaderSize()
+        updateConfigDependentSizes()
     }
 
-    private fun updateSpaceHeaderSize() {
+    private fun updateConfigDependentSizes() {
         val cardSize = resources.getDimensionPixelSize(R.dimen.spaces_header_card_height)
         binding.spaceHeader.spaceHeaderCard.layoutParams.apply {
             width = cardSize
             height = cardSize
         }
         binding.spaceHeader.spaceHeaderCard.requestLayout()
+
+        val iconSize = resources.getDimensionPixelSize(R.dimen.empty_icon_size)
+        binding.emptyDataParent.listEmptyDatasetIcon.layoutParams.apply {
+            width = iconSize
+            height = iconSize
+        }
+        binding.emptyDataParent.listEmptyDatasetIcon.requestLayout()
     }
 
     override fun onResume() {

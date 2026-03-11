@@ -24,4 +24,5 @@
     <dimen name="spaces_header_card_height">150dp</dimen>
     <dimen name="spaces_margin_horizontal">50dp</dimen>
     <dimen name="spaces_margin_vertical">40dp</dimen>
+    <dimen name="empty_icon_size">72dp</dimen>
 </resources>

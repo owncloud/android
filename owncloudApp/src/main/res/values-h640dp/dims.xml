@@ -29,4 +29,5 @@
     <!-- Spaces -->
     <dimen name="spaces_thumbnail_height">172dp</dimen>
     <dimen name="spaces_header_card_height">100dp</dimen>
+    <dimen name="empty_icon_size">48dp</dimen>
 </resources>
