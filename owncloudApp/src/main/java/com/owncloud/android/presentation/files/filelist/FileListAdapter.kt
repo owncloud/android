@@ -288,7 +288,7 @@ class FileListAdapter(
                             params -> params.marginStart = if (isFolderInKw) 0 else
                         context.resources.getDimensionPixelSize(R.dimen.standard_quarter_margin) }
                     it.fileListLastMod.text = DisplayUtils.getRelativeTimestamp(context, file.modificationTimestamp)
-                    it.threeDotMenu.isVisible = getCheckedItems().isEmpty()
+                    it.threeDotMenu.isVisible = !isPickerMode && getCheckedItems().isEmpty()
                     it.threeDotMenu.contentDescription = context.getString(R.string.content_description_file_operations, file.fileName)
                     if (fileListOption.isAvailableOffline() || (fileListOption.isSharedByLink() && fileWithSyncInfo.space == null)) {
                         it.spacePathLine.path.apply {
