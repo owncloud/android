@@ -857,7 +857,7 @@
     <string name="create_space_dialog_gb_unit">GB</string>
     <string name="create_space_dialog_empty_error">El nombre del space no puede estar vacío</string>
     <string name="create_space_dialog_length_error">El nombre del space no puede exceder 255 caracteres</string>
-    <string name="create_space_dialog_characters_error">Caracteres prohibidos: / \\ . : \? * &amp;quot; \' &gt; &lt; |</string>
+    <string name="create_space_dialog_characters_error">Caracteres prohibidos: / \\ . : \? * \" \' &gt; &lt; |</string>
     <string name="create_space_dialog_quota_empty_error">La cuota del space no puede estar vacía</string>
     <string name="create_space_dialog_quota_zero_error">La cuota del space tiene que ser mayor que cero</string>
     <string name="create_space_dialog_quota_too_large_error">La cuota del space no puede exceder 1PB</string>
