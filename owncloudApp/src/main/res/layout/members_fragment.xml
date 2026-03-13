@@ -103,6 +103,21 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"/>
 
+            <ImageButton
+                android:id="@+id/add_public_link_button"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:padding="@dimen/standard_padding"
+                android:background="@color/transparent"
+                android:src="@drawable/ic_add"
+                android:contentDescription="@string/content_description_add_public_link"
+                android:visibility="gone"
+                android:focusable="true"
+                android:clickable="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:visibility="visible"/>
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView

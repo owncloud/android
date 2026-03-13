@@ -215,9 +215,7 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
                 when (val uiResult = event.peekContent()) {
                     is UIResult.Success -> {
                         uiResult.data?.let { spacePermissions ->
-                            binding.addMemberButton.isVisible = DRIVES_CREATE_PERMISSION in spacePermissions
-                            canRemoveMembers = DRIVES_DELETE_PERMISSION in spacePermissions
-                            canEditMembers = DRIVES_UPDATE_PERMISSION in spacePermissions
+                            checkPermissions(spacePermissions)
                             spaceMembersAdapter.setSpaceMembers(spaceMembers, roles, canRemoveMembers, canEditMembers, numberOfManagers)
                         }
                     }
@@ -268,6 +266,16 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
                 }
             }
         }
+    }
+
+    private fun checkPermissions(spacePermissions: List<String>) {
+        binding.apply {
+            val hasCreatePermission = DRIVES_CREATE_PERMISSION in spacePermissions
+            addMemberButton.isVisible = hasCreatePermission
+            addPublicLinkButton.isVisible = hasCreatePermission
+        }
+        canRemoveMembers = DRIVES_DELETE_PERMISSION in spacePermissions
+        canEditMembers = DRIVES_UPDATE_PERMISSION in spacePermissions
     }
 
     private fun showOrHideEmptyView(hasLinks: Boolean) {
