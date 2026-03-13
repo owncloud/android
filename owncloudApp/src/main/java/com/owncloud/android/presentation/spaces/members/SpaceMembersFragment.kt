@@ -29,6 +29,7 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.owncloud.android.R
 import com.owncloud.android.databinding.MembersFragmentBinding
 import com.owncloud.android.domain.links.model.OCLink
@@ -102,6 +103,10 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
 
         subscribeToViewModels()
 
+        binding.swipeRefreshMembers.setOnRefreshListener {
+            spaceMembersViewModel.getSpaceMembers()
+        }
+
         binding.addMemberButton.setOnClickListener {
             spaceMembersViewModel.resetViewModel()
             listener?.addMember(
@@ -166,6 +171,15 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
     }
 
     private fun subscribeToViewModels() {
+        observeRoles()
+        observeSpaceMembers()
+        observeSpacePermissions()
+        observeAddMemberResult()
+        observeRemoveMemberResult()
+        observeEditMemberResult()
+    }
+
+    private fun observeRoles() {
         collectLatestLifecycleFlow(spaceMembersViewModel.roles) { event ->
             event?.let {
                 when (val uiResult = event.peekContent()) {
@@ -182,7 +196,9 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
                 }
             }
         }
+    }
 
+    private fun observeSpaceMembers() {
         collectLatestLifecycleFlow(spaceMembersViewModel.spaceMembers) { event ->
             event?.let {
                 when (val uiResult = event.peekContent()) {
@@ -190,7 +206,8 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
                         uiResult.data?.let {
                             if (roles.isNotEmpty()) {
                                 numberOfManagers = it.members.count { spaceMember ->
-                                    spaceMember.roles.contains(OCRoleType.toString(OCRoleType.CAN_MANAGE)) }
+                                    spaceMember.roles.contains(OCRoleType.toString(OCRoleType.CAN_MANAGE))
+                                }
                                 spaceMembers = it.members
                                 addMemberRoles = it.roles
                                 spaceMembersAdapter.setSpaceMembers(spaceMembers, roles, canRemoveMembers, canEditMembers, numberOfManagers)
@@ -198,10 +215,14 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
                                 showOrHideEmptyView(hasLinks)
                                 if (hasLinks) { showSpaceLinks(it.links) }
                                 binding.indeterminateProgressBar.isVisible = false
+                                binding.swipeRefreshMembers.isRefreshing = false
                             }
                         }
                     }
-                    is UIResult.Loading -> { binding.indeterminateProgressBar.isVisible = true }
+                    is UIResult.Loading -> {
+                        binding.indeterminateProgressBar.isVisible = true
+                        binding.swipeRefreshMembers.isRefreshing = true
+                    }
                     is UIResult.Error -> {
                         requireActivity().finish()
                         Timber.e(uiResult.error, "Failed to retrieve space members for space: ${currentSpace.id} (${currentSpace.id})")
@@ -209,7 +230,9 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
                 }
             }
         }
+    }
 
+    private fun observeSpacePermissions() {
         collectLatestLifecycleFlow(spaceMembersViewModel.spacePermissions) { event ->
             event?.let {
                 when (val uiResult = event.peekContent()) {
@@ -228,7 +251,9 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
                 }
             }
         }
+    }
 
+    private fun observeAddMemberResult() {
         collectLatestLifecycleFlow(spaceMembersViewModel.addMemberResultFlow) { event ->
             event?.peekContent()?.let { uiResult ->
                 when (uiResult) {
@@ -241,7 +266,9 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
                 }
             }
         }
+    }
 
+    private fun observeRemoveMemberResult() {
         collectLatestLifecycleFlow(spaceMembersViewModel.removeMemberResultFlow) { uiResult ->
             when (uiResult) {
                 is UIResult.Loading -> { }
@@ -255,7 +282,9 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
                 }
             }
         }
+    }
 
+    private fun observeEditMemberResult() {
         collectLatestLifecycleFlow(spaceMembersViewModel.editMemberResultFlow) { event ->
             event?.peekContent()?.let { uiResult ->
                 when (uiResult) {
