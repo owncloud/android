@@ -1,0 +1,6 @@
+Enhancement: Show destination folder snackbar for copy/move operations
+
+A snackbar message has been displayed after copy or move operations with an action button that allows users to quickly navigate to the destination folder.
+
+https://github.com/owncloud/android/issues/4379
+https://github.com/owncloud/android/pull/4802

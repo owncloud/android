@@ -90,6 +90,18 @@ fun Activity.showMessageInSnackbar(
     Snackbar.make(findViewById(layoutId), message, duration).show()
 }
 
+fun Activity.showSnackbarWithAction(
+    message: CharSequence,
+    action: () -> Unit,
+    actionText: CharSequence,
+    duration: Int = Snackbar.LENGTH_LONG,
+    layoutId: Int = android.R.id.content
+) {
+    Snackbar.make(findViewById(layoutId), message, duration)
+        .setAction(actionText) { action() }
+        .show()
+}
+
 fun Activity.showErrorInToast(
     genericErrorMessageId: Int,
     throwable: Throwable?,
