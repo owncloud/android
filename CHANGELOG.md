@@ -40,10 +40,13 @@ ownCloud admins and users.
 
 ## Summary
 
+* Bugfix - Option "Copy here" in spaces list after rotating device: [#4178](https://github.com/owncloud/android/issues/4178)
+* Bugfix - Reduce space header size after rotating device: [#4625](https://github.com/owncloud/android/issues/4625)
 * Bugfix - Edit space option available when there is no connection: [#4742](https://github.com/owncloud/android/issues/4742)
 * Bugfix - Sort is not alphabetically correct: [#4760](https://github.com/owncloud/android/issues/4760)
 * Change - Migrate tests to the new kotlinx-coroutines-test API: [#4710](https://github.com/owncloud/android/issues/4710)
 * Change - Increase rating dialog delay: [#4744](https://github.com/owncloud/android/pull/4744)
+* Change - Stream handling and double-close in UploadFileFromContentUriWorker: [#4798](https://github.com/owncloud/android/issues/4798)
 * Enhancement - Show members of a space: [#4612](https://github.com/owncloud/android/issues/4612)
 * Enhancement - Add a member to a space: [#4613](https://github.com/owncloud/android/issues/4613)
 * Enhancement - Set emoji as space image: [#4707](https://github.com/owncloud/android/issues/4707)
@@ -56,6 +59,21 @@ ownCloud admins and users.
 * Enhancement - QA Content Provider: [#4776](https://github.com/owncloud/android/pull/4776)
 
 ## Details
+
+* Bugfix - Option "Copy here" in spaces list after rotating device: [#4178](https://github.com/owncloud/android/issues/4178)
+
+   The "Copy here" button has been prevented from being displayed after device
+   rotation in the spaces list.
+
+   https://github.com/owncloud/android/issues/4178
+   https://github.com/owncloud/android/pull/4786
+
+* Bugfix - Reduce space header size after rotating device: [#4625](https://github.com/owncloud/android/issues/4625)
+
+   The space header height has been reduced in landscape orientation.
+
+   https://github.com/owncloud/android/issues/4625
+   https://github.com/owncloud/android/pull/4790
 
 * Bugfix - Edit space option available when there is no connection: [#4742](https://github.com/owncloud/android/issues/4742)
 
@@ -87,6 +105,15 @@ ownCloud admins and users.
    to make it less intrusive for the user.
 
    https://github.com/owncloud/android/pull/4744
+
+* Change - Stream handling and double-close in UploadFileFromContentUriWorker: [#4798](https://github.com/owncloud/android/issues/4798)
+
+   Both the content resolver input stream and the file output stream from
+   UploadFileFromContentUriWorker have been closed via use blocks, and the
+   redundant double-close of the output stream has been removed.
+
+   https://github.com/owncloud/android/issues/4798
+   https://github.com/owncloud/android/pull/4799
 
 * Enhancement - Show members of a space: [#4612](https://github.com/owncloud/android/issues/4612)
 
