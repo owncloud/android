@@ -1,0 +1,65 @@
+name: Validate Android source strings
+
+on:
+  push:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-strings:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Install xmlstarlet
+        run: sudo apt-get update && sudo apt-get install -y xmlstarlet
+
+      - name: Validate source strings
+        run: |
+          xml_file="owncloudApp/src/main/res/values/strings.xml"
+          has_errors=0
+
+          # ANSI-C quoting to read characters correctly
+          forbidden_values=($'\'' $'"' $'@' $'\n' $'\t')
+          forbidden_labels=($'\'' $'"' $'@' '\n' '\t')
+          escaped_values=($'\\\'' $'\\"' $'\\@' $'\\n' $'\\t')
+
+          # Take one line every lap
+          while IFS= read -r line; do
+            string_name="${line%%^*}"
+            string_value="${line#*^}"
+            check_value="$string_value"
+
+            # Check if the string contains any of the escaped_values and remove it
+            for escaped in "${escaped_values[@]}"; do
+              check_value="${check_value//"$escaped"/}"
+            done
+
+            # Check if the string contains any of the forbidden_values
+            found_forbidden=()
+            # Getting the index with !
+            for i in "${!forbidden_values[@]}"; do
+              if [[ "$check_value" == *"${forbidden_values[$i]}"* ]]; then
+                found_forbidden+=("${forbidden_labels[$i]}")
+              fi
+            done
+
+            if (( ${#found_forbidden[@]} > 0 )); then
+              echo "Source string \"$string_name\" contains forbidden characters: ${found_forbidden[*]}"
+              has_errors=1
+            fi
+          done < <(
+            xmlstarlet sel \
+              -t \
+              -m '/resources/string' \
+              -v '@name' \
+              -o '^' \
+              -v '.' \
+              -n \
+              "$xml_file"
+          )
+
+          exit $has_errors
