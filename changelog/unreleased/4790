@@ -1,0 +1,6 @@
+Bugfix: Reduce space header size after rotating device
+
+The space header height has been reduced in landscape orientation.
+
+https://github.com/owncloud/android/issues/4625
+https://github.com/owncloud/android/pull/4790
