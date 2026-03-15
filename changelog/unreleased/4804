@@ -1,0 +1,5 @@
+Change: Update actions dependencies to be compliant with Node24 requirements 
+
+Some dependencies and "uses" clauses in GitHub Actions workflows have been updated to newer versions that support Node24
+
+https://github.com/owncloud/android/pull/4804
