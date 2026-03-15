@@ -142,6 +142,7 @@
     <string name="auth_oauth_failure">Das Zugriffstoken ist abgelaufen oder ungültig geworden. Melden Sie sich erneut an, um wieder Zugriff zu erhalten.</string>
     <string name="auth_oauth_failure_snackbar_action">Einloggen</string>
     <string name="auth_check_server">Überprüfe den Server</string>
+    <string name="auth_host_url">Server Adresse https://&#8230;</string>
     <string name="auth_username">Benutzername</string>
     <string name="auth_password">Passwort</string>
     <string name="auth_register">Ist %1$s neu für dich?</string>
@@ -174,6 +175,7 @@
     <string name="spaces_list_empty_subtitle">Sie haben keinen Zugriff auf einen Space!</string>
     <string name="file_list_empty_subtitle_available_offline">Dateien und Ordner, die du als offline verfügbar markierst, werden hier angezeigt.</string>
     <string name="file_list_empty_subtitle_shared_by_links">Dateien und Ordner, die du per Link teilst, werden hier erscheinen.</string>
+    <string name="file_list_loading">Lade&#8230;</string>
     <string name="file_list_no_app_for_file_type">Keine App für diesen Dateityp gefunden</string>
     <string name="file_list_no_app_for_perform_action">Keine App für diese Aktion gefunden</string>
     <string name="local_file_list_empty">Es befinden sich keine Dateien in diesem Ordner.</string>
@@ -211,6 +213,7 @@
     <string name="common_back">Zurück</string>
     <string name="common_save_exit">Speichern &amp; verlassen</string>
     <string name="common_error">Fehler</string>
+    <string name="common_loading">Lade&#8230;</string>
     <string name="common_unknown">unbekannt</string>
     <string name="common_error_unknown">Unbekannter Fehler</string>
     <string name="common_pending">Ausstehend</string>
@@ -220,6 +223,7 @@
     <string name="create_account">Account erstellen</string>
     <string name="upload_chooser_title">Hochladen von (Quelle)</string>
     <string name="uploader_info_dirname">Ordnername</string>
+    <string name="uploader_upload_in_progress_ticker">Hochladen&#8230;</string>
     <string name="uploader_upload_in_progress_content">%1$d%% Hochladen %2$s</string>
     <string name="uploader_upload_succeeded_ticker">Hochladen erfolgreich</string>
     <string name="uploader_upload_succeeded_content_single">%1$s hochgeladen</string>
@@ -270,6 +274,7 @@
     <string name="uploader_upload_canceled_ticker">Hochladen abgebrochen</string>
     <string name="downloader_download_canceled_ticker">Herunterladen abgebrochen</string>
     <string name="downloader_download_enqueued_ticker">Herunterladen von %1$s in Warteschlange eingereiht</string>
+    <string name="downloader_download_in_progress_ticker">Herunterladen&#8230;</string>
     <string name="downloader_download_in_progress_content">%1$d%% Herunterladen %2$s</string>
     <string name="downloader_download_succeeded_ticker">Herunterladen erfolgreich</string>
     <string name="downloader_download_succeeded_content">%1$s heruntergeladen</string>
@@ -343,6 +348,8 @@
     <string name="media_forward_description">Vorspulen Knopf</string>
     <string name="upload_from_camera_title">Kamerabild</string>
 
+    <string name="auth_getting_authorization">Genehmigung einholen&#8230;</string>
+    <string name="auth_trying_to_login">Anmeldeversuch&#8230;</string>
     <string name="auth_no_net_conn_title">Keine Netzwerkverbindung</string>
     <string name="auth_nossl_plain_ok_title">Sichere Verbindung nicht verfügbar.</string>
     <string name="auth_connection_established">Verbindung hergestellt</string>
@@ -522,6 +529,8 @@
     <string name="log_send_history_button">versende die Chronik</string>
     <string name="log_send_no_mail_app">Es wurde keine App gefunden die Logs verschicken kann. Bitte installiere eine App die E-Mails verschicken kann.</string>
     <string name="log_send_mail_subject">%1$s Android-App Meldungen</string>
+    <string name="log_progress_dialog_text">Lade Daten&#8230;</string>
+
     <string name="actionbar_select_all">Alle auswählen</string>
     <string name="actionbar_select_inverse">Selektion umkehren</string>
 
@@ -649,6 +658,7 @@
     <string name="share_no_public_links">Bisher wurde kein öffentlicher Link erstellt.</string>
     <string name="share_no_link_in_this_share">Diese Freigabe hat keinen Link.</string>
     <string name="share_warning_about_forwarding_public_links">Alle mit dem Link haben Zugriff auf die Datei oder den Ordner.</string>
+    <string name="share_warning_about_forwarding_space_public_links">Jeder, der den Link hat, hat Zugang zu dem Raum.</string>
     <string name="share_via_link_default_password">*****</string>
     <string name="share_via_link_password_enforced_label">Passwort *</string>
     <string name="share_via_link_expiration_date_enforced_label">Ablaufdatum *</string>
@@ -706,6 +716,7 @@
     <string name="scoped_storage_wizard_explanation">Es wurde(n) %1$s der Daten auf externem Speicher gefunden. Diese werden auf den sicheren Speicher auf dem Gerät verschoben. Verbleibende Dateien auf externem Speicher werden nach der Migration aufgeräumt, um Duplikate und Sicherheitslücken vorzubeugen.</string>
     <string name="scoped_storage_wizard_intro">Ihre App wurde aktualisiert. Dieses Anwendungs-Update migriert Ihre Dateien an einen sichereren Ort auf Ihrem Gerät. Diese einmalige Datenmigration ist erforderlich und kann bis zu einer Minute oder länger dauern.</string>
     <string name="scoped_storage_wizard_intro_button">Lass uns loslegen</string>
+    <string name="scoped_storage_wizard_not_enough_space_warning">&#9888;️ Der freie Speicherplatz auf Ihrem Gerät ist derzeit begrenzt. Es kann sein, dass einige Dateien nicht übertragen werden. Bitte stellen Sie sicher, dass alle heruntergeladenen Dateien nach Abschluss des Vorgangs weiterhin vorhanden sind.</string>
     <string name="scoped_storage_wizard_migrate_and_clean_button">Jetzt migrieren</string>
     <string name="scoped_storage_wizard_migration_completed">Die Migration war erfolgreich. Deine Daten sind jetzt sicherer als jemals zuvor.</string>
     <string name="scoped_storage_wizard_migration_completed_access_files_button">Auf Ihre Dateien zugreifen</string>
@@ -726,6 +737,7 @@
 
     <!-- Release Notes -->
     <string name="release_notes_header">Neu in %1$s</string>
+    <string name="release_notes_footer">Danke für die Benutzung %1$s.\n&#10084;</string>
     <string name="release_notes_proceed">Fortfahren</string>
     <string name="release_notes_icon">Icon für Veröffentlichungsnotizen</string>
     <string name="release_notes_bugfixes_title">Geringfügige Fehler behoben</string>
@@ -734,6 +746,11 @@
     <string name="release_notes_4_8_0_subtitle_set_emoji_as_space_image">Benutzer von Infinite Scale mit den entsprechenden Berechtigungen können nun ein Emoji als Space-Bild festlegen.</string>
     <string name="release_notes_4_8_0_title_space_membership">Space Mitgliedschaft</string>
     <string name="release_notes_4_8_0_subtitle_space_membership">Benutzer von Infinite Scale können alle Mitglieder eines Spaces sehen und sie mit den entsprechenden Berechtigungen verwalten</string>
+    <string name="release_notes_4_8_0_title_spaces_permanent_links">Permanente Links für Spaces</string>
+    <string name="release_notes_4_8_0_subtitle_spaces_permanent_links">Nutzer von Infinite Scale können nun einen permanenten Link für einen Bereich abrufen und diesen mit anderen Mitgliedern teilen</string>
+    <string name="release_notes_4_8_0_title_space_public_links">Space öffentliche Links</string>
+    <string name="release_notes_4_8_0_subtitle_space_public_links">Benutzer von Infinite Scale können alle öffentlichen Links eines Bereichs einsehen und diese mit den entsprechenden Berechtigungen verwalten</string>
+
     <!-- Open in web -->
     <string name="ic_action_open_in_web">Öffnen im Webbrowser</string>
     <string name="ic_action_open_with_web">Öffnen in %1$s (web)</string>
@@ -822,6 +839,10 @@
     <string name="content_description_add_member">Neues Mitglied hinzufügen</string>
     <string name="content_description_invite_member_button">Mitglied einladen</string>
     <string name="content_description_expiration_date_switch">Ablaufdatum</string>
+    <string name="content_description_remove_member_button">Mitglied entfernen %1$s</string>
+    <string name="content_description_edit_member_button">Mitglied bearbeiten %1$s</string>
+    <string name="content_description_permanent_link_button">Permanenten Link abrufen</string>
+
     <string name="create_shortcut_dialog_title">Verknüpfung erstellen</string>
     <string name="create_shortcut_dialog_url">URL</string>
     <string name="create_shortcut_dialog_url_information">Die URL muss mit https:// oder http:// beginnen, damit sie im Browser geöffnet werden kann.</string>
@@ -838,6 +859,7 @@
     <string name="create_space_dialog_gb_unit">GB</string>
     <string name="create_space_dialog_empty_error">Der Space Name darf nicht leer sein</string>
     <string name="create_space_dialog_length_error">Der Space Name darf nicht länger als 255 Zeichen lang sein</string>
+    <string name="create_space_dialog_characters_error">Unzulässige Zeichen: / \\ . : \? * &quot; \' &gt; &lt; |</string>
     <string name="create_space_dialog_quota_empty_error">Das Space Kontingent darf nicht leer sein</string>
     <string name="create_space_dialog_quota_zero_error">Das Space Kontingent muss größer als null sein</string>
     <string name="create_space_dialog_quota_too_large_error">Das Space Kontingent darf nicht größer als 1 PB sein</string>
@@ -868,6 +890,7 @@
     <string name="set_space_icon">Setze ein Icon</string>
     <string name="members_title">Mitglieder</string>
     <string name="members_add">Mitglied hinzufügen</string>
+    <string name="members_add_correctly">Das Mitglied wurde ordnungsgemäß eingeladen</string>
     <string name="members_add_failed">Das Benutzer kann nicht eingeladen werden</string>
     <string name="members_add_conflict_error">Wurde bereits in den ausgewählten Sapce eingeladen</string>
     <string name="members_search_failed">Keine Ergebnisse gefunden</string>
@@ -876,8 +899,21 @@
     <string name="members_options">Optionen</string>
     <string name="members_expiration_date">Ablaufdatum</string>
     <string name="members_invite">Einladung</string>
+    <string name="members_remove_dialog_message">Möchten Sie das Mitglied %1$s wirklich entfernen?</string>
+    <string name="members_remove_correctly">Das Mitglied wurde ordnungsgemäß entfernt</string>
+    <string name="members_remove_failed">Das Mitglied konnte nicht entfernt werden</string>
+    <string name="members_edit">Mitglied bearbeiten</string>
+    <string name="members_edit_correctly">Mitglied korrekt editiert</string>
+    <string name="members_edit_failed">Das Mitglied konnte nicht bearbeitet werden</string>
     <string name="member_type_user">Benutzer</string>
     <string name="member_type_group">Gruppe</string>
+    <string name="current_user_label">(ich)</string>
+    <string name="public_link_view">Kann ansehen</string>
+    <string name="public_link_edit">Kann bearbeiten</string>
+    <string name="public_link_upload">Kann hochladen</string>
+    <string name="public_link_create_only">Geheime Dateiablage</string>
+    <string name="public_link_internal">Eingeladene Personen</string>
+
     <string name="feedback_dialog_get_in_contact_description"><![CDATA[ Fragen Sie für Hilfe in unserem <a href=\"%1$s\"><b>Forum</b></a> oder machen Sie einen Beitrag in unserem <a href=\"%2$s\"><b>GitHub repo</b></a>]]></string>
 
     <string name="link_role_accessibility">Link</string>
