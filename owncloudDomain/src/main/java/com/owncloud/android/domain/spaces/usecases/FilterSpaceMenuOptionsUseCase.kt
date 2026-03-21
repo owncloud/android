@@ -45,11 +45,7 @@ class FilterSpaceMenuOptionsUseCase(
 
         val editImagePermission = hasSpacePermission(spacePermissionsResult, DRIVES_MANAGE_PERMISSION)
 
-        val membersPermission = hasSpacePermission(spacePermissionsResult, DRIVES_READ_PERMISSION)
-
-        if (membersPermission) {
-            optionsToShow.add(SpaceMenuOption.MEMBERS)
-        }
+        optionsToShow.add(SpaceMenuOption.MEMBERS)
 
         if (editPermission || (isSpaceManager && currentSpace.isDisabled)) {
             optionsToShow.add(SpaceMenuOption.EDIT)
@@ -87,7 +83,6 @@ class FilterSpaceMenuOptionsUseCase(
     companion object {
         private const val DRIVES_MANAGE_PERMISSION = "libre.graph/driveItem/permissions/update"
         private const val DRIVES_DELETE_PERMISSION = "libre.graph/driveItem/permissions/delete"
-        private const val DRIVES_READ_PERMISSION = "libre.graph/driveItem/permissions/read"
         private const val DRIVES_MANAGER_ROLE = "manager"
     }
 }
