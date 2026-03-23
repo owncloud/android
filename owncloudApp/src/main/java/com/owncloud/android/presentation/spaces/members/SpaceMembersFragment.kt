@@ -170,6 +170,15 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
     }
 
     private fun subscribeToViewModels() {
+        observeRoles()
+        observeSpaceMembers()
+        observeSpacePermissions()
+        observeAddMemberResult()
+        observeRemoveMemberResult()
+        observeEditMemberResult()
+    }
+
+    private fun observeRoles() {
         collectLatestLifecycleFlow(spaceMembersViewModel.roles) { event ->
             event?.let {
                 when (val uiResult = event.peekContent()) {
@@ -186,7 +195,9 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
                 }
             }
         }
+    }
 
+    private fun observeSpaceMembers() {
         collectLatestLifecycleFlow(spaceMembersViewModel.spaceMembers) { event ->
             event?.let {
                 when (val uiResult = event.peekContent()) {
@@ -214,7 +225,9 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
                 }
             }
         }
+    }
 
+    private fun observeSpacePermissions() {
         collectLatestLifecycleFlow(spaceMembersViewModel.spacePermissions) { event ->
             event?.let {
                 when (val uiResult = event.peekContent()) {
@@ -236,7 +249,9 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
                 }
             }
         }
+    }
 
+    private fun observeAddMemberResult() {
         collectLatestLifecycleFlow(spaceMembersViewModel.addMemberResultFlow) { event ->
             event?.peekContent()?.let { uiResult ->
                 when (uiResult) {
@@ -249,7 +264,9 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
                 }
             }
         }
+    }
 
+    private fun observeRemoveMemberResult() {
         collectLatestLifecycleFlow(spaceMembersViewModel.removeMemberResultFlow) { uiResult ->
             when (uiResult) {
                 is UIResult.Loading -> { }
@@ -263,7 +280,9 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
                 }
             }
         }
+    }
 
+    private fun observeEditMemberResult() {
         collectLatestLifecycleFlow(spaceMembersViewModel.editMemberResultFlow) { event ->
             event?.peekContent()?.let { uiResult ->
                 when (uiResult) {
