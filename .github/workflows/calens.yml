@@ -34,3 +34,4 @@ jobs:
           name: ownClouders
           commit_message: "docs: calens changelog updated"
           access_token: ${{ secrets.GH_PAT }}
+          
