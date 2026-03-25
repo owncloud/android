@@ -47,6 +47,7 @@ ownCloud admins and users.
 * Bugfix - Conventional commits' action ignores SBOM automatic commits: [#4808](https://github.com/owncloud/android/pull/4808)
 * Change - Migrate tests to the new kotlinx-coroutines-test API: [#4710](https://github.com/owncloud/android/issues/4710)
 * Change - Increase rating dialog delay: [#4744](https://github.com/owncloud/android/pull/4744)
+* Change - Resource leak in CopyAndUploadContentUrisTask: [#4797](https://github.com/owncloud/android/issues/4797)
 * Change - Stream handling and double-close in UploadFileFromContentUriWorker: [#4798](https://github.com/owncloud/android/issues/4798)
 * Change - Update actions dependencies to be compliant with Node24 requirements: [#4804](https://github.com/owncloud/android/pull/4804)
 * Enhancement - Show members of a space: [#4612](https://github.com/owncloud/android/issues/4612)
@@ -115,6 +116,15 @@ ownCloud admins and users.
    to make it less intrusive for the user.
 
    https://github.com/owncloud/android/pull/4744
+
+* Change - Resource leak in CopyAndUploadContentUrisTask: [#4797](https://github.com/owncloud/android/issues/4797)
+
+   Input and output streams have been closed per URI iteration using
+   try-with-resources to prevent file descriptor and memory leaks when copying
+   multiple content URIs.
+
+   https://github.com/owncloud/android/issues/4797
+   https://github.com/owncloud/android/pull/4806
 
 * Change - Stream handling and double-close in UploadFileFromContentUriWorker: [#4798](https://github.com/owncloud/android/issues/4798)
 
