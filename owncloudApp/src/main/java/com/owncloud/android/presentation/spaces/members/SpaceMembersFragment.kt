@@ -101,7 +101,6 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
             canEditMembers = it.getBoolean(CAN_EDIT_MEMBERS, false)
             canReadMembers = it.getBoolean(CAN_READ_MEMBERS, false)
         }
-        binding.membersRecyclerView.isVisible = canReadMembers
 
         subscribeToViewModels()
 
@@ -208,11 +207,12 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
                                     spaceMember.roles.contains(OCRoleType.toString(OCRoleType.CAN_MANAGE)) }
                                 spaceMembers = it.members
                                 addMemberRoles = it.roles
-                                val membersForList = if (canReadMembers) spaceMembers else emptyList()
-                                spaceMembersAdapter.setSpaceMembers(membersForList, roles, canRemoveMembers, canEditMembers, numberOfManagers)
-                                val hasLinks = it.links.isNotEmpty()
-                                showOrHideEmptyView(hasLinks)
-                                if (hasLinks) { showSpaceLinks(it.links) }
+                                if (canReadMembers) {
+                                    spaceMembersAdapter.setSpaceMembers(spaceMembers, roles, canRemoveMembers, canEditMembers, numberOfManagers)
+                                    val hasLinks = it.links.isNotEmpty()
+                                    showOrHideEmptyView(hasLinks)
+                                    if (hasLinks) { showSpaceLinks(it.links) }
+                                }
                                 binding.indeterminateProgressBar.isVisible = false
                             }
                         }
@@ -237,9 +237,11 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
                             canRemoveMembers = DRIVES_DELETE_PERMISSION in spacePermissions
                             canEditMembers = DRIVES_UPDATE_PERMISSION in spacePermissions
                             canReadMembers = DRIVES_READ_PERMISSION in spacePermissions
-                            binding.membersRecyclerView.isVisible = canReadMembers
-                            val membersForList = if (canReadMembers) spaceMembers else emptyList()
-                            spaceMembersAdapter.setSpaceMembers(membersForList, roles, canRemoveMembers, canEditMembers, numberOfManagers)
+                            binding.membersListSection.isVisible = canReadMembers
+                            binding.publicLinksSection.isVisible = canReadMembers
+                            if (canReadMembers) {
+                                spaceMembersAdapter.setSpaceMembers(spaceMembers, roles, canRemoveMembers, canEditMembers, numberOfManagers)
+                            }
                         }
                     }
                     is UIResult.Loading -> { }
