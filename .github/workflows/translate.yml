@@ -12,46 +12,11 @@ permissions: {}
 
 jobs:
   update-translations:
-    permissions:
-      contents: read
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-        with:
-          fetch-depth: 0
-          persist-credentials: false
-
-      - name: l10n-push-source
-        uses: transifex/cli-action@584fd205cbe598773b5a81ce711fa44842678189 # v2
-        with:
-          token: ${{ secrets.TX_TOKEN }}
-          args: push -s
-
-      - name: fix-transifex-action
-        run: rm -rf /tmp/tx
-
-      - name: l10n-pull
-        uses: transifex/cli-action@584fd205cbe598773b5a81ce711fa44842678189 # v2
-        with:
-          token: ${{ secrets.TX_TOKEN }}
-          args: pull --force --all --silent
-
-      - name: Generate GitHub App token
-        id: app-token
-        uses: actions/create-github-app-token@21cfef2b496dd8ef5b904c159339626a10ad380e # v1.11.6
-        with:
-          app-id: ${{ secrets.TRANSLATION_APP_ID }}
-          private-key: ${{ secrets.TRANSLATION_APP_PRIVATE_KEY }}
-
-      - name: Create or update translations PR
-        uses: peter-evans/create-pull-request@c0f553fe549906ede9cf27b5156039d195d2ece0 # v8.1.0
-        with:
-          token: ${{ steps.app-token.outputs.token }}
-          branch: chore/translations-update
-          base: master
-          commit-message: "chore: update translations from transifex"
-          title: "chore: update translations from transifex"
-          body: "Automated translation update from Transifex. This pull request is updated on each sync run — merging it will close it and a fresh one will be opened on the next change."
-          delete-branch: true
-          sign-commits: true
+    uses: owncloud/reusable-workflows/.github/workflows/translation-sync.yml@main
+    with:
+      mode: native
+      sub_path: .
+    secrets:
+      TX_TOKEN: ${{ secrets.TX_TOKEN }}
+      TRANSLATION_APP_ID: ${{ secrets.TRANSLATION_APP_ID }}
+      TRANSLATION_APP_PRIVATE_KEY: ${{ secrets.TRANSLATION_APP_PRIVATE_KEY }}
