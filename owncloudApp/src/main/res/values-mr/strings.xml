@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- GLOBAL -->
+    <string name="global_name">नाव</string>
+    <string name="actionbar_settings">सेटिंग्ज</string>
+    <string name="drawer_item_settings">सेटिंग्ज</string>
+    <string name="prefs_subsection_more">आणखी</string>
+    <string name="action_share">वाटा</string>
+    <string name="common_rename">नाव बदला</string>
+    <string name="share_dialog_title">वाटा</string>
+    <string name="share_privilege_can_edit">बदलू शकतो</string>
+    <string name="create_space_dialog_name">नाव</string>
+    </resources>

@@ -769,6 +769,7 @@
     <string name="content_description_add_share">공유 추가</string>
     <string name="content_description_file_operations">%1$s 작동</string>
     <string name="content_description_create_new_folder">새 폴더 만들기</string>
+    <string name="content_description_cancel_button">취소</string>
     <string name="create_shortcut_dialog_title">바로가기 만들기</string>
     <string name="create_shortcut_dialog_url">URL</string>
     <string name="create_shortcut_dialog_url_information">URL은 브라우저에서 열릴 수 있도록 반드시 https:// 또는 http://으로 시작해야합니다.</string>

@@ -1,9 +1,65 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="actionbar_settings">Налады</string>
-  <string name="file_list_seconds_ago">Секунд таму</string>
-  <string name="common_yes">Так</string>
-  <string name="common_no">Не</string>
+
+    <!-- GLOBAL -->
+    <string name="global_name">Назва</string>
+    <string name="global_size">Памер</string>
+    <string name="actionbar_upload">Запампаваць</string>
+    <string name="actionbar_upload_files">Файлы</string>
+    <string name="actionbar_mkdir">Новая папка</string>
+    <string name="actionbar_settings">Налады</string>
+    <string name="actionbar_send_file">Адправіць</string>
+    <string name="drawer_item_all_files">Усе файлы</string>
+    <string name="drawer_item_shared_by_link_files">Абагулена праз спасылку</string>
+    <string name="drawer_item_settings">Налады</string>
+    <string name="drawer_close">Закрыць</string>
+    <string name="prefs_category_general">Агульныя</string>
+    <string name="prefs_subsection_security">Бяспека</string>
+    <string name="prefs_subsection_advanced">Дасведчаны</string>
+    <string name="prefs_show_hidden_files">Паказваць схаваныя файлы</string>
+    <!-- Bottom navigation bar -->
+    <string name="bottom_nav_files">Файлы</string>
+    <string name="bottom_nav_personal">Асабістыя</string>
+    <string name="auth_username">Імя карыстальніка</string>
+    <string name="auth_password">Пароль</string>
+    <string name="sync_string_files">Файлы</string>
+    <string name="setup_btn_login">Увайсці</string>
+    <string name="uploader_btn_upload_text">Запампаваць</string>
+    <string name="uploader_wrn_no_account_quit_btn_text">Выйсці</string>
+    <string name="file_list_seconds_ago">Секунд таму</string>
+    <string name="file_list_empty_title_all_files">Тут няма файлаў</string>
+    <string name="filedetails_download">Спампаваць</string>
+    <string name="action_share">Абагуліць</string>
+    <string name="common_yes">Так</string>
+    <string name="common_no">Не</string>
     <string name="common_error">Памылка</string>
-  <string name="folder_picker_choose_button_text">Выбар</string>
-</resources>
+    <string name="change_password">Змяніць пароль</string>
+    <string name="uploads_view_upload_status_unknown_fail">Невядомая памылка</string>
+    <string name="common_rename">Перайменаваць</string>
+    <string name="activity_chooser_send_file_title">Адправіць</string>
+
+    <string name="actionbar_select_all">Выбраць усе</string>
+    <string name="actionbar_move">Перамясціць</string>
+    <string name="folder_picker_choose_button_text">Выбар</string>
+    <string name="username">Імя карыстальніка</string>
+
+    <string name="file_list__footer__folder">1 папка</string>
+    <string name="file_list__footer__file">1 файл</string>
+    <string name="file_list__footer__file_and_folder">1 файл, 1 папка</string>
+    <string name="share_dialog_title">Абагуліць</string>
+    <string name="share_cancel_public_link_button">Скасаваць</string>
+    <string name="share_confirm_public_link_button">Захаваць</string>
+    <string name="share_via_link_password_label">Пароль</string>
+    <string name="share_search">Пошук</string>
+
+    <string name="action_upload_clear">Ачысціць</string>
+
+    <string name="prefs_delete_local_files_entries_never">Ніколі</string>
+    <string name="insecure_http_url_continue_button">Працягнуць</string>
+
+    <string name="content_description_search">Пошук</string>
+    <string name="create_space_dialog_name">Назва</string>
+    <string name="member_type_user">Карыстальнік</string>
+    <string name="member_type_group">Група</string>
+    <string name="link_role_accessibility">Спасылка</string>
+    </resources>

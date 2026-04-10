@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- GLOBAL -->
+    <string name="global_name">නම</string>
+    <string name="global_date">දිනය</string>
+    <string name="global_size">ප්‍රමාණය</string>
+    <string name="actionbar_search">මෙම බහාලුම සොයන්න</string>
+    <string name="actionbar_upload">උඩුගත කිරීම</string>
+    <string name="actionbar_upload_files">ගොනු</string>
+    <string name="actionbar_mkdir">නව බහාලුම</string>
+    <string name="actionbar_settings">සැකසුම්</string>
+    <string name="actionbar_see_details">විස්තර</string>
+    <string name="actionbar_send_file">යවන්න</string>
+    <string name="actionbar_descending">අවරෝහණ</string>
+    <string name="drawer_item_settings">සැකසුම්</string>
+    <string name="drawer_close">වසන්න</string>
+    <string name="drawer_open">විවෘත කරන්න</string>
+    <string name="drawer_help">උදව්</string>
+    <string name="prefs_category_general">සාමාන්යයෙන්</string>
+    <string name="prefs_subsection_more">තව</string>
+    <string name="prefs_accounts">ගිණුම්</string>
+    <string name="prefs_manage_accounts">ගිණුම් කළමනාකරනය</string>
+    <string name="prefs_subsection_advanced">දියුණු/උසස්</string>
+    <string name="prefs_help">උදව්</string>
+    <!-- Bottom navigation bar -->
+    <string name="bottom_nav_files">ගොනු</string>
+    <string name="bottom_nav_personal">පෞද්ගලික</string>
+    <string name="auth_username">පරිශීලක නම</string>
+    <string name="auth_password">මුර පදය</string>
+    <string name="sync_string_files">ගොනු</string>
+    <string name="setup_btn_login">ප්රවේශ වන්න</string>
+    <string name="uploader_btn_upload_text">උඩුගත කිරීම</string>
+    <string name="uploader_wrn_no_account_title">ගිණුමක් හමු නොවීය</string>
+    <string name="uploader_wrn_no_account_setup_btn_text">ස්ථාපනය</string>
+    <string name="uploader_wrn_no_account_quit_btn_text">නික්මෙන්න</string>
+    <string name="file_list_seconds_ago">මදකට පෙර</string>
+    <string name="file_list_folder">ෆෝල්ඩරය</string>
+    <string name="file_list_folders">ෆෝල්ඩර</string>
+    <string name="file_list_file">ගොනුව</string>
+    <string name="file_list_files">ගොනුව</string>
+    <string name="filedetails_select_file">වැඩි විස්තර සඳහා ගොනුවක් ස්පර්ෂ කරන්න</string>
+    <string name="filedetails_size">විශාලත්වය:</string>
+    <string name="filedetails_type">ගණය:</string>
+    <string name="filedetails_created">සිදු වූ දිනය:</string>
+    <string name="filedetails_modified">වෙනස් කළ දිනය:</string>
+    <string name="filedetails_download">භාගත කරන්න</string>
+    <string name="action_share">බෙදා හදා ගන්න</string>
+    <string name="common_yes">ඔව්</string>
+    <string name="common_no">එපා</string>
+    <string name="common_error">දෝෂය</string>
+    <string name="common_important">වැදගත්</string>
+    <string name="change_password">මුරපදය වෙනස් කිරීම</string>
+    <string name="create_account">ගැන සාදන්න</string>
+    <string name="uploader_info_dirname">ෆොල්ඩරයේ නම</string>
+    <string name="uploader_upload_succeeded_ticker">උඩුගත කිරීම සාර්ථකයි</string>
+    <string name="uploader_upload_failed_ticker">උඩුගත කිරීම අසාර්ථකයි</string>
+    <string name="uploads_view_group_finished_uploads">උඩුගත කරන ලදී</string>
+    <string name="uploads_view_upload_status_failed_permission_error">අඩංගු දෝෂයක්</string>
+    <string name="uploads_view_upload_status_conflict">ගැටුම</string>
+    <string name="downloader_download_succeeded_ticker">බාගත කිරීම සාර්ථකයි</string>
+    <string name="downloader_download_failed_ticker">බාගත කිරීම අසාර්ථකයි</string>
+    <string name="common_choose_account">ගැන තෝරාගන්න</string>
+    <string name="auth_no_net_conn_title">ජාල සම්බන්ධතාවක් නොමැත</string>
+    <string name="auth_nossl_plain_ok_title">ආරක්ෂිත සම්බන්ධතාවක් නොලැබුණි</string>
+    <string name="auth_connection_established">සම්බන්ධතාවක් සාදන ලදී</string>
+    <string name="auth_not_configured_title">විකෘති වූ හැඩගැසුමක්</string>
+    <string name="auth_unknown_error_title">නොදන්නා දෝෂයක් ඇතිවීම</string>
+    <string name="auth_ssl_general_error_title">SSL ආරම්භ කිරීම අසාර්ථකයි</string>
+    <string name="auth_bad_oc_version_title">හඳුනාගත නොහැකි අනුවාදයක්</string>
+    <string name="auth_wrong_connection_title">සම්බන්ධයක් ඇතිකර ගැනීමට නොහැකි විය</string>
+    <string name="auth_secure_connection">රක්ෂිත සම්බන්ධතාවක් සාදා ඇත</string>
+    <string name="common_rename">නැවත නම් කරන්න</string>
+    <string name="common_remove">ඉවත් කරන්න </string>
+    <string name="confirmation_remove_local">පෙදෙසි පමණක්</string>
+    <string name="remove_success_msg">සාර්ථක ඉවත්කිරීමක්</string>
+    <string name="remove_fail_msg">ඉවත් කිරීම සම්පූර්ණ කළ නොහැක</string>
+    <string name="rename_server_fail_msg">නැවත නම් කිරීම සම්පුර්ණ කළ නොහැකි විය</string>
+    <string name="filename_forbidden_characters_from_server">ගොනු නාමයේ අවම වශයෙන් එක් අවලංගු අක්ෂරයක්වත් අඩංගු වේ</string>
+    <string name="wait_a_moment">ටිකක් මොහොතක් සිටින්න</string>
+    <string name="filedisplay_no_file_selected">ගොනුවක් තෝරා නැත</string>
+    <string name="ssl_validator_btn_details_see">විස්තර</string>
+    <string name="ssl_validator_btn_details_hide">සඟවන්න</string>
+    <string name="ssl_validator_label_C">රට:</string>
+    <string name="activity_chooser_send_file_title">යවන්න</string>
+
+    <string name="clipboard_text_copied">පසුරුපුවරුවට පිටපත් විය</string>
+    <string name="prefs_category_accounts">ගිණුම්</string>
+    <string name="prefs_add_account">ගිණුම එකතු කරන්න</string>
+    <string name="drawer_manage_accounts">ගිණුම් කළමනාකරනය</string>
+    <string name="folder_picker_choose_button_text">තෝරා ගැනීම</string>
+    <string name="auth_host_address">සේවාදායකයේ ලිපිනය</string>
+    <string name="username">පරිශීලක නම</string>
+
+    <string name="share_dialog_title">බෙදා හදා ගන්න</string>
+    <string name="share_with_user_section_title">පරිශීලකයින් සහ කණ්ඩායම්</string>
+    <string name="share_cancel_public_link_button">එපා</string>
+    <string name="share_confirm_public_link_button">සුරකින්න</string>
+    <string name="share_via_link_password_label">මුර පදය</string>
+    <string name="share_via_link_copy_password_button">පිටපත්</string>
+    <string name="share_via_link_edit_permission_read_only_label">බාගත / බලන්න</string>
+    <string name="share_with_title">බෙදාගන්න</string>
+    <string name="share_search">සොයන්න</string>
+
+    <string name="share_privilege_can_share">බෙදාගන්න පුළුවන්</string>
+    <string name="share_privilege_can_edit">සංස්කරණය කළ හැක</string>
+    <string name="share_privilege_can_edit_create">සදන්න</string>
+    <string name="share_privilege_can_edit_change">වෙනස් කිරීම</string>
+    <string name="share_privilege_can_edit_delete">මකන්න</string>
+    <plurals name="items_selected_count">
+        <item quantity="one">%d තෝරා ඇත</item>
+        <item quantity="other">%d තෝරා ඇත</item>
+    </plurals>
+
+    <string name="tab_label_ascii">පෙළ</string>
+
+    <string name="fab_refresh_text">නැවුම් කරන්න</string>
+    <string name="insecure_http_url_continue_button">දිගටම කරගෙන යන්න</string>
+
+    <string name="content_description_manage_accounts">ගිණුම් කළමනාකරනය</string>
+    <string name="content_description_search">සොයන්න</string>
+    <string name="content_description_cancel_button">එපා</string>
+    <string name="create_shortcut_dialog_url">URL</string>
+    <string name="create_space_dialog_name">නම</string>
+    <string name="create_space_dialog_quota">සලාකය</string>
+    <string name="pattern_label">රටාව</string>
+    <string name="login_label">ප්‍රවිශ්ටය</string>
+    <string name="details_label">විස්තර</string>
+    </resources>

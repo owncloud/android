@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- GLOBAL -->
+    <string name="global_name">﻿ಹೆಸರು</string>
+    <string name="global_date">ದಿನಾಂಕ</string>
+    <string name="global_size">﻿ ಗಾತ್ರ</string>
+    <string name="actionbar_upload">ಪೇರಿಸು</string>
+    <string name="actionbar_upload_files">﻿ಕಡತಗಳು</string>
+    <string name="actionbar_mkdir">﻿ಹೊಸ ಕಡತಕೋಶ</string>
+    <string name="actionbar_settings">ಆಯ್ಕೆ</string>
+    <string name="actionbar_send_file">﻿ಕಳುಹಿಸಿ</string>
+    <string name="fab_new_file">ಹೊಸ ದಾಖಲೆ</string>
+    <string name="drawer_item_all_files">﻿ಎಲ್ಲಾ ಕಡತಗಳು</string>
+    <string name="drawer_item_settings">ಆಯ್ಕೆ</string>
+    <string name="drawer_close">ಮುಚ್ಚು</string>
+    <string name="drawer_open">ತೆರೆ</string>
+    <string name="drawer_help">﻿ಸಹಾಯ</string>
+    <string name="prefs_subsection_more">﻿ಇನ್ನಷ್ಟು</string>
+    <string name="prefs_subsection_security">﻿ಭದ್ರತೆ</string>
+    <string name="prefs_help">﻿ಸಹಾಯ</string>
+    <string name="prefs_imprint">ಮುದ್ರೆ</string>
+    <!-- Bottom navigation bar -->
+    <string name="bottom_nav_files">﻿ಕಡತಗಳು</string>
+    <string name="bottom_nav_personal">﻿ವೈಯಕ್ತಿಕ</string>
+    <string name="auth_username">﻿ಬಳಕೆಯ ಹೆಸರು</string>
+    <string name="auth_password">ಗುಪ್ತಪದ</string>
+    <string name="sync_string_files">﻿ಕಡತಗಳು</string>
+    <string name="uploader_btn_upload_text">ಪೇರಿಸು</string>
+    <string name="filedetails_download">ಪ್ರತಿಯನ್ನು ಸ್ಥಳೀಯವಾಗಿ ಉಳಿಸಿಕೊಳ್ಳಿ</string>
+    <string name="action_share">﻿ಹಂಚಿಕೊಳ್ಳಿ</string>
+    <string name="common_yes">﻿ಹೌದು</string>
+    <string name="common_no">﻿ಇಲ್ಲ</string>
+    <string name="common_error">﻿ತಪ್ಪಾಗಿದೆ</string>
+    <string name="common_pending">﻿ಬಾಕಿ ಇದೆ</string>
+    <string name="change_password">ಗುಪ್ತ ಪದವನ್ನು ಬದಲಾಯಿಸಿ</string>
+    <string name="uploads_view_group_file_count">%d ಕಡತ</string>
+    <string name="uploads_view_group_file_count_single">%d ಕಡತ</string>
+    <string name="uploads_view_upload_status_unknown_fail">ಗೊತ್ತಿಲ್ಲದ ದೋಷ</string>
+    <string name="common_rename">﻿ಮರುಹೆಸರಿಸು</string>
+    <string name="common_remove">ತೆಗೆದುಹಾಕಿ</string>
+    <string name="sync_file_not_found_msg">ಕಡತ ಕಂಡುಬಂದಿಲ್ಲ</string>
+    <string name="activity_chooser_send_file_title">﻿ಕಳುಹಿಸಿ</string>
+
+    <string name="actionbar_select_all">﻿ಎಲ್ಲಾ ಆಯ್ಕೆ ಮಾಡಿ</string>
+    <string name="folder_picker_choose_button_text">﻿ಆಯ್ಕೆ</string>
+    <string name="auth_host_address">﻿ಪರಿಚಾರಕ ಗಣಕಯಂತ್ರದ ವಿಳಾಸ</string>
+    <string name="username">﻿ಬಳಕೆಯ ಹೆಸರು</string>
+
+    <string name="file_list__footer__folders">%1$d ಕೋಶ(ಗಳು)</string>
+    <string name="file_list__footer__files">%1$d ಕಡತ</string>
+    <string name="share_dialog_title">﻿ಹಂಚಿಕೊಳ್ಳಿ</string>
+    <string name="share_cancel_public_link_button">﻿ರದ್ದು</string>
+    <string name="share_confirm_public_link_button">﻿ಉಳಿಸಿ</string>
+    <string name="share_via_link_expiration_date_label">﻿ಮುಕ್ತಾಯ</string>
+    <string name="share_via_link_password_label">ಗುಪ್ತಪದ</string>
+    <string name="share_with_title">ಜೊತೆ ಹಂಚಿಕೊಳ್ಳಿ</string>
+    <string name="share_search">﻿ಹುಡುಕು</string>
+
+    <string name="share_privilege_can_share">﻿ಹಂಚಿಕೊಳ್ಳಬಹುದು</string>
+    <string name="share_privilege_can_edit">﻿ಸಂಪಾದಿಸಬಹುದು</string>
+    <string name="share_privilege_can_edit_create">ಸೃಷ್ಟಿಸು</string>
+    <string name="share_privilege_can_edit_change">﻿ಬದಲಾವಣೆ</string>
+    <string name="share_privilege_can_edit_delete">﻿ಅಳಿಸಿ</string>
+    <string name="action_upload_clear">ತೆರವುಗೊಳಿಸು</string>
+
+    <string name="tab_label_ascii">ವಿಷಯ</string>
+
+    <string name="insecure_http_url_continue_button">﻿ಮುಂದುವರಿಸಿ</string>
+
+    <string name="content_description_search">﻿ಹುಡುಕು</string>
+    <string name="content_description_cancel_button">﻿ರದ್ದು</string>
+    <string name="create_shortcut_dialog_url">ಜಾಲದ ಕೊಂಡಿ</string>
+    <string name="create_space_dialog_name">﻿ಹೆಸರು</string>
+    <string name="create_space_dialog_quota">ಪಾಲು</string>
+    <string name="disabled_space_label">ನಿಷ್ಕ್ರಿಯಗೊಳಿಸಲಾಗಿದೆ</string>
+    <string name="members_title">ಸದಸ್ಯರು</string>
+    <string name="link_role_accessibility">ಸಂಪರ್ಕ ಕೊಂಡಿ</string>
+    <string name="login_label">ಖಾತೆ ಪ್ರವೇಶಿಸು</string>
+    </resources>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="actionbar_sync">I-refresh ang account</string>
+    <string name="actionbar_upload">Mag-upload</string>
+    <string name="actionbar_upload_from_apps">Content mula sa ibang apps</string>
+    <string name="actionbar_open_with">Buksan gamit ang</string>
+    <string name="actionbar_mkdir">Bagong folder</string>
+    <string name="actionbar_see_details">Mga Detalye</string>
+    <string name="actionbar_send_file">Ipadala</string>
+    <string name="drawer_close">Isara</string>
+    <string name="drawer_open">Buksan</string>
+    <string name="drawer_help">Tulong</string>
+    <string name="prefs_manage_accounts">Pamahalaan ang accounts</string>
+    <string name="prefs_help">Tulong</string>
+    <string name="prefs_recommend">Irekomenda sa kaibigan</string>
+    <string name="recommend_subject">Subukan ang %1$s sa iyong smartphone!</string>
+    <string name="recommend_text">I want to invite you to use %1$s on your smartphone!\nDownload here: %2$s</string>
+
+    <string name="auth_username">Username</string>
+    <string name="auth_password">Password</string>
+    <string name="auth_register">Bago ka ba sa %1$s?</string>
+    <string name="uploader_btn_upload_text">Mag-upload</string>
+    <string name="uploader_wrn_no_account_title">Walang nakitang account</string>
+    <string name="uploader_wrn_no_account_text">Walang mga %1$s account sa iyong device. Mag-set up muna ng account.</string>
+    <string name="uploader_wrn_no_account_quit_btn_text">Umalis</string>
+    <string name="file_list_seconds_ago">(na) segundo ang nakalipas</string>
+    <string name="local_file_list_empty">Walang mga file sa folder na ito.</string>
+    <string name="filedetails_select_file">I-tap ang isang file para magpakita ng karagdagang impormasyon.</string>
+    <string name="filedetails_size">Laki:</string>
+    <string name="filedetails_type">Uri:</string>
+    <string name="filedetails_created">Ginawa:</string>
+    <string name="filedetails_modified">Binago:</string>
+    <string name="filedetails_download">I-download</string>
+    <string name="filedetails_sync_file">I-synchronize</string>
+    <string name="action_share">I-share</string>
+    <string name="common_yes">Oo</string>
+    <string name="common_no">Hindi</string>
+    <string name="common_cancel_sync">I-cancel ang sync</string>
+    <string name="common_save_exit">I-save at i-exit</string>
+    <string name="common_error">Error</string>
+    <string name="change_password">Palitan ang password</string>
+    <string name="delete_account">Tanggalin ang account</string>
+    <string name="create_account">Gumawa ng account</string>
+    <string name="uploader_info_dirname">Pangalan ng folder</string>
+    <string name="uploader_upload_failed_ticker">Hindi na-upload</string>
+    <string name="uploads_view_upload_status_unknown_fail">Hindi kilalang error</string>
+    <string name="downloader_download_failed_ticker">Hindi na-download</string>
+    <string name="downloader_download_failed_content">Hindi nakumpleto ang pag-download sa %1$s</string>
+    <string name="downloader_not_downloaded_yet">Hindi pa nada-download</string>
+    <string name="ssl_validator_btn_details_see">Mga Detalye</string>
+    <string name="activity_chooser_send_file_title">Ipadala</string>
+
+    <string name="drawer_manage_accounts">Pamahalaan ang accounts</string>
+    <string name="username">Username</string>
+
+    <string name="share_dialog_title">I-share</string>
+    <string name="share_cancel_public_link_button">I-cancel</string>
+    <string name="share_via_link_password_label">Password</string>
+    <string name="content_description_manage_accounts">Pamahalaan ang accounts</string>
+    <string name="content_description_cancel_button">I-cancel</string>
+    <string name="details_label">Mga Detalye</string>
+    </resources>

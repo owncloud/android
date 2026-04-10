@@ -1,19 +1,29 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="actionbar_upload_files">ဖိုင်များ</string>
-  <string name="drawer_help">အကူအညီ</string>
-  <string name="prefs_help">အကူအညီ</string>
-  <string name="auth_username">သုံးစွဲသူအမည်</string>
-  <string name="auth_password">စကားဝှက်</string>
-  <string name="sync_string_files">ဖိုင်များ</string>
-  <string name="file_list_seconds_ago">စက္ကန့်အနည်းငယ်က</string>
-  <string name="filedetails_download">ဒေါင်းလုတ်</string>
-  <string name="common_yes">ဟုတ်</string>
-  <string name="common_no">မဟုတ်ဘူး</string>
+
+    <string name="actionbar_upload_files">ဖိုင်များ</string>
+    <string name="drawer_help">အကူအညီ</string>
+    <string name="prefs_subsection_advanced">အဆင့်မြင့်</string>
+    <string name="prefs_help">အကူအညီ</string>
+    <!-- Bottom navigation bar -->
+    <string name="bottom_nav_files">ဖိုင်များ</string>
+    <string name="auth_username">သုံးစွဲသူအမည်</string>
+    <string name="auth_password">စကားဝှက်</string>
+    <string name="sync_string_files">ဖိုင်များ</string>
+    <string name="setup_btn_login">ဝင်ရောက်ရန်</string>
+    <string name="file_list_seconds_ago">စက္ကန့်အနည်းငယ်က</string>
+    <string name="filedetails_download">ဒေါင်းလုတ်</string>
+    <string name="common_yes">ဟုတ်</string>
+    <string name="common_no">မဟုတ်ဘူး</string>
     <string name="folder_picker_choose_button_text">ရွေးချယ်</string>
-  <string name="share_cancel_public_link_button">ပယ်ဖျက်မည်</string>
-  <string name="share_via_link_password_label">စကားဝှက်</string>
-  <string name="share_privilege_can_edit">ပြင်ဆင်နိုင်</string>
-  <string name="share_privilege_can_edit_create">ဖန်တီးမည်</string>
-  <string name="share_privilege_can_edit_delete">ဖျက်မည်</string>
-</resources>
+    <string name="username">သုံးစွဲသူအမည်</string>
+
+    <string name="share_cancel_public_link_button">ပယ်ဖျက်မည်</string>
+    <string name="share_via_link_password_label">စကားဝှက်</string>
+    <string name="share_privilege_can_edit">ပြင်ဆင်နိုင်</string>
+    <string name="share_privilege_can_edit_create">ဖန်တီးမည်</string>
+    <string name="share_privilege_can_edit_delete">ဖျက်မည်</string>
+    <string name="tab_label_ascii">စာသား</string>
+
+    <string name="content_description_cancel_button">ပယ်ဖျက်မည်</string>
+    </resources>

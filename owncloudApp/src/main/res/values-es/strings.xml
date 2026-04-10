@@ -745,7 +745,6 @@
     <string name="release_notes_4_8_0_subtitle_spaces_permanent_links">Usuarios de Infinite Scale pueden ahora obtener un enlace permanence a un space y compartirlo con otros miembros</string>
     <string name="release_notes_4_8_0_title_space_public_links">Enlaces públicos a spaces</string>
     <string name="release_notes_4_8_0_subtitle_space_public_links">Usuarios de Infinite Scale pueden ahora ver todos los enlaces a un space y gestionarlos si tienen los permisos adecuados.</string>
-
     <!-- Open in web -->
     <string name="ic_action_open_in_web">Abrir en web</string>
     <string name="ic_action_open_with_web">Open in %1$s (web)</string>
@@ -835,7 +834,6 @@
     <string name="content_description_remove_member_button">Eliminar miembro %1$s</string>
     <string name="content_description_edit_member_button">Editar miembro %1$s</string>
     <string name="content_description_permanent_link_button">Obtener enlace permanente</string>
-
     <string name="create_shortcut_dialog_title">Crear un acceso directo</string>
     <string name="create_shortcut_dialog_url">URL</string>
     <string name="create_shortcut_dialog_url_information">La URL tiene que empezar con https:// o http:// para que pueda ser abierta por el navegador</string>
@@ -901,12 +899,12 @@
     <string name="member_type_user">Usuario</string>
     <string name="member_type_group">Grupo</string>
     <string name="current_user_label">(yo)</string>
+
     <string name="public_link_view">Puede ver</string>
     <string name="public_link_edit">Puede editar</string>
     <string name="public_link_upload">Puede cargar</string>
     <string name="public_link_create_only">Subida secreta de fichero</string>
     <string name="public_link_internal">Personas invitadas</string>
-
     <string name="feedback_dialog_get_in_contact_description"><![CDATA[ Solicita ayuda en nuestro <a href=\"%1$s\"><b>foro</b></a> o contribuye con nosotros en nuestro <a href=\"%2$s\"><b>repositorio GitHub</b></a>]]></string>
 
     <string name="link_role_accessibility">Enlace</string>
