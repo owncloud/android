@@ -80,7 +80,7 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
     private var spaceMembers: List<SpaceMember> = emptyList()
     private var listener: SpaceMemberFragmentListener? = null
     private var canRemoveMembersAndLinks = false
-    private var canEditMembers = false
+    private var canEditMembersAndLinks = false
     private var canReadMembers = false
     private var numberOfManagers = 1
 
@@ -112,7 +112,7 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
         currentSpace = requireArguments().getParcelable<OCSpace>(ARG_CURRENT_SPACE) ?: return
         savedInstanceState?.let {
             canRemoveMembersAndLinks = it.getBoolean(CAN_REMOVE_MEMBERS, false)
-            canEditMembers = it.getBoolean(CAN_EDIT_MEMBERS, false)
+            canEditMembersAndLinks = it.getBoolean(CAN_EDIT_MEMBERS, false)
             canReadMembers = it.getBoolean(CAN_READ_MEMBERS, false)
         }
 
@@ -158,7 +158,7 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putBoolean(CAN_REMOVE_MEMBERS, canRemoveMembersAndLinks)
-        outState.putBoolean(CAN_EDIT_MEMBERS, canEditMembers)
+        outState.putBoolean(CAN_EDIT_MEMBERS, canEditMembersAndLinks)
         outState.putBoolean(CAN_READ_MEMBERS, canReadMembers)
     }
 
@@ -195,6 +195,10 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
             positiveButtonListener = { _: DialogInterface?, _: Int -> spaceLinksViewModel.removePublicLink(publicLinkId) },
             negativeButtonText = getString(R.string.common_no)
         )
+    }
+
+    override fun onEditPublicLink(publicLink: OCLink) {
+
     }
 
     private fun subscribeToViewModels() {
@@ -359,7 +363,7 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
     private fun checkPermissions(spacePermissions: List<String>) {
         val hasCreatePermission = DRIVES_CREATE_PERMISSION in spacePermissions
         canRemoveMembersAndLinks = DRIVES_DELETE_PERMISSION in spacePermissions
-        canEditMembers = DRIVES_UPDATE_PERMISSION in spacePermissions
+        canEditMembersAndLinks = DRIVES_UPDATE_PERMISSION in spacePermissions
         canReadMembers = DRIVES_READ_PERMISSION in spacePermissions
         binding.apply {
             addMemberButton.isVisible = hasCreatePermission
@@ -381,7 +385,7 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
             spaceMembers = spaceMembers,
             roles = roles,
             canRemoveMembers = canRemoveMembersAndLinks,
-            canEditMembers = canEditMembers,
+            canEditMembers = canEditMembersAndLinks,
             numberOfManagers = numberOfManagers
         )
     }
@@ -398,7 +402,8 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
                     Date(0)
                 }
             },
-            canRemoveLinks = canRemoveMembersAndLinks
+            canRemoveLinks = canRemoveMembersAndLinks,
+            canEditLinks = canEditMembersAndLinks
         )
     }
 
