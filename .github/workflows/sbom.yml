@@ -98,6 +98,14 @@ jobs:
             diff sbom_prev_normalized.json sbom_current_normalized.json || true
           fi
 
+      # Generate a token to perform the commit in the next step 
+      - name: Generate GitHub App token
+        id: app-token
+        uses: actions/create-github-app-token@1b10c78c7865c340bc4f6099eb2f838309f1e8c3 # v3.1.1
+        with:
+          app-id: ${{ secrets.TRANSLATION_APP_ID }}
+          private-key: ${{ secrets.TRANSLATION_APP_PRIVATE_KEY }}
+
       # Commit the SBOM file only if it differs from master to avoid unnecessary commits
       - name: Commit and push updated SBOM
         if: steps.compare.outputs.no_changes == 'false'
@@ -107,4 +115,4 @@ jobs:
           files: sbom.json
           email: devops@owncloud.com
           name: ownClouders
-          access_token: ${{ secrets.GH_PAT }}
+          access_token: ${{ steps.app-token.outputs.token }}
