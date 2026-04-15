@@ -21,6 +21,10 @@
 package com.owncloud.android.presentation.spaces.links
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.owncloud.android.domain.capabilities.model.CapabilityBooleanType
+import com.owncloud.android.domain.capabilities.model.OCCapability
+import com.owncloud.android.domain.capabilities.usecases.GetStoredCapabilitiesUseCase
 import com.owncloud.android.domain.links.model.OCLinkType
 import com.owncloud.android.domain.links.usecases.AddLinkUseCase
 import com.owncloud.android.domain.links.usecases.RemoveLinkUseCase
@@ -34,9 +38,11 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 class SpaceLinksViewModel(
     private val addLinkUseCase: AddLinkUseCase,
+    private val getStoredCapabilitiesUseCase: GetStoredCapabilitiesUseCase,
     private val removeLinkUseCase: RemoveLinkUseCase,
     private val accountName: String,
     private val space: OCSpace,
@@ -52,8 +58,13 @@ class SpaceLinksViewModel(
     private val _removeLinkResultFlow = MutableSharedFlow<UIResult<Unit>>()
     val removeLinkResultFlow: SharedFlow<UIResult<Unit>> = _removeLinkResultFlow
 
+    private var capabilities: OCCapability? = null
+
     init {
         _addPublicLinkUIState.value = AddPublicLinkUIState()
+        viewModelScope.launch(coroutineDispatcherProvider.io) {
+            capabilities = getStoredCapabilitiesUseCase(GetStoredCapabilitiesUseCase.Params(accountName))
+        }
     }
 
     fun onPermissionSelected(permission: OCLinkType) {
@@ -98,6 +109,14 @@ class SpaceLinksViewModel(
             )
         )
     }
+
+    fun checkPasswordEnforced(selectedPermission: OCLinkType) =
+        when(selectedPermission) {
+            OCLinkType.CAN_VIEW -> capabilities?.filesSharingPublicPasswordEnforcedReadOnly == CapabilityBooleanType.TRUE
+            OCLinkType.CAN_EDIT -> capabilities?.filesSharingPublicPasswordEnforcedReadWrite == CapabilityBooleanType.TRUE
+            OCLinkType.CREATE_ONLY -> capabilities?.filesSharingPublicPasswordEnforcedUploadOnly == CapabilityBooleanType.TRUE
+            else -> true
+        }
 
     fun resetViewModel() {
         _addLinkResultFlow.value = null

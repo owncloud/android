@@ -31,19 +31,15 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.owncloud.android.R
 import com.owncloud.android.databinding.AddPublicLinkFragmentBinding
-import com.owncloud.android.domain.capabilities.model.OCCapability
 import com.owncloud.android.domain.links.model.OCLinkType
 import com.owncloud.android.domain.spaces.model.OCSpace
 import com.owncloud.android.extensions.collectLatestLifecycleFlow
 import com.owncloud.android.extensions.hideSoftKeyboard
 import com.owncloud.android.extensions.showErrorInSnackbar
-import com.owncloud.android.presentation.capabilities.CapabilityViewModel
 import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.utils.DisplayUtils
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
-import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
-import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.Locale
 import java.util.TimeZone
@@ -60,13 +56,7 @@ class AddPublicLinkFragment: Fragment(), SetPasswordDialogFragment.SetPasswordLi
             requireArguments().getParcelable(ARG_CURRENT_SPACE)
         )
     }
-    private val capabilityViewModel: CapabilityViewModel by viewModel {
-        parametersOf(
-            accountName
-        )
-    }
 
-    private var capabilities: OCCapability? = null
     private var isPasswordEnforced = true
     private var hasPassword = false
 
@@ -126,18 +116,6 @@ class AddPublicLinkFragment: Fragment(), SetPasswordDialogFragment.SetPasswordLi
                         }
                         showPasswordDialog(uiState.selectedPassword)
                     }
-                }
-            }
-        }
-
-        capabilityViewModel.capabilities.observe(viewLifecycleOwner) { event->
-            when (val uiResult = event.peekContent()) {
-                is UIResult.Success -> {
-                    capabilities = uiResult.data
-                }
-                is UIResult.Loading -> { }
-                is UIResult.Error -> {
-                    Timber.e(uiResult.error, "Failed to retrieve server capabilities")
                 }
             }
         }
@@ -203,7 +181,7 @@ class AddPublicLinkFragment: Fragment(), SetPasswordDialogFragment.SetPasswordLi
             selectedRadioButton.isChecked = true
         }
         val selectedPermission = selectedRadioButton.tag as OCLinkType
-        isPasswordEnforced = capabilityViewModel.checkPasswordEnforced(selectedPermission, capabilities)
+        isPasswordEnforced = spaceLinksViewModel.checkPasswordEnforced(selectedPermission)
         spaceLinksViewModel.onPermissionSelected(selectedPermission)
     }
 

@@ -25,12 +25,10 @@ package com.owncloud.android.presentation.capabilities
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
-import com.owncloud.android.domain.capabilities.model.CapabilityBooleanType
 import com.owncloud.android.domain.capabilities.model.OCCapability
 import com.owncloud.android.domain.capabilities.usecases.GetCapabilitiesAsLiveDataUseCase
 import com.owncloud.android.domain.capabilities.usecases.GetStoredCapabilitiesUseCase
 import com.owncloud.android.domain.capabilities.usecases.RefreshCapabilitiesFromServerAsyncUseCase
-import com.owncloud.android.domain.links.model.OCLinkType
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.ViewModelExt.runUseCaseWithResultAndUseCachedData
 import com.owncloud.android.presentation.common.UIResult
@@ -83,11 +81,4 @@ class CapabilityViewModel(
         capabilities?.spaces?.hasMultiplePersonalSpaces == true
     }
 
-    fun checkPasswordEnforced(selectedPermission: OCLinkType, capabilities: OCCapability?) =
-        when(selectedPermission) {
-            OCLinkType.CAN_VIEW -> capabilities?.filesSharingPublicPasswordEnforcedReadOnly == CapabilityBooleanType.TRUE
-            OCLinkType.CAN_EDIT -> capabilities?.filesSharingPublicPasswordEnforcedReadWrite == CapabilityBooleanType.TRUE
-            OCLinkType.CREATE_ONLY -> capabilities?.filesSharingPublicPasswordEnforcedUploadOnly == CapabilityBooleanType.TRUE
-            else -> true
-        }
 }
