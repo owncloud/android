@@ -28,6 +28,7 @@ import android.view.MenuItem
 import androidx.fragment.app.transaction
 import com.owncloud.android.R
 import com.owncloud.android.databinding.MembersActivityBinding
+import com.owncloud.android.domain.links.model.OCLink
 import com.owncloud.android.domain.roles.model.OCRole
 import com.owncloud.android.domain.spaces.model.OCSpace
 import com.owncloud.android.domain.spaces.model.SpaceMember
@@ -101,8 +102,8 @@ class SpaceMembersActivity: FileActivity(), SpaceMembersFragment.SpaceMemberFrag
         }
     }
 
-    override fun addPublicLink(space: OCSpace) {
-        val addPublicLinkFragment = AddPublicLinkFragment.newInstance(account.name, space)
+    override fun addPublicLink(space: OCSpace, editMode: Boolean, selectedPublicLink: OCLink?) {
+        val addPublicLinkFragment = AddPublicLinkFragment.newInstance(account.name, space, editMode, selectedPublicLink)
         val transaction = supportFragmentManager.beginTransaction()
         transaction.apply {
             replace(R.id.members_fragment_container, addPublicLinkFragment, TAG_ADD_PUBLIC_LINK_FRAGMENT)

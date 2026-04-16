@@ -131,7 +131,11 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
 
         binding.addPublicLinkButton.setOnClickListener {
             spaceLinksViewModel.resetViewModel()
-            listener?.addPublicLink(currentSpace)
+            listener?.addPublicLink(
+                space = currentSpace,
+                editMode = false,
+                selectedPublicLink = null
+            )
         }
     }
 
@@ -198,7 +202,12 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
     }
 
     override fun onEditPublicLink(publicLink: OCLink) {
-
+        spaceLinksViewModel.resetViewModel()
+        listener?.addPublicLink(
+            space = currentSpace,
+            editMode = true,
+            selectedPublicLink = publicLink
+        )
     }
 
     private fun subscribeToViewModels() {
@@ -409,7 +418,7 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
 
     interface SpaceMemberFragmentListener {
         fun addMember(space: OCSpace, spaceMembers: List<SpaceMember>, roles: List<OCRole>, editMode: Boolean, selectedMember: SpaceMember?)
-        fun addPublicLink(space: OCSpace)
+        fun addPublicLink(space: OCSpace, editMode: Boolean, selectedPublicLink: OCLink?)
         fun copyOrSendPublicLink(publicLinkUrl: String, spaceName: String)
     }
 

@@ -75,8 +75,8 @@ class SpaceLinksViewModel(
         _addPublicLinkUIState.update { it?.copy(selectedExpirationDate = expirationDate) }
     }
 
-    fun onPasswordSelected(password: String?) {
-        _addPublicLinkUIState.update { it?.copy(selectedPassword = password) }
+    fun onPasswordSelected(password: String?, hasPassword: Boolean) {
+        _addPublicLinkUIState.update { it?.copy(selectedPassword = password, hasPassword = hasPassword) }
     }
 
     fun createPublicLink(displayName: String) {
@@ -126,6 +126,7 @@ class SpaceLinksViewModel(
     data class AddPublicLinkUIState(
         val selectedPermission: OCLinkType? = null,
         val selectedExpirationDate: String? = null,
-        val selectedPassword: String? = null
+        val selectedPassword: String? = null,
+        val hasPassword: Boolean = false
     )
 }
