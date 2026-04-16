@@ -1,36 +1,15 @@
 name: Calens Changelog
-# This workflow is triggered on pushes to the repository.
+
 on:
   push:
     branches:
-    - feature/*
-    - fix/*
-    - improvement/*
-    - release/*
-    - technical/*
+      - master
 
-permissions:
-  contents: read
+permissions: {}
 
 jobs:
-  build:
-    permissions:
-      contents: write
-    runs-on: ubuntu-22.04
-    name: Generate Calens Changelog
-    steps:
-      - name: Checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd #v6.0.2
-        with:
-          persist-credentials: false
-      - name: Run Calens
-        uses: actionhippie/calens@244f3e5c328b842a740113859b87bbebf697f63b #v1.13.0
-        with:
-          target: CHANGELOG.md
-      - name: Commit files
-        uses: GuillaumeFalourd/git-commit-push@205c043bca2f932f7a48a28a8d619ba30eb84baf #v1.3
-        with:
-          email: devops@owncloud.com
-          name: ownClouders
-          commit_message: "docs: calens changelog updated"
-          access_token: ${{ secrets.GH_PAT }}
+  changelog:
+    uses: owncloud/reusable-workflows/.github/workflows/calens.yml@main
+    secrets:
+      TRANSLATION_APP_ID: ${{ secrets.TRANSLATION_APP_ID }}
+      TRANSLATION_APP_PRIVATE_KEY: ${{ secrets.TRANSLATION_APP_PRIVATE_KEY }}
