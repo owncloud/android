@@ -1,0 +1,5 @@
+Change: Use reusable workflow for Calens 
+
+A new reusable workflow for calens changelog changes has been added to the current workflow in order to be used by all clients
+
+https://github.com/owncloud/android/pull/4825
