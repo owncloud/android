@@ -80,6 +80,7 @@ import com.owncloud.android.domain.files.usecases.SortFilesUseCase
 import com.owncloud.android.domain.files.usecases.SortFilesWithSyncInfoUseCase
 import com.owncloud.android.domain.files.usecases.UpdateAlreadyDownloadedFilesPathUseCase
 import com.owncloud.android.domain.links.usecases.AddLinkUseCase
+import com.owncloud.android.domain.links.usecases.EditLinkUseCase
 import com.owncloud.android.domain.links.usecases.RemoveLinkUseCase
 import com.owncloud.android.domain.members.usecases.AddMemberUseCase
 import com.owncloud.android.domain.members.usecases.EditMemberUseCase
@@ -321,5 +322,6 @@ val useCaseModule = module {
 
     // Links
     factoryOf(::AddLinkUseCase)
+    factoryOf(::EditLinkUseCase)
     factoryOf(::RemoveLinkUseCase)
 }

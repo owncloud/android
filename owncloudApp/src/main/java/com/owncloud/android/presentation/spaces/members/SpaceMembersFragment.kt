@@ -219,6 +219,7 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
         observeEditMemberResult()
         observeAddLinkResult()
         observeRemoveLinkResult()
+        observeEditLinkResult()
     }
 
     private fun observeRoles() {
@@ -364,6 +365,21 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
                 is UIResult.Error -> {
                     Timber.e(uiResult.error, "Failed to remove a public link from space: ${currentSpace.id}")
                     showErrorInSnackbar(R.string.public_link_remove_failed, uiResult.error)
+                }
+            }
+        }
+    }
+
+    private fun observeEditLinkResult() {
+        collectLatestLifecycleFlow(spaceLinksViewModel.editLinkResultFlow) { event ->
+            event?.peekContent()?.let { uiResult ->
+                when (uiResult) {
+                    is UIResult.Loading -> { }
+                    is UIResult.Success -> {
+                        showMessageInSnackbar(getString(R.string.public_link_edit_correctly))
+                        spaceLinksViewModel.resetViewModel()
+                    }
+                    is UIResult.Error -> { }
                 }
             }
         }

@@ -25,5 +25,6 @@ import com.owncloud.android.lib.resources.Service
 
 interface LinksService: Service {
     fun addLink(spaceId: String, displayName: String, type: String, expirationDate: String?, password: String?): RemoteOperationResult<Unit>
+    fun editLink(spaceId: String, linkId: String, displayName: String, type: String, expirationDate: String?): RemoteOperationResult<Unit>
     fun removeLink(spaceId: String, linkId: String): RemoteOperationResult<Unit>
 }
