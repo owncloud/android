@@ -12,5 +12,5 @@ jobs:
   changelog:
     uses: owncloud/reusable-workflows/.github/workflows/calens.yml@main
     secrets:
-      TRANSLATION_APP_ID: ${{ secrets.TRANSLATION_APP_ID }}
-      TRANSLATION_APP_PRIVATE_KEY: ${{ secrets.TRANSLATION_APP_PRIVATE_KEY }}
+      CALENS_APP_ID: ${{ secrets.CALENS_APP_ID }}
+      CALENS_APP_PRIVATE_KEY: ${{ secrets.CALENS_APP_PRIVATE_KEY }}
