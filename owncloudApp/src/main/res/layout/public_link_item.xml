@@ -88,6 +88,7 @@
                     android:textSize="13sp"
                     android:textColor="@color/textColor"
                     android:ellipsize="middle"
+                    android:maxLines="1"
                     android:visibility="gone"
                     tools:visibility="visible"/>
 
