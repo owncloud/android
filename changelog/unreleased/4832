@@ -1,0 +1,5 @@
+Change: Use reusable workflow for Conventional commits
+
+A new reusable workflow to validate Conventional commits has been added to the current workflow in order to be used by all clients
+
+https://github.com/owncloud/android/pull/4832
