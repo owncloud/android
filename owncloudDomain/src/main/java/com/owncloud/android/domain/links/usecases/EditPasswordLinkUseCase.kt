@@ -18,14 +18,23 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.lib.resources.links.services
+package com.owncloud.android.domain.links.usecases
 
-import com.owncloud.android.lib.common.operations.RemoteOperationResult
-import com.owncloud.android.lib.resources.Service
+import com.owncloud.android.domain.BaseUseCaseWithResult
+import com.owncloud.android.domain.links.LinksRepository
 
-interface LinksService: Service {
-    fun addLink(spaceId: String, displayName: String, type: String, expirationDate: String?, password: String?): RemoteOperationResult<Unit>
-    fun editLink(spaceId: String, linkId: String, displayName: String, type: String, expirationDate: String?): RemoteOperationResult<Unit>
-    fun editPasswordLink(spaceId: String, linkId: String, password: String?): RemoteOperationResult<Unit>
-    fun removeLink(spaceId: String, linkId: String): RemoteOperationResult<Unit>
+class EditPasswordLinkUseCase(
+    private val linksRepository: LinksRepository
+): BaseUseCaseWithResult<Unit, EditPasswordLinkUseCase.Params>() {
+
+    override fun run(params: Params) {
+        linksRepository.editPasswordLink(params.accountName, params.spaceId, params.linkId, params.password)
+    }
+
+    data class Params(
+        val accountName: String,
+        val spaceId: String,
+        val linkId: String,
+        val password: String?
+    )
 }

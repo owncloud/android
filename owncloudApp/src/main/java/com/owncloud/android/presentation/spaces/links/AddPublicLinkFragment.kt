@@ -287,7 +287,7 @@ class AddPublicLinkFragment: Fragment(), SetPasswordDialogFragment.SetPasswordLi
             }
 
             if (it.hasPassword) {
-                spaceLinksViewModel.onPasswordSelected(null, true)
+                spaceLinksViewModel.onPasswordSelected(password = null, hasPassword = true, wasPasswordChanged = false)
             }
 
             it.expirationDateTime?.let { expirationDate ->

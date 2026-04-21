@@ -41,6 +41,12 @@ class OCRemoteLinksDataSource(
         }
     }
 
+    override fun editPasswordLink(accountName: String, spaceId: String, linkId: String, password: String?) {
+        executeRemoteOperation {
+            clientManager.getLinksService(accountName).editPasswordLink(spaceId, linkId, password)
+        }
+    }
+
     override fun removeLink(accountName: String, spaceId: String, linkId: String) {
         executeRemoteOperation {
             clientManager.getLinksService(accountName).removeLink(spaceId, linkId)

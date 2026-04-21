@@ -28,6 +28,7 @@ import com.owncloud.android.domain.capabilities.usecases.GetStoredCapabilitiesUs
 import com.owncloud.android.domain.links.model.OCLinkType
 import com.owncloud.android.domain.links.usecases.AddLinkUseCase
 import com.owncloud.android.domain.links.usecases.EditLinkUseCase
+import com.owncloud.android.domain.links.usecases.EditPasswordLinkUseCase
 import com.owncloud.android.domain.links.usecases.RemoveLinkUseCase
 import com.owncloud.android.domain.spaces.model.OCSpace
 import com.owncloud.android.domain.utils.Event
@@ -44,6 +45,7 @@ import kotlinx.coroutines.launch
 class SpaceLinksViewModel(
     private val addLinkUseCase: AddLinkUseCase,
     private val editLinkUseCase: EditLinkUseCase,
+    private val editPasswordLinkUseCase: EditPasswordLinkUseCase,
     private val getStoredCapabilitiesUseCase: GetStoredCapabilitiesUseCase,
     private val removeLinkUseCase: RemoveLinkUseCase,
     private val accountName: String,
@@ -80,8 +82,8 @@ class SpaceLinksViewModel(
         _addPublicLinkUIState.update { it?.copy(selectedExpirationDate = expirationDate) }
     }
 
-    fun onPasswordSelected(password: String?, hasPassword: Boolean) {
-        _addPublicLinkUIState.update { it?.copy(selectedPassword = password, hasPassword = hasPassword) }
+    fun onPasswordSelected(password: String?, hasPassword: Boolean, wasPasswordChanged: Boolean = true) {
+        _addPublicLinkUIState.update { it?.copy(selectedPassword = password, hasPassword = hasPassword, wasPasswordChanged = wasPasswordChanged) }
     }
 
     fun createPublicLink(displayName: String) {
@@ -130,6 +132,16 @@ class SpaceLinksViewModel(
                     expirationDate = _addPublicLinkUIState.value?.selectedExpirationDate,
                 )
             )
+            if (_addPublicLinkUIState.value?.wasPasswordChanged == true) {
+                viewModelScope.launch(coroutineDispatcherProvider.io) {
+                    editPasswordLinkUseCase(EditPasswordLinkUseCase.Params(
+                        accountName = accountName,
+                        spaceId = space.id,
+                        linkId = linkId,
+                        password = _addPublicLinkUIState.value?.selectedPassword
+                    ))
+                }
+            }
         }
     }
 
@@ -151,6 +163,7 @@ class SpaceLinksViewModel(
         val selectedPermission: OCLinkType? = null,
         val selectedExpirationDate: String? = null,
         val selectedPassword: String? = null,
-        val hasPassword: Boolean = false
+        val hasPassword: Boolean = false,
+        val wasPasswordChanged: Boolean = false
     )
 }

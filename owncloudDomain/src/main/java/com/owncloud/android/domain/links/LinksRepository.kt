@@ -25,5 +25,6 @@ import com.owncloud.android.domain.links.model.OCLinkType
 interface LinksRepository {
     fun addLink(accountName: String, spaceId: String, displayName: String, type: OCLinkType, expirationDate: String?, password: String?)
     fun editLink(accountName: String, spaceId: String, linkId: String, displayName: String, type: OCLinkType, expirationDate: String?)
+    fun editPasswordLink(accountName: String, spaceId: String, linkId: String, password: String?)
     fun removeLink(accountName: String, spaceId: String, linkId: String)
 }
