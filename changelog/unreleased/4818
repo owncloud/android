@@ -3,3 +3,4 @@ Enhancement: Workflow to use the translation-sync reusable workflow
 A new workflow that uses the translation-sync reusable workflow has been added in order to update translations from transifex
 
 https://github.com/owncloud/android/pull/4818
+https://github.com/owncloud/android/pull/4831
