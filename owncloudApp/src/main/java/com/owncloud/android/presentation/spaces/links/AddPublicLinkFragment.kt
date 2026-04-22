@@ -179,6 +179,11 @@ class AddPublicLinkFragment: Fragment(), SetPasswordDialogFragment.SetPasswordLi
         }
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
     override fun onCancelPassword() {
         if (!isPasswordEnforced && !hasPassword) {
             binding.passwordLayout.setPasswordSwitch.isChecked = false
