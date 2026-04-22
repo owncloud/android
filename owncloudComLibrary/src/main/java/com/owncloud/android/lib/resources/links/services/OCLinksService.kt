@@ -59,7 +59,11 @@ class OCLinksService(override val client: OwnCloudClient) : LinksService {
             expirationDate = expirationDate
         ).execute(client)
 
-    override fun editPasswordLink(spaceId: String, linkId: String, password: String?): RemoteOperationResult<Unit> =
+    override fun editPasswordLink(
+        spaceId: String,
+        linkId: String,
+        password: String?
+    ): RemoteOperationResult<Unit> =
         EditRemotePasswordLinkOperation(
             spaceId = spaceId,
             linkId = linkId,
