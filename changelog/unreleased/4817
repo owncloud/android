@@ -1,0 +1,6 @@
+Enhancement: Edit space link
+
+A new option to edit space public links has been added. It will be only visible for users with proper permissions.
+
+https://github.com/owncloud/android/issues/4756
+https://github.com/owncloud/android/pull/4817
