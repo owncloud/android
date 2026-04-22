@@ -274,7 +274,10 @@ class AddPublicLinkFragment: Fragment(), SetPasswordDialogFragment.SetPasswordLi
     private fun bindEditMode() {
         selectedPublicLink?.let {
             binding.publicLinkNameEditText.setText(it.displayName)
-            binding.createPublicLinkButton.setText(R.string.share_confirm_public_link_button)
+            binding.createPublicLinkButton.apply {
+                setText(R.string.share_confirm_public_link_button)
+                contentDescription = getString(R.string.share_confirm_public_link_button)
+            }
 
             // Do not recreate the edit view after the first iteration
             if (spaceLinksViewModel.addPublicLinkUIState.value?.selectedPermission != null) return
