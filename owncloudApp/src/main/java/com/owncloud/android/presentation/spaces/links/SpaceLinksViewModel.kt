@@ -65,6 +65,9 @@ class SpaceLinksViewModel(
     private val _editLinkResultFlow = MutableStateFlow<Event<UIResult<Unit>>?>(null)
     val editLinkResultFlow: StateFlow<Event<UIResult<Unit>>?> = _editLinkResultFlow
 
+    private val _editPasswordLinkResultFlow = MutableStateFlow<Event<UIResult<Unit>>?>(null)
+    val editPasswordLinkResultFlow: StateFlow<Event<UIResult<Unit>>?> = _editPasswordLinkResultFlow
+
     private var capabilities: OCCapability? = null
 
     init {
@@ -132,16 +135,22 @@ class SpaceLinksViewModel(
                     expirationDate = _addPublicLinkUIState.value?.selectedExpirationDate,
                 )
             )
-            if (_addPublicLinkUIState.value?.wasPasswordChanged == true) {
-                viewModelScope.launch(coroutineDispatcherProvider.io) {
-                    editPasswordLinkUseCase(EditPasswordLinkUseCase.Params(
-                        accountName = accountName,
-                        spaceId = space.id,
-                        linkId = linkId,
-                        password = _addPublicLinkUIState.value?.selectedPassword
-                    ))
-                }
-            }
+        }
+    }
+
+    fun editPasswordPublicLink(linkId: String) {
+        if (_addPublicLinkUIState.value?.wasPasswordChanged == true) {
+            runUseCaseWithResult(
+                coroutineDispatcher = coroutineDispatcherProvider.io,
+                flow = _editLinkResultFlow,
+                useCase = editPasswordLinkUseCase,
+                useCaseParams = EditPasswordLinkUseCase.Params(
+                    accountName = accountName,
+                    spaceId = space.id,
+                    linkId = linkId,
+                    password = _addPublicLinkUIState.value?.selectedPassword
+                )
+            )
         }
     }
 

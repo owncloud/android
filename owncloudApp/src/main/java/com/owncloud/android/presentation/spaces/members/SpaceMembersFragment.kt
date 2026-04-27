@@ -220,6 +220,7 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
         observeAddLinkResult()
         observeRemoveLinkResult()
         observeEditLinkResult()
+        observeEditPasswordLinkResult()
     }
 
     private fun observeRoles() {
@@ -380,6 +381,18 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
                         spaceLinksViewModel.resetViewModel()
                     }
                     is UIResult.Error -> { }
+                }
+            }
+        }
+    }
+
+    private fun observeEditPasswordLinkResult() {
+        collectLatestLifecycleFlow(spaceLinksViewModel.editPasswordLinkResultFlow) { event ->
+            event?.peekContent()?.let { uiResult ->
+                when (uiResult) {
+                    is UIResult.Loading -> { }
+                    is UIResult.Success -> spaceLinksViewModel.resetViewModel()
+                    is UIResult.Error -> showErrorInSnackbar(R.string.public_link_edit_failed, uiResult.error)
                 }
             }
         }
