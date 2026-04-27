@@ -2,38 +2,35 @@ name: SBOM
 
 on:
   workflow_dispatch:
+    inputs:
+      target_branch:
+        type: string
+        required: false
+        default: master
   push:
     branches:
-    - feature/*
-    - fix/*
-    - improvement/*
-    - release/*
-    - technical/*
-    - 'dependabot/**'
+     - master
 
-# Cancels other executions in the same branch
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  group: sbom-update
+  cancel-in-progress: false
 
 permissions:
   contents: write
 
 jobs:
   sbom:
-    # Skip if the job was triggered by the SBOM commit or a merge commit in the latest push.
-    if: "!contains(github.event.head_commit.message, 'Merge pull request') && !contains(github.event.head_commit.message, 'SBOM updated')"
     runs-on: ubuntu-latest
+    env:
+      SOURCE_BRANCH: chore/sbom-update
+      TARGET_BRANCH: ${{ github.event.inputs.target_branch || 'master' }}
 
     steps:
       # Checkout the repository
       - name: Checkout repository
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd #v6.0.2
         with:
-          # Parent commit to compare
-          fetch-depth: 2
           persist-credentials: false
-
 
       # Cache Gradle dependencies to speed up future builds
       - name: Cache Gradle dependencies
@@ -79,40 +76,62 @@ jobs:
           EOF
           chmod +x normalize-sbom.sh
 
-      # Compares with the HEAD to check if there are changes
-      - name: Compare with previous SBOM
+      # Compare with the SBOM update branch, or master as fallback
+      - name: Compare with previous SBOM in branch or master as fallback
         id: compare
         run: |
-          # Try HEAD first to compare with previous commit's sbom (HEAD~1)
-          git show HEAD~1:sbom.json > sbom_prev.json 2>/dev/null || echo '{}' > sbom_prev.json
+          # Branch to compare with in case the source branch does not exist
+          FALLBACK_BRANCH="master"
+
+          echo "Checking whether branch $SOURCE_BRANCH exists in origin..."
+
+          # If source branch exists, fetch it and set as previous sbom
+          if git ls-remote --exit-code --heads origin "$SOURCE_BRANCH"; then
+            echo "Remote branch found: $SOURCE_BRANCH"
+            git fetch origin "refs/heads/$SOURCE_BRANCH:refs/remotes/origin/$SOURCE_BRANCH" --depth=1
+            PREVIOUS_SBOM_REF="origin/$SOURCE_BRANCH"
+            echo "Using sbom.json from $PREVIOUS_SBOM_REF"
+          # Use the fallback branch
+          else
+            echo "Remote branch not found: $SOURCE_BRANCH"
+            PREVIOUS_SBOM_REF="origin/$FALLBACK_BRANCH"
+            echo "Using sbom.json from fallback branch: $PREVIOUS_SBOM_REF"
+          fi
+
+          git show "$PREVIOUS_SBOM_REF:sbom.json" > sbom_prev.json
 
           ./normalize-sbom.sh sbom_prev.json sbom_prev_normalized.json
           ./normalize-sbom.sh sbom.json sbom_current_normalized.json
 
           if diff -q sbom_prev_normalized.json sbom_current_normalized.json; then
-            echo "no_changes=true" >> $GITHUB_OUTPUT
+            echo "changes=false" >> $GITHUB_OUTPUT
             echo "No changes in SBOM"
           else
-            echo "no_changes=false" >> $GITHUB_OUTPUT
+            echo "changes=true" >> $GITHUB_OUTPUT
             echo "Differences in SBOM"
             diff sbom_prev_normalized.json sbom_current_normalized.json || true
           fi
 
       # Generate a token to perform the commit in the next step 
       - name: Generate GitHub App token
+        if: steps.compare.outputs.changes == 'true'
         id: app-token
         uses: actions/create-github-app-token@1b10c78c7865c340bc4f6099eb2f838309f1e8c3 # v3.1.1
         with:
           app-id: ${{ secrets.SBOM_APP_ID }}
           private-key: ${{ secrets.SBOM_APP_PRIVATE_KEY }}
 
-      # Commit the SBOM file only if it differs from master to avoid unnecessary commits
-      - name: Commit and push updated SBOM
-        if: steps.compare.outputs.no_changes == 'false'
-        uses: GuillaumeFalourd/git-commit-push@205c043bca2f932f7a48a28a8d619ba30eb84baf #v1.3
+      # Create a branch with latest SBOM changes only if there are changes
+      - name: Create or update SBOM PR
+        if: steps.compare.outputs.changes == 'true'
+        uses: peter-evans/create-pull-request@c0f553fe549906ede9cf27b5156039d195d2ece0 # v8.1.0
         with:
-          commit_message: "docs: SBOM updated"
-          files: sbom.json
-          email: devops@owncloud.com
-          name: ownClouders
-          access_token: ${{ steps.app-token.outputs.token }}
+          add-paths: sbom.json
+          token: ${{ steps.app-token.outputs.token }}
+          branch: ${{ env.SOURCE_BRANCH }}
+          base: ${{ env.TARGET_BRANCH }}
+          commit-message: "chore: update SBOM"
+          title: "chore: update sbom.json"
+          body: "Automated SBOM update. This pull request is updated on each push to `master` or manual dispatch — merging it will close it and a fresh one will be opened on the next change."
+          delete-branch: true
+          sign-commits: true
