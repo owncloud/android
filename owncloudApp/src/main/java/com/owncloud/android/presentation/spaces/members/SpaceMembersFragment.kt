@@ -119,6 +119,11 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
 
         subscribeToViewModels()
 
+        binding.swipeRefreshMembers.setOnRefreshListener {
+            spaceMembersViewModel.getSpacePermissions()
+            spaceMembersViewModel.getSpaceMembers()
+        }
+
         binding.addMemberButton.setOnClickListener {
             spaceMembersViewModel.resetViewModel()
             listener?.addMember(
@@ -263,11 +268,11 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
                                         showSpaceLinks()
                                     }
                                 }
-                                binding.indeterminateProgressBar.isVisible = false
+                                binding.swipeRefreshMembers.isRefreshing = false
                             }
                         }
                     }
-                    is UIResult.Loading -> { binding.indeterminateProgressBar.isVisible = true }
+                    is UIResult.Loading -> { binding.swipeRefreshMembers.isRefreshing = true }
                     is UIResult.Error -> {
                         requireActivity().finish()
                         Timber.e(uiResult.error, "Failed to retrieve space members for space: ${currentSpace.id} (${currentSpace.id})")
