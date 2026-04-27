@@ -153,14 +153,7 @@ class AddPublicLinkFragment: Fragment(), SetPasswordDialogFragment.SetPasswordLi
 
         if (editMode) { bindEditMode() }
 
-        binding.publicLinkPermissions.apply {
-            canViewPublicLinkRadioButton.setOnClickListener { selectRadioButton(canViewPublicLinkRadioButton) }
-            canViewPublicLinkLayout.setOnClickListener { selectRadioButton(canViewPublicLinkRadioButton) }
-            canEditPublicLinkRadioButton.setOnClickListener { selectRadioButton(canEditPublicLinkRadioButton) }
-            canEditPublicLinkLayout.setOnClickListener { selectRadioButton(canEditPublicLinkRadioButton) }
-            secretFileDropPublicLinkRadioButton.setOnClickListener { selectRadioButton(secretFileDropPublicLinkRadioButton) }
-            secretFileDropPublicLinkLayout.setOnClickListener { selectRadioButton(secretFileDropPublicLinkRadioButton) }
-        }
+        bindRadioButtonsListeners()
 
         binding.passwordLayout.apply {
             setPasswordButton.setOnClickListener {
@@ -202,6 +195,17 @@ class AddPublicLinkFragment: Fragment(), SetPasswordDialogFragment.SetPasswordLi
             binding.passwordLayout.setPasswordSwitch.isChecked = false
         }
         spaceLinksViewModel.onPasswordSelected(normalizedPassword, hasPassword)
+    }
+
+    private fun bindRadioButtonsListeners() {
+        binding.publicLinkPermissions.apply {
+            canViewPublicLinkRadioButton.setOnClickListener { selectRadioButton(canViewPublicLinkRadioButton) }
+            canViewPublicLinkLayout.setOnClickListener { selectRadioButton(canViewPublicLinkRadioButton) }
+            canEditPublicLinkRadioButton.setOnClickListener { selectRadioButton(canEditPublicLinkRadioButton) }
+            canEditPublicLinkLayout.setOnClickListener { selectRadioButton(canEditPublicLinkRadioButton) }
+            secretFileDropPublicLinkRadioButton.setOnClickListener { selectRadioButton(secretFileDropPublicLinkRadioButton) }
+            secretFileDropPublicLinkLayout.setOnClickListener { selectRadioButton(secretFileDropPublicLinkRadioButton) }
+        }
     }
 
     private fun selectRadioButton(selectedRadioButton: RadioButton) {
