@@ -59,7 +59,8 @@
                 android:hint="@string/share_via_link_name_label"
                 android:inputType="text"
                 android:maxLines="1"
-                android:maxLength="255"/>
+                android:maxLength="255"
+                android:selectAllOnFocus="true"/>
 
             <TextView
                 android:id="@+id/permissions_title"
