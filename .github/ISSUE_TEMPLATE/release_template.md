@@ -20,6 +20,7 @@ If you don't need some of the steps, cross them by removing the "[ ]" and surrou
  - [ ] [COM] Ping @mmattel about the new release
  - [ ] [GIT] Merge translations branch `chore/translations-update` into `master`
  - [ ] [GIT] Merge calens branch `chore/changelog-update` into `master`
+ - [ ] [GIT] Merge sbom branch `chore/sbom-update` into `master`
  - [ ] [GIT] Create branch `release/M.m.p` in owncloud/android from `master`
  - [ ] [DEV] Update version number and name in build.gradle in owncloudApp module
  - [ ] [DIS] Move Calens files from `unreleased` to a new folder like `M.m.p_YYYY-MM-DD` inside the `changelog` folder
