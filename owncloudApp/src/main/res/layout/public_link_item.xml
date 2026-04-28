@@ -87,7 +87,7 @@
                     android:text="@string/placeholder_sentence"
                     android:textSize="13sp"
                     android:textColor="@color/textColor"
-                    android:ellipsize="middle"
+                    android:ellipsize="end"
                     android:maxLines="1"
                     android:visibility="gone"
                     tools:visibility="visible"/>
