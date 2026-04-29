@@ -377,7 +377,9 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
                 when (uiResult) {
                     is UIResult.Loading -> { }
                     is UIResult.Success -> {
-                        showMessageInSnackbar(getString(R.string.public_link_edit_correctly))
+                        if (spaceLinksViewModel.addPublicLinkUIState.value?.wasPasswordChanged == false) {
+                            showMessageInSnackbar(getString(R.string.public_link_edit_correctly))
+                        }
                         spaceLinksViewModel.resetViewModel()
                     }
                     is UIResult.Error -> { }
@@ -391,8 +393,8 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
             event?.peekContent()?.let { uiResult ->
                 when (uiResult) {
                     is UIResult.Loading -> { }
-                    is UIResult.Success -> spaceLinksViewModel.resetViewModel()
-                    is UIResult.Error -> showErrorInSnackbar(R.string.public_link_edit_failed, uiResult.error)
+                    is UIResult.Success -> showMessageInSnackbar(getString(R.string.public_link_edit_correctly))
+                    is UIResult.Error -> { }
                 }
             }
         }

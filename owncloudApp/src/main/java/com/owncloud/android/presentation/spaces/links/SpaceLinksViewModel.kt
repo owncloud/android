@@ -121,6 +121,16 @@ class SpaceLinksViewModel(
     }
 
     fun editPublicLink(linkId: String, displayName: String) {
+        _addPublicLinkUIState.value?.let {
+            if (it.wasPasswordChanged) {
+                editPasswordPublicLink(linkId)
+            } else {
+                editLink(linkId, displayName)
+            }
+        }
+    }
+
+    fun editLink(linkId: String, displayName: String) {
         _addPublicLinkUIState.value?.selectedPermission?.let {
             runUseCaseWithResult(
                 coroutineDispatcher = coroutineDispatcherProvider.io,
@@ -138,22 +148,6 @@ class SpaceLinksViewModel(
         }
     }
 
-    fun editPasswordPublicLink(linkId: String) {
-        if (_addPublicLinkUIState.value?.wasPasswordChanged == true) {
-            runUseCaseWithResult(
-                coroutineDispatcher = coroutineDispatcherProvider.io,
-                flow = _editLinkResultFlow,
-                useCase = editPasswordLinkUseCase,
-                useCaseParams = EditPasswordLinkUseCase.Params(
-                    accountName = accountName,
-                    spaceId = space.id,
-                    linkId = linkId,
-                    password = _addPublicLinkUIState.value?.selectedPassword
-                )
-            )
-        }
-    }
-
     fun checkPasswordEnforced(selectedPermission: OCLinkType) =
         when(selectedPermission) {
             OCLinkType.CAN_VIEW -> capabilities?.filesSharingPublicPasswordEnforcedReadOnly == CapabilityBooleanType.TRUE
@@ -166,6 +160,21 @@ class SpaceLinksViewModel(
         _addLinkResultFlow.value = null
         _addPublicLinkUIState.value = AddPublicLinkUIState()
         _editLinkResultFlow.value = null
+        _editPasswordLinkResultFlow.value = null
+    }
+
+    private fun editPasswordPublicLink(linkId: String) {
+        runUseCaseWithResult(
+            coroutineDispatcher = coroutineDispatcherProvider.io,
+            flow = _editPasswordLinkResultFlow,
+            useCase = editPasswordLinkUseCase,
+            useCaseParams = EditPasswordLinkUseCase.Params(
+                accountName = accountName,
+                spaceId = space.id,
+                linkId = linkId,
+                password = _addPublicLinkUIState.value?.selectedPassword
+            )
+        )
     }
 
     data class AddPublicLinkUIState(

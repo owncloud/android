@@ -140,8 +140,21 @@ class AddPublicLinkFragment: Fragment(), SetPasswordDialogFragment.SetPasswordLi
             event?.peekContent()?.let { uiResult ->
                 when (uiResult) {
                     is UIResult.Loading -> { }
+                    is UIResult.Success -> parentFragmentManager.popBackStack()
+                    is UIResult.Error -> showErrorInSnackbar(R.string.public_link_edit_failed, uiResult.error)
+                }
+            }
+        }
+
+        collectLatestLifecycleFlow(spaceLinksViewModel.editPasswordLinkResultFlow) { event ->
+            event?.peekContent()?.let { uiResult ->
+                when (uiResult) {
+                    is UIResult.Loading -> { }
                     is UIResult.Success -> {
-                        selectedPublicLink?.let { spaceLinksViewModel.editPasswordPublicLink(it.id) }
+                        val displayName = binding.publicLinkNameEditText.text.toString().ifEmpty {
+                            getString(R.string.public_link_default_display_name)
+                        }
+                        selectedPublicLink?.let { spaceLinksViewModel.editLink(it.id, displayName) }
                         parentFragmentManager.popBackStack()
                     }
                     is UIResult.Error -> {

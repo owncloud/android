@@ -921,6 +921,7 @@
 
     <string name="public_link_create_title">Create public link</string>
     <string name="public_link_set_password">Set password</string>
+    <string name="public_link_password_enforced_error">Password is mandatory</string>
     <string name="public_link_view">Can view</string>
     <string name="public_link_view_description">View, download</string>
     <string name="public_link_edit">Can edit</string>

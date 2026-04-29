@@ -59,13 +59,20 @@ class EditRemotePasswordLinkOperation(
 
             val response = postMethod.getResponseBodyAsString()
 
-            if (status == HttpConstants.HTTP_OK) {
-                Timber.d("Successful response: $response")
-                result = RemoteOperationResult(ResultCode.OK)
-                Timber.d("Edit password public link operation completed and parsed to ${result.data}")
-            } else {
-                result = RemoteOperationResult(postMethod)
-                Timber.e("Failed response while editing password public link; status code: $status, response: $response")
+            when (status) {
+                HttpConstants.HTTP_OK -> {
+                    Timber.d("Successful response: $response")
+                    result = RemoteOperationResult(ResultCode.OK)
+                    Timber.d("Edit password public link operation completed and parsed to ${result.data}")
+                }
+                HttpConstants.HTTP_BAD_REQUEST -> {
+                    result = RemoteOperationResult(ResultCode.PASSWORD_ENFORCED)
+                    Timber.e("Bad request response while editing password public link; status code: $status, response: $response")
+                }
+                else -> {
+                    result = RemoteOperationResult(postMethod)
+                    Timber.e("Failed response while editing password public link; status code: $status, response: $response")
+                }
             }
         } catch (e: Exception) {
             result = RemoteOperationResult(e)
