@@ -168,17 +168,7 @@ class AddPublicLinkFragment: Fragment(), SetPasswordDialogFragment.SetPasswordLi
 
         bindRadioButtonsListeners()
 
-        binding.passwordLayout.apply {
-            setPasswordButton.setOnClickListener {
-                showPasswordDialog()
-            }
-            removePasswordButton.setOnClickListener {
-                removePassword()
-            }
-            setPasswordSwitch.setOnClickListener {
-                if (setPasswordSwitch.isChecked) showPasswordDialog() else removePassword()
-            }
-        }
+        bindPasswordListeners()
 
         binding.createPublicLinkButton.setOnClickListener {
             val displayName = binding.publicLinkNameEditText.text.toString().ifEmpty { getString(R.string.public_link_default_display_name) }
@@ -278,6 +268,20 @@ class AddPublicLinkFragment: Fragment(), SetPasswordDialogFragment.SetPasswordLi
                 if (expirationDate == null) {
                     binding.expirationDateLayout.expirationDateSwitch.isChecked = false
                 }
+            }
+        }
+    }
+
+    private fun bindPasswordListeners() {
+        binding.passwordLayout.apply {
+            setPasswordButton.setOnClickListener {
+                showPasswordDialog()
+            }
+            removePasswordButton.setOnClickListener {
+                removePassword()
+            }
+            setPasswordSwitch.setOnClickListener {
+                if (setPasswordSwitch.isChecked) showPasswordDialog() else removePassword()
             }
         }
     }
