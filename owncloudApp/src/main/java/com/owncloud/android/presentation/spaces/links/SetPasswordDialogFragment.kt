@@ -124,6 +124,11 @@ class SetPasswordDialogFragment: DialogFragment() {
         }
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
     override fun onCancel(dialog: DialogInterface) {
         super.onCancel(dialog)
         setPasswordListener.onCancelPassword()

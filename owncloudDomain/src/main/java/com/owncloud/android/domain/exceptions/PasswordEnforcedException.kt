@@ -3,7 +3,7 @@
  *
  * @author Jorge Aguado Recio
  *
- * Copyright (C) 2026 ownCloud GmbH.
+ * Copyright (C) 2025 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -18,13 +18,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.data.links.datasources
+package com.owncloud.android.domain.exceptions
 
-import com.owncloud.android.domain.links.model.OCLinkType
-
-interface RemoteLinksDataSource {
-    fun addLink(accountName: String, spaceId: String, displayName: String, type: OCLinkType, expirationDate: String?, password: String?)
-    fun editLink(accountName: String, spaceId: String, linkId: String, displayName: String, type: OCLinkType, expirationDate: String?)
-    fun editPasswordLink(accountName: String, spaceId: String, linkId: String, password: String?)
-    fun removeLink(accountName: String, spaceId: String, linkId: String)
-}
+class PasswordEnforcedException : Exception()

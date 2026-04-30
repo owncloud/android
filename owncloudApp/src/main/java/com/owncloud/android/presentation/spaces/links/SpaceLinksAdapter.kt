@@ -39,6 +39,7 @@ class SpaceLinksAdapter(
 
     private var spaceLinks: List<OCLink> = emptyList()
     private var canRemoveLinks = false
+    private var canEditLinks = false
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SpaceLinksViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -78,13 +79,22 @@ class SpaceLinksAdapter(
                     listener.onRemovePublicLink(spaceLink.id, spaceLink.displayName)
                 }
             }
+
+            editPublicLinkButton.apply {
+                contentDescription = holder.itemView.context.getString(R.string.content_description_edit_public_link, spaceLink.displayName)
+                isVisible = canEditLinks
+                setOnClickListener {
+                    listener.onEditPublicLink(spaceLink)
+                }
+            }
         }
     }
 
     override fun getItemCount(): Int = spaceLinks.size
 
-    fun setSpaceLinks(spaceLinks: List<OCLink>, canRemoveLinks: Boolean) {
+    fun setSpaceLinks(spaceLinks: List<OCLink>, canRemoveLinks: Boolean, canEditLinks: Boolean) {
         this.canRemoveLinks = canRemoveLinks
+        this.canEditLinks = canEditLinks
         val diffCallback = SpaceLinksDiffUtil(this.spaceLinks, spaceLinks)
         val diffResult = DiffUtil.calculateDiff(diffCallback)
         this.spaceLinks = spaceLinks
@@ -98,5 +108,6 @@ class SpaceLinksAdapter(
     interface SpaceLinksAdapterListener {
         fun onCopyOrSendPublicLink(publicLinkUrl: String)
         fun onRemovePublicLink(publicLinkId: String, publicLinkDisplayName: String)
+        fun onEditPublicLink(publicLink: OCLink)
     }
 }

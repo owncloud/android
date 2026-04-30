@@ -35,6 +35,18 @@ class OCRemoteLinksDataSource(
         }
     }
 
+    override fun editLink(accountName: String, spaceId: String, linkId: String, displayName: String, type: OCLinkType, expirationDate: String?) {
+        executeRemoteOperation {
+            clientManager.getLinksService(accountName).editLink(spaceId, linkId, displayName, OCLinkType.toString(type), expirationDate)
+        }
+    }
+
+    override fun editPasswordLink(accountName: String, spaceId: String, linkId: String, password: String?) {
+        executeRemoteOperation {
+            clientManager.getLinksService(accountName).editPasswordLink(spaceId, linkId, password)
+        }
+    }
+
     override fun removeLink(accountName: String, spaceId: String, linkId: String) {
         executeRemoteOperation {
             clientManager.getLinksService(accountName).removeLink(spaceId, linkId)

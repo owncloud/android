@@ -21,8 +21,14 @@
 package com.owncloud.android.presentation.spaces.links
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.owncloud.android.domain.capabilities.model.CapabilityBooleanType
+import com.owncloud.android.domain.capabilities.model.OCCapability
+import com.owncloud.android.domain.capabilities.usecases.GetStoredCapabilitiesUseCase
 import com.owncloud.android.domain.links.model.OCLinkType
 import com.owncloud.android.domain.links.usecases.AddLinkUseCase
+import com.owncloud.android.domain.links.usecases.EditLinkUseCase
+import com.owncloud.android.domain.links.usecases.EditPasswordLinkUseCase
 import com.owncloud.android.domain.links.usecases.RemoveLinkUseCase
 import com.owncloud.android.domain.spaces.model.OCSpace
 import com.owncloud.android.domain.utils.Event
@@ -34,9 +40,13 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 class SpaceLinksViewModel(
     private val addLinkUseCase: AddLinkUseCase,
+    private val editLinkUseCase: EditLinkUseCase,
+    private val editPasswordLinkUseCase: EditPasswordLinkUseCase,
+    private val getStoredCapabilitiesUseCase: GetStoredCapabilitiesUseCase,
     private val removeLinkUseCase: RemoveLinkUseCase,
     private val accountName: String,
     private val space: OCSpace,
@@ -52,8 +62,19 @@ class SpaceLinksViewModel(
     private val _removeLinkResultFlow = MutableSharedFlow<UIResult<Unit>>()
     val removeLinkResultFlow: SharedFlow<UIResult<Unit>> = _removeLinkResultFlow
 
+    private val _editLinkResultFlow = MutableStateFlow<Event<UIResult<Unit>>?>(null)
+    val editLinkResultFlow: StateFlow<Event<UIResult<Unit>>?> = _editLinkResultFlow
+
+    private val _editPasswordLinkResultFlow = MutableStateFlow<Event<UIResult<Unit>>?>(null)
+    val editPasswordLinkResultFlow: StateFlow<Event<UIResult<Unit>>?> = _editPasswordLinkResultFlow
+
+    private var capabilities: OCCapability? = null
+
     init {
         _addPublicLinkUIState.value = AddPublicLinkUIState()
+        viewModelScope.launch(coroutineDispatcherProvider.io) {
+            capabilities = getStoredCapabilitiesUseCase(GetStoredCapabilitiesUseCase.Params(accountName))
+        }
     }
 
     fun onPermissionSelected(permission: OCLinkType) {
@@ -64,8 +85,8 @@ class SpaceLinksViewModel(
         _addPublicLinkUIState.update { it?.copy(selectedExpirationDate = expirationDate) }
     }
 
-    fun onPasswordSelected(password: String?) {
-        _addPublicLinkUIState.update { it?.copy(selectedPassword = password) }
+    fun onPasswordSelected(password: String?, hasPassword: Boolean, wasPasswordChanged: Boolean = true) {
+        _addPublicLinkUIState.update { it?.copy(selectedPassword = password, hasPassword = hasPassword, wasPasswordChanged = wasPasswordChanged) }
     }
 
     fun createPublicLink(displayName: String) {
@@ -99,14 +120,68 @@ class SpaceLinksViewModel(
         )
     }
 
+    fun editPublicLink(linkId: String, displayName: String) {
+        _addPublicLinkUIState.value?.let {
+            if (it.wasPasswordChanged) {
+                editPasswordPublicLink(linkId)
+            } else {
+                editLink(linkId, displayName)
+            }
+        }
+    }
+
+    fun editLink(linkId: String, displayName: String) {
+        _addPublicLinkUIState.value?.selectedPermission?.let {
+            runUseCaseWithResult(
+                coroutineDispatcher = coroutineDispatcherProvider.io,
+                flow = _editLinkResultFlow,
+                useCase = editLinkUseCase,
+                useCaseParams = EditLinkUseCase.Params(
+                    accountName = accountName,
+                    spaceId = space.id,
+                    linkId = linkId,
+                    displayName = displayName,
+                    type = it,
+                    expirationDate = _addPublicLinkUIState.value?.selectedExpirationDate,
+                )
+            )
+        }
+    }
+
+    fun checkPasswordEnforced(selectedPermission: OCLinkType) =
+        when(selectedPermission) {
+            OCLinkType.CAN_VIEW -> capabilities?.filesSharingPublicPasswordEnforcedReadOnly == CapabilityBooleanType.TRUE
+            OCLinkType.CAN_EDIT -> capabilities?.filesSharingPublicPasswordEnforcedReadWrite == CapabilityBooleanType.TRUE
+            OCLinkType.CREATE_ONLY -> capabilities?.filesSharingPublicPasswordEnforcedUploadOnly == CapabilityBooleanType.TRUE
+            else -> true
+        }
+
     fun resetViewModel() {
         _addLinkResultFlow.value = null
         _addPublicLinkUIState.value = AddPublicLinkUIState()
+        _editLinkResultFlow.value = null
+        _editPasswordLinkResultFlow.value = null
+    }
+
+    private fun editPasswordPublicLink(linkId: String) {
+        runUseCaseWithResult(
+            coroutineDispatcher = coroutineDispatcherProvider.io,
+            flow = _editPasswordLinkResultFlow,
+            useCase = editPasswordLinkUseCase,
+            useCaseParams = EditPasswordLinkUseCase.Params(
+                accountName = accountName,
+                spaceId = space.id,
+                linkId = linkId,
+                password = _addPublicLinkUIState.value?.selectedPassword
+            )
+        )
     }
 
     data class AddPublicLinkUIState(
         val selectedPermission: OCLinkType? = null,
         val selectedExpirationDate: String? = null,
-        val selectedPassword: String? = null
+        val selectedPassword: String? = null,
+        val hasPassword: Boolean = false,
+        val wasPasswordChanged: Boolean = false
     )
 }

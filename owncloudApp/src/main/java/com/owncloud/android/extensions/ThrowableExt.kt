@@ -44,6 +44,7 @@ import com.owncloud.android.domain.exceptions.NoConnectionWithServerException
 import com.owncloud.android.domain.exceptions.NoNetworkConnectionException
 import com.owncloud.android.domain.exceptions.OAuth2ErrorAccessDeniedException
 import com.owncloud.android.domain.exceptions.OAuth2ErrorException
+import com.owncloud.android.domain.exceptions.PasswordEnforcedException
 import com.owncloud.android.domain.exceptions.PayloadTooLongException
 import com.owncloud.android.domain.exceptions.QuotaExceededException
 import com.owncloud.android.domain.exceptions.RedirectToNonSecureException
@@ -106,6 +107,7 @@ fun Throwable.parseError(
             is NetworkErrorException -> resources.getString(R.string.network_error_message)
             is ResourceLockedException -> resources.getString(R.string.resource_locked_error_message)
             is PayloadTooLongException -> resources.getString(R.string.uploads_view_upload_status_failed_payload_error)
+            is PasswordEnforcedException -> resources.getString(R.string.public_link_password_enforced_error)
             else -> resources.getString(R.string.common_error_unknown)
         }
 

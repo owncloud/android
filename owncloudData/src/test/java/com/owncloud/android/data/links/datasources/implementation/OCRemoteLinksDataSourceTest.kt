@@ -84,6 +84,70 @@ class OCRemoteLinksDataSourceTest {
     }
 
     @Test
+    fun `editLink edits a public link from a project space correctly`() {
+        val editLinkResult = createRemoteOperationResultMock(Unit, isSuccess = true)
+
+        every {
+            ocLinksService.editLink(
+                spaceId = OC_SPACE_PROJECT_WITH_IMAGE.id,
+                linkId = SPACE_MEMBERS.links[0].id,
+                displayName = SPACE_MEMBERS.links[0].displayName,
+                type = OCLinkType.toString(SPACE_MEMBERS.links[0].type),
+                expirationDate = SPACE_MEMBERS.links[0].expirationDateTime
+            )
+        } returns editLinkResult
+
+        ocRemoteLinksDataSource.editLink(
+            accountName = OC_ACCOUNT_NAME,
+            spaceId = OC_SPACE_PROJECT_WITH_IMAGE.id,
+            linkId = SPACE_MEMBERS.links[0].id,
+            displayName = SPACE_MEMBERS.links[0].displayName,
+            type = SPACE_MEMBERS.links[0].type,
+            expirationDate = SPACE_MEMBERS.links[0].expirationDateTime
+        )
+
+        verify(exactly = 1) {
+            clientManager.getLinksService(OC_ACCOUNT_NAME)
+            ocLinksService.editLink(
+                spaceId = OC_SPACE_PROJECT_WITH_IMAGE.id,
+                linkId = SPACE_MEMBERS.links[0].id,
+                displayName = SPACE_MEMBERS.links[0].displayName,
+                type = OCLinkType.toString(SPACE_MEMBERS.links[0].type),
+                expirationDate = SPACE_MEMBERS.links[0].expirationDateTime
+            )
+        }
+    }
+
+    @Test
+    fun `editPasswordLink edits the password of a public link from a project space correctly`() {
+        val editPasswordLinkResult = createRemoteOperationResultMock(Unit, isSuccess = true)
+
+        every {
+            ocLinksService.editPasswordLink(
+                spaceId = OC_SPACE_PROJECT_WITH_IMAGE.id,
+                linkId = SPACE_MEMBERS.links[0].id,
+                password = password
+            )
+        } returns editPasswordLinkResult
+
+        ocRemoteLinksDataSource.editPasswordLink(
+            accountName = OC_ACCOUNT_NAME,
+            spaceId = OC_SPACE_PROJECT_WITH_IMAGE.id,
+            linkId = SPACE_MEMBERS.links[0].id,
+            password = password
+        )
+
+        verify(exactly = 1) {
+            clientManager.getLinksService(OC_ACCOUNT_NAME)
+            ocLinksService.editPasswordLink(
+                spaceId = OC_SPACE_PROJECT_WITH_IMAGE.id,
+                linkId = SPACE_MEMBERS.links[0].id,
+                password = password
+            )
+        }
+    }
+
+    @Test
     fun `removeLink removes a public link from a project space correctly`() {
         val removeLinkResult = createRemoteOperationResultMock(Unit, isSuccess = true)
 

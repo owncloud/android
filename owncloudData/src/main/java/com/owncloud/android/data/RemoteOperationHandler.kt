@@ -53,6 +53,7 @@ import com.owncloud.android.domain.exceptions.OAuth2ErrorAccessDeniedException
 import com.owncloud.android.domain.exceptions.OAuth2ErrorException
 import com.owncloud.android.domain.exceptions.PartialCopyDoneException
 import com.owncloud.android.domain.exceptions.PartialMoveDoneException
+import com.owncloud.android.domain.exceptions.PasswordEnforcedException
 import com.owncloud.android.domain.exceptions.PayloadTooLongException
 import com.owncloud.android.domain.exceptions.QuotaExceededException
 import com.owncloud.android.domain.exceptions.RedirectToNonSecureException
@@ -148,6 +149,7 @@ private fun <T> handleRemoteOperationResult(
         RemoteOperationResult.ResultCode.NETWORK_ERROR -> throw NetworkErrorException()
         RemoteOperationResult.ResultCode.RESOURCE_LOCKED -> throw ResourceLockedException()
         RemoteOperationResult.ResultCode.PAYLOAD_TOO_LONG -> throw PayloadTooLongException()
+        RemoteOperationResult.ResultCode.PASSWORD_ENFORCED -> throw PasswordEnforcedException()
         else -> throw Exception("An unknown error has occurred")
     }
 }

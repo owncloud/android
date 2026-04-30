@@ -601,6 +601,7 @@ public class RemoteOperationResult<T>
         TOO_EARLY,
         NETWORK_ERROR,
         RESOURCE_LOCKED,
-        PAYLOAD_TOO_LONG
+        PAYLOAD_TOO_LONG,
+        PASSWORD_ENFORCED
     }
 }

@@ -80,7 +80,7 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
     private var spaceMembers: List<SpaceMember> = emptyList()
     private var listener: SpaceMemberFragmentListener? = null
     private var canRemoveMembersAndLinks = false
-    private var canEditMembers = false
+    private var canEditMembersAndLinks = false
     private var canReadMembers = false
     private var numberOfManagers = 1
 
@@ -112,7 +112,7 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
         currentSpace = requireArguments().getParcelable<OCSpace>(ARG_CURRENT_SPACE) ?: return
         savedInstanceState?.let {
             canRemoveMembersAndLinks = it.getBoolean(CAN_REMOVE_MEMBERS, false)
-            canEditMembers = it.getBoolean(CAN_EDIT_MEMBERS, false)
+            canEditMembersAndLinks = it.getBoolean(CAN_EDIT_MEMBERS, false)
             canReadMembers = it.getBoolean(CAN_READ_MEMBERS, false)
         }
 
@@ -131,7 +131,11 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
 
         binding.addPublicLinkButton.setOnClickListener {
             spaceLinksViewModel.resetViewModel()
-            listener?.addPublicLink(currentSpace)
+            listener?.addPublicLink(
+                space = currentSpace,
+                editMode = false,
+                selectedPublicLink = null
+            )
         }
     }
 
@@ -158,7 +162,7 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putBoolean(CAN_REMOVE_MEMBERS, canRemoveMembersAndLinks)
-        outState.putBoolean(CAN_EDIT_MEMBERS, canEditMembers)
+        outState.putBoolean(CAN_EDIT_MEMBERS, canEditMembersAndLinks)
         outState.putBoolean(CAN_READ_MEMBERS, canReadMembers)
     }
 
@@ -197,6 +201,15 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
         )
     }
 
+    override fun onEditPublicLink(publicLink: OCLink) {
+        spaceLinksViewModel.resetViewModel()
+        listener?.addPublicLink(
+            space = currentSpace,
+            editMode = true,
+            selectedPublicLink = publicLink
+        )
+    }
+
     private fun subscribeToViewModels() {
         observeRoles()
         observeSpaceMembers()
@@ -206,6 +219,8 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
         observeEditMemberResult()
         observeAddLinkResult()
         observeRemoveLinkResult()
+        observeEditLinkResult()
+        observeEditPasswordLinkResult()
     }
 
     private fun observeRoles() {
@@ -356,10 +371,39 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
         }
     }
 
+    private fun observeEditLinkResult() {
+        collectLatestLifecycleFlow(spaceLinksViewModel.editLinkResultFlow) { event ->
+            event?.peekContent()?.let { uiResult ->
+                when (uiResult) {
+                    is UIResult.Loading -> { }
+                    is UIResult.Success -> {
+                        if (spaceLinksViewModel.addPublicLinkUIState.value?.wasPasswordChanged == false) {
+                            showMessageInSnackbar(getString(R.string.public_link_edit_correctly))
+                        }
+                        spaceLinksViewModel.resetViewModel()
+                    }
+                    is UIResult.Error -> { }
+                }
+            }
+        }
+    }
+
+    private fun observeEditPasswordLinkResult() {
+        collectLatestLifecycleFlow(spaceLinksViewModel.editPasswordLinkResultFlow) { event ->
+            event?.peekContent()?.let { uiResult ->
+                when (uiResult) {
+                    is UIResult.Loading -> { }
+                    is UIResult.Success -> showMessageInSnackbar(getString(R.string.public_link_edit_correctly))
+                    is UIResult.Error -> { }
+                }
+            }
+        }
+    }
+
     private fun checkPermissions(spacePermissions: List<String>) {
         val hasCreatePermission = DRIVES_CREATE_PERMISSION in spacePermissions
         canRemoveMembersAndLinks = DRIVES_DELETE_PERMISSION in spacePermissions
-        canEditMembers = DRIVES_UPDATE_PERMISSION in spacePermissions
+        canEditMembersAndLinks = DRIVES_UPDATE_PERMISSION in spacePermissions
         canReadMembers = DRIVES_READ_PERMISSION in spacePermissions
         binding.apply {
             addMemberButton.isVisible = hasCreatePermission
@@ -381,7 +425,7 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
             spaceMembers = spaceMembers,
             roles = roles,
             canRemoveMembers = canRemoveMembersAndLinks,
-            canEditMembers = canEditMembers,
+            canEditMembers = canEditMembersAndLinks,
             numberOfManagers = numberOfManagers
         )
     }
@@ -398,13 +442,14 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
                     Date(0)
                 }
             },
-            canRemoveLinks = canRemoveMembersAndLinks
+            canRemoveLinks = canRemoveMembersAndLinks,
+            canEditLinks = canEditMembersAndLinks
         )
     }
 
     interface SpaceMemberFragmentListener {
         fun addMember(space: OCSpace, spaceMembers: List<SpaceMember>, roles: List<OCRole>, editMode: Boolean, selectedMember: SpaceMember?)
-        fun addPublicLink(space: OCSpace)
+        fun addPublicLink(space: OCSpace, editMode: Boolean, selectedPublicLink: OCLink?)
         fun copyOrSendPublicLink(publicLinkUrl: String, spaceName: String)
     }
 

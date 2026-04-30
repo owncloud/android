@@ -87,7 +87,8 @@
                     android:text="@string/placeholder_sentence"
                     android:textSize="13sp"
                     android:textColor="@color/textColor"
-                    android:ellipsize="middle"
+                    android:ellipsize="end"
+                    android:maxLines="1"
                     android:visibility="gone"
                     tools:visibility="visible"/>
 
@@ -108,6 +109,19 @@
             android:focusable="true"
             android:src="@drawable/copy_link"
             android:visibility="visible"/>
+
+        <ImageButton
+            android:id="@+id/edit_public_link_button"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="@dimen/standard_half_margin"
+            android:padding="@dimen/standard_half_padding"
+            android:background="?android:attr/selectableItemBackground"
+            android:focusable="true"
+            android:src="@drawable/ic_lead_pencil_grey"
+            android:visibility="gone"
+            tools:visibility="visible" />
 
         <ImageButton
             android:id="@+id/remove_public_link_button"
