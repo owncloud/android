@@ -109,7 +109,6 @@
   <string name="file_list_no_app_for_file_type">Δεν βρέθηκε καμία εφαρμογή για τύπο αρχείου</string>
   <string name="local_file_list_search_with_no_matches">Δεν υπάρχουν αποτελέσματα για αυτήν την αναζήτηση</string>
   <string name="upload_list_empty">Μη διαθέσιμες μεταφορτώσεις.</string>
-  <string name="filedetails_select_file">Πατήστε σε κάποιο αρχείο για να προβάλετε περισσότερες πληροφορίες.</string>
   <string name="upload_to">Μεταφόρτωση σε %1$s</string>
   <string name="upload_files_title">Αρχεία</string>
   <string name="filedetails_size">Μέγεθος:</string>

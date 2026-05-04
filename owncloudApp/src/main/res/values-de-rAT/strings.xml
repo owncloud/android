@@ -24,7 +24,6 @@
   <string name="uploader_wrn_no_account_title">Kein Benutzerkonto gefunden</string>
   <string name="uploader_wrn_no_account_quit_btn_text">Schließen</string>
   <string name="file_list_seconds_ago">Sekunden zuvor</string>
-  <string name="filedetails_select_file">Auf eine Datei drücken, um mehr Informationen zu erhalten.</string>
   <string name="filedetails_size">Größe:</string>
   <string name="filedetails_type">Typ:</string>
   <string name="filedetails_created">Erstellt am:</string>

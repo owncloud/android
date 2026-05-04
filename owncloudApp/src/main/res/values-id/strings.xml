@@ -107,7 +107,6 @@
   <string name="file_list_no_app_for_file_type">Tidak ditemukan aplikasi untuk membaca berkas</string>
   <string name="local_file_list_search_with_no_matches">Tidak ada kecocokan untuk pencarian ini</string>
   <string name="upload_list_empty">Unggahan tidak tersedia</string>
-  <string name="filedetails_select_file">Sentuh pada berkas untuk menampilkan informasi tambahan</string>
   <string name="upload_to">Unggah untuk %1$s</string>
   <string name="upload_files_title">File</string>
   <string name="filedetails_size">Ukuran:</string>

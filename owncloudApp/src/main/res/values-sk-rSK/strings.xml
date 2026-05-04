@@ -74,7 +74,6 @@
   <string name="uploader_error_title_no_file_to_upload">Žiadny súbor na nahrávanie</string>
   <string name="uploader_error_title_file_cannot_be_uploaded">Súbor nie je možné nahrať</string>
   <string name="file_list_seconds_ago">pred sekundami</string>
-  <string name="filedetails_select_file">Viac informácií získate kliknutím na súbor.</string>
   <string name="filedetails_size">Veľkosť:</string>
   <string name="filedetails_type">Typ:</string>
   <string name="filedetails_created">Vytvorený:</string>

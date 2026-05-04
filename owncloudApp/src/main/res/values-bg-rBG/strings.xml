@@ -119,7 +119,6 @@
   <string name="file_list_no_app_for_perform_action">Не е намерено приложение за това действие</string>
   <string name="local_file_list_search_with_no_matches">Няма съвпадения за това търсене</string>
   <string name="upload_list_empty">Няма налични файлове за качване.</string>
-  <string name="filedetails_select_file">Натиснете върху файла за да видите допълнителна информация.</string>
   <string name="upload_to">Качване в %1$s</string>
   <string name="upload_files_title">Файлове</string>
   <string name="filedetails_size">Размер:</string>

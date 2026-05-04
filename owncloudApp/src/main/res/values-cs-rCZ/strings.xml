@@ -135,7 +135,6 @@
     <string name="local_file_list_search_with_no_matches">Nebyly nalezeny žádné výsledky odpovídající zadání</string>
     <string name="upload_list_empty">Nahraná data nejsou dostupná.</string>
     <string name="upload_list_empty_subtitle">Nahraná data se zobrazí zde.</string>
-    <string name="filedetails_select_file">Více informací získáte klepnutím na soubor.</string>
     <string name="upload_to">Nahrát do %1$s</string>
     <string name="upload_files_title">Soubory</string>
     <string name="filedetails_size">Velikost:</string>

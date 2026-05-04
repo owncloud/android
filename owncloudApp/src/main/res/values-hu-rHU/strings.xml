@@ -112,7 +112,6 @@
   <string name="file_list_no_app_for_file_type">Nem található alkalmazás a fájltípushoz</string>
   <string name="local_file_list_search_with_no_matches">Nincsen keresési találat</string>
   <string name="upload_list_empty">Nem találhatók feltöltések.</string>
-  <string name="filedetails_select_file">További információkért koppintson egy fájlra.</string>
   <string name="upload_to">Feltöltés ide: %1$s</string>
   <string name="upload_files_title">Fájl</string>
   <string name="filedetails_size">Méret:</string>

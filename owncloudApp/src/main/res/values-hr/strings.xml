@@ -42,7 +42,6 @@
   <string name="file_list_seconds_ago">prije par sekundi</string>
   <string name="file_list_no_app_for_file_type">Nije nađena aplikacija za ovaj tip datoteke</string>
   <string name="upload_list_empty">Slanje onemogućeno</string>
-  <string name="filedetails_select_file">Dodirni na datoteku za više informacija</string>
   <string name="filedetails_size">Veličina:</string>
   <string name="filedetails_type">Tip:</string>
   <string name="filedetails_created">Napravio:</string>

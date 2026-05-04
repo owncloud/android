@@ -139,7 +139,6 @@
     <string name="file_list_no_app_for_perform_action">Bu eylem için uygulama bulunamadı</string>
     <string name="local_file_list_search_with_no_matches">Bu arama için eşleşme yok</string>
     <string name="upload_list_empty">Uygun yükleme yok.</string>
-    <string name="filedetails_select_file">Ek bilgileri görmek için dosyaya dokunun.</string>
     <string name="upload_to">%1$s konumuna yükle</string>
     <string name="pick_document_type">Oluşturmak için bir doküman türü seçin:</string>
     <string name="upload_files_title">Dosyalar</string>

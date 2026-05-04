@@ -128,7 +128,6 @@
   <string name="file_list_no_app_for_perform_action">Nie znaleziono aplikacji dla tej akcji</string>
   <string name="local_file_list_search_with_no_matches">Brak wyników wyszukiwania</string>
   <string name="upload_list_empty">Brak przesłanych plików.</string>
-  <string name="filedetails_select_file">Dotknij plik aby wyświetlić dodatkowe informacje</string>
   <string name="upload_to">Wyślij do %1$s</string>
   <string name="upload_files_title">Pliki</string>
   <string name="filedetails_size">Rozmiar:</string>

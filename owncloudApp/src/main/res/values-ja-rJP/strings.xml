@@ -157,7 +157,6 @@
     <string name="local_file_list_search_with_no_matches">この検索条件に一致するものはありません。</string>
     <string name="upload_list_empty">ファイルがありません。</string>
     <string name="upload_list_empty_subtitle">何かをアップロードすれば、ここに表示される。</string>
-    <string name="filedetails_select_file">ファイルをタップすると追加情報が表示されます。</string>
     <string name="upload_to">アップロード先 %1$s</string>
     <string name="pick_document_type">作成するドキュメントタイプを選ぶ：</string>
     <string name="upload_files_title">ファイル</string>

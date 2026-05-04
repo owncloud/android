@@ -144,7 +144,6 @@
   <string name="local_file_list_search_with_no_matches">沒有與此搜尋匹配的</string>
   <string name="upload_list_empty">無上傳</string>
   <string name="upload_list_empty_subtitle">你上传的文件将在此显示</string>
-  <string name="filedetails_select_file">在檔案上輕觸來顯示更多資訊。</string>
   <string name="upload_to">上傳到%1$s</string>
   <string name="pick_document_type">请选择要创建的文件类型</string>
   <string name="upload_files_title">檔案</string>

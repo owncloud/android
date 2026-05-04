@@ -143,7 +143,6 @@
   <string name="local_file_list_search_with_no_matches">Нет соответствий для этого поиска</string>
   <string name="upload_list_empty">Нет файлов</string>
   <string name="upload_list_empty_subtitle">Здесь будут показаны загруженные файлы</string>
-  <string name="filedetails_select_file">Нажмите на файл для отображения дополнительной информации.</string>
   <string name="upload_to">Закачать в %1$s</string>
   <string name="pick_document_type">Выберите тип документа для создания:</string>
   <string name="upload_files_title">Файлы</string>

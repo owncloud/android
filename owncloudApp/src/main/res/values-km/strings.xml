@@ -24,7 +24,6 @@
   <string name="uploader_wrn_no_account_setup_btn_text">ដំឡើង</string>
   <string name="uploader_wrn_no_account_quit_btn_text">ចាក់ចេញ</string>
   <string name="file_list_seconds_ago">វិនាទី​មុន</string>
-  <string name="filedetails_select_file">ចុចមួយ​លើឯកសារ ដើម្បី​បង្ហាញ​ព័ត៌មាន​បន្ថែម។</string>
   <string name="filedetails_size">ទំហំ៖</string>
   <string name="filedetails_type">ប្រភេទ៖</string>
   <string name="filedetails_created">បាន​បង្កើត៖</string>

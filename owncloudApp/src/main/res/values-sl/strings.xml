@@ -83,7 +83,6 @@
   <string name="file_list_no_app_for_file_type">Ni nameščenega programa za to vrsto datoteke</string>
   <string name="local_file_list_search_with_no_matches">Ni rezultatov iskanja</string>
   <string name="upload_list_empty">Ni posodobitev</string>
-  <string name="filedetails_select_file">Pritisnite na datoteko za prikaz dodatnih podrobnosti.</string>
   <string name="upload_to">Pošlji na %1$s</string>
   <string name="upload_files_title">Datoteke</string>
   <string name="filedetails_size">Velikost:</string>

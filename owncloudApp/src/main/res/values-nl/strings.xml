@@ -110,7 +110,6 @@ Download hier: %2$s</string>
   <string name="file_list_no_app_for_file_type">Geen app gevonden voor het bestandsformaat</string>
   <string name="local_file_list_search_with_no_matches">Geen matches voor deze zoekopdracht</string>
   <string name="upload_list_empty">Geen uploads beschikbaar.</string>
-  <string name="filedetails_select_file">Druk op een bestand om extra informatie weer te geven</string>
   <string name="upload_to">Uploaden naar %1$s</string>
   <string name="upload_files_title">Bestanden</string>
   <string name="filedetails_size">Grootte:</string>

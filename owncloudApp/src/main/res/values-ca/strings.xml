@@ -100,7 +100,6 @@
   <string name="file_list_no_app_for_file_type">No s\'ha trobat cap aplicació per a aquest tipus d\'arxiu!</string>
   <string name="local_file_list_search_with_no_matches">No hi ha coincidències per aquesta búsqueda</string>
   <string name="upload_list_empty">No hi ha fitxers carregats disponibles.</string>
-  <string name="filedetails_select_file">Feu clic en un fitxer per mostrar informació addicional.</string>
   <string name="upload_to">Pujada d\'arxius al %1$s</string>
   <string name="upload_files_title">Arxius</string>
   <string name="filedetails_size">Mida:</string>
