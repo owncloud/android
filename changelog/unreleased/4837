@@ -1,0 +1,5 @@
+Change: SBOM to be updated in a separate branch with signed commits
+
+SBOM workflow in GitHub Actions has been modified to accomplish security policies, assuring that commits are verified and pushing them to a specific branch
+
+https://github.com/owncloud/android/pull/4837
