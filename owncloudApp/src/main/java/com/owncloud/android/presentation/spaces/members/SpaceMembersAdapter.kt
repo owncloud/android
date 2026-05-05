@@ -94,6 +94,7 @@ class SpaceMembersAdapter(
             expirationCalendarIcon.isVisible = hasExpirationDate
             expirationDate.isVisible = hasExpirationDate
             if (hasExpirationDate) {
+                holder.binding.memberRole.maxWidth = holder.itemView.context.resources.getDimensionPixelSize(R.dimen.member_role_max_width)
                 expirationDate.text = DisplayUtils.displayDateToHumanReadable(member.expirationDateTime)
                 expirationDate.contentDescription =
                     holder.itemView.context.getString(R.string.content_description_member_expiration_date, expirationDate.text)
