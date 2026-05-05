@@ -112,7 +112,7 @@ class SpaceMembersAdapter(
         numberOfManagers: Int
     ) {
 
-        val userPermissionsChanged = this.canEditMembers != canEditMembers
+        val hasUserPermissionsChanged = this.canEditMembers != canEditMembers || this.canRemoveMembers != canRemoveMembers
         val numberOfManagersChanged = this.numberOfManagers != numberOfManagers
 
         this.canRemoveMembers = canRemoveMembers
@@ -120,7 +120,7 @@ class SpaceMembersAdapter(
         this.rolesMap = roles.associate { it.id to it.displayName }
         val listOfMembersFiltered = spaceMembers.sortedWith(compareByDescending<SpaceMember> {
                 member -> roles.indexOfFirst { it.id in member.roles } }.thenBy { member -> member.displayName })
-        val diffCallback = SpaceMembersDiffUtil(this.members, listOfMembersFiltered, numberOfManagersChanged, userPermissionsChanged)
+        val diffCallback = SpaceMembersDiffUtil(this.members, listOfMembersFiltered, numberOfManagersChanged, hasUserPermissionsChanged)
         val diffResult = DiffUtil.calculateDiff(diffCallback)
         this.members = listOfMembersFiltered
         this.numberOfManagers = numberOfManagers
