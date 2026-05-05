@@ -43,6 +43,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:layout_marginEnd="@dimen/standard_half_margin"
             android:orientation="vertical">
 
             <TextView
@@ -93,7 +94,8 @@
                     android:text="@string/placeholder_sentence"
                     android:textSize="13sp"
                     android:textColor="@color/textColor"
-                    android:ellipsize="middle"
+                    android:ellipsize="end"
+                    android:maxLines="1"
                     android:visibility="gone"
                     tools:visibility="visible"/>
 

@@ -86,6 +86,9 @@
     <dimen name="spaces_margin_horizontal">30dp</dimen>
     <dimen name="spaces_margin_vertical">20dp</dimen>
 
+    <!-- Members -->
+    <dimen name="member_role_max_width">100dp</dimen>
+
     <!-- Accessibility dims -->
     <dimen name="icon_button_size">48dp</dimen>
     <dimen name="empty_icon_size">36dp</dimen>
