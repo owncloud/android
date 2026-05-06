@@ -4,9 +4,6 @@ on:
   workflow_dispatch:
   schedule:
     - cron: "0 3 * * *"
-  pull_request:
-    branches:
-      - master
 
 permissions:
   contents: read
