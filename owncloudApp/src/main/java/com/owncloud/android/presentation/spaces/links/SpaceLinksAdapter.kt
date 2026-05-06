@@ -93,9 +93,10 @@ class SpaceLinksAdapter(
     override fun getItemCount(): Int = spaceLinks.size
 
     fun setSpaceLinks(spaceLinks: List<OCLink>, canRemoveLinks: Boolean, canEditLinks: Boolean) {
+        val hasUserPermissionsChanged = this.canEditLinks != canEditLinks || this.canRemoveLinks != canRemoveLinks
         this.canRemoveLinks = canRemoveLinks
         this.canEditLinks = canEditLinks
-        val diffCallback = SpaceLinksDiffUtil(this.spaceLinks, spaceLinks)
+        val diffCallback = SpaceLinksDiffUtil(this.spaceLinks, spaceLinks, hasUserPermissionsChanged)
         val diffResult = DiffUtil.calculateDiff(diffCallback)
         this.spaceLinks = spaceLinks
         diffResult.dispatchUpdatesTo(this)

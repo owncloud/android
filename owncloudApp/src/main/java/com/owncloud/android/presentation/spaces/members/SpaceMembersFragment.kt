@@ -78,10 +78,11 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
     private var roles: List<OCRole> = emptyList()
     private var addMemberRoles: List<OCRole> = emptyList()
     private var spaceMembers: List<SpaceMember> = emptyList()
+    private var spaceLinks: List<OCLink> = emptyList()
     private var listener: SpaceMemberFragmentListener? = null
     private var canRemoveMembersAndLinks = false
     private var canEditMembersAndLinks = false
-    private var canReadMembers = false
+    private var canReadMembersAndLinks = false
     private var numberOfManagers = 1
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -113,7 +114,7 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
         savedInstanceState?.let {
             canRemoveMembersAndLinks = it.getBoolean(CAN_REMOVE_MEMBERS, false)
             canEditMembersAndLinks = it.getBoolean(CAN_EDIT_MEMBERS, false)
-            canReadMembers = it.getBoolean(CAN_READ_MEMBERS, false)
+            canReadMembersAndLinks = it.getBoolean(CAN_READ_MEMBERS, false)
         }
 
         subscribeToViewModels()
@@ -163,7 +164,7 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
         super.onSaveInstanceState(outState)
         outState.putBoolean(CAN_REMOVE_MEMBERS, canRemoveMembersAndLinks)
         outState.putBoolean(CAN_EDIT_MEMBERS, canEditMembersAndLinks)
-        outState.putBoolean(CAN_READ_MEMBERS, canReadMembers)
+        outState.putBoolean(CAN_READ_MEMBERS, canReadMembersAndLinks)
     }
 
     override fun onRemoveMember(spaceMember: SpaceMember) {
@@ -253,11 +254,14 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
                                     spaceMember.roles.contains(OCRoleType.toString(OCRoleType.CAN_MANAGE)) }
                                 spaceMembers = it.members
                                 addMemberRoles = it.roles
-                                if (canReadMembers) {
+                                if (canReadMembersAndLinks) {
                                     showSpaceMembers()
                                     val hasLinks = it.links.isNotEmpty()
                                     showOrHideEmptyView(hasLinks)
-                                    if (hasLinks) { showSpaceLinks(it.links) }
+                                    if (hasLinks) {
+                                        spaceLinks = it.links
+                                        showSpaceLinks()
+                                    }
                                 }
                                 binding.indeterminateProgressBar.isVisible = false
                             }
@@ -280,8 +284,9 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
                     is UIResult.Success -> {
                         uiResult.data?.let { spacePermissions ->
                             checkPermissions(spacePermissions)
-                            if (canReadMembers) {
+                            if (canReadMembersAndLinks) {
                                 showSpaceMembers()
+                                showSpaceLinks()
                             }
                         }
                     }
@@ -404,12 +409,12 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
         val hasCreatePermission = DRIVES_CREATE_PERMISSION in spacePermissions
         canRemoveMembersAndLinks = DRIVES_DELETE_PERMISSION in spacePermissions
         canEditMembersAndLinks = DRIVES_UPDATE_PERMISSION in spacePermissions
-        canReadMembers = DRIVES_READ_PERMISSION in spacePermissions
+        canReadMembersAndLinks = DRIVES_READ_PERMISSION in spacePermissions
         binding.apply {
             addMemberButton.isVisible = hasCreatePermission
             addPublicLinkButton.isVisible = hasCreatePermission
-            membersListSection.isVisible = canReadMembers
-            publicLinksSection.isVisible = canReadMembers
+            membersListSection.isVisible = canReadMembersAndLinks
+            publicLinksSection.isVisible = canReadMembersAndLinks
         }
     }
 
@@ -430,7 +435,7 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
         )
     }
 
-    private fun showSpaceLinks(spaceLinks: List<OCLink>) {
+    private fun showSpaceLinks() {
         val formatter = SimpleDateFormat(DisplayUtils.DATE_FORMAT_ISO, Locale.ROOT).apply {
             timeZone = TimeZone.getTimeZone("UTC")
         }

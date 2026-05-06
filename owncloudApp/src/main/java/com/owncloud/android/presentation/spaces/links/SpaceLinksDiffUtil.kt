@@ -25,7 +25,8 @@ import com.owncloud.android.domain.links.model.OCLink
 
 class SpaceLinksDiffUtil(
     private val oldList: List<OCLink>,
-    private val newList: List<OCLink>
+    private val newList: List<OCLink>,
+    private val hasUserPermissionsChanged: Boolean
 ) : DiffUtil.Callback() {
     override fun getOldListSize(): Int = oldList.size
 
@@ -43,6 +44,7 @@ class SpaceLinksDiffUtil(
         val newItem = newList[newItemPosition]
 
         return ((oldItem.id == newItem.id) && (oldItem.expirationDateTime == newItem.expirationDateTime) &&
-                (oldItem.displayName == newItem.displayName) && (oldItem.type == newItem.type) && (oldItem.webUrl == newItem.webUrl))
+                (oldItem.displayName == newItem.displayName) && (oldItem.type == newItem.type) &&
+                (oldItem.webUrl == newItem.webUrl) && !hasUserPermissionsChanged)
     }
 }
