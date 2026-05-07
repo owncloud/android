@@ -1,0 +1,7 @@
+Enhancement: Pull to refresh members and links
+
+A pull to refresh has been added to the space members and links lists
+in order to refresh the data and permissions with a simple gesture.
+
+https://github.com/owncloud/android/issues/4773
+https://github.com/owncloud/android/pull/4836
