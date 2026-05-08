@@ -3,7 +3,9 @@
  *
  *   @author David González Verdugo
  *   @author Abel García de Prada
- *   Copyright (C) 2020 ownCloud GmbH.
+ *   @author Jorge Aguado Recio
+ *
+ *   Copyright (C) 2026 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -83,6 +85,7 @@ import com.owncloud.android.data.user.db.UserQuotaEntity
         AutoMigration(from = 45, to = 46),
         AutoMigration(from = 46, to = 47),
         AutoMigration(from = 47, to = 48),
+        AutoMigration(from = 48, to = 49),
     ],
     version = ProviderMeta.DB_VERSION,
     exportSchema = true

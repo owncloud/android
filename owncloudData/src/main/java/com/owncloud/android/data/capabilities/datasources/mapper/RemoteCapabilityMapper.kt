@@ -3,8 +3,9 @@
  *
  * @author David González Verdugo
  * @author Juan Carlos Garrote Gascón
+ * @author Jorge Aguado Recio
  *
- * Copyright (C) 2024 ownCloud GmbH.
+ * Copyright (C) 2026 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -64,6 +65,7 @@ class RemoteCapabilityMapper : RemoteMapper<OCCapability, RemoteCapability> {
                 filesSharingFederationIncoming =
                 CapabilityBooleanType.fromValue(remote.filesSharingFederationIncoming.value),
                 filesSharingUserProfilePicture = CapabilityBooleanType.fromValue(remote.filesSharingUserProfilePicture.value),
+                filesSharingSearchMinLength = remote.filesSharingSearchMinLength,
                 filesBigFileChunking = CapabilityBooleanType.fromValue(remote.filesBigFileChunking.value),
                 filesUndelete = CapabilityBooleanType.fromValue(remote.filesUndelete.value),
                 filesVersioning = CapabilityBooleanType.fromValue(remote.filesVersioning.value),
@@ -110,6 +112,7 @@ class RemoteCapabilityMapper : RemoteMapper<OCCapability, RemoteCapability> {
                 filesSharingFederationIncoming =
                 RemoteCapabilityBooleanType.fromValue(model.filesSharingFederationIncoming.value)!!,
                 filesSharingUserProfilePicture = RemoteCapabilityBooleanType.fromValue(model.filesSharingUserProfilePicture.value)!!,
+                filesSharingSearchMinLength = model.filesSharingSearchMinLength,
                 filesBigFileChunking = RemoteCapabilityBooleanType.fromValue(model.filesBigFileChunking.value)!!,
                 filesUndelete = RemoteCapabilityBooleanType.fromValue(model.filesUndelete.value)!!,
                 filesVersioning = RemoteCapabilityBooleanType.fromValue(model.filesVersioning.value)!!,

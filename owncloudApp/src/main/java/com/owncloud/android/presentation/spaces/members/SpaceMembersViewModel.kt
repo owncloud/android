@@ -23,6 +23,8 @@ package com.owncloud.android.presentation.spaces.members
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.owncloud.android.domain.UseCaseResult
+import com.owncloud.android.domain.capabilities.model.OCCapability
+import com.owncloud.android.domain.capabilities.usecases.GetStoredCapabilitiesUseCase
 import com.owncloud.android.domain.members.model.OCMember
 import com.owncloud.android.domain.members.usecases.AddMemberUseCase
 import com.owncloud.android.domain.members.usecases.EditMemberUseCase
@@ -54,6 +56,7 @@ class SpaceMembersViewModel(
     private val getRolesAsyncUseCase: GetRolesAsyncUseCase,
     private val getSpaceMembersUseCase: GetSpaceMembersUseCase,
     private val getSpacePermissionsAsyncUseCase: GetSpacePermissionsAsyncUseCase,
+    private val getStoredCapabilitiesUseCase: GetStoredCapabilitiesUseCase,
     private val removeMemberUseCase: RemoveMemberUseCase,
     private val searchMembersUseCase: SearchMembersUseCase,
     private val accountName: String,
@@ -86,6 +89,7 @@ class SpaceMembersViewModel(
     val editMemberResultFlow: StateFlow<Event<UIResult<Unit>>?> = _editMemberResultFlow
 
     private var searchJob: Job? = null
+    var capabilities: OCCapability? = null
 
     init {
         runUseCaseWithResult(
@@ -97,7 +101,9 @@ class SpaceMembersViewModel(
             requiresConnection = true
         )
         getSpacePermissions()
-
+        viewModelScope.launch(coroutineDispatcherProvider.io) {
+            capabilities = getStoredCapabilitiesUseCase(GetStoredCapabilitiesUseCase.Params(accountName))
+        }
     }
 
     fun getSpacePermissions() = runUseCaseWithResult(

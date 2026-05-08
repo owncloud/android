@@ -3,8 +3,9 @@
  *
  * @author David González Verdugo
  * @author Juan Carlos Garrote Gascón
+ * @author Jorge Aguado Recio
  *
- * Copyright (C) 2024 ownCloud GmbH.
+ * Copyright (C) 2026 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -47,6 +48,7 @@ data class OCCapability(
     val filesSharingFederationOutgoing: CapabilityBooleanType,
     val filesSharingFederationIncoming: CapabilityBooleanType,
     val filesSharingUserProfilePicture: CapabilityBooleanType,
+    val filesSharingSearchMinLength: Int,
     val filesBigFileChunking: CapabilityBooleanType,
     val filesUndelete: CapabilityBooleanType,
     val filesVersioning: CapabilityBooleanType,

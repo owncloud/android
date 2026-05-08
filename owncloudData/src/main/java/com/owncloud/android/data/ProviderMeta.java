@@ -5,8 +5,10 @@
  * @author David A. Velasco
  * @author masensio
  * @author David González Verdugo
+ * @author Jorge Aguado Recio
+ *
  * Copyright (C) 2011  Bartek Przybylski
- * Copyright (C) 2020 ownCloud GmbH.
+ * Copyright (C) 2026 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -31,7 +33,7 @@ public class ProviderMeta {
 
     public static final String DB_NAME = "filelist";
     public static final String NEW_DB_NAME = "owncloud_database";
-    public static final int DB_VERSION = 48;
+    public static final int DB_VERSION = 49;
 
     private ProviderMeta() {
     }
@@ -90,6 +92,7 @@ public class ProviderMeta {
         public static final String CAPABILITIES_SHARING_PUBLIC_SUPPORTS_UPLOAD_ONLY = "supports_upload_only";
         public static final String CAPABILITIES_SHARING_PUBLIC_UPLOAD = "sharing_public_upload";
         public static final String CAPABILITIES_SHARING_RESHARING = "sharing_resharing";
+        public static final String CAPABILITIES_SHARING_SEARCH_MIN_LENGTH = "search_min_length";
         public static final String CAPABILITIES_SHARING_USER_PROFILE_PICTURE = "sharing_user_profile_picture";
         public static final String CAPABILITIES_SPACES_PREFIX = "spaces_";
         public static final String CAPABILITIES_PASSWORD_POLICY_PREFIX = "password_policy_";
