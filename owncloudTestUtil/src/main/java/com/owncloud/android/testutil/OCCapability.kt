@@ -2,8 +2,9 @@
  * ownCloud Android client application
  *
  * @author Aitor Ballesteros Pavón
+ * @author Jorge Aguado Recio
  *
- * Copyright (C) 2024 ownCloud GmbH.
+ * Copyright (C) 2026 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -49,6 +50,7 @@ val OC_CAPABILITY =
         filesSharingFederationOutgoing = CapabilityBooleanType.FALSE,
         filesSharingFederationIncoming = CapabilityBooleanType.FALSE,
         filesSharingUserProfilePicture = CapabilityBooleanType.FALSE,
+        filesSharingSearchMinLength = 3,
         filesBigFileChunking = CapabilityBooleanType.FALSE,
         filesUndelete = CapabilityBooleanType.FALSE,
         filesVersioning = CapabilityBooleanType.FALSE,
