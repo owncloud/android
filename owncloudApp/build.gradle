@@ -241,6 +241,14 @@ def setOutputFileName(variant, appName, callerProject) {
     }
 }
 
+
+// implementation libs.disklrucache
+//     implementation libs.media3.exoplayer
+//     implementation libs.media3.ui
+//     implementation libs.floatingactionbutton
+//     implementation libs.material
+//     implementation libs.patternlockview
+
 static def getLatestGitHash() {
     def process = "git rev-parse --short HEAD".execute()
     return process.text.toString().trim()
