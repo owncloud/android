@@ -66,7 +66,7 @@ class AddMemberFragment: Fragment(), SearchMembersAdapter.SearchMembersAdapterLi
 
     private var editMode = false
     private var selectedMemberId = ""
-    private var searchMinLength = 3
+    private var searchMinLength = DEFAULT_SEARCH_MIN_LENGTH
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = AddMemberFragmentBinding.inflate(inflater, container, false)
@@ -142,7 +142,7 @@ class AddMemberFragment: Fragment(), SearchMembersAdapter.SearchMembersAdapterLi
 
     private fun subscribeToViewModels() {
         val spaceMembers = requireArguments().getParcelableArrayList<SpaceMember>(ARG_SPACE_MEMBERS) ?: arrayListOf()
-        searchMinLength = spaceMembersViewModel.capabilities?.filesSharingSearchMinLength ?: searchMinLength
+        searchMinLength = spaceMembersViewModel.capabilities?.filesSharingSearchMinLength ?: DEFAULT_SEARCH_MIN_LENGTH
 
         collectLatestLifecycleFlow(spaceMembersViewModel.members) { uiState ->
             if (uiState.isLoading) {
@@ -320,6 +320,7 @@ class AddMemberFragment: Fragment(), SearchMembersAdapter.SearchMembersAdapterLi
         private const val ARG_ROLES = "ROLES"
         private const val ARG_EDIT_MODE = "EDIT_MODE"
         private const val ARG_SELECTED_MEMBER = "SELECTED_MEMBER"
+        private const val DEFAULT_SEARCH_MIN_LENGTH = 3
 
         fun newInstance(
             accountName: String,
