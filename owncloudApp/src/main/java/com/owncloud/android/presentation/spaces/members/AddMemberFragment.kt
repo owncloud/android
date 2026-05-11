@@ -66,6 +66,7 @@ class AddMemberFragment: Fragment(), SearchMembersAdapter.SearchMembersAdapterLi
 
     private var editMode = false
     private var selectedMemberId = ""
+    private var searchMinLength = DEFAULT_SEARCH_MIN_LENGTH
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = AddMemberFragmentBinding.inflate(inflater, container, false)
@@ -106,7 +107,11 @@ class AddMemberFragment: Fragment(), SearchMembersAdapter.SearchMembersAdapterLi
                 override fun onQueryTextSubmit(query: String): Boolean = true
 
                 override fun onQueryTextChange(newText: String): Boolean {
-                    if (newText.length > 2) { spaceMembersViewModel.searchMembers(newText) } else { spaceMembersViewModel.clearSearch() }
+                    if (newText.length >= searchMinLength) {
+                        spaceMembersViewModel.searchMembers(newText)
+                    } else {
+                        spaceMembersViewModel.clearSearch()
+                    }
                     return true
                 }
             })
@@ -116,7 +121,7 @@ class AddMemberFragment: Fragment(), SearchMembersAdapter.SearchMembersAdapterLi
     private fun showOrHideEmptyView(hasMembers: Boolean) {
         binding.membersRecyclerView.isVisible = hasMembers
         binding.emptyDataParent.apply {
-            val shouldShow = !hasMembers && binding.searchBar.query.length > 2
+            val shouldShow = !hasMembers && binding.searchBar.query.length >= searchMinLength
             root.isVisible = shouldShow
             if (shouldShow) {
                 listEmptyDatasetIcon.setImageResource(R.drawable.ic_share_generic_white)
@@ -137,6 +142,7 @@ class AddMemberFragment: Fragment(), SearchMembersAdapter.SearchMembersAdapterLi
 
     private fun subscribeToViewModels() {
         val spaceMembers = requireArguments().getParcelableArrayList<SpaceMember>(ARG_SPACE_MEMBERS) ?: arrayListOf()
+        searchMinLength = spaceMembersViewModel.capabilities?.filesSharingSearchMinLength ?: DEFAULT_SEARCH_MIN_LENGTH
 
         collectLatestLifecycleFlow(spaceMembersViewModel.members) { uiState ->
             if (uiState.isLoading) {
@@ -314,6 +320,7 @@ class AddMemberFragment: Fragment(), SearchMembersAdapter.SearchMembersAdapterLi
         private const val ARG_ROLES = "ROLES"
         private const val ARG_EDIT_MODE = "EDIT_MODE"
         private const val ARG_SELECTED_MEMBER = "SELECTED_MEMBER"
+        private const val DEFAULT_SEARCH_MIN_LENGTH = 3
 
         fun newInstance(
             accountName: String,

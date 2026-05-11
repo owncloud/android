@@ -3,7 +3,9 @@
  *
  * @author David González Verdugo
  * @author Abel García de Prada
- * Copyright (C) 2020 ownCloud GmbH.
+ * @author Jorge Aguado Recio
+ *
+ * Copyright (C) 2026 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -49,6 +51,7 @@ import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_SHA
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_SUPPORTS_UPLOAD_ONLY
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_UPLOAD
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_SHARING_RESHARING
+import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_SHARING_SEARCH_MIN_LENGTH
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_SHARING_USER_PROFILE_PICTURE
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_SPACES_PREFIX
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_TABLE_NAME
@@ -114,6 +117,8 @@ data class OCCapabilityEntity(
     val filesSharingFederationIncoming: Int,
     @ColumnInfo(name = CAPABILITIES_SHARING_USER_PROFILE_PICTURE, defaultValue = capabilityBooleanTypeUnknownString)
     val filesSharingUserProfilePicture: Int,
+    @ColumnInfo (name = CAPABILITIES_SHARING_SEARCH_MIN_LENGTH, defaultValue = "3")
+    val filesSharingSearchMinLength: Int,
     @ColumnInfo(name = CAPABILITIES_FILES_BIGFILECHUNKING, defaultValue = capabilityBooleanTypeUnknownString)
     val filesBigFileChunking: Int,
     @ColumnInfo(name = CAPABILITIES_FILES_UNDELETE, defaultValue = capabilityBooleanTypeUnknownString)
@@ -158,6 +163,7 @@ data class OCCapabilityEntity(
                 it.getInt(it.getColumnIndexOrThrow(CAPABILITIES_SHARING_FEDERATION_OUTGOING)),
                 it.getInt(it.getColumnIndexOrThrow(CAPABILITIES_SHARING_FEDERATION_INCOMING)),
                 it.getInt(it.getColumnIndexOrThrow(CAPABILITIES_SHARING_USER_PROFILE_PICTURE)),
+                it.getInt(it.getColumnIndexOrThrow(CAPABILITIES_SHARING_SEARCH_MIN_LENGTH)),
                 it.getInt(it.getColumnIndexOrThrow(CAPABILITIES_FILES_BIGFILECHUNKING)),
                 it.getInt(it.getColumnIndexOrThrow(CAPABILITIES_FILES_UNDELETE)),
                 it.getInt(it.getColumnIndexOrThrow(CAPABILITIES_FILES_VERSIONING)),

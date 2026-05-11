@@ -2,7 +2,9 @@
  * ownCloud Android client application
  *
  * @author David González Verdugo
- * Copyright (C) 2020 ownCloud GmbH.
+ * @author Jorge Aguado Recio
+ *
+ * Copyright (C) 2026 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -79,6 +81,7 @@ class OCLocalCapabilitiesDataSource(
                 filesSharingFederationOutgoing = CapabilityBooleanType.fromValue(filesSharingFederationOutgoing),
                 filesSharingFederationIncoming = CapabilityBooleanType.fromValue(filesSharingFederationIncoming),
                 filesSharingUserProfilePicture = CapabilityBooleanType.fromValue(filesSharingUserProfilePicture),
+                filesSharingSearchMinLength = filesSharingSearchMinLength,
                 filesBigFileChunking = CapabilityBooleanType.fromValue(filesBigFileChunking),
                 filesUndelete = CapabilityBooleanType.fromValue(filesUndelete),
                 filesVersioning = CapabilityBooleanType.fromValue(filesVersioning),
@@ -115,6 +118,7 @@ class OCLocalCapabilitiesDataSource(
                 filesSharingFederationOutgoing = filesSharingFederationOutgoing.value,
                 filesSharingFederationIncoming = filesSharingFederationIncoming.value,
                 filesSharingUserProfilePicture = filesSharingUserProfilePicture.value,
+                filesSharingSearchMinLength = filesSharingSearchMinLength,
                 filesBigFileChunking = filesBigFileChunking.value,
                 filesUndelete = filesUndelete.value,
                 filesVersioning = filesVersioning.value,

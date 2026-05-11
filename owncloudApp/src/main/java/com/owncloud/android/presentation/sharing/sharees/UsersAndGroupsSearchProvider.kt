@@ -4,7 +4,9 @@
  * @author David A. Velasco
  * @author Juan Carlos González Cabrero
  * @author David González Verdugo
- * Copyright (C) 2020 ownCloud GmbH.
+ * @author Jorge Aguado Recio
+ *
+ * Copyright (C) 2026 ownCloud GmbH.
  *
  *
  * This program is free software: you can redistribute it and/or modify
@@ -129,11 +131,10 @@ class UsersAndGroupsSearchProvider : ContentProvider() {
 
         val getStoredCapabilitiesUseCase: GetStoredCapabilitiesUseCase by inject()
 
-        val capabilities = getStoredCapabilitiesUseCase(
-            GetStoredCapabilitiesUseCase.Params(
-                accountName = account.name
-            )
-        )
+        val capabilities = getStoredCapabilitiesUseCase(GetStoredCapabilitiesUseCase.Params(accountName = account.name))
+
+        val searchMinLength = capabilities?.filesSharingSearchMinLength ?: 3
+        if (userQuery.length < searchMinLength) { return MatrixCursor(COLUMNS) }
 
         val getShareesAsyncUseCase: GetShareesAsyncUseCase by inject()
 

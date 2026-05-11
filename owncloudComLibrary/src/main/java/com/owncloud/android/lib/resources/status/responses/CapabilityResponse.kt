@@ -91,6 +91,7 @@ data class CapabilityResponse(
         CapabilityBooleanType.fromBooleanValue(capabilities?.fileSharingCapabilities?.fileSharingUser?.profilePicture),
         spaces = capabilities?.spacesCapabilities?.toSpaces(),
         passwordPolicy = capabilities?.passwordPolicyCapabilities?.toPasswordPolicy(),
+        filesSharingSearchMinLength = capabilities?.fileSharingCapabilities?.fileSharingSearchMinLength ?: 3
     )
 }
 
@@ -127,6 +128,8 @@ data class FileSharingCapabilities(
     val fileSharingFederation: FileSharingFederation?,
     @Json(name = "user")
     val fileSharingUser: FileSharingUser?,
+    @Json(name = "search_min_length")
+    val fileSharingSearchMinLength: Int
 )
 
 @JsonClass(generateAdapter = true)
