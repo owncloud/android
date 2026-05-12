@@ -806,6 +806,7 @@
     <string name="content_description_space_name">%1$sスペース名</string>
     <string name="content_description_space_three_dot_menu">%1$sスペースメニュー</string>
     <string name="content_description_space_subtitle">%1$sスペースサブタイトル</string>
+    <string name="content_description_cancel_button">キャンセル</string>
     <string name="content_description_quota_switch">スペース割り当て</string>
     <string name="content_description_member_user">ユーザー %1$s</string>
     <string name="content_description_member_group">グループ %1$s</string>

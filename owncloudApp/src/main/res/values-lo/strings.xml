@@ -67,7 +67,7 @@
     <string name="prefs_subsection_video_uploads">ການອັບໂຫຼດວິດີໂອ</string>
     <string name="prefs_subsection_video_uploads_summary">ອັບໂຫຼດວິດີໂອຂອງທ່ານໂດຍອັດຕະໂນມັດ</string>
     <string name="prefs_camera_picture_upload">ອັບໂຫຼດຮູບພາບຈາກກ້ອງ</string>
-    <string name="prefs_camera_picture_upload_summary">ອັບໂຫຼດຮູບພາບຈາກໂຟລເດີກ້ອງโดยอັດຕະໂນມັດ</string>
+    <string name="prefs_camera_picture_upload_summary">ອັບໂຫຼດຮູບພາບຈາກໂຟລເດີກ້ອງໂດຍອັດຕະໂນມັດ</string>
     <string name="prefs_camera_picture_upload_path_title">ເສັ້ນທາງອັບໂຫຼດ</string>
     <string name="prefs_camera_picture_upload_conditions_title">ເງື່ອນໄຂການອັບໂຫຼດ</string>
     <string name="prefs_camera_picture_upload_conditions_summary">ອັບໂຫຼດສະເພາະເມື່ອເຊື່ອມຕໍ່ Wi-Fi ແລະ/ຫຼື ກຳລັງສາກແບັດ</string>
@@ -75,7 +75,7 @@
     <string name="prefs_camera_picture_upload_on_charging">ອັບໂຫຼດເມື່ອກຳລັງສາກເທົ່ານັ້ນ</string>
     <string name="prefs_camera_upload_on_charging_summary">ອັບໂຫຼດເມື່ອສາກແບັດເຕີຣີເທົ່ານັ້ນ</string>
     <string name="prefs_camera_video_upload">ອັບໂຫຼດວິດີໂອຈາກກ້ອງ</string>
-    <string name="prefs_camera_video_upload_summary">ອັບໂຫຼດວິດີໂອຈາກໂຟລເດີກ້ອງโดยอັດຕະໂນມັດ</string>
+    <string name="prefs_camera_video_upload_summary">ອັບໂຫຼດວິດີໂອຈາກໂຟລເດີກ້ອງໂດຍອັດຕະໂນມັດ</string>
     <string name="prefs_camera_video_upload_path_title">ເສັ້ນທາງອັບໂຫຼດ</string>
     <string name="prefs_camera_video_upload_on_wifi">ອັບໂຫຼດຜ່ານ Wi-Fi ເທົ່ານັ້ນ</string>
     <string name="prefs_camera_video_upload_on_charging">ອັບໂຫຼດເມື່ອກຳລັງສາກເທົ່ານັ້ນ</string>
@@ -84,6 +84,7 @@
     <string name="prefs_subsection_notifications">ການແຈ້ງເຕືອນ</string>
     <string name="prefs_show_hidden_files">ສະແດງໄຟລ໌ທີ່ເຊື່ອງໄວ້</string>
     <string name="prefs_show_disabled_spaces">ສະແດງພື້ນທີ່ທີ່ປິດໃຊ້ງານ</string>
+    <string name="prefs_show_disabled_spaces_summary">ສະແດງພື້ນທີ່ຈັດເກັບຂໍ້ມູນທີ່ຖືກປິດໃຊ້ງານໄວ້</string>
     <string name="prefs_log_open_logs_list_view">ເບິ່ງລາຍການບັນທຶກ</string>
     <string name="prefs_log_no_logs_list_view">ບໍ່ມີລາຍການບັນທຶກ</string>
     <string name="prefs_log_empty_subtitle">ລາຍການບັນທຶກຂອງທ່ານວ່າງເປົ່າ</string>
@@ -141,6 +142,7 @@
     <string name="auth_oauth_failure">ການອະນຸຍາດລົ້ມເຫຼວ</string>
     <string name="auth_oauth_failure_snackbar_action">ລອງໃໝ່</string>
     <string name="auth_check_server">ກຳລັງກວດສອບເຊີບເວີ</string>
+    <string name="auth_host_url">URL ຂອງໂຮສ</string>
     <string name="auth_username">ຊື່ຜູ້ໃຊ້</string>
     <string name="auth_password">ລະຫັດຜ່ານ</string>
     <string name="auth_register">ລົງທະບຽນ</string>
@@ -166,13 +168,14 @@
     <string name="space_label">ພື້ນທີ່</string>
     <string name="file_list_empty_title_available_offline">ບໍ່ມີໄຟລ໌ສຳລັບອອບໄລນ໌</string>
     <string name="file_list_empty_title_shared_by_links">ບໍ່ມີໄຟລ໌ທີ່ແຊຣ໌ຜ່ານລິ້ງ</string>
-    <string name="file_list_empty_subtitle_all_files">ອັບໂຫຼດເນື້ອหาบางอย่างหรือซิงโครไนซ์อุปกรณ์ของคุณ!</string>
+    <string name="file_list_empty_subtitle_all_files">ອັບໂຫຼດເນື້ອຫາບາງຢ່າງ ຫຼື ຊິງຄ໌ອຸປະກອນຂອງທ່ານ!</string>
     <string name="light_users_subtitle">ທ່ານບໍ່ສາມາດອັບໂຫຼດໄຟລ໌ໄດ້</string>
     <string name="shares_list_empty_title">ຍັງບໍ່ມີການແຊຣ໌</string>
     <string name="shares_list_empty_subtitle">ໄຟລ໌ທີ່ທ່ານແຊຣ໌ຈະປາກົດຢູ່ທີ່ນີ້</string>
     <string name="spaces_list_empty_subtitle">ພື້ນທີ່ທີ່ສ້າງຂຶ້ນຈະປາກົດຢູ່ທີ່ນີ້</string>
     <string name="file_list_empty_subtitle_available_offline">ໄຟລ໌ທີ່ຕັ້ງຄ່າເປັນ \"ໃຊ້ງານແບບອອບໄລນ໌\" ຈະປາກົດຢູ່ທີ່ນີ້</string>
     <string name="file_list_empty_subtitle_shared_by_links">ໄຟລ໌ທີ່ແຊຣ໌ຜ່ານລິ້ງສາທາລະນະຈະປາກົດຢູ່ທີ່ນີ້</string>
+    <string name="file_list_loading">ກຳລັງໂຫຼດລາຍຊື່ໄຟລ໌...</string>
     <string name="file_list_no_app_for_file_type">ບໍ່ມີແອັບທີ່ສາມາດເປີດໄຟລ໌ປະເພດນີ້ໄດ້</string>
     <string name="file_list_no_app_for_perform_action">ບໍ່ມີແອັບທີ່ສາມາດດຳເນີນການນີ້ໄດ້</string>
     <string name="local_file_list_empty">ບໍ່ມີໄຟລ໌</string>
@@ -210,15 +213,18 @@
     <string name="common_back">ກັບຄືນ</string>
     <string name="common_save_exit">ບັນທຶກ ແລະ ອອກ</string>
     <string name="common_error">ຂໍ້ຜິດພາດ</string>
+    <string name="common_loading">ກຳລັງໂຫຼດ...</string>
     <string name="common_unknown">ບໍ່ຮູ້ຈັກ</string>
     <string name="common_error_unknown">ຂໍ້ຜິດພາດທີ່ບໍ່ຮູ້ຈັກ</string>
     <string name="common_pending">ກຳລັງລໍຖ້າ</string>
     <string name="common_important">ສຳຄັນ</string>
+    <string name="common_set">ຕັ້ງຄ່າ</string>
     <string name="change_password">ປ່ຽນລະຫັດຜ່ານ</string>
     <string name="delete_account">ລຶບບັນຊີ</string>
     <string name="create_account">ສ້າງບັນຊີ</string>
     <string name="upload_chooser_title">ອັບໂຫຼດຈາກ</string>
     <string name="uploader_info_dirname">ໃນ %1$s</string>
+    <string name="uploader_upload_in_progress_ticker">ກຳລັງດຳເນີນການອັບໂຫຼດ</string>
     <string name="uploader_upload_in_progress_content">ກຳລັງອັບໂຫຼດ %1$d ໄຟລ໌</string>
     <string name="uploader_upload_succeeded_ticker">ອັບໂຫຼດສຳເລັດ</string>
     <string name="uploader_upload_succeeded_content_single">ອັບໂຫຼດ %1$s ສຳເລັດແລ້ວ</string>
@@ -269,6 +275,7 @@
     <string name="uploader_upload_canceled_ticker">ການອັບໂຫຼດຖືກຍົກເລີກ</string>
     <string name="downloader_download_canceled_ticker">ການດາວໂຫຼດຖືກຍົກເລີກ</string>
     <string name="downloader_download_enqueued_ticker">ການດາວໂຫຼດຖືກເພີ່ມເຂົ້າຄິວ</string>
+    <string name="downloader_download_in_progress_ticker">ກຳລັງດຳເນີນການດາວໂຫຼດ</string>
     <string name="downloader_download_in_progress_content">ກຳລັງດາວໂຫຼດ %1$s</string>
     <string name="downloader_download_succeeded_ticker">ດາວໂຫຼດສຳເລັດ</string>
     <string name="downloader_download_succeeded_content">ດາວໂຫຼດ %1$s ສຳເລັດແລ້ວ</string>
@@ -342,6 +349,8 @@
     <string name="media_forward_description">ກໍໄປໜ້າ</string>
     <string name="upload_from_camera_title">ສ້າງໄຟລ໌ໃໝ່ຈາກ</string>
 
+    <string name="auth_getting_authorization">ກຳລັງຂໍສິດອະນຸຍາດ...</string>
+    <string name="auth_trying_to_login">ກຳລັງພະຍາຍາມເຂົ້າສູ່ລະບົບ...</string>
     <string name="auth_no_net_conn_title">ບໍ່ມີການເຊື່ອມຕໍ່ເຄືອຂ່າຍ</string>
     <string name="auth_nossl_plain_ok_title">ການເຊື່ອມຕໍ່ບໍ່ປອດໄພ. ດຳເນີນການຕໍ່?</string>
     <string name="auth_connection_established">ການເຊື່ອມຕໍ່ສຳເລັດ</string>
@@ -364,6 +373,7 @@
     <string name="auth_expired_basic_auth_toast">ກະລຸນາໃສ່ລະຫັດຜ່ານປັດຈຸບັນຂອງທ່ານ</string>
     <string name="auth_connecting_auth_server">ກຳລັງເຊື່ອມຕໍ່ກັບເຊີບເວີ</string>
     <string name="auth_unsupported_auth_method">ເຊີບເວີບໍ່ຮອງຮັບວິທີການຢືນຢັນຕົວຕົນນີ້</string>
+    <string name="auth_fail_get_user_name">ບໍ່ສາມາດເອົາຊື່ຜູ້ໃຊ້ໄດ້</string>
     <string name="auth_can_not_auth_against_server">ບໍ່ສາມາດຢືນຢັນຕົວຕົນກັບເຊີບເວີນີ້ໄດ້</string>
     <string name="auth_account_does_not_exist">ບໍ່ພົບບັນຊີ</string>
 
@@ -469,8 +479,9 @@
     <string name="error__upload__local_file_not_copied">ບໍ່ສາມາດສຳເນົາ %1$s ໄປທີ່ໂຟລເດີຂອງແອັບໄດ້</string>
 
     <string name="get_shares_error">ບໍ່ສາມາດເອົາຂໍ້ມູນການແຊຣ໌ໄດ້</string>
-    <string name="get_sharees_error">ບໍ່ສາມາດເອົາລາຍຊື່ผู้ที่อาจແຊຣ໌ให้ได้</string>
+    <string name="get_sharees_error">ບໍ່ສາມາດເອົາລາຍຊື່ຜູ້ທີ່ອາດແຊຣ໌ໃຫ້ໄດ້</string>
     <string name="get_capabilities_error">ບໍ່ສາມາດເອົາຄວາມສາມາດຂອງລະບົບໄດ້</string>
+    <string name="share_link_no_support_share_api">ເຊີບເວີນີ້ບໍ່ຮອງຮັບ Share API</string>
     <string name="share_link_file_error">ມີບາງຢ່າງຜິດພາດ. ໄຟລ໌ອາດຈະຖືກລຶບໄປແລ້ວ ຫຼື ບໍ່ສາມາດໃຊ້ງານໄດ້ອີກຕໍ່ໄປ.</string>
     <string name="unshare_link_file_error">ບໍ່ສາມາດລຶບລິ້ງສາທາລະນະໄດ້ເນື່ອງຈາກຂໍ້ຜິດພາດຂອງເຊີບເວີ</string>
     <string name="update_link_file_error">ບໍ່ສາມາດອັບເດດລິ້ງສາທາລະນະໄດ້ເນື່ອງຈາກຂໍ້ຜິດພາດຂອງເຊີບເວີ</string>
@@ -517,6 +528,8 @@
     <string name="log_send_history_button">ສົ່ງ</string>
     <string name="log_send_no_mail_app">ບໍ່ມີແອັບອີເມລຕິດຕັ້ງຢູ່</string>
     <string name="log_send_mail_subject">ບັນທຶກຂອງ ownCloud for Android</string>
+    <string name="log_progress_dialog_text">ກຳລັງປະມວນຜົນບັນທຶກ...</string>
+
     <string name="actionbar_select_all">ເລືອກທັງໝົດ</string>
     <string name="actionbar_select_inverse">ປີ້ນການເລືອກ</string>
 
@@ -531,25 +544,29 @@
     <string name="move_file_invalid_into_descendent">ບໍ່ສາມາດຍ້າຍໂຟລເດີເຂົ້າໄປໃນໂຟລເດີຍ່ອຍຂອງມັນເອງ.</string>
     <string name="move_file_invalid_overwrite">ລາຍການ %1$s ມີຢູ່ແລ້ວ.</string>
     <string name="move_file_error">ເກີດຂໍ້ຜິດພາດໃນຂະນະທີ່ພະຍາຍາມຍ້າຍໄຟລ໌.</string>
+    <string name="move_file_correctly">ຍ້າຍລາຍການ(s)ສຳເລັດແລ້ວ</string>
     <string name="forbidden_permissions_move">ທ່ານບໍ່ມີສິດຍ້າຍໄຟລ໌ນີ້.</string>
 
     <string name="copy_file_not_found">ບໍ່ສາມາດດຳເນີນການໄດ້. ລາຍການອາດຈະຖືກລຶບໄປແລ້ວ.</string>
     <string name="copy_file_invalid_into_descendent">ບໍ່ສາມາດສຳເນົາໂຟລເດີເຂົ້າໄປໃນໂຟລເດີຍ່ອຍຂອງມັນເອງ.</string>
     <string name="copy_file_invalid_overwrite">ລາຍການ %1$s ມີຢູ່ແລ້ວ.</string>
     <string name="copy_file_error">ເກີດຂໍ້ຜິດພາດໃນຂະນະທີ່ພະຍາຍາມສຳເນົາໄຟລ໌.</string>
+    <string name="copy_file_correctly">ສຳເນົາລາຍການ(s)ສຳເລັດແລ້ວ</string>
     <string name="forbidden_permissions_copy">ທ່ານບໍ່ມີສິດສຳເນົາໄຟລ໌ນີ້.</string>
+
+    <string name="go_to_destination_folder">ເປີດໂຟນເດີ</string>
 
     <string name="prefs_category_camera_upload">ສາມາດໃຊ້ງານແບບອອບໄລນ໌</string>
 
     <string name="sync_folder_failed_content">ບໍ່ສາມາດຊິງຄ໌ເນື້ອໃນຂອງໂຟລເດີ %1$s</string>
 
-    <string name="shared_subject_header">ແຊຣ໌ແລ້ວ</string>
+    <string name="shared_subject_header">ແແຊຣ໌ແລ້ວ</string>
     <string name="with_you_subject_header">ກັບທ່ານ</string>
 
     <string name="subject_user_shared_with_you">%1$s ໄດ້ແຊຣ໌ \"%2$s\" ກັບທ່ານ</string>
     <string name="subject_shared_with_you">\"%1$s\" ໄດ້ຖືກແຊຣ໌ກັບທ່ານ</string>
 
-    <string name="auth_refresh_button">รีเฟรชการเชื่อมต่อ</string>
+    <string name="auth_refresh_button">ຣີເຟຣຊການເຊື່ອມຕໍ່</string>
     <string name="auth_host_address">ທີ່ຢູ່ເຈົ້າພາບ</string>
     <string name="common_error_out_memory">ໜ່ວຍຄວາມຈຳບໍ່ພຽງພໍ.</string>
 
@@ -608,6 +625,7 @@
     <string name="share_remote_clarification">(ທາງໄກ)</string>
     <string name="share_known_remote_clarification">(ທາງໄກທີ່ຮູ້ຈັກ)</string>
 
+    <string name="share_sharee_unavailable">ຜູ້ຮັບແຊຣ໌ບໍ່ວ່າງ ຫຼື ບໍ່ສາມາດເຂົ້າເຖິງໄດ້</string>
     <string name="share_privilege_can_share">ສາມາດແຊຣ໌</string>
     <string name="share_privilege_can_edit">ສາມາດແກ້ໄຂ</string>
     <string name="share_privilege_can_edit_create">ສ້າງ</string>
@@ -620,7 +638,7 @@
     <string name="action_upload_clear">ລຶບລ້າງ</string>
 
     <string name="local_file_not_found_toast">ໄຟລ໌ໃນເຄື່ອງບໍ່ມີຢູ່.</string>
-    <string name="confirmation_remove_files_alert">ທ່ານແນ່ໃຈບໍ່ວ່າຕ້ອງການລຶບໄຟລ໌ที่เลือก\?</string>
+    <string name="confirmation_remove_files_alert">ທ່ານແນ່ໃຈບໍ່ວ່າຕ້ອງການລຶບໄຟລ໌ທີ່ເລືອກ\?</string>
     <string name="confirmation_remove_folders_alert">ທ່ານແນ່ໃຈບໍ່ວ່າຕ້ອງການລຶບໂຟລເດີທີ່ເລືອກ ແລະ ເນື້ອໃນທັງໝົດຂອງມັນ?</string>
     <string name="failed_upload_quota_exceeded_text">ພື້ນທີ່ໃນບັນຊີຂອງທ່ານບໍ່ພຽງພໍ.</string>
     <string name="auth_forbidden">ເວັບເຊີບເວີກຳລັງປະຕິເສດການເຊື່ອມຕໍ່. ຕິດຕໍ່ຜູ້ເບິ່ງແຍງລະບົບ ແລະ ກວດສອບບັນທຶກ.</string>
@@ -641,7 +659,8 @@
     <string name="error_no_network_connection">ບໍ່ມີການເຊື່ອມຕໍ່ເຄືອຂ່າຍ</string>
     <string name="share_no_public_links">ບໍ່ມີລິ້ງສາທາລະນະທີ່ຖືກແຊຣ໌</string>
     <string name="share_no_link_in_this_share">ບໍ່ມີລິ້ງໃນການແຊຣ໌ນີ້</string>
-    <string name="share_warning_about_forwarding_public_links">ກະລຸນາຮັບຊາບວ່າผู้ใช้ໃດກໍຕາມສາມາດເຂົ້າເຖິງເນື້ອຫາໄດ້ດ້ວຍລິ້ງສາທາລະນະที่ສ້າງขึ้น.</string>
+    <string name="share_warning_about_forwarding_public_links">ກະລຸນາຮັບຊາບວ່າ ຜູ້ໃຊ້ໃດກໍຕາມສາມາດເຂົ້າເຖິງເນື້ອຫາໄດ້ດ້ວຍລິ້ງສາທາລະນະທີ່ສ້າງຂຶ້ນ.</string>
+    <string name="share_warning_about_forwarding_space_public_links">ກະລຸນາຮັບຊາບວ່າຜູ້ໃດກໍຕາມທີ່ມີລິ້ງສາທາລະນະຈະສາມາດເຂົ້າເຖິງເນື້ອໃນໃນພື້ນທີ່ນີ້ໄດ້.</string>
     <string name="share_via_link_default_password">ລະຫັດຜ່ານ</string>
     <string name="share_via_link_password_enforced_label">ລະຫັດຜ່ານຖືກບັງຄັບໃຊ້</string>
     <string name="share_via_link_expiration_date_enforced_label">ວັນທີໝົດອາຍຸຖືກບັງຄັບໃຊ້</string>
@@ -651,19 +670,19 @@
     <string name="private_link_info">ເອົາລິ້ງສ່ວນຕົວເພື່ອໃຫ້ທຸກຄົນໃນ ownCloud ນີ້ສາມາດຊອກຫາໄຟລ໌ນີ້ໄດ້</string>
     <string name="file_private_link_error">ມີບາງຢ່າງຜິດພາດ. ໄຟລ໌ອາດຈະຖືກລຶບໄປແລ້ວ ຫຼື ບໍ່ສາມາດໃຊ້ງານໄດ້ອີກຕໍ່ໄປ.</string>
     <string name="download_notification_channel_name">ການດາວໂຫຼດ</string>
-    <string name="download_notification_channel_description">ສະແດງການແຈ້ງເຕືອນກ່ຽວກັບການດາວໂຫຼດที่กำลังดำเนินอยู่และเสร็จสิ้น</string>
+    <string name="download_notification_channel_description">ສະແດງການແຈ້ງເຕືອນກ່ຽວກັບການດາວໂຫຼດທີ່ກຳລັງດຳເນີນຢູ່ ແລະ ສຳເລັດແລ້ວ</string>
     <string name="upload_notification_channel_name">ການອັບໂຫຼດ</string>
-    <string name="upload_notification_channel_description">ສະແດງການແຈ້ງເຕືອນກ່ຽວກັບການອັບໂຫຼດที่กำลังดำเนินอยู่และเสร็จสิ้น</string>
+    <string name="upload_notification_channel_description">ສະແດງການແຈ້ງເຕືອນກ່ຽວກັບການອັບໂຫຼດທີ່ກຳລັງດຳເນີນຢູ່ ແລະ ສຳເລັດແລ້ວ</string>
     <string name="media_service_notification_channel_name">ບໍລິການສື່</string>
     <string name="media_service_notification_channel_description">ສະແດງວ່າສື່ໃດກຳລັງຫຼິ້ນຢູ່</string>
     <string name="file_sync_notification_channel_name">ການຊິງຄ໌ໄຟລ໌</string>
     <string name="file_sync_notification_channel_description">ສະແດງການແຈ້ງເຕືອນກ່ຽວກັບການຊິງຄ໌ໄຟລ໌ທີ່ກຳລັງດຳເນີນຢູ່ ແລະ ສຳເລັດແລ້ວ</string>
     <string name="file_sync_conflict_notification_channel_name">ຂໍ້ຂັດແຍ່ງການຊິງຄ໌ໄຟລ໌</string>
-    <string name="file_sync_conflict_notification_channel_description">ສະແດງການແຈ້ງເຕືອນກ່ຽວກັບໄຟລ໌ที่ไม่ສາມາດຊິງຄ໌ໄດ້</string>
-    <string name="clicks_to_be_developer">ທ່ານຍັງເຫຼືອອີກ %1$d ຄລິກเพื่อจะเป็นนักพัฒนา</string>
+    <string name="file_sync_conflict_notification_channel_description">ສະແງການແຈ້ງເຕືອນກ່ຽວກັບໄຟລ໌ທີ່ບໍ່ສາມາດຊິງຄ໌ໄດ້</string>
+    <string name="clicks_to_be_developer">ທ່ານຍັງເຫຼືອອີກ %1$d ຄລິກ ເພື່ອຈະເປັນນັກພັດທະນາ</string>
 
     <string name="rate_dialog_title">ໃຫ້ຄະແນນແອັບນີ້</string>
-    <string name="rate_dialog_description">ຖ້າທ່ານມັກໃຊ້ແອັບນີ້, ກະລຸນາໃຊ້ເວລາสักครู่ເພື່ອໃຫ້ຄະແນນ. ຂອບໃຈສຳລັບການສະໜັບສະໜູນຂອງທ່ານ!</string>
+    <string name="rate_dialog_description">ຖ້າທ່ານມັກໃຊ້ແອັບນີ້, ກະລຸນາໃຊ້ເວລາສັກຄູ່ເພື່ອໃຫ້ຄະແນນ. ຂອບໃຈສຳລັບການສະໜັບສະໜູນຂອງທ່ານ!</string>
     <string name="button_no_thanks_name">ບໍ່, ຂອບໃຈ</string>
     <string name="button_later_name">ໄວ້ເທື່ອໜ້າ</string>
     <string name="button_rate_now_name">ໃຫ້ຄະແນນດຽວນີ້</string>
@@ -675,14 +694,14 @@
     <string name="welcome_feature_skip_button">ຂ້າມ</string>
     <string name="welcome_feature_1_title">ຍິນດີຕ້ອນຮັບສູ່ ownCloud</string>
     <string name="welcome_feature_1_text">ໄຟລ໌ຂອງທ່ານ, ທຸກທີ່, ທຸກເວລາ.</string>
-    <string name="welcome_feature_2_title">ແຊຣ໌ກັບທຸກຄົນ</string>
-    <string name="welcome_feature_2_text">ແຊຣ໌ໄຟລ໌ກັບໝູ່, ຄອບຄົວ และเพื่อนร่วมงาน. ປອດໄພ และຕາມເງື່ອນໄຂຂອງທ່ານเอง.</string>
+    <string name="welcome_feature_2_title">ແແຊຣ໌ກັບທຸກຄົນ</string>
+    <string name="welcome_feature_2_text">ແຊຣ໌ໄຟລ໌ກັບໝູ່, ຄອບຄົວ ແລະ ເພື່ອນຮ່ວມງານ. ປອດໄພ ແລະ ຕາມເງື່ອນໄຂຂອງທ່ານເອງ.</string>
     <string name="welcome_feature_3_title">ຄວບຄຸມຢູ່ສະເໝີ</string>
-    <string name="welcome_feature_3_text">ຄວບຄຸມວ່າໃຜສາມາດເຂົ້າເຖິງໄຟລ໌ຂອງທ່ານ. ສ້າງລິ້ງທີ່ປອດໄພ และຍົກເລີກການເຂົ້າເຖິງເມື່ອໃດກໍຕາມที่คุณต้องการ.</string>
+    <string name="welcome_feature_3_text">ຄວບຄຸມວ່າໃຜສາມາດເຂົ້າເຖິງໄຟລ໌ຂອງທ່ານ. ສ້າງລິ້ງທີ່ປອດໄພ ແລະ ຍົກເລີກການເຂົ້າເຖິງເມື່ອໃດກໍຕາມທີ່ທ່ານຕ້ອງການ.</string>
     <string name="welcome_feature_4_title">ສາມາດໃຊ້ງານແບບອອບໄລນ໌</string>
-    <string name="welcome_feature_4_text">ໝາຍໄຟລ໌ໃຫ້ສາມາດໃຊ້ງານແບບອອບໄລນ໌ເພື່ອເຂົ້າເຖິງພວກมันແມ້ແຕ່ບໍ່ມີການເຊື່ອມຕໍ່ອິນເຕີເນັດ.</string>
-    <string name="welcome_feature_5_title">ເລີ່ມຕົ້ນใช้งาน</string>
-    <string name="welcome_feature_5_text">เชื่อมต่อกับเซิร์ฟเวอร์ ownCloud ของคุณหรือหาผู้ให้บริการ</string>
+    <string name="welcome_feature_4_text">ໝາຍໄຟລ໌ໃຫ້ສາມາດໃຊ້ງານແບບອອບໄລນ໌ເພື່ອເຂົ້າເຖິງພວກມັນ ແມ້ແຕ່ບໍ່ມີການເຊື່ອມຕໍ່ອິນເຕີເນັດ.</string>
+    <string name="welcome_feature_5_title">ເລີ່ມຕົ້ນໃຊ້ງານ</string>
+    <string name="welcome_feature_5_text">ເຊື່ອມຕໍ່ກັບເຊີບເວີ ownCloud ຂອງທ່ານ ຫຼື ຊອກຫາຜູ້ໃຫ້ບໍລິການ</string>
     <string name="no_browser_installed_alert">ບໍ່ມີເບຣົາເຊີຕິດຕັ້ງຢູ່</string>
     <string name="common_not_found">ບໍ່ພົບ</string>
 
@@ -695,13 +714,14 @@
     <string name="spaces_sync_failed">ການຊິງຄ໌ລົ້ມເຫຼວ</string>
 
     <!-- Scoped storage migration wizard -->
-    <string name="scoped_storage_wizard_explanation">ເພື່ອປົກປ້ອງข้อมูลของคุณให้ดีขึ้น, โฟลเดอร์ที่แอปใช้เก็บไฟล์จำเป็นต้องถูกย้าย</string>
-    <string name="scoped_storage_wizard_intro">ໄຟລ໌ຈາກບັນຊີຂອງທ່ານจะถูกย้ายไปยังโฟลเดอร์ส่วนตัว. ທ່ານຍັງຄົງสามารถเข้าถึงได้โดยใช้แอปนี้, แต่ไม่สามารถเข้าถึงจากแอปอื่นได้</string>
+    <string name="scoped_storage_wizard_explanation">ເພື່ອປົກປ້ອງຂໍ້ມູນຂອງທ່ານໃຫ້ດີຂຶ້ນ, ໂຟລເດີທີ່ແອັບໃຊ້ເກັບໄຟລ໌ຈຳເປັນຕ້ອງຖືກຍ້າຍ</string>
+    <string name="scoped_storage_wizard_intro">ໄຟລ໌ຈາກບັນຊີຂອງທ່ານ ຈະຖືກຍ້າຍໄປຍັງໂຟລເດີສ່ວນຕົວ. ທ່ານຍັງຄົງສາມາດເຂົ້າເຖິງໄດ້ໂດຍໃຊ້ແອັບນີ້, ແຕ່ບໍ່ສາມາດເຂົ້າເຖິງຈາກແອັບອື່ນໄດ້</string>
     <string name="scoped_storage_wizard_intro_button">ດຳເນີນການຕໍ່</string>
+    <string name="scoped_storage_wizard_not_enough_space_warning">ພື້ນທີ່ຈັດເກັບຂໍ້ມູນບໍ່ພຽງພໍສຳລັບການຍ້າຍຂໍ້ມູນ</string>
     <string name="scoped_storage_wizard_migrate_and_clean_button">ຍ້າຍໄຟລ໌</string>
-    <string name="scoped_storage_wizard_migration_completed">การย้ายข้อมูลเสร็จสมบูรณ์</string>
+    <string name="scoped_storage_wizard_migration_completed">ການຍ້າຍຂໍ້ມູນສຳເລັດສົມບູນ</string>
     <string name="scoped_storage_wizard_migration_completed_access_files_button">ເຂົ້າເຖິງໄຟລ໌</string>
-    <string name="scoped_storage_wizard_migration_in_progress">ກຳລັງຍ້າຍข้อมูล. ທ່ານສາມາດປິດແອັບໄດ້, ແລະມັນຈະດຳເນີນການຕໍ່ໃນພື້ນຫຼັງ.</string>
+    <string name="scoped_storage_wizard_migration_in_progress">ກຳລັງຍ້າຍຂໍ້ມູນ. ທ່ານສາມາດປິດແອັບໄດ້, ແລະ ມັນຈະດຳເນີນການຕໍ່ໃນພື້ນຫຼັງ.</string>
     <string name="scoped_storage_wizard_migration_in_progress_button">ສຳເລັດ</string>
     <string name="scoped_storage_wizard_title">ອັບເດດສຳຄັນ!</string>
 
@@ -710,7 +730,7 @@
     <string name="security_enforced_first_option">ຕັ້ງລະຫັດຜ່ານ ຫຼື ຮູບແບບ</string>
     <string name="security_enforced_second_option">ເປີດໃຊ້ຊີວະມາດ</string>
 
-    <string name="folder_upload_some_content_or_sync_devices">ອັບໂຫຼດເນື້ອหาบางอย่างหรือซิงโครไนซ์อุปกรณ์ของคุณ!</string>
+    <string name="folder_upload_some_content_or_sync_devices">ອັບໂຫຼດເນື້ອຫາບາງຢ່າງ ຫຼື ຊິງຄ໌ອຸປະກອນຂອງທ່ານ!</string>
 
     <!-- Webfinger -->
     <string name="global_proceed">ດຳເນີນການ</string>
@@ -718,20 +738,32 @@
 
     <!-- Release Notes -->
     <string name="release_notes_header">ມີຫຍັງໃໝ່</string>
+    <string name="release_notes_footer">ສຶກສາເພີ່ມເຕີມໄດ້ທີ່ owncloud.com</string>
     <string name="release_notes_proceed">ດຳເນີນການ</string>
-    <string name="release_notes_icon">ໄອຄອນบันทึกประจำรุ่น</string>
-    <string name="release_notes_bugfixes_title">การแก้ไขข้อบกพร่อง</string>
-    <string name="release_notes_bugfixes_subtitle">ແອັບຕອນນີ້เสถียรและเชื่อถือได้มากขึ้น. สำหรับรายการการเปลี่ยนแปลงทั้งหมด, เยี่ยมชม owncloud.com</string>
+    <string name="release_notes_icon">ໄອຄອນບັນທຶກປະຈຳລຸ້ນ</string>
+    <string name="release_notes_bugfixes_title">ການແກ້ໄຂຂໍ້ຜິດພາດ</string>
+    <string name="release_notes_bugfixes_subtitle">ແອັບຕອນນີ້ສະຖຽນ ແລະ ເຊື່ອຖືໄດ້ຫຼາຍຂຶ້ນ. ສຳລັບລາຍການການປ່ຽນແປງທັງໝົດ, ຢ້ຽມຊົມ owncloud.com</string>
+    <string name="release_notes_4_8_0_title_set_emoji_as_space_image">ຕັ້ງຄ່າອີໂມຈິເປັນຮູບພາບພື້ນທີ່</string>
+    <string name="release_notes_4_8_0_subtitle_set_emoji_as_space_image">ຕອນນີ້ທ່ານສາມາດໃຊ້ emojis ເພື່ອປັບແຕ່ງຮູບພາບພື້ນທີ່ຂອງທ່ານໄດ້ແລ້ວ</string>
+    <string name="release_notes_4_8_0_title_space_membership">ການຈັດການສະມາຊິກພື້ນທີ່</string>
+    <string name="release_notes_4_8_0_subtitle_space_membership">ຈັດການຜູ້ທີ່ມີສິດເຂົ້າເຖິງພື້ນທີ່ຂອງທ່ານໄດ້ງ່າຍຂຶ້ນ</string>
+    <string name="release_notes_4_8_0_title_spaces_permanent_links">ລິ້ງຖາວອນສຳລັບພື້ນທີ່</string>
+    <string name="release_notes_4_8_0_subtitle_spaces_permanent_links">ແບ່ງປັນລິ້ງທີ່ບໍ່ມີການປ່ຽນແປງສຳລັບພື້ນທີ່ສະເພາະ</string>
+    <string name="release_notes_4_8_0_title_space_public_links">ລິ້ງສາທາລະນະສຳລັບພື້ນທີ່</string>
+    <string name="release_notes_4_8_0_subtitle_space_public_links">ສ້າງລິ້ງສາທາລະນະເພື່ອແບ່ງປັນເນື້ອໃນພາຍໃນພື້ນທີ່</string>
+    <string name="release_notes_4_8_0_title_action_to_copy_or_move_destination_folder">ການນຳທາງໄປຫາໂຟນເດີປາຍທາງ</string>
+    <string name="release_notes_4_8_0_subtitle_action_to_copy_or_move_destination_folder">ການດຳເນີນການໃໝ່ເພື່ອໄປຫາໂຟນເດີປາຍທາງເມື່ອໄຟລ໌ ຫຼື ໂຟນເດີຖືກສຳເນົາ ຫຼື ຍ້າຍ</string>
+
     <!-- Open in web -->
     <string name="ic_action_open_in_web">ເປີດໃນເບຣົາເຊີ</string>
     <string name="ic_action_open_with_web">ເປີດດ້ວຍ...</string>
-    <string name="open_in_web_error_generic">ບໍ່ສາມາດເປີດໄຟລ໌ในເບຣົາເຊີໄດ້</string>
-    <string name="open_in_web_error_not_supported">ເວີຊັນເຊີບເວີຂອງທ່ານບໍ່ຮອງຮັບการเปิดไฟล์ในເບຣົາເຊີ. ກະລຸນາติดต่อผู้ดูแลระบบ</string>
+    <string name="open_in_web_error_generic">ບໍ່ສາມາດເປີດໄຟລ໌ໃນເບຣົາເຊີໄດ້</string>
+    <string name="open_in_web_error_not_supported">ເວີຊັນເຊີບເວີຂອງທ່ານບໍ່ຮອງຮັບການເປີດໄຟລ໌ໃນເບຣົາເຊີ. ກະລຸນາຕິດຕໍ່ຜູ້ເບິ່ງແຍງລະບົບ</string>
     <string name="open_in_web_error_too_early">ຄຸນສົມບັດກຳລັງໂຫຼດ. ກະລຸນາລອງໃໝ່ໃນອີກສອງສາມວິນາທີ.</string>
 
     <!-- oCIS accounts warning -->
     <string name="ocis_accounts_warning_title">ບັນຊີ oCIS ຍັງບໍ່ຮອງຮັບ</string>
-    <string name="ocis_accounts_warning_message">ບາງຄຸນສົມບັດອາດຈະບໍ່ເຮັດວຽກຕາມທີ່ຄາດຫວັງ. ກະລຸນາຮັບຊາບວ່າອາດຈະເຮັດໃຫ້ข้อมูลสูญหายหรือเสียหาย. ໂດຍການດຳເນີນການຕໍ່, ທ່ານຮັບทราบຄວາມສ່ຽງນີ້.</string>
+    <string name="ocis_accounts_warning_message">ບາງຄຸນສົມບັດອາດຈະບໍ່ເຮັດວຽກຕາມທີ່ຄາດຫວັງ. ກະລຸນາຮັບຊາບວ່າອາດຈະເຮັດໃຫ້ຂໍ້ມູນສູນຫາຍ ຫຼື ເສຍຫາຍ. ໂດຍການດຳເນີນການຕໍ່, ທ່ານຮັບຊາບຄວາມສ່ຽງນີ້.</string>
     <string name="ocis_accounts_warning_checkbox_message">ຂ້ອຍເຂົ້າໃຈຄວາມສ່ຽງ</string>
     <string name="ocis_accounts_warning_button">ດຳເນີນການ</string>
 
@@ -740,7 +772,7 @@
     <string name="apply_to_all_conflicts">ນຳໃຊ້ກັບຂໍ້ຂັດແຍ່ງທັງໝົດ</string>
     <string name="log_file_downloaded">ໄຟລ໌ບັນທຶກດາວໂຫຼດແລ້ວ</string>
     <string name="go_to_download_folder">ໄປທີ່ໂຟລເດີດາວໂຫຼດ</string>
-    <string name="log_file_downloaded_description">ໄຟລ໌ບັນທຶກຖືກດາວໂຫຼດไปยังโฟลเดอร์ดาวน์โหลดของคุณแล้ว</string>
+    <string name="log_file_downloaded_description">ໄຟລ໌ບັນທຶກຖືກດາວໂຫຼດ ໄປຍັງໂຟລເດີດາວໂຫຼດຂອງທ່ານແລ້ວ</string>
 
     <!-- DeepLinks -->
     <string name="invalid_deep_link_format">ລິ້ງທີ່ໃຫ້ມານັ້ນບໍ່ຖືກຕ້ອງ. ກະລຸນາກວດສອບຮູບແບບແລ້ວລອງໃໝ່</string>
@@ -765,13 +797,13 @@
     <string name="prefs_delete_local_files_entries_1day">1 ມື້</string>
     <string name="prefs_delete_local_files_entries_30days">30 ມື້</string>
     <string name="prefs_delete_local_files">ລຶບໄຟລ໌ໃນເຄື່ອງ</string>
-    <string name="prefs_delete_local_files_summary">ລຶບໄຟລ໌ในเครื่องຫຼັງຈາກເວລາທີ່ກຳນົດ</string>
+    <string name="prefs_delete_local_files_summary">ລຶບໄຟລ໌ໃນເຄື່ອງ ຫຼັງຈາກເວລາທີ່ກຳນົດ</string>
 
     <string name="insecure_http_url_title_dialog">ການເຊື່ອມຕໍ່ບໍ່ປອດໄພ</string>
-    <string name="insecure_http_url_message_dialog">ທ່ານກຳລັງພະຍາຍາມเชื่อมต่อโดยใช้การเชื่อมต่อที่ไม่ปลอดภัย (http). ຕ້ອງການລອງใช้ https แทนไหม?</string>
+    <string name="insecure_http_url_message_dialog">ທ່ານກຳລັງພະຍາຍາມເຊື່ອມຕໍ່ໂດຍໃຊ້ການເຊື່ອມຕໍ່ທີ່ບໍ່ປອດໄພ (http). ຕ້ອງການລອງໃຊ້ https ແທນບໍ່?</string>
     <string name="insecure_http_url_continue_button">ດຳເນີນການຕໍ່ດ້ວຍ https</string>
 
-    <string name="clean_data_account_message">ໄຟລ໌ທັງໝົດຈາກບັນຊີທີ່ເລືອກจะถูกลบออกจากอุปกรณ์ของคุณอย่างถาวร. ຕ້ອງການດຳເນີນການຕໍ່ບໍ່\?</string>
+    <string name="clean_data_account_message">ໄຟລ໌ທັງໝົດຈາກບັນຊີທີ່ເລືອກ ຈະຖືກລົບອອກຈາກອຸປະກອນຂອງທ່ານຢ່າງຖາວອນ. ຕ້ອງການດຳເນີນການຕໍ່ບໍ່\?</string>
     <string name="clean_data_account_title">ລ້າງພື້ນທີ່ເກັບຂໍ້ມູນບັນຊີ</string>
     <string name="clean_data_account_button_yes">ແມ່ນ</string>
 
@@ -801,10 +833,28 @@
     <string name="content_description_space_name">ຊື່ພື້ນທີ່</string>
     <string name="content_description_space_three_dot_menu">ການດຳເນີນການກັບພື້ນທີ່</string>
     <string name="content_description_space_subtitle">ລາຍລະອຽດພື້ນທີ່</string>
+    <string name="content_description_create_button">ສ້າງ</string>
+    <string name="content_description_cancel_button">ຍົກເລີກ</string>
+    <string name="content_description_set_button">ຕັ້ງຄ່າ</string>
     <string name="content_description_quota_switch">ຕັ້ງຄ່າໂຄຕ້າ</string>
+    <string name="content_description_member_user">ຜູ້ໃຊ້ສະມາຊິກ</string>
+    <string name="content_description_member_group">ກຸ່ມສະມາຊິກ</string>
+    <string name="content_description_member_expiration_date">ວັນໝົດອາຍຸຂອງສະມາຊິກ</string>
+    <string name="content_description_add_member">ເພີ່ມສະມາຊິກ</string>
+    <string name="content_description_invite_member_button">ປຸ່ມເຊີນສະມາຊິກ</string>
+    <string name="content_description_expiration_date_switch">ສະຫຼັບວັນໝົດອາຍຸ</string>
+    <string name="content_description_remove_member_button">ປຸ່ມລຶບສະມາຊິກ</string>
+    <string name="content_description_edit_member_button">ປຸ່ມແກ້ໄຂສະມາຊິກ</string>
+    <string name="content_description_permanent_link_button">ປຸ່ມລິ້ງຖາວອນ</string>
+    <string name="content_description_create_public_link_button">ສ້າງລິ້ງສາທາລະນະ</string>
+    <string name="content_description_set_password_button">ຕັ້ງລະຫັດຜ່ານ</string>
+    <string name="content_description_remove_password_button">ລຶບລະຫັດຜ່ານ</string>
+    <string name="content_description_generate_password_button">ສ້າງລະຫັດຜ່ານ</string>
+    <string name="content_description_copy_password_button">ສຳເນົາລະຫັດຜ່ານ</string>
+
     <string name="create_shortcut_dialog_title">ສ້າງທາງລັດ</string>
     <string name="create_shortcut_dialog_url">URL</string>
-    <string name="create_shortcut_dialog_url_information">ລິ້ງນີ້ຈະເປີດในເບຣົາເຊີของคุณເມື່ອທ່ານແຕະที่ທາງລັດ</string>
+    <string name="create_shortcut_dialog_url_information">ລິ້ງນີ້ຈະເປີດໃນເບຣົາເຊີຂອງທ່ານ ເມື່ອທ່ານແຕະທີ່ທາງລັດ</string>
     <string name="create_shortcut_dialog_url_error_no_blanks">URL ບໍ່ສາມາດມີຍະຫວ່າງໄດ້</string>
     <string name="create_shortcut_dialog_url_extension">.url</string>
     <string name="open_shortcut_description">ທ່ານແນ່ໃຈບໍ່ວ່າຕ້ອງການເປີດລິ້ງນີ້?</string>
@@ -812,7 +862,7 @@
 
     <string name="create_space_dialog_title">ສ້າງພື້ນທີ່ໃໝ່</string>
     <string name="create_space_dialog_name">ຊື່</string>
-    <string name="create_space_dialog_subtitle">ອັນນີ້ຈະເຫັນໄດ້ສຳລັບທ່ານ ແລະ ທຸກຄົນที่คุณແຊຣ໌ให้</string>
+    <string name="create_space_dialog_subtitle">ອັນນີ້ຈະເຫັນໄດ້ສຳລັບທ່ານ ແລະ ທຸກຄົນທີ່ທ່ານແຊຣ໌ໃຫ້</string>
     <string name="create_space_dialog_quota">ໂຄຕ້າ</string>
     <string name="create_space_dialog_no_restriction">ບໍ່ມີຂໍ້ຈຳກັດ</string>
     <string name="create_space_dialog_gb_unit">GB</string>
@@ -846,7 +896,43 @@
     <string name="delete_space_dialog_message">ທ່ານແນ່ໃຈບໍ່ວ່າຕ້ອງການລຶບພື້ນທີ່ນີ້?</string>
     <string name="delete_space_correctly">ລຶບພື້ນທີ່ສຳເລັດ</string>
     <string name="delete_space_failed">ບໍ່ສາມາດລຶບພື້ນທີ່ໄດ້</string>
-    <string name="feedback_dialog_get_in_contact_description">ມີปัญหากับการติดตั้ง ownCloud ของคุณหรือไม่\? ติดต่อทีมงานของเราสำหรับຂໍ້ມູນเพิ่มเติม</string>
+    <string name="set_space_icon">ຕັ້ງໄອຄອນພື້ນທີ່</string>
+    <string name="members_title">ສະມາຊິກ</string>
+    <string name="members_add">ເພີ່ມສະມາຊິກ</string>
+    <string name="members_add_correctly">ເພີ່ມສະມາຊິກສຳເລັດແລ້ວ</string>
+    <string name="members_add_failed">ເພີ່ມສະມາຊິກບໍ່ສຳເລັດ</string>
+    <string name="members_add_conflict_error">ສະມາຊິກນີ້ຖືກເພີ່ມເຂົ້າແລ້ວ</string>
+    <string name="members_search_failed">ການຄົ້ນຫາສະມາຊິກລົ້ມເຫຼວ</string>
+    <string name="members_search_empty">ບໍ່ພົບສະມາຊິກ</string>
+    <string name="members_permissions">ສິດການເຂົ້າເຖິງ</string>
+    <string name="members_options">ຕົວເລືອກສະມາຊິກ</string>
+    <string name="members_expiration_date">ວັນໝົດອາຍຸ</string>
+    <string name="members_invite">ເຊີນສະມາຊິກ</string>
+    <string name="members_remove_dialog_message">ທ່ານແນ່ໃຈບໍ່ວ່າຕ້ອງການລຶບສະມາຊິກນີ້?</string>
+    <string name="members_remove_correctly">ລຶບສະມາຊິກສຳເລັດແລ້ວ</string>
+    <string name="members_remove_failed">ລຶບສະມາຊິກບໍ່ສຳເລັດ</string>
+    <string name="members_edit">ແກ້ໄຂສະມາຊິກ</string>
+    <string name="members_edit_correctly">ແກ້ໄຂສະມາຊິກສຳເລັດແລ້ວ</string>
+    <string name="members_edit_failed">ແກ້ໄຂສະມາຊິກບໍ່ສຳເລັດ</string>
+    <string name="member_type_user">ຜູ້ໃຊ້</string>
+    <string name="member_type_group">ກຸ່ມ</string>
+    <string name="current_user_label">ຜູ້ໃຊ້ປັດຈຸບັນ</string>
+
+    <string name="public_link_create_title">ສ້າງລິ້ງສາທາລະນະ</string>
+    <string name="public_link_set_password">ຕັ້ງລະຫັດຜ່ານ</string>
+    <string name="public_link_view">ເບິ່ງ</string>
+    <string name="public_link_view_description">ເບິ່ງ, ດາວໂຫຼດ</string>
+    <string name="public_link_edit">ແກ້ໄຂ</string>
+    <string name="public_link_edit_description">ເບິ່ງ, ອັບໂຫຼດ, ແກ້ໄຂ, ດາວໂຫຼດ, ລຶບ</string>
+    <string name="public_link_upload">ອັບໂຫຼດ</string>
+    <string name="public_link_create_only">ສ້າງເທົ່ານັ້ນ</string>
+    <string name="public_link_create_only_description">ອັບໂຫຼດເທົ່ານັ້ນ, ເນື້ອໃນທີ່ມີຢູ່ຈະບໍ່ຖືກສະແດງ</string>
+    <string name="public_link_internal">ພາຍໃນ</string>
+    <string name="public_link_default_display_name">ລິ້ງທີ່ບໍ່ມີຊື່</string>
+    <string name="public_link_add_correctly">ສ້າງລິ້ງສາທາລະນະສຳເລັດແລ້ວ</string>
+    <string name="public_link_add_failed">ຕັ້ງຄ່າ</string>
+
+    <string name="feedback_dialog_get_in_contact_description">ມີບັນຫາກັບການຕິດຕັ້ງ ownCloud ຂອງທ່ານ ຫຼື ບໍ່\? ຕິດຕໍ່ທີມງານຂອງພວກເຮົາສຳລັບຂໍ້ມູນເພີ່ມເຕີມ</string>
 
     <string name="link_role_accessibility">ລິ້ງ</string>
     <string name="button_role_accessibility">ປຸ່ມ</string>
@@ -863,4 +949,6 @@
     <string name="audio_preview_label">ຕົວຢ່າງສຽງ</string>
     <string name="details_label">ລາຍລະອຽດ</string>
     <string name="text_preview_label">ຕົວຢ່າງຂໍ້ຄວາມ</string>
-    </resources>
+    <string name="space_members_label">ສະມາຊິກພື້ນທີ່</string>
+
+</resources>

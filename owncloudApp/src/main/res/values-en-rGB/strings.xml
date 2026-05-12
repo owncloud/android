@@ -142,6 +142,7 @@
     <string name="auth_oauth_failure">The access token has expired or become invalid. Sign in again to regain access.</string>
     <string name="auth_oauth_failure_snackbar_action">Sign in</string>
     <string name="auth_check_server">Check server</string>
+    <string name="auth_host_url">Server address https://&#8230;</string>
     <string name="auth_username">Username</string>
     <string name="auth_password">Password</string>
     <string name="auth_register">New to %1$s?</string>
@@ -174,6 +175,7 @@
     <string name="spaces_list_empty_subtitle">You don\'t have access to any space!</string>
     <string name="file_list_empty_subtitle_available_offline">Files and folders you mark as available offline will show up here.</string>
     <string name="file_list_empty_subtitle_shared_by_links">Files and folders you share by link will show up here.</string>
+    <string name="file_list_loading">Loading&#8230;</string>
     <string name="file_list_no_app_for_file_type">No app found for file type</string>
     <string name="file_list_no_app_for_perform_action">No app found for this action</string>
     <string name="local_file_list_empty">There are no files in this folder.</string>
@@ -211,6 +213,7 @@
     <string name="common_back">Back</string>
     <string name="common_save_exit">Save &amp; exit</string>
     <string name="common_error">Error</string>
+    <string name="common_loading">Loading&#8230;</string>
     <string name="common_unknown">unknown</string>
     <string name="common_error_unknown">unknown error</string>
     <string name="common_pending">Pending</string>
@@ -220,6 +223,7 @@
     <string name="create_account">Create account</string>
     <string name="upload_chooser_title">Upload from</string>
     <string name="uploader_info_dirname">Folder name</string>
+    <string name="uploader_upload_in_progress_ticker">Uploading&#8230;</string>
     <string name="uploader_upload_in_progress_content">%1$d%% Uploading %2$s</string>
     <string name="uploader_upload_succeeded_ticker">Upload succeeded</string>
     <string name="uploader_upload_succeeded_content_single">%1$s uploaded</string>
@@ -270,6 +274,7 @@
     <string name="uploader_upload_canceled_ticker">Upload cancelled</string>
     <string name="downloader_download_canceled_ticker">Download cancelled</string>
     <string name="downloader_download_enqueued_ticker">Download of %1$s has been enqueued</string>
+    <string name="downloader_download_in_progress_ticker">Downloading&#8230;</string>
     <string name="downloader_download_in_progress_content">%1$d%% Downloading %2$s</string>
     <string name="downloader_download_succeeded_ticker">Download succeeded</string>
     <string name="downloader_download_succeeded_content">%1$s downloaded</string>
@@ -343,6 +348,8 @@
     <string name="media_forward_description">Fast-forward button</string>
     <string name="upload_from_camera_title">Picture from camera</string>
 
+    <string name="auth_getting_authorization">Getting authorisation&amp;#8230;</string>
+    <string name="auth_trying_to_login">Trying to log in&#8230;</string>
     <string name="auth_no_net_conn_title">No network connection</string>
     <string name="auth_nossl_plain_ok_title">Secure connection unavailable.</string>
     <string name="auth_connection_established">Connection established</string>
@@ -365,6 +372,7 @@
     <string name="auth_expired_basic_auth_toast">Please enter the current password</string>
     <string name="auth_connecting_auth_server">Connecting to authentication server …</string>
     <string name="auth_unsupported_auth_method">The server does not support this authentication method</string>
+    <string name="auth_fail_get_user_name">Your server is not returning a correct user ID. Please contact an administrator.</string>
     <string name="auth_can_not_auth_against_server">Cannot authenticate to this server</string>
     <string name="auth_account_does_not_exist">Account does not exist in the device yet</string>
 
@@ -472,6 +480,7 @@
     <string name="get_shares_error">It was not possible to retrieve the shares from the server</string>
     <string name="get_sharees_error">It was not possible to retrieve users and groups from the server</string>
     <string name="get_capabilities_error">It was not possible to retrieve the capabilities from the server</string>
+    <string name="share_link_no_support_share_api">Sorry, sharing is not enabled on your server. Please contact your administrator.</string>
     <string name="share_link_file_error">It was not possible to share this file or folder</string>
     <string name="unshare_link_file_error">It was not possible to unshare this file or folder</string>
     <string name="update_link_file_error">It was not possible to update this file or folder</string>
@@ -518,6 +527,8 @@
     <string name="log_send_history_button">Send history</string>
     <string name="log_send_no_mail_app">No app for sending logs found. Please install a mail app.</string>
     <string name="log_send_mail_subject">%1$s Android app logs</string>
+    <string name="log_progress_dialog_text">Loading data&#8230;</string>
+
     <string name="actionbar_select_all">Select all</string>
     <string name="actionbar_select_inverse">Select inverse</string>
 
@@ -609,6 +620,7 @@
     <string name="share_remote_clarification">%1$s (remote)</string>
     <string name="share_known_remote_clarification">%1$s ( at %2$s )</string>
 
+    <string name="share_sharee_unavailable">Sorry, your server version does not allow sharing with users within clients.\nPlease contact your administrator</string>
     <string name="share_privilege_can_share">can share</string>
     <string name="share_privilege_can_edit">can edit</string>
     <string name="share_privilege_can_edit_create">create</string>
@@ -643,6 +655,7 @@
     <string name="share_no_public_links">No public links created yet.</string>
     <string name="share_no_link_in_this_share">This share has no link.</string>
     <string name="share_warning_about_forwarding_public_links">Anyone with the link has access to the file/folder.</string>
+    <string name="share_warning_about_forwarding_space_public_links">Anyone with the link has access to the space.</string>
     <string name="share_via_link_default_password">*****</string>
     <string name="share_via_link_password_enforced_label">Password *</string>
     <string name="share_via_link_expiration_date_enforced_label">Expiration *</string>
@@ -700,6 +713,7 @@
     <string name="scoped_storage_wizard_explanation">Found %1$s of data on your external storage. It will be moved to the safe storage on your device. Remaining files will be cleaned from your external storage after the migration to avoid duplicates and vulnerability.</string>
     <string name="scoped_storage_wizard_intro">Your app has been updated. This app update migrates your files to a more secure location on your device. This one-time data migration is required and can take up to a minute or more.</string>
     <string name="scoped_storage_wizard_intro_button">Let\'s get started</string>
+    <string name="scoped_storage_wizard_not_enough_space_warning">&#9888;️ Your free space is currently limited on your device. Some files may not be migrated, please check that all downloaded files keep downloaded after the process has been completed.</string>
     <string name="scoped_storage_wizard_migrate_and_clean_button">Migrate now</string>
     <string name="scoped_storage_wizard_migration_completed">Migration completed successfully. Your files are now safer than ever.</string>
     <string name="scoped_storage_wizard_migration_completed_access_files_button">Access your files</string>
@@ -720,6 +734,7 @@
 
     <!-- Release Notes -->
     <string name="release_notes_header">New in %1$s</string>
+    <string name="release_notes_footer">Thank you for using %1$s.\n&#10084;</string>
     <string name="release_notes_proceed">Proceed</string>
     <string name="release_notes_icon">Release note icon</string>
     <string name="release_notes_bugfixes_title">Minor bugfixes</string>
@@ -728,6 +743,10 @@
     <string name="release_notes_4_8_0_subtitle_set_emoji_as_space_image">Infinite Scale users with right permissions can now set an emoji as space image</string>
     <string name="release_notes_4_8_0_title_space_membership">Space membership</string>
     <string name="release_notes_4_8_0_subtitle_space_membership">Infinite Scale users can see all members of a space and manage them with right permissions</string>
+    <string name="release_notes_4_8_0_title_spaces_permanent_links">Permanent links for spaces</string>
+    <string name="release_notes_4_8_0_subtitle_spaces_permanent_links">Infinite Scale users can now get a permanent link for a space and share it with other members</string>
+    <string name="release_notes_4_8_0_title_space_public_links">Space public links</string>
+    <string name="release_notes_4_8_0_subtitle_space_public_links">Infinite Scale users can see all public links of a space and manage them with right permissions</string>
     <!-- Open in web -->
     <string name="ic_action_open_in_web">Open in web</string>
     <string name="ic_action_open_with_web">Open in %1$s (web)</string>
@@ -807,6 +826,7 @@
     <string name="content_description_space_name">%1$s space name</string>
     <string name="content_description_space_three_dot_menu">%1$s space menu</string>
     <string name="content_description_space_subtitle">%1$s space subtitle</string>
+    <string name="content_description_cancel_button">Cancel</string>
     <string name="content_description_quota_switch">Space quota</string>
     <string name="content_description_member_user">User %1$s</string>
     <string name="content_description_member_group">Group %1$s</string>
@@ -814,6 +834,9 @@
     <string name="content_description_add_member">Add new member</string>
     <string name="content_description_invite_member_button">Invite member</string>
     <string name="content_description_expiration_date_switch">Expiration date</string>
+    <string name="content_description_remove_member_button">Remove member %1$s</string>
+    <string name="content_description_edit_member_button">Edit member %1$s</string>
+    <string name="content_description_permanent_link_button">Get permanent link</string>
     <string name="create_shortcut_dialog_title">Create a shortcut</string>
     <string name="create_shortcut_dialog_url">URL</string>
     <string name="create_shortcut_dialog_url_information">The URL must start with https:// or http:// so that it can be opened in the browser</string>
@@ -861,6 +884,7 @@
     <string name="set_space_icon">Set icon</string>
     <string name="members_title">Members</string>
     <string name="members_add">Add member</string>
+    <string name="members_add_correctly">Member invited correctly</string>
     <string name="members_add_failed">Member could not be invited</string>
     <string name="members_add_conflict_error">Is already invited in the selected space</string>
     <string name="members_search_failed">No results found</string>
@@ -869,8 +893,21 @@
     <string name="members_options">Options</string>
     <string name="members_expiration_date">Expiration date</string>
     <string name="members_invite">Invite</string>
+    <string name="members_remove_dialog_message">Do you really want to remove the member: %1$s?</string>
+    <string name="members_remove_correctly">Member removed correctly</string>
+    <string name="members_remove_failed">Member could not be removed</string>
+    <string name="members_edit">Edit member</string>
+    <string name="members_edit_correctly">Member edited correctly</string>
+    <string name="members_edit_failed">Member could not be edited</string>
     <string name="member_type_user">User</string>
     <string name="member_type_group">Group</string>
+    <string name="current_user_label">(me)</string>
+
+    <string name="public_link_view">Can view</string>
+    <string name="public_link_edit">Can edit</string>
+    <string name="public_link_upload">Can upload</string>
+    <string name="public_link_create_only">Secret file drop</string>
+    <string name="public_link_internal">Invited people</string>
     <string name="feedback_dialog_get_in_contact_description"><![CDATA[ Ask for help in our <a href=\"%1$s\"><b>forum</b></a> or contribute in our <a href=\"%2$s\"><b>GitHub repo</b></a>]]></string>
 
     <string name="link_role_accessibility">Link</string>

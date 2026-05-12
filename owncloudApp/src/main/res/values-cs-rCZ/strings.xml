@@ -695,6 +695,7 @@
     <string name="content_description_get_private_link">Získat soukromý odkaz</string>
     <string name="content_description_logo">Logo</string>
     <string name="content_description_create_new_folder">Vytvořit novou složku</string>
+    <string name="content_description_cancel_button">Zrušit</string>
     <string name="content_description_expiration_date_switch">Datum vypršení platnosti</string>
     <string name="create_shortcut_dialog_url">URL</string>
     <string name="open_shortcut_title">Otevřít odkaz</string>

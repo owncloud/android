@@ -780,6 +780,7 @@
     <string name="content_description_sort_by_name_ascending">Сортировать %1$s по возрастанию</string>
     <string name="content_description_sort_by_name_descending">Сортировать %1$s по убыванию</string>
     <string name="content_description_create_new_folder">Создать новую папку</string>
+    <string name="content_description_cancel_button">Отмена</string>
     <string name="create_shortcut_dialog_title">Создать ярлык</string>
     <string name="create_shortcut_dialog_url">URL</string>
     <string name="create_shortcut_dialog_url_information">URL должен начинаться с https:// или http:// чтобы его можно было открыть в браузере</string>
