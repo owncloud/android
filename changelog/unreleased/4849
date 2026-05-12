@@ -1,0 +1,5 @@
+Change: Weekly dependabot updates
+
+Dependabot workflow in GitHub Actions has been modified to be triggered weekly with maximum 5 PRs to be created
+
+https://github.com/owncloud/android/pull/4849
