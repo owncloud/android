@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+      - 'release/**'
 
 permissions:
   contents: read
@@ -11,6 +12,8 @@ permissions:
 jobs:
   changelog:
     uses: owncloud/reusable-workflows/.github/workflows/calens.yml@main
+    with:
+      branch: ${{ github.ref_name }}
     secrets:
       APP_ID: ${{ secrets.CALENS_APP_ID }}
       APP_PRIVATE_KEY: ${{ secrets.CALENS_APP_PRIVATE_KEY }}
