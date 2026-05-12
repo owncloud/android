@@ -125,7 +125,6 @@ public class HttpClient {
                 .connectTimeout(HttpConstants.DEFAULT_CONNECTION_TIMEOUT, TimeUnit.MILLISECONDS)
                 .followRedirects(false)
                 .sslSocketFactory(sslSocketFactory, trustManager)
-                .hostnameVerifier((asdf, usdf) -> true)
                 .cookieJar(cookieJar)
                 .build();
     }
