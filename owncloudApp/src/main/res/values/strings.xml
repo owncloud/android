@@ -754,6 +754,8 @@
     <string name="release_notes_4_8_0_subtitle_space_public_links">Infinite Scale users can see all public links of a space and manage them with right permissions</string>
     <string name="release_notes_4_8_0_title_action_to_copy_or_move_destination_folder">Navigation to target folder</string>
     <string name="release_notes_4_8_0_subtitle_action_to_copy_or_move_destination_folder">New action to navigate to the destination folder when a file or folder is copied or moved</string>
+    <string name="release_notes_4_8_0_title_warning_latest_release_sdk28">Android 8 last call</string>
+    <string name="release_notes_4_8_0_subtitle_warning_latest_release_sdk28">This version will be the latest one with support for Android 8 and older</string>
 
     <!-- Open in web -->
     <string name="ic_action_open_in_web">Open in web</string>
