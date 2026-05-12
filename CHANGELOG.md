@@ -1,6 +1,6 @@
 # Table of Contents
 
-* [Changelog for unreleased](#changelog-for-owncloud-android-client-unreleased-unreleased)
+* [Changelog for 4.8.0](#changelog-for-owncloud-android-client-480-2026-05-18)
 * [Changelog for 4.7.0](#changelog-for-owncloud-android-client-470-2025-11-17)
 * [Changelog for 4.6.2](#changelog-for-owncloud-android-client-462-2025-08-13)
 * [Changelog for 4.6.1](#changelog-for-owncloud-android-client-461-2025-08-01)
@@ -31,12 +31,12 @@
 * [Changelog for 2.18.1](#changelog-for-owncloud-android-client-2181-2021-07-20)
 * [Changelog for 2.18.0](#changelog-for-owncloud-android-client-2180-2021-05-24)
 * [Changelog for 2.17 versions and below](#changelog-for-217-versions-and-below)
-# Changelog for ownCloud Android Client [unreleased] (UNRELEASED)
+# Changelog for ownCloud Android Client [4.8.0] (2026-05-18)
 
-The following sections list the changes in ownCloud Android Client unreleased relevant to
+The following sections list the changes in ownCloud Android Client 4.8.0 relevant to
 ownCloud admins and users.
 
-[unreleased]: https://github.com/owncloud/android/compare/v4.7.0...master
+[4.8.0]: https://github.com/owncloud/android/compare/v4.7.0...v4.8.0
 
 ## Summary
 
@@ -178,6 +178,7 @@ ownCloud admins and users.
    https://github.com/owncloud/android/pull/4825
    https://github.com/owncloud/android/pull/4826
    https://github.com/owncloud/android/pull/4829
+   https://github.com/owncloud/android/pull/4853
 
 * Change - Use reusable workflow for Conventional commits: [#4832](https://github.com/owncloud/android/pull/4832)
 
