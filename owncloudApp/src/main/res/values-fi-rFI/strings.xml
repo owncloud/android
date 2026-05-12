@@ -784,6 +784,7 @@
     <string name="content_description_sort_by_name_ascending">Järjestä %1$s mukaan nousevasti</string>
     <string name="content_description_sort_by_name_descending">Järjestä %1$s mukaan laskevasti</string>
     <string name="content_description_create_new_folder">Luo uusi kansio</string>
+    <string name="content_description_cancel_button">Peruuta</string>
     <string name="create_shortcut_dialog_title">Luo oikopolku</string>
     <string name="create_shortcut_dialog_url">URL</string>
     <string name="create_shortcut_dialog_url_information">URL pitää alkaa joko https:// tai http:// jotta sen voi avata selaimessa</string>

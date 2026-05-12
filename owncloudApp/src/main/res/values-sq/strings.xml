@@ -473,7 +473,7 @@
     <string name="get_capabilities_error">S\’qe e mundur të merreshin aftësi nga shërbyesi</string>
     <string name="share_link_file_error">S\’qe e mundur të ndahej me të tjerë kjo kartelë ose dosje</string>
     <string name="unshare_link_file_error">S\’qe e mundur të hiqej ndarja e kësaj kartele apo dosjeje</string>
-    <string name="update_link_file_error">S\’qe e mundur të përditësohej kjo kartel ose dosje</string>
+    <string name="update_link_file_error">S\’qe e mundur të përditësohej kjo kartelë ose dosje</string>
     <string name="share_link_password_title">Jepni një fjalëkalim</string>
     <string name="share_link_empty_password">Duhet të jepni një fjalëkalim.</string>
 
@@ -806,6 +806,7 @@
     <string name="content_description_space_name">Emër hapësire %1$s</string>
     <string name="content_description_space_three_dot_menu">Menu hapësire %1$s</string>
     <string name="content_description_space_subtitle">Nëntitull hapësire %1$s</string>
+    <string name="content_description_cancel_button">Anuloje</string>
     <string name="content_description_quota_switch">Kuota hapësire</string>
     <string name="content_description_member_user">Përdorues %1$s</string>
     <string name="content_description_member_group">Grup %1$s</string>
