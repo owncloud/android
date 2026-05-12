@@ -94,4 +94,16 @@ public class NetworkUtils {
         }
     }
 
+    public static boolean isCertInKnownServersStore(Certificate cert, Context context) {
+        if (cert == null || context == null) {
+            return false;
+        }
+        try {
+            return getKnownServersStore(context).getCertificateAlias(cert) != null;
+        } catch (KeyStoreException | IOException | NoSuchAlgorithmException | CertificateException e) {
+            Timber.e(e, "Fail while checking certificate in the known-servers store");
+            return false;
+        }
+    }
+
 }
