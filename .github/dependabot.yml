@@ -13,3 +13,17 @@ updates:
         update-types:
           - minor
           - patch
+
+  - package-ecosystem: gradle
+    directory: "/"
+    schedule:
+      interval: weekly
+      day: wednesday
+      time: '22:00'
+      timezone: Etc/UTC
+    open-pull-requests-limit: 5
+    groups:
+      minor-and-patch:
+        update-types:
+          - minor
+          - patch
