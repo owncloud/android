@@ -36,15 +36,15 @@ If you don't need some of the steps, cross them by removing the "[ ]" and surrou
  - [ ] [COM] Ping @mmattel that we are close to sign the new tags
  - [ ] [DIS] Upload and publish release bundle and changelog in Play Store
  - [ ] [DIS] Update screenshots in Play Store/GitHub/F-Droid
+ - [ ] [DIS] Release published in Play Store
  - [ ] [GIT] Create and sign tag `vM.m.p` in HEAD commit of release branch, in owncloud/android
  - [ ] [GIT] Move tag `latest` pointing the same commit as the release commit
  - [ ] [DIS] Publish a new [release](https://github.com/owncloud/android/releases) in owncloud/android
- - [ ] [DIS] Release published in Play Store
  - [ ] [COM] Publish post in central.owncloud.org ([Category:News + Tag:android](https://central.owncloud.org/tags/c/news/5/android))
  - [ ] [COM] Inform via chat that release is out
  - [ ] [GIT] Merge `master` into `release/M.m.p`, fixing all the conflicts that could happen, in owncloud/android
  - [ ] [GIT] Merge without rebasing `release/M.m.p` branch into `master`, in owncloud/android
- - [ ] [COM] Ping @DeepDiver1975 to update release information in https://owncloud.com/mobile-apps/
+ - [ ] [COM] Ping @JordanaFung to update release information in https://owncloud.com/mobile-apps/
 
 
 ### QA
