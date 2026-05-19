@@ -34,7 +34,7 @@ jobs:
 
       # Cache Gradle dependencies to speed up future builds
       - name: Cache Gradle dependencies
-        uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7 #v5.0.4
+        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae #v5.0.5
         with:
           path: |
             ~/.gradle/caches
@@ -116,7 +116,7 @@ jobs:
       - name: Generate GitHub App token
         if: steps.compare.outputs.changes == 'true'
         id: app-token
-        uses: actions/create-github-app-token@1b10c78c7865c340bc4f6099eb2f838309f1e8c3 # v3.1.1
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
         with:
           app-id: ${{ secrets.SBOM_APP_ID }}
           private-key: ${{ secrets.SBOM_APP_PRIVATE_KEY }}
@@ -124,7 +124,7 @@ jobs:
       # Create a branch with latest SBOM changes only if there are changes
       - name: Create or update SBOM PR
         if: steps.compare.outputs.changes == 'true'
-        uses: peter-evans/create-pull-request@c0f553fe549906ede9cf27b5156039d195d2ece0 # v8.1.0
+        uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
         with:
           add-paths: sbom.json
           token: ${{ steps.app-token.outputs.token }}
