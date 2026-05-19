@@ -1,0 +1,5 @@
+Enhancement: Add gradle ecosystem to dependabot 
+
+Dependabot workflow in GitHub Actions has been modified to update gradle dependencies weekly
+
+https://github.com/owncloud/android/pull/4863
