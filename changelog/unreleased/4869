@@ -1,0 +1,5 @@
+Enhancement: Remove unused resources
+
+Useless strings and resources in the project have been removed in order to keep the codebase cleaner
+
+https://github.com/owncloud/android/pull/4869
