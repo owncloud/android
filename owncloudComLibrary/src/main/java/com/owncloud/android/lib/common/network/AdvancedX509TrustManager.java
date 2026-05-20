@@ -84,11 +84,16 @@ public class AdvancedX509TrustManager implements X509TrustManager {
         mStandardTrustManager.checkClientTrusted(certificates, authType);
     }
 
+    public static final ThreadLocal<X509Certificate> sLastCert = new ThreadLocal<>();
+
     /**
      * @see javax.net.ssl.X509TrustManager#checkServerTrusted(X509Certificate[],
      * String authType)
      */
     public void checkServerTrusted(X509Certificate[] certificates, String authType) {
+        if (certificates != null && certificates.length > 0) {
+            sLastCert.set(certificates[0]);
+        }
         if (!isKnownServer(certificates[0])) {
             CertificateCombinedException result = new CertificateCombinedException(certificates[0]);
             try {

@@ -32,6 +32,7 @@ import at.bitfire.dav4jvm.exception.HttpException;
 import com.owncloud.android.lib.common.accounts.AccountUtils;
 import com.owncloud.android.lib.common.http.HttpConstants;
 import com.owncloud.android.lib.common.http.methods.HttpBaseMethod;
+import com.owncloud.android.lib.common.network.AdvancedX509TrustManager;
 import com.owncloud.android.lib.common.network.CertificateCombinedException;
 import okhttp3.Headers;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -148,6 +149,13 @@ public class RemoteOperationResult<T>
 
         } else if (e instanceof SSLException || e instanceof RuntimeException) {
             if (e instanceof SSLPeerUnverifiedException) {
+                java.security.cert.X509Certificate lastCert = AdvancedX509TrustManager.sLastCert.get();
+                AdvancedX509TrustManager.sLastCert.remove();
+                CertificateCombinedException sslPeerUnverifiedException =
+                        new CertificateCombinedException(lastCert);
+                sslPeerUnverifiedException.setSslPeerUnverifiedException((SSLPeerUnverifiedException) e);
+                sslPeerUnverifiedException.initCause(e);
+                mException = sslPeerUnverifiedException;
                 mCode = ResultCode.SSL_RECOVERABLE_PEER_UNVERIFIED;
             } else {
                 CertificateCombinedException se = getCertificateCombinedException(e);
