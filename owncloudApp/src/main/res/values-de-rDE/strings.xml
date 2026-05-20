@@ -142,7 +142,7 @@
     <string name="auth_oauth_failure">Das Zugriffstoken ist abgelaufen oder ungültig geworden. Melden Sie sich erneut an, um wieder Zugriff zu erhalten.</string>
     <string name="auth_oauth_failure_snackbar_action">Anmelden</string>
     <string name="auth_check_server">Server überprüfen</string>
-    <string name="auth_host_url">Server Adresse https://...</string>
+    <string name="auth_host_url">Server Adresse https://&amp;#8230;</string>
     <string name="auth_username">Benutzername</string>
     <string name="auth_password">Passwort</string>
     <string name="auth_register">Ist %1$s neu für Sie?</string>
@@ -175,7 +175,7 @@
     <string name="spaces_list_empty_subtitle">Sie haben keinen Zugriff auf einen Space!</string>
     <string name="file_list_empty_subtitle_available_offline">Dateien und Ordner, die Sie als offline verfügbar markieren, werden hier angezeigt.</string>
     <string name="file_list_empty_subtitle_shared_by_links">Dateien und Ordner, die Sie per Link teilen, werden hier erscheinen.</string>
-    <string name="file_list_loading">Lade...</string>
+    <string name="file_list_loading">Lade&amp;#8230;</string>
     <string name="file_list_no_app_for_file_type">Keine Applikationen für diesen Dateityp gefunden</string>
     <string name="file_list_no_app_for_perform_action">Keine Anwendung für diese Aktion gefunden</string>
     <string name="local_file_list_empty">Es befinden sich keine Dateien in diesem Ordner.</string>
@@ -213,7 +213,7 @@
     <string name="common_back">Zurück</string>
     <string name="common_save_exit">Speichern &amp; Schließen</string>
     <string name="common_error">Fehler</string>
-    <string name="common_loading">Lade...</string>
+    <string name="common_loading">Lade&amp;#8230;</string>
     <string name="common_unknown">unbekannt</string>
     <string name="common_error_unknown">Unbekannter Fehler</string>
     <string name="common_pending">Ausstehend</string>
@@ -224,7 +224,7 @@
     <string name="create_account">Account erstellen</string>
     <string name="upload_chooser_title">Dateien hochladen von ...</string>
     <string name="uploader_info_dirname">Ordnername</string>
-    <string name="uploader_upload_in_progress_ticker">Hochladen...</string>
+    <string name="uploader_upload_in_progress_ticker">Hochladen&amp;#8230;</string>
     <string name="uploader_upload_in_progress_content">%1$d%% Hochladen %2$s</string>
     <string name="uploader_upload_succeeded_ticker">Hochladen erfolgreich</string>
     <string name="uploader_upload_succeeded_content_single">%1$s wurde/n erfolgreich hochgeladen.</string>
@@ -275,7 +275,7 @@
     <string name="uploader_upload_canceled_ticker">Hochladen abgebrochen</string>
     <string name="downloader_download_canceled_ticker">Herunterladen abgebrochen</string>
     <string name="downloader_download_enqueued_ticker">Herunterladen von %1$s in Warteschlange eingereiht</string>
-    <string name="downloader_download_in_progress_ticker">Herunterladen...</string>
+    <string name="downloader_download_in_progress_ticker">Herunterladen&amp;#8230;</string>
     <string name="downloader_download_in_progress_content">%1$d%% Herunterladen %2$s</string>
     <string name="downloader_download_succeeded_ticker">Herunterladen erfolgreich</string>
     <string name="downloader_download_succeeded_content">%1$s wurde erfolgreich heruntergeladen</string>
@@ -349,8 +349,8 @@
     <string name="media_forward_description">Vorspulen</string>
     <string name="upload_from_camera_title">Kamerabild</string>
 
-    <string name="auth_getting_authorization">Genehmigung einholen...</string>
-    <string name="auth_trying_to_login">Anmeldeversuch...</string>
+    <string name="auth_getting_authorization">Genehmigung einholen&amp;#8230;</string>
+    <string name="auth_trying_to_login">Anmeldeversuch&amp;#8230;</string>
     <string name="auth_no_net_conn_title">Keine Netzwerkverbindung</string>
     <string name="auth_nossl_plain_ok_title">Sichere Verbindung nicht verfügbar.</string>
     <string name="auth_connection_established">Verbindung hergestellt</string>
@@ -528,7 +528,7 @@
     <string name="log_send_history_button">Verlauf senden</string>
     <string name="log_send_no_mail_app">Keine App zum Versenden der Meldungen gefunden. Bitte installieren Sie die E-Mail-App!</string>
     <string name="log_send_mail_subject">%1$s Android-App Meldungen</string>
-    <string name="log_progress_dialog_text">Lade Daten...</string>
+    <string name="log_progress_dialog_text">Lade Daten&amp;#8230;</string>
 
     <string name="actionbar_select_all">Alle auswählen</string>
     <string name="actionbar_select_inverse">Auswahl invertieren</string>
@@ -718,7 +718,7 @@
     <string name="scoped_storage_wizard_explanation">Es wurde(n) %1$s der Daten auf externem Speicher gefunden. Diese werden auf den sicheren Speicher auf dem Gerät verschoben. Verbleibende Dateien auf externem Speicher werden nach der Migration aufgeräumt, um Duplikaten und Sicherheitslücken vorzubeugen.</string>
     <string name="scoped_storage_wizard_intro">Ihre Anwendung wurde aktualisiert. Dieses Aktualisierung migriert Ihre Dateien an einen sichereren Ort auf Ihrem Gerät. Diese einmalige Datenmigration ist erforderlich und kann bis zu einer Minute oder länger dauern.</string>
     <string name="scoped_storage_wizard_intro_button">Legen wir los.</string>
-    <string name="scoped_storage_wizard_not_enough_space_warning">⚠️  Der freie Speicherplatz auf Ihrem Gerät ist derzeit begrenzt. Es kann sein, dass einige Dateien nicht übertragen werden. Bitte stellen Sie sicher, dass alle heruntergeladenen Dateien nach Abschluss des Vorgangs weiterhin vorhanden sind.</string>
+    <string name="scoped_storage_wizard_not_enough_space_warning">&amp;#9888;️ Der freie Speicherplatz auf Ihrem Gerät ist derzeit begrenzt. Es kann sein, dass einige Dateien nicht übertragen werden. Bitte stellen Sie sicher, dass alle heruntergeladenen Dateien nach Abschluss des Vorgangs weiterhin vorhanden sind.</string>
     <string name="scoped_storage_wizard_migrate_and_clean_button">Jetzt migrieren</string>
     <string name="scoped_storage_wizard_migration_completed">Die Migration war erfolgreich. Ihre Daten sind jetzt sicherer als jemals zuvor.</string>
     <string name="scoped_storage_wizard_migration_completed_access_files_button">Auf Ihre Dateien zugreifen</string>
@@ -739,7 +739,7 @@
 
     <!-- Release Notes -->
     <string name="release_notes_header">Neu in %1$s</string>
-    <string name="release_notes_footer">Danke für die Benutzung %1$s.\n❤</string>
+    <string name="release_notes_footer">Danke für die Benutzung %1$s.\n&amp;#10084;</string>
     <string name="release_notes_proceed">Fortfahren</string>
     <string name="release_notes_icon">Symbol für Veröffentlichungsnotizen</string>
     <string name="release_notes_bugfixes_title">Geringfügige Fehler behoben</string>
