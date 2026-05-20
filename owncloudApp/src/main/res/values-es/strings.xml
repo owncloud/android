@@ -711,7 +711,7 @@
     <string name="scoped_storage_wizard_explanation">Se encontraron %1$s de datos en su almacenamiento externo. Se moverá al almacenamiento seguro en su dispositivo. Los archivos restantes se limpiarán de su almacenamiento externo después de la migración para evitar duplicados y vulnerabilidades.</string>
     <string name="scoped_storage_wizard_intro">Su aplicación ha sido actualizada. Esta actualización migra sus archivos a una ubicación más segura en su dispositivo. Esta migración de datos única es necesaria y puede tardar hasta un minuto o más.</string>
     <string name="scoped_storage_wizard_intro_button">Empecemos</string>
-    <string name="scoped_storage_wizard_not_enough_space_warning">⚠️  El espacio libre en su dispositivo es limitado. Algunos ficheros no se migrarán, por favor compruebe todos los ficheros descargados se mantienen descargados después que el proceso se haya completado.</string>
+    <string name="scoped_storage_wizard_not_enough_space_warning">&amp;#9888;️ El espacio libre en su dispositivo es limitado. Algunos ficheros no se migrarán, por favor compruebe todos los ficheros descargados se mantienen descargados después que el proceso se haya completado.</string>
     <string name="scoped_storage_wizard_migrate_and_clean_button">Migrar ahora</string>
     <string name="scoped_storage_wizard_migration_completed">La migración se completó satisfactoriamente. Sus ficheros están ahora más seguros que nunca.</string>
     <string name="scoped_storage_wizard_migration_completed_access_files_button">Acceder a sus archivos</string>
@@ -732,7 +732,7 @@
 
     <!-- Release Notes -->
     <string name="release_notes_header">Nuevo en %1$s</string>
-    <string name="release_notes_footer">Gracias por usar %1$s\n❤</string>
+    <string name="release_notes_footer">Gracias por usar %1$s\n&amp;#10084;</string>
     <string name="release_notes_proceed">Proceder</string>
     <string name="release_notes_icon">Icono notas de lanzamiento</string>
     <string name="release_notes_bugfixes_title">Solución de problemas</string>
