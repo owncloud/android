@@ -26,7 +26,6 @@
   <string name="uploader_wrn_no_account_setup_btn_text">Iestatīt</string>
   <string name="uploader_wrn_no_account_quit_btn_text">Iziet</string>
   <string name="file_list_seconds_ago">sekundes atpakaļ</string>
-  <string name="filedetails_select_file">Uzsitiet uz datnes, lai redzētu papildinformāciju.</string>
   <string name="filedetails_size">Izmērs:</string>
   <string name="filedetails_type">Tips:</string>
   <string name="filedetails_created">Izveidota:</string>

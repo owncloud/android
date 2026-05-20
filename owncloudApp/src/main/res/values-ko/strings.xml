@@ -146,7 +146,6 @@
     <string name="local_file_list_search_with_no_matches">검색 결과 없음</string>
     <string name="upload_list_empty">업로드한 항목이 없습니다.</string>
     <string name="upload_list_empty_subtitle">무언가 업로드하면 그것이 여기에 나타납니다.</string>
-    <string name="filedetails_select_file">파일을 누르면 추가 정보가 표시됩니다.</string>
     <string name="upload_to">%1$s로 업로드</string>
     <string name="pick_document_type">생성할 문서 타입을 고르세요.</string>
     <string name="upload_files_title">파일</string>

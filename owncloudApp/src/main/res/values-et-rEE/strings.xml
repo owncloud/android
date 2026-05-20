@@ -157,7 +157,6 @@
     <string name="local_file_list_search_with_no_matches">Otsingule ei leitud vasteid</string>
     <string name="upload_list_empty">Üleslaadimisi pole saadaval.</string>
     <string name="upload_list_empty_subtitle">Lae midagi üles ning failid tekkivad siia.</string>
-    <string name="filedetails_select_file">Lisainfo vaatamiseks vajuta failile.</string>
     <string name="upload_to">Lae üles %1$s</string>
     <string name="pick_document_type">Vali loodava dokumendi tüüp:</string>
     <string name="upload_files_title">Failid</string>

@@ -88,7 +88,6 @@
   <string name="file_list_empty_subtitle_shared_by_links">Fișierele și directoarele pe care le partajezi prin legături vor apărea aici</string>
   <string name="file_list_no_app_for_file_type">Nu s-a găsit nici o aplicație pentru acest tip de fișier/</string>
   <string name="upload_list_empty">Nicio încărcare disponibilă.</string>
-  <string name="filedetails_select_file">Selectați un fișier pentru a afișa informația adițională.</string>
   <string name="upload_to">Încarcă la %1$s</string>
   <string name="upload_files_title">Fișiere</string>
   <string name="filedetails_size">Mărime:</string>

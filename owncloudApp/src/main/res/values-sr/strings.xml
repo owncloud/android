@@ -33,7 +33,6 @@
   <string name="uploader_wrn_no_account_setup_btn_text">Подеси</string>
   <string name="uploader_wrn_no_account_quit_btn_text">Напусти</string>
   <string name="file_list_seconds_ago">пре пар секунди</string>
-  <string name="filedetails_select_file">Тапните на фајл ради приказа додатних информација.</string>
   <string name="filedetails_size">Величина:</string>
   <string name="filedetails_type">Врста:</string>
   <string name="filedetails_created">Направљен:</string>

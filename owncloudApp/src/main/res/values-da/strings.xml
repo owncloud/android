@@ -88,7 +88,6 @@
   <string name="file_list_seconds_ago">sekunder siden</string>
   <string name="file_list_no_app_for_file_type">Ingen app fundet for filtype</string>
   <string name="upload_list_empty">Ingen uploads tilgængelige.</string>
-  <string name="filedetails_select_file">Tryk på en fil for at vise yderligere information.</string>
   <string name="upload_to">Upload til %1$s</string>
   <string name="upload_files_title">Filer</string>
   <string name="filedetails_size">Størelse:</string>

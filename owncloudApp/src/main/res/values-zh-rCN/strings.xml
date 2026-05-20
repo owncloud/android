@@ -144,7 +144,6 @@
   <string name="local_file_list_search_with_no_matches">此次搜索没有找到匹配的结果</string>
   <string name="upload_list_empty">没有可用的上传任务。</string>
   <string name="upload_list_empty_subtitle">你上传的文件将在此显示</string>
-  <string name="filedetails_select_file">点击一个文件可以显示额外的信息。</string>
   <string name="upload_to">上传到 %1$s</string>
   <string name="pick_document_type">请选择要创建的文件类型</string>
   <string name="upload_files_title">文件</string>

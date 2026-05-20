@@ -125,7 +125,6 @@
   <string name="local_file_list_search_with_no_matches">אין התאמות לחיפוש זה</string>
   <string name="upload_list_empty">אין העלאות זמינות.</string>
   <string name="upload_list_empty_subtitle">יש להעלות משהו והוא יופיע כאן</string>
-  <string name="filedetails_select_file">יש לגעת בקובץ כדי להציג פרטים נוספים.</string>
   <string name="upload_to">העלאה אל %1$s</string>
   <string name="upload_files_title">קבצים</string>
   <string name="filedetails_size">גודל:</string>

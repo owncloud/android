@@ -103,7 +103,6 @@
   <string name="file_list_no_app_for_file_type">Не знайдено додатка для типу файла</string>
   <string name="local_file_list_search_with_no_matches">Немає збігів для цього пошуку</string>
   <string name="upload_list_empty">Немає доступних надсилань.</string>
-  <string name="filedetails_select_file">Натисніть на файл для відображення додаткової інформації</string>
   <string name="upload_to">Відвантажити до %1$s</string>
   <string name="upload_files_title">Файли</string>
   <string name="filedetails_size">Розмір:</string>

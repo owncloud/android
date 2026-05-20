@@ -117,7 +117,6 @@
   <string name="file_list_no_app_for_file_type">لم يتم العثور على أي تطبيق مناسب لنوع الملف</string>
   <string name="local_file_list_search_with_no_matches">لا يوجد نتائج متطابقة لهذا البحث</string>
   <string name="upload_list_empty">لا توجد أي تحميلات متوفرة.</string>
-  <string name="filedetails_select_file">انقر على أحد الملفات لعرض معلومات إضافية.</string>
   <string name="upload_to">تحميل إلى %1$s</string>
   <string name="upload_files_title">ملفات</string>
   <string name="filedetails_size">الحجم:</string>

@@ -118,7 +118,6 @@ Téléchargez-le ici : %2$s</string>
   <string name="file_list_no_app_for_file_type">Aucune application trouvée pour ce type de fichier</string>
   <string name="local_file_list_search_with_no_matches">Pas de résultat pour cette recherche</string>
   <string name="upload_list_empty">Aucun téléversement disponible.</string>
-  <string name="filedetails_select_file">Cliquer sur un fichier pour afficher des informations supplémentaires.</string>
   <string name="upload_to">Téléversez vers %1$s</string>
   <string name="upload_files_title">Fichiers</string>
   <string name="filedetails_size">Taille :</string>

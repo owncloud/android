@@ -138,7 +138,6 @@ Téléchargez-le ici : %2$s</string>
   <string name="local_file_list_search_with_no_matches">Pas de résultat pour cette recherche</string>
   <string name="upload_list_empty">Aucun téléversement disponible.</string>
   <string name="upload_list_empty_subtitle">Téléverser quelque chose et il apparaîtra ici.</string>
-  <string name="filedetails_select_file">Sélectionnez un fichier pour afficher des informations supplémentaires</string>
   <string name="upload_to">Téléversez vers %1$s</string>
   <string name="pick_document_type">Choisissez un type de document à créer:</string>
   <string name="upload_files_title">Fichiers</string>

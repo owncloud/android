@@ -42,7 +42,6 @@
   <string name="file_list_seconds_ago">sekund sidan</string>
   <string name="file_list_no_app_for_file_type">Ingen program funnen for denne fil type</string>
   <string name="upload_list_empty">Ingen opplasting tilgjengeleg.</string>
-  <string name="filedetails_select_file">Trykk på ei fil for å visa meir informasjon.</string>
   <string name="filedetails_size">Storleik:</string>
   <string name="filedetails_type">Type:</string>
   <string name="filedetails_created">Oppretta:</string>
