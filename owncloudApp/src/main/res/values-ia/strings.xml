@@ -1,17 +1,14 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="actionbar_upload">Incargar</string>
-  <string name="actionbar_upload_files">Files</string>
   <string name="actionbar_mkdir">Nove dossier</string>
   <string name="actionbar_settings">Configurationes</string>
   <string name="actionbar_see_details">Detalios</string>
   <string name="actionbar_send_file">Invia</string>
   <string name="drawer_open">Aperi</string>
   <string name="drawer_help">Adjuta</string>
-  <string name="prefs_category_general">General</string>
   <string name="prefs_subsection_more">Plus</string>
   <string name="prefs_subsection_security">Securitate</string>
-  <string name="prefs_accounts">Contos</string>
   <string name="prefs_help">Adjuta</string>
   <string name="auth_username">Nomine de usator</string>
   <string name="auth_password">Contrasigno</string>
@@ -20,7 +17,6 @@
   <string name="uploader_btn_upload_text">Incargar</string>
   <string name="uploader_wrn_no_account_title">Nulle contos trovate</string>
   <string name="file_list_seconds_ago">secundas passate</string>
-  <string name="file_list_folder">dossier</string>
   <string name="filedetails_size">Dimension:</string>
   <string name="filedetails_type">Typo:</string>
   <string name="filedetails_download">Discargar</string>
@@ -28,9 +24,7 @@
   <string name="common_yes">Si</string>
   <string name="common_no">No</string>
     <string name="common_back">Retro</string>
-  <string name="common_error">Error</string>
   <string name="common_error_unknown">Error Incognite</string>
-    <string name="change_password">Cambiar contrasigno</string>
   <string name="uploader_info_dirname">Nomine de dossier</string>
   <string name="uploads_view_upload_status_cancelled">Cancellate</string>
   <string name="uploads_view_upload_status_unknown_fail">Error Incognite</string>
@@ -39,7 +33,6 @@
   <string name="ssl_validator_btn_details_see">Detalios</string>
   <string name="activity_chooser_send_file_title">Invia</string>
   <string name="clipboard_text_copied">Copiate in le area de transferentia</string>
-  <string name="prefs_category_accounts">Contos</string>
   <string name="folder_picker_choose_button_text">Seliger</string>
   <string name="share_dialog_title">Compartir</string>
   <string name="share_cancel_public_link_button">Cancellar</string>
