@@ -7,25 +7,17 @@
     <string name="global_size">Размер</string>
     <string name="actionbar_search">Поиск в текущей папке</string>
     <string name="actionbar_search_space">Поиск пространств</string>
-    <string name="actionbar_sync">Синхронизировать</string>
     <string name="actionbar_upload">Загрузить</string>
-    <string name="actionbar_upload_from_apps">Содержимое из других приложений</string>
-    <string name="actionbar_upload_files">Файлы</string>
     <string name="actionbar_open_with">Открыть с помощью</string>
     <string name="actionbar_open_with_read_only">Открыть с помощью (только чтение)</string>
     <string name="actionbar_mkdir">Новый каталог</string>
     <string name="actionbar_settings">Настройки</string>
     <string name="actionbar_see_details">Подробно</string>
     <string name="actionbar_send_file">Отправить</string>
-    <string name="actionbar_descending">Убывающий </string>
     <string name="actionbar_sort_title">Упорядочить по</string>
     <string name="fab_new_file">Новый документ</string>
     <string name="fab_new_shortcut">Новый ярлык</string>
-    <string name="drawer_item_all_files">Все файлы</string>
     <string name="drawer_item_only_available_offline">Доступные оффлайн</string>
-    <string name="drawer_item_shared_by_link_files">Доступные по ссылке</string>
-    <string name="drawer_item_settings">Настройки</string>
-    <string name="drawer_item_uploads_list">Загрузки</string>
     <string name="drawer_close">Закрыть</string>
     <string name="drawer_open">Открыть</string>
     <string name="drawer_loading_quota">Загрузка квоты</string>
@@ -34,7 +26,6 @@
     <string name="drawer_unavailable_used_storage">Нет данных о занятом объёме</string>
     <string name="drawer_feedback">Обратная связь</string>
     <string name="drawer_help">Помощь</string>
-    <string name="prefs_category_general">Основные</string>
     <string name="prefs_subsection_logging">Журналирование</string>
     <string name="prefs_subsection_more">Больше</string>
     <string name="prefs_subsection_security">Безопасность</string>
@@ -42,8 +33,6 @@
     <string name="prefs_subsection_security_summary">Установка блокировок на доступ к приложению и разрешение на соприкосновение с другими видимыми окнами</string>
     <string name="prefs_subsection_logging_summary">Отслеживание журналов, создаваемых при выполнении приложения</string>
     <string name="prefs_subsection_more_summary">Информация о приложении, обратная связь, и прочее</string>
-    <string name="prefs_accounts">Учётные записи</string>
-    <string name="prefs_manage_accounts">Управление аккаунтами</string>
     <string name="prefs_passcode">Блокировка кодом</string>
     <string name="prefs_biometric">Биометрическая блокировка</string>
     <string name="prefs_biometric_summary">Чтобы использовать эту настройку, включите блокировку по коду или графическому ключу</string>
@@ -69,7 +58,6 @@
     <string name="prefs_camera_picture_upload_conditions_summary">Автозагрузка будет запущена только при удовлетворении выбранных ниже условий</string>
     <string name="prefs_camera_picture_upload_on_wifi">Загрузка изображений только через wifi</string>
     <string name="prefs_camera_picture_upload_on_charging">Загрузка изображений только во время зарядки</string>
-    <string name="prefs_camera_upload_on_charging_summary">Включите опцию загрузка только через Wi-Fi</string>
     <string name="prefs_camera_video_upload">Загрузка видео</string>
     <string name="prefs_camera_video_upload_summary">Автоматически загружать видео, записанные камерой</string>
     <string name="prefs_camera_video_upload_path_title">Путь загрузки видео</string>
@@ -81,11 +69,6 @@
     <string name="prefs_log_open_logs_list_view">Логи</string>
     <string name="prefs_log_no_logs_list_view">Пусто</string>
     <string name="prefs_log_empty_subtitle">Включите ведение журнала, и здесь будут отображаться файлы журнала.</string>
-    <string name="prefs_log_title">Включить журналирование</string>
-    <string name="prefs_log_summary">Используется для регистрации проблем.</string>
-    <string name="prefs_log_title_history">История журналов</string>
-    <string name="prefs_log_summary_history">Здесь показаны записи в журнал</string>
-    <string name="prefs_log_delete_history_button">Удалить историю</string>
     <string name="prefs_help">Помощь</string>
     <string name="prefs_sync_calendar_contacts">Синхронизировать ваши контакты, календари и задачи</string>
     <string name="prefs_sync_calendar_contacts_summary">Установить DAVx⁵</string>
@@ -94,8 +77,6 @@
     <string name="prefs_recommend">Рекомендовать другу</string>
     <string name="prefs_feedback">Обратная связь</string>
     <string name="prefs_imprint">Штамп</string>
-    <string name="prefs_remember_last_share_location">Запомнить расположение общего ресурса</string>
-    <string name="prefs_remember_last_upload_location_summary">Запомнить расположение загрузки последней публикации</string>
     <string name="prefs_pattern">Графический ключ</string>
     <string name="prefs_enable_logging">Включить журналирование</string>
     <string name="prefs_enable_logging_summary">Активная запись лог файлов может влиять на расход ресурсов. Также они могут содержать конфиденциальную информацию. Обмен лог-файлами подлежит исключительно ответственности пользователя. Автоматическая загрузка лог-файлов на серверы ownCloud исключена.</string>
@@ -108,8 +89,6 @@
     <string name="pattern_incorrect_pattern">Неверный графический ключ</string>
     <string name="pattern_reenter_pattern">Введите графический ключ снова</string>
     <string name="pattern_not_same_pattern">Ключи не совпадают</string>
-    <string name="pattern_error_set">При установке графического ключа произошла ошибка</string>
-    <string name="pattern_error_remove">При удалении графического ключа произошла ошибка</string>
     <string name="pattern_already_set">Сначала отключите графический ключ. Графический ключ и код не могут быть включены одновременно.</string>
     <string name="passcode_already_set">Сначала отключите код. Графический ключ и код не могут быть включены одновременно.</string>
     <string name="pattern_no_longer_required">Графический ключ не будет больше запрашиваться</string>
@@ -148,7 +127,6 @@
     <string name="uploader_wrn_no_account_setup_btn_text">Настройка</string>
     <string name="uploader_wrn_no_account_quit_btn_text">Выход</string>
     <string name="uploader_error_title_no_file_to_upload">Не выбран файл для загрузки</string>
-    <string name="uploader_error_message_received_piece_of_text">%1$s не может загрузить часть текста как файл.</string>
     <string name="uploader_error_message_no_file_to_upload">Принятые данные не включают в себя никаких файлов.</string>
     <string name="uploader_error_title_file_cannot_be_uploaded">Файл не может быть загружен</string>
     <string name="uploader_error_message_read_permission_not_granted">%1$s не позволено читать принятый файл</string>
@@ -168,16 +146,9 @@
     <string name="file_list_empty_subtitle_shared_by_links">Здесь появятся файлы и каталоги, ссылкой на которые вы поделитесь</string>
     <string name="file_list_no_app_for_file_type">Не найдено приложение для этого типа файла</string>
     <string name="file_list_no_app_for_perform_action">Нет приложений, поддерживающих это действие</string>
-    <string name="local_file_list_empty">В этом каталоге нет файлов.</string>
-    <string name="local_file_list_empty_just_folders">В этом каталоге нет каталогов.</string>
     <string name="local_file_list_search_with_no_matches">Нет соответствий для этого поиска</string>
     <string name="upload_list_empty">Нет файлов</string>
     <string name="upload_list_empty_subtitle">Здесь будут показаны загруженные файлы</string>
-    <string name="file_list_folder">каталог</string>
-    <string name="file_list_folders">каталоги</string>
-    <string name="file_list_file">файл</string>
-    <string name="file_list_files">файлы</string>
-    <string name="filedetails_select_file">Нажмите на файл для отображения дополнительной информации.</string>
     <string name="upload_to">Закачать в %1$s</string>
     <string name="pick_document_type">Выберите тип документа для создания:</string>
     <string name="upload_files_title">Файлы</string>
@@ -185,40 +156,26 @@
     <string name="filedetails_type">Тип:</string>
     <string name="filedetails_created">Создан:</string>
     <string name="filedetails_last_sync">Последняя синхронизация:</string>
-    <string name="filedetails_path">Путь</string>
     <string name="filedetails_modified">Изменён:</string>
     <string name="filedetails_download">Скачать</string>
     <string name="filedetails_file_image_content_description">Файл изображения</string>
     <string name="filedetails_cancel_btn_content_description">Кнопка отмены загрузки</string>
     <string name="filedetails_sync_file">Синхронизация</string>
-    <string name="filedetails_renamed_in_upload_msg">Файл был переименован в %1$s во время загрузки</string>
-    <string name="list_layout">Вид списка</string>
     <string name="action_share">Общий доступ</string>
     <string name="login_account_preparing">Подготовка аккаунта к первому запуску</string>
     <string name="common_yes">Да</string>
     <string name="common_no">Нет</string>
-    <string name="common_remove_upload">Удалить загрузку</string>
-    <string name="common_retry_upload">Повторить загрузку</string>
     <string name="common_cancel_sync">Отменить синхронизацию</string>
     <string name="common_back">Назад</string>
-    <string name="common_save_exit">Сохранить и выйти</string>
-    <string name="common_error">Ошибка</string>
-    <string name="common_unknown">неизвестно</string>
     <string name="common_error_unknown">неизвестная ошибка</string>
     <string name="common_pending">Ожидается</string>
     <string name="common_important">Важный</string>
-    <string name="change_password">Сменить пароль</string>
-    <string name="delete_account">Удалить аккаунт</string>
-    <string name="create_account">Создать учётную запись</string>
     <string name="upload_chooser_title">Загрузить из</string>
     <string name="uploader_info_dirname">Имя каталога</string>
-    <string name="uploader_upload_in_progress_content">%1$d%% Загружается %2$s</string>
-    <string name="uploader_upload_succeeded_ticker">Загрузка завершена</string>
     <string name="uploader_upload_succeeded_content_single">%1$s загружено</string>
     <string name="uploader_upload_failed_ticker">Ошибка загрузки</string>
     <string name="uploader_upload_failed_content_single">Загрузка %1$s не может быть завершена</string>
     <string name="uploader_upload_failed_credentials_error">Загрузка не удалась, вам необходимо войти повторно.</string>
-    <string name="uploader_upload_failed_ssl_certificate_not_trusted">Нет доверия сертификату сервера</string>
     <string name="uploader_upload_text_dialog_title">Укажите имя для нового файла</string>
     <string name="uploader_upload_text_dialog_filename_error_empty">Имя файла не должно быть пустым</string>
     <string name="uploader_upload_text_dialog_filename_error_length_max">Имя файла должно быть не длиннее %d символов</string>
@@ -229,8 +186,6 @@
     <string name="uploader_upload_camera_upload_source_path_error">Загрузка из камеры не удалась</string>
     <string name="uploader_upload_picture_upload_error">Исходный путь для загрузки изображений больше не является допустимым</string>
     <string name="uploader_upload_video_upload_error">Исходный путь для загрузки видео больше не является допустимым</string>
-    <string name="uploader_upload_available_offline_files">Загрузка файлов, доступных автономно</string>
-    <string name="uploader_upload_requested_from_wifi_files">Загрузка файлов, запрошенных через WiFi</string>
     <string name="ssl_certificate_not_trusted">Нет доверия сертификату сервера</string>
     <string name="uploads_view_title">Загрузки</string>
     <string name="uploads_view_group_current_uploads">Текущие</string>
@@ -241,27 +196,22 @@
     <string name="uploads_view_group_file_count_single">%d файл</string>
     <string name="uploads_view_upload_status_succeeded">Завершённые</string>
     <string name="uploads_view_upload_status_cancelled">Отменён</string>
-    <string name="uploads_view_upload_status_paused">На паузе</string>
     <string name="uploads_view_upload_status_failed_connection_error">Ошибка соединения</string>
-    <string name="uploads_view_upload_status_failed_retry">Скоро загрузка повторится</string>
     <string name="uploads_view_upload_status_failed_credentials_error">Ошибка учетных данных</string>
     <string name="uploads_view_upload_status_failed_folder_error">Ошибка каталога</string>
     <string name="uploads_view_upload_status_failed_file_error">Ошибка файла</string>
     <string name="uploads_view_upload_status_failed_localfile_error">Локальный файл не найден</string>
     <string name="uploads_view_upload_status_failed_permission_error">Ошибка доступа</string>
-    <string name="uploads_view_upload_status_failed_firewall_error">Запрещено правилом в межсетевом экране</string>
     <string name="uploads_view_upload_status_conflict">Конфликт</string>
     <string name="uploads_view_upload_status_service_interrupted">Работа приложения была прекращена</string>
     <string name="uploads_view_upload_status_unknown_fail">Неизвестная ошибка</string>
     <string name="uploads_view_upload_status_waiting_for_wifi">Ожидание соединения по wifi</string>
     <string name="uploads_view_upload_status_queued">В очереди</string>
-    <string name="uploads_view_later_waiting_to_upload">Ожидается загрузка</string>
     <string name="uploads_view_unsupported_media_type">Неподдерживаемый тип медиаданных</string>
     <string name="uploader_upload_enqueued_ticker">Загрузка %1$s в очереди</string>
     <string name="uploader_upload_canceled_ticker">Загрузка отменена</string>
     <string name="downloader_download_canceled_ticker">Скачивание отменено</string>
     <string name="downloader_download_enqueued_ticker">Скачивание %1$s в очереди</string>
-    <string name="downloader_download_in_progress_content">%1$d%% Скачивается %2$s</string>
     <string name="downloader_download_succeeded_ticker">Скачивание завершено</string>
     <string name="downloader_download_succeeded_content">%1$s скачан</string>
     <string name="downloader_download_failed_ticker">Скачивание не удалось</string>
@@ -269,16 +219,11 @@
     <string name="downloader_download_failed_content">Скачивание %1$s не может быть завершено</string>
     <string name="downloader_not_downloaded_yet">Ещё не скачано</string>
     <string name="downloader_download_failed_credentials_error">Скачивание не удалось, вам необходимо войти повторно</string>
-    <string name="downloader_download_forbidden_permissions">на скачивание этого файла</string>
     <string name="common_choose_account">Выберите учётную запись</string>
     <string name="sync_fail_ticker">Синхронизация не удалась</string>
     <string name="sync_fail_ticker_unauthorized">Синхронизация не удалась, вам нужно войти повторно</string>
     <string name="sync_fail_content">Синхронизация %1$s не может быть завершена</string>
     <string name="sync_fail_content_unauthorized">Неверный пароль для %1$s</string>
-    <string name="sync_conflicts_in_favourites_ticker">Обнаружены конфликты</string>
-    <string name="sync_conflicts_in_favourites_content">%1$d файлов не может быть синхронизировано</string>
-    <string name="sync_fail_in_favourites_ticker">Не удалось синхронизировать файлы</string>
-    <string name="sync_fail_in_favourites_content">Содержимое %1$d файлов не может быть синхронизировано (конфликтов: %2$d)</string>
     <string name="sync_current_folder_was_removed">Целевой каталог 1%1$s уже не существует</string>
 
     <string name="pass_code_enter_pass_code">Пожалуйста, укажите ваш код</string>
@@ -289,8 +234,6 @@
     <string name="pass_code_remove_your_pass_code">Убрать код</string>
     <string name="pass_code_mismatch">Коды не совпадают</string>
     <string name="pass_code_wrong">Некоррентный код</string>
-    <string name="pass_code_error_set">При установке кода блокировки произошла ошибка</string>
-    <string name="pass_code_error_remove">При снятии кода блокировки произошла ошибка</string>
     <string name="numberkeyboard_backspace_button_content_description">Кнопка Backspace</string>
     <string name="numberkeyboard_biometric_button_content_description">Биометрическая кнопка</string>
 
@@ -316,7 +259,6 @@
     <string name="media_state_loading">%1$s (загружается)</string>
     <string name="media_event_done">%1$s воспроизведение завершено</string>
     <string name="media_err_nothing_to_play">Медиафайлы не найдены</string>
-    <string name="media_err_no_account">Учётная запись не указана</string>
     <string name="media_err_not_in_owncloud">Файл в неверной учётной записи</string>
     <string name="media_err_unsupported">Неподдерживаемый кодек</string>
     <string name="media_err_io">Медиафайл не может быть прочитан</string>
@@ -332,30 +274,23 @@
     <string name="media_forward_description">Перемотка вперед</string>
     <string name="upload_from_camera_title">Изображение из камеры</string>
 
-    <string name="auth_no_net_conn_title">Нет подключения к сети</string>
-    <string name="auth_nossl_plain_ok_title">Защищённое соединение недоступно.</string>
     <string name="auth_connection_established">Соединение установлено</string>
     <string name="auth_testing_connection">Проверка соединения</string>
     <string name="auth_not_configured_title">Конфигурация сервера задана неверно</string>
     <string name="auth_account_not_new">Учётная запись такого пользователя и сервера уже существует на устройстве</string>
     <string name="auth_account_not_the_same">Указанный пользователь не соответствует этой учётной записи</string>
-    <string name="auth_unknown_error_title">Произошла неизвестная ошибка!</string>
     <string name="auth_incorrect_path_title">Сервер не найден</string>
     <string name="auth_incorrect_address_title">Неправильный формат адреса сервера</string>
     <string name="auth_ssl_general_error_title">Ошибка инициализации SSL</string>
     <string name="auth_bad_oc_version_title">Неизвестная версия сервера</string>
-    <string name="auth_wrong_connection_title">Не удается установить соединение</string>
     <string name="auth_secure_connection">Защищённое соединение установлено</string>
     <string name="auth_unauthorized">Неверное имя пользователя или пароль</string>
     <string name="auth_oauth_error">Ошибка авторизации</string>
     <string name="auth_oauth_error_access_denied">Сервер авторизации отказал в доступе</string>
-    <string name="auth_wtf_reenter_URL">Неожиданное состояние; пожалуйста укажите адрес сервера повторно</string>
     <string name="auth_expired_oauth_token_toast">Время авторизации истекло. Пожалуйста, авторизуйтесь снова</string>
     <string name="auth_expired_basic_auth_toast">Пожалуйста укажите текущий пароль</string>
-    <string name="auth_connecting_auth_server">Подключение к серверу авторизации ...</string>
     <string name="auth_unsupported_auth_method">Сервер не поддерживает выбранный метод аутентификации</string>
     <string name="auth_can_not_auth_against_server">Не удается авторизоваться на этом сервере</string>
-    <string name="auth_account_does_not_exist">Аккаунт ещё не существует на устройстве</string>
 
     <string name="set_available_offline">Сделать доступным автономно</string>
     <string name="unset_available_offline">Убрать доступность автономно</string>
@@ -374,14 +309,12 @@
     <string name="remove_success_msg">Удаление завершено</string>
     <string name="remove_fail_msg">Ошибка удаления</string>
     <string name="rename_dialog_title">Введите новое имя</string>
-    <string name="available_offline_inherited_msg">Каталог, содержащий этот файл, доступен автономно</string>
     <string name="rename_local_fail_msg">Локальная копия не может быть переименована; попробуйте другое имя</string>
     <string name="rename_server_fail_msg">Переименование не может быть завершено</string>
     <string name="file_already_exists">файл уже существует</string>
     <string name="folder_already_exists">файл уже существует</string>
     <string name="file_already_exists_description">Элемент с тем же именем 1%1$s уже существует</string>
     <string name="folder_already_exists_description">Элемент с тем же именем 1%1$s уже существует</string>
-    <string name="sync_file_fail_msg">Удаленный файл не может быть проверен</string>
     <string name="sync_file_nothing_to_do_msg">Содержимое файла уже синхронизировано</string>
     <string name="sync_file_not_found_msg">Файл не найден</string>
     <string name="new_remote_version_found_msg">Найдена новая версия на сервере. Загрузка...</string>
@@ -395,13 +328,10 @@
     <string name="filename_too_long">Неверная длина имени файла</string>
     <string name="wait_a_moment">Подождите немного</string>
     <string name="wait_checking_credentials">Проверка сохранённых учётных данных</string>
-    <string name="filedisplay_unexpected_bad_get_content">Неизвестная ошибка; выберите этот файл из другого приложения</string>
     <string name="filedisplay_no_file_selected">Файлы не выбраны</string>
     <string name="activity_chooser_title">Отправка ссылки пользователю</string>
     <string name="wait_for_tmp_copy_from_private_storage">Копирование файла из частного хранилища</string>
 
-    <string name="oauth_check_onoff">Войти через oAuth2</string>
-    <string name="oauth_login_connection">Подключение к oAuth2 серверу...</string>
 
     <string name="ssl_connection_not_secure">Соединение небезопасно, и http-трафик запрещен.</string>
     <string name="ssl_validator_header">Не удалось проверить подлинность сервера</string>
@@ -434,7 +364,6 @@
 
     <string name="placeholder_sentence">Это заполнитель</string>
     <string name="placeholder_filename">placeholder.txt</string>
-    <string name="placeholder_filetype">Изображение PNG</string>
     <string name="placeholder_filesize">389 КБ</string>
     <string name="placeholder_timestamp">2012/05/18 12:23 PM</string>
     <string name="placeholder_media_time">12:23:45</string>
@@ -452,7 +381,6 @@
     <string name="conflict_replace">отмена</string>
 
     <string name="preview_image_description">Предпросмотр</string>
-    <string name="preview_image_error_unknown_format">Это изображение не может быть отображено</string>
 
     <string name="error__upload__local_file_not_copied">%1$s невозможно скопировать в локальный каталог %2$s </string>
 
@@ -462,8 +390,6 @@
     <string name="share_link_file_error">Не удалось предоставить доступ к этому файлу или каталогу</string>
     <string name="unshare_link_file_error">Не удалось убрать общий доступ с этого файла или каталога</string>
     <string name="update_link_file_error">Не удалось обновить этот файл или каталог</string>
-    <string name="share_link_password_title">Введите пароль</string>
-    <string name="share_link_empty_password">Вы должны ввести пароль</string>
 
     <string name="activity_chooser_send_file_title">Отправить</string>
 
@@ -473,7 +399,6 @@
     <string name="clipboard_uxexpected_error">Неожиданная ошибка во время копирования в буфер обмена</string>
     <string name="clipboard_label">Текст скопирован из %1$s</string>
 
-    <string name="error_cant_bind_to_operations_service">Критическая ошибка: невозможно выполнить действия</string>
 
     <string name="network_error_socket_exception">При подключении к серверу возникла ошибка</string>
     <string name="network_error_socket_timeout_exception">Ответ сервера занимает слишком много времени</string>
@@ -484,61 +409,37 @@
 
     <string name="forbidden_permissions">У вас нет прав %s</string>
 
-    <string name="forbidden_permissions_rename">для переименования этого файла</string>
-    <string name="forbidden_permissions_delete">для удаления этого файла</string>
-    <string name="share_link_forbidden_permissions">для открытия доступа к этому файлу</string>
-    <string name="unshare_link_forbidden_permissions">для закрытия доступа к этому файлу</string>
-    <string name="update_link_forbidden_permissions">для обновления этой ссылки</string>
-    <string name="forbidden_permissions_create">для создания файла</string>
     <string name="uploader_upload_forbidden_permissions">для загрузки в этот каталог</string>
-    <string name="uploader_upload_forbidden">Загрузка не разрешена</string>
-    <string name="downloader_download_file_not_found">Этот файл больше недоступен на сервере</string>
 
-    <string name="prefs_category_accounts">Учётные записи</string>
     <string name="prefs_add_account">Добавить учетную запись</string>
     <string name="drawer_manage_accounts">Управление аккаунтами</string>
     <string name="manage_accounts_quota">%1$s из %2$s</string>
     <string name="auth_redirect_non_secure_connection_title">Безопасное соединение перенаправлено через небезопасный маршрут.</string>
 
-    <string name="actionbar_logger">Журналы</string>
-    <string name="log_send_history_button">История отправок</string>
-    <string name="log_send_no_mail_app">Программа для отправки журналов не найдена. Пожалуйста установите почтовую программу.</string>
-    <string name="log_send_mail_subject">Журналы %1$s для Android</string>
     <string name="actionbar_select_all">Выделить все</string>
     <string name="actionbar_select_inverse">Инвертировать выделение</string>
 
     <string name="actionbar_move">Переместить</string>
-    <string name="file_list_empty_moving">Здесь ничего нет. Вы можете создать каталог!</string>
     <string name="folder_picker_choose_button_text">Выбрать</string>
     <string name="folder_picker_move_here_button_text">Поместить сюда</string>
     <string name="folder_picker_copy_here_button_text">Копировать сюда</string>
     <string name="folder_picker_no_permissions_message_text">У Вас нет полномочий для добавления контактов</string>
 
-    <string name="move_file_not_found">Невозможно переместить. Убедитесь, что файл существует</string>
     <string name="move_file_invalid_into_descendent">Невозможно переместить каталог в его подкаталог</string>
     <string name="move_file_invalid_overwrite">Файл уже существует в каталоге назначения</string>
     <string name="move_file_error">Произошла ошибка при попытке перемещения этого файла или каталога</string>
-    <string name="forbidden_permissions_move">для перемещения этого файла</string>
 
-    <string name="copy_file_not_found">Не удалось произвести копирование. Пожалуйста проверьте существование файла</string>
     <string name="copy_file_invalid_into_descendent">Нельзя произвести копирование папки в унаследованную папку</string>
     <string name="copy_file_invalid_overwrite">Файл уже существует в каталоге назначения</string>
     <string name="copy_file_error">Произошла ошибка во время копирования этого файла или папки</string>
-    <string name="forbidden_permissions_copy">для копирования этого файла</string>
 
-    <string name="prefs_category_camera_upload">Загрузки камеры</string>
 
-    <string name="sync_folder_failed_content">Синхронизация папки %1$s не может быть завершена</string>
 
-    <string name="shared_subject_header">поделился</string>
-    <string name="with_you_subject_header">с вами</string>
 
     <string name="subject_user_shared_with_you">%1$s предоставил вам доступ к \"%2$s\"</string>
     <string name="subject_shared_with_you">Вам предоставлен доступ к \"%1$s\"</string>
 
     <string name="auth_refresh_button">Обновить соединение</string>
-    <string name="auth_host_address">Адрес сервера</string>
-    <string name="common_error_out_memory">Недостаточно памяти</string>
 
     <string name="username">Имя пользователя</string>
 
@@ -558,18 +459,13 @@
     <string name="prefs_camera_upload_behaviour_title">Исходный файл будет</string>
     <string name="prefs_camera_upload_last_sync_title">Последняя синхронизация</string>
     <string name="notifications_permission_denied">Вы можете обновить свои установки в Настройки</string>
-    <string name="upload_copy_files">Копировать файл</string>
-    <string name="upload_move_files">Переместить файл</string>
 
     <string name="pref_behaviour_entries_keep_file">остался в исходной папке</string>
     <string name="pref_behaviour_entries_remove_original_file">удалено из исходной папки</string>
 
     <string name="share_dialog_title">Общий доступ</string>
-    <string name="share_file">Поделиться %1$s</string>
     <string name="share_with_user_section_title">Пользователи и группы</string>
     <string name="share_no_users">Нет данных используемых совместно с другими пользователями</string>
-    <string name="share_incompatible_version">Чтобы предоставлять доступ другим пользователям, ваш сервер должен как минимум иметь версию 8.2.</string>
-    <string name="share_add_user_or_group">Добавить пользователя или группу</string>
     <string name="share_via_link_section_title">Общедоступные ссылки</string>
     <string name="share_via_link_create_title">Создать доступ по ссылке</string>
     <string name="share_via_link_edit_title">Изменить доступ по ссылке</string>
@@ -578,13 +474,11 @@
     <string name="share_confirm_public_link_button">Сохранить</string>
     <string name="share_via_link_expiration_date_label">Срок действия</string>
     <string name="share_via_link_password_label">Пароль</string>
-    <string name="share_via_link_password_title">Безопасный</string>
     <string name="share_via_link_generate_password_button">Общие</string>
     <string name="share_via_link_copy_password_button">Копировать</string>
     <string name="share_via_link_edit_permission_read_only_label">Скачивание / Просмотр</string>
     <string name="share_via_link_edit_permission_read_and_write_label">Скачивание / Просмотр / Закачка</string>
     <string name="share_via_link_edit_permission_upload_only_label">Только закачка (перетащить файл сюда)</string>
-    <string name="share_get_public_link_button">Получить ссылку</string>
     <string name="share_with_title">Поделиться с</string>
     <string name="share_with_edit_title">Поделиться с %1$s</string>
 
@@ -600,8 +494,6 @@
     <string name="share_privilege_can_edit_create">создать</string>
     <string name="share_privilege_can_edit_change">изменить</string>
     <string name="share_privilege_can_edit_delete">удалить</string>
-    <string name="edit_share_unshare">Остановить общий доступ</string>
-    <string name="edit_share_done">завершено</string>
 
     <string name="action_upload_retry">Повторить</string>
     <string name="action_upload_clear">Очистить</string>
@@ -610,7 +502,6 @@
     <string name="confirmation_remove_files_alert">Вы действительно хотите удалить выбранные %s элементы?</string>
     <string name="confirmation_remove_folders_alert">Вы действительно хотите удалить выбранные элементы вместе с их содержимым?</string>
     <string name="failed_upload_quota_exceeded_text">Недостаточно места в учётной записи</string>
-    <string name="auth_forbidden">Запрещённая аутентификация</string>
 
     <string name="actionbar_privacy_policy">Политика конфиденциальности</string>
     <string name="prefs_privacy_policy">Политика конфиденциальности</string>
@@ -623,7 +514,6 @@
     <string name="streaming_crossed_redirection">Потоковая передача не разрешена через перекрёстные перенаправления</string>
     <string name="previewing_video_common_error">Это видео невозможно воспроизвести.</string>
 
-    <string name="previewing_video_not_supported">Предпросмотр видео не поддерживается в вашей версии Андроида. Скачивание файла начнётся автоматически.</string>
     <string name="streaming_position_not_available">"Позиция недоступна"</string>
     <string name="error_no_network_connection">Устройство не подключено к сети</string>
     <string name="share_no_public_links">Ещё не создано ни одной общедоступной ссылки.</string>
@@ -634,7 +524,6 @@
     <string name="share_via_link_expiration_date_enforced_label">Срок действия</string>
     <string name="share_via_link_expiration_date_explanation_label">Общедоступная ссылка устареет не позднее, чем через %1$d дней после создания.</string>
     <string name="share_via_link_default_name_template">Ссылка %1$s</string>
-    <string name="share_via_link_empty_password">Пароль пуст</string>
     <string name="private_link_info">Личная ссылка: её могут использовать только те, у кого есть доступ к файлу или каталогу. Используйте её в качестве постоянной ссылки для себя или чтобы указать другим на файлы в общем доступе</string>
     <string name="file_private_link_error">Личная ссылка для этого файла недоступна</string>
     <string name="download_notification_channel_name">Скачивания</string>
@@ -647,7 +536,6 @@
     <string name="file_sync_notification_channel_description">Просмотр результатов синхронизации файлов</string>
     <string name="file_sync_conflict_notification_channel_name">Конфликты файлов</string>
     <string name="file_sync_conflict_notification_channel_description">Смотрите конфликты файлов, когда они происходят</string>
-    <string name="clicks_to_be_developer">Вам ещё остается %1$d кликов, чтобы включить меню разработчика</string>
 
     <string name="rate_dialog_title">Оцените приложение %1$s!</string>
     <string name="rate_dialog_description">Если вам нравится пользоваться этим приложением, не уделите ли вы минутку, чтобы оценить его? Ваш отзыв очень важен для нас.</string>
@@ -673,15 +561,12 @@
     <string name="welcome_feature_4_text">Ваши снимки и видео загружаются автоматически</string>
     <string name="welcome_feature_5_title"> Потоковое видео</string>
     <string name="welcome_feature_5_text">Проигрывайте ваши ролики, не скачивая их</string>
-    <string name="no_browser_installed_alert">Не установлен никакой браузер. Пожалуйста, установите браузер для поддержки безопасного входа.</string>
     <string name="common_not_found">не найдено</string>
 
     <string name="supports_oauth2_error">Невозможно было узнать, поддерживается ли OAuth2</string>
     <string name="get_base_url_error">Узнать базу сервера, было невозможно</string>
     <string name="prefs_http_logs">Записывать в лог-файл HTTP запросы и ответы</string>
-    <string name="prefs_logs_summary">В логах может содержаться чувствительная информация. Отправка логов третьим лицам находится под вашей ответственностью</string>
 
-    <string name="synchronizing_account">Синхронизация аккаунта</string>
     <string name="spaces_sync_failed">Пространства не могут быть обновлены</string>
 
     <!-- Scoped storage migration wizard -->
@@ -700,7 +585,6 @@
     <string name="security_enforced_first_option">Блокировка кодом</string>
     <string name="security_enforced_second_option">Шаблон заблокирован</string>
 
-    <string name="folder_upload_some_content_or_sync_devices">Загрузите что-нибудь или синхронизируйте со своими устройствами!</string>
 
     <!-- Webfinger -->
     <string name="global_proceed">Продолжить</string>
@@ -713,7 +597,6 @@
     <string name="release_notes_bugfixes_title">Незначительные исправления ошибок</string>
     <string name="release_notes_bugfixes_subtitle">Некоторые ошибки были исправлены для улучшения работы приложения</string>
     <!-- Open in web -->
-    <string name="ic_action_open_in_web">Открыть в браузере</string>
     <string name="ic_action_open_with_web">Открыть в %1$s (веб)</string>
     <string name="open_in_web_error_generic">Не удалось открыть в сети</string>
     <string name="open_in_web_error_not_supported">нет приложений, которые поддерживают этот тип файла</string>
@@ -783,7 +666,6 @@
     <string name="content_description_cancel_button">Отмена</string>
     <string name="create_shortcut_dialog_title">Создать ярлык</string>
     <string name="create_shortcut_dialog_url">URL</string>
-    <string name="create_shortcut_dialog_url_information">URL должен начинаться с https:// или http:// чтобы его можно было открыть в браузере</string>
     <string name="create_shortcut_dialog_url_error_no_blanks">URL не должен содержать пробелы</string>
     <string name="create_shortcut_dialog_url_extension">.url</string>
     <string name="open_shortcut_description">Этот ярлык указывает на:</string>

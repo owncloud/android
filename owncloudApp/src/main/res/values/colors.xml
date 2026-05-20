@@ -21,7 +21,6 @@
 
     <!-- standard material color definitions -->
     <color name="primary">@color/owncloud_blue</color>
-    <color name="primary_dark">#162233</color>
     <color name="color_accent">@color/owncloud_blue_accent</color>
 
     <!-- Colors -->
@@ -39,18 +38,12 @@
     <color name="half_black">#808080</color>
     <color name="black_semi_transparent">#B2000000</color>
     <color name="textColor">@color/black</color>
-    <color name="drawerMenuTextColor">#000000</color>
     <color name="list_divider_background">#eee</color>
     <color name="filelist_icon_background">#DDDDDD</color>
     <color name="dark_background_text_color">#EEEEEE</color>
-    <color name="secondary_button_color">#D6D7D7</color>
     <color name="transparent">#00000000</color>
     <color name="secondaryTextColor">#a0a0a0</color>
-    <color name="listItemHighlighted">#f8f8f8</color>
-    <color name="highlightTextColor">#55739a</color>
     <color name="grey">#A5ABAF</color>
-
-    <color name="dialog_list_item">#1F1F1F</color>
 
     <!-- special transparent_cloud action bar colors for image preview -->
     <color name="owncloud_blue_transparent">#201D2D44</color>

@@ -1,9 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-    <string name="actionbar_sync">គណនីឱ្យថ្មីឡើងវិញ</string>
   <string name="actionbar_upload">ផ្ទុក​ឡើង</string>
-  <string name="actionbar_upload_from_apps">មាតិការ​ពីកម្មវិធីផ្សេងទៀត</string>
-  <string name="actionbar_upload_files">ឯកសារ</string>
   <string name="actionbar_open_with">បើកជាមួយ</string>
   <string name="actionbar_mkdir">ថត​ថ្មី</string>
   <string name="actionbar_settings">ការកំណត់</string>
@@ -13,12 +10,8 @@
   <string name="drawer_open">បើក</string>
   <string name="drawer_feedback">មតិត្រឡប់</string>
   <string name="drawer_help">ជំនួយ</string>
-  <string name="prefs_category_general">ទូទៅ</string>
   <string name="prefs_subsection_more">ច្រើន​ទៀត</string>
   <string name="prefs_subsection_security">សុវត្ថិភាព</string>
-  <string name="prefs_accounts">គណនី</string>
-  <string name="prefs_log_summary">នេះជាបញ្ហា​សម្រាប់​អ្នក​ដែល​បាន​ចូលទៅកាន់</string>
-  <string name="prefs_log_summary_history">នៅទីនេះ​គឺបង្ហាញការដែលបាន​ចូលទៅកាន់</string>
   <string name="prefs_help">ជំនួយ</string>
   <string name="prefs_recommend">ផ្ដល់អនុសាសន៍ទៅកាន់មិត្តភក្ដិ</string>
   <string name="prefs_feedback">មតិត្រឡប់</string>
@@ -31,7 +24,6 @@
   <string name="uploader_wrn_no_account_setup_btn_text">ដំឡើង</string>
   <string name="uploader_wrn_no_account_quit_btn_text">ចាក់ចេញ</string>
   <string name="file_list_seconds_ago">វិនាទី​មុន</string>
-  <string name="filedetails_select_file">ចុចមួយ​លើឯកសារ ដើម្បី​បង្ហាញ​ព័ត៌មាន​បន្ថែម។</string>
   <string name="filedetails_size">ទំហំ៖</string>
   <string name="filedetails_type">ប្រភេទ៖</string>
   <string name="filedetails_created">បាន​បង្កើត៖</string>
@@ -41,24 +33,18 @@
   <string name="common_yes">ព្រម</string>
   <string name="common_no">ទេ</string>
     <string name="common_back">ត្រឡប់ក្រោយ</string>
-  <string name="common_error">កំហុស</string>
   <string name="common_loading">កំពុងដំណើរការ</string>
   <string name="common_error_unknown">មិន​ស្គាល់​កំហុស</string>
   <string name="common_pending">កំពុង​រង់ចាំ</string>
-    <string name="change_password">ប្តូរ​ពាក្យសម្ងាត់</string>
-  <string name="create_account">បង្កើតគណនី</string>
   <string name="upload_chooser_title">ផ្ទុកឡើងពី…</string>
   <string name="uploader_info_dirname">ឈ្មោះ​ថត</string>
   <string name="uploader_upload_in_progress_ticker">កំពុង​តែផ្ទុកឡើង…</string>
-  <string name="uploader_upload_succeeded_ticker">ការផ្ទុកឡើងបាន​ជោគជ័យ</string>
   <string name="uploader_upload_failed_ticker">ការផ្ទុកឡើងបាន​បរាជ័យ</string>
   <string name="uploads_view_upload_status_unknown_fail">មិន​ស្គាល់​កំហុស</string>
   <string name="downloader_download_in_progress_ticker">កំពុង​ធ្វើការទាញយក…</string>
   <string name="downloader_download_succeeded_ticker">ការទាញយក​បានជោគជ័យ</string>
   <string name="downloader_download_failed_ticker">ការទាញយក​បានបរាជ័យ</string>
   <string name="common_choose_account">ជ្រើស​គណនី</string>
-    <string name="auth_no_net_conn_title">គ្មានបណ្តាញ​តភ្ជាប់ទេ</string>
-  <string name="auth_unknown_error_title">មិនស្គាល់កំហុសបានកើតឡើង!</string>
   <string name="common_rename">ប្ដូរ​ឈ្មោះ</string>
   <string name="common_remove">ដកចេញ</string>
   <string name="confirmation_remove_local">ទីកន្លែងតែមួយ</string>
@@ -75,9 +61,7 @@
   <string name="ssl_validator_label_validity_to">រហូតដល់ៈ</string>
   <string name="ssl_validator_label_signature">ហត្ថលេខា:</string>
   <string name="activity_chooser_send_file_title">ផ្ញើ</string>
-  <string name="prefs_category_accounts">គណនី</string>
   <string name="folder_picker_choose_button_text">ជ្រើស</string>
-  <string name="auth_host_address">អាសយដ្ឋាន​ម៉ាស៊ីន​បម្រើ</string>
   <string name="share_dialog_title">ចែក​រំលែក</string>
   <string name="share_cancel_public_link_button">បោះបង់</string>
   <string name="share_confirm_public_link_button">រក្សាទុក</string>

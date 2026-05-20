@@ -1,6 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="actionbar_upload_files">فائلیں</string>
   <string name="actionbar_settings">سیٹینگز</string>
   <string name="actionbar_send_file">بھجیں</string>
   <string name="drawer_open">کھولیں</string>
@@ -16,7 +15,6 @@
   <string name="action_share">اشتراک</string>
   <string name="common_yes">ہاں</string>
   <string name="common_no">نہیں</string>
-    <string name="common_error">ایرر</string>
   <string name="common_error_unknown">غیر معروف خرابی</string>
   <string name="uploads_view_upload_status_unknown_fail">غیر معروف خرابی</string>
   <string name="common_rename">نام بدلیں</string>
