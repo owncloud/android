@@ -40,7 +40,6 @@
   <string name="uploader_error_message_source_file_not_copied">Beim Kopéiere vun dësem Fichier op den temporäre Dossier ass e Feeler opgetrueden. Wann ech gelift versicht et nach eng Kéier ze schécken.</string>
   <string name="file_list_seconds_ago">Sekonnen hier</string>
   <string name="upload_list_empty">Keng Uploads verfügbar.</string>
-  <string name="filedetails_select_file">Tippt op e Fichier fir zousätzlech Informatiounen unzeweisen.</string>
   <string name="filedetails_size">Gréisst:</string>
   <string name="filedetails_type">Typ:</string>
   <string name="filedetails_created">Erstallt:</string>

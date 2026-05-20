@@ -123,7 +123,6 @@
   <string name="file_list_no_app_for_file_type">ไม่พบแอปฯที่ตรงกับประเภทของไฟล์</string>
   <string name="local_file_list_search_with_no_matches">ไม่พบสิ่งที่คุณกำลังค้นหา</string>
   <string name="upload_list_empty">ไม่พบการอัปโหลดใดๆ</string>
-  <string name="filedetails_select_file">แตะที่ไฟล์ เพื่อแสดงข้อมูลเพิ่มเติม</string>
   <string name="upload_to">อัปโหลดไปยัง %1$s</string>
   <string name="upload_files_title">ไฟล์</string>
   <string name="filedetails_size">ขนาด:</string>

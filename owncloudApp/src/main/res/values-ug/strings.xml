@@ -119,7 +119,6 @@
   <string name="file_list_no_app_for_file_type">ھۆججەت تىپى ئۈچۈن ھېچقانداق ئەپ تېپىلمىدى</string>
   <string name="local_file_list_search_with_no_matches">بۇ ئىزدەشكە ماس كەلمەيدۇ</string>
   <string name="upload_list_empty_subtitle">بىر نەرسە يۈكلەڭ ، ئۇ بۇ يەردە كۆرۈنىدۇ.</string>
-  <string name="filedetails_select_file">قوشۇمچە ئۇچۇرلارنى كۆرسىتىش ئۈچۈن ھۆججەتنى چېكىڭ.</string>
   <string name="pick_document_type">قۇرۇش ئۈچۈن ھۆججەت تۈرىنى تاللاڭ:</string>
   <string name="filedetails_size">چوڭلۇقى:</string>
   <string name="filedetails_type">تىپى:</string>

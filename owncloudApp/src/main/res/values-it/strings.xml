@@ -119,7 +119,6 @@
   <string name="file_list_no_app_for_perform_action">Nessuna app trovata per questa azione</string>
   <string name="local_file_list_search_with_no_matches">Nessun risultato per questa ricerca</string>
   <string name="upload_list_empty">Nessun caricamento disponibile.</string>
-  <string name="filedetails_select_file">Tocca un file per visualizzare informazioni aggiuntive.</string>
   <string name="upload_to">Aggiorna a %1$s</string>
   <string name="pick_document_type">Scegliere il tipo di documento da creare:</string>
   <string name="upload_files_title"> File</string>

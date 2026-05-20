@@ -33,7 +33,6 @@
   <string name="uploader_error_title_file_cannot_be_uploaded">ਫਾਈਲ ਅੱਪਲੋਡ ਨਹੀਂ ਕੀਤੀ ਜਾ ਸਕਦੀ</string>
   <string name="file_list_seconds_ago">ਸਕਿੰਟ ਪਹਿਲਾਂ</string>
   <string name="upload_list_empty">ਕੋਈ ਅੱਪਲੋਡ ਉਪਲਬਧ ਨਹੀਂ। </string>
-  <string name="filedetails_select_file">ਹੋਰ ਜਾਣਕਾਰੀ ਵੇਖਣ ਲਈ ਫਾਇਲ ਉੱਤੇ ਛੂਹੋ</string>
   <string name="filedetails_size">ਆਕਾਰ:</string>
   <string name="filedetails_type">ਕਿਸਮ:</string>
   <string name="filedetails_created">ਬਣਾਈ:</string>

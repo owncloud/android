@@ -113,7 +113,6 @@
   <string name="file_list_no_app_for_file_type">Ingen app hittades för filtypen</string>
   <string name="local_file_list_search_with_no_matches">Inga matchningar för denna sökningen</string>
   <string name="upload_list_empty">Inga uppladdningar tillgängliga.</string>
-  <string name="filedetails_select_file">Peka på en fil för att visa mer information.</string>
   <string name="upload_to">Ladda upp till %1$s</string>
   <string name="pick_document_type">Välj en dokumenttyp att skapa:</string>
   <string name="upload_files_title">Filer</string>

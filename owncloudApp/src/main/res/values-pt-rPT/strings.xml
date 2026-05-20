@@ -157,7 +157,6 @@
     <string name="local_file_list_search_with_no_matches">Nenhum resultado para esta pesquisa</string>
     <string name="upload_list_empty">Sem envios disponíveis.</string>
     <string name="upload_list_empty_subtitle">Faça upload de algo e ele aparecerá aqui.</string>
-    <string name="filedetails_select_file">Toque num ficheiro para visualizar a informação adicional.</string>
     <string name="upload_to">Carregar para %1$s</string>
     <string name="pick_document_type">Escolha um tipo de documento para criar:</string>
     <string name="upload_files_title">Ficheiros</string>

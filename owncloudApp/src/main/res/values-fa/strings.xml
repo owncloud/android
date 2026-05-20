@@ -65,7 +65,6 @@
   <string name="file_list_seconds_ago">ثانیه پیش</string>
   <string name="file_list_no_app_for_file_type">کاره‌ای برای گونهٔ پرونده پیدا نشد</string>
   <string name="upload_list_empty">هیچ بارگذاری‌ای موجود نیست.</string>
-  <string name="filedetails_select_file">برای نمایش اطّلاعات اضافی، روی پرونده‌ای ضربه بزنید.</string>
   <string name="upload_to">آپلود به%1$s</string>
   <string name="upload_files_title">فایل ها</string>
   <string name="filedetails_size">اندازه:</string>

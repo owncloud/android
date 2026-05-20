@@ -156,7 +156,6 @@
     <string name="local_file_list_search_with_no_matches">S\’ka përputhje për këtë kërkim</string>
     <string name="upload_list_empty">S\’ka ngarkime te gatshme.</string>
     <string name="upload_list_empty_subtitle">Ngarkoni diçka dhe do të shfaqet këtu.</string>
-    <string name="filedetails_select_file">Prekni mbi një kartelë që të shfaqen hollësi shtesë.</string>
     <string name="upload_to">Ngarkoje te %1$s</string>
     <string name="pick_document_type">Zgjidhni një dokument për krijim:</string>
     <string name="upload_files_title">Kartela</string>

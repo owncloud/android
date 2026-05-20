@@ -154,7 +154,6 @@
     <string name="local_file_list_search_with_no_matches">Tälle haulle ei löydy tuloksia</string>
     <string name="upload_list_empty">Ei lähetyksiä saatavilla.</string>
     <string name="upload_list_empty_subtitle">Lähetä jotain, niin se näkyy tässä.</string>
-    <string name="filedetails_select_file">Napauta tiedostoa nähdäksesi lisätietoja.</string>
     <string name="upload_to">Lähetä %1$siin</string>
     <string name="pick_document_type">Valitse luotavan dokumentin tyyppi:</string>
     <string name="upload_files_title">Tiedostot</string>

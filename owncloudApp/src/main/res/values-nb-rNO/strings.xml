@@ -102,7 +102,6 @@
   <string name="file_list_no_app_for_file_type">Ingen apper funnet for filtypen</string>
   <string name="local_file_list_search_with_no_matches">Ingen treff på dette søket</string>
   <string name="upload_list_empty">Ingen opplastinger tilgjengelig.</string>
-  <string name="filedetails_select_file">Trykk på en fil for å vise ekstra informasjon.</string>
   <string name="upload_to">Last opp til %1$s</string>
   <string name="upload_files_title">Filer</string>
   <string name="filedetails_size">Størrelse:</string>

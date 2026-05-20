@@ -29,7 +29,6 @@
   <string name="uploader_wrn_no_account_setup_btn_text">Qurulum</string>
   <string name="uploader_wrn_no_account_quit_btn_text">Çıx</string>
   <string name="file_list_seconds_ago">saniyələr öncə</string>
-  <string name="filedetails_select_file">Faylın üstünə sıxın ki, əlavə məlumat ekrana çıxsın.</string>
   <string name="filedetails_size">Həcm:</string>
   <string name="filedetails_type">Tip:</string>
   <string name="filedetails_created">Yaradıldı:</string>

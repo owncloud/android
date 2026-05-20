@@ -88,7 +88,6 @@
   <string name="file_list_no_app_for_file_type">Nerasta programėlė šiam failo tipui</string>
   <string name="local_file_list_search_with_no_matches">Nėra rezultatų šiai paieškai</string>
   <string name="upload_list_empty">Įkėlimų nerasta</string>
-  <string name="filedetails_select_file">Palieskite failą, kad parodyti papildomą informaciją.</string>
   <string name="upload_to">Įkelti į %1$s</string>
   <string name="upload_files_title">Failai</string>
   <string name="filedetails_size">Dydis:</string>

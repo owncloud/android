@@ -110,7 +110,6 @@
   <string name="file_list_no_app_for_file_type">No se ha encontrado una aplicación para este tipo de archivo</string>
   <string name="local_file_list_search_with_no_matches">No hay resultados para esta búsqueda</string>
   <string name="upload_list_empty">No hay cargas disponibles.</string>
-  <string name="filedetails_select_file">Pulsá sobre un archivo para mostrar información adicional.</string>
   <string name="upload_to">Cargar en %1$s</string>
   <string name="upload_files_title">Archivos</string>
   <string name="filedetails_size">Tamaño:</string>

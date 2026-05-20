@@ -158,7 +158,6 @@
     <string name="local_file_list_search_with_no_matches">ບໍ່ພົບໄຟລ໌ທີ່ກົງກັນ</string>
     <string name="upload_list_empty">ບໍ່ມີການອັບໂຫຼດ</string>
     <string name="upload_list_empty_subtitle">ການອັບໂຫຼດຂອງທ່ານຈະປາກົດຢູ່ທີ່ນີ້</string>
-    <string name="filedetails_select_file">ແຕະທີ່ໄຟລ໌ເພື່ອເບິ່ງລາຍລະອຽດ</string>
     <string name="upload_to">ອັບໂຫຼດໄປທີ່</string>
     <string name="pick_document_type">ເລືອກປະເພດເອກະສານ</string>
     <string name="upload_files_title">ອັບໂຫຼດໄຟລ໌</string>

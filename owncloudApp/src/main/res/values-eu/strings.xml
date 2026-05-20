@@ -55,7 +55,6 @@
   <string name="file_list_seconds_ago">segundu</string>
   <string name="file_list_no_app_for_file_type">Ez da fitxategi motarentzat app-ik aurkitu</string>
   <string name="upload_list_empty">Ez dago kargatzekorik.</string>
-  <string name="filedetails_select_file">Sakatu fitxategi baten gainean informazio gehiago lortzeko</string>
   <string name="upload_to">%1$sera igo</string>
   <string name="upload_files_title">Fitxategiak</string>
   <string name="filedetails_size">Tamaina:</string>

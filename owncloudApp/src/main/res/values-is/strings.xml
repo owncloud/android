@@ -91,7 +91,6 @@
   <string name="file_list_no_app_for_file_type">Engin forrit fundust fyrir skráategundina</string>
   <string name="local_file_list_search_with_no_matches">Engar samsvaranir fundust fyrir þessa leit</string>
   <string name="upload_list_empty">Engar innsendingar tiltækar.</string>
-  <string name="filedetails_select_file">Bankaðu á skrá til að sjá ítarlegri upplýsingar.</string>
   <string name="upload_to">Senda inn í %1$s</string>
   <string name="upload_files_title">Skrár</string>
   <string name="filedetails_size">Stærð:</string>

@@ -41,7 +41,6 @@
   <string name="uploader_error_message_source_file_not_copied">Hebo un fallu mientres s\'intentaba copiar un ficheru a una carpeta temporal. Por favor, intente unviala de nuevu.</string>
   <string name="file_list_seconds_ago">hai segundos</string>
   <string name="upload_list_empty">Nenguna xuba disponible.</string>
-  <string name="filedetails_select_file">Calca nun ficheru p\'amosar información adicional</string>
   <string name="filedetails_size">Tamañu:</string>
   <string name="filedetails_type">Triba:</string>
   <string name="filedetails_created">Creáu:</string>
