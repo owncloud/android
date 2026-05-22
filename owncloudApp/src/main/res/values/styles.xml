@@ -18,8 +18,6 @@
 -->
 <resources xmlns:tools="http://schemas.android.com/tools" xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <style name="Animations" />
-
     <!-- THEMES: styles for whole APP or individual ACTIVITIES -->
 
     <!-- General ownCloud app style.
@@ -98,12 +96,6 @@
         <item name="android:windowOptOutEdgeToEdgeEnforcement" tools:targetApi="35">true</item>
     </style>
 
-    <!-- USED IN SHAREACTIVITY!! !! -->
-    <style name="Theme.ownCloud.AlertDialog.NoTitle">
-        <item name="windowNoTitle">true</item>
-        <item name="android:windowOptOutEdgeToEdgeEnforcement" tools:targetApi="35">true</item>
-    </style>
-
     <!-- APP BAR styles -->
 
     <!-- Regular style for the app bar (both for old actionbar and new toolbar);
@@ -168,11 +160,6 @@
         <item name="android:textColor">@color/fab_white</item>
     </style>
 
-    <style name="NavigationView_ItemTextAppearance">
-        <item name="android:ellipsize">end</item>
-        <item name="android:listDivider">@color/grey</item>
-    </style>
-
     <!-- Button Bar hack due to Lollipop bug:
         https://code.google.com/p/android/issues/detail?id=78302
     fix see:
@@ -193,52 +180,6 @@
         <item name="android:layout_weight">1</item>
         <!-- setting a fixed width as follows results in narrow buttons with line breaks, but of course this is not a solution -->
         <!-- <item name="android:width">100dp</item> -->
-    </style>
-
-    <!-- PopDownMenu -->
-    <style name="Animations.PopDownMenu" />
-
-    <style name="Animations.PopDownMenu.Center">
-        <item name="android:windowEnterAnimation">@anim/grow_from_top</item>
-        <item name="android:windowExitAnimation">@anim/shrink_from_bottom</item>
-    </style>
-
-    <style name="Animations.PopDownMenu.Left">
-        <item name="android:windowEnterAnimation">@anim/grow_from_topleft_to_bottomright</item>
-        <item name="android:windowExitAnimation">@anim/shrink_from_bottomright_to_topleft</item>
-    </style>
-
-    <style name="Animations.PopDownMenu.Right">
-        <item name="android:windowEnterAnimation">@anim/grow_from_topright_to_bottomleft</item>
-        <item name="android:windowExitAnimation">@anim/shrink_from_bottomleft_to_topright</item>
-    </style>
-
-    <style name="Animations.PopDownMenu.Reflect">
-        <item name="android:windowEnterAnimation">@anim/pump_top</item>
-        <item name="android:windowExitAnimation">@anim/disappear</item>
-    </style>
-
-    <!-- PopUpMenu -->
-    <style name="Animations.PopUpMenu" />
-
-    <style name="Animations.PopUpMenu.Center">
-        <item name="android:windowEnterAnimation">@anim/grow_from_bottom</item>
-        <item name="android:windowExitAnimation">@anim/shrink_from_top</item>
-    </style>
-
-    <style name="Animations.PopUpMenu.Left">
-        <item name="android:windowEnterAnimation">@anim/grow_from_bottomleft_to_topright</item>
-        <item name="android:windowExitAnimation">@anim/shrink_from_topright_to_bottomleft</item>
-    </style>
-
-    <style name="Animations.PopUpMenu.Right">
-        <item name="android:windowEnterAnimation">@anim/grow_from_bottomright_to_topleft</item>
-        <item name="android:windowExitAnimation">@anim/shrink_from_topleft_to_bottomright</item>
-    </style>
-
-    <style name="Animations.PopUpMenu.Reflect">
-        <item name="android:windowEnterAnimation">@anim/pump_bottom</item>
-        <item name="android:windowExitAnimation">@anim/disappear</item>
     </style>
 
     <style name="PassCodeStyle">
@@ -272,16 +213,6 @@
     <style name="numberkeyboard_keyContainer">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">0dp</item>
-    </style>
-
-    <!-- Notifications -->
-    <style name="Theme.ownCloud.NotificationText.Title" parent="@android:style/TextAppearance.StatusBar.EventContent.Title">
-        <item name="android:textSize">18sp</item>
-        <item name="android:textStyle">bold</item>
-    </style>
-
-    <style name="Theme.ownCloud.NotificationText.Content" parent="@android:style/TextAppearance.StatusBar.EventContent">
-        <item name="android:textSize">16sp</item>
     </style>
 
     <!-- Authenticator Activity -->

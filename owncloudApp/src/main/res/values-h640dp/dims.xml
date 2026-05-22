@@ -22,7 +22,6 @@
 <resources>
     <!-- Passcode margin keyboard for standard screens-->
     <dimen name="passcode_standard_margin">16dp</dimen>
-    <dimen name="passcode_margin_top">50dp</dimen>
     <dimen name="passcode_margin_bottom">16dp</dimen>
     <dimen name="passcode_margin_buttons">8dp</dimen>
 

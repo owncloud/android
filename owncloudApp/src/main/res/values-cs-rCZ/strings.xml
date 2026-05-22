@@ -6,24 +6,16 @@
     <string name="global_date">Datum</string>
     <string name="global_size">Velikost</string>
     <string name="actionbar_search">Hledat v tomto adresáři</string>
-    <string name="actionbar_sync">Obnovit účet</string>
     <string name="actionbar_upload">Nahrát</string>
-    <string name="actionbar_upload_from_apps">Obsah z ostatních aplikací</string>
-    <string name="actionbar_upload_files">Soubory</string>
     <string name="actionbar_open_with">Otevřít pomocí</string>
     <string name="actionbar_mkdir">Nový adresář</string>
     <string name="actionbar_settings">Nastavení</string>
     <string name="actionbar_see_details">Podrobnosti</string>
     <string name="actionbar_send_file">Odeslat</string>
-    <string name="actionbar_descending">Klesající</string>
     <string name="actionbar_sort_title">Seřadit podle</string>
     <string name="fab_new_file">Nový dokument</string>
     <string name="fab_new_shortcut">Nová zkratka</string>
-    <string name="drawer_item_all_files">Všechny soubory</string>
     <string name="drawer_item_only_available_offline">Dostupné offline</string>
-    <string name="drawer_item_shared_by_link_files">Sdíleno pomocí odkazu</string>
-    <string name="drawer_item_settings">Nastavení</string>
-    <string name="drawer_item_uploads_list">Nahrání</string>
     <string name="drawer_close">Zavřít</string>
     <string name="drawer_open">Otevřít</string>
     <string name="drawer_loading_quota">Načítám kvóty</string>
@@ -35,7 +27,6 @@
     <string name="drawer_unavailable_used_storage">Informace o využívání úložiště nejsou dostupné</string>
     <string name="drawer_feedback">Odezva</string>
     <string name="drawer_help">Nápověda</string>
-    <string name="prefs_category_general">Obecné</string>
     <string name="prefs_subsection_logging">Logování</string>
     <string name="prefs_subsection_more">Více</string>
     <string name="prefs_subsection_security">Zabezpečení</string>
@@ -43,8 +34,6 @@
     <string name="prefs_subsection_security_summary">Nastavení zámků aplikace a povolení doteku s jinými aplikacemi</string>
     <string name="prefs_subsection_logging_summary">Detailní nastavení možností logování aplikace</string>
     <string name="prefs_subsection_more_summary">Informace, zpětná vazba a další</string>
-    <string name="prefs_accounts">Účty</string>
-    <string name="prefs_manage_accounts">Spravovat účty</string>
     <string name="prefs_passcode">Zámek bezpečnostního kódu</string>
     <string name="prefs_biometric">Biometrický zámek</string>
     <string name="prefs_biometric_summary">Nutné povolit bezpečnostní kód nebo gesto k povolení této možnosti</string>
@@ -78,19 +67,12 @@
     <string name="prefs_show_hidden_files">Zobrazit skryté soubory</string>
     <string name="prefs_log_open_logs_list_view">Soubory logu</string>
     <string name="prefs_log_no_logs_list_view">Vymazat koš!</string>
-    <string name="prefs_log_title">Povolit logování</string>
-    <string name="prefs_log_summary">Použito k zaznamenávání problémů.</string>
-    <string name="prefs_log_title_history">Historie logování</string>
-    <string name="prefs_log_summary_history">Zobrazuje zaznamenané logy.</string>
-    <string name="prefs_log_delete_history_button">Smazat historii</string>
     <string name="prefs_help">Nápověda</string>
     <string name="prefs_sync_calendar_contacts">Synchronizovat kontakty, kalendáře a úkoly</string>
     <string name="prefs_sync_calendar_contacts_summary">Nainstalovat DAVx⁵</string>
     <string name="prefs_recommend">Doporučit přátelům</string>
     <string name="prefs_feedback">Odezva</string>
     <string name="prefs_imprint">Imprint</string>
-    <string name="prefs_remember_last_share_location">Zapamatovat umístění sdílení</string>
-    <string name="prefs_remember_last_upload_location_summary">Zapamatovat poslední umístění pro nahrání sdílených souborů</string>
     <string name="prefs_pattern">Zámek gestem</string>
     <string name="prefs_enable_logging">Povolit logování</string>
     <string name="prefs_enable_logging_summary">Při aktivaci může být ovlivněn výkon a logy mohou obsahovat citlivé údaje. Logy se ovšem neposílají automaticky na servery ownCloud. Sdílení logů je jen na vaší osobní zodpovědnosti.</string>
@@ -103,8 +85,6 @@
     <string name="pattern_incorrect_pattern">Nesprávné gesto</string>
     <string name="pattern_reenter_pattern">Prosím, zadejte gesto znovu.</string>
     <string name="pattern_not_same_pattern">Gesta nejsou shodná</string>
-    <string name="pattern_error_set">Nastala chyba při nastavování zámku gestem.</string>
-    <string name="pattern_error_remove">Nastala chyba při odstraňování zámku gestem.</string>
     <string name="pattern_already_set">Gesto a bezpečnostní kód nemohou být povoleny současně, nejprve zakažte gesto.</string>
     <string name="passcode_already_set">Gesto a bezpečnostní kód nemohou být povoleny současně, nejprve zakažte bezpečnostní kód.</string>
     <string name="pattern_no_longer_required">Gesto již nebude vyžadováno.</string>
@@ -139,7 +119,6 @@
     <string name="uploader_wrn_no_account_setup_btn_text">Nastavení</string>
     <string name="uploader_wrn_no_account_quit_btn_text">Ukončit</string>
     <string name="uploader_error_title_no_file_to_upload">Žádný soubor k nahrání</string>
-    <string name="uploader_error_message_received_piece_of_text">%1$s neumí nahrát text jako soubor.</string>
     <string name="uploader_error_message_no_file_to_upload">Obdržená data neobsahují žádný platný soubor.</string>
     <string name="uploader_error_title_file_cannot_be_uploaded">Soubor nelze nahrát</string>
     <string name="uploader_error_message_read_permission_not_granted">%1$s nemá oprávnění číst přijatý soubor.</string>
@@ -153,53 +132,32 @@
     <string name="file_list_empty_subtitle_available_offline">Soubory a složky, které označíte jako dostupné offline se zobrazí zde.</string>
     <string name="file_list_empty_subtitle_shared_by_links">Sdílené soubory a složky se zobrazí zde.</string>
     <string name="file_list_no_app_for_file_type">Pro typ souboru nebyla nalezena aplikace</string>
-    <string name="local_file_list_empty">V tomto adresáři nejsou žádné soubory.</string>
-    <string name="local_file_list_empty_just_folders">V tomto adresáři nejsou žádné podadresáře.</string>
     <string name="local_file_list_search_with_no_matches">Nebyly nalezeny žádné výsledky odpovídající zadání</string>
     <string name="upload_list_empty">Nahraná data nejsou dostupná.</string>
     <string name="upload_list_empty_subtitle">Nahraná data se zobrazí zde.</string>
-    <string name="file_list_folder">adresář</string>
-    <string name="file_list_folders">adresářů</string>
-    <string name="file_list_file">soubor</string>
-    <string name="file_list_files">souborů</string>
-    <string name="filedetails_select_file">Více informací získáte klepnutím na soubor.</string>
     <string name="upload_to">Nahrát do %1$s</string>
     <string name="upload_files_title">Soubory</string>
     <string name="filedetails_size">Velikost:</string>
     <string name="filedetails_type">Typ:</string>
     <string name="filedetails_created">Vytvořen:</string>
     <string name="filedetails_last_sync">Poslední synchronizace:</string>
-    <string name="filedetails_path">Cesta:</string>
     <string name="filedetails_modified">Upraven:</string>
     <string name="filedetails_download">Stáhnout</string>
     <string name="filedetails_sync_file">Synchronizovat</string>
-    <string name="filedetails_renamed_in_upload_msg">Soubor byl v průběhu odesílání přejmenován na %1$s</string>
-    <string name="list_layout">Náhled seznamu</string>
     <string name="action_share">Sdílet</string>
     <string name="common_yes">Ano</string>
     <string name="common_no">Ne</string>
-    <string name="common_remove_upload">Odstranit nahrávání</string>
-    <string name="common_retry_upload">Opakovat nahrání</string>
     <string name="common_cancel_sync">Zrušit synchronizaci</string>
     <string name="common_back">Zpět</string>
-    <string name="common_save_exit">Uložit &amp; ukončit</string>
-    <string name="common_error">Chyba</string>
-    <string name="common_unknown">neznámý</string>
     <string name="common_error_unknown">neznámá chyba</string>
     <string name="common_pending">Nevyřízené</string>
     <string name="common_important">Důležité</string>
-    <string name="change_password">Změnit heslo</string>
-    <string name="delete_account">Odebrat účet</string>
-    <string name="create_account">Vytvořit účet</string>
     <string name="upload_chooser_title">Nahrát z</string>
     <string name="uploader_info_dirname">Název adresáře</string>
-    <string name="uploader_upload_in_progress_content">%1$d%% Odesílám %2$s</string>
-    <string name="uploader_upload_succeeded_ticker">Odesílání úspěšné</string>
     <string name="uploader_upload_succeeded_content_single">%1$s nahráno</string>
     <string name="uploader_upload_failed_ticker">Odesílání selhalo</string>
     <string name="uploader_upload_failed_content_single">Odesílání %1$s nemohlo být dokončeno.</string>
     <string name="uploader_upload_failed_credentials_error">Nahrání selhalo, je třeba se znovu přihlásit</string>
-    <string name="uploader_upload_failed_ssl_certificate_not_trusted">Certifikát serveru není důvěryhodný</string>
     <string name="uploader_upload_text_dialog_title">Vložte název nového souboru.</string>
     <string name="uploader_upload_text_dialog_filename_error_empty">Název souboru nesmí být prázdný.</string>
     <string name="uploader_upload_text_dialog_filename_error_length_max">Název souboru nesmí být delší než %d znaků.</string>
@@ -210,8 +168,6 @@
     <string name="uploader_upload_camera_upload_source_path_error">Odesílání selhalo.</string>
     <string name="uploader_upload_picture_upload_error">Cesta k nahrávání obrázků již není platná.</string>
     <string name="uploader_upload_video_upload_error">Cesta k nahrávání videí již není platná.</string>
-    <string name="uploader_upload_available_offline_files">Nahrávání dostupných offline souborů</string>
-    <string name="uploader_upload_requested_from_wifi_files">Vyžádáno nahrávání souborů</string>
     <string name="ssl_certificate_not_trusted">Certifikát serveru není důvěryhodný</string>
     <string name="uploads_view_title">Nahrání</string>
     <string name="uploads_view_group_current_uploads">Aktuální</string>
@@ -222,27 +178,22 @@
     <string name="uploads_view_group_file_count_single">%d souboru</string>
     <string name="uploads_view_upload_status_succeeded">Dokončeno</string>
     <string name="uploads_view_upload_status_cancelled">Zrušeno</string>
-    <string name="uploads_view_upload_status_paused">Pozastaveno</string>
     <string name="uploads_view_upload_status_failed_connection_error">Chyba připojení</string>
-    <string name="uploads_view_upload_status_failed_retry">Nahrání bude brzy opakováno</string>
     <string name="uploads_view_upload_status_failed_credentials_error">Chyba přihlašovacích údajů</string>
     <string name="uploads_view_upload_status_failed_folder_error">Chyba adresáře</string>
     <string name="uploads_view_upload_status_failed_file_error">Chyba souboru</string>
     <string name="uploads_view_upload_status_failed_localfile_error">Místní soubor nenalezen</string>
     <string name="uploads_view_upload_status_failed_permission_error">Chyba oprávnění</string>
-    <string name="uploads_view_upload_status_failed_firewall_error">Zakázáno kvůli pravidlu firewallu</string>
     <string name="uploads_view_upload_status_conflict">Konflikt</string>
     <string name="uploads_view_upload_status_service_interrupted">Aplikace byla ukončena</string>
     <string name="uploads_view_upload_status_unknown_fail">Neznámá chyba</string>
     <string name="uploads_view_upload_status_waiting_for_wifi">Čekání na wifi připojení</string>
     <string name="uploads_view_upload_status_queued">Ve frontě</string>
-    <string name="uploads_view_later_waiting_to_upload">Čekání na nahrávání</string>
     <string name="uploads_view_unsupported_media_type">Nepodporovaný typ média</string>
     <string name="uploader_upload_enqueued_ticker">Nahrávání %1$s bylo přidáno do fronty</string>
     <string name="uploader_upload_canceled_ticker">Odesílání zrušeno</string>
     <string name="downloader_download_canceled_ticker">Stahování zrušeno</string>
     <string name="downloader_download_enqueued_ticker">Stahování %1$s bylo přidáno do fronty</string>
-    <string name="downloader_download_in_progress_content">%1$d%% Stahuji %2$s</string>
     <string name="downloader_download_succeeded_ticker">Stažení úspěšné</string>
     <string name="downloader_download_succeeded_content">%1$s staženo</string>
     <string name="downloader_download_failed_ticker">Stažení selhalo</string>
@@ -250,16 +201,11 @@
     <string name="downloader_download_failed_content">Stažení %1$s nemohlo být dokončeno</string>
     <string name="downloader_not_downloaded_yet">Ještě nestaženo</string>
     <string name="downloader_download_failed_credentials_error">Stažení selhalo, je třeba se znovu přihlásit.</string>
-    <string name="downloader_download_forbidden_permissions">Pro stažení souboru</string>
     <string name="common_choose_account">Vybrat účet</string>
     <string name="sync_fail_ticker">Synchronizace selhala</string>
     <string name="sync_fail_ticker_unauthorized">Synchronizace selhala, je třeba se znovu přihlásit.</string>
     <string name="sync_fail_content">Synchronizace %1$s nemohla být dokončena.</string>
     <string name="sync_fail_content_unauthorized">Chybné heslo pro %1$s</string>
-    <string name="sync_conflicts_in_favourites_ticker">Nalezeny konflikty</string>
-    <string name="sync_conflicts_in_favourites_content">%1$d souborů z automatické synchronizace nelze synchronizovat</string>
-    <string name="sync_fail_in_favourites_ticker">Automatická synchronizace souborů selhala</string>
-    <string name="sync_fail_in_favourites_content">Obsah %1$d souborů nemohl být synchronizován (počet konfliktů: %2$d)</string>
     <string name="sync_current_folder_was_removed">Adresář %1$s již neexistuje.</string>
 
     <string name="pass_code_enter_pass_code">Zadejte prosím svůj bezpečnostní kód.</string>
@@ -269,8 +215,6 @@
     <string name="pass_code_remove_your_pass_code">Odstraňte svůj bezpečnostní kód.</string>
     <string name="pass_code_mismatch">Bezpečnostní kód se liší.</string>
     <string name="pass_code_wrong">Nesprávný bezpečnostní kód</string>
-    <string name="pass_code_error_set">Nastala chyba při nastavování bezpečnostního kódu.</string>
-    <string name="pass_code_error_remove">Nastala chyba při odstraňování bezpečnostního kódu.</string>
     <string name="numberkeyboard_zero">0</string>
     <string name="numberkeyboard_one">1</string>
     <string name="numberkeyboard_two">2</string>
@@ -292,7 +236,6 @@
     <string name="media_state_loading">%1$s (načítá)</string>
     <string name="media_event_done">%1$s přehrávání dokončeno</string>
     <string name="media_err_nothing_to_play">Nenalezen žádný multimediální soubor</string>
-    <string name="media_err_no_account">Neposkytnut žádný účet</string>
     <string name="media_err_not_in_owncloud">Soubor není v platném účtu</string>
     <string name="media_err_unsupported">Nepodporovaný kodek</string>
     <string name="media_err_io">Multimediální soubor nelze přečíst</string>
@@ -308,30 +251,23 @@
     <string name="media_forward_description">Tlačítko Rychle vpřed</string>
     <string name="upload_from_camera_title">Obrázek z kamery</string>
 
-    <string name="auth_no_net_conn_title">Žádné síťové spojení</string>
-    <string name="auth_nossl_plain_ok_title">Zabezpečené spojení není k dispozici</string>
     <string name="auth_connection_established">Spojení navázáno</string>
     <string name="auth_testing_connection">Testuje se připojení</string>
     <string name="auth_not_configured_title">Neplatné nastavení serveru</string>
     <string name="auth_account_not_new">Účet pro stejného uživatele a server již v zařízení existuje.</string>
     <string name="auth_account_not_the_same">Zadaný uživatel neodpovídá uživateli tohoto účtu.</string>
-    <string name="auth_unknown_error_title">Nastala neznámá chyba</string>
     <string name="auth_incorrect_path_title">Instance serveru nenalezena</string>
     <string name="auth_incorrect_address_title">Chybný formát adresy serveru</string>
     <string name="auth_ssl_general_error_title">Inicializace SSL selhala</string>
     <string name="auth_bad_oc_version_title">Nerozpoznaná verze serveru</string>
-    <string name="auth_wrong_connection_title">Nemohu navázat spojení</string>
     <string name="auth_secure_connection">Zabezpečené spojení navázáno</string>
     <string name="auth_unauthorized">Chybné přihlašovací jméno nebo heslo</string>
     <string name="auth_oauth_error">Neúspěšné přihlášení</string>
     <string name="auth_oauth_error_access_denied">Přístup zamítnut autorizačním serverem</string>
-    <string name="auth_wtf_reenter_URL">Neočekávaný stav; zadejte prosím znovu adresu serveru</string>
     <string name="auth_expired_oauth_token_toast">Vaše přihlášení vypršelo. Přihlaste se prosím znovu</string>
     <string name="auth_expired_basic_auth_toast">Zadejte prosím aktuální heslo</string>
-    <string name="auth_connecting_auth_server">Připojování k ověřovacímu serveru ...</string>
     <string name="auth_unsupported_auth_method">Server nepodporuje tuto přihlašovací metodu</string>
     <string name="auth_can_not_auth_against_server">Na tomto serveru nelze ověřit</string>
-    <string name="auth_account_does_not_exist">V zařízení není zatím nastaven účet</string>
 
     <string name="set_available_offline">Nastavit jako dostupné offline</string>
     <string name="unset_available_offline">Zrušit nastavení dostupnosti offline</string>
@@ -348,14 +284,12 @@
     <string name="remove_success_msg">Úspěšně odstraněno</string>
     <string name="remove_fail_msg">Odstranění nelze dokončit</string>
     <string name="rename_dialog_title">Zadejte nový název</string>
-    <string name="available_offline_inherited_msg">Složka obsahující tento soubor je dostupná offline.</string>
     <string name="rename_local_fail_msg">Místní kopii nelze přejmenovat, zkuste jiný nový název</string>
     <string name="rename_server_fail_msg">Přejmenování nelze dokončit</string>
     <string name="file_already_exists">Soubor již existuje</string>
     <string name="folder_already_exists">Adresář již existuje</string>
     <string name="file_already_exists_description">Soubor s názvem %1$s již existuje.</string>
     <string name="folder_already_exists_description">Složka s názvem %1$s již existuje.</string>
-    <string name="sync_file_fail_msg">Vzdálený soubor nemohl být zkontrolován</string>
     <string name="sync_file_nothing_to_do_msg">Obsah souboru je již synchronizován</string>
     <string name="sync_file_not_found_msg">Soubor nenalezen</string>
     <string name="new_remote_version_found_msg">Novější verze byla nalezena na serveru. Stahuji...</string>
@@ -373,8 +307,6 @@
     <string name="activity_chooser_title">Odeslat odkaz</string>
     <string name="wait_for_tmp_copy_from_private_storage">Kopírování souboru z privátního úložiště</string>
 
-    <string name="oauth_check_onoff">Přihlásit se s oAuth2</string>
-    <string name="oauth_login_connection">Připojování k OAuth2 server</string>
 
     <string name="ssl_validator_header">Identitu serveru nebylo možné ověřit.</string>
     <string name="ssl_validator_reason_cert_not_trusted">- Certifikát serveru je nedůvěryhodný.</string>
@@ -406,7 +338,6 @@
 
     <string name="placeholder_sentence">Zástupný text.</string>
     <string name="placeholder_filename">placeholder.txt</string>
-    <string name="placeholder_filetype">Obrázek PNG</string>
     <string name="placeholder_filesize">389 KB</string>
     <string name="placeholder_timestamp">2012/05/18 12:23 PM</string>
     <string name="placeholder_media_time">12:23:45</string>
@@ -423,7 +354,6 @@
     <string name="conflict_replace">Nahradit</string>
 
     <string name="preview_image_description">Náhled obrázku</string>
-    <string name="preview_image_error_unknown_format">Obrázek nelze zobrazit.</string>
 
     <string name="error__upload__local_file_not_copied">%1$s nelze zkopírovat do místního adresáře %2$s.</string>
 
@@ -433,8 +363,6 @@
     <string name="share_link_file_error">Nepodařilo se sdílet tento soubor nebo složku</string>
     <string name="unshare_link_file_error">Nepodařilo se ukončit sdílení tohoto souboru nebo složky</string>
     <string name="update_link_file_error">Nepodařilo se aktualizovat tento soubor nebo složku</string>
-    <string name="share_link_password_title">Zadejte heslo</string>
-    <string name="share_link_empty_password">Musíte zadat heslo</string>
 
     <string name="activity_chooser_send_file_title">Odeslat</string>
 
@@ -444,7 +372,6 @@
     <string name="clipboard_uxexpected_error">Neočekávaná chyba při kopírování do schránky</string>
     <string name="clipboard_label">Text zkopírován z %1$s</string>
 
-    <string name="error_cant_bind_to_operations_service">Kritická chyba: operace nelze provést</string>
 
     <string name="network_error_socket_exception">Při pokusu o připojení k serveru došlo k chybě.</string>
     <string name="network_error_socket_timeout_exception">Serveru trvalo příliš dlouho odpovědět.</string>
@@ -452,58 +379,34 @@
     <string name="network_host_not_available">Server je nedostupný.</string>
     <string name="forbidden_permissions">Nemáte oprávnění %s</string>
 
-    <string name="forbidden_permissions_rename">přejmenovat tento soubor</string>
-    <string name="forbidden_permissions_delete">smazat tento soubor</string>
-    <string name="share_link_forbidden_permissions">sdílet tento soubor</string>
-    <string name="unshare_link_forbidden_permissions">zrušit sdílení tohoto souboru</string>
-    <string name="update_link_forbidden_permissions">pro aktualizaci tohoto sdílení</string>
-    <string name="forbidden_permissions_create">vytvořit tento soubor</string>
     <string name="uploader_upload_forbidden_permissions">nahrávat do tohoto adresáře</string>
-    <string name="uploader_upload_forbidden">Nahrávání není povoleno</string>
-    <string name="downloader_download_file_not_found">Tento soubor již není dostupný na serveru.</string>
 
-    <string name="prefs_category_accounts">Účty</string>
     <string name="prefs_add_account">Přidat účet</string>
     <string name="drawer_manage_accounts">Spravovat účty</string>
     <string name="manage_accounts_quota">%1$s z %2$s</string>
     <string name="used_quota_title_manage_accounts">Využito:</string>
     <string name="auth_redirect_non_secure_connection_title">Zabezpečené spojení je přesměrováváno nezabezpečenou trasou.</string>
 
-    <string name="actionbar_logger">Logy</string>
-    <string name="log_send_history_button">Historie odesílání</string>
-    <string name="log_send_no_mail_app">Nenalezena aplikace pro odesílání logů. Nainstalujte prosím emailovou aplikaci.</string>
-    <string name="log_send_mail_subject">%1$s logy aplikace pro Android</string>
     <string name="actionbar_select_all">Vybrat vše</string>
     <string name="actionbar_select_inverse">Vybrat obráceně</string>
 
     <string name="actionbar_move">Přesunout</string>
-    <string name="file_list_empty_moving">Zde nic není. Můžete přidat adresář!</string>
     <string name="folder_picker_choose_button_text">Vybrat</string>
     <string name="folder_picker_move_here_button_text">Přesunout sem</string>
     <string name="folder_picker_copy_here_button_text">Zkopírovat sem</string>
-    <string name="move_file_not_found">Nelze přesunout. Zkontrolujte prosím že soubor existuje.</string>
     <string name="move_file_invalid_into_descendent">Není možné adresář přesunout do vlastního podadresáře.</string>
     <string name="move_file_error">Při pokusu o přesun tohoto souboru či adresáře nastala chyba.</string>
-    <string name="forbidden_permissions_move">pro přesun tohoto souboru</string>
 
-    <string name="copy_file_not_found">Nelze zkopírpovat. Zkontrolujte prosím že soubor existuje.</string>
     <string name="copy_file_invalid_into_descendent">Není možné adresář zkopírovat do jeho vlastního podadresáře.</string>
     <string name="copy_file_error">Při pokusu o zkopírování tohoto souboru či adresáře došlo k chybě.</string>
-    <string name="forbidden_permissions_copy">pro zkopírování tohoto souboru</string>
 
-    <string name="prefs_category_camera_upload">Nahrávání fotoaparátu</string>
 
-    <string name="sync_folder_failed_content">Synchronizaci adresáře %1$s nelze dokončit</string>
 
-    <string name="shared_subject_header">sdílené</string>
-    <string name="with_you_subject_header">s vámi</string>
 
     <string name="subject_user_shared_with_you">%1$s s vámi sdílí \"%2$s\"</string>
     <string name="subject_shared_with_you">\"%1$s\" ti byl nasdílen</string>
 
     <string name="auth_refresh_button">Obnovit připojení</string>
-    <string name="auth_host_address">Adresa serveru</string>
-    <string name="common_error_out_memory">Nedostatek paměti</string>
 
     <string name="username">Uživatelské jméno</string>
 
@@ -522,18 +425,13 @@
     <string name="prefs_camera_upload_behaviour_dialog_title">Původní soubor bude</string>
     <string name="prefs_camera_upload_behaviour_title">Původní soubor bude</string>
     <string name="prefs_camera_upload_last_sync_title">Poslední synchronizace</string>
-    <string name="upload_copy_files">Zkopírovat soubor</string>
-    <string name="upload_move_files">Přesunout soubor</string>
 
     <string name="pref_behaviour_entries_keep_file">ponechán ve výchozím adresáři</string>
     <string name="pref_behaviour_entries_remove_original_file">odstraněn z původního adresáře</string>
 
     <string name="share_dialog_title">Sdílet</string>
-    <string name="share_file">Sdílet %1$s</string>
     <string name="share_with_user_section_title">Uživatelé a skupiny</string>
     <string name="share_no_users">Zatím nebyla s uživateli sdílena žádná data</string>
-    <string name="share_incompatible_version">Pokud chcete sdílet s ostatními uživateli, váš server musí být alespoň verze 8.2.</string>
-    <string name="share_add_user_or_group">Přidat uživatele nebo skupinu</string>
     <string name="share_via_link_section_title">Veřejné odkazy</string>
     <string name="share_via_link_create_title">Vytvořit odkaz pro sdílení</string>
     <string name="share_via_link_edit_title">Upravit odkaz pro sdílení</string>
@@ -542,13 +440,11 @@
     <string name="share_confirm_public_link_button">Uložit</string>
     <string name="share_via_link_expiration_date_label">Konec platnosti</string>
     <string name="share_via_link_password_label">Heslo</string>
-    <string name="share_via_link_password_title">Zabezpečeno</string>
     <string name="share_via_link_generate_password_button">Vygenerovat</string>
     <string name="share_via_link_copy_password_button">Kopie</string>
     <string name="share_via_link_edit_permission_read_only_label">Stáhnout / zobrazit</string>
     <string name="share_via_link_edit_permission_read_and_write_label">Stáhnout/zobrazit/nahrát</string>
     <string name="share_via_link_edit_permission_upload_only_label">Pouze nahrát</string>
-    <string name="share_get_public_link_button">Vytvořit odkaz</string>
     <string name="share_with_title">Sdílet s</string>
     <string name="share_with_edit_title">Sdílet s %1$s</string>
 
@@ -564,8 +460,6 @@
     <string name="share_privilege_can_edit_create">vytvořit</string>
     <string name="share_privilege_can_edit_change">změnit</string>
     <string name="share_privilege_can_edit_delete">smazat</string>
-    <string name="edit_share_unshare">Ukončit sdílení</string>
-    <string name="edit_share_done">dokončeno</string>
 
     <string name="action_upload_retry">Zkusit znovu</string>
     <string name="action_upload_clear">Vyčistit</string>
@@ -573,7 +467,6 @@
     <string name="local_file_not_found_toast">Soubor nebyl nalezen v místním souborovém systému</string>
     <string name="confirmation_remove_folders_alert">Opravdu chcete odstranit vybrané položky a jejich obsah?</string>
     <string name="failed_upload_quota_exceeded_text">Na účtu není dostatek místa</string>
-    <string name="auth_forbidden">Zakázaná autentizace</string>
 
     <string name="actionbar_privacy_policy">Zásady ochrany osobních údajů</string>
     <string name="prefs_privacy_policy">Zásady ochrany osobních údajů</string>
@@ -586,7 +479,6 @@
     <string name="streaming_crossed_redirection">Vysílání není povoleno přes přesměrování.</string>
     <string name="previewing_video_common_error">Video nelze přehrát.</string>
 
-    <string name="previewing_video_not_supported">Pro Vaši verzi Androidu je video náhled nedostupný. Stažení souboru se spustí automaticky.</string>
     <string name="streaming_position_not_available">\"Pozice je nedostupná\"</string>
     <string name="error_no_network_connection">Zařízení není připojeno k síti.</string>
     <string name="share_no_public_links">Dosud nebyly vytvořeny žádné veřejné odkazy.</string>
@@ -597,7 +489,6 @@
     <string name="share_via_link_expiration_date_enforced_label">Konec platnosti *</string>
     <string name="share_via_link_expiration_date_explanation_label">Platnost tohoto veřejného odkazu skončí nejpozději %1$d dní po jeho vytvoření.</string>
     <string name="share_via_link_default_name_template">%1$s odkaz</string>
-    <string name="share_via_link_empty_password">Heslo není vyplněno</string>
     <string name="private_link_info">Privátní odkaz: Mohou použít jen osoby, které mají přístup k souboru/složce. Používejte jako trvalý odkaz pro sebe nebo ostatní v rámci sdílení.</string>
     <string name="file_private_link_error">Soukromý odkaz není pro tento soubor k dispozici.</string>
     <string name="download_notification_channel_name">Stažení</string>
@@ -609,7 +500,6 @@
     <string name="file_sync_notification_channel_name">Synchronizace souborů</string>
     <string name="file_sync_notification_channel_description">Zobrazit výsledek synchronizace souborů</string>
     <string name="file_sync_conflict_notification_channel_name">Konflikt souboru</string>
-    <string name="clicks_to_be_developer">Jste %1$dkliků daleko od povolení vývojářských nastavení</string>
 
     <string name="rate_dialog_title">Ohodnoťte %1$s aplikaci!</string>
     <string name="rate_dialog_description">Pokud se Vám aplikace líbí, mohli byste si najít chvilku a ohodnotit ji? Váš názor je pro nás důležitý.</string>
@@ -635,15 +525,12 @@
     <string name="welcome_feature_4_text">Obrázky/videa se automaticky nahrály</string>
     <string name="welcome_feature_5_title">Přehrávání videa</string>
     <string name="welcome_feature_5_text">Přehrávejte videa bez nutnosti stažení na disk</string>
-    <string name="no_browser_installed_alert">Není nainstalován žádný prohlížeč. Nainstalujte si prosím prohlížeč pro bezpečné přihlášení.</string>
     <string name="common_not_found">nebylo nalezeno</string>
 
     <string name="supports_oauth2_error">Nebylo možné zjistit, zda-li je OAuth2 podporováno.</string>
     <string name="get_base_url_error">Nebylo možné zjistit základní URL adresu serveru.</string>
     <string name="prefs_http_logs">Logovat HTTP požadavky a odpovědi</string>
-    <string name="prefs_logs_summary">Log může obsahovat citlivé informace. Sdílení je pouze na vaší zodpovědnosti.</string>
 
-    <string name="synchronizing_account">Synchronizuji účet</string>
     <string name="scoped_storage_wizard_intro_button">Začněme</string>
     <string name="scoped_storage_wizard_migrate_and_clean_button">Migrovat nyní</string>
     <string name="scoped_storage_wizard_migration_completed">Migrace úspěšně skončila. Vaše soubory jsou nyní uložené bezpečněji.</string>
@@ -651,7 +538,6 @@
     <string name="security_enforced_first_option">Zámek bezpečnostního kódu</string>
     <string name="security_enforced_second_option">Zámek gestem</string>
 
-    <string name="folder_upload_some_content_or_sync_devices">Nahrajte nějaký obsah nebo synchronizujte se svými přístroji!</string>
 
     <!-- Webfinger -->
     <string name="global_proceed">Pokračovat</string>
@@ -662,7 +548,6 @@
     <string name="release_notes_proceed">Pokračovat</string>
     <string name="release_notes_bugfixes_title">Drobné opravy chyb</string>
     <!-- Open in web -->
-    <string name="ic_action_open_in_web">Otevřít na webu</string>
     <string name="open_in_web_error_generic">Nepodařilo se otevřít na webu</string>
     <string name="ocis_accounts_warning_checkbox_message">Znovu neukazovat</string>
     <string name="ocis_accounts_warning_button">Rozumím</string>

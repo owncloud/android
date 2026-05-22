@@ -7,26 +7,18 @@
     <string name="global_size">Suurus</string>
     <string name="actionbar_search">Otsi sellest kaustast</string>
     <string name="actionbar_search_space">Otsi ruumidest</string>
-    <string name="actionbar_sync">Värskenda kontot</string>
     <string name="actionbar_upload">Lae üles</string>
-    <string name="actionbar_upload_from_apps">Sisu teistest rakendustest</string>
-    <string name="actionbar_upload_files">Failid</string>
     <string name="actionbar_open_with">Ava rakendusega</string>
     <string name="actionbar_open_with_read_only">Ava rakendusega (ainult loetav)</string>
     <string name="actionbar_mkdir">Uus kaust</string>
     <string name="actionbar_settings">Seaded</string>
     <string name="actionbar_see_details">Üksikasjad</string>
     <string name="actionbar_send_file">Saada</string>
-    <string name="actionbar_descending">Kahanevalt</string>
     <string name="actionbar_sort_title">Sorteeri</string>
     <string name="fab_new_file">Uus dokument</string>
     <string name="fab_new_shortcut">Uus otsetee</string>
     <string name="fab_new_space">Uus ruum</string>
-    <string name="drawer_item_all_files">Kõik failid</string>
     <string name="drawer_item_only_available_offline">Saadaval ilma võrguühenduseta</string>
-    <string name="drawer_item_shared_by_link_files">Jagatud lingiga</string>
-    <string name="drawer_item_settings">Seaded</string>
-    <string name="drawer_item_uploads_list">Üleslaadimised</string>
     <string name="drawer_close">Sulge</string>
     <string name="drawer_open">Ava</string>
     <string name="drawer_loading_quota">Laadimise limiit</string>
@@ -38,7 +30,6 @@
     <string name="drawer_unavailable_used_storage">Mahu kasutuse info pole saadaval</string>
     <string name="drawer_feedback">Tagasiside</string>
     <string name="drawer_help">Abiinfo</string>
-    <string name="prefs_category_general">Üldine</string>
     <string name="prefs_subsection_logging">Logimine</string>
     <string name="prefs_subsection_more">Rohkem</string>
     <string name="prefs_subsection_security">Turvalisus</string>
@@ -46,8 +37,6 @@
     <string name="prefs_subsection_security_summary">Seadista rakenduse lukud ja luba nähtavate akende puudutamine</string>
     <string name="prefs_subsection_logging_summary">Jälgi rakenduse käivitamisel loodud logisid</string>
     <string name="prefs_subsection_more_summary">Rakenduse info, tagasiside ja muu</string>
-    <string name="prefs_accounts">Kontod</string>
-    <string name="prefs_manage_accounts">Halda kontosid</string>
     <string name="prefs_passcode">Parooli lukk</string>
     <string name="prefs_biometric">Biomeetriline lukk</string>
     <string name="prefs_biometric_summary">Aktiveeri parool või mustri lukk selle võimaluse kasutamiseks</string>
@@ -73,7 +62,6 @@
     <string name="prefs_camera_picture_upload_conditions_summary">Üleslaadimised käivitatakse kui kõik valitud variandid on täidetud</string>
     <string name="prefs_camera_picture_upload_on_wifi">Laadi pilte üles ainult üle wifi</string>
     <string name="prefs_camera_picture_upload_on_charging">Laadi pilte üles ainult aku laadimise ajal</string>
-    <string name="prefs_camera_upload_on_charging_summary">Selle valiku aktiveerimiseks luba üleslaadimised ainult üle wifi</string>
     <string name="prefs_camera_video_upload">Videote üleslaadimine</string>
     <string name="prefs_camera_video_upload_summary">Laadi kaameraga tehtud videod automaatselt üles</string>
     <string name="prefs_camera_video_upload_path_title">Videote üleslaadimise kaust</string>
@@ -88,11 +76,6 @@
     <string name="prefs_log_open_logs_list_view">Logifailid</string>
     <string name="prefs_log_no_logs_list_view">Tühi logide kaust!</string>
     <string name="prefs_log_empty_subtitle">Lülita logimine sisse ning logifailid tekkivad siia.</string>
-    <string name="prefs_log_title">Luba logimine</string>
-    <string name="prefs_log_summary">Kasutatakse probleemide logimiseks.</string>
-    <string name="prefs_log_title_history">Logimise ajalugu</string>
-    <string name="prefs_log_summary_history">See näitab salvestatud logisid.</string>
-    <string name="prefs_log_delete_history_button">Kustuta ajalugu</string>
     <string name="prefs_help">Abiinfo</string>
     <string name="prefs_sync_calendar_contacts">Sünkroniseeri kontaktid, kalendrid ja ülesanded</string>
     <string name="prefs_sync_calendar_contacts_summary">Paigalda DAVx⁵</string>
@@ -101,8 +84,6 @@
     <string name="prefs_recommend">Soovita sõbrale</string>
     <string name="prefs_feedback">Tagasiside</string>
     <string name="prefs_imprint">Impressum</string>
-    <string name="prefs_remember_last_share_location">Jäta meelde jagamise asukoht</string>
-    <string name="prefs_remember_last_upload_location_summary">Jäta meelde viimase jagamise üleslaadimise asukoht</string>
     <string name="prefs_pattern">Mustri lukk</string>
     <string name="prefs_enable_logging">Luba logimine</string>
     <string name="prefs_enable_logging_summary">Kui on aktiveeritud, siis logid võivad mõjutada jõudlust ja sisaldada tundlikku infot. Samas, logisid ei saadeta automaatselt ownCloudi serveritesse. Logide jagamine on ainult kasutaja vastutusel.</string>
@@ -115,8 +96,6 @@
     <string name="pattern_incorrect_pattern">Vigane muster</string>
     <string name="pattern_reenter_pattern">Palun sisesta oma muster uuesti.</string>
     <string name="pattern_not_same_pattern">Mustrid pole samad.</string>
-    <string name="pattern_error_set">Mustri luku seadistamisel tekkis viga.</string>
-    <string name="pattern_error_remove">Mustri luku eemaldamisel tekkis viga.</string>
     <string name="pattern_already_set">Mustri lukk ja parool ei saa korraga kehtida, eemalda kõigepealt mustri lukk.</string>
     <string name="passcode_already_set">Mustri lukk ja parool ei saa korraga kehtida, eemalda kõigepealt parool.</string>
     <string name="pattern_no_longer_required">Mustrit enam ei küsita.</string>
@@ -155,7 +134,6 @@
     <string name="uploader_wrn_no_account_setup_btn_text">Seadista</string>
     <string name="uploader_wrn_no_account_quit_btn_text">Lõpeta</string>
     <string name="uploader_error_title_no_file_to_upload">Ühtegi faili ei laaditud</string>
-    <string name="uploader_error_message_received_piece_of_text">%1$s ei saa üles laadida teksti failina.</string>
     <string name="uploader_error_message_no_file_to_upload">Saadud andmetes ei olnud ühtegi kehtivat faili.</string>
     <string name="uploader_error_title_file_cannot_be_uploaded">Faili pole võimalik üles laadida</string>
     <string name="uploader_error_message_read_permission_not_granted">%1$s-l ei ole lubatud saadud faili lugeda .</string>
@@ -176,16 +154,9 @@
     <string name="file_list_empty_subtitle_shared_by_links">Siin kuvatakse faile ja kaustasid, mida sa jagad lingiga.</string>
     <string name="file_list_no_app_for_file_type">Selle failitüübi jaoks ei leitud rakendust</string>
     <string name="file_list_no_app_for_perform_action">Selleks tegevuseks ei leitud rakendust</string>
-    <string name="local_file_list_empty">Kaustas pole faile.</string>
-    <string name="local_file_list_empty_just_folders">Selles kaustas ei ole kaustu.</string>
     <string name="local_file_list_search_with_no_matches">Otsingule ei leitud vasteid</string>
     <string name="upload_list_empty">Üleslaadimisi pole saadaval.</string>
     <string name="upload_list_empty_subtitle">Lae midagi üles ning failid tekkivad siia.</string>
-    <string name="file_list_folder">kaust</string>
-    <string name="file_list_folders">kaustad</string>
-    <string name="file_list_file">fail</string>
-    <string name="file_list_files">failid</string>
-    <string name="filedetails_select_file">Lisainfo vaatamiseks vajuta failile.</string>
     <string name="upload_to">Lae üles %1$s</string>
     <string name="pick_document_type">Vali loodava dokumendi tüüp:</string>
     <string name="upload_files_title">Failid</string>
@@ -193,40 +164,26 @@
     <string name="filedetails_type">Tüüp:</string>
     <string name="filedetails_created">Loodud:</string>
     <string name="filedetails_last_sync">Viimane sünkroniseerimine:</string>
-    <string name="filedetails_path">Rada:</string>
     <string name="filedetails_modified">Muudetud:</string>
     <string name="filedetails_download">Lae alla</string>
     <string name="filedetails_file_image_content_description">Faili tõmmis</string>
     <string name="filedetails_cancel_btn_content_description">Allalaadimise tühistamise nupp</string>
     <string name="filedetails_sync_file">Sünkrooni</string>
-    <string name="filedetails_renamed_in_upload_msg">Fail nimetati üleslaadimise käigus ümber %1$ </string>
-    <string name="list_layout">Nimekiri</string>
     <string name="action_share">Jaga</string>
     <string name="login_account_preparing">Valmistan kontot ette esimeseks käivitamiseks</string>
     <string name="common_yes">Jah</string>
     <string name="common_no">Ei</string>
-    <string name="common_remove_upload">Eemalda üleslaadimine</string>
-    <string name="common_retry_upload">Laadi uuesti üles</string>
     <string name="common_cancel_sync">Tühista sünkroonimine</string>
     <string name="common_back">Tagasi</string>
-    <string name="common_save_exit">Salvesta &amp; välju</string>
-    <string name="common_error">Viga</string>
-    <string name="common_unknown">tundmatu</string>
     <string name="common_error_unknown">tundmatu tõrge</string>
     <string name="common_pending">Ootel</string>
     <string name="common_important">Tähtis</string>
-    <string name="change_password">Muuda parooli</string>
-    <string name="delete_account">Eemalda konto</string>
-    <string name="create_account">Loo konto</string>
     <string name="upload_chooser_title">Lae üles kohast</string>
     <string name="uploader_info_dirname">Kausta nimi</string>
-    <string name="uploader_upload_in_progress_content">%1$d%% üleslaadimine %2$s</string>
-    <string name="uploader_upload_succeeded_ticker">Üleslaadimine oli edukas</string>
     <string name="uploader_upload_succeeded_content_single">%1$s üles laaditud</string>
     <string name="uploader_upload_failed_ticker">Üleslaadimine ebaõnnestus</string>
     <string name="uploader_upload_failed_content_single">%1$s üleslaadimist ei õnnestunud lõpetada.</string>
     <string name="uploader_upload_failed_credentials_error">Üleslaadimine ebaõnnestus, logi uuesti sisse.</string>
-    <string name="uploader_upload_failed_ssl_certificate_not_trusted">Serveri sertifikaat pole usaldusväärne.</string>
     <string name="uploader_upload_text_dialog_title">Sisesta uuele failile nimi.</string>
     <string name="uploader_upload_text_dialog_filename_error_empty">Failinimi ei tohi olla tühi.</string>
     <string name="uploader_upload_text_dialog_filename_error_length_max">Failinimi ei tohi olla pikem kui %d märki.</string>
@@ -237,8 +194,6 @@
     <string name="uploader_upload_camera_upload_source_path_error">Kaamera üleslaadimised ebaõnnestusid.</string>
     <string name="uploader_upload_picture_upload_error">Piltide üleslaadimise lähterada ei ole enam kehtiv.</string>
     <string name="uploader_upload_video_upload_error">Videote üleslaadimise lähterada ei ole enam kehtiv.</string>
-    <string name="uploader_upload_available_offline_files">Laen üles võrguühenduseta saadaval olevaid faile</string>
-    <string name="uploader_upload_requested_from_wifi_files">Üleslaadimine on päritud wifi failide poolt</string>
     <string name="ssl_certificate_not_trusted">Serveri sertifikaat pole usaldusväärne.</string>
     <string name="uploads_view_title">Üleslaadimised</string>
     <string name="uploads_view_group_current_uploads">Praegune</string>
@@ -249,28 +204,23 @@
     <string name="uploads_view_group_file_count_single">%d fail</string>
     <string name="uploads_view_upload_status_succeeded">Lõpetatud</string>
     <string name="uploads_view_upload_status_cancelled">Tühistatud</string>
-    <string name="uploads_view_upload_status_paused">Peatatud</string>
     <string name="uploads_view_upload_status_failed_connection_error">Ühenduse viga</string>
-    <string name="uploads_view_upload_status_failed_retry">Üleslaadimist proovitakse kohe uuesti</string>
     <string name="uploads_view_upload_status_failed_credentials_error">Autentimisandmete tõrge</string>
     <string name="uploads_view_upload_status_failed_folder_error">Kausta tõrge</string>
     <string name="uploads_view_upload_status_failed_file_error">Faili tõrge</string>
     <string name="uploads_view_upload_status_failed_localfile_error">Kohalikku faili ei leitud</string>
     <string name="uploads_view_upload_status_failed_permission_error">Õiguse viga</string>
-    <string name="uploads_view_upload_status_failed_firewall_error">Keelatud tulemüüri reegli tõttu</string>
     <string name="uploads_view_upload_status_failed_payload_error">Fail on üleslaadimiseks liiga suur</string>
     <string name="uploads_view_upload_status_conflict">Konflikt</string>
     <string name="uploads_view_upload_status_service_interrupted">Rakendus suleti jõuga</string>
     <string name="uploads_view_upload_status_unknown_fail">Tundmatu viga</string>
     <string name="uploads_view_upload_status_waiting_for_wifi">Ootan wifi ühendust</string>
     <string name="uploads_view_upload_status_queued">Järjekorras</string>
-    <string name="uploads_view_later_waiting_to_upload">Üleslaadimise ootamine</string>
     <string name="uploads_view_unsupported_media_type">Mittetoetatud meediatüüp</string>
     <string name="uploader_upload_enqueued_ticker">Üleslaadimine %1$s lisati järjekorda</string>
     <string name="uploader_upload_canceled_ticker">Üleslaadimine tühistati</string>
     <string name="downloader_download_canceled_ticker">Allalaadimine tühistati</string>
     <string name="downloader_download_enqueued_ticker">Allalaadimine %1$s lisati järjekorda</string>
-    <string name="downloader_download_in_progress_content">%1$d%% allalaadimine %2$s</string>
     <string name="downloader_download_succeeded_ticker">Allalaadimine oli edukas</string>
     <string name="downloader_download_succeeded_content">%1$s alla laaditud</string>
     <string name="downloader_download_failed_ticker">Allalaadimine ebaõnnestus</string>
@@ -278,16 +228,11 @@
     <string name="downloader_download_failed_content">%1$s allalaadimist ei õnnestunud lõpetada</string>
     <string name="downloader_not_downloaded_yet">Allalaadimata</string>
     <string name="downloader_download_failed_credentials_error">Allalaadimine ebaõnnestus, logi uuesti sisse.</string>
-    <string name="downloader_download_forbidden_permissions">faili allalaadimiseks</string>
     <string name="common_choose_account">Vali konto</string>
     <string name="sync_fail_ticker">Sünkroniseerimine ebaõnnestus</string>
     <string name="sync_fail_ticker_unauthorized">Sünkroniseerimine ebaõnnestus, logi uuesti sisse.</string>
     <string name="sync_fail_content">%1$s sünkroniseerimise lõpetamine ebaõnnestus.</string>
     <string name="sync_fail_content_unauthorized">Vigane parool %1$s jaoks</string>
-    <string name="sync_conflicts_in_favourites_ticker">Leite konflikte</string>
-    <string name="sync_conflicts_in_favourites_content">%1$d sünkroniseeritavad faile ei suudeta sünkroniseerida</string>
-    <string name="sync_fail_in_favourites_ticker">Sünkroniseeritavad failid ebaõnnestusid</string>
-    <string name="sync_fail_in_favourites_content">Faili %1$d sisu ei suudeta sünkroniseerida (konflikt %2$d)</string>
     <string name="sync_current_folder_was_removed">Kausta %1$s pole enam olemas.</string>
 
     <string name="pass_code_enter_pass_code">Palun sisesta oma parool.</string>
@@ -298,8 +243,6 @@
     <string name="pass_code_remove_your_pass_code">Eemalda oma parool.</string>
     <string name="pass_code_mismatch">Paroolid pole samad.</string>
     <string name="pass_code_wrong">Vale parool</string>
-    <string name="pass_code_error_set">Parooli luku seadistamisel tekkis viga.</string>
-    <string name="pass_code_error_remove">Parooli luku eemaldamisel tekkis viga.</string>
     <string name="numberkeyboard_backspace_button_content_description">Tagasilükke klahv</string>
     <string name="numberkeyboard_biometric_button_content_description">Biomeetriline nupp</string>
 
@@ -327,7 +270,6 @@
     <string name="media_state_loading">%1$s (laeb)</string>
     <string name="media_event_done">%1$s esitus lõpetatud</string>
     <string name="media_err_nothing_to_play">Meedia faili ei leitud</string>
-    <string name="media_err_no_account">Ühtegi kontot pole antud</string>
     <string name="media_err_not_in_owncloud">Fail ei kuulu õigele kontole</string>
     <string name="media_err_unsupported">Mittetoetatud meedia koodek</string>
     <string name="media_err_io">Ei suuda lugeda meediafaili</string>
@@ -343,30 +285,23 @@
     <string name="media_forward_description">Kiire kerimise nupp</string>
     <string name="upload_from_camera_title">Pilt kaamerast</string>
 
-    <string name="auth_no_net_conn_title">Võrguühendust pole</string>
-    <string name="auth_nossl_plain_ok_title">Turvaline ühendus pole saadaval</string>
     <string name="auth_connection_established">Saadi ühendus</string>
     <string name="auth_testing_connection">Ühenduse testimine</string>
     <string name="auth_not_configured_title">Vigases vormingus server seadistus</string>
     <string name="auth_account_not_new">Konto sama kasutaja ja serveriga on selles seadmes juba olemas.</string>
     <string name="auth_account_not_the_same">Sisestatud kasutaja ei kattu selle konto kasutajaga.</string>
-    <string name="auth_unknown_error_title">Tekkis tundmatu tõrge!</string>
     <string name="auth_incorrect_path_title">server protsessi ei leitud</string>
     <string name="auth_incorrect_address_title">Vigane serveri aadressi vorming</string>
     <string name="auth_ssl_general_error_title">SSL-i käivitamine ebaõnnestus</string>
     <string name="auth_bad_oc_version_title">Tundmatu serveri versioon</string>
-    <string name="auth_wrong_connection_title">Ühenduse loomine ebaõnnestus</string>
     <string name="auth_secure_connection">Saavutati turvaline ühendus</string>
     <string name="auth_unauthorized">Vale kasutajanimi või parool</string>
     <string name="auth_oauth_error">Autoriseerimine ebaõnnestus</string>
     <string name="auth_oauth_error_access_denied">Ligipääs keelatud autoriseeriva serveri poolt</string>
-    <string name="auth_wtf_reenter_URL">Ootamatu seisund; palun sisesta serveri aadress uuesti</string>
     <string name="auth_expired_oauth_token_toast">Sinu autoriseerimine aegus. Palun autoriseeri uuesti</string>
     <string name="auth_expired_basic_auth_toast">Palun sisesta kehtiv parool</string>
-    <string name="auth_connecting_auth_server">Ühendun autentimis-serveriga</string>
     <string name="auth_unsupported_auth_method">See server ei toeta seda autentimise viisi</string>
     <string name="auth_can_not_auth_against_server">Ei saa selle serveriga autentida</string>
-    <string name="auth_account_does_not_exist">Kontot pole veel seadmes</string>
 
     <string name="set_available_offline">Määra saadavaks ilma võrguühenduseta</string>
     <string name="unset_available_offline">Eemalda saadavus ilma võrguühenduseta</string>
@@ -385,14 +320,12 @@
     <string name="remove_success_msg">Eemaldamine oli edukas</string>
     <string name="remove_fail_msg">Eemaldamine ebaõnnestus</string>
     <string name="rename_dialog_title">Sisesta uus nimi</string>
-    <string name="available_offline_inherited_msg">Kaust, mis sisaldab seda faili, on saadaval võrguühenduseta</string>
     <string name="rename_local_fail_msg">Kohalikku faili ei saa ümber nimetada; proovi teist uut nime</string>
     <string name="rename_server_fail_msg">Ümbernimetamine ebaõnnestus</string>
     <string name="file_already_exists">Fail on juba olemas</string>
     <string name="folder_already_exists">Kaust on juba olemas</string>
     <string name="file_already_exists_description">Fail nimega %1$s on juba olemas.</string>
     <string name="folder_already_exists_description">Kaust nimega %1$s on juba olemas.</string>
-    <string name="sync_file_fail_msg">Mujaloleva faili kontrollimine ebaõnnestus</string>
     <string name="sync_file_nothing_to_do_msg">Faili sisu on juba sünkroniseeritud</string>
     <string name="sync_file_not_found_msg">Faili ei leitud</string>
     <string name="new_remote_version_found_msg">Serveris leidus uus versioon. Laen alla…</string>
@@ -406,13 +339,10 @@
     <string name="filename_too_long">Faili nimi ei saa olla nii pikk</string>
     <string name="wait_a_moment">Oota hetk</string>
     <string name="wait_checking_credentials">Kontrollin salvestatud identimisteavet</string>
-    <string name="filedisplay_unexpected_bad_get_content">Ootamatu tõrge; palun vali fail kasutades mõnda teist rakendust</string>
     <string name="filedisplay_no_file_selected">Ühtegi faili pole valitud</string>
     <string name="activity_chooser_title">Saada link</string>
     <string name="wait_for_tmp_copy_from_private_storage">Faili kopeerimine privaatsest salvestusalast</string>
 
-    <string name="oauth_check_onoff">Logi sisse oAuth2-ga</string>
-    <string name="oauth_login_connection">oAuth2 serveriga ühendumine...</string>
 
     <string name="ssl_connection_not_secure">Ühendus on ebaturvaline, http liiklus ei ole lubatud.</string>
     <string name="ssl_validator_header">Serveri identiteeti ei suudetud kinnitada.</string>
@@ -445,7 +375,6 @@
 
     <string name="placeholder_sentence">See on kohahoidja.</string>
     <string name="placeholder_filename">placeholder.txt</string>
-    <string name="placeholder_filetype">PNG pilt</string>
     <string name="placeholder_filesize">389 KB</string>
     <string name="placeholder_timestamp">2012/05/18 12:23 PM</string>
     <string name="placeholder_media_time">12:23:45</string>
@@ -465,7 +394,6 @@
     <string name="conflict_replace">Asenda</string>
 
     <string name="preview_image_description">Pildi eelvaade</string>
-    <string name="preview_image_error_unknown_format">Seda pilti ei saa näidata.</string>
 
     <string name="error__upload__local_file_not_copied">%1$s ei suudetud kopeerida kohalikku kataloogi %2$s.</string>
 
@@ -475,8 +403,6 @@
     <string name="share_link_file_error">Selle faili või kausta jagamine ei olnud võimalik</string>
     <string name="unshare_link_file_error">Selle faili või kausta jagamise lõpetamine ei olnud võimalik</string>
     <string name="update_link_file_error">Selle faili või kausta uuendamine ei olnud võimalik</string>
-    <string name="share_link_password_title">Sisesta parool</string>
-    <string name="share_link_empty_password">Sa pead parooli sisestama.</string>
 
     <string name="activity_chooser_send_file_title">Saada</string>
 
@@ -486,7 +412,6 @@
     <string name="clipboard_uxexpected_error">Ootamatu viga lõikepuhvrisse kopeerimisel</string>
     <string name="clipboard_label">Tekst kopeeriti %1$s-st</string>
 
-    <string name="error_cant_bind_to_operations_service">Viga: ei suutnud operatsiooni lõpetada</string>
 
     <string name="network_error_socket_exception">Serveriga ühendumisel tekkis tõrge.</string>
     <string name="network_error_socket_timeout_exception">Serveril kulus vastamiseks liiga kaua.</string>
@@ -497,62 +422,38 @@
 
     <string name="forbidden_permissions">Sul ei ole %s õigusi</string>
 
-    <string name="forbidden_permissions_rename">selle faili ümbernimetamiseks</string>
-    <string name="forbidden_permissions_delete">selle faili kustutamiseks</string>
-    <string name="share_link_forbidden_permissions">faili jagamiseks</string>
-    <string name="unshare_link_forbidden_permissions">faili jagamise lõpetamiseks</string>
-    <string name="update_link_forbidden_permissions">jagamise uuendamiseks</string>
-    <string name="forbidden_permissions_create">faili loomiseks</string>
     <string name="uploader_upload_forbidden_permissions">sellesse kausta laadimiseks</string>
-    <string name="uploader_upload_forbidden">Üleslaadimine pole lubatud</string>
-    <string name="downloader_download_file_not_found">Fail ei ole serveris enam kättesaadav.</string>
 
-    <string name="prefs_category_accounts">Kontod</string>
     <string name="prefs_add_account">Lisa konto</string>
     <string name="drawer_manage_accounts">Halda kontosid</string>
     <string name="manage_accounts_quota">%1$s %2$s-st</string>
     <string name="used_quota_title_manage_accounts">Kasutatud:</string>
     <string name="auth_redirect_non_secure_connection_title">Turvalist ühendust suunatakse läbi turvamata ühenduse.</string>
 
-    <string name="actionbar_logger">Logid</string>
-    <string name="log_send_history_button">Saada ajalugu</string>
-    <string name="log_send_no_mail_app">Rakendust logide saatmiseks ei leitud. Palun paigalda mõni meilirakendus.</string>
-    <string name="log_send_mail_subject">%1$s Androidi rakenduse logid</string>
     <string name="actionbar_select_all">Vali kõik</string>
     <string name="actionbar_select_inverse">Pööra valik ümber</string>
 
     <string name="actionbar_move">Tõsta ümber</string>
-    <string name="file_list_empty_moving">Siin pole midagi. Sa võid lisada kausta!</string>
     <string name="folder_picker_choose_button_text">Vali</string>
     <string name="folder_picker_move_here_button_text">Liiguta siia</string>
     <string name="folder_picker_copy_here_button_text">Kopeeri siia</string>
     <string name="folder_picker_no_permissions_message_text">Sul puuduvad õigused siia sisu lisamiseks!</string>
 
-    <string name="move_file_not_found">Liigutamine ebaõnnestus. Palun kontrolli, kas fail on olemas.</string>
     <string name="move_file_invalid_into_descendent">Kausta ei saa liigutada tema enda alamkausta.</string>
     <string name="move_file_invalid_overwrite">See fail on sihtkaustas juba olemas.</string>
     <string name="move_file_error">Selle faili või kausta liigutamisel tekkis tõrge.</string>
-    <string name="forbidden_permissions_move">selle faili liigutamiseks</string>
 
-    <string name="copy_file_not_found">Kopeerimine ebaõnnestus. Palun kontrolli, kas fail on olemas.</string>
     <string name="copy_file_invalid_into_descendent">Kausta ei saa kopeerida tema enda alamkausta.</string>
     <string name="copy_file_invalid_overwrite">See fail on sihtkaustas juba olemas.</string>
     <string name="copy_file_error">Selle faili või kausta kopeerimisel tekkis tõrge.</string>
-    <string name="forbidden_permissions_copy">et kopeerida seda faili</string>
 
-    <string name="prefs_category_camera_upload">Kaamera üleslaadimised</string>
 
-    <string name="sync_folder_failed_content">%1$s kausta sünkroniseerimist ei õnnestunud lõpule viia</string>
 
-    <string name="shared_subject_header">jagatud</string>
-    <string name="with_you_subject_header">sinuga</string>
 
     <string name="subject_user_shared_with_you">%1$s jagas sinuga \"%2$s\"</string>
     <string name="subject_shared_with_you">\"%1$s\" on sinuga jagatud</string>
 
     <string name="auth_refresh_button">Värskenda ühendust</string>
-    <string name="auth_host_address">Serveri aadress</string>
-    <string name="common_error_out_memory">Mälu pole piisavalt</string>
 
     <string name="username">Kasutajanimi</string>
 
@@ -572,18 +473,13 @@
     <string name="prefs_camera_upload_behaviour_title">Algne fail on</string>
     <string name="prefs_camera_upload_last_sync_title">Viimane sünkroniseerimine</string>
     <string name="notifications_permission_denied">Eelistusi saab uuendada seadete alajaotuses</string>
-    <string name="upload_copy_files">Kopeeri fail</string>
-    <string name="upload_move_files">Liiguta fail</string>
 
     <string name="pref_behaviour_entries_keep_file">hoitakse algses kaustas</string>
     <string name="pref_behaviour_entries_remove_original_file">eemaldatud algsest kaustast</string>
 
     <string name="share_dialog_title">Jaga</string>
-    <string name="share_file">Jaga %1$s</string>
     <string name="share_with_user_section_title">Kasutajad ja grupid</string>
     <string name="share_no_users">Kasutajatega pole veel midagi jagatud</string>
-    <string name="share_incompatible_version">Teiste kasutajatega jagamiseks peab serveris olema vähemalt versioon 8.2</string>
-    <string name="share_add_user_or_group">Lisa kasutaja või grupp</string>
     <string name="share_via_link_section_title">Avalikud lingid</string>
     <string name="share_via_link_create_title">Loo lingiga jagamine</string>
     <string name="share_via_link_edit_title">Muuda lingiga jagamist</string>
@@ -592,13 +488,11 @@
     <string name="share_confirm_public_link_button">Salvesta</string>
     <string name="share_via_link_expiration_date_label">Aegumine</string>
     <string name="share_via_link_password_label">Parool</string>
-    <string name="share_via_link_password_title">Turvatud</string>
     <string name="share_via_link_generate_password_button">Loo</string>
     <string name="share_via_link_copy_password_button">Kopeeri</string>
     <string name="share_via_link_edit_permission_read_only_label">Laadi alla / Vaata</string>
     <string name="share_via_link_edit_permission_read_and_write_label">Laadi alla / Vaata / Laadi üles</string>
     <string name="share_via_link_edit_permission_upload_only_label">Ainult üleslaadimine (File Drop)</string>
-    <string name="share_get_public_link_button">Hangi link</string>
     <string name="share_with_title">Jaga</string>
     <string name="share_with_edit_title">Jaga kasutajaga %1$s</string>
 
@@ -614,8 +508,6 @@
     <string name="share_privilege_can_edit_create">loo</string>
     <string name="share_privilege_can_edit_change">muuda</string>
     <string name="share_privilege_can_edit_delete">kustuta</string>
-    <string name="edit_share_unshare">Lõpeta jagamine</string>
-    <string name="edit_share_done">valmis</string>
 
     <string name="action_upload_retry">Proovi uuesti</string>
     <string name="action_upload_clear">Tühjenda</string>
@@ -624,7 +516,6 @@
     <string name="confirmation_remove_files_alert">Kas soovid tõesti eemaldada %s kirje/kirjet?</string>
     <string name="confirmation_remove_folders_alert">Kas soovid tõesti eemaldada valitud üksused ja nende sisud?</string>
     <string name="failed_upload_quota_exceeded_text">Kontol pole piisavalt mahtu</string>
-    <string name="auth_forbidden">Autentimine keelatud</string>
 
     <string name="actionbar_privacy_policy">Privaatsus</string>
     <string name="prefs_privacy_policy">Privaatsus</string>
@@ -637,7 +528,6 @@
     <string name="streaming_crossed_redirection">Voogedastus üle ristatud ümbersuunamiste ei ole lubatud.</string>
     <string name="previewing_video_common_error">Seda videot ei õnnestu taasluua.</string>
 
-    <string name="previewing_video_not_supported">Video eelvaade ei ole sinu Androidi versiooni poolt toetatud. Faili allalaadimine algab automaatselt.</string>
     <string name="streaming_position_not_available">"Positsioon ei ole saadaval"</string>
     <string name="error_no_network_connection">Seade ei ole võrguga ühendatud.</string>
     <string name="share_no_public_links">Avalikke linke pole veel loodud.</string>
@@ -648,7 +538,6 @@
     <string name="share_via_link_expiration_date_enforced_label">Aegumine *</string>
     <string name="share_via_link_expiration_date_explanation_label">Avalik link ei aegu hiljem kui %1$d päeva peale loomist.</string>
     <string name="share_via_link_default_name_template">%1$s link</string>
-    <string name="share_via_link_empty_password">Parool on tühi.</string>
     <string name="private_link_info">Privaatne link: ainult inimesed, kellel on ligipääs failile/kaustale saavad seda kasutada. Kasuta seda ise püsilingina või suuna teisi failini jagamiste piires.</string>
     <string name="file_private_link_error">Privaatne link ei ole selle faili jaoks saadaval.</string>
     <string name="download_notification_channel_name">Allalaadimised</string>
@@ -661,7 +550,6 @@
     <string name="file_sync_notification_channel_description">Vaata failide sünkroonimise tulemust</string>
     <string name="file_sync_conflict_notification_channel_name">Failikonfliktid</string>
     <string name="file_sync_conflict_notification_channel_description">Näita tekkivaid failikonflikte.</string>
-    <string name="clicks_to_be_developer">Oled %1$d kliki kaugusel arendaja menüüde lubamisest.</string>
 
     <string name="rate_dialog_title">Hinda %1$s rakendust!</string>
     <string name="rate_dialog_description">Kui sulle meeldib selle rakenduse kasutamine, siis kas leiad hetke hinnangu andmiseks? Sinu tagasiside on meile väga oluline.</string>
@@ -685,15 +573,12 @@
     <string name="welcome_feature_4_text">Sinu pildid/videod laeti automaatselt üles</string>
     <string name="welcome_feature_5_title">Video voogedastus</string>
     <string name="welcome_feature_5_text">Esita videod ilma neid alla laadimata</string>
-    <string name="no_browser_installed_alert">Veebilehitsejat ei ole paigaldatud. Paigalda veebilehitseja, et lubada turvaline sisselogimine.</string>
     <string name="common_not_found">seda ei leitud</string>
 
     <string name="supports_oauth2_error">Ei olnud võimalik tuvastada, kas OAuth2 on toetatud.</string>
     <string name="get_base_url_error">Ei olnud võimalik tuvastada serveri põhiaadressi.</string>
     <string name="prefs_http_logs">Logi HTTP-päringuid ja -vastuseid</string>
-    <string name="prefs_logs_summary">Logid võivad sisaldada tundlikku infot. Logide jagamine teistega on ainult kasutaja vastutusel.</string>
 
-    <string name="synchronizing_account">Sünkroonin kontot</string>
     <string name="spaces_sync_failed">Ruume ei õnnestunud värskendada</string>
 
     <!-- Scoped storage migration wizard -->
@@ -712,7 +597,6 @@
     <string name="security_enforced_first_option">Parooli lukk</string>
     <string name="security_enforced_second_option">Mustri lukk</string>
 
-    <string name="folder_upload_some_content_or_sync_devices">Laadi sisu üles või süngi oma seadmetega!</string>
 
     <!-- Webfinger -->
     <string name="global_proceed">Jätka</string>
@@ -727,7 +611,6 @@
     <string name="release_notes_4_8_0_title_set_emoji_as_space_image">Emoji määramine ruumi pildiks</string>
     <string name="release_notes_4_8_0_subtitle_set_emoji_as_space_image">Korrektse õigustega Infinite Scale kasutajad saavad nüüd ruumi pildiks valida ka emoji</string>
     <!-- Open in web -->
-    <string name="ic_action_open_in_web">Ava veebis</string>
     <string name="ic_action_open_with_web">Ava %1$s (veebis)</string>
     <string name="open_in_web_error_generic">Ei saanud veebis avada</string>
     <string name="open_in_web_error_not_supported">Seda failitüüpi toetavaid rakendusi ei ole.</string>
@@ -809,7 +692,6 @@
     <string name="content_description_quota_switch">Ruumi mahupiirang</string>
     <string name="create_shortcut_dialog_title">Loo otsetee</string>
     <string name="create_shortcut_dialog_url">URL</string>
-    <string name="create_shortcut_dialog_url_information">Brauseris avamiseks peab URL alguses olema kas http:// või https://</string>
     <string name="create_shortcut_dialog_url_error_no_blanks">URL ei saa sisaldada tühikuid</string>
     <string name="create_shortcut_dialog_url_extension">.url</string>
     <string name="open_shortcut_description">See otsetee viitab:</string>
