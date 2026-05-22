@@ -56,23 +56,23 @@
         android:layout_marginTop="@dimen/standard_margin"
         android:textColor="@color/warning"
         android:textSize="16sp"
-        app:layout_constraintBottom_toTopOf="@id/patternContainer"
+        app:layout_constraintBottom_toTopOf="@id/pattern_container"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/explanation_pattern" />
 
     <com.owncloud.android.presentation.security.passcode.SquareFrameLayout
-        android:id="@+id/patternContainer"
+        android:id="@+id/pattern_container"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/standard_margin"
         android:layout_marginVertical="@dimen/standard_margin"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@id/rightGuideline"
+        app:layout_constraintEnd_toEndOf="@id/right_guideline"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintStart_toStartOf="@id/leftGuideline"
+        app:layout_constraintStart_toStartOf="@id/left_guideline"
         app:layout_constraintTop_toBottomOf="@id/error_pattern">
 
         <com.andrognito.patternlockview.PatternLockView
@@ -91,16 +91,16 @@
     </com.owncloud.android.presentation.security.passcode.SquareFrameLayout>
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/leftGuideline"
+        android:id="@+id/left_guideline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.25" />
+        app:layout_constraintGuide_percent="0.3" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/rightGuideline"
+        android:id="@+id/right_guideline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.75" />
+        app:layout_constraintGuide_percent="0.7" />
 </androidx.constraintlayout.widget.ConstraintLayout>

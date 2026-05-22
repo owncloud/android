@@ -51,12 +51,12 @@
         android:layout_marginTop="@dimen/standard_margin"
         android:textColor="@color/warning"
         android:textSize="16sp"
-        app:layout_constraintBottom_toTopOf="@id/patternContainer"
+        app:layout_constraintBottom_toTopOf="@id/pattern_container"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <com.owncloud.android.presentation.security.passcode.SquareFrameLayout
-        android:id="@+id/patternContainer"
+        android:id="@+id/pattern_container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginHorizontal="@dimen/standard_margin"
