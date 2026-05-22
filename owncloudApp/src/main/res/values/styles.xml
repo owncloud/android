@@ -96,8 +96,6 @@
         <item name="android:windowOptOutEdgeToEdgeEnforcement" tools:targetApi="35">true</item>
     </style>
 
-    <!-- USED IN SHAREACTIVITY!! !! -->
-
     <!-- APP BAR styles -->
 
     <!-- Regular style for the app bar (both for old actionbar and new toolbar);
@@ -184,10 +182,6 @@
         <!-- <item name="android:width">100dp</item> -->
     </style>
 
-    <!-- PopDownMenu -->
-
-    <!-- PopUpMenu -->
-
     <style name="PassCodeStyle">
         <item name="android:layout_width">50dp</item>
         <item name="android:layout_height">50dp</item>
@@ -220,8 +214,6 @@
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">0dp</item>
     </style>
-
-    <!-- Notifications -->
 
     <!-- Authenticator Activity -->
     <style name="Theme.ownCloud.Authenticator" parent="Theme.ownCloud">
