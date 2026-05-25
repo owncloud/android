@@ -2,7 +2,7 @@
   ownCloud Android client application
 
   Copyright (C) 2012  Bartek Przybylski
-  Copyright (C) 2020 ownCloud GmbH.
+  Copyright (C) 2026 ownCloud GmbH.
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License version 2,
@@ -18,7 +18,7 @@
 -->
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/passcodeLockLayout"
+    android:id="@+id/passcode_lock_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="@dimen/passcode_standard_margin"
@@ -29,25 +29,25 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/layout_code"
+        app:layout_constraintBottom_toTopOf="@id/passcode_value"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
         <TextView
-            android:id="@+id/header"
+            android:id="@+id/passcode_header"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/pass_code_enter_pass_code"
             android:textColor="@android:color/black"
             android:textSize="16sp"
-            app:layout_constraintBottom_toTopOf="@id/explanation"
+            app:layout_constraintBottom_toTopOf="@id/passcode_explanation"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_chainStyle="spread_inside" />
 
         <TextView
-            android:id="@+id/explanation"
+            android:id="@+id/passcode_explanation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/passcode_standard_margin"
@@ -57,28 +57,28 @@
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/header" />
+            app:layout_constraintTop_toBottomOf="@id/passcode_header" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     <LinearLayout
-        android:id="@+id/layout_code"
+        android:id="@+id/passcode_value"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@id/error"
+        app:layout_constraintBottom_toTopOf="@id/passcode_error"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/title">
 
-        <!-- Edit text items will be added here procedurally based on ownBrander settings. -->
+        <!-- Edit text items will be added here procedurally based on branding settings. -->
 
     </LinearLayout>
 
     <TextView
-        android:id="@+id/error"
+        android:id="@+id/passcode_error"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/warning"
@@ -87,7 +87,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/layout_code" />
+        app:layout_constraintTop_toBottomOf="@id/passcode_value" />
 
     <TextView
         android:id="@+id/lock_time"
@@ -97,14 +97,14 @@
         android:textColor="@android:color/black"
         android:textSize="16sp"
         android:visibility="invisible"
-        app:layout_constraintBottom_toTopOf="@id/numberKeyboard"
+        app:layout_constraintBottom_toTopOf="@id/number_keyboard"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/error" />
+        app:layout_constraintTop_toBottomOf="@id/passcode_error" />
 
     <com.owncloud.android.presentation.security.passcode.NumberKeyboard
-        android:id="@+id/numberKeyboard"
+        android:id="@+id/number_keyboard"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"

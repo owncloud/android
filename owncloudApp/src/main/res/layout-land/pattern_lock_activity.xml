@@ -57,22 +57,22 @@
     </com.owncloud.android.presentation.security.passcode.SquareFrameLayout>
 
     <TextView
-        android:id="@+id/header_pattern"
+        android:id="@+id/pattern_header"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/standard_margin"
         android:gravity="center"
-        android:text="@string/pass_code_enter_pass_code"
+        android:text="@string/pattern_enter_pattern"
         android:textColor="@android:color/black"
         android:textSize="16sp"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/explanation_pattern"
+        app:layout_constraintBottom_toTopOf="@id/pattern_explanation"
         app:layout_constraintStart_toStartOf="@id/vertical_guide"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintVertical_chainStyle="packed" />
 
     <TextView
-        android:id="@+id/explanation_pattern"
+        android:id="@+id/pattern_explanation"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/standard_margin"
@@ -80,20 +80,20 @@
         android:text="@string/pattern_configure_your_pattern_explanation"
         android:textAppearance="@android:style/TextAppearance.Small"
         android:textSize="14sp"
-        app:layout_constraintTop_toBottomOf="@id/header_pattern"
-        app:layout_constraintBottom_toTopOf="@id/error_pattern"
+        app:layout_constraintTop_toBottomOf="@id/pattern_header"
+        app:layout_constraintBottom_toTopOf="@id/pattern_error"
         app:layout_constraintStart_toStartOf="@id/vertical_guide"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
-        android:id="@+id/error_pattern"
+        android:id="@+id/pattern_error"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/standard_margin"
         android:gravity="center"
         android:textColor="@color/warning"
         android:textSize="16sp"
-        app:layout_constraintTop_toBottomOf="@id/explanation_pattern"
+        app:layout_constraintTop_toBottomOf="@id/pattern_explanation"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@id/vertical_guide"
         app:layout_constraintEnd_toEndOf="parent" />

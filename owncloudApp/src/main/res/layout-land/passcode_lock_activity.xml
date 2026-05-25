@@ -19,14 +19,14 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/passcodeLockLayout"
+    android:id="@+id/passcode_lock_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="@dimen/passcode_standard_margin"
     android:filterTouchesWhenObscured="true">
 
     <TextView
-        android:id="@+id/header"
+        android:id="@+id/passcode_header"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/passcode_standard_margin"
@@ -39,7 +39,7 @@
         app:layout_constraintTop_toTopOf="parent"/>
 
     <TextView
-        android:id="@+id/explanation"
+        android:id="@+id/passcode_explanation"
         android:layout_width="0dp"
         android:gravity="center"
         android:layout_height="wrap_content"
@@ -49,10 +49,10 @@
         android:textSize="14sp"
         app:layout_constraintStart_toEndOf="@id/left_guideline"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/header" />
+        app:layout_constraintTop_toBottomOf="@id/passcode_header" />
 
     <LinearLayout
-        android:id="@+id/layout_code"
+        android:id="@+id/passcode_value"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
@@ -60,14 +60,14 @@
         android:orientation="horizontal"
         app:layout_constraintStart_toEndOf="@id/left_guideline"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/explanation">
+        app:layout_constraintTop_toBottomOf="@id/passcode_explanation">
 
-        <!-- Edit text items will be added here procedurally based on ownBrander settings. -->
+        <!-- Edit text items will be added here procedurally based on branding settings. -->
 
     </LinearLayout>
 
     <TextView
-        android:id="@+id/error"
+        android:id="@+id/passcode_error"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -76,7 +76,7 @@
         android:textSize="16sp"
         app:layout_constraintStart_toEndOf="@id/left_guideline"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/layout_code" />
+        app:layout_constraintTop_toBottomOf="@id/passcode_value" />
 
     <TextView
         android:id="@+id/lock_time"
@@ -89,10 +89,10 @@
         android:visibility="invisible"
         app:layout_constraintStart_toEndOf="@id/left_guideline"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/error" />
+        app:layout_constraintTop_toBottomOf="@id/passcode_error" />
 
     <com.owncloud.android.presentation.security.passcode.NumberKeyboard
-        android:id="@+id/numberKeyboard"
+        android:id="@+id/number_keyboard"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"

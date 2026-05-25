@@ -1,8 +1,8 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<?xml version="1.0" encoding="utf-8"?>
+<!--
   ownCloud Android client application
 
-  Copyright (C) 2012  Bartek Przybylski
-  Copyright (C) 2020 ownCloud GmbH.
+  Copyright (C) 2026 ownCloud GmbH.
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License version 2,
@@ -18,21 +18,22 @@
 -->
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/passcodeLockLayout"
+    android:id="@+id/passcode_lock_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="@dimen/passcode_standard_margin"
     android:filterTouchesWhenObscured="true">
 
     <TextView
-        android:id="@+id/header"
-        android:layout_width="wrap_content"
+        android:id="@+id/passcode_header"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/passcode_standard_margin"
+        android:gravity="center"
         android:text="@string/pass_code_enter_pass_code"
         android:textColor="@android:color/black"
         android:textSize="16sp"
-        app:layout_constraintBottom_toTopOf="@id/explanation"
+        app:layout_constraintBottom_toTopOf="@id/passcode_explanation"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -40,65 +41,68 @@
         app:layout_constraintVertical_chainStyle="spread_inside" />
 
     <TextView
-        android:id="@+id/explanation"
-        android:layout_width="match_parent"
+        android:id="@+id/passcode_explanation"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/passcode_standard_margin"
         android:gravity="center"
         android:text="@string/pass_code_configure_your_pass_code_explanation"
         android:textAppearance="@android:style/TextAppearance.Small"
         android:textSize="14sp"
-        app:layout_constraintBottom_toTopOf="@id/layout_code"
+        app:layout_constraintBottom_toTopOf="@id/passcode_value"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/header" />
+        app:layout_constraintTop_toBottomOf="@id/passcode_header" />
 
     <LinearLayout
-        android:id="@+id/layout_code"
-        android:layout_width="match_parent"
+        android:id="@+id/passcode_value"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
+        android:gravity="center"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@id/error"
+        app:layout_constraintBottom_toTopOf="@id/passcode_error"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/explanation">
+        app:layout_constraintTop_toBottomOf="@id/passcode_explanation">
 
-        <!-- Edit text items will be added here procedurally based on ownBrander settings. -->
+        <!-- Edit text items will be added here procedurally based on branding settings. -->
 
     </LinearLayout>
 
     <TextView
-        android:id="@+id/error"
-        android:layout_width="wrap_content"
+        android:id="@+id/passcode_error"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:textColor="@color/warning"
         android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@id/lock_time"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/layout_code" />
+        app:layout_constraintTop_toBottomOf="@id/passcode_value" />
 
     <TextView
         android:id="@+id/lock_time"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/passcode_standard_margin"
+        android:gravity="center"
         android:textColor="@android:color/black"
         android:textSize="16sp"
         android:visibility="invisible"
-        app:layout_constraintBottom_toTopOf="@id/numberKeyboard"
+        app:layout_constraintBottom_toTopOf="@id/number_keyboard"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/error" />
+        app:layout_constraintTop_toBottomOf="@id/passcode_error" />
 
     <com.owncloud.android.presentation.security.passcode.NumberKeyboard
-        android:id="@+id/numberKeyboard"
+        android:id="@+id/number_keyboard"
         android:layout_width="0dp"
+        android:padding="10dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/passcode_margin_bottom"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -112,12 +116,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.3" />
+        app:layout_constraintGuide_percent="0.4" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/right_guideline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.7" />
+        app:layout_constraintGuide_percent="0.6" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
