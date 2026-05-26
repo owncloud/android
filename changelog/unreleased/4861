@@ -1,0 +1,6 @@
+Security: SSL certificate verification and trusted host handling
+
+SSL certificate verification flow has been improved by enhancing
+host validation and trusted certificate handling.
+
+https://github.com/owncloud/android/pull/4861

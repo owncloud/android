@@ -1,5 +1,7 @@
-/* ownCloud Android Library is available under MIT license
- *   Copyright (C) 2016 ownCloud GmbH.
+/**
+ *   ownCloud Android Library is available under MIT license
+ *
+ *   Copyright (C) 2026 ownCloud GmbH.
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -91,6 +93,18 @@ public class NetworkUtils {
         knownServers.setCertificateEntry(Integer.toString(cert.hashCode()), cert);
         try (FileOutputStream fos = context.openFileOutput(LOCAL_TRUSTSTORE_FILENAME, Context.MODE_PRIVATE)) {
             knownServers.store(fos, LOCAL_TRUSTSTORE_PASSWORD.toCharArray());
+        }
+    }
+
+    public static boolean isCertInKnownServersStore(Certificate cert, Context context) {
+        if (cert == null || context == null) {
+            return false;
+        }
+        try {
+            return getKnownServersStore(context).getCertificateAlias(cert) != null;
+        } catch (KeyStoreException | IOException | NoSuchAlgorithmException | CertificateException e) {
+            Timber.e(e, "Fail while checking certificate in the known-servers store");
+            return false;
         }
     }
 

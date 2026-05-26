@@ -1,5 +1,7 @@
-/* ownCloud Android Library is available under MIT license
- *   Copyright (C) 2022 ownCloud GmbH.
+/**
+ *   ownCloud Android Library is available under MIT license
+ *
+ *   Copyright (C) 2026 ownCloud GmbH.
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -32,6 +34,7 @@ import at.bitfire.dav4jvm.exception.HttpException;
 import com.owncloud.android.lib.common.accounts.AccountUtils;
 import com.owncloud.android.lib.common.http.HttpConstants;
 import com.owncloud.android.lib.common.http.methods.HttpBaseMethod;
+import com.owncloud.android.lib.common.network.AdvancedX509TrustManager;
 import com.owncloud.android.lib.common.network.CertificateCombinedException;
 import okhttp3.Headers;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -50,6 +53,7 @@ import java.net.ProtocolException;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
+import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -148,6 +152,12 @@ public class RemoteOperationResult<T>
 
         } else if (e instanceof SSLException || e instanceof RuntimeException) {
             if (e instanceof SSLPeerUnverifiedException) {
+                X509Certificate lastCert = AdvancedX509TrustManager.sLastCert.get();
+                AdvancedX509TrustManager.sLastCert.remove();
+                CertificateCombinedException sslPeerUnverifiedException = new CertificateCombinedException(lastCert);
+                sslPeerUnverifiedException.setSslPeerUnverifiedException((SSLPeerUnverifiedException) e);
+                sslPeerUnverifiedException.initCause(e);
+                mException = sslPeerUnverifiedException;
                 mCode = ResultCode.SSL_RECOVERABLE_PEER_UNVERIFIED;
             } else {
                 CertificateCombinedException se = getCertificateCombinedException(e);
