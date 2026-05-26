@@ -121,7 +121,7 @@
     <string name="auth_oauth_failure">The access token has expired or become invalid. Sign in again to regain access.</string>
     <string name="auth_oauth_failure_snackbar_action">Sign in</string>
     <string name="auth_check_server">Check server</string>
-    <string name="auth_host_url">Server address https://&#8230;</string>
+    <string name="auth_host_url">Server address https://…</string>
     <string name="auth_username">Username</string>
     <string name="auth_password">Password</string>
     <string name="auth_register">New to %1$s?</string>
@@ -176,14 +176,14 @@
     <string name="common_no">No</string>
     <string name="common_cancel_sync">Cancel sync</string>
     <string name="common_back">Back</string>
-    <string name="common_loading">Loading&#8230;</string>
+    <string name="common_loading">Loading…</string>
     <string name="common_error_unknown">unknown error</string>
     <string name="common_pending">Pending</string>
     <string name="common_important">Important</string>
     <string name="common_set">Set</string>
     <string name="upload_chooser_title">Upload from</string>
     <string name="uploader_info_dirname">Folder name</string>
-    <string name="uploader_upload_in_progress_ticker">Uploading&#8230;</string>
+    <string name="uploader_upload_in_progress_ticker">Uploading…</string>
     <string name="uploader_upload_succeeded_content_single">%1$s uploaded</string>
     <string name="uploader_upload_failed_ticker">Upload failed</string>
     <string name="uploader_upload_failed_content_single">Upload of %1$s could not be completed.</string>
@@ -225,7 +225,7 @@
     <string name="uploader_upload_canceled_ticker">Upload cancelled</string>
     <string name="downloader_download_canceled_ticker">Download cancelled</string>
     <string name="downloader_download_enqueued_ticker">Download of %1$s has been enqueued</string>
-    <string name="downloader_download_in_progress_ticker">Downloading&#8230;</string>
+    <string name="downloader_download_in_progress_ticker">Downloading…</string>
     <string name="downloader_download_succeeded_ticker">Download succeeded</string>
     <string name="downloader_download_succeeded_content">%1$s downloaded</string>
     <string name="downloader_download_failed_ticker">Download failed</string>
@@ -290,8 +290,8 @@
     <string name="media_forward_description">Fast forward button</string>
     <string name="upload_from_camera_title">Picture from camera</string>
 
-    <string name="auth_getting_authorization">Getting authorization&#8230;</string>
-    <string name="auth_trying_to_login">Trying to log in&#8230;</string>
+    <string name="auth_getting_authorization">Getting authorization…</string>
+    <string name="auth_trying_to_login">Trying to log in…</string>
     <string name="auth_connection_established">Connection established</string>
     <string name="auth_testing_connection">Testing connection</string>
     <string name="auth_not_configured_title">Malformed server configuration</string>
@@ -618,7 +618,7 @@
 
     <!-- Release Notes -->
     <string name="release_notes_header">New in %1$s</string>
-    <string name="release_notes_footer">Thank you for using %1$s.\n&#10084;</string>
+    <string name="release_notes_footer">Thank you for using %1$s.\n❤</string>
     <string name="release_notes_proceed">Proceed</string>
     <string name="release_notes_icon">Release note icon</string>
     <string name="release_notes_bugfixes_title">Minor bugfixes</string>
