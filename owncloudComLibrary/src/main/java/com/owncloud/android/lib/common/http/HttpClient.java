@@ -30,6 +30,7 @@ import android.content.Context;
 
 import com.owncloud.android.lib.common.http.logging.LogInterceptor;
 import com.owncloud.android.lib.common.network.AdvancedX509TrustManager;
+import com.owncloud.android.lib.common.network.KnownServersHostnameVerifier;
 import com.owncloud.android.lib.common.network.NetworkUtils;
 import okhttp3.Cookie;
 import okhttp3.CookieJar;
@@ -127,6 +128,7 @@ public class HttpClient {
                 .connectTimeout(HttpConstants.DEFAULT_CONNECTION_TIMEOUT, TimeUnit.MILLISECONDS)
                 .followRedirects(false)
                 .sslSocketFactory(sslSocketFactory, trustManager)
+                .hostnameVerifier(new KnownServersHostnameVerifier(mContext))
                 .cookieJar(cookieJar)
                 .build();
     }
