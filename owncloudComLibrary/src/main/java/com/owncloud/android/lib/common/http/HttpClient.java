@@ -1,5 +1,7 @@
-/* ownCloud Android Library is available under MIT license
- *   Copyright (C) 2020 ownCloud GmbH.
+/**
+ *   ownCloud Android Library is available under MIT license
+ *
+ *   Copyright (C) 2026 ownCloud GmbH.
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -125,7 +127,6 @@ public class HttpClient {
                 .connectTimeout(HttpConstants.DEFAULT_CONNECTION_TIMEOUT, TimeUnit.MILLISECONDS)
                 .followRedirects(false)
                 .sslSocketFactory(sslSocketFactory, trustManager)
-                .hostnameVerifier((asdf, usdf) -> true)
                 .cookieJar(cookieJar)
                 .build();
     }

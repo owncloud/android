@@ -4,7 +4,9 @@
  * @author masensio
  * @author David A. Velasco
  * @author Christian Schabesberger
- * Copyright (C) 2020 ownCloud GmbH.
+ *
+ * Copyright (C) 2026 ownCloud GmbH.
+ *
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -82,7 +84,7 @@ public class SslUntrustedCertDialog extends DialogFragment {
             throw new IllegalArgumentException("Trying to create instance with parameter sslException == null");
         }
         SslUntrustedCertDialog dialog = new SslUntrustedCertDialog();
-        dialog.m509Certificate = sslException.getServerCertificate();
+        dialog.m509Certificate = sslException.getSslPeerUnverifiedException() == null ? sslException.getServerCertificate() : null;
         dialog.mErrorViewAdapter = new CertificateCombinedExceptionViewAdapter(sslException);
         dialog.mCertificateViewAdapter = new X509CertificateViewAdapter(sslException.getServerCertificate());
         return dialog;
@@ -143,6 +145,12 @@ public class SslUntrustedCertDialog extends DialogFragment {
 
         Button cancel = mView.findViewById(R.id.btnCancel);
         cancel.setOnClickListener(new OnCertificateNotTrusted());
+
+        if (m509Certificate == null) {
+            ok.setText(android.R.string.ok);
+            mView.findViewById(R.id.question).setVisibility(View.GONE);
+            cancel.setVisibility(View.GONE);
+        }
 
         Button details = mView.findViewById(R.id.details_btn);
         details.setOnClickListener(new OnClickListener() {
@@ -219,6 +227,8 @@ public class SslUntrustedCertDialog extends DialogFragment {
                     ((OnSslUntrustedCertListener) activity).onFailedSavingCertificate();
                     Timber.e(e, "Server certificate could not be saved in the known-servers trust store ");
                 }
+            } else if (mHandler == null) {
+                ((OnSslUntrustedCertListener) getActivity()).onCancelCertificate();
             }
         }
 
