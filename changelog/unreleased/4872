@@ -1,0 +1,5 @@
+Change: Remove unicode characters from strings file 
+
+Unicode characters in strings.xml file have been replaced by the character itself to prevent problems in translations
+
+https://github.com/owncloud/android/pull/4872
