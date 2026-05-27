@@ -32,7 +32,6 @@ package com.owncloud.android.presentation.security.passcode
 
 import android.content.Intent
 import android.os.Bundle
-import android.text.Editable
 import android.view.KeyEvent
 import android.view.MenuItem
 import android.view.View
@@ -84,6 +83,10 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, EnableBiom
         super.onCreate(savedInstanceState)
 
         this.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
+
+        savedInstanceState?.let {
+            it.getString(STATE_PASSCODE)?.let { passcode -> passCodeViewModel.restorePassCode(passcode) }
+        }
 
         subscribeToViewModel()
 
@@ -174,6 +177,11 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, EnableBiom
         return true
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString(STATE_PASSCODE, passCodeViewModel.passcode.value.orEmpty())
+    }
+
     override fun onBackPressed() {
         PassCodeManager.onActivityStopped(this)
         super.onBackPressed()
@@ -239,21 +247,14 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, EnableBiom
         }
 
         passCodeViewModel.passcode.observe(this) { passcode ->
-            if (passcode.isNotEmpty()) {
-                passCodeEditTexts[passcode.length - 1]?.apply {
-                    text = Editable.Factory.getInstance().newEditable(passcode.last().toString())
-                    isEnabled = false
+            passCodeEditTexts.forEachIndexed { index, editText ->
+                editText?.apply {
+                    val digit = passcode.getOrNull(index)
+                    setText(digit?.toString() ?: "")
+                    isEnabled = digit == null
                 }
             }
-
-            if (passcode.length < numberOfPasscodeDigits) {
-                //Backspace
-                passCodeEditTexts[passcode.length]?.apply {
-                    isEnabled = true
-                    setText("")
-                    requestFocus()
-                }
-            }
+            passCodeEditTexts.getOrNull(passcode.length)?.requestFocus()
         }
     }
 
@@ -482,5 +483,6 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, EnableBiom
 
         const val BIOMETRIC_HAS_FAILED = "BIOMETRIC_HAS_FAILED"
 
+        private const val STATE_PASSCODE = "STATE_PASSCODE"
     }
 }
