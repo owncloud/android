@@ -1,35 +1,108 @@
-[![Android Unit Tests](https://github.com/owncloud/android/actions/workflows/android-unit-tests.yml/badge.svg)](https://github.com/owncloud/android/actions/workflows/android-unit-tests.yml) [![Android Instrumented Data Tests](https://github.com/owncloud/android/actions/workflows/android-instrumented-data-tests.yml/badge.svg)](https://github.com/owncloud/android/actions/workflows/android-instrumented-data-tests.yml) [![Detekt](https://github.com/owncloud/android/actions/workflows/detekt.yml/badge.svg)](https://github.com/owncloud/android/actions/workflows/detekt.yml) [![Conventional Commits](https://github.com/owncloud/android/actions/workflows/conventional-commits.yml/badge.svg)](https://github.com/owncloud/android/actions/workflows/conventional-commits.yml)
+# ownCloud Android App
 
-# [ownCloud](https://owncloud.org) Android app
+<!-- OSPO-managed README | Generated: 2026-04-16 | v2 -->
 
-<a href="https://play.google.com/store/apps/details?id=com.owncloud.android"><img src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" height="75"></a><a href="https://f-droid.org/packages/com.owncloud.android/"><img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png" height="75"></a>
+[![License](https://img.shields.io/badge/License-GPL--2.0-blue.svg)](LICENSE.txt) [![ownCloud OSPO](https://img.shields.io/badge/OSPO-ownCloud-blue)](https://kiteworks.com/opensource)
 
-| <img src="docs_resources/filelist_device.png"> | <img src="docs_resources/photos_device.png"> | <img src="docs_resources/share_device.png"> | <img src="docs_resources/spaces_device.png"> |
-| ---------------------------------------------- | -------------------------------------------- | ------------------------------------------- | ------------------------------------------- |
+The ownCloud Android app enables users to access, sync, and share files stored on their ownCloud server directly from Android devices. Built with Kotlin, it supports ownCloud Infinite Scale (oCIS) and ownCloud 10 servers, featuring file browsing, photo galleries, Spaces, sharing, passcode lock, and biometric authentication. The app is available on [Google Play](https://play.google.com/store/apps/details?id=com.owncloud.android) and [F-Droid](https://f-droid.org/packages/com.owncloud.android/).
 
-## Join development!
+## Part of Mobile (Android)
 
-**Start contributing:** Make sure you read [SETUP.md](https://github.com/owncloud/android/blob/master/SETUP.md) when you start working on this project. Basically: Fork this repository and contribute back using pull requests to the master branch.
-Easy starting points are also reviewing [pull requests](https://github.com/owncloud/android/pulls) and working on [contributions are welcome](https://github.com/owncloud/android/issues?q=is%3Aopen+is%3Aissue+label%3A%22Contributions+are+welcome%22).
+This is the official [ownCloud Android app](https://github.com/owncloud/android), the primary mobile client for Android users. It connects to both [ownCloud Infinite Scale (oCIS)](https://github.com/owncloud/ocis) and [ownCloud Server (Classic)](https://github.com/owncloud/core).
 
-**Forum:** [#Android](https://central.owncloud.org/c/android)
+## Getting Started
 
-**License:** [GPLv2](https://github.com/owncloud/android/blob/master/LICENSE.txt)
+1. Read [SETUP.md](https://github.com/owncloud/android/blob/master/SETUP.md) for development environment setup
+2. Fork the repository and clone it locally
+3. Open the project in Android Studio
+4. Build and run using `./gradlew assembleDebug`
 
-## Join testing!
+### Beta Testing
 
-If you are interested in testing the new features before being released and give us your feedback, please try out our beta channels:
+- **Play Store:** Download the app from Play Store, scroll down to the beta section, and tap "I'm in"
+- **F-Droid:** Open the ownCloud tab in F-Droid and download the latest beta version
 
-**Play Store**
+## Documentation
 
-1. Download ownCloud app from Play Store.
-2. Go to ownCloud tab in Play Store and scroll down to the end of the view.
-3. Press the **I'M IN** button to join the beta program and your final app will be replaced with the beta one.
+- [SETUP.md](https://github.com/owncloud/android/blob/master/SETUP.md) - Development setup guide
+- [CONTRIBUTING.md](CONTRIBUTING.md) - Contribution guidelines
+- [CHANGELOG.md](https://github.com/owncloud/android/blob/master/CHANGELOG.md) - Release history
+- [ownCloud documentation](https://doc.owncloud.com)
 
-Note: If you want to use the ownCloud production version you have to leave the beta program, uninstall the app, and reinstall the production version.
+## Community & Support
 
-**F-Droid**
+**[Star](https://github.com/owncloud/android)** this repo and **Watch** for release notifications!
 
-1. Go to ownCloud tab in F-Droid.
-2. Open versions section.
-3. Download the latest version that contains beta in the name.
+- [ownCloud Website](https://owncloud.com)
+- [Community Discussions](https://github.com/orgs/owncloud/discussions)
+- [Matrix Chat](https://app.element.io/#/room/#owncloud:matrix.org)
+- [Documentation](https://doc.owncloud.com)
+- [Enterprise Support](https://owncloud.com/contact-us/)
+- [OSPO Home](https://kiteworks.com/opensource)
+
+## Contributing
+
+We welcome contributions! Please read the [Contributing Guidelines](CONTRIBUTING.md)
+and our [Code of Conduct](CODE_OF_CONDUCT.md) before getting started.
+
+### Workflow
+
+- **Rebase Early, Rebase Often!** We use a rebase workflow. Always rebase on the target branch before submitting a PR.
+- **Dependabot**: Automated dependency updates are managed via Dependabot. Review and merge dependency PRs promptly.
+- **Signed Commits**: All commits **must** be PGP/GPG signed. See [GitHub's signing guide](https://docs.github.com/en/authentication/managing-commit-signature-verification).
+- **DCO Sign-off**: Every commit must carry a `Signed-off-by` line:
+  ```
+  git commit -s -S -m "your commit message"
+  ```
+- **GitHub Actions Policy**: Workflows may only use actions that are (a) owned by `owncloud`, (b) created by GitHub (`actions/*`), or (c) verified in the GitHub Marketplace.
+
+## Translations
+
+Help translate this project on Transifex:
+**<https://explore.transifex.com/owncloud-org/owncloud-android/>**
+
+Please submit translations via Transifex -- do not open pull requests for translation changes.
+
+## Security
+
+**Do not open a public GitHub issue for security vulnerabilities.**
+
+Report vulnerabilities at **<https://security.owncloud.com>** -- see [SECURITY.md](SECURITY.md).
+
+Bug bounty: [YesWeHack ownCloud Program](https://yeswehack.com/programs/owncloud-bug-bounty-program)
+
+## License
+
+This project is licensed under the [GPL-2.0](LICENSE.txt).
+
+## About the ownCloud OSPO
+
+The [Kiteworks Open Source Program Office](https://kiteworks.com/opensource), operating under
+the [ownCloud](https://owncloud.com) brand, launched on May 5, 2026, to steward the open source
+ecosystem around ownCloud's products. The OSPO ensures transparent governance, license compliance,
+community health, and sustainable collaboration between the open source community and
+[Kiteworks](https://www.kiteworks.com), which acquired ownCloud in 2023.
+
+- **OSPO Home**: <https://kiteworks.com/opensource>
+- **GitHub**: <https://github.com/owncloud>
+- **ownCloud**: <https://owncloud.com>
+
+For questions about the OSPO or licensing, contact ospo@kiteworks.com.
+
+### License Migration to Apache 2.0
+
+The OSPO is driving a strategic relicensing of ownCloud repositories toward the
+[Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0), following
+the [Apache Software Foundation's third-party license policy](https://www.apache.org/legal/resolved.html).
+
+Individual repositories will migrate as their audit is completed. The LICENSE file
+in each repo reflects its **current** license status (not the target).
+
+**Current license: GPL-2.0** (Category X per Apache policy -- cannot be included in Apache-2.0 works).
+
+Migration prerequisites for this repository:
+
+- **CLA/DCO coverage**: All past contributors must have signed agreements permitting relicensing
+- **Copyleft dependency audit**: All GPL dependencies must be replaced or isolated
+- **KDE heritage review**: Any code with KDE-era copyrights requires legal analysis
+- **Complete relicensing**: GPL-2.0 is a strong copyleft license; migration requires full relicensing of all files
