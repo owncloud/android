@@ -2,8 +2,9 @@
  * ownCloud Android client application
  *
  * @author Juan Carlos Garrote Gascón
+ * @author Jorge Aguado Recio
  *
- * Copyright (C) 2021 ownCloud GmbH.
+ * Copyright (C) 2026 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -121,7 +122,7 @@ class PassCodeViewModel(
             resetNumberOfAttempts()
         } else {
             increaseNumberOfAttempts()
-            passcodeString = StringBuilder()
+            clearPassCode()
             _status.postValue(Status(PasscodeAction.CHECK, PasscodeType.ERROR))
         }
     }
@@ -131,7 +132,7 @@ class PassCodeViewModel(
             removePassCode()
             _status.postValue(Status(PasscodeAction.REMOVE, PasscodeType.OK))
         } else {
-            passcodeString = StringBuilder()
+            clearPassCode()
             _status.postValue(Status(PasscodeAction.REMOVE, PasscodeType.ERROR))
         }
     }
@@ -140,12 +141,13 @@ class PassCodeViewModel(
         // enabling pass code
         if (!confirmingPassCode) {
             requestPassCodeConfirmation()
+            clearPassCode()
             _status.postValue(Status(PasscodeAction.CREATE, PasscodeType.NO_CONFIRM))
         } else if (confirmPassCode()) {
             setPassCode()
             _status.postValue(Status(PasscodeAction.CREATE, PasscodeType.CONFIRM))
         } else {
-            passcodeString = StringBuilder()
+            clearPassCode()
             _status.postValue(Status(PasscodeAction.CREATE, PasscodeType.ERROR))
         }
     }
@@ -219,6 +221,16 @@ class PassCodeViewModel(
                 _getFinishedTimeToUnlockLiveData.postValue(Event(true))
             }
         }.start()
+    }
+
+    fun restorePassCode(passcode: String) {
+        passcodeString = StringBuilder(passcode)
+        _passcode.postValue(passcode)
+    }
+
+    fun clearPassCode() {
+        passcodeString = StringBuilder()
+        _passcode.postValue("")
     }
 
     private fun loadPinFromOldFormatIfPossible(): String? {

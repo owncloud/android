@@ -1,0 +1,6 @@
+Enhancement: Passcode and pattern screens in landscape mode
+
+Orientation restrictions defined in the manifest have been removed, and support for both
+orientations (portrait and landscape) has been added to the passcode and pattern screens.
+
+https://github.com/owncloud/android/pull/4871

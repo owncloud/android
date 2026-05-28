@@ -13,7 +13,7 @@
  * @author Jorge Aguado Recio
  *
  * Copyright (C) 2011 Bartek Przybylski
- * Copyright (C) 2025 ownCloud GmbH.
+ * Copyright (C) 2026 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -32,7 +32,6 @@ package com.owncloud.android.presentation.security.passcode
 
 import android.content.Intent
 import android.os.Bundle
-import android.text.Editable
 import android.view.KeyEvent
 import android.view.MenuItem
 import android.view.View
@@ -42,7 +41,7 @@ import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.owncloud.android.BuildConfig
 import com.owncloud.android.R
-import com.owncloud.android.databinding.PasscodelockBinding
+import com.owncloud.android.databinding.PasscodeLockActivityBinding
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.showBiometricDialog
 import com.owncloud.android.extensions.showMessageInSnackbar
@@ -66,7 +65,7 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, EnableBiom
 
     private val biometricViewModel by viewModel<BiometricViewModel>()
 
-    private var _binding: PasscodelockBinding? = null
+    private var _binding: PasscodeLockActivityBinding? = null
     val binding get() = _binding!!
 
     private lateinit var passCodeEditTexts: Array<EditText?>
@@ -85,9 +84,13 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, EnableBiom
 
         this.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
 
+        savedInstanceState?.let {
+            it.getString(STATE_PASSCODE)?.let { passcode -> passCodeViewModel.restorePassCode(passcode) }
+        }
+
         subscribeToViewModel()
 
-        _binding = PasscodelockBinding.inflate(layoutInflater)
+        _binding = PasscodeLockActivityBinding.inflate(layoutInflater)
 
         // protection against screen recording
         if (!BuildConfig.DEBUG) {
@@ -106,7 +109,7 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, EnableBiom
         // Allow or disallow touches with other visible windows
         binding.passcodeLockLayout.filterTouchesWhenObscured =
             PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(this)
-        binding.explanation.filterTouchesWhenObscured =
+        binding.passcodeExplanation.filterTouchesWhenObscured =
             PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(this)
 
         inflatePasscodeTxtLine()
@@ -120,8 +123,8 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, EnableBiom
         when (intent.action) {
             ACTION_CHECK -> { //When you start the app with passcode
                 // this is a pass code request; the user has to input the right value
-                binding.header.text = getString(R.string.pass_code_enter_pass_code)
-                binding.explanation.visibility = View.INVISIBLE
+                binding.passcodeHeader.text = getString(R.string.pass_code_enter_pass_code)
+                binding.passcodeExplanation.visibility = View.INVISIBLE
                 supportActionBar?.setDisplayHomeAsUpEnabled(false) //Don´t show the back arrow
             }
 
@@ -131,14 +134,14 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, EnableBiom
                     requestPassCodeConfirmation()
                 } else {
                     if (intent.extras?.getBoolean(EXTRAS_MIGRATION) == true) {
-                        binding.header.text =
+                        binding.passcodeHeader.text =
                             getString(R.string.pass_code_configure_your_pass_code_migration, passCodeViewModel.getNumberOfPassCodeDigits())
                     } else {
                         // pass code preference has just been activated in Preferences;
                         // will receive and confirm pass code value
-                        binding.header.text = getString(R.string.pass_code_configure_your_pass_code)
+                        binding.passcodeHeader.text = getString(R.string.pass_code_configure_your_pass_code)
                     }
-                    binding.explanation.visibility = View.VISIBLE
+                    binding.passcodeExplanation.visibility = View.VISIBLE
                     when {
                         intent.extras?.getBoolean(EXTRAS_MIGRATION) == true -> {
                             supportActionBar?.setDisplayHomeAsUpEnabled(false)
@@ -158,8 +161,8 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, EnableBiom
             ACTION_REMOVE -> { // Remove password
                 // pass code preference has just been disabled in Preferences;
                 // will confirm user knows pass code, then remove it
-                binding.header.text = getString(R.string.pass_code_remove_your_pass_code)
-                binding.explanation.visibility = View.INVISIBLE
+                binding.passcodeHeader.text = getString(R.string.pass_code_remove_your_pass_code)
+                binding.passcodeExplanation.visibility = View.INVISIBLE
                 supportActionBar?.setDisplayHomeAsUpEnabled(true)
             }
 
@@ -174,13 +177,18 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, EnableBiom
         return true
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString(STATE_PASSCODE, passCodeViewModel.passcode.value.orEmpty())
+    }
+
     override fun onBackPressed() {
         PassCodeManager.onActivityStopped(this)
         super.onBackPressed()
     }
 
     private fun inflatePasscodeTxtLine() {
-        val layoutCode = findViewById<LinearLayout>(R.id.layout_code)
+        val layoutCode = findViewById<LinearLayout>(R.id.passcode_value)
         val numberOfPasscodeDigits = (passCodeViewModel.getPassCode()?.length ?: passCodeViewModel.getNumberOfPassCodeDigits())
         for (i in 0 until numberOfPasscodeDigits) {
             val txt = layoutInflater.inflate(R.layout.passcode_edit_text, layoutCode, false) as EditText
@@ -239,34 +247,27 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, EnableBiom
         }
 
         passCodeViewModel.passcode.observe(this) { passcode ->
-            if (passcode.isNotEmpty()) {
-                passCodeEditTexts[passcode.length - 1]?.apply {
-                    text = Editable.Factory.getInstance().newEditable(passcode.last().toString())
-                    isEnabled = false
+            passCodeEditTexts.forEachIndexed { index, editText ->
+                editText?.apply {
+                    val digit = passcode.getOrNull(index)
+                    setText(digit?.toString() ?: "")
+                    isEnabled = digit == null
                 }
             }
-
-            if (passcode.length < numberOfPasscodeDigits) {
-                //Backspace
-                passCodeEditTexts[passcode.length]?.apply {
-                    isEnabled = true
-                    setText("")
-                    requestFocus()
-                }
-            }
+            passCodeEditTexts.getOrNull(passcode.length)?.requestFocus()
         }
     }
 
     private fun actionCheckOk() {
         // pass code accepted in request, user is allowed to access the app
-        binding.error.visibility = View.INVISIBLE
+        binding.passcodeError.visibility = View.INVISIBLE
 
         PassCodeManager.onActivityStopped(this)
         finish()
     }
 
     private fun actionCheckMigration() {
-        binding.error.visibility = View.INVISIBLE
+        binding.passcodeError.visibility = View.INVISIBLE
 
         val intent = Intent(baseContext, PassCodeActivity::class.java)
         intent.apply {
@@ -305,7 +306,7 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, EnableBiom
     }
 
     private fun actionCreateNoConfirm() {
-        binding.error.visibility = View.INVISIBLE
+        binding.passcodeError.visibility = View.INVISIBLE
         requestPassCodeConfirmation()
     }
 
@@ -341,10 +342,10 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, EnableBiom
         errorMessage: Int, headerMessage: String,
         explanationVisibility: Int
     ) {
-        binding.error.setText(errorMessage)
-        binding.error.visibility = View.VISIBLE
-        binding.header.text = headerMessage
-        binding.explanation.visibility = explanationVisibility
+        binding.passcodeError.setText(errorMessage)
+        binding.passcodeError.visibility = View.VISIBLE
+        binding.passcodeHeader.text = headerMessage
+        binding.passcodeExplanation.visibility = explanationVisibility
         clearBoxes()
     }
 
@@ -354,8 +355,8 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, EnableBiom
      */
     private fun requestPassCodeConfirmation() {
         clearBoxes()
-        binding.header.setText(R.string.pass_code_reenter_your_pass_code)
-        binding.explanation.visibility = View.INVISIBLE
+        binding.passcodeHeader.setText(R.string.pass_code_reenter_your_pass_code)
+        binding.passcodeExplanation.visibility = View.INVISIBLE
         confirmingPassCode = true
     }
 
@@ -482,5 +483,6 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, EnableBiom
 
         const val BIOMETRIC_HAS_FAILED = "BIOMETRIC_HAS_FAILED"
 
+        private const val STATE_PASSCODE = "STATE_PASSCODE"
     }
 }

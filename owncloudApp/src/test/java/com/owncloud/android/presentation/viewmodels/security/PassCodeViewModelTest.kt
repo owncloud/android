@@ -89,7 +89,7 @@ class PassCodeViewModelTest : ViewModelTest() {
 
     @Test
     fun `on number clicked - 4 numbers`() {
-        launchTest(passcodeDigits = 0, passcode = null)
+        launchTest()
 
         passCodeViewModel = PassCodeViewModel(preferencesProvider, contextProvider, PasscodeAction.CHECK)
 

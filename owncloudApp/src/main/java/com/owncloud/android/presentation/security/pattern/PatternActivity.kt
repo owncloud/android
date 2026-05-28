@@ -8,7 +8,7 @@
  * @author Juan Carlos Garrote Gascón
  * @author Jorge Aguado Recio
  *
- * Copyright (C) 2025 ownCloud GmbH.
+ * Copyright (C) 2026 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -40,7 +40,7 @@ import com.andrognito.patternlockview.utils.PatternLockUtils
 import com.owncloud.android.BuildConfig
 import com.owncloud.android.R
 import com.owncloud.android.data.providers.implementation.OCSharedPreferencesProvider
-import com.owncloud.android.databinding.ActivityPatternLockBinding
+import com.owncloud.android.databinding.PatternLockActivityBinding
 import com.owncloud.android.extensions.showBiometricDialog
 import com.owncloud.android.extensions.showMessageInSnackbar
 import com.owncloud.android.presentation.documentsprovider.DocumentsProviderUtils.notifyDocumentsProviderRoots
@@ -59,7 +59,7 @@ class PatternActivity : AppCompatActivity(), EnableBiometrics {
     private val patternViewModel by viewModel<PatternViewModel>()
     private val biometricViewModel by viewModel<BiometricViewModel>()
 
-    private var _binding: ActivityPatternLockBinding? = null
+    private var _binding: PatternLockActivityBinding? = null
     val binding get() = _binding!!
 
     private var confirmingPattern = false
@@ -75,7 +75,7 @@ class PatternActivity : AppCompatActivity(), EnableBiometrics {
             window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
         }
 
-        _binding = ActivityPatternLockBinding.inflate(layoutInflater)
+        _binding = PatternLockActivityBinding.inflate(layoutInflater)
 
         setContentView(binding.root)
 
@@ -102,8 +102,8 @@ class PatternActivity : AppCompatActivity(), EnableBiometrics {
                  * This block is executed when the user opens the app after setting the pattern lock
                  * this block takes the pattern input by the user and checks it with the pattern initially set by the user.
                  */
-                binding.headerPattern.text = getString(R.string.pattern_enter_pattern)
-                binding.explanationPattern.visibility = View.INVISIBLE
+                binding.patternHeader.text = getString(R.string.pattern_enter_pattern)
+                binding.patternExplanation.visibility = View.INVISIBLE
                 supportActionBar?.setDisplayHomeAsUpEnabled(false)
             }
             ACTION_REQUEST_WITH_RESULT -> {
@@ -118,13 +118,13 @@ class PatternActivity : AppCompatActivity(), EnableBiometrics {
                     patternExpShouldVisible = savedInstanceState.getBoolean(PATTERN_EXP_VIEW_STATE)
                 }
                 if (confirmingPattern) {
-                    binding.headerPattern.text = headerPatternViewText
+                    binding.patternHeader.text = headerPatternViewText
                     if (!patternExpShouldVisible) {
-                        binding.explanationPattern.visibility = View.INVISIBLE
+                        binding.patternExplanation.visibility = View.INVISIBLE
                     }
                 } else {
-                    binding.headerPattern.text = getString(R.string.pattern_configure_pattern)
-                    binding.explanationPattern.visibility = View.VISIBLE
+                    binding.patternHeader.text = getString(R.string.pattern_configure_pattern)
+                    binding.patternExplanation.visibility = View.VISIBLE
                     if (intent.extras?.getBoolean(EXTRAS_LOCK_ENFORCED) == true) {
                         supportActionBar?.setDisplayHomeAsUpEnabled(false)
                     } else {
@@ -136,9 +136,9 @@ class PatternActivity : AppCompatActivity(), EnableBiometrics {
                 /**
                  * This block is executed when the user is removing the pattern lock (i.e disabling the pattern lock)
                  */
-                binding.headerPattern.text = getString(R.string.pattern_remove_pattern)
-                binding.explanationPattern.text = getString(R.string.pattern_no_longer_required)
-                binding.explanationPattern.visibility = View.VISIBLE
+                binding.patternHeader.text = getString(R.string.pattern_remove_pattern)
+                binding.patternExplanation.text = getString(R.string.pattern_no_longer_required)
+                binding.patternExplanation.visibility = View.VISIBLE
                 supportActionBar?.setDisplayHomeAsUpEnabled(true)
             }
             else -> {
@@ -223,7 +223,7 @@ class PatternActivity : AppCompatActivity(), EnableBiometrics {
 
     private fun handleActionCheck() {
         if (patternViewModel.checkPatternIsValid(patternValue)) {
-            binding.errorPattern.visibility = View.INVISIBLE
+            binding.patternError.visibility = View.INVISIBLE
             val preferencesProvider = OCSharedPreferencesProvider(applicationContext)
             preferencesProvider.putLong(PREFERENCE_LAST_UNLOCK_TIMESTAMP, SystemClock.elapsedRealtime())
             PatternManager.onActivityStopped(this)
@@ -241,7 +241,7 @@ class PatternActivity : AppCompatActivity(), EnableBiometrics {
             patternViewModel.removePattern()
             val result = Intent()
             setResult(RESULT_OK, result)
-            binding.errorPattern.visibility = View.INVISIBLE
+            binding.patternError.visibility = View.INVISIBLE
             notifyDocumentsProviderRoots(applicationContext)
             finish()
         } else {
@@ -254,7 +254,7 @@ class PatternActivity : AppCompatActivity(), EnableBiometrics {
 
     private fun handleActionRequestWithResult() {
         if (!confirmingPattern) {
-            binding.errorPattern.visibility = View.INVISIBLE
+            binding.patternError.visibility = View.INVISIBLE
             requestPatternConfirmation()
         } else if (confirmPattern()) {
             savePatternAndExit()
@@ -271,10 +271,10 @@ class PatternActivity : AppCompatActivity(), EnableBiometrics {
         explanationVisibility: Int
     ) {
         patternValue = null
-        binding.errorPattern.setText(errorMessage)
-        binding.errorPattern.visibility = View.VISIBLE
-        binding.headerPattern.setText(headerMessage)
-        binding.explanationPattern.visibility = explanationVisibility
+        binding.patternError.setText(errorMessage)
+        binding.patternError.visibility = View.VISIBLE
+        binding.patternHeader.setText(headerMessage)
+        binding.patternExplanation.visibility = explanationVisibility
     }
 
     /**
@@ -282,8 +282,8 @@ class PatternActivity : AppCompatActivity(), EnableBiometrics {
      */
     private fun requestPatternConfirmation() {
         binding.patternLockView.clearPattern()
-        binding.headerPattern.setText(R.string.pattern_reenter_pattern)
-        binding.explanationPattern.visibility = View.INVISIBLE
+        binding.patternHeader.setText(R.string.pattern_reenter_pattern)
+        binding.patternExplanation.visibility = View.INVISIBLE
         confirmingPattern = true
     }
 
@@ -309,8 +309,8 @@ class PatternActivity : AppCompatActivity(), EnableBiometrics {
         outState.apply {
             putBoolean(KEY_CONFIRMING_PATTERN, confirmingPattern)
             putString(KEY_PATTERN_STRING, patternValue)
-            putString(PATTERN_HEADER_VIEW_TEXT, binding.headerPattern.text.toString())
-            putBoolean(PATTERN_EXP_VIEW_STATE, binding.explanationPattern.isVisible)
+            putString(PATTERN_HEADER_VIEW_TEXT, binding.patternHeader.text.toString())
+            putBoolean(PATTERN_EXP_VIEW_STATE, binding.patternExplanation.isVisible)
         }
     }
 

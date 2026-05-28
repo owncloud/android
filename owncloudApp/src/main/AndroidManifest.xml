@@ -187,7 +187,6 @@
         <activity
             android:name=".presentation.security.passcode.PassCodeActivity"
             android:label="@string/passcode_label"
-            android:screenOrientation="portrait"
             android:theme="@style/Theme.ownCloud" />
         <activity
             android:name=".presentation.conflicts.ConflictsResolveActivity"
@@ -235,7 +234,6 @@
             android:theme="@style/Theme.ownCloud.Toolbar"/>
         <activity
             android:name=".presentation.security.pattern.PatternActivity"
-            android:screenOrientation="portrait"
             android:label="@string/pattern_label"
             android:theme="@style/Theme.ownCloud" />
         <activity android:name=".presentation.security.biometric.BiometricActivity" />
