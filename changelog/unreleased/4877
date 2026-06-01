@@ -1,0 +1,7 @@
+Enhancement: Spaces icon color brandable
+
+The color of the generic space icon has been replaced with a brandable
+color to provide a consistent design across branded variants.
+
+https://github.com/owncloud/android/issues/4860
+https://github.com/owncloud/android/pull/4877
