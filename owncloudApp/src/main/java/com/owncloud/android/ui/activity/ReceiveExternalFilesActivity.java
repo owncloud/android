@@ -13,7 +13,7 @@
  * @author Jorge Aguado Recio
  *
  * Copyright (C) 2012  Bartek Przybylski
- * Copyright (C) 2025 ownCloud GmbH.
+ * Copyright (C) 2026 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -459,7 +459,13 @@ public class ReceiveExternalFilesActivity extends FileActivity
         } else {
             mParents.pop();
             String full_path = generatePath(mParents);
-            startSyncFolderOperation(getStorageManager().getFileByPath(full_path, currentSpaceId));
+            OCFile folder = getStorageManager().getFileByPath(full_path, currentSpaceId);
+            if (folder == null) {
+                Timber.i("Folder %s not found, fetching the folder again.", full_path);
+                super.onBackPressed();
+                return;
+            }
+            startSyncFolderOperation(folder);
             updateDirectoryList();
             if (mParents.size() <= 1 && !areSpacesAllowed) {
                 updateToolbar(getString(R.string.uploader_top_message));
