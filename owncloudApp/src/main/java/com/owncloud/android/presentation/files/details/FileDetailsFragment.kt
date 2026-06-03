@@ -6,7 +6,7 @@
  * @author Aitor Ballesteros Pavón
  * @author Jorge Aguado Recio
  *
- * Copyright (C) 2025 ownCloud GmbH.
+ * Copyright (C) 2026 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -610,7 +610,7 @@ class FileDetailsFragment : FileFragment() {
                 file = ocFileWithSyncInfo.file
                 updateDetails(ocFileWithSyncInfo)
             } else {
-                requireActivity().onBackPressed()
+                requireActivity().onBackPressedDispatcher.onBackPressed()
             }
         }
     }
