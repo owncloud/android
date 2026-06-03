@@ -1,0 +1,7 @@
+Bugfix: Crash from Google Play Console in ReceiveExternalFilesActivity
+
+In order to prevent crashes, a nullability check has been added before
+refreshing a not found folder while receiving external files.
+
+https://github.com/owncloud/android/issues/4738
+https://github.com/owncloud/android/pull/4878
