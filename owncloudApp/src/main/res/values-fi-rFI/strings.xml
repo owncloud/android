@@ -118,6 +118,7 @@
     <string name="auth_oauth_failure">Käyttöoikeustunnus on vanhentunut tai korruptoitunut. Kirjaudu uudelleen sovellukseen, jotta voit jatkaa.</string>
     <string name="auth_oauth_failure_snackbar_action">Kirjaudu</string>
     <string name="auth_check_server">Tarkista palvelin</string>
+    <string name="auth_host_url">Palvelinosoite https://…</string>
     <string name="auth_username">Käyttäjätunnus</string>
     <string name="auth_password">Salasana</string>
     <string name="auth_register">Onko %1$s uusi tuttavuus sinulle?</string>
@@ -172,11 +173,13 @@
     <string name="common_no">Ei</string>
     <string name="common_cancel_sync">Peru synkronointi</string>
     <string name="common_back">Takaisin</string>
+    <string name="common_loading">Ladataan…</string>
     <string name="common_error_unknown">tuntematon virhe</string>
     <string name="common_pending">Odottaa</string>
     <string name="common_important">Tärkeä</string>
     <string name="upload_chooser_title">Mistä lähetetään</string>
     <string name="uploader_info_dirname">Kansion nimi</string>
+    <string name="uploader_upload_in_progress_ticker">Lähetetään...</string>
     <string name="uploader_upload_succeeded_content_single">%1$s lähetetty</string>
     <string name="uploader_upload_failed_ticker">Lähetys epäonnistui</string>
     <string name="uploader_upload_failed_content_single">%1$s lähetys ei onnistunut.</string>
@@ -217,6 +220,7 @@
     <string name="uploader_upload_canceled_ticker">Lähetys peruutettu</string>
     <string name="downloader_download_canceled_ticker">Lataus peruutettu</string>
     <string name="downloader_download_enqueued_ticker">%1$s lataus on jonossa</string>
+    <string name="downloader_download_in_progress_ticker">Ladataan...</string>
     <string name="downloader_download_succeeded_ticker">Lataus tänne onnistui</string>
     <string name="downloader_download_succeeded_content">%1$s ladattu</string>
     <string name="downloader_download_failed_ticker">Lataus epäonnistui</string>
@@ -279,6 +283,8 @@
     <string name="media_forward_description">Eteenpäin kelaus -painike</string>
     <string name="upload_from_camera_title">Kuva kamerasta</string>
 
+    <string name="auth_getting_authorization">Noudetaan valtuutusta…</string>
+    <string name="auth_trying_to_login">Yritetään kirjautua sisään…</string>
     <string name="auth_connection_established">Yhteys muodostettu</string>
     <string name="auth_testing_connection">Testataan yhteyttä</string>
     <string name="auth_not_configured_title">Väärin tehdyt palvelin-asetukset</string>
@@ -422,6 +428,7 @@
     <string name="used_quota_title_manage_accounts">Käytetty:</string>
     <string name="auth_redirect_non_secure_connection_title">Salattu yhteys on ohjattu uudelleen salaamatonta reittiä pitkin.</string>
 
+
     <string name="actionbar_select_all">Valitse kaikki</string>
     <string name="actionbar_select_inverse">Valitse käänteinen</string>
 
@@ -434,14 +441,9 @@
     <string name="move_file_invalid_into_descendent">Kansiota ei voi siirtää saman kansion sisällä olevaan toiseen kansioon.</string>
     <string name="move_file_invalid_overwrite">Tiedosto on jo olemassa kohdekansiossa.</string>
     <string name="move_file_error">Tämän tiedoston tai kansion siirtämisessä tapahtui virhe.</string>
-
     <string name="copy_file_invalid_into_descendent">Kansiota ei voi kopioida saman kansion sisällä olevaan toiseen kansioon.</string>
     <string name="copy_file_invalid_overwrite">Tiedosto on jo olemassa kohdekansiossa.</string>
     <string name="copy_file_error">Tämän tiedoston tai kansion kopioinnissa tapahtui virhe.</string>
-
-
-
-
     <string name="subject_user_shared_with_you">%1$s jakoi kohteen \"%2$s\" kanssasi</string>
     <string name="subject_shared_with_you">\"%1$s\" on jaettu kanssasi</string>
 
@@ -596,6 +598,7 @@
 
     <!-- Release Notes -->
     <string name="release_notes_header">Uusi %1$s :ssa</string>
+    <string name="release_notes_footer">Kiitos kun käytät %1$s.\n❤</string>
     <string name="release_notes_proceed">Jatka</string>
     <string name="release_notes_icon">Julkaisutiedotteen ikoni</string>
     <string name="release_notes_bugfixes_title">Pieniä bugikorjauksia</string>

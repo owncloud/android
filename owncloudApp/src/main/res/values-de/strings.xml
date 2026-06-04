@@ -121,7 +121,7 @@
     <string name="auth_oauth_failure">Das Zugriffstoken ist abgelaufen oder ungültig geworden. Melden Sie sich erneut an, um wieder Zugriff zu erhalten.</string>
     <string name="auth_oauth_failure_snackbar_action">Einloggen</string>
     <string name="auth_check_server">Überprüfe den Server</string>
-    <string name="auth_host_url">Server Adresse https://...</string>
+    <string name="auth_host_url">Serveradresse https://…</string>
     <string name="auth_username">Benutzername</string>
     <string name="auth_password">Passwort</string>
     <string name="auth_register">Ist %1$s neu für dich?</string>
@@ -176,14 +176,14 @@
     <string name="common_no">Nein</string>
     <string name="common_cancel_sync">Synchronisation abbrechen</string>
     <string name="common_back">Zurück</string>
-    <string name="common_loading">Lade...</string>
+    <string name="common_loading">Wird geladen…</string>
     <string name="common_error_unknown">Unbekannter Fehler</string>
     <string name="common_pending">Ausstehend</string>
     <string name="common_important">Wichtig</string>
     <string name="common_set">Eingetragen</string>
     <string name="upload_chooser_title">Hochladen von (Quelle)</string>
     <string name="uploader_info_dirname">Ordnername</string>
-    <string name="uploader_upload_in_progress_ticker">Hochladen...</string>
+    <string name="uploader_upload_in_progress_ticker">Wird hochgeladen…</string>
     <string name="uploader_upload_succeeded_content_single">%1$s hochgeladen</string>
     <string name="uploader_upload_failed_ticker">Hochladen fehlgeschlagen</string>
     <string name="uploader_upload_failed_content_single">Hochladen von  %1$s konnte nicht abgeschlossen werden.</string>
@@ -225,7 +225,7 @@
     <string name="uploader_upload_canceled_ticker">Hochladen abgebrochen</string>
     <string name="downloader_download_canceled_ticker">Herunterladen abgebrochen</string>
     <string name="downloader_download_enqueued_ticker">Herunterladen von %1$s in Warteschlange eingereiht</string>
-    <string name="downloader_download_in_progress_ticker">Herunterladen...</string>
+    <string name="downloader_download_in_progress_ticker">Wird heruntergeladen…</string>
     <string name="downloader_download_succeeded_ticker">Herunterladen erfolgreich</string>
     <string name="downloader_download_succeeded_content">%1$s heruntergeladen</string>
     <string name="downloader_download_failed_ticker">Herunterladen fehlgeschlagen</string>
@@ -290,8 +290,8 @@
     <string name="media_forward_description">Vorspulen Knopf</string>
     <string name="upload_from_camera_title">Kamerabild</string>
 
-    <string name="auth_getting_authorization">Genehmigung einholen...</string>
-    <string name="auth_trying_to_login">Anmeldeversuch...</string>
+    <string name="auth_getting_authorization">Berechtigung wird angefordert…</string>
+    <string name="auth_trying_to_login">Anmeldungsversuch...</string>
     <string name="auth_connection_established">Verbindung hergestellt</string>
     <string name="auth_testing_connection">Verbindung testen</string>
     <string name="auth_not_configured_title">Fehlerhafte Server Konfiguration</string>
@@ -598,7 +598,7 @@
     <string name="scoped_storage_wizard_explanation">Es wurde(n) %1$s der Daten auf externem Speicher gefunden. Diese werden auf den sicheren Speicher auf dem Gerät verschoben. Verbleibende Dateien auf externem Speicher werden nach der Migration aufgeräumt, um Duplikate und Sicherheitslücken vorzubeugen.</string>
     <string name="scoped_storage_wizard_intro">Ihre App wurde aktualisiert. Dieses Anwendungs-Update migriert Ihre Dateien an einen sichereren Ort auf Ihrem Gerät. Diese einmalige Datenmigration ist erforderlich und kann bis zu einer Minute oder länger dauern.</string>
     <string name="scoped_storage_wizard_intro_button">Lass uns loslegen</string>
-    <string name="scoped_storage_wizard_not_enough_space_warning">⚠️  Der freie Speicherplatz auf Ihrem Gerät ist derzeit begrenzt. Es kann sein, dass einige Dateien nicht übertragen werden. Bitte stellen Sie sicher, dass alle heruntergeladenen Dateien nach Abschluss des Vorgangs weiterhin vorhanden sind.</string>
+    <string name="scoped_storage_wizard_not_enough_space_warning">⚠️  Der freie Speicherplatz auf Ihrem Gerät ist derzeit begrenzt. Es kann sein, dass einige Dateien nicht übertragen werden. Bitte stellen Sie sicher, dass alle heruntergeladenen Dateien auch nach Abschluss des Vorgangs erhalten bleiben.</string>
     <string name="scoped_storage_wizard_migrate_and_clean_button">Jetzt migrieren</string>
     <string name="scoped_storage_wizard_migration_completed">Die Migration war erfolgreich. Deine Daten sind jetzt sicherer als jemals zuvor.</string>
     <string name="scoped_storage_wizard_migration_completed_access_files_button">Auf Ihre Dateien zugreifen</string>
@@ -618,7 +618,7 @@
 
     <!-- Release Notes -->
     <string name="release_notes_header">Neu in %1$s</string>
-    <string name="release_notes_footer">Danke für die Benutzung %1$s.\n❤</string>
+    <string name="release_notes_footer">Vielen Dank, dass Sie %1$s verwenden.\n❤</string>
     <string name="release_notes_proceed">Fortfahren</string>
     <string name="release_notes_icon">Icon für Veröffentlichungsnotizen</string>
     <string name="release_notes_bugfixes_title">Geringfügige Fehler behoben</string>
@@ -633,6 +633,8 @@
     <string name="release_notes_4_8_0_subtitle_space_public_links">Benutzer von Infinite Scale können alle öffentlichen Links eines Bereichs einsehen und diese mit den entsprechenden Berechtigungen verwalten</string>
     <string name="release_notes_4_8_0_title_action_to_copy_or_move_destination_folder">Navigation zum Zielordner</string>
     <string name="release_notes_4_8_0_subtitle_action_to_copy_or_move_destination_folder">Neue Aktion zum Wechseln in den Zielordner, wenn eine Datei oder ein Ordner kopiert oder verschoben wird</string>
+    <string name="release_notes_4_8_0_title_warning_latest_release_sdk28">Letzte Chance für Android 8</string>
+    <string name="release_notes_4_8_0_subtitle_warning_latest_release_sdk28">Diese Version ist die aktuellste, die Android 8 und ältere Versionen unterstützt</string>
 
     <!-- Open in web -->
     <string name="ic_action_open_with_web">Öffnen in %1$s (web)</string>
@@ -798,6 +800,7 @@
 
     <string name="public_link_create_title">Öffentlichen Link erstellen</string>
     <string name="public_link_set_password">Passwort festlegen</string>
+    <string name="public_link_password_enforced_error">Die Eingabe eines Passworts ist obligatorisch</string>
     <string name="public_link_view">Kann ansehen</string>
     <string name="public_link_view_description">Anzeigen, herunterladen</string>
     <string name="public_link_edit">Kann bearbeiten</string>
@@ -809,6 +812,13 @@
     <string name="public_link_default_display_name">Link ohne Namen</string>
     <string name="public_link_add_correctly">Öffentlicher Link erfolgreich erstellt</string>
     <string name="public_link_add_failed">Der öffentliche Link konnte nicht erstellt werden</string>
+    <string name="public_link_remove_dialog_title">Möchten Sie den Link: %1$s wirklich entfernen\?</string>
+    <string name="public_link_remove_dialog_message">Es ist nicht möglich, denselben Link erneut zu erstellen</string>
+    <string name="public_link_remove_correctly">Der öffentlicher Link wurde ordnungsgemäß entfernt</string>
+    <string name="public_link_remove_failed">Der öffentliche Link konnte nicht entfernt werden</string>
+    <string name="public_link_edit_title">Öffentlichen Link bearbeiten</string>
+    <string name="public_link_edit_correctly">Der öffentlicher Link wurde korrekt bearbeitet</string>
+    <string name="public_link_edit_failed">Der öffentliche Link konnte nicht bearbeitet werden</string>
 
     <string name="feedback_dialog_get_in_contact_description"><![CDATA[ Fragen Sie für Hilfe in unserem <a href=\"%1$s\"><b>Forum</b></a> oder machen Sie einen Beitrag in unserem <a href=\"%2$s\"><b>GitHub repo</b></a>]]></string>
 

@@ -121,7 +121,7 @@
     <string name="auth_oauth_failure">El token de acceso ha expirado o es inválido. Inicie sesión de nuevo para volver a tener acceso</string>
     <string name="auth_oauth_failure_snackbar_action">Registrarse</string>
     <string name="auth_check_server">Verificar servidor</string>
-    <string name="auth_host_url">Dirección del servidor https://...</string>
+    <string name="auth_host_url">Dirección del servidor https://…</string>
     <string name="auth_username">Nombre de usuario</string>
     <string name="auth_password">Contraseña</string>
     <string name="auth_register">¿Nuevo en %1$s?</string>
@@ -180,6 +180,7 @@
     <string name="common_error_unknown">error desconocido</string>
     <string name="common_pending">Pendiente</string>
     <string name="common_important">Importante</string>
+    <string name="common_set">Crear</string>
     <string name="upload_chooser_title">Subir desde</string>
     <string name="uploader_info_dirname">Nombre de la carpeta</string>
     <string name="uploader_upload_in_progress_ticker">Subiendo...</string>
@@ -290,7 +291,7 @@
     <string name="upload_from_camera_title">Imagen de la cámara</string>
 
     <string name="auth_getting_authorization">Obteniendo autorización...</string>
-    <string name="auth_trying_to_login">Intentando loguear...</string>
+    <string name="auth_trying_to_login">Intentando iniciar sesión...</string>
     <string name="auth_connection_established">Conexión establecida</string>
     <string name="auth_testing_connection">Comprobando la conexión</string>
     <string name="auth_not_configured_title">Configuración de servidor en formato incorrecto</string>
@@ -449,10 +450,14 @@
     <string name="move_file_invalid_into_descendent">No es posible mover una carpeta dentro de sí misma.</string>
     <string name="move_file_invalid_overwrite">El fichero ya existe en la carpeta destino.</string>
     <string name="move_file_error">Ocurrió un error mientras se intentaba mover este fichero o carpeta.</string>
+    <string name="move_file_correctly">Elemento(s) movidos correctamente</string>
 
     <string name="copy_file_invalid_into_descendent">No es posible copiar una carpeta dentro de sí misma.</string>
     <string name="copy_file_invalid_overwrite">El fichero ya existe en la carpeta destino.</string>
     <string name="copy_file_error">Ocurrió un error mientras se intentaba copiar este fichero o carpeta.</string>
+    <string name="copy_file_correctly">Elemento(s) copiados correctamente</string>
+
+    <string name="go_to_destination_folder">Abrir carpeta</string>
 
 
 
@@ -594,7 +599,7 @@
     <string name="scoped_storage_wizard_explanation">Se encontraron %1$s de datos en su almacenamiento externo. Se moverá al almacenamiento seguro en su dispositivo. Los archivos restantes se limpiarán de su almacenamiento externo después de la migración para evitar duplicados y vulnerabilidades.</string>
     <string name="scoped_storage_wizard_intro">Su aplicación ha sido actualizada. Esta actualización migra sus archivos a una ubicación más segura en su dispositivo. Esta migración de datos única es necesaria y puede tardar hasta un minuto o más.</string>
     <string name="scoped_storage_wizard_intro_button">Empecemos</string>
-    <string name="scoped_storage_wizard_not_enough_space_warning">⚠️  El espacio libre en su dispositivo es limitado. Algunos ficheros no se migrarán, por favor compruebe todos los ficheros descargados se mantienen descargados después que el proceso se haya completado.</string>
+    <string name="scoped_storage_wizard_not_enough_space_warning">⚠️  Su espacio libre está actualmente limitado en su dispositivo. Algunos ficheros podrían no migrarse, por favor compruebe que todos los ficheros descargados continúan descargados una vez el proceso se haya completado.</string>
     <string name="scoped_storage_wizard_migrate_and_clean_button">Migrar ahora</string>
     <string name="scoped_storage_wizard_migration_completed">La migración se completó satisfactoriamente. Sus ficheros están ahora más seguros que nunca.</string>
     <string name="scoped_storage_wizard_migration_completed_access_files_button">Acceder a sus archivos</string>
@@ -614,7 +619,7 @@
 
     <!-- Release Notes -->
     <string name="release_notes_header">Nuevo en %1$s</string>
-    <string name="release_notes_footer">Gracias por usar %1$s\n❤</string>
+    <string name="release_notes_footer">Gracias por usar %1$s.\n❤</string>
     <string name="release_notes_proceed">Proceder</string>
     <string name="release_notes_icon">Icono notas de lanzamiento</string>
     <string name="release_notes_bugfixes_title">Solución de problemas</string>
@@ -627,6 +632,11 @@
     <string name="release_notes_4_8_0_subtitle_spaces_permanent_links">Usuarios de Infinite Scale pueden ahora obtener un enlace permanence a un space y compartirlo con otros miembros</string>
     <string name="release_notes_4_8_0_title_space_public_links">Enlaces públicos a spaces</string>
     <string name="release_notes_4_8_0_subtitle_space_public_links">Usuarios de Infinite Scale pueden ahora ver todos los enlaces a un space y gestionarlos si tienen los permisos adecuados.</string>
+    <string name="release_notes_4_8_0_title_action_to_copy_or_move_destination_folder">Navegación a la carpeta destino</string>
+    <string name="release_notes_4_8_0_subtitle_action_to_copy_or_move_destination_folder">Nueva acción para navegar a la carpeta destino cuando un fichero o carpeta se copia o mueve</string>
+    <string name="release_notes_4_8_0_title_warning_latest_release_sdk28">Android 8, última llamada</string>
+    <string name="release_notes_4_8_0_subtitle_warning_latest_release_sdk28">Esta version será la última con soporte para Android 8 y más antiguas</string>
+
     <!-- Open in web -->
     <string name="ic_action_open_with_web">Open in %1$s (web)</string>
     <string name="open_in_web_error_generic">No se pudo abrir en web</string>
@@ -705,7 +715,9 @@
     <string name="content_description_space_name">%1$s nombre del space</string>
     <string name="content_description_space_three_dot_menu">%1$s menu del space</string>
     <string name="content_description_space_subtitle">%1$s subtitulo del space</string>
+    <string name="content_description_create_button">Crear</string>
     <string name="content_description_cancel_button">Cancelar</string>
+    <string name="content_description_set_button">Crear</string>
     <string name="content_description_quota_switch">Cuota del space</string>
     <string name="content_description_member_user">Usuario %1$s</string>
     <string name="content_description_member_group">Grupo %1$s</string>
@@ -716,6 +728,12 @@
     <string name="content_description_remove_member_button">Eliminar miembro %1$s</string>
     <string name="content_description_edit_member_button">Editar miembro %1$s</string>
     <string name="content_description_permanent_link_button">Obtener enlace permanente</string>
+    <string name="content_description_create_public_link_button">Crear enlace público</string>
+    <string name="content_description_set_password_button">Establecer contraseña</string>
+    <string name="content_description_remove_password_button">Eliminar contraseña</string>
+    <string name="content_description_generate_password_button">Generar contraseña</string>
+    <string name="content_description_copy_password_button">Copiar contraseña</string>
+
     <string name="create_shortcut_dialog_title">Crear un acceso directo</string>
     <string name="create_shortcut_dialog_url">URL</string>
     <string name="create_shortcut_dialog_url_error_no_blanks">La URL puede contener espacios en blanco</string>
@@ -781,11 +799,28 @@
     <string name="member_type_group">Grupo</string>
     <string name="current_user_label">(yo)</string>
 
+    <string name="public_link_create_title">Crear enlace público</string>
+    <string name="public_link_set_password">Establecer contraseña</string>
+    <string name="public_link_password_enforced_error">Contraseña obligatoria</string>
     <string name="public_link_view">Puede ver</string>
+    <string name="public_link_view_description">Ver, descargar</string>
     <string name="public_link_edit">Puede editar</string>
+    <string name="public_link_edit_description">Ver, subir, editar, descargar, borrar</string>
     <string name="public_link_upload">Puede cargar</string>
     <string name="public_link_create_only">Subida secreta de fichero</string>
+    <string name="public_link_create_only_description">Solo subir, el contenido existente no es mostrado</string>
     <string name="public_link_internal">Personas invitadas</string>
+    <string name="public_link_default_display_name">Link sin nombre</string>
+    <string name="public_link_add_correctly">Enlace público creado correctamente</string>
+    <string name="public_link_add_failed">No se pudo crear el enlace público</string>
+    <string name="public_link_remove_dialog_title">Quiere realmente eliminar el enlace %1$s\?</string>
+    <string name="public_link_remove_dialog_message">No es posible volver a crear el mismo enlace</string>
+    <string name="public_link_remove_correctly">Enlace público eliminado correctamente</string>
+    <string name="public_link_remove_failed">No se pudo eliminar el enlace público</string>
+    <string name="public_link_edit_title">Editar enlace público</string>
+    <string name="public_link_edit_correctly">Enlace público editado correctamente</string>
+    <string name="public_link_edit_failed">El enlace público no pudo ser editado</string>
+
     <string name="feedback_dialog_get_in_contact_description"><![CDATA[ Solicita ayuda en nuestro <a href=\"%1$s\"><b>foro</b></a> o contribuye con nosotros en nuestro <a href=\"%2$s\"><b>repositorio GitHub</b></a>]]></string>
 
     <string name="link_role_accessibility">Enlace</string>
