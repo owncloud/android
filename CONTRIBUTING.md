@@ -1,30 +1,17 @@
-## Submitting issues
+# Contributing
 
-If you have questions about how to use ownCloud, please join our [forum][forum].
+Thank you for your interest in contributing to this project!
 
-### Guidelines
-* [Report the issue](https://github.com/owncloud/android/issues/new) using on of our [templates][template], they include all the information we need to track down the issue.
-* This repository is *only* for issues within the ownCloud Android app code. Issues in other components should be reported in their own repositories: 
-  - [ownCloud core](https://github.com/owncloud/core/issues)
-  - [oCIS](https://github.com/owncloud/ocis/issues)
-  - [iOS client](https://github.com/owncloud/ios-app/issues)
-  - [Desktop client](https://github.com/owncloud/client/issues)
-* Search the [existing issues](https://github.com/owncloud/android/issues) first, it's likely that your issue was already reported.
+Please read the full contributing guidelines at:
+**<https://owncloud.com/contribute/>**
 
-If your issue appears to be a bug, and hasn't been reported, open a new issue.
-
-Help us to maximize the effort we can spend fixing issues and adding new features, by not reporting duplicate issues.
-
-[template]: https://github.com/owncloud/android/tree/master/.github/ISSUE_TEMPLATE
-[forum]: https://central.owncloud.org/
+For development setup, coding standards, and pull request process,
+see the [README](https://github.com/owncloud/android/blob/master/README.md) in this repository.
 
 ## Contributing to Source Code
 
-Thanks for wanting to contribute source code to ownCloud. That's great!
-
-Before we're able to merge your code into the ownCloud app for Android, please, check the [contribution guidelines][contribution].
-
 ### Guidelines
+
 * Contribute your code in a feature, fix, improvement or technical enhancement  branch by using  one of the following branch names:
 
      - ```feature/feature_name``` → new features in the app
@@ -45,15 +32,11 @@ Before we're able to merge your code into the ownCloud app for Android, please, 
 
 	Interesting [link](https://www.endoflineblog.com/oneflow-a-git-branching-model-and-workflow) about this.
 
-[contribution]: https://owncloud.com/contribute/
-
 ### 1. Fork and download android/master repository:
 
 * Please follow [SETUP.md](https://github.com/owncloud/android/blob/master/SETUP.md) to setup ownCloud Android app work environment.
 
 ### 2. Create pull request:
-
-NOTE: You must sign the [CLA](https://cla-assistant.io/owncloud/android) before your changes can be accepted!
 
 * Create new feature, fix, improvement or technical enhancement branch from your master branch: ```git checkout -b feature/feature_name```
 * Register your changes: `git add filename`
@@ -65,7 +48,7 @@ NOTE: You must sign the [CLA](https://cla-assistant.io/owncloud/android) before 
 
 	Submit the commit with ```git commit -m "commit message"```
 * Push your changes to your GitHub repo: ```git push origin feature/feature_name```
-* Browse to https://github.com/YOURGITHUBNAME/android/pulls and issue pull request
+* Browse to `https://github.com/YOURGITHUBNAME/android/pulls` and issue pull request
 * Enter description and send pull request.
 
 ### 3. Update your contribution branch with master changes:
@@ -75,6 +58,7 @@ It is possible you see the next message from time to time.
 <img src="docs_resources/out_of_date_branch.png" />
 
 To fix this and make sure your contribution branch is updated with official android/master, you need to perform the next steps:
+
 * Checkout your master branch: ```git checkout master```
 * Get and apply official android/master branch changes in your master branch: ```git fetch upstream``` + ```git rebase upstream/master```. Now you have your master branch updated with official master branch changes.
 * Checkout your contribution branch: ```git checkout feature/feature_name```
@@ -84,13 +68,3 @@ To fix this and make sure your contribution branch is updated with official andr
 ## Versioning
 
 In order to check or review the stable versions, all available tags can be fetched with the command `git fetch --tags` and listed with the command `git tag`. The tag `latest` is also available pointing to the latest released version.
-
-## Translations
-Please submit translations via [Transifex][transifex].
-
-[transifex]: https://www.transifex.com/projects/p/owncloud/
-
-## Code of conduct
-Please, read the [ownCloud code of conduct]. Being respectful and polite with other members of the community and staff is necessary to develop a better product together.
-
-[ownCloud code of conduct]: https://owncloud.com/contribute/code-of-conduct/
