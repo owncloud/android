@@ -1,5 +1,6 @@
 # Table of Contents
 
+* [Changelog for unreleased](#changelog-for-owncloud-android-client-unreleased-unreleased)
 * [Changelog for 4.8.0](#changelog-for-owncloud-android-client-480-2026-05-18)
 * [Changelog for 4.7.0](#changelog-for-owncloud-android-client-470-2025-11-17)
 * [Changelog for 4.6.2](#changelog-for-owncloud-android-client-462-2025-08-13)
@@ -31,6 +32,95 @@
 * [Changelog for 2.18.1](#changelog-for-owncloud-android-client-2181-2021-07-20)
 * [Changelog for 2.18.0](#changelog-for-owncloud-android-client-2180-2021-05-24)
 * [Changelog for 2.17 versions and below](#changelog-for-217-versions-and-below)
+# Changelog for ownCloud Android Client [unreleased] (UNRELEASED)
+
+The following sections list the changes in ownCloud Android Client unreleased relevant to
+ownCloud admins and users.
+
+[unreleased]: https://github.com/owncloud/android/compare/v4.8.0...master
+
+## Summary
+
+* Security - SSL certificate verification and trusted host handling: [#4861](https://github.com/owncloud/android/pull/4861)
+* Bugfix - Crash from Google Play Console in FileDetailsFragment: [#4737](https://github.com/owncloud/android/issues/4737)
+* Bugfix - Crash from Google Play Console in ReceiveExternalFilesActivity: [#4738](https://github.com/owncloud/android/issues/4738)
+* Change - Bump target SDK to 36: [#4743](https://github.com/owncloud/android/issues/4743)
+* Change - Remove unicode characters from strings file: [#4872](https://github.com/owncloud/android/pull/4872)
+* Enhancement - Spaces icon color brandable: [#4860](https://github.com/owncloud/android/issues/4860)
+* Enhancement - Add gradle ecosystem to dependabot: [#4863](https://github.com/owncloud/android/pull/4863)
+* Enhancement - Remove unused resources: [#4869](https://github.com/owncloud/android/pull/4869)
+* Enhancement - Passcode and pattern screens in landscape mode: [#4871](https://github.com/owncloud/android/pull/4871)
+
+## Details
+
+* Security - SSL certificate verification and trusted host handling: [#4861](https://github.com/owncloud/android/pull/4861)
+
+   SSL certificate verification flow has been improved by enhancing host validation
+   and trusted certificate handling.
+
+   https://github.com/owncloud/android/pull/4861
+
+* Bugfix - Crash from Google Play Console in FileDetailsFragment: [#4737](https://github.com/owncloud/android/issues/4737)
+
+   To prevent crashes, the navigation logic when navigating back has been improved,
+   especially in cases where the observed file is null.
+
+   https://github.com/owncloud/android/issues/4737
+   https://github.com/owncloud/android/pull/4879
+
+* Bugfix - Crash from Google Play Console in ReceiveExternalFilesActivity: [#4738](https://github.com/owncloud/android/issues/4738)
+
+   In order to prevent crashes, a nullability check has been added before
+   refreshing a not found folder while receiving external files.
+
+   https://github.com/owncloud/android/issues/4738
+   https://github.com/owncloud/android/pull/4878
+
+* Change - Bump target SDK to 36: [#4743](https://github.com/owncloud/android/issues/4743)
+
+   Target SDK has been upgraded to 36 in order to fulfill Android platform
+   requirements.
+
+   https://github.com/owncloud/android/issues/4743
+   https://github.com/owncloud/android/pull/4862
+
+* Change - Remove unicode characters from strings file: [#4872](https://github.com/owncloud/android/pull/4872)
+
+   Unicode characters in strings.xml file have been replaced by the character
+   itself to prevent problems in translations
+
+   https://github.com/owncloud/android/pull/4872
+
+* Enhancement - Spaces icon color brandable: [#4860](https://github.com/owncloud/android/issues/4860)
+
+   The color of the generic space icon has been replaced with a brandable color to
+   provide a consistent design across branded variants.
+
+   https://github.com/owncloud/android/issues/4860
+   https://github.com/owncloud/android/pull/4877
+
+* Enhancement - Add gradle ecosystem to dependabot: [#4863](https://github.com/owncloud/android/pull/4863)
+
+   Dependabot workflow in GitHub Actions has been modified to update gradle
+   dependencies weekly
+
+   https://github.com/owncloud/android/pull/4863
+
+* Enhancement - Remove unused resources: [#4869](https://github.com/owncloud/android/pull/4869)
+
+   Useless strings and resources in the project have been removed in order to keep
+   the codebase cleaner
+
+   https://github.com/owncloud/android/pull/4869
+
+* Enhancement - Passcode and pattern screens in landscape mode: [#4871](https://github.com/owncloud/android/pull/4871)
+
+   Orientation restrictions defined in the manifest have been removed, and support
+   for both orientations (portrait and landscape) has been added to the passcode
+   and pattern screens.
+
+   https://github.com/owncloud/android/pull/4871
+
 # Changelog for ownCloud Android Client [4.8.0] (2026-05-18)
 
 The following sections list the changes in ownCloud Android Client 4.8.0 relevant to
