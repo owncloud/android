@@ -121,7 +121,7 @@
     <string name="auth_oauth_failure">The access token has expired or become invalid. Sign in again to regain access.</string>
     <string name="auth_oauth_failure_snackbar_action">Sign in</string>
     <string name="auth_check_server">Check server</string>
-    <string name="auth_host_url">Server address https://...</string>
+    <string name="auth_host_url">Server address https://…</string>
     <string name="auth_username">Username</string>
     <string name="auth_password">Password</string>
     <string name="auth_register">New to %1$s?</string>
@@ -176,13 +176,13 @@
     <string name="common_no">No</string>
     <string name="common_cancel_sync">Cancel sync</string>
     <string name="common_back">Back</string>
-    <string name="common_loading">Loading...</string>
+    <string name="common_loading">Loading…</string>
     <string name="common_error_unknown">unknown error</string>
     <string name="common_pending">Pending</string>
     <string name="common_important">Important</string>
     <string name="upload_chooser_title">Upload from</string>
     <string name="uploader_info_dirname">Folder name</string>
-    <string name="uploader_upload_in_progress_ticker">Uploading...</string>
+    <string name="uploader_upload_in_progress_ticker">Uploading…</string>
     <string name="uploader_upload_succeeded_content_single">%1$s uploaded</string>
     <string name="uploader_upload_failed_ticker">Upload failed</string>
     <string name="uploader_upload_failed_content_single">Upload of %1$s could not be completed.</string>
@@ -224,7 +224,7 @@
     <string name="uploader_upload_canceled_ticker">Upload cancelled</string>
     <string name="downloader_download_canceled_ticker">Download cancelled</string>
     <string name="downloader_download_enqueued_ticker">Download of %1$s has been enqueued</string>
-    <string name="downloader_download_in_progress_ticker">Downloading...</string>
+    <string name="downloader_download_in_progress_ticker">Downloading…</string>
     <string name="downloader_download_succeeded_ticker">Download succeeded</string>
     <string name="downloader_download_succeeded_content">%1$s downloaded</string>
     <string name="downloader_download_failed_ticker">Download failed</string>
@@ -289,8 +289,8 @@
     <string name="media_forward_description">Fast-forward button</string>
     <string name="upload_from_camera_title">Picture from camera</string>
 
-    <string name="auth_getting_authorization">Getting authorisation...</string>
-    <string name="auth_trying_to_login">Trying to log in...</string>
+    <string name="auth_getting_authorization">Getting authorisation…</string>
+    <string name="auth_trying_to_login">Trying to log in…</string>
     <string name="auth_connection_established">Connection established</string>
     <string name="auth_testing_connection">Testing connection</string>
     <string name="auth_not_configured_title">Malformed server configuration</string>
@@ -449,14 +449,9 @@
     <string name="move_file_invalid_into_descendent">It is not possible to move a folder into a descendant.</string>
     <string name="move_file_invalid_overwrite">The file exists already in the destination folder.</string>
     <string name="move_file_error">An error occurred while trying to move this file or folder.</string>
-
     <string name="copy_file_invalid_into_descendent">It is not possible to copy a folder into a descendant.</string>
     <string name="copy_file_invalid_overwrite">The file exists already in the destination folder.</string>
     <string name="copy_file_error">An error occurred while trying to copy this file or folder.</string>
-
-
-
-
     <string name="subject_user_shared_with_you">%1$s shared \"%2$s\" with you</string>
     <string name="subject_shared_with_you">\"%1$s\" has been shared with you</string>
 
@@ -593,7 +588,6 @@
     <string name="scoped_storage_wizard_explanation">Found %1$s of data on your external storage. It will be moved to the safe storage on your device. Remaining files will be cleaned from your external storage after the migration to avoid duplicates and vulnerability.</string>
     <string name="scoped_storage_wizard_intro">Your app has been updated. This app update migrates your files to a more secure location on your device. This one-time data migration is required and can take up to a minute or more.</string>
     <string name="scoped_storage_wizard_intro_button">Let\'s get started</string>
-    <string name="scoped_storage_wizard_not_enough_space_warning">⚠️  Your free space is currently limited on your device. Some files may not be migrated, please check that all downloaded files keep downloaded after the process has been completed.</string>
     <string name="scoped_storage_wizard_migrate_and_clean_button">Migrate now</string>
     <string name="scoped_storage_wizard_migration_completed">Migration completed successfully. Your files are now safer than ever.</string>
     <string name="scoped_storage_wizard_migration_completed_access_files_button">Access your files</string>

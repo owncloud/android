@@ -121,6 +121,7 @@
     <string name="auth_oauth_failure">アクセストークンの有効期限が切れたか、無効になっています。再度サインインしてください。</string>
     <string name="auth_oauth_failure_snackbar_action">ログイン</string>
     <string name="auth_check_server">サーバーのチェック</string>
+    <string name="auth_host_url">サーバーアドレス https://…</string>
     <string name="auth_username">ユーザー名</string>
     <string name="auth_password">パスワード</string>
     <string name="auth_register">%1$sは初めてですか？</string>
@@ -175,11 +176,14 @@
     <string name="common_no">いいえ</string>
     <string name="common_cancel_sync">同期のキャンセル</string>
     <string name="common_back">戻る</string>
+    <string name="common_loading">読込中...</string>
     <string name="common_error_unknown">不明なエラー</string>
     <string name="common_pending">中断</string>
     <string name="common_important">重要</string>
+    <string name="common_set">設定</string>
     <string name="upload_chooser_title">アップロード元</string>
     <string name="uploader_info_dirname">フォルダー名</string>
+    <string name="uploader_upload_in_progress_ticker">アップロード中…</string>
     <string name="uploader_upload_succeeded_content_single">%1$s は正常にアップロードされました</string>
     <string name="uploader_upload_failed_ticker">アップロードに失敗</string>
     <string name="uploader_upload_failed_content_single">%1$sのアップロードが完了できませんでした。</string>
@@ -221,6 +225,7 @@
     <string name="uploader_upload_canceled_ticker">アップロードがキャンセルされました</string>
     <string name="downloader_download_canceled_ticker">ダウンロードがキャンセルされました</string>
     <string name="downloader_download_enqueued_ticker">%1$sのダウンロードがキューに入れられました</string>
+    <string name="downloader_download_in_progress_ticker">ダウンロード中...</string>
     <string name="downloader_download_succeeded_ticker">ダウンロードに成功</string>
     <string name="downloader_download_succeeded_content">%1$s は正常にダウンロードされました</string>
     <string name="downloader_download_failed_ticker">ダウンロードに失敗</string>
@@ -285,6 +290,8 @@
     <string name="media_forward_description">早送りボタン</string>
     <string name="upload_from_camera_title">カメラのピクチャー</string>
 
+    <string name="auth_getting_authorization">認証中...</string>
+    <string name="auth_trying_to_login">ログインしています...</string>
     <string name="auth_connection_established">接続が確立しました</string>
     <string name="auth_testing_connection">接続のテスト中</string>
     <string name="auth_not_configured_title">サーバー設定が間違っています</string>
@@ -430,6 +437,7 @@
     <string name="used_quota_title_manage_accounts">使用:</string>
     <string name="auth_redirect_non_secure_connection_title">暗号化されていない接続を経て、暗号化接続へリダイレクトされました。</string>
 
+
     <string name="actionbar_select_all">すべて選択</string>
     <string name="actionbar_select_inverse">逆を選択</string>
 
@@ -442,10 +450,14 @@
     <string name="move_file_invalid_into_descendent">フォルダーを子孫に移動することはできません。</string>
     <string name="move_file_invalid_overwrite">ファイルは保存先フォルダに既に存在する。</string>
     <string name="move_file_error">このファイルまたはフォルダを移動しようとしてエラーが発生しました。</string>
+    <string name="move_file_correctly">正しく移動されました</string>
 
     <string name="copy_file_invalid_into_descendent">フォルダを子孫にコピーすることはできません。</string>
     <string name="copy_file_invalid_overwrite">ファイルは保存先フォルダに既に存在する。</string>
     <string name="copy_file_error">このファイルまたはフォルダをコピーしようとしてエラーが発生しました。</string>
+    <string name="copy_file_correctly">正しくコピーされました</string>
+
+    <string name="go_to_destination_folder">フォルダーを開く</string>
 
 
 
@@ -533,6 +545,7 @@
     <string name="share_no_public_links">公開リンクはまだ作成されていない。</string>
     <string name="share_no_link_in_this_share">このシェアにはリンクがない。</string>
     <string name="share_warning_about_forwarding_public_links">リンクがあれば誰でもそのファイル/フォルダにアクセスできる。</string>
+    <string name="share_warning_about_forwarding_space_public_links">リンクを知っている人なら誰でもそのスペースにアクセスできます</string>
     <string name="share_via_link_default_password">*****</string>
     <string name="share_via_link_password_enforced_label">パスワード *</string>
     <string name="share_via_link_expiration_date_enforced_label">有効期限 *</string>
@@ -603,6 +616,7 @@
 
     <!-- Release Notes -->
     <string name="release_notes_header">%1$sでの新しい機能</string>
+    <string name="release_notes_footer">%1$sのご利用ありがとうございます。\n❤</string>
     <string name="release_notes_proceed">続行</string>
     <string name="release_notes_icon">リリースノートのアイコン</string>
     <string name="release_notes_bugfixes_title">軽微なバグ修正</string>
@@ -611,6 +625,11 @@
     <string name="release_notes_4_8_0_subtitle_set_emoji_as_space_image">適切な権限を持つInfinite Scaleユーザーは、絵文字をスペース用画像として設定できるようになりました</string>
     <string name="release_notes_4_8_0_title_space_membership">スペースのメンバーシップ</string>
     <string name="release_notes_4_8_0_subtitle_space_membership">Infinite Scaleユーザーは、スペースのすべてのメンバーを確認し、適切な権限で管理できます</string>
+    <string name="release_notes_4_8_0_title_spaces_permanent_links">スペースの固定リンク</string>
+    <string name="release_notes_4_8_0_subtitle_spaces_permanent_links">Infinite Scaleユーザーは、スペースの固定リンクを取得し、他のメンバーと共有できるようになりました。</string>
+    <string name="release_notes_4_8_0_subtitle_space_public_links">Infinite Scaleユーザーは、スペースのすべての公開リンクを表示し、適切な権限で管理できます。</string>
+    <string name="release_notes_4_8_0_title_action_to_copy_or_move_destination_folder">対象フォルダへのナビゲーション</string>
+    <string name="release_notes_4_8_0_subtitle_action_to_copy_or_move_destination_folder">ファイルまたはフォルダがコピーまたは移動されたときに、宛先フォルダに移動する新しいアクション</string>
     <!-- Open in web -->
     <string name="ic_action_open_with_web">%1$s(Web) で開く</string>
     <string name="open_in_web_error_generic">Webで開けません</string>
@@ -689,7 +708,9 @@
     <string name="content_description_space_name">%1$sスペース名</string>
     <string name="content_description_space_three_dot_menu">%1$sスペースメニュー</string>
     <string name="content_description_space_subtitle">%1$sスペースサブタイトル</string>
+    <string name="content_description_create_button">作成</string>
     <string name="content_description_cancel_button">キャンセル</string>
+    <string name="content_description_set_button">設定</string>
     <string name="content_description_quota_switch">スペース割り当て</string>
     <string name="content_description_member_user">ユーザー %1$s</string>
     <string name="content_description_member_group">グループ %1$s</string>
@@ -697,6 +718,15 @@
     <string name="content_description_add_member">新しいメンバーを追加</string>
     <string name="content_description_invite_member_button">メンバーを招待</string>
     <string name="content_description_expiration_date_switch">有効期限</string>
+    <string name="content_description_remove_member_button">メンバー %1$s を削除</string>
+    <string name="content_description_edit_member_button">メンバー %1$s を編集</string>
+    <string name="content_description_permanent_link_button">固定リンクを取得</string>
+    <string name="content_description_create_public_link_button">公開リンクを作成</string>
+    <string name="content_description_set_password_button">パスワード設定</string>
+    <string name="content_description_remove_password_button">パスワードを削除</string>
+    <string name="content_description_generate_password_button">パスワード生成</string>
+    <string name="content_description_copy_password_button">パスワードをコピー</string>
+
     <string name="create_shortcut_dialog_title">ショートカットを作成</string>
     <string name="create_shortcut_dialog_url">URL</string>
     <string name="create_shortcut_dialog_url_error_no_blanks">URLにはスペースが含まれています</string>
@@ -743,6 +773,7 @@
     <string name="set_space_icon">アイコンを設定</string>
     <string name="members_title">メンバー</string>
     <string name="members_add">メンバー追加</string>
+    <string name="members_add_correctly">メンバーを招待しました</string>
     <string name="members_add_failed">メンバーを招待できませんでした</string>
     <string name="members_add_conflict_error">選択したスペースにすでに招待されています</string>
     <string name="members_search_failed">結果が見つかりませんでした</string>
@@ -751,8 +782,26 @@
     <string name="members_options">オプション</string>
     <string name="members_expiration_date">有効期限</string>
     <string name="members_invite">招待する</string>
+    <string name="members_remove_dialog_message">本当にメンバー: %1$s を削除しますか？</string>
+    <string name="members_remove_correctly">メンバーは正しく削除されました</string>
+    <string name="members_remove_failed">メンバーを削除できませんでした</string>
+    <string name="members_edit">メンバー編集</string>
+    <string name="members_edit_correctly">メンバーを編集しました</string>
+    <string name="members_edit_failed">メンバーを編集できませんでした</string>
     <string name="member_type_user">ユーザー</string>
     <string name="member_type_group">グループ</string>
+    <string name="public_link_create_title">公開リンクを作成</string>
+    <string name="public_link_set_password">パスワード設定</string>
+    <string name="public_link_view">閲覧可</string>
+    <string name="public_link_view_description">閲覧、ダウンロード</string>
+    <string name="public_link_edit">編集可</string>
+    <string name="public_link_edit_description">閲覧、アップロード、編集、ダウンロード、削除</string>
+    <string name="public_link_upload">アップロード可</string>
+    <string name="public_link_create_only_description">アップロードのみで、既存のコンテンツは公開されません</string>
+    <string name="public_link_internal">招待された人々</string>
+    <string name="public_link_default_display_name">名前のないリンク</string>
+    <string name="public_link_add_correctly">公開リンクが正しく作成されました</string>
+    <string name="public_link_add_failed">公開リンクを作成できませんでした</string>
     <string name="feedback_dialog_get_in_contact_description"><![CDATA[ <a href=\"%1$s\"><b>フォーラム</b></a>で質問するか、<a href=\"%2$s\"><b>GitHubリポジトリ</b></a>に貢献してください]]></string>
 
     <string name="link_role_accessibility">リンク</string>

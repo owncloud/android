@@ -121,6 +121,7 @@
     <string name="auth_oauth_failure">O token de acesso expirou ou tornou-se inválido. Faça login novamente para recuperar o acesso.</string>
     <string name="auth_oauth_failure_snackbar_action">Iniciar sessão</string>
     <string name="auth_check_server">Verificar servidor</string>
+    <string name="auth_host_url">Endereço do servidor https://..</string>
     <string name="auth_username">Nome de utilizador</string>
     <string name="auth_password">Palavra-passe</string>
     <string name="auth_register">Novo em %1$s?</string>
@@ -175,11 +176,13 @@
     <string name="common_no">Não</string>
     <string name="common_cancel_sync">Cancelar sincronização</string>
     <string name="common_back">Voltar</string>
+    <string name="common_loading">A carregar...</string>
     <string name="common_error_unknown">erro desconhecido</string>
     <string name="common_pending">Pendente</string>
     <string name="common_important">Importante</string>
     <string name="upload_chooser_title">Enviando de</string>
     <string name="uploader_info_dirname">Nome da pasta</string>
+    <string name="uploader_upload_in_progress_ticker">Enviando...</string>
     <string name="uploader_upload_succeeded_content_single">%1$s carregado</string>
     <string name="uploader_upload_failed_ticker">O envio falhou</string>
     <string name="uploader_upload_failed_content_single">Carregar de%1$snão pôde ser concluído.</string>
@@ -221,6 +224,7 @@
     <string name="uploader_upload_canceled_ticker">Envio cancelado</string>
     <string name="downloader_download_canceled_ticker">Baixar cancelado</string>
     <string name="downloader_download_enqueued_ticker">Baixar de%1$s foi colocado na fila</string>
+    <string name="downloader_download_in_progress_ticker">Baixando...</string>
     <string name="downloader_download_succeeded_ticker">Transferência bem sucedida</string>
     <string name="downloader_download_succeeded_content">%1$s transferido</string>
     <string name="downloader_download_failed_ticker">Erro na transferência</string>
@@ -285,6 +289,8 @@
     <string name="media_forward_description">Botão de avanço rápido</string>
     <string name="upload_from_camera_title">Fotografia da camera</string>
 
+    <string name="auth_getting_authorization">A obter a autorização...</string>
+    <string name="auth_trying_to_login">Tentando fazer o login…</string>
     <string name="auth_connection_established">Ligação estabelecida</string>
     <string name="auth_testing_connection">A testar a ligação</string>
     <string name="auth_not_configured_title">Configuração de servidor incorreta.</string>
@@ -430,6 +436,7 @@
     <string name="used_quota_title_manage_accounts">Usado:</string>
     <string name="auth_redirect_non_secure_connection_title">Uma ligação segura foi redirecionada por uma rota insegura.</string>
 
+
     <string name="actionbar_select_all">Selecionar todos</string>
     <string name="actionbar_select_inverse">Selecione inverso</string>
 
@@ -442,14 +449,9 @@
     <string name="move_file_invalid_into_descendent">Não é possível mover uma pasta para uma pasta descendente.</string>
     <string name="move_file_invalid_overwrite">O arquivo já existe na pasta de destino.</string>
     <string name="move_file_error">Ocorreu um erro ao tentar mover este arquivo ou pasta.</string>
-
     <string name="copy_file_invalid_into_descendent">Não é possível copiar uma pasta para uma descendente.</string>
     <string name="copy_file_invalid_overwrite">O arquivo já existe na pasta de destino.</string>
     <string name="copy_file_error">Ocorreu um erro ao tentar copiar este arquivo ou pasta.</string>
-
-
-
-
     <string name="subject_user_shared_with_you">%1$s partilhou \"%2$s\" consigo</string>
     <string name="subject_shared_with_you">\"%1$s\" foi partilhado consigo</string>
 
@@ -605,6 +607,7 @@
 
     <!-- Release Notes -->
     <string name="release_notes_header">Novo em %1$s</string>
+    <string name="release_notes_footer">Obrigado por usar %1$s.\n❤</string>
     <string name="release_notes_proceed">Continuar</string>
     <string name="release_notes_icon">Ícone de nota de lançamento</string>
     <string name="release_notes_bugfixes_title">Pequenas correções de bugs</string>

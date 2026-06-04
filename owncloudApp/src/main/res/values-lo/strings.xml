@@ -121,7 +121,7 @@
     <string name="auth_oauth_failure">ການອະນຸຍາດລົ້ມເຫຼວ</string>
     <string name="auth_oauth_failure_snackbar_action">ລອງໃໝ່</string>
     <string name="auth_check_server">ກຳລັງກວດສອບເຊີບເວີ</string>
-    <string name="auth_host_url">URL ຂອງໂຮສ</string>
+    <string name="auth_host_url">ທີ່ຢູ່ເຊີບເວີ</string>
     <string name="auth_username">ຊື່ຜູ້ໃຊ້</string>
     <string name="auth_password">ລະຫັດຜ່ານ</string>
     <string name="auth_register">ລົງທະບຽນ</string>
@@ -183,7 +183,7 @@
     <string name="common_set">ຕັ້ງຄ່າ</string>
     <string name="upload_chooser_title">ອັບໂຫຼດຈາກ</string>
     <string name="uploader_info_dirname">ໃນ %1$s</string>
-    <string name="uploader_upload_in_progress_ticker">ກຳລັງດຳເນີນການອັບໂຫຼດ</string>
+    <string name="uploader_upload_in_progress_ticker">ກຳລັງອັບໂຫຼດ...</string>
     <string name="uploader_upload_succeeded_content_single">ອັບໂຫຼດ %1$s ສຳເລັດແລ້ວ</string>
     <string name="uploader_upload_failed_ticker">ການອັບໂຫຼດລົ້ມເຫຼວ</string>
     <string name="uploader_upload_failed_content_single">ບໍ່ສາມາດອັບໂຫຼດ %1$s</string>
@@ -225,7 +225,7 @@
     <string name="uploader_upload_canceled_ticker">ການອັບໂຫຼດຖືກຍົກເລີກ</string>
     <string name="downloader_download_canceled_ticker">ການດາວໂຫຼດຖືກຍົກເລີກ</string>
     <string name="downloader_download_enqueued_ticker">ການດາວໂຫຼດຖືກເພີ່ມເຂົ້າຄິວ</string>
-    <string name="downloader_download_in_progress_ticker">ກຳລັງດຳເນີນການດາວໂຫຼດ</string>
+    <string name="downloader_download_in_progress_ticker">ກຳລັງດາວໂຫຼດ...</string>
     <string name="downloader_download_succeeded_ticker">ດາວໂຫຼດສຳເລັດ</string>
     <string name="downloader_download_succeeded_content">ດາວໂຫຼດ %1$s ສຳເລັດແລ້ວ</string>
     <string name="downloader_download_failed_ticker">ການດາວໂຫຼດລົ້ມເຫຼວ</string>
@@ -290,8 +290,8 @@
     <string name="media_forward_description">ກໍໄປໜ້າ</string>
     <string name="upload_from_camera_title">ສ້າງໄຟລ໌ໃໝ່ຈາກ</string>
 
-    <string name="auth_getting_authorization">ກຳລັງຂໍສິດອະນຸຍາດ...</string>
-    <string name="auth_trying_to_login">ກຳລັງພະຍາຍາມເຂົ້າສູ່ລະບົບ...</string>
+    <string name="auth_getting_authorization">ກຳລັງຂໍການອະນຸຍາດ</string>
+    <string name="auth_trying_to_login">ກຳລັງພະຍາຍາມເຂົ້າສູ່ລະບົບ</string>
     <string name="auth_connection_established">ການເຊື່ອມຕໍ່ສຳເລັດ</string>
     <string name="auth_testing_connection">ກຳລັງທົດສອບການເຊື່ອມຕໍ່</string>
     <string name="auth_not_configured_title">ການຕັ້ງຄ່າເຊີບເວີຜິດພາດ</string>
@@ -597,7 +597,6 @@
     <string name="scoped_storage_wizard_explanation">ເພື່ອປົກປ້ອງຂໍ້ມູນຂອງທ່ານໃຫ້ດີຂຶ້ນ, ໂຟລເດີທີ່ແອັບໃຊ້ເກັບໄຟລ໌ຈຳເປັນຕ້ອງຖືກຍ້າຍ</string>
     <string name="scoped_storage_wizard_intro">ໄຟລ໌ຈາກບັນຊີຂອງທ່ານ ຈະຖືກຍ້າຍໄປຍັງໂຟລເດີສ່ວນຕົວ. ທ່ານຍັງຄົງສາມາດເຂົ້າເຖິງໄດ້ໂດຍໃຊ້ແອັບນີ້, ແຕ່ບໍ່ສາມາດເຂົ້າເຖິງຈາກແອັບອື່ນໄດ້</string>
     <string name="scoped_storage_wizard_intro_button">ດຳເນີນການຕໍ່</string>
-    <string name="scoped_storage_wizard_not_enough_space_warning">ພື້ນທີ່ຈັດເກັບຂໍ້ມູນບໍ່ພຽງພໍສຳລັບການຍ້າຍຂໍ້ມູນ</string>
     <string name="scoped_storage_wizard_migrate_and_clean_button">ຍ້າຍໄຟລ໌</string>
     <string name="scoped_storage_wizard_migration_completed">ການຍ້າຍຂໍ້ມູນສຳເລັດສົມບູນ</string>
     <string name="scoped_storage_wizard_migration_completed_access_files_button">ເຂົ້າເຖິງໄຟລ໌</string>
@@ -617,7 +616,7 @@
 
     <!-- Release Notes -->
     <string name="release_notes_header">ມີຫຍັງໃໝ່</string>
-    <string name="release_notes_footer">ສຶກສາເພີ່ມເຕີມໄດ້ທີ່ owncloud.com</string>
+    <string name="release_notes_footer">ທີມງານ ownCloud</string>
     <string name="release_notes_proceed">ດຳເນີນການ</string>
     <string name="release_notes_icon">ໄອຄອນບັນທຶກປະຈຳລຸ້ນ</string>
     <string name="release_notes_bugfixes_title">ການແກ້ໄຂຂໍ້ຜິດພາດ</string>
@@ -632,7 +631,6 @@
     <string name="release_notes_4_8_0_subtitle_space_public_links">ສ້າງລິ້ງສາທາລະນະເພື່ອແບ່ງປັນເນື້ອໃນພາຍໃນພື້ນທີ່</string>
     <string name="release_notes_4_8_0_title_action_to_copy_or_move_destination_folder">ການນຳທາງໄປຫາໂຟນເດີປາຍທາງ</string>
     <string name="release_notes_4_8_0_subtitle_action_to_copy_or_move_destination_folder">ການດຳເນີນການໃໝ່ເພື່ອໄປຫາໂຟນເດີປາຍທາງເມື່ອໄຟລ໌ ຫຼື ໂຟນເດີຖືກສຳເນົາ ຫຼື ຍ້າຍ</string>
-
     <!-- Open in web -->
     <string name="ic_action_open_with_web">ເປີດດ້ວຍ...</string>
     <string name="open_in_web_error_generic">ບໍ່ສາມາດເປີດໄຟລ໌ໃນເບຣົາເຊີໄດ້</string>
@@ -808,7 +806,6 @@
     <string name="public_link_default_display_name">ລິ້ງທີ່ບໍ່ມີຊື່</string>
     <string name="public_link_add_correctly">ສ້າງລິ້ງສາທາລະນະສຳເລັດແລ້ວ</string>
     <string name="public_link_add_failed">ຕັ້ງຄ່າ</string>
-
     <string name="feedback_dialog_get_in_contact_description">ມີບັນຫາກັບການຕິດຕັ້ງ ownCloud ຂອງທ່ານ ຫຼື ບໍ່\? ຕິດຕໍ່ທີມງານຂອງພວກເຮົາສຳລັບຂໍ້ມູນເພີ່ມເຕີມ</string>
 
     <string name="link_role_accessibility">ລິ້ງ</string>
