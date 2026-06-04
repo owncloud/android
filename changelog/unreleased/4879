@@ -1,0 +1,7 @@
+Bugfix: Crash from Google Play Console in FileDetailsFragment
+
+To prevent crashes, the navigation logic when navigating back has been
+improved, especially in cases where the observed file is null.
+
+https://github.com/owncloud/android/issues/4737
+https://github.com/owncloud/android/pull/4879

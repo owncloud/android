@@ -12,7 +12,7 @@
  * @author Jorge Aguado Recio
  *
  * Copyright (C) 2011  Bartek Przybylski
- * Copyright (C) 2025 ownCloud GmbH.
+ * Copyright (C) 2026 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -543,7 +543,7 @@ class FileDisplayActivity : FileActivity(),
         if (second != null) {
             val tr = supportFragmentManager.beginTransaction()
             tr.remove(second)
-            tr.commitNow()
+            tr.commit()
         }
         updateFragmentsVisibility(false)
         updateToolbar(null)
