@@ -2,7 +2,9 @@
   ~ ownCloud Android client application
   ~
   ~ @author Fernando Sanz Velasco
-  ~ Copyright (C) 2021 ownCloud GmbH.
+  ~ @author Jorge Aguado Recio
+  ~
+  ~ Copyright (C) 2026 ownCloud GmbH.
   ~
   ~ This program is free software: you can redistribute it and/or modify
   ~ it under the terms of the GNU General Public License version 2,
@@ -26,7 +28,7 @@
     tools:context=".presentation.logging.LogsListActivity">
 
     <include
-        android:id="@+id/toolbar_activity_logs_list"
+        android:id="@+id/toolbar"
         layout="@layout/owncloud_toolbar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -39,7 +41,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar_activity_logs_list"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
         tools:listitem="@layout/log_list_item" />
 
     <include
@@ -49,5 +51,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar_activity_logs_list" />
+        app:layout_constraintTop_toBottomOf="@id/toolbar" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -2,8 +2,9 @@
  * ownCloud Android client application
  *
  * @author Juan Carlos Garrote Gascón
+ * @author Jorge Aguado Recio
  *
- * Copyright (C) 2021 ownCloud GmbH.
+ * Copyright (C) 2026 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -22,6 +23,7 @@ package com.owncloud.android.presentation.settings.privacypolicy
 
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View
 import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.webkit.WebViewClient
@@ -32,6 +34,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import com.owncloud.android.R
+import com.owncloud.android.extensions.adaptInfiniteEdges
 import com.owncloud.android.extensions.showMessageInSnackbar
 import com.owncloud.android.utils.PreferenceUtils
 
@@ -42,6 +45,9 @@ class PrivacyPolicyActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_privacy_policy)
+
+        val privacyPolicyRoot = findViewById<View>(R.id.activityPrivacyPolicyLayout)
+        adaptInfiniteEdges(privacyPolicyRoot)
 
         val toolbar = findViewById<Toolbar>(R.id.standard_toolbar).apply {
             setTitle(R.string.actionbar_privacy_policy)

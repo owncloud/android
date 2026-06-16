@@ -23,7 +23,7 @@
     <!-- General ownCloud app style.
          To apply directly only on Activities that cannot extend ToolbarActivity;
          otherwise, prefer Theme.ownCloud.Toolbar -->
-    <style name="Theme.ownCloud" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="Theme.ownCloud" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowBackground">@color/background_color</item>
 
         <!-- theme for the app bar (both for old actionbar and new toolbar) -->

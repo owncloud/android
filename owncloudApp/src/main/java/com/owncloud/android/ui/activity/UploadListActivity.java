@@ -9,7 +9,7 @@
  * @author Aitor Ballesteros Pavón
  * @author Jorge Aguado Recio
  *
- * Copyright (C) 2025 ownCloud GmbH.
+ * Copyright (C) 2026 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -31,12 +31,17 @@ import android.accounts.AccountManager;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
-
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.FragmentTransaction;
+import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.owncloud.android.R;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
@@ -68,6 +73,9 @@ public class UploadListActivity extends FileActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) { getWindow().setNavigationBarContrastEnforced(false); }
+        adaptInfiniteEdges();
 
         View rightFragmentContainer = findViewById(R.id.right_fragment_container);
         rightFragmentContainer.setVisibility(View.GONE);
@@ -192,5 +200,24 @@ public class UploadListActivity extends FileActivity {
             }
         }
         return super.onKeyUp(keyCode, event);
+    }
+
+    private void adaptInfiniteEdges() {
+        View root = findViewById(R.id.drawer_layout);
+        View content = findViewById(R.id.left_fragment_container);
+        BottomNavigationView bottomNavView = findViewById(R.id.bottom_nav_view);
+        AppBarLayout toolbar = findViewById(R.id.owncloud_app_bar);
+
+        ViewCompat.setOnApplyWindowInsetsListener(root, (view, insets) -> {
+            Insets systemInsets = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+
+            toolbar.setPadding(systemInsets.left, 0, systemInsets.right, 0);
+
+            content.setPadding(systemInsets.left, content.getPaddingTop(), systemInsets.right, content.getPaddingBottom());
+
+            bottomNavView.setPadding(bottomNavView.getPaddingLeft(), bottomNavView.getPaddingTop(), bottomNavView.getPaddingRight(), systemInsets.bottom);
+
+            return insets;
+        });
     }
 }

@@ -4,7 +4,7 @@
  * @author David Crespo Ríos
  * @author Jorge Aguado Recio
  *
- * Copyright (C) 2025 ownCloud GmbH.
+ * Copyright (C) 2026 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -25,6 +25,8 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.owncloud.android.BuildConfig
 import com.owncloud.android.MainApp
@@ -49,6 +51,7 @@ class ReleaseNotesActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         _binding = ReleaseNotesActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        adaptInfiniteEdges()
         setData()
         initView()
     }
@@ -81,6 +84,14 @@ class ReleaseNotesActivity : AppCompatActivity() {
 
         binding.txtHeader.text = header
         binding.txtFooter.text = footer
+    }
+
+    private fun adaptInfiniteEdges() {
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, insets ->
+            val systemInsets = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            binding.root.setPadding(systemInsets.left, systemInsets.top, systemInsets.right, systemInsets.bottom)
+            insets
+        }
     }
 
     companion object {

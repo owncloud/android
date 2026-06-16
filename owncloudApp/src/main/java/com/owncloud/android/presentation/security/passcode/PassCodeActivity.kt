@@ -33,16 +33,17 @@ package com.owncloud.android.presentation.security.passcode
 import android.content.Intent
 import android.os.Bundle
 import android.view.KeyEvent
+import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
 import android.widget.EditText
 import android.widget.LinearLayout
-import androidx.appcompat.app.AppCompatActivity
 import com.owncloud.android.BuildConfig
 import com.owncloud.android.R
 import com.owncloud.android.databinding.PasscodeLockActivityBinding
 import com.owncloud.android.domain.utils.Event
+import com.owncloud.android.extensions.adaptInfiniteEdges
 import com.owncloud.android.extensions.showBiometricDialog
 import com.owncloud.android.extensions.showMessageInSnackbar
 import com.owncloud.android.presentation.documentsprovider.DocumentsProviderUtils.notifyDocumentsProviderRoots
@@ -50,11 +51,12 @@ import com.owncloud.android.presentation.security.biometric.BiometricStatus
 import com.owncloud.android.presentation.security.biometric.BiometricViewModel
 import com.owncloud.android.presentation.security.biometric.EnableBiometrics
 import com.owncloud.android.presentation.settings.security.SettingsSecurityFragment.Companion.EXTRAS_LOCK_ENFORCED
+import com.owncloud.android.ui.activity.ToolbarActivity
 import com.owncloud.android.utils.PreferenceUtils
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
-class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, EnableBiometrics {
+class PassCodeActivity : ToolbarActivity(), NumberKeyboardListener, EnableBiometrics {
 
     // ViewModel
     private val passCodeViewModel: PassCodeViewModel by viewModel {
@@ -98,6 +100,11 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, EnableBiom
         } // else, let it go, or taking screenshots & testing will not be possible
 
         setContentView(binding.root)
+
+        adaptInfiniteEdges(binding.passcodeLockLayout)
+
+        setupStandardToolbar(title = null, displayHomeAsUpEnabled = true, homeButtonEnabled = true, displayShowTitleEnabled = true)
+        supportActionBar?.setHomeActionContentDescription(R.string.common_back)
 
         if (intent.getBooleanExtra(BIOMETRIC_HAS_FAILED, false)) {
             showMessageInSnackbar(message = getString(R.string.biometric_not_available))
@@ -186,6 +193,8 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, EnableBiom
         PassCodeManager.onActivityStopped(this)
         super.onBackPressed()
     }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean = false
 
     private fun inflatePasscodeTxtLine() {
         val layoutCode = findViewById<LinearLayout>(R.id.passcode_value)

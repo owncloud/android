@@ -10,7 +10,7 @@
  * @author Aitor Ballesteros Pavon
  * @author Jorge Aguado Recio
  *
- * Copyright (C) 2024 ownCloud GmbH.
+ * Copyright (C) 2026 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -48,8 +48,11 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.GravityCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.get
 import androidx.core.view.isVisible
+import androidx.core.view.updatePadding
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.drawerlayout.widget.DrawerLayout.DrawerListener
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -105,6 +108,8 @@ abstract class DrawerActivity : ToolbarActivity() {
         // Allow or disallow touches with other visible windows
         getDrawerLayout()?.filterTouchesWhenObscured = PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(this)
         getNavView()?.filterTouchesWhenObscured = PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(this)
+
+        adaptInfiniteEdges()
 
         // Set background header image, if any
         if (resources.getBoolean(R.bool.use_drawer_background_header)) {
@@ -606,6 +611,18 @@ abstract class DrawerActivity : ToolbarActivity() {
      * restart helper method which is called after a changing the current account.
      */
     protected abstract fun restart()
+
+    private fun adaptInfiniteEdges() {
+        val navView = findViewById<NavigationView>(R.id.nav_view)
+        val footer = navView.findViewById<View>(R.id.nav_drawer_footer)
+
+        ViewCompat.setOnApplyWindowInsetsListener(navView) { _, insets ->
+            val systemInsets = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            navView.updatePadding(left = systemInsets.left)
+            footer.updatePadding(bottom = systemInsets.bottom)
+            insets
+        }
+    }
 
     companion object {
         const val CENTRAL_URL = "https://central.owncloud.org/"

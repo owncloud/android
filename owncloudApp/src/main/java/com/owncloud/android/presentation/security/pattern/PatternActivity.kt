@@ -29,10 +29,10 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.SystemClock
 import android.view.KeyEvent
+import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.andrognito.patternlockview.PatternLockView.Dot
 import com.andrognito.patternlockview.listener.PatternLockViewListener
@@ -41,6 +41,7 @@ import com.owncloud.android.BuildConfig
 import com.owncloud.android.R
 import com.owncloud.android.data.providers.implementation.OCSharedPreferencesProvider
 import com.owncloud.android.databinding.PatternLockActivityBinding
+import com.owncloud.android.extensions.adaptInfiniteEdges
 import com.owncloud.android.extensions.showBiometricDialog
 import com.owncloud.android.extensions.showMessageInSnackbar
 import com.owncloud.android.presentation.documentsprovider.DocumentsProviderUtils.notifyDocumentsProviderRoots
@@ -49,11 +50,12 @@ import com.owncloud.android.presentation.security.biometric.BiometricStatus
 import com.owncloud.android.presentation.security.biometric.BiometricViewModel
 import com.owncloud.android.presentation.security.biometric.EnableBiometrics
 import com.owncloud.android.presentation.settings.security.SettingsSecurityFragment.Companion.EXTRAS_LOCK_ENFORCED
+import com.owncloud.android.ui.activity.ToolbarActivity
 import com.owncloud.android.utils.PreferenceUtils
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
-class PatternActivity : AppCompatActivity(), EnableBiometrics {
+class PatternActivity : ToolbarActivity(), EnableBiometrics {
 
     // ViewModel
     private val patternViewModel by viewModel<PatternViewModel>()
@@ -84,6 +86,11 @@ class PatternActivity : AppCompatActivity(), EnableBiometrics {
         }
 
         binding.patternLockView.clearPattern()
+
+        adaptInfiniteEdges(binding.activityPatternLockLayout)
+
+        setupStandardToolbar(title = null, displayHomeAsUpEnabled = true, homeButtonEnabled = true, displayShowTitleEnabled = true)
+        supportActionBar?.setHomeActionContentDescription(R.string.common_back)
 
         // Allow or disallow touches with other visible windows
         binding.activityPatternLockLayout.filterTouchesWhenObscured =
@@ -158,6 +165,8 @@ class PatternActivity : AppCompatActivity(), EnableBiometrics {
         PatternManager.onActivityStopped(this)
         super.onBackPressed()
     }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean = false
 
     /**
      * Binds the appropriate listener to the pattern view.

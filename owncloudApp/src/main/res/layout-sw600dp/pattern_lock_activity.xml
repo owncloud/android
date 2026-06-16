@@ -18,8 +18,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/activityPatternLockLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="@dimen/standard_padding">
+    android:layout_height="match_parent">
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/owncloud_toolbar" />
 
     <TextView
         android:id="@+id/pattern_header"
@@ -33,7 +36,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
         app:layout_constraintVertical_chainStyle="packed" />
 
     <TextView

@@ -22,8 +22,11 @@
     android:id="@+id/passcode_lock_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="@dimen/passcode_standard_margin"
     android:filterTouchesWhenObscured="true">
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/owncloud_toolbar" />
 
     <TextView
         android:id="@+id/passcode_header"
@@ -36,7 +39,7 @@
         android:textSize="16sp"
         app:layout_constraintStart_toEndOf="@id/left_guideline"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toBottomOf="@id/toolbar"/>
 
     <TextView
         android:id="@+id/passcode_explanation"
@@ -98,7 +101,7 @@
         android:layout_marginStart="32dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/left_guideline"

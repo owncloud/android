@@ -215,6 +215,9 @@ public class ReceiveExternalFilesActivity extends FileActivity
         //init ui
         setContentView(R.layout.uploader_layout);
 
+        View receiveExternalFilesRoot = findViewById(R.id.coordinator_layout);
+        ActivityExtKt.adaptInfiniteEdges(this, receiveExternalFilesRoot);
+
         mSortOptionsView = findViewById(R.id.options_layout);
         if (mSortOptionsView != null) {
             mSortOptionsView.setOnSortOptionsListener(this);
