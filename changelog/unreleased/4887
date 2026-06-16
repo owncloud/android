@@ -1,0 +1,7 @@
+Bugfix: Infinite edges
+
+All screens have been adapted to the edge-to-edge feature (starting from
+Android 15) and are no longer cut off by the system and navigation bars
+
+https://github.com/owncloud/android/issues/4576
+https://github.com/owncloud/android/pull/4887
