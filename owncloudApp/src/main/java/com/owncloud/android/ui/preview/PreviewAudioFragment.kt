@@ -10,7 +10,7 @@
  * @author Aitor Ballesteros Pavón
  * @author Jorge Aguado Recio
  *
- * Copyright (C) 2024 ownCloud GmbH.
+ * Copyright (C) 2026 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -43,6 +43,8 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.snackbar.Snackbar
 import com.owncloud.android.R
 import com.owncloud.android.domain.files.model.OCFile
@@ -120,6 +122,9 @@ class PreviewAudioFragment : FileFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val root = view.findViewById<View>(R.id.top)
+        adaptInfiniteEdges(root)
 
         collectLatestLifecycleFlow(previewAudioViewModel.getCurrentFile()) { currentFile ->
             if (currentFile != null) {
@@ -424,6 +429,14 @@ class PreviewAudioFragment : FileFragment() {
      */
     private fun finish() {
         activity?.onBackPressed()
+    }
+
+    private fun adaptInfiniteEdges(root: View) {
+        ViewCompat.setOnApplyWindowInsetsListener(root) { _, insets ->
+            val systemInsets = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            root.setPadding(systemInsets.left, root.paddingTop, systemInsets.right, systemInsets.bottom)
+            insets
+        }
     }
 
     companion object {

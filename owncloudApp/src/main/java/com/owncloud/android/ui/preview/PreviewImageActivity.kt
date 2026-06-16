@@ -8,7 +8,7 @@
  * @author Juan Carlos Garrote Gascón
  * @author Jorge Aguado Recio
  *
- * Copyright (C) 2025 ownCloud GmbH.
+ * Copyright (C) 2026 ownCloud GmbH.
  *
  *
  * This program is free software: you can redistribute it and/or modify
@@ -29,6 +29,7 @@
 package com.owncloud.android.ui.preview
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
@@ -100,6 +101,8 @@ class PreviewImageActivity : FileActivity(),
         requestWindowFeature(Window.FEATURE_ACTION_BAR_OVERLAY)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.preview_image_activity)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) { window.isNavigationBarContrastEnforced = false }
 
         // ActionBar
         supportActionBar?.run {
