@@ -8,7 +8,7 @@
  * @author Jorge Aguado Recio
  * @author Aitor Ballesteros Pavón
  *
- * Copyright (C) 2025 ownCloud GmbH.
+ * Copyright (C) 2026 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -196,8 +196,10 @@ class MainFileListFragment : Fragment(),
             setDrawerStatus(enabled = false)
             actionMode = mode
 
-            requireActivity().findViewById<View>(R.id.owncloud_app_bar).isFocusableInTouchMode = false
-
+            requireActivity().findViewById<View>(R.id.owncloud_app_bar).apply {
+                isFocusableInTouchMode = false
+                visibility = View.INVISIBLE
+            }
             val inflater = requireActivity().menuInflater
             inflater.inflate(R.menu.file_actions_menu, menu)
             this@MainFileListFragment.menu = menu
@@ -296,8 +298,10 @@ class MainFileListFragment : Fragment(),
             setDrawerStatus(enabled = true)
             actionMode = null
 
-            requireActivity().findViewById<View>(R.id.owncloud_app_bar).isFocusableInTouchMode = true
-
+            requireActivity().findViewById<View>(R.id.owncloud_app_bar).apply {
+                isFocusableInTouchMode = true
+                visibility = View.VISIBLE
+            }
             // reset to previous color
             requireActivity().window.statusBarColor = statusBarColor!!
 
