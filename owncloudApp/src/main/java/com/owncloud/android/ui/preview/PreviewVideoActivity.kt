@@ -10,7 +10,7 @@
  * @author Aitor Ballesteros Pavón
  * @author Jorge Aguado Recio
  *
- * Copyright (C) 2024 ownCloud GmbH.
+ * Copyright (C) 2026 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -40,6 +40,7 @@ import android.view.Window
 import androidx.annotation.OptIn
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.MenuProvider
+import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
@@ -150,6 +151,9 @@ class PreviewVideoActivity : FileActivity(), Player.Listener, OnPrepareVideoPlay
             setHomeButtonEnabled(true)
             title = file.fileName
         }
+
+        adaptInfiniteEdges()
+
         playerView = binding.videoPlayer
         playerView.setShowPreviousButton(false)
         playerView.setShowNextButton(false)
@@ -446,6 +450,14 @@ class PreviewVideoActivity : FileActivity(), Player.Listener, OnPrepareVideoPlay
     // The main_menu won't be displayed
     override fun onCreateOptionsMenu(menu: Menu): Boolean =
         false
+
+    private fun adaptInfiniteEdges() {
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, insets ->
+            val systemInsets = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            binding.root.setPadding(systemInsets.left, binding.root.paddingTop, systemInsets.right, systemInsets.bottom)
+            insets
+        }
+    }
 
     companion object {
         const val EXTRA_FILE = "FILE"

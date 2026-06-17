@@ -32,6 +32,7 @@ import com.owncloud.android.domain.links.model.OCLink
 import com.owncloud.android.domain.roles.model.OCRole
 import com.owncloud.android.domain.spaces.model.OCSpace
 import com.owncloud.android.domain.spaces.model.SpaceMember
+import com.owncloud.android.extensions.adaptInfiniteEdges
 import com.owncloud.android.presentation.common.ShareSheetHelper
 import com.owncloud.android.presentation.spaces.links.AddPublicLinkFragment
 import com.owncloud.android.ui.activity.FileActivity
@@ -46,6 +47,8 @@ class SpaceMembersActivity: FileActivity(), SpaceMembersFragment.SpaceMemberFrag
 
         binding = MembersActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        adaptInfiniteEdges(binding.root)
 
         setupStandardToolbar(title = null, displayHomeAsUpEnabled = true, homeButtonEnabled = true, displayShowTitleEnabled = true)
 

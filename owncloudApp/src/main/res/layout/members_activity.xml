@@ -24,7 +24,9 @@
     android:filterTouchesWhenObscured="true"
     android:orientation="vertical">
 
-    <include layout="@layout/owncloud_toolbar" />
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/owncloud_toolbar" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/item_header_container"

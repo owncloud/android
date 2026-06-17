@@ -20,8 +20,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/activityPatternLockLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="@dimen/standard_padding">
+    android:layout_height="match_parent">
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/owncloud_toolbar" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/vertical_guide"
@@ -33,11 +36,11 @@
     <com.owncloud.android.presentation.security.passcode.SquareFrameLayout
         android:id="@+id/pattern_container"
         android:layout_width="0dp"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:layout_margin="@dimen/standard_margin"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/vertical_guide"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
         app:layout_constraintBottom_toBottomOf="parent">
 
         <com.andrognito.patternlockview.PatternLockView

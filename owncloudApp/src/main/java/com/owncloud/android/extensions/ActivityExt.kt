@@ -3,8 +3,9 @@
  *
  * @author David González Verdugo
  * @author Aitor Ballesteros Pavón
+ * @author Jorge Aguado Recio
  *
- * Copyright (C) 2024 ownCloud GmbH.
+ * Copyright (C) 2026 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -32,14 +33,21 @@ import android.content.pm.ResolveInfo
 import android.net.Uri
 import android.text.method.LinkMovementMethod
 import android.util.TypedValue
+import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.webkit.MimeTypeMap
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.core.content.FileProvider
 import androidx.core.text.HtmlCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updateLayoutParams
+import androidx.core.view.updateMargins
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -74,6 +82,7 @@ import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import timber.log.Timber
 import java.io.File
+import kotlin.math.min
 
 fun Activity.showErrorInSnackbar(genericErrorMessageId: Int, throwable: Throwable?) =
     throwable?.let {
@@ -493,5 +502,43 @@ fun <T> FragmentActivity.collectLatestLifecycleFlow(
         repeatOnLifecycle(lifecycleState) {
             flow.collectLatest(collect)
         }
+    }
+}
+
+fun Activity.adaptInfiniteEdges(root: View) {
+    val typedValue = TypedValue()
+    var actionBarHeight = 0
+    if (theme.resolveAttribute(android.R.attr.actionBarSize, typedValue, true)) {
+        actionBarHeight = TypedValue.complexToDimensionPixelSize(typedValue.data, resources.displayMetrics)
+    }
+
+    val maxInsetPx = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 32f, resources.displayMetrics).toInt()
+    val extraTopPx = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 12f, resources.displayMetrics).toInt()
+
+    // Adapt toolbar for infinite edges
+    findViewById<View>(R.id.toolbar).apply {
+        ViewCompat.setOnApplyWindowInsetsListener(this) { _, insets ->
+            val systemInsets = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            val usedInsetFinal = min(systemInsets.top, maxInsetPx) + extraTopPx
+            updateLayoutParams { height = actionBarHeight + usedInsetFinal }
+            insets
+        }
+    }
+
+    // Adapt text in the toolbar
+    findViewById<Toolbar>(R.id.standard_toolbar).apply {
+        ViewCompat.setOnApplyWindowInsetsListener(this) { _, insets ->
+            val systemInsets = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            val usedInsetFinal = min(systemInsets.top, maxInsetPx) + extraTopPx
+            updateLayoutParams<ViewGroup.MarginLayoutParams> { updateMargins(top = usedInsetFinal) }
+            insets
+        }
+    }
+
+    // Adapt content for infinite edges
+    ViewCompat.setOnApplyWindowInsetsListener(root) { _, insets ->
+        val systemInsets = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+        root.setPadding(systemInsets.left, root.paddingTop, systemInsets.right, systemInsets.bottom)
+        insets
     }
 }

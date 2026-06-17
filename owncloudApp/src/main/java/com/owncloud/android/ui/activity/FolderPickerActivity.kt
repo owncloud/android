@@ -8,7 +8,7 @@
  * @author Aitor Ballesteros Pavón
  * @author Jorge Aguado Recio
  *
- * Copyright (C) 2025 ownCloud GmbH.
+ * Copyright (C) 2026 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -37,6 +37,7 @@ import com.owncloud.android.datamodel.FileDataStorageManager
 import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.spaces.model.OCSpace
+import com.owncloud.android.extensions.adaptInfiniteEdges
 import com.owncloud.android.presentation.authentication.AccountUtils
 import com.owncloud.android.presentation.files.filelist.MainFileListFragment
 import com.owncloud.android.presentation.spaces.SpacesListFragment
@@ -64,6 +65,8 @@ open class FolderPickerActivity : FileActivity(),
 
         binding = FilesFolderPickerBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        adaptInfiniteEdges(binding.root)
 
         // Allow or disallow touches with other visible windows
         binding.filesFolderPickerLayout.filterTouchesWhenObscured = PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(this)

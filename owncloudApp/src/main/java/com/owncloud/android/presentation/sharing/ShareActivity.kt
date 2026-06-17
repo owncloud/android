@@ -8,8 +8,9 @@
  * @author Christian Schabesberger
  * @author Aitor Ballesteros Pavón
  * @author Juan Carlos Garrote Gascón
+ * @author Jorge Aguado Recio
  *
- * Copyright (C) 2024 ownCloud GmbH.
+ * Copyright (C) 2026 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -39,6 +40,7 @@ import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.sharing.shares.model.OCShare
 import com.owncloud.android.domain.sharing.shares.model.ShareType
 import com.owncloud.android.domain.utils.Event.EventObserver
+import com.owncloud.android.extensions.adaptInfiniteEdges
 import com.owncloud.android.extensions.showErrorInSnackbar
 import com.owncloud.android.lib.resources.shares.RemoteShare
 import com.owncloud.android.presentation.common.UIResult
@@ -67,6 +69,9 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.share_activity)
+
+        val shareRoot = findViewById<View>(R.id.share_activity_layout)
+        adaptInfiniteEdges(shareRoot)
 
         setupStandardToolbar(
             title = null,

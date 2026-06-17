@@ -52,6 +52,8 @@ import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
@@ -249,6 +251,9 @@ class FileDisplayActivity : FileActivity(),
         binding = ActivityMainBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) { window.isNavigationBarContrastEnforced = false }
+        adaptInfiniteEdges()
 
         // setup toolbar
         setupRootToolbar(
@@ -2071,6 +2076,22 @@ class FileDisplayActivity : FileActivity(),
         } else {
             super.onKeyUp(keyCode, event)
         }
+
+    private fun adaptInfiniteEdges() {
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, insets ->
+            val systemInsets = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+
+            binding.navCoordinatorLayout.appBarLayout.setPadding(systemInsets.left, 0, systemInsets.right, 0)
+
+            val content = binding.navCoordinatorLayout.navMainContainer.listLayout
+            content.setPadding(systemInsets.left, content.paddingTop, systemInsets.right, 0)
+
+            val bottomNavView = binding.navCoordinatorLayout.bottomNavView
+            bottomNavView.setPadding(bottomNavView.paddingLeft, bottomNavView.paddingTop, bottomNavView.paddingRight, systemInsets.bottom)
+
+            insets
+        }
+    }
 
     companion object {
         private const val TAG_LIST_OF_FILES = "LIST_OF_FILES"

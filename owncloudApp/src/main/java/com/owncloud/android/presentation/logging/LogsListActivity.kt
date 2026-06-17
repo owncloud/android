@@ -2,7 +2,9 @@
  * ownCloud Android client application
  *
  * @author Fernando Sanz Velasco
- * Copyright (C) 2021 ownCloud GmbH.
+ * @author Jorge Aguado Recio
+ *
+ * Copyright (C) 2026 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -39,6 +41,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.owncloud.android.R
 import com.owncloud.android.databinding.LogsListActivityBinding
+import com.owncloud.android.extensions.adaptInfiniteEdges
 import com.owncloud.android.extensions.openFile
 import com.owncloud.android.extensions.sendFile
 import com.owncloud.android.extensions.showMessageInSnackbar
@@ -88,6 +91,7 @@ class LogsListActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         _binding = LogsListActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        adaptInfiniteEdges(binding.root)
         initToolbar()
         initList()
     }
