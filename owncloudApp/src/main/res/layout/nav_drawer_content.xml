@@ -19,33 +19,36 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <com.google.android.material.navigation.NavigationView
-        android:id="@+id/nav_view"
+        android:id="@+id/navigation_view_container"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:fitsSystemWindows="true"
-        app:headerLayout="@layout/nav_drawer_header"
-        app:menu="@menu/drawer_menu">
+        android:fitsSystemWindows="true">
 
-        <LinearLayout
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:fillViewport="true"
+            android:scrollbars="vertical">
 
-            <androidx.core.widget.NestedScrollView
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:fillViewport="true"/>
+            <com.google.android.material.navigation.NavigationView
+                android:id="@+id/nav_view"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="start"
+                android:fitsSystemWindows="true"
+                app:headerLayout="@layout/nav_drawer_header"
+                app:menu="@menu/drawer_menu">
 
-            <include
-                android:id="@+id/nav_drawer_footer"
-                layout="@layout/nav_drawer_footer"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/standard_half_margin"/>
+                <include
+                    android:id="@+id/nav_drawer_footer"
+                    layout="@layout/nav_drawer_footer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:layout_marginBottom="@dimen/standard_half_margin"/>
 
-        </LinearLayout>
-
+            </com.google.android.material.navigation.NavigationView>
+        </androidx.core.widget.NestedScrollView>
     </com.google.android.material.navigation.NavigationView>
 </merge>

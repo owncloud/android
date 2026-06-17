@@ -613,7 +613,7 @@ abstract class DrawerActivity : ToolbarActivity() {
     protected abstract fun restart()
 
     private fun adaptInfiniteEdges() {
-        val navView = findViewById<NavigationView>(R.id.nav_view)
+        val navView = findViewById<NavigationView>(R.id.navigation_view_container)
         val footer = navView.findViewById<View>(R.id.nav_drawer_footer)
 
         ViewCompat.setOnApplyWindowInsetsListener(navView) { _, insets ->
