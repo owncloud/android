@@ -1,0 +1,6 @@
+Bugfix: Grid mode after rotation
+
+Grid mode now recalculates its column count after device rotation, keeping
+file tiles in the correct layout for the new orientation.
+
+https://github.com/owncloud/android/issues/4884
