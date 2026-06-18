@@ -45,6 +45,7 @@ If you don't need some of the steps, cross them by removing the "[ ]" and surrou
  - [ ] [GIT] Merge `master` into `release/M.m.p`, fixing all the conflicts that could happen, in owncloud/android
  - [ ] [GIT] Merge without rebasing `release/M.m.p` branch into `master`, in owncloud/android
  - [ ] [COM] Ping @JordanaFung to update release information in https://owncloud.com/mobile-apps/
+ - [ ] [DOC] Update release guidelines document if needed
 
 
 ### QA
@@ -84,7 +85,8 @@ _____
  - [ ] [COM] Inform via chat that release is out
  - [ ] [GIT] Merge `master` into `release/M.m.p`, fixing all the conflicts that could happen, in owncloud/android
  - [ ] [GIT] Merge without rebasing `release/M.m.p` branch into `master`, in owncloud/android
- - [ ] [COM] Ping @DeepDiver1975 to update release information in https://owncloud.com/mobile-apps/
+ - [ ] [COM] Ping @JordanaFung to update release information in https://owncloud.com/mobile-apps/
+ - [ ] [DOC] Update release guidelines document if needed
 
 
 ### QA
