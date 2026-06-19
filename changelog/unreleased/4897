@@ -1,0 +1,6 @@
+Security: Redact cookie headers in logs
+
+Cookie headers have been redacted in the logs depending on the app
+configuration, in order to prevent sensitive information leaks.
+
+https://github.com/owncloud/android/pull/4897

@@ -1,5 +1,5 @@
 /* ownCloud Android Library is available under MIT license
- *   Copyright (C) 2023 ownCloud GmbH.
+ *   Copyright (C) 2026 ownCloud GmbH.
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -24,7 +24,9 @@
 package com.owncloud.android.lib.common.http.logging
 
 import com.owncloud.android.lib.common.http.HttpConstants.AUTHORIZATION_HEADER
+import com.owncloud.android.lib.common.http.HttpConstants.COOKIE_HEADER
 import com.owncloud.android.lib.common.http.HttpConstants.OC_X_REQUEST_ID
+import com.owncloud.android.lib.common.http.HttpConstants.SET_COOKIE_HEADER
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import okhttp3.Headers
@@ -85,11 +87,13 @@ class LogInterceptor : Interceptor {
 
     private fun logHeaders(headers: Headers): Map<String, String> {
         val auxHeaders = headers.toMap().toMutableMap()
-        if (auxHeaders.contains(AUTHORIZATION_HEADER)) {
-            val authHeaderList = auxHeaders[AUTHORIZATION_HEADER]!!.split(" ")
-            val authType = authHeaderList[0]
-            val authInfo = if (redactAuthHeader) "[redacted]" else authHeaderList[1]
-            auxHeaders[AUTHORIZATION_HEADER] = "$authType $authInfo"
+        if (redactAuthHeader) {
+            if (AUTHORIZATION_HEADER in auxHeaders) {
+                val authType = auxHeaders[AUTHORIZATION_HEADER]!!.substringBefore(" ")
+                auxHeaders[AUTHORIZATION_HEADER] = "$authType $REDACTED_VALUE"
+            }
+            if (COOKIE_HEADER in auxHeaders) { auxHeaders[COOKIE_HEADER] = REDACTED_VALUE }
+            if (SET_COOKIE_HEADER in auxHeaders) { auxHeaders[SET_COOKIE_HEADER] = REDACTED_VALUE }
         }
         return auxHeaders
     }
@@ -182,5 +186,6 @@ class LogInterceptor : Interceptor {
         private const val LIMIT_BODY_LOG: Long = 1000000
         private const val BINARY_OMITTED = "<-- Body end for response -- Binary -- Omitted:"
         private const val BYTES = "bytes -->"
+        private const val REDACTED_VALUE = "[redacted]"
     }
 }
