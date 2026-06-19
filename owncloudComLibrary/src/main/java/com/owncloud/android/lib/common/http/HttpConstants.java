@@ -1,5 +1,5 @@
 /* ownCloud Android Library is available under MIT license
- *   Copyright (C) 2024 ownCloud GmbH.
+ *   Copyright (C) 2026 ownCloud GmbH.
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -35,6 +35,7 @@ public class HttpConstants {
 
     public static final String AUTHORIZATION_HEADER = "Authorization";
     public static final String COOKIE_HEADER = "Cookie";
+    public static final String SET_COOKIE_HEADER = "Set-Cookie";
     public static final String BEARER_AUTHORIZATION_KEY = "Bearer ";
     public static final String USER_AGENT_HEADER = "User-Agent";
     public static final String IF_MATCH_HEADER = "If-Match";
