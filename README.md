@@ -6,7 +6,7 @@
 
 [![Android Unit Tests](https://github.com/owncloud/android/actions/workflows/android-unit-tests.yml/badge.svg)](https://github.com/owncloud/android/actions/workflows/android-unit-tests.yml) [![Android Instrumented Data Tests](https://github.com/owncloud/android/actions/workflows/android-instrumented-data-tests.yml/badge.svg)](https://github.com/owncloud/android/actions/workflows/android-instrumented-data-tests.yml) [![Detekt](https://github.com/owncloud/android/actions/workflows/detekt.yml/badge.svg)](https://github.com/owncloud/android/actions/workflows/detekt.yml) [![Conventional Commits](https://github.com/owncloud/android/actions/workflows/conventional-commits.yml/badge.svg)](https://github.com/owncloud/android/actions/workflows/conventional-commits.yml)
 
-The ownCloud Android app enables users to access, sync, and share files stored on their ownCloud server directly from Android devices. Built with Kotlin, it supports ownCloud Infinite Scale (oCIS) and ownCloud 10 servers, featuring file browsing, photo galleries, Spaces, sharing, passcode lock, and biometric authentication. The app is available on:
+The ownCloud Android app enables users to access, sync, and share files stored on their ownCloud server directly from Android devices. Built with Kotlin, it supports ownCloud Infinite Scale (oCIS) and ownCloud Classic 10 servers, featuring file browsing, photo galleries, Spaces, sharing, passcode lock, and biometric authentication. The app is available on:
 
 <a href="https://play.google.com/store/apps/details?id=com.owncloud.android"><img src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" height="75"></a><a href="https://f-droid.org/packages/com.owncloud.android/"><img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png" height="75"></a>
 
@@ -15,7 +15,7 @@ The ownCloud Android app enables users to access, sync, and share files stored o
 
 ## Part of Mobile (Android)
 
-This is the official [ownCloud Android app](https://github.com/owncloud/android), the primary mobile client for Android users. It connects to both [ownCloud Infinite Scale (oCIS)](https://github.com/owncloud/ocis) and [ownCloud Server (Classic)](https://github.com/owncloud/core).
+This is the official [ownCloud Android app](https://github.com/owncloud/android), the primary mobile client for Android users. It connects to both [ownCloud Infinite Scale (oCIS)](https://github.com/owncloud/ocis) and [ownCloud Classic](https://github.com/owncloud/core).
 
 ## Getting Started
 
