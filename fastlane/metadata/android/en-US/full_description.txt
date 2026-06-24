@@ -8,6 +8,6 @@ Whether using a mobile device, a desktop, or the web client, ownCloud provides t
 
 Should you have any problem connecting or synchronizing with your ownCloud server, please contact us on https://github.com/owncloud/android/issues or check https://central.owncloud.org.
 
-Visit us at www.ownCloud.com for more information about ownCloud and the ownCloud Subscriptions. For more information on the free and open source ownCloud Server, visit www.ownCloud.org.
+Visit us at www.ownCloud.com for more information about ownCloud and the ownCloud Subscriptions. For more information on the free and open source ownCloud Classic, visit www.ownCloud.org.
 
 *** If you are experiencing login issues after an update and the ownCloud Workaround App is installed in your device, please, try to uninstall and reinstall the Workaround App ***

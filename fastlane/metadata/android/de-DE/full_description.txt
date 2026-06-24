@@ -8,6 +8,6 @@ ownCloud bietet die Möglichkeit die richtigen Dateien zur richtigen Zeit in die
 
 Falls Sie Probleme haben sich mit dem ownCloud Server zu verbinden oder mit diesem zu synchronisieren kontaktieren Sie uns bitte auf https://github.com/owncloud/android/issues (englisch). Oftmals ist auch bereits eine Lösung in unserem Forum zu finden: https://central.owncloud.org (deutsch & englisch)
 
-Besuchen Sie uns unter www.ownCloud.com für weitere Informationen zu ownCloud und den ownCloud Subscriptions. Für mehr Informationen zur freien Open Source Software ownCloud Server besuchen Sie bitte www.owncloud.org .
+Besuchen Sie uns unter www.ownCloud.com für weitere Informationen zu ownCloud und den ownCloud Subscriptions. Für mehr Informationen zur freien Open Source Software ownCloud Classic besuchen Sie bitte www.owncloud.org .
 
 ***Falls es zu Log-In Problemen nach einem Update kommt und Sie die ownCloud Workaround App auf Ihrem Gerät installiert haben versuchen Sie bitte die Workaround App zu deinstallieren und anschließend neu zu installieren***
