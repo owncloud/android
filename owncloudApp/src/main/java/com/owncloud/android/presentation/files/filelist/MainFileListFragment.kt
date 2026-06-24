@@ -335,9 +335,7 @@ class MainFileListFragment : Fragment(),
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
         updateConfigDependentSizes()
-        if (::viewType.isInitialized && viewType == ViewType.VIEW_TYPE_GRID) {
-            updateRecyclerViewLayoutForCurrentViewType()
-        }
+        updateRecyclerViewLayoutForCurrentViewType()
     }
 
     private fun updateConfigDependentSizes() {
@@ -1015,16 +1013,10 @@ class MainFileListFragment : Fragment(),
     }
 
     private fun updateRecyclerViewLayoutForCurrentViewType() {
-        if (!::layoutManager.isInitialized || !::fileListAdapter.isInitialized) {
-            return
-        }
-
         layoutManager.spanCount = when (viewType) {
             ViewType.VIEW_TYPE_LIST -> 1
             ViewType.VIEW_TYPE_GRID -> ColumnQuantity(requireContext(), R.layout.grid_item).calculateNoOfColumns()
         }
-        layoutManager.invalidateSpanAssignments()
-        binding.recyclerViewMainFileList.requestLayout()
         fileListAdapter.notifyItemRangeChanged(0, fileListAdapter.itemCount)
     }
 
