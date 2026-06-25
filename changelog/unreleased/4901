@@ -1,0 +1,5 @@
+Bugfix: Remove useless debug manifest file
+
+Manifest file for debug builds has been removed because it was not used, in order to fix a lint warning
+
+https://github.com/owncloud/android/pull/4901
