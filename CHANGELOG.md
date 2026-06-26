@@ -1,5 +1,6 @@
 # Table of Contents
 
+* [Changelog for unreleased](#changelog-for-owncloud-android-client-unreleased-unreleased)
 * [Changelog for 4.8.1](#changelog-for-owncloud-android-client-481-2026-06-09)
 * [Changelog for 4.8.0](#changelog-for-owncloud-android-client-480-2026-05-18)
 * [Changelog for 4.7.0](#changelog-for-owncloud-android-client-470-2025-11-17)
@@ -32,6 +33,43 @@
 * [Changelog for 2.18.1](#changelog-for-owncloud-android-client-2181-2021-07-20)
 * [Changelog for 2.18.0](#changelog-for-owncloud-android-client-2180-2021-05-24)
 * [Changelog for 2.17 versions and below](#changelog-for-217-versions-and-below)
+# Changelog for ownCloud Android Client [unreleased] (UNRELEASED)
+
+The following sections list the changes in ownCloud Android Client unreleased relevant to
+ownCloud admins and users.
+
+[unreleased]: https://github.com/owncloud/android/compare/v4.8.1...master
+
+## Summary
+
+* Security - Redact cookie headers in logs: [#4897](https://github.com/owncloud/android/pull/4897)
+* Bugfix - Infinite edges: [#4576](https://github.com/owncloud/android/issues/4576)
+* Bugfix - Remove useless debug manifest file: [#4901](https://github.com/owncloud/android/pull/4901)
+
+## Details
+
+* Security - Redact cookie headers in logs: [#4897](https://github.com/owncloud/android/pull/4897)
+
+   Cookie headers have been redacted in the logs depending on the app
+   configuration, in order to prevent sensitive information leaks.
+
+   https://github.com/owncloud/android/pull/4897
+
+* Bugfix - Infinite edges: [#4576](https://github.com/owncloud/android/issues/4576)
+
+   All screens have been adapted to the edge-to-edge feature (starting from Android
+   15) and are no longer cut off by the system and navigation bars
+
+   https://github.com/owncloud/android/issues/4576
+   https://github.com/owncloud/android/pull/4887
+
+* Bugfix - Remove useless debug manifest file: [#4901](https://github.com/owncloud/android/pull/4901)
+
+   Manifest file for debug builds has been removed because it was not used, in
+   order to fix a lint warning
+
+   https://github.com/owncloud/android/pull/4901
+
 # Changelog for ownCloud Android Client [4.8.1] (2026-06-09)
 
 The following sections list the changes in ownCloud Android Client 4.8.1 relevant to
