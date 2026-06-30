@@ -621,15 +621,6 @@
     <string name="release_notes_icon">リリースノートのアイコン</string>
     <string name="release_notes_bugfixes_title">軽微なバグ修正</string>
     <string name="release_notes_bugfixes_subtitle">アプリの使い心地を向上するため、いくつかのバグを修正しました</string>
-    <string name="release_notes_4_8_0_title_set_emoji_as_space_image">絵文字をスペース用画像として設定する</string>
-    <string name="release_notes_4_8_0_subtitle_set_emoji_as_space_image">適切な権限を持つInfinite Scaleユーザーは、絵文字をスペース用画像として設定できるようになりました</string>
-    <string name="release_notes_4_8_0_title_space_membership">スペースのメンバーシップ</string>
-    <string name="release_notes_4_8_0_subtitle_space_membership">Infinite Scaleユーザーは、スペースのすべてのメンバーを確認し、適切な権限で管理できます</string>
-    <string name="release_notes_4_8_0_title_spaces_permanent_links">スペースの固定リンク</string>
-    <string name="release_notes_4_8_0_subtitle_spaces_permanent_links">Infinite Scaleユーザーは、スペースの固定リンクを取得し、他のメンバーと共有できるようになりました。</string>
-    <string name="release_notes_4_8_0_subtitle_space_public_links">Infinite Scaleユーザーは、スペースのすべての公開リンクを表示し、適切な権限で管理できます。</string>
-    <string name="release_notes_4_8_0_title_action_to_copy_or_move_destination_folder">対象フォルダへのナビゲーション</string>
-    <string name="release_notes_4_8_0_subtitle_action_to_copy_or_move_destination_folder">ファイルまたはフォルダがコピーまたは移動されたときに、宛先フォルダに移動する新しいアクション</string>
     <!-- Open in web -->
     <string name="ic_action_open_with_web">%1$s(Web) で開く</string>
     <string name="open_in_web_error_generic">Webで開けません</string>
