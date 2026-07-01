@@ -46,6 +46,7 @@ import androidx.core.content.FileProvider
 import androidx.core.text.HtmlCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import androidx.core.view.updateMargins
 import androidx.fragment.app.FragmentActivity
@@ -96,7 +97,10 @@ fun Activity.showMessageInSnackbar(
     message: CharSequence,
     duration: Int = Snackbar.LENGTH_LONG
 ) {
-    Snackbar.make(findViewById(layoutId), message, duration).show()
+    val bottomNavView = findViewById<View?>(R.id.bottom_nav_view)
+    val snackbar = Snackbar.make(findViewById(layoutId), message, duration)
+    if (bottomNavView?.isVisible == true) { snackbar.setAnchorView(bottomNavView) }
+    snackbar.show()
 }
 
 fun Activity.showSnackbarWithAction(
@@ -105,9 +109,10 @@ fun Activity.showSnackbarWithAction(
     action: () -> Unit,
     duration: Int = Snackbar.LENGTH_LONG,
 ) {
-    Snackbar.make(findViewById(android.R.id.content), message, duration)
-        .setAction(actionText) { action() }
-        .show()
+    val bottomNavView = findViewById<View?>(R.id.bottom_nav_view)
+    val snackbar = Snackbar.make(findViewById(android.R.id.content), message, duration)
+    if (bottomNavView?.isVisible == true) { snackbar.setAnchorView(bottomNavView) }
+    snackbar.setAction(actionText) { action() }.show()
 }
 
 fun Activity.showErrorInToast(

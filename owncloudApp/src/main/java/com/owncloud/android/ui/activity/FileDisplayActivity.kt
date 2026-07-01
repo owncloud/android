@@ -58,6 +58,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.work.WorkManager
+import com.google.android.material.snackbar.Snackbar
 import com.owncloud.android.AppRater
 import com.owncloud.android.BuildConfig
 import com.owncloud.android.MainApp
@@ -1409,7 +1410,7 @@ class FileDisplayActivity : FileActivity(),
 
                     is SynchronizeFileUseCase.SyncType.DownloadEnqueued -> {
                         fileWaitingToPreview?.let {
-                            showSnackMessage(getString(R.string.new_remote_version_found_msg))
+                            Snackbar.make(findViewById(android.R.id.content), R.string.new_remote_version_found_msg, Snackbar.LENGTH_LONG).show()
                             startSyncThenOpen(it)
                             fileWaitingToPreview = null
                         } ?: showSnackMessage(getString(R.string.download_enqueued_msg))
