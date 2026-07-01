@@ -1178,7 +1178,6 @@ class FileDisplayActivity : FileActivity(),
                     }
                     updateBottombar(targetFolderSpace)
                 },
-                layoutId = R.id.list_layout
             )
         } else {
             showMessageInSnackbar(R.id.list_layout, message)

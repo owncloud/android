@@ -104,9 +104,8 @@ fun Activity.showSnackbarWithAction(
     actionText: CharSequence,
     action: () -> Unit,
     duration: Int = Snackbar.LENGTH_LONG,
-    layoutId: Int = android.R.id.content
 ) {
-    Snackbar.make(findViewById(layoutId), message, duration)
+    Snackbar.make(findViewById(android.R.id.content), message, duration)
         .setAction(actionText) { action() }
         .show()
 }
