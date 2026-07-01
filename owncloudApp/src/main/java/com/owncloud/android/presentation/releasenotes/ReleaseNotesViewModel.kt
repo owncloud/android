@@ -44,36 +44,6 @@ class ReleaseNotesViewModel(
     companion object {
         val releaseNotesList = listOf(
             ReleaseNote(
-                title = R.string.release_notes_4_8_0_title_space_membership,
-                subtitle = R.string.release_notes_4_8_0_subtitle_space_membership,
-                type = ReleaseNoteType.ENHANCEMENT
-            ),
-            ReleaseNote(
-                title = R.string.release_notes_4_8_0_title_space_public_links,
-                subtitle = R.string.release_notes_4_8_0_subtitle_space_public_links,
-                type = ReleaseNoteType.ENHANCEMENT
-            ),
-            ReleaseNote(
-                title = R.string.release_notes_4_8_0_title_set_emoji_as_space_image,
-                subtitle = R.string.release_notes_4_8_0_subtitle_set_emoji_as_space_image,
-                type = ReleaseNoteType.ENHANCEMENT
-            ),
-            ReleaseNote(
-                title = R.string.release_notes_4_8_0_title_spaces_permanent_links,
-                subtitle = R.string.release_notes_4_8_0_subtitle_spaces_permanent_links,
-                type = ReleaseNoteType.ENHANCEMENT
-            ),
-            ReleaseNote(
-                title = R.string.release_notes_4_8_0_title_action_to_copy_or_move_destination_folder,
-                subtitle = R.string.release_notes_4_8_0_subtitle_action_to_copy_or_move_destination_folder,
-                type = ReleaseNoteType.ENHANCEMENT
-            ),
-            ReleaseNote(
-                title = R.string.release_notes_4_8_0_title_warning_latest_release_sdk28,
-                subtitle = R.string.release_notes_4_8_0_subtitle_warning_latest_release_sdk28,
-                type = ReleaseNoteType.CHANGE
-            ),
-            ReleaseNote(
                 title = R.string.release_notes_bugfixes_title,
                 subtitle = R.string.release_notes_bugfixes_subtitle,
                 type = ReleaseNoteType.BUGFIX

@@ -623,18 +623,6 @@
     <string name="release_notes_icon">Release note icon</string>
     <string name="release_notes_bugfixes_title">Minor bugfixes</string>
     <string name="release_notes_bugfixes_subtitle">Some bugs were fixed to improve experience in the app</string>
-    <string name="release_notes_4_8_0_title_set_emoji_as_space_image">Set emoji as space image</string>
-    <string name="release_notes_4_8_0_subtitle_set_emoji_as_space_image">Infinite Scale users with right permissions can now set an emoji as space image</string>
-    <string name="release_notes_4_8_0_title_space_membership">Space membership</string>
-    <string name="release_notes_4_8_0_subtitle_space_membership">Infinite Scale users can see all members of a space and manage them with right permissions</string>
-    <string name="release_notes_4_8_0_title_spaces_permanent_links">Permanent links for spaces</string>
-    <string name="release_notes_4_8_0_subtitle_spaces_permanent_links">Infinite Scale users can now get a permanent link for a space and share it with other members</string>
-    <string name="release_notes_4_8_0_title_space_public_links">Space public links</string>
-    <string name="release_notes_4_8_0_subtitle_space_public_links">Infinite Scale users can see all public links of a space and manage them with right permissions</string>
-    <string name="release_notes_4_8_0_title_action_to_copy_or_move_destination_folder">Navigation to target folder</string>
-    <string name="release_notes_4_8_0_subtitle_action_to_copy_or_move_destination_folder">New action to navigate to the destination folder when a file or folder is copied or moved</string>
-    <string name="release_notes_4_8_0_title_warning_latest_release_sdk28">Android 8 last call</string>
-    <string name="release_notes_4_8_0_subtitle_warning_latest_release_sdk28">This version will be the latest one with support for Android 8 and older</string>
 
     <!-- Open in web -->
     <string name="ic_action_open_with_web">Open in %1$s (web)</string>
