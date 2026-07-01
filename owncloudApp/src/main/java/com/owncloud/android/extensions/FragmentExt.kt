@@ -3,8 +3,9 @@
  *
  * @author David González Verdugo
  * @author Juan Carlos Garrote Gascón
+ * @author Jorge Aguado Recio
  *
- * Copyright (C) 2023 ownCloud GmbH.
+ * Copyright (C) 2026 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -26,7 +27,9 @@ import android.content.Context
 import android.content.DialogInterface
 import android.view.Menu
 import android.view.MenuItem.SHOW_AS_ACTION_NEVER
+import android.view.View
 import android.view.inputmethod.InputMethodManager
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -45,10 +48,14 @@ fun Fragment.showErrorInSnackbar(genericErrorMessageId: Int, throwable: Throwabl
 
 fun Fragment.showMessageInSnackbar(
     message: CharSequence,
-    duration: Int = Snackbar.LENGTH_LONG
+    duration: Int = Snackbar.LENGTH_LONG,
 ) {
     val requiredView = view ?: return
-    Snackbar.make(requiredView, message, duration).show()
+    val rootView = view?.rootView ?: return
+    val bottomNavView = rootView.findViewById<View?>(R.id.bottom_nav_view)
+    val snackbar = Snackbar.make(requiredView, message, duration)
+    if (bottomNavView?.isVisible == true) { snackbar.setAnchorView(bottomNavView) }
+    snackbar.show()
 }
 
 fun Fragment.showSnackbarWithAction(
