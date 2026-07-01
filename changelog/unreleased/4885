@@ -1,0 +1,7 @@
+Change: Upgrade minimum SDK version to API 28 (Android 9)
+
+The minimum SDK version has been upgraded to API 28 (Android 9)
+and previous versions will not be supported anymore
+
+https://github.com/owncloud/android/issues/4880
+https://github.com/owncloud/android/pull/4885
