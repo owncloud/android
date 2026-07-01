@@ -62,6 +62,9 @@ _____
 
 ### TASKS:
 
+ - [ ] [GIT] Merge translations branch `chore/translations-update` into `master`
+ - [ ] [GIT] Merge calens branch `chore/changelog-update` into `master`
+ - [ ] [GIT] Merge sbom branch `chore/sbom-update` into `master`
  - [ ] [GIT] Create branch `release/M.m.p` in owncloud/android from `latest`
  - [ ] [DEV] Update version number and name in build.gradle in owncloudApp module
  - [ ] [DIS] Update release notes in app and changelog in `unreleased` with the proper content for the release
@@ -78,10 +81,10 @@ _____
  - [ ] [DIS] Upload release APK and bundle to internal ownCloud instance
  - [ ] [DIS] Upload and publish release bundle and changelog in Play Store
  - [ ] [DIS] Update screenshots in Play Store/GitHub/F-Droid
+ - [ ] [DIS] Release published in Play Store
  - [ ] [GIT] Create and sign tag `vM.m.p` in HEAD commit of release branch, in owncloud/android
  - [ ] [GIT] Move tag `latest` pointing the same commit as the release commit
  - [ ] [DIS] Publish a new [release](https://github.com/owncloud/android/releases) in owncloud/android
- - [ ] [DIS] Release published in Play Store
  - [ ] [COM] Inform via chat that release is out
  - [ ] [GIT] Merge `master` into `release/M.m.p`, fixing all the conflicts that could happen, in owncloud/android
  - [ ] [GIT] Merge without rebasing `release/M.m.p` branch into `master`, in owncloud/android
