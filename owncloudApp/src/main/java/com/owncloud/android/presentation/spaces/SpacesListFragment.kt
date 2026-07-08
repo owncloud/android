@@ -181,13 +181,19 @@ class SpacesListFragment :
         collectLatestLifecycleFlow(spacesListViewModel.spacesList) { uiState ->
             var spacesToListFiltered: List<OCSpace>
             if (uiState.searchFilter != "") {
-                spacesToListFiltered =
-                    uiState.spaces.filter { it.name.lowercase().contains(uiState.searchFilter.lowercase()) && !it.isPersonal &&
+                val searchFilter = uiState.searchFilter.lowercase()
+                spacesToListFiltered = if (isMultiPersonal) {
+                    uiState.spaces.filter { it.name.lowercase().contains(searchFilter) && shouldShowDisabledSpace(it) }
+                } else {
+                    uiState.spaces.filter { it.name.lowercase().contains(searchFilter) && !it.isPersonal &&
                             shouldShowDisabledSpace(it) }
-                val personalSpace = uiState.spaces.find { it.isPersonal }
-                personalSpace?.let {
-                    spacesToListFiltered = spacesToListFiltered.toMutableList().apply {
-                        add(0, personalSpace)
+                }
+                if (!isMultiPersonal) {
+                    val personalSpace = uiState.spaces.find { it.isPersonal }
+                    personalSpace?.let {
+                        spacesToListFiltered = spacesToListFiltered.toMutableList().apply {
+                            add(0, personalSpace)
+                        }
                     }
                 }
                 showOrHideEmptyView(spacesToListFiltered)
