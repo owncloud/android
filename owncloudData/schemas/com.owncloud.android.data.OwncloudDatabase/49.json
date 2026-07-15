@@ -23,8 +23,7 @@
           {
             "fieldPath": "ext",
             "columnName": "ext",
-            "affinity": "TEXT",
-            "notNull": false
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "appProviders",
@@ -35,32 +34,27 @@
           {
             "fieldPath": "name",
             "columnName": "name",
-            "affinity": "TEXT",
-            "notNull": false
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "icon",
             "columnName": "icon",
-            "affinity": "TEXT",
-            "notNull": false
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "description",
             "columnName": "description",
-            "affinity": "TEXT",
-            "notNull": false
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "allowCreation",
             "columnName": "allow_creation",
-            "affinity": "INTEGER",
-            "notNull": false
+            "affinity": "INTEGER"
           },
           {
             "fieldPath": "defaultApplication",
             "columnName": "default_application",
-            "affinity": "TEXT",
-            "notNull": false
+            "affinity": "TEXT"
           }
         ],
         "primaryKey": {
@@ -69,9 +63,7 @@
             "account_name",
             "mime_type"
           ]
-        },
-        "indices": [],
-        "foreignKeys": []
+        }
       },
       {
         "tableName": "folder_backup",
@@ -128,8 +120,7 @@
           {
             "fieldPath": "spaceId",
             "columnName": "spaceId",
-            "affinity": "TEXT",
-            "notNull": false
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "id",
@@ -143,9 +134,7 @@
           "columnNames": [
             "id"
           ]
-        },
-        "indices": [],
-        "foreignKeys": []
+        }
       },
       {
         "tableName": "capabilities",
@@ -154,8 +143,7 @@
           {
             "fieldPath": "accountName",
             "columnName": "account",
-            "affinity": "TEXT",
-            "notNull": false
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "versionMajor",
@@ -178,14 +166,12 @@
           {
             "fieldPath": "versionString",
             "columnName": "version_string",
-            "affinity": "TEXT",
-            "notNull": false
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "versionEdition",
             "columnName": "version_edition",
-            "affinity": "TEXT",
-            "notNull": false
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "corePollInterval",
@@ -354,98 +340,82 @@
           {
             "fieldPath": "appProviders.enabled",
             "columnName": "app_providers_enabled",
-            "affinity": "INTEGER",
-            "notNull": false
+            "affinity": "INTEGER"
           },
           {
             "fieldPath": "appProviders.version",
             "columnName": "app_providers_version",
-            "affinity": "TEXT",
-            "notNull": false
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "appProviders.appsUrl",
             "columnName": "app_providers_appsUrl",
-            "affinity": "TEXT",
-            "notNull": false
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "appProviders.openUrl",
             "columnName": "app_providers_openUrl",
-            "affinity": "TEXT",
-            "notNull": false
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "appProviders.openWebUrl",
             "columnName": "app_providers_openWebUrl",
-            "affinity": "TEXT",
-            "notNull": false
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "appProviders.newUrl",
             "columnName": "app_providers_newUrl",
-            "affinity": "TEXT",
-            "notNull": false
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "spaces.enabled",
             "columnName": "spaces_enabled",
-            "affinity": "INTEGER",
-            "notNull": false
+            "affinity": "INTEGER"
           },
           {
             "fieldPath": "spaces.projects",
             "columnName": "spaces_projects",
-            "affinity": "INTEGER",
-            "notNull": false
+            "affinity": "INTEGER"
           },
           {
             "fieldPath": "spaces.shareJail",
             "columnName": "spaces_shareJail",
-            "affinity": "INTEGER",
-            "notNull": false
+            "affinity": "INTEGER"
           },
           {
             "fieldPath": "spaces.hasMultiplePersonalSpaces",
             "columnName": "spaces_hasMultiplePersonalSpaces",
-            "affinity": "INTEGER",
-            "notNull": false
+            "affinity": "INTEGER"
           },
           {
             "fieldPath": "passwordPolicy.maxCharacters",
             "columnName": "password_policy_maxCharacters",
-            "affinity": "INTEGER",
-            "notNull": false
+            "affinity": "INTEGER"
           },
           {
             "fieldPath": "passwordPolicy.minCharacters",
             "columnName": "password_policy_minCharacters",
-            "affinity": "INTEGER",
-            "notNull": false
+            "affinity": "INTEGER"
           },
           {
             "fieldPath": "passwordPolicy.minDigits",
             "columnName": "password_policy_minDigits",
-            "affinity": "INTEGER",
-            "notNull": false
+            "affinity": "INTEGER"
           },
           {
             "fieldPath": "passwordPolicy.minLowercaseCharacters",
             "columnName": "password_policy_minLowercaseCharacters",
-            "affinity": "INTEGER",
-            "notNull": false
+            "affinity": "INTEGER"
           },
           {
             "fieldPath": "passwordPolicy.minSpecialCharacters",
             "columnName": "password_policy_minSpecialCharacters",
-            "affinity": "INTEGER",
-            "notNull": false
+            "affinity": "INTEGER"
           },
           {
             "fieldPath": "passwordPolicy.minUppercaseCharacters",
             "columnName": "password_policy_minUppercaseCharacters",
-            "affinity": "INTEGER",
-            "notNull": false
+            "affinity": "INTEGER"
           }
         ],
         "primaryKey": {
@@ -453,9 +423,7 @@
           "columnNames": [
             "id"
           ]
-        },
-        "indices": [],
-        "foreignKeys": []
+        }
       },
       {
         "tableName": "files",
@@ -464,8 +432,7 @@
           {
             "fieldPath": "parentId",
             "columnName": "parentId",
-            "affinity": "INTEGER",
-            "notNull": false
+            "affinity": "INTEGER"
           },
           {
             "fieldPath": "owner",
@@ -482,8 +449,7 @@
           {
             "fieldPath": "remoteId",
             "columnName": "remoteId",
-            "affinity": "TEXT",
-            "notNull": false
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "length",
@@ -494,8 +460,7 @@
           {
             "fieldPath": "creationTimestamp",
             "columnName": "creationTimestamp",
-            "affinity": "INTEGER",
-            "notNull": false
+            "affinity": "INTEGER"
           },
           {
             "fieldPath": "modificationTimestamp",
@@ -512,62 +477,52 @@
           {
             "fieldPath": "etag",
             "columnName": "etag",
-            "affinity": "TEXT",
-            "notNull": false
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "permissions",
             "columnName": "permissions",
-            "affinity": "TEXT",
-            "notNull": false
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "privateLink",
             "columnName": "privateLink",
-            "affinity": "TEXT",
-            "notNull": false
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "storagePath",
             "columnName": "storagePath",
-            "affinity": "TEXT",
-            "notNull": false
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "name",
             "columnName": "name",
-            "affinity": "TEXT",
-            "notNull": false
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "treeEtag",
             "columnName": "treeEtag",
-            "affinity": "TEXT",
-            "notNull": false
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "availableOfflineStatus",
             "columnName": "keepInSync",
-            "affinity": "INTEGER",
-            "notNull": false
+            "affinity": "INTEGER"
           },
           {
             "fieldPath": "lastSyncDateForData",
             "columnName": "lastSyncDateForData",
-            "affinity": "INTEGER",
-            "notNull": false
+            "affinity": "INTEGER"
           },
           {
             "fieldPath": "lastUsage",
             "columnName": "lastUsage",
-            "affinity": "INTEGER",
-            "notNull": false
+            "affinity": "INTEGER"
           },
           {
             "fieldPath": "fileShareViaLink",
             "columnName": "fileShareViaLink",
-            "affinity": "INTEGER",
-            "notNull": false
+            "affinity": "INTEGER"
           },
           {
             "fieldPath": "needsToUpdateThumbnail",
@@ -578,26 +533,22 @@
           {
             "fieldPath": "modifiedAtLastSyncForData",
             "columnName": "modifiedAtLastSyncForData",
-            "affinity": "INTEGER",
-            "notNull": false
+            "affinity": "INTEGER"
           },
           {
             "fieldPath": "etagInConflict",
             "columnName": "etagInConflict",
-            "affinity": "TEXT",
-            "notNull": false
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "fileIsDownloading",
             "columnName": "fileIsDownloading",
-            "affinity": "INTEGER",
-            "notNull": false
+            "affinity": "INTEGER"
           },
           {
             "fieldPath": "sharedWithSharee",
             "columnName": "sharedWithSharee",
-            "affinity": "INTEGER",
-            "notNull": false
+            "affinity": "INTEGER"
           },
           {
             "fieldPath": "sharedByLink",
@@ -608,8 +559,7 @@
           {
             "fieldPath": "spaceId",
             "columnName": "spaceId",
-            "affinity": "TEXT",
-            "notNull": false
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "id",
@@ -624,7 +574,6 @@
             "id"
           ]
         },
-        "indices": [],
         "foreignKeys": [
           {
             "table": "spaces",
@@ -654,14 +603,12 @@
           {
             "fieldPath": "uploadWorkerUuid",
             "columnName": "uploadWorkerUuid",
-            "affinity": "BLOB",
-            "notNull": false
+            "affinity": "BLOB"
           },
           {
             "fieldPath": "downloadWorkerUuid",
             "columnName": "downloadWorkerUuid",
-            "affinity": "BLOB",
-            "notNull": false
+            "affinity": "BLOB"
           },
           {
             "fieldPath": "isSynchronizing",
@@ -676,7 +623,6 @@
             "fileId"
           ]
         },
-        "indices": [],
         "foreignKeys": [
           {
             "table": "files",
@@ -704,8 +650,7 @@
           {
             "fieldPath": "shareWith",
             "columnName": "share_with",
-            "affinity": "TEXT",
-            "notNull": false
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "path",
@@ -734,20 +679,17 @@
           {
             "fieldPath": "token",
             "columnName": "token",
-            "affinity": "TEXT",
-            "notNull": false
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "sharedWithDisplayName",
             "columnName": "shared_with_display_name",
-            "affinity": "TEXT",
-            "notNull": false
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "sharedWithAdditionalInfo",
             "columnName": "share_with_additional_info",
-            "affinity": "TEXT",
-            "notNull": false
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "isFolder",
@@ -770,14 +712,12 @@
           {
             "fieldPath": "name",
             "columnName": "name",
-            "affinity": "TEXT",
-            "notNull": false
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "shareLink",
             "columnName": "url",
-            "affinity": "TEXT",
-            "notNull": false
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "id",
@@ -791,9 +731,7 @@
           "columnNames": [
             "id"
           ]
-        },
-        "indices": [],
-        "foreignKeys": []
+        }
       },
       {
         "tableName": "transfers",
@@ -844,14 +782,12 @@
           {
             "fieldPath": "transferEndTimestamp",
             "columnName": "transferEndTimestamp",
-            "affinity": "INTEGER",
-            "notNull": false
+            "affinity": "INTEGER"
           },
           {
             "fieldPath": "lastResult",
             "columnName": "lastResult",
-            "affinity": "INTEGER",
-            "notNull": false
+            "affinity": "INTEGER"
           },
           {
             "fieldPath": "createdBy",
@@ -862,20 +798,17 @@
           {
             "fieldPath": "transferId",
             "columnName": "transferId",
-            "affinity": "TEXT",
-            "notNull": false
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "spaceId",
             "columnName": "spaceId",
-            "affinity": "TEXT",
-            "notNull": false
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "sourcePath",
             "columnName": "sourcePath",
-            "affinity": "TEXT",
-            "notNull": false
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "id",
@@ -889,9 +822,7 @@
           "columnNames": [
             "id"
           ]
-        },
-        "indices": [],
-        "foreignKeys": []
+        }
       },
       {
         "tableName": "spaces",
@@ -906,8 +837,7 @@
           {
             "fieldPath": "driveAlias",
             "columnName": "drive_alias",
-            "affinity": "TEXT",
-            "notNull": false
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "driveType",
@@ -924,8 +854,7 @@
           {
             "fieldPath": "lastModifiedDateTime",
             "columnName": "last_modified_date_time",
-            "affinity": "TEXT",
-            "notNull": false
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "name",
@@ -936,50 +865,42 @@
           {
             "fieldPath": "ownerId",
             "columnName": "owner_id",
-            "affinity": "TEXT",
-            "notNull": false
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "webUrl",
             "columnName": "web_url",
-            "affinity": "TEXT",
-            "notNull": false
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "description",
             "columnName": "description",
-            "affinity": "TEXT",
-            "notNull": false
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "quota.remaining",
             "columnName": "quota_remaining",
-            "affinity": "INTEGER",
-            "notNull": false
+            "affinity": "INTEGER"
           },
           {
             "fieldPath": "quota.state",
             "columnName": "quota_state",
-            "affinity": "TEXT",
-            "notNull": false
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "quota.total",
             "columnName": "quota_total",
-            "affinity": "INTEGER",
-            "notNull": false
+            "affinity": "INTEGER"
           },
           {
             "fieldPath": "quota.used",
             "columnName": "quota_used",
-            "affinity": "INTEGER",
-            "notNull": false
+            "affinity": "INTEGER"
           },
           {
             "fieldPath": "root.eTag",
             "columnName": "root_etag",
-            "affinity": "TEXT",
-            "notNull": false
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "root.id",
@@ -996,14 +917,12 @@
           {
             "fieldPath": "root.deleteState",
             "columnName": "root_deleted_state",
-            "affinity": "TEXT",
-            "notNull": false
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "root.role",
             "columnName": "space_role",
-            "affinity": "TEXT",
-            "notNull": false
+            "affinity": "TEXT"
           }
         ],
         "primaryKey": {
@@ -1012,9 +931,7 @@
             "account_name",
             "space_id"
           ]
-        },
-        "indices": [],
-        "foreignKeys": []
+        }
       },
       {
         "tableName": "spaces_special",
@@ -1053,8 +970,7 @@
           {
             "fieldPath": "lastModifiedDateTime",
             "columnName": "last_modified_date_time",
-            "affinity": "TEXT",
-            "notNull": false
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "name",
@@ -1088,7 +1004,6 @@
             "special_id"
           ]
         },
-        "indices": [],
         "foreignKeys": [
           {
             "table": "spaces",
@@ -1130,14 +1045,12 @@
           {
             "fieldPath": "total",
             "columnName": "total",
-            "affinity": "INTEGER",
-            "notNull": false
+            "affinity": "INTEGER"
           },
           {
             "fieldPath": "state",
             "columnName": "state",
-            "affinity": "TEXT",
-            "notNull": false
+            "affinity": "TEXT"
           }
         ],
         "primaryKey": {
@@ -1145,12 +1058,9 @@
           "columnNames": [
             "accountName"
           ]
-        },
-        "indices": [],
-        "foreignKeys": []
+        }
       }
     ],
-    "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
       "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '608dd4806a3630dc41bcc6d380576fb6')"

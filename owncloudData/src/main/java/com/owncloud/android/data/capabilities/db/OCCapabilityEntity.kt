@@ -60,9 +60,11 @@ import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_VER
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_VERSION_MICRO
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_VERSION_MINOR
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_VERSION_STRING
+import com.owncloud.android.domain.capabilities.model.AppProviders
 import com.owncloud.android.domain.capabilities.model.CapabilityBooleanType
 import com.owncloud.android.domain.capabilities.model.CapabilityBooleanType.Companion.capabilityBooleanTypeUnknownString
-import com.owncloud.android.domain.capabilities.model.OCCapability
+import com.owncloud.android.domain.capabilities.model.PasswordPolicy
+import com.owncloud.android.domain.capabilities.model.Spaces
 
 /**
  * Represents one record of the Capabilities table.
@@ -128,11 +130,11 @@ data class OCCapabilityEntity(
     @ColumnInfo(name = CAPABILITIES_FILES_PRIVATE_LINKS, defaultValue = capabilityBooleanTypeUnknownString)
     val filesPrivateLinks: Int,
     @Embedded(prefix = CAPABILITIES_APP_PROVIDERS_PREFIX)
-    val appProviders: OCCapability.AppProviders?,
+    val appProviders: AppProviders?,
     @Embedded(prefix = CAPABILITIES_SPACES_PREFIX)
-    val spaces: OCCapability.Spaces?,
+    val spaces: Spaces?,
     @Embedded(prefix = CAPABILITIES_PASSWORD_POLICY_PREFIX)
-    val passwordPolicy: OCCapability.PasswordPolicy?,
+    val passwordPolicy: PasswordPolicy?,
 ) {
     @PrimaryKey(autoGenerate = true) var id: Int = 0
 
