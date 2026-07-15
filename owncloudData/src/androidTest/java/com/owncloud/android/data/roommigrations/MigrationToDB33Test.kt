@@ -2,7 +2,9 @@
  *   ownCloud Android client application
  *
  *   @author Abel García de Prada
- *   Copyright (C) 2020 ownCloud GmbH.
+ *   @author Jorge Aguado Recio
+ *
+ *   Copyright (C) 2026 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -104,7 +106,7 @@ class MigrationToDB33Test : MigrationTest() {
                     "file_source)" +
                     " VALUES " +
                     "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-            arrayOf(
+            arrayOf<Any?>(
                 OC_SHARE.shareType,
                 OC_SHARE.shareWith,
                 OC_SHARE.path,

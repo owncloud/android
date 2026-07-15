@@ -22,8 +22,11 @@
 
 package com.owncloud.android.data.capabilities.datasources.mapper
 
+import com.owncloud.android.domain.capabilities.model.AppProviders
 import com.owncloud.android.domain.capabilities.model.CapabilityBooleanType
 import com.owncloud.android.domain.capabilities.model.OCCapability
+import com.owncloud.android.domain.capabilities.model.PasswordPolicy
+import com.owncloud.android.domain.capabilities.model.Spaces
 import com.owncloud.android.domain.mappers.RemoteMapper
 import com.owncloud.android.lib.resources.status.RemoteCapability
 import com.owncloud.android.lib.resources.status.RemoteCapability.CapabilityBooleanType as RemoteCapabilityBooleanType
@@ -124,11 +127,11 @@ class RemoteCapabilityMapper : RemoteMapper<OCCapability, RemoteCapability> {
         }
 
     private fun RemoteCapability.RemoteAppProviders.toAppProviders() =
-        OCCapability.AppProviders(enabled, version, appsUrl, openUrl, openWebUrl, newUrl)
+        AppProviders(enabled, version, appsUrl, openUrl, openWebUrl, newUrl)
 
     private fun RemoteCapability.RemoteSpaces.toSpaces() =
-        OCCapability.Spaces(enabled, projects, shareJail, hasMultiplePersonalSpaces)
+        Spaces(enabled, projects, shareJail, hasMultiplePersonalSpaces)
 
     private fun RemoteCapability.RemotePasswordPolicy.toPasswordPolicy() =
-        OCCapability.PasswordPolicy(maxCharacters, minCharacters, minDigits, minLowercaseCharacters, minSpecialCharacters, minUppercaseCharacters)
+        PasswordPolicy(maxCharacters, minCharacters, minDigits, minLowercaseCharacters, minSpecialCharacters, minUppercaseCharacters)
 }

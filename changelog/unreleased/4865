@@ -1,0 +1,6 @@
+Change: Bump AGP from 8.7.2 to 9.2.1
+
+Android Gradle Plugin (AGP) has been updated from version 8.7.2 to 9.2.1, along
+with other dependencies required to build the app with this new version.
+
+https://github.com/owncloud/android/pull/4865
