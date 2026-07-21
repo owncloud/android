@@ -1,0 +1,5 @@
+Bugfix: Help URL incorrect
+
+Help URL has been fixed because it returned "Page not found"
+
+https://github.com/owncloud/android/pull/4931
