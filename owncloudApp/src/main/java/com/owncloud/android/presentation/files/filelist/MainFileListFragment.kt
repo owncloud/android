@@ -332,6 +332,9 @@ class MainFileListFragment : Fragment(),
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
         updateConfigDependentSizes()
+        if (mainFileListViewModel.isGridModeSetAsPreferred()) {
+            layoutManager.spanCount = ColumnQuantity(requireContext(), R.layout.grid_item).calculateNoOfColumns()
+        }
     }
 
     private fun updateConfigDependentSizes() {
