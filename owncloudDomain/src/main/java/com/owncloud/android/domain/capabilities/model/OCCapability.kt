@@ -70,32 +70,32 @@ data class OCCapability(
     fun isSpacesAllowed(): Boolean = spaces?.enabled == true
 
     fun isSpacesProjectsAllowed(): Boolean = spaces?.projects == true
-
-    data class AppProviders(
-        val enabled: Boolean,
-        val version: String,
-        val appsUrl: String?,
-        val openUrl: String?,
-        val openWebUrl: String?,
-        val newUrl: String?,
-    )
-
-    data class Spaces(
-        val enabled: Boolean,
-        val projects: Boolean,
-        val shareJail: Boolean?,
-        val hasMultiplePersonalSpaces: Boolean?,
-    )
-
-    data class PasswordPolicy(
-        val maxCharacters: Int?,
-        val minCharacters: Int?,
-        val minDigits: Int?,
-        val minLowercaseCharacters: Int?,
-        val minSpecialCharacters: Int?,
-        val minUppercaseCharacters: Int?,
-    )
 }
+
+data class AppProviders(
+    val enabled: Boolean,
+    val version: String,
+    val appsUrl: String?,
+    val openUrl: String?,
+    val openWebUrl: String?,
+    val newUrl: String?,
+)
+
+data class Spaces(
+    val enabled: Boolean,
+    val projects: Boolean,
+    val shareJail: Boolean?,
+    val hasMultiplePersonalSpaces: Boolean?,
+)
+
+data class PasswordPolicy(
+    val maxCharacters: Int?,
+    val minCharacters: Int?,
+    val minDigits: Int?,
+    val minLowercaseCharacters: Int?,
+    val minSpecialCharacters: Int?,
+    val minUppercaseCharacters: Int?,
+)
 
 /**
  * Enum for Boolean Type in capabilities, with values:

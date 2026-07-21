@@ -623,18 +623,6 @@
     <string name="release_notes_icon">Icon für Veröffentlichungsnotizen</string>
     <string name="release_notes_bugfixes_title">Geringfügige Fehler behoben</string>
     <string name="release_notes_bugfixes_subtitle">Einige Fehler wurden behoben, um die Benutzung der App zu verbessern.</string>
-    <string name="release_notes_4_8_0_title_set_emoji_as_space_image">Ein Emoji als Space-Bild festlegen</string>
-    <string name="release_notes_4_8_0_subtitle_set_emoji_as_space_image">Benutzer von Infinite Scale mit den entsprechenden Berechtigungen können nun ein Emoji als Space-Bild festlegen.</string>
-    <string name="release_notes_4_8_0_title_space_membership">Space Mitgliedschaft</string>
-    <string name="release_notes_4_8_0_subtitle_space_membership">Benutzer von Infinite Scale können alle Mitglieder eines Spaces sehen und sie mit den entsprechenden Berechtigungen verwalten</string>
-    <string name="release_notes_4_8_0_title_spaces_permanent_links">Permanente Links für Spaces</string>
-    <string name="release_notes_4_8_0_subtitle_spaces_permanent_links">Nutzer von Infinite Scale können nun einen permanenten Link für einen Bereich abrufen und diesen mit anderen Mitgliedern teilen</string>
-    <string name="release_notes_4_8_0_title_space_public_links">Öffentliche Links in Spaces</string>
-    <string name="release_notes_4_8_0_subtitle_space_public_links">Benutzer von Infinite Scale können alle öffentlichen Links eines Bereichs einsehen und diese mit den entsprechenden Berechtigungen verwalten</string>
-    <string name="release_notes_4_8_0_title_action_to_copy_or_move_destination_folder">Navigation zum Zielordner</string>
-    <string name="release_notes_4_8_0_subtitle_action_to_copy_or_move_destination_folder">Neue Aktion zum Wechseln in den Zielordner, wenn eine Datei oder ein Ordner kopiert oder verschoben wird</string>
-    <string name="release_notes_4_8_0_title_warning_latest_release_sdk28">Letzte Chance für Android 8</string>
-    <string name="release_notes_4_8_0_subtitle_warning_latest_release_sdk28">Diese Version ist die aktuellste, die Android 8 und ältere Versionen unterstützt</string>
 
     <!-- Open in web -->
     <string name="ic_action_open_with_web">Öffnen in %1$s (web)</string>

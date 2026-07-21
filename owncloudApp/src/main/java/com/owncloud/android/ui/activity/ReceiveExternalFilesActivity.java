@@ -506,23 +506,22 @@ public class ReceiveExternalFilesActivity extends FileActivity
     @Override
     public void onClick(View v) {
         // click on button
-        switch (v.getId()) {
-            case R.id.uploader_choose_folder:
-                mUploadPath = "";   // first element in mParents is root dir, represented by "";
-                // init mUploadPath with "/" results in a "//" prefix
-                for (String p : mParents) {
-                    mUploadPath += p + File.separator;
-                }
-                if (!isPlainTextUpload()) {
-                    Timber.d("Uploading file to dir %s", mUploadPath);
-                    uploadFiles();
-                } else {
-                    showUploadTextDialog();
-                }
-                break;
-
-            default:
-                throw new IllegalArgumentException("Wrong element clicked");
+        // Using an if / else if / else block because Java switch statements
+        // with resource ID comparisons are no longer supported in AGP 9
+        if (v.getId() == R.id.uploader_choose_folder) {
+            mUploadPath = "";   // first element in mParents is root dir, represented by "";
+            // init mUploadPath with "/" results in a "//" prefix
+            for (String p : mParents) {
+                mUploadPath += p + File.separator;
+            }
+            if (!isPlainTextUpload()) {
+                Timber.d("Uploading file to dir %s", mUploadPath);
+                uploadFiles();
+            } else {
+                showUploadTextDialog();
+            }
+        } else {
+            throw new IllegalArgumentException("Wrong element clicked");
         }
     }
 
