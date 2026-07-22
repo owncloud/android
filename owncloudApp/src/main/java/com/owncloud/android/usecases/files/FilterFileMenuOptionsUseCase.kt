@@ -2,8 +2,9 @@
  * ownCloud Android client application
  *
  * @author Juan Carlos Garrote Gascón
+ * @author Jorge Aguado Recio
  *
- * Copyright (C) 2023 ownCloud GmbH.
+ * Copyright (C) 2026 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -27,14 +28,12 @@ import com.owncloud.android.domain.capabilities.CapabilityRepository
 import com.owncloud.android.domain.files.model.FileMenuOption
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.files.model.OCFileSyncInfo
-import com.owncloud.android.domain.spaces.usecases.GetSpaceWithSpecialsByIdForAccountUseCase
 import com.owncloud.android.extensions.getRunningWorkInfosByTags
 import com.owncloud.android.usecases.transfers.TRANSFER_TAG_DOWNLOAD
 
 class FilterFileMenuOptionsUseCase(
     private val workManager: WorkManager,
     private val capabilityRepository: CapabilityRepository,
-    private val getSpaceWithSpecialsByIdForAccountUseCase: GetSpaceWithSpecialsByIdForAccountUseCase,
 ) : BaseUseCase<MutableList<FileMenuOption>, FilterFileMenuOptionsUseCase.Params>() {
     override fun run(params: Params): MutableList<FileMenuOption> {
         val optionsToShow = mutableListOf<FileMenuOption>()
@@ -46,11 +45,6 @@ class FilterFileMenuOptionsUseCase(
 
         val filesSyncInfo = params.filesSyncInfo
         val capability = capabilityRepository.getStoredCapabilities(params.accountName)
-        val space = getSpaceWithSpecialsByIdForAccountUseCase(GetSpaceWithSpecialsByIdForAccountUseCase.Params(
-            spaceId = files.first().spaceId,
-            accountName = params.accountName,
-        ))
-
         val isAnyFileSynchronizing: Boolean = if (filesSyncInfo.isEmpty()) {
             anyFileSynchronizingLookingIntoWorkers(files, params.accountName)
         } else {
@@ -70,7 +64,6 @@ class FilterFileMenuOptionsUseCase(
         } else {
             false
         }
-        val isPersonalSpace = space?.isPersonal ?: true
         val resharingAllowed = capability?.let { !anyFileSharedWithMe(files) || it.filesSharingResharing.isTrue } ?: false
         val displaySelectAll = params.displaySelectAll
         val displaySelectInverse = params.displaySelectInverse
@@ -95,7 +88,7 @@ class FilterFileMenuOptionsUseCase(
         }
         // Share
         if (!onlyAvailableOfflineFiles && shareViaLinkOrWithUsersAllowed && resharingAllowed &&
-            isPersonalSpace && hasResharePermission) {
+            hasResharePermission) {
             optionsToShow.add(FileMenuOption.SHARE)
         }
         // Open with (different to preview!)
