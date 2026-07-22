@@ -34,8 +34,11 @@ import android.view.KeyEvent
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.fragment.app.transaction
 import com.owncloud.android.R
+import com.owncloud.android.databinding.MembersActivityBinding
+import com.owncloud.android.datamodel.ThumbnailsCacheManager
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.sharing.shares.model.OCShare
 import com.owncloud.android.domain.sharing.shares.model.ShareType
@@ -43,6 +46,7 @@ import com.owncloud.android.domain.utils.Event.EventObserver
 import com.owncloud.android.extensions.adaptInfiniteEdges
 import com.owncloud.android.extensions.showErrorInSnackbar
 import com.owncloud.android.lib.resources.shares.RemoteShare
+import com.owncloud.android.presentation.capabilities.CapabilityViewModel
 import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.presentation.sharing.sharees.EditPrivateShareFragment
 import com.owncloud.android.presentation.sharing.sharees.SearchShareesFragment
@@ -50,6 +54,8 @@ import com.owncloud.android.presentation.sharing.sharees.UsersAndGroupsSearchPro
 import com.owncloud.android.presentation.sharing.shares.PublicShareDialogFragment
 import com.owncloud.android.ui.activity.FileActivity
 import com.owncloud.android.extensions.showDialogFragment
+import com.owncloud.android.utils.DisplayUtils
+import com.owncloud.android.utils.MimetypeIconUtil
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import timber.log.Timber
@@ -64,37 +70,63 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
             account?.name
         )
     }
+    private val capabilityViewModel: CapabilityViewModel by viewModel {
+        parametersOf(account?.name)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(R.layout.share_activity)
-
-        val shareRoot = findViewById<View>(R.id.share_activity_layout)
-        adaptInfiniteEdges(shareRoot)
-
-        setupStandardToolbar(
-            title = null,
-            displayHomeAsUpEnabled = true,
-            homeButtonEnabled = true,
-            displayShowTitleEnabled = true,
-        )
-        supportActionBar?.setHomeActionContentDescription(R.string.common_back)
-
-        supportFragmentManager.transaction {
-            if (savedInstanceState == null && file != null && account != null) {
-                // Add Share fragment on first creation
-                val fragment = ShareFileFragment.newInstance(file, account!!)
-                replace(
-                    R.id.share_fragment_container, fragment,
-                    TAG_SHARE_FRAGMENT
-                )
-            }
+        if (capabilityViewModel.isOcisServer()) {
+            setupOcisLayout()
+        } else {
+            setupLegacyLayout(savedInstanceState)
         }
 
         observePrivateShareCreation()
         observePrivateShareEdition()
         observeShareDeletion()
+    }
+
+    private fun setupOcisLayout() {
+        val binding = MembersActivityBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        setupToolbar(binding.root)
+        setupFileHeader(binding)
+    }
+
+    private fun setupLegacyLayout(savedInstanceState: Bundle?) {
+        setContentView(R.layout.share_activity)
+        setupToolbar(findViewById(R.id.share_activity_layout))
+        if (savedInstanceState == null && file != null && account != null) {
+            supportFragmentManager.transaction {
+                replace(R.id.share_fragment_container, ShareFileFragment.newInstance(file, account!!), TAG_SHARE_FRAGMENT)
+            }
+        }
+    }
+
+    private fun setupToolbar(root: View) {
+        adaptInfiniteEdges(root)
+        setupStandardToolbar(title = null, displayHomeAsUpEnabled = true, homeButtonEnabled = true, displayShowTitleEnabled = true)
+        supportActionBar?.setHomeActionContentDescription(R.string.common_back)
+    }
+
+    private fun setupFileHeader(binding: MembersActivityBinding) {
+        binding.itemIcon.setImageResource(MimetypeIconUtil.getFileTypeIconId(file.mimeType, file.fileName))
+        if (file.isImage) {
+            val thumbnail = ThumbnailsCacheManager.getBitmapFromDiskCache(file.remoteId.toString())
+            if (thumbnail != null) { binding.itemIcon.setImageBitmap(thumbnail) }
+        }
+
+        binding.itemName.text = file.fileName
+
+        if (file.isFolder) {
+            binding.itemSize.isVisible = false
+        } else {
+            binding.itemSize.text = DisplayUtils.bytesToHumanReadable(file.length, this, true)
+        }
+
+        binding.permanentLinkButton.isVisible = false
     }
 
     /**************************************************************************************************************
