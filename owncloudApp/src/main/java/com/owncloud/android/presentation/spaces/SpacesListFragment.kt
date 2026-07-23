@@ -181,21 +181,7 @@ class SpacesListFragment :
         collectLatestLifecycleFlow(spacesListViewModel.spacesList) { uiState ->
             var spacesToListFiltered: List<OCSpace>
             if (uiState.searchFilter != "") {
-                val searchFilter = uiState.searchFilter.lowercase()
-                spacesToListFiltered = if (isMultiPersonal) {
-                    uiState.spaces.filter { it.name.lowercase().contains(searchFilter) && shouldShowDisabledSpace(it) }
-                } else {
-                    uiState.spaces.filter { it.name.lowercase().contains(searchFilter) && !it.isPersonal &&
-                            shouldShowDisabledSpace(it) }
-                }
-                if (!isMultiPersonal) {
-                    val personalSpace = uiState.spaces.find { it.isPersonal }
-                    personalSpace?.let {
-                        spacesToListFiltered = spacesToListFiltered.toMutableList().apply {
-                            add(0, personalSpace)
-                        }
-                    }
-                }
+                spacesToListFiltered = uiState.spaces.filterSpaces(uiState.searchFilter, isMultiPersonal, ::shouldShowDisabledSpace)
                 showOrHideEmptyView(spacesToListFiltered)
                 spacesListAdapter.setData(spacesToListFiltered, isMultiPersonal)
             } else {
@@ -523,4 +509,17 @@ class SpacesListFragment :
         }
     }
 
+}
+
+internal fun List<OCSpace>.filterSpaces(
+    query: String,
+    multi: Boolean,
+    visible: (OCSpace) -> Boolean,
+): List<OCSpace> {
+    val queryLowercase = query.lowercase()
+    val spacesMatchingName = filter { it.name.lowercase().contains(queryLowercase) }
+    val matchingSpaces = spacesMatchingName.filter { (multi || !it.isPersonal) && visible(it) }
+    if (multi) return matchingSpaces
+    val personalSpace = find { it.isPersonal } ?: return matchingSpaces
+    return listOf(personalSpace) + matchingSpaces
 }
