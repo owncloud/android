@@ -621,6 +621,7 @@
     <string name="release_notes_icon">ໄອຄອນບັນທຶກປະຈຳລຸ້ນ</string>
     <string name="release_notes_bugfixes_title">ການແກ້ໄຂຂໍ້ຜິດພາດ</string>
     <string name="release_notes_bugfixes_subtitle">ແອັບຕອນນີ້ສະຖຽນ ແລະ ເຊື່ອຖືໄດ້ຫຼາຍຂຶ້ນ. ສຳລັບລາຍການການປ່ຽນແປງທັງໝົດ, ຢ້ຽມຊົມ owncloud.com</string>
+
     <!-- Open in web -->
     <string name="ic_action_open_with_web">ເປີດດ້ວຍ...</string>
     <string name="open_in_web_error_generic">ບໍ່ສາມາດເປີດໄຟລ໌ໃນເບຣົາເຊີໄດ້</string>
