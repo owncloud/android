@@ -1,5 +1,6 @@
 # Table of Contents
 
+* [Changelog for unreleased](#changelog-for-owncloud-android-client-unreleased-unreleased)
 * [Changelog for 4.8.3](#changelog-for-owncloud-android-client-483-2026-07-21)
 * [Changelog for 4.8.2](#changelog-for-owncloud-android-client-482-2026-07-01)
 * [Changelog for 4.8.1](#changelog-for-owncloud-android-client-481-2026-06-09)
@@ -34,6 +35,54 @@
 * [Changelog for 2.18.1](#changelog-for-owncloud-android-client-2181-2021-07-20)
 * [Changelog for 2.18.0](#changelog-for-owncloud-android-client-2180-2021-05-24)
 * [Changelog for 2.17 versions and below](#changelog-for-217-versions-and-below)
+# Changelog for ownCloud Android Client [unreleased] (UNRELEASED)
+
+The following sections list the changes in ownCloud Android Client unreleased relevant to
+ownCloud admins and users.
+
+[unreleased]: https://github.com/owncloud/android/compare/v4.8.3...master
+
+## Summary
+
+* Bugfix - Recalculate grid mode after rotation: [#4884](https://github.com/owncloud/android/issues/4884)
+* Change - Bump AGP from 8.7.2 to 9.2.1: [#4865](https://github.com/owncloud/android/pull/4865)
+* Change - Upgrade minimum SDK version to API 28 (Android 9): [#4880](https://github.com/owncloud/android/issues/4880)
+* Enhancement - New UI for oCIS sharing: [#4839](https://github.com/owncloud/android/issues/4839)
+
+## Details
+
+* Bugfix - Recalculate grid mode after rotation: [#4884](https://github.com/owncloud/android/issues/4884)
+
+   The grid mode column count has been recalculated after device rotation, keeping
+   file layouts aligned with the new orientation.
+
+   https://github.com/owncloud/android/issues/4884
+   https://github.com/owncloud/android/pull/4935
+
+* Change - Bump AGP from 8.7.2 to 9.2.1: [#4865](https://github.com/owncloud/android/pull/4865)
+
+   Android Gradle Plugin (AGP) has been updated from version 8.7.2 to 9.2.1, along
+   with other dependencies required to build the app with this new version.
+
+   https://github.com/owncloud/android/pull/4865
+
+* Change - Upgrade minimum SDK version to API 28 (Android 9): [#4880](https://github.com/owncloud/android/issues/4880)
+
+   The minimum SDK version has been upgraded to API 28 (Android 9) and previous
+   versions will not be supported anymore
+
+   https://github.com/owncloud/android/issues/4880
+   https://github.com/owncloud/android/pull/4885
+
+* Enhancement - New UI for oCIS sharing: [#4839](https://github.com/owncloud/android/issues/4839)
+
+   A new UI has been implemented for oCIS sharing. The app now distinguishes
+   between the backend in use: the new UI is displayed for oCIS, while the existing
+   sharing UI is preserved for oC classic.
+
+   https://github.com/owncloud/android/issues/4839
+   https://github.com/owncloud/android/pull/4936
+
 # Changelog for ownCloud Android Client [4.8.3] (2026-07-21)
 
 The following sections list the changes in ownCloud Android Client 4.8.3 relevant to
