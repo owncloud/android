@@ -45,12 +45,17 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.R as AppCompatR
 import androidx.appcompat.view.ActionMode
 import androidx.appcompat.widget.SearchView
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
+import androidx.core.view.updateLayoutParams
+import androidx.core.view.updatePadding
 import androidx.core.widget.doOnTextChanged
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
@@ -199,6 +204,7 @@ class MainFileListFragment : Fragment(),
                 isFocusableInTouchMode = false
                 visibility = View.INVISIBLE
             }
+            binding.root.post { adaptActionModeForInfiniteEdges() }
             val inflater = requireActivity().menuInflater
             inflater.inflate(R.menu.file_actions_menu, menu)
             this@MainFileListFragment.menu = menu
@@ -208,6 +214,7 @@ class MainFileListFragment : Fragment(),
             // Set gray color
             val window = activity?.window
             statusBarColor = window?.statusBarColor ?: -1
+            window?.statusBarColor = statusBarColorActionMode ?: statusBarColor!!
 
             // Hide FAB in multi selection mode
             toggleFabVisibility(false)
@@ -312,6 +319,33 @@ class MainFileListFragment : Fragment(),
 
             fileListAdapter.clearSelection()
         }
+    }
+
+    private fun adaptActionModeForInfiniteEdges() {
+        val actionModeBar = requireActivity().findViewById<View>(
+            AppCompatR.id.action_mode_bar
+        ) ?: return
+        (actionModeBar.parent as? ViewGroup)?.apply {
+            clipChildren = false
+            clipToPadding = false
+        }
+        ViewCompat.setOnApplyWindowInsetsListener(actionModeBar) { view, insets ->
+            val systemInsets = insets.getInsets(
+                WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.displayCutout()
+            )
+
+            view.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                leftMargin = -systemInsets.left
+                rightMargin = -systemInsets.right
+            }
+            view.updatePadding(
+                left = systemInsets.left,
+                right = systemInsets.right,
+            )
+
+            insets
+        }
+        ViewCompat.requestApplyInsets(actionModeBar)
     }
 
     override fun onCreateView(
@@ -1675,4 +1709,3 @@ class MainFileListFragment : Fragment(),
         }
     }
 }
-
