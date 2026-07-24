@@ -180,6 +180,7 @@
     <string name="common_error_unknown">unknown error</string>
     <string name="common_pending">Pending</string>
     <string name="common_important">Important</string>
+    <string name="common_set">Set</string>
     <string name="upload_chooser_title">Upload from</string>
     <string name="uploader_info_dirname">Folder name</string>
     <string name="uploader_upload_in_progress_ticker">Uploading…</string>
@@ -449,9 +450,18 @@
     <string name="move_file_invalid_into_descendent">It is not possible to move a folder into a descendant.</string>
     <string name="move_file_invalid_overwrite">The file exists already in the destination folder.</string>
     <string name="move_file_error">An error occurred while trying to move this file or folder.</string>
+    <string name="move_file_correctly">Item(s) moved correctly</string>
+
     <string name="copy_file_invalid_into_descendent">It is not possible to copy a folder into a descendant.</string>
     <string name="copy_file_invalid_overwrite">The file exists already in the destination folder.</string>
     <string name="copy_file_error">An error occurred while trying to copy this file or folder.</string>
+    <string name="copy_file_correctly">Item(s) copied correctly</string>
+
+    <string name="go_to_destination_folder">Open Folder</string>
+
+
+
+
     <string name="subject_user_shared_with_you">%1$s shared \"%2$s\" with you</string>
     <string name="subject_shared_with_you">\"%1$s\" has been shared with you</string>
 
@@ -588,6 +598,7 @@
     <string name="scoped_storage_wizard_explanation">Found %1$s of data on your external storage. It will be moved to the safe storage on your device. Remaining files will be cleaned from your external storage after the migration to avoid duplicates and vulnerability.</string>
     <string name="scoped_storage_wizard_intro">Your app has been updated. This app update migrates your files to a more secure location on your device. This one-time data migration is required and can take up to a minute or more.</string>
     <string name="scoped_storage_wizard_intro_button">Let\'s get started</string>
+    <string name="scoped_storage_wizard_not_enough_space_warning">⚠️  Your free space is currently limited on your device. Some files may not be migrated, please check that all downloaded files keep downloaded after the process has been completed.</string>
     <string name="scoped_storage_wizard_migrate_and_clean_button">Migrate now</string>
     <string name="scoped_storage_wizard_migration_completed">Migration completed successfully. Your files are now safer than ever.</string>
     <string name="scoped_storage_wizard_migration_completed_access_files_button">Access your files</string>
@@ -612,6 +623,7 @@
     <string name="release_notes_icon">Release note icon</string>
     <string name="release_notes_bugfixes_title">Minor bugfixes</string>
     <string name="release_notes_bugfixes_subtitle">Some bugs were fixed to improve experience in the app</string>
+
     <!-- Open in web -->
     <string name="ic_action_open_with_web">Open in %1$s (web)</string>
     <string name="open_in_web_error_generic">Couldn\'t open in web</string>
@@ -690,7 +702,9 @@
     <string name="content_description_space_name">%1$s space name</string>
     <string name="content_description_space_three_dot_menu">%1$s space menu</string>
     <string name="content_description_space_subtitle">%1$s space subtitle</string>
+    <string name="content_description_create_button">Create</string>
     <string name="content_description_cancel_button">Cancel</string>
+    <string name="content_description_set_button">Set</string>
     <string name="content_description_quota_switch">Space quota</string>
     <string name="content_description_member_user">User %1$s</string>
     <string name="content_description_member_group">Group %1$s</string>
@@ -701,6 +715,12 @@
     <string name="content_description_remove_member_button">Remove member %1$s</string>
     <string name="content_description_edit_member_button">Edit member %1$s</string>
     <string name="content_description_permanent_link_button">Get permanent link</string>
+    <string name="content_description_create_public_link_button">Create public link</string>
+    <string name="content_description_set_password_button">Set password</string>
+    <string name="content_description_remove_password_button">Remove password</string>
+    <string name="content_description_generate_password_button">Generate password</string>
+    <string name="content_description_copy_password_button">Copy password</string>
+
     <string name="create_shortcut_dialog_title">Create a shortcut</string>
     <string name="create_shortcut_dialog_url">URL</string>
     <string name="create_shortcut_dialog_url_error_no_blanks">The URL cannot contain blanks</string>
@@ -766,11 +786,28 @@
     <string name="member_type_group">Group</string>
     <string name="current_user_label">(me)</string>
 
+    <string name="public_link_create_title">Create public link</string>
+    <string name="public_link_set_password">Set password</string>
+    <string name="public_link_password_enforced_error">Password is mandatory</string>
     <string name="public_link_view">Can view</string>
+    <string name="public_link_view_description">View, download</string>
     <string name="public_link_edit">Can edit</string>
+    <string name="public_link_edit_description">View, upload, edit, download, delete</string>
     <string name="public_link_upload">Can upload</string>
     <string name="public_link_create_only">Secret file drop</string>
+    <string name="public_link_create_only_description">Upload only, existing content is not revealed</string>
     <string name="public_link_internal">Invited people</string>
+    <string name="public_link_default_display_name">Unnamed Link</string>
+    <string name="public_link_add_correctly">Public link created correctly</string>
+    <string name="public_link_add_failed">Public link could not be created</string>
+    <string name="public_link_remove_dialog_title">Do you really want to remove the link: %1$s\?</string>
+    <string name="public_link_remove_dialog_message">Recreating the same link again is not possible</string>
+    <string name="public_link_remove_correctly">Public link removed correctly</string>
+    <string name="public_link_remove_failed">Public link could not be removed</string>
+    <string name="public_link_edit_title">Edit public link</string>
+    <string name="public_link_edit_correctly">Public link edited correctly</string>
+    <string name="public_link_edit_failed">Public link could not be edited</string>
+
     <string name="feedback_dialog_get_in_contact_description"><![CDATA[ Ask for help in our <a href=\"%1$s\"><b>forum</b></a> or contribute in our <a href=\"%2$s\"><b>GitHub repo</b></a>]]></string>
 
     <string name="link_role_accessibility">Link</string>
