@@ -107,7 +107,7 @@ class ShareViewModelTest {
 
         Dispatchers.setMain(testCoroutineDispatcher)
         startKoin {
-            allowOverride(override = true)
+            allowOverride(true)
             modules(
                 module {
                     factory {
