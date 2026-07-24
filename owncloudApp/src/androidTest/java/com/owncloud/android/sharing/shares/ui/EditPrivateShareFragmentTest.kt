@@ -70,8 +70,8 @@ class EditPrivateShareFragmentTest {
         stopKoin()
 
         startKoin {
+            allowOverride(true)
             androidContext(ApplicationProvider.getApplicationContext())
-            allowOverride(override = true)
             modules(
                 module {
                     viewModel {

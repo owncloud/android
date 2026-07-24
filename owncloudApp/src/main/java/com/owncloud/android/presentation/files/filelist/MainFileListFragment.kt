@@ -124,7 +124,7 @@ import com.owncloud.android.utils.PreferenceUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okio.Path.Companion.toPath
-import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import timber.log.Timber
@@ -145,7 +145,7 @@ class MainFileListFragment : Fragment(),
             requireArguments().getParcelable(ARG_FILE_LIST_OPTION),
         )
     }
-    private val fileOperationsViewModel by sharedViewModel<FileOperationsViewModel>()
+    private val fileOperationsViewModel by activityViewModel<FileOperationsViewModel>()
     private val transfersViewModel by viewModel<TransfersViewModel>()
     private val spacesListViewModel: SpacesListViewModel by viewModel {
         parametersOf(

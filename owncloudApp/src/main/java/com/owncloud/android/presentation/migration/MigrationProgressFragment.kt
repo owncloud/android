@@ -24,11 +24,11 @@ import android.view.View
 import android.widget.Button
 import androidx.fragment.app.Fragment
 import com.owncloud.android.R
-import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import org.koin.androidx.viewmodel.ext.android.activityViewModel
 
 class MigrationProgressFragment : Fragment(R.layout.fragment_migration_progress) {
 
-    private val migrationViewModel: MigrationViewModel by sharedViewModel()
+    private val migrationViewModel: MigrationViewModel by activityViewModel()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

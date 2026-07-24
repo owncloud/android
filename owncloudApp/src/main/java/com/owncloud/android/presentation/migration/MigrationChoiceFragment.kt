@@ -27,11 +27,11 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.owncloud.android.R
 import com.owncloud.android.utils.DisplayUtils.bytesToHumanReadable
-import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import org.koin.androidx.viewmodel.ext.android.activityViewModel
 
 class MigrationChoiceFragment : Fragment(R.layout.fragment_migration_choice) {
 
-    private val migrationViewModel: MigrationViewModel by sharedViewModel()
+    private val migrationViewModel: MigrationViewModel by activityViewModel()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

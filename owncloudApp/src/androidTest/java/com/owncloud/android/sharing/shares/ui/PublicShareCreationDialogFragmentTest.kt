@@ -76,8 +76,8 @@ class PublicShareCreationDialogFragmentTest {
         stopKoin()
 
         startKoin {
+            allowOverride(true)
             androidContext(ApplicationProvider.getApplicationContext())
-            allowOverride(override = true)
             modules(
                 module {
                     viewModel {
