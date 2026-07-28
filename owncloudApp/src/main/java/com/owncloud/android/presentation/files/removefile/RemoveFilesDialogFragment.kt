@@ -35,7 +35,7 @@ import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.presentation.files.operations.FileOperation
 import com.owncloud.android.presentation.files.operations.FileOperationsViewModel
 import com.owncloud.android.utils.MimetypeIconUtil
-import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import org.koin.androidx.viewmodel.ext.android.activityViewModel
 
 /**
  * Dialog requiring confirmation before removing a collection of given OCFiles.
@@ -44,7 +44,7 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
  */
 class RemoveFilesDialogFragment : DialogFragment() {
 
-    private val fileOperationViewModel: FileOperationsViewModel by sharedViewModel()
+    private val fileOperationViewModel: FileOperationsViewModel by activityViewModel()
     private var _binding: RemoveFilesDialogBinding? = null
     private val binding get() = _binding!!
 

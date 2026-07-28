@@ -144,8 +144,8 @@ class LoginActivityTest {
         stopKoin()
 
         startKoin {
+            allowOverride(true)
             context
-            allowOverride(override = true)
             modules(
                 module {
                     viewModel {
