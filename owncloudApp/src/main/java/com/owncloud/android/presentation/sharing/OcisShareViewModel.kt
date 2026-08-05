@@ -25,7 +25,7 @@ import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.roles.model.OCRole
 import com.owncloud.android.domain.roles.usecases.GetRolesAsyncUseCase
 import com.owncloud.android.domain.sharing.shares.usecases.GetOcisSharesAsyncUseCase
-import com.owncloud.android.domain.spaces.model.SpaceMembers
+import com.owncloud.android.domain.sharing.shares.model.OCPermissions
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.ViewModelExt.runUseCaseWithResult
 import com.owncloud.android.presentation.common.UIResult
@@ -44,8 +44,8 @@ class OcisShareViewModel(
     private val _roles = MutableStateFlow<Event<UIResult<List<OCRole>>>?>(null)
     val roles: StateFlow<Event<UIResult<List<OCRole>>>?> = _roles
 
-    private val _shares = MutableStateFlow<Event<UIResult<SpaceMembers>>?>(null)
-    val shares: StateFlow<Event<UIResult<SpaceMembers>>?> = _shares
+    private val _shares = MutableStateFlow<Event<UIResult<OCPermissions>>?>(null)
+    val shares: StateFlow<Event<UIResult<OCPermissions>>?> = _shares
 
     init {
         runUseCaseWithResult(

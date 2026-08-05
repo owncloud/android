@@ -30,9 +30,9 @@ import com.owncloud.android.domain.links.model.OCLinkType
 import com.owncloud.android.domain.roles.model.OCRole
 import com.owncloud.android.domain.sharing.shares.model.OCShare
 import com.owncloud.android.domain.sharing.shares.model.ShareType
-import com.owncloud.android.domain.spaces.model.SpaceMember
-import com.owncloud.android.domain.spaces.model.SpaceMembers
-import com.owncloud.android.lib.resources.spaces.responses.SpacePermissionsResponse
+import com.owncloud.android.domain.sharing.shares.model.MemberPermission
+import com.owncloud.android.domain.sharing.shares.model.OCPermissions
+import com.owncloud.android.lib.resources.spaces.responses.PermissionsResponse
 
 class OCRemoteShareDataSource(
     private val clientManager: ClientManager,
@@ -60,7 +60,7 @@ class OCRemoteShareDataSource(
         accountName: String,
         spaceId: String,
         itemId: String
-    ): SpaceMembers {
+    ): OCPermissions {
         val response = executeRemoteOperation {
             clientManager.getShareService(accountName).getOcisShares(spaceId, itemId)
         }
@@ -124,9 +124,9 @@ class OCRemoteShareDataSource(
     }
 
     companion object {
-        fun SpacePermissionsResponse.toModel(): SpaceMembers {
+        fun PermissionsResponse.toModel(): OCPermissions {
             val membersResponse = members.orEmpty()
-            return SpaceMembers(
+            return OCPermissions(
                 roles = roles.map { spaceRoleResponse ->
                     OCRole(
                         id = spaceRoleResponse.id,
@@ -135,7 +135,7 @@ class OCRemoteShareDataSource(
                     )
                 },
                 members = membersResponse.filter { it.grantedToV2 != null }.map { spaceMemberResponse ->
-                    SpaceMember(
+                    MemberPermission(
                         id = spaceMemberResponse.id ?: "",
                         expirationDateTime = spaceMemberResponse.expirationDateTime,
                         displayName = spaceMemberResponse.grantedToV2?.user?.displayName

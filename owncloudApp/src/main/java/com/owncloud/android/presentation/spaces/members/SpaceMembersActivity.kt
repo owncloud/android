@@ -31,7 +31,7 @@ import com.owncloud.android.databinding.MembersActivityBinding
 import com.owncloud.android.domain.links.model.OCLink
 import com.owncloud.android.domain.roles.model.OCRole
 import com.owncloud.android.domain.spaces.model.OCSpace
-import com.owncloud.android.domain.spaces.model.SpaceMember
+import com.owncloud.android.domain.sharing.shares.model.MemberPermission
 import com.owncloud.android.extensions.adaptInfiniteEdges
 import com.owncloud.android.presentation.common.ShareSheetHelper
 import com.owncloud.android.presentation.spaces.links.AddPublicLinkFragment
@@ -95,7 +95,13 @@ class SpaceMembersActivity: FileActivity(), SpaceMembersFragment.SpaceMemberFrag
             super.onOptionsItemSelected(item)
         }
 
-    override fun addMember(space: OCSpace, spaceMembers: List<SpaceMember>, roles: List<OCRole>, editMode: Boolean, selectedMember: SpaceMember?) {
+    override fun addMember(
+        space: OCSpace,
+        spaceMembers: List<MemberPermission>,
+        roles: List<OCRole>,
+        editMode: Boolean,
+        selectedMember: MemberPermission?
+    ) {
         val addMemberFragment = AddMemberFragment.newInstance(account.name, space, spaceMembers, roles, editMode, selectedMember)
         val transaction = supportFragmentManager.beginTransaction()
         transaction.apply {

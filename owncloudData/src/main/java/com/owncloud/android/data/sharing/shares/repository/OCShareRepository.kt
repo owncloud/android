@@ -28,7 +28,7 @@ import com.owncloud.android.data.sharing.shares.datasources.RemoteShareDataSourc
 import com.owncloud.android.domain.sharing.shares.ShareRepository
 import com.owncloud.android.domain.sharing.shares.model.OCShare
 import com.owncloud.android.domain.sharing.shares.model.ShareType
-import com.owncloud.android.domain.spaces.model.SpaceMembers
+import com.owncloud.android.domain.sharing.shares.model.OCPermissions
 import com.owncloud.android.lib.resources.shares.RemoteShare
 
 class OCShareRepository(
@@ -120,7 +120,7 @@ class OCShareRepository(
     override fun getShareAsLiveData(remoteId: String): LiveData<OCShare> =
         localShareDataSource.getShareAsLiveData(remoteId)
 
-    override fun getOcisShares(accountName: String, spaceId: String, itemId: String): SpaceMembers =
+    override fun getOcisShares(accountName: String, spaceId: String, itemId: String): OCPermissions =
         remoteShareDataSource.getOcisShares(accountName, spaceId, itemId)
 
     override fun refreshSharesFromNetwork(

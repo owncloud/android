@@ -36,7 +36,7 @@ import com.owncloud.android.lib.resources.shares.ShareResponse
 import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.lib.resources.shares.UpdateRemoteShareOperation
 import com.owncloud.android.lib.resources.shares.services.ShareService
-import com.owncloud.android.lib.resources.spaces.responses.SpacePermissionsResponse
+import com.owncloud.android.lib.resources.spaces.responses.PermissionsResponse
 
 class OCShareService(override val client: OwnCloudClient) : ShareService {
     override fun getShares(
@@ -49,7 +49,7 @@ class OCShareService(override val client: OwnCloudClient) : ShareService {
         subfiles
     ).execute(client)
 
-    override fun getOcisShares(spaceId: String, itemId: String): RemoteOperationResult<SpacePermissionsResponse> =
+    override fun getOcisShares(spaceId: String, itemId: String): RemoteOperationResult<PermissionsResponse> =
         GetRemoteOcisSharesOperation(spaceId, itemId).execute(client)
 
     override fun insertShare(

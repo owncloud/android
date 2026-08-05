@@ -30,8 +30,8 @@ import com.owncloud.android.domain.roles.model.OCRole
 import com.owncloud.android.domain.spaces.model.OCSpace
 import com.owncloud.android.domain.spaces.model.SpaceDeleted
 import com.owncloud.android.domain.spaces.model.SpaceFile
-import com.owncloud.android.domain.spaces.model.SpaceMember
-import com.owncloud.android.domain.spaces.model.SpaceMembers
+import com.owncloud.android.domain.sharing.shares.model.MemberPermission
+import com.owncloud.android.domain.sharing.shares.model.OCPermissions
 import com.owncloud.android.domain.spaces.model.SpaceOwner
 import com.owncloud.android.domain.spaces.model.SpaceQuota
 import com.owncloud.android.domain.spaces.model.SpaceRoot
@@ -39,7 +39,7 @@ import com.owncloud.android.domain.spaces.model.SpaceSpecial
 import com.owncloud.android.domain.spaces.model.SpaceSpecialFolder
 import com.owncloud.android.domain.spaces.model.SpaceUser
 import com.owncloud.android.lib.resources.spaces.responses.RootResponse
-import com.owncloud.android.lib.resources.spaces.responses.SpacePermissionsResponse
+import com.owncloud.android.lib.resources.spaces.responses.PermissionsResponse
 import com.owncloud.android.lib.resources.spaces.responses.SpaceResponse
 
 class OCRemoteSpacesDataSource(
@@ -60,7 +60,7 @@ class OCRemoteSpacesDataSource(
         return spaceResponse.toModel(accountName)
     }
 
-    override fun getSpaceMembers(accountName: String, spaceId: String): SpaceMembers {
+    override fun getSpaceMembers(accountName: String, spaceId: String): OCPermissions {
         val spacePermissionsResponse = executeRemoteOperation {
             clientManager.getSpacesService(accountName).getSpacePermissions(spaceId)
         }
@@ -196,9 +196,9 @@ class OCRemoteSpacesDataSource(
             )
 
         @VisibleForTesting
-        fun SpacePermissionsResponse.toModel(): SpaceMembers {
+        fun PermissionsResponse.toModel(): OCPermissions {
             val membersResponse = members.orEmpty()
-            return SpaceMembers(
+            return OCPermissions(
                 roles = roles.map { spaceRoleResponse ->
                     OCRole(
                         id = spaceRoleResponse.id,
@@ -207,7 +207,7 @@ class OCRemoteSpacesDataSource(
                     )
                 },
                 members = membersResponse.filter { it.grantedToV2 != null }.map { spaceMemberResponse ->
-                    SpaceMember(
+                    MemberPermission(
                         id = spaceMemberResponse.id ?: "",
                         expirationDateTime = spaceMemberResponse.expirationDateTime,
                         displayName = spaceMemberResponse.grantedToV2?.user?.displayName

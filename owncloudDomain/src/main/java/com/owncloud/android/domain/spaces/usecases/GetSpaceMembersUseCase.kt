@@ -22,11 +22,11 @@ package com.owncloud.android.domain.spaces.usecases
 
 import com.owncloud.android.domain.BaseUseCaseWithResult
 import com.owncloud.android.domain.spaces.SpacesRepository
-import com.owncloud.android.domain.spaces.model.SpaceMembers
+import com.owncloud.android.domain.sharing.shares.model.OCPermissions
 
 class GetSpaceMembersUseCase(
     private val spacesRepository: SpacesRepository
-): BaseUseCaseWithResult<SpaceMembers, GetSpaceMembersUseCase.Params>() {
+): BaseUseCaseWithResult<OCPermissions, GetSpaceMembersUseCase.Params>() {
 
     override fun run(params: Params) = spacesRepository.getSpaceMembers(params.accountName, params.spaceId)
 

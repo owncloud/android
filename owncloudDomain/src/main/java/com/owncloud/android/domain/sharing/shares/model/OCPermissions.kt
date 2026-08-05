@@ -18,22 +18,25 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.extensions
+package com.owncloud.android.domain.sharing.shares.model
 
-import com.owncloud.android.domain.members.model.OCMember
-import com.owncloud.android.domain.members.model.OCMemberType
-import com.owncloud.android.domain.sharing.shares.model.MemberPermission
+import android.os.Parcelable
+import com.owncloud.android.domain.links.model.OCLink
+import com.owncloud.android.domain.roles.model.OCRole
+import kotlinx.parcelize.Parcelize
 
-private const val GROUP_PREFIX = "g:"
-private const val USER_PREFIX = "u:"
+@Parcelize
+data class OCPermissions(
+    val roles: List<OCRole>,
+    val members: List<MemberPermission>,
+    val links: List<OCLink>
+) : Parcelable
 
-fun MemberPermission.toOCMember(): OCMember {
-    val isGroup = id.startsWith(GROUP_PREFIX)
-    val type = if (isGroup) OCMemberType.GROUP else OCMemberType.USER
-    return OCMember(
-        id = id.removePrefix(if (isGroup) GROUP_PREFIX else USER_PREFIX),
-        displayName = displayName,
-        surname = OCMemberType.toString(type),
-        type = type
-    )
-}
+@Parcelize
+data class MemberPermission(
+    val id: String,
+    val expirationDateTime: String?,
+    val displayName: String,
+    val roles: List<String>,
+    val isGroup: Boolean = false
+) : Parcelable

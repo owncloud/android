@@ -392,7 +392,7 @@ class OCRemoteShareDataSourceTest {
     }
 
     @Test
-    fun `getOcisShares returns a SpaceMembers`() {
+    fun `getOcisShares returns a OCPermissions`() {
         val getSpaceMembersResult = createRemoteOperationResultMock(SPACE_PERMISSIONS_RESPONSE, isSuccess = true)
 
         every {

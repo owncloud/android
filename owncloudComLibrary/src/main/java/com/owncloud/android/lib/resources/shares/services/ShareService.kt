@@ -30,7 +30,7 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.Service
 import com.owncloud.android.lib.resources.shares.ShareResponse
 import com.owncloud.android.lib.resources.shares.ShareType
-import com.owncloud.android.lib.resources.spaces.responses.SpacePermissionsResponse
+import com.owncloud.android.lib.resources.spaces.responses.PermissionsResponse
 
 interface ShareService : Service {
     fun getShares(
@@ -39,7 +39,7 @@ interface ShareService : Service {
         subfiles: Boolean
     ): RemoteOperationResult<ShareResponse>
 
-    fun getOcisShares(spaceId: String, itemId: String): RemoteOperationResult<SpacePermissionsResponse>
+    fun getOcisShares(spaceId: String, itemId: String): RemoteOperationResult<PermissionsResponse>
 
     fun insertShare(
         remoteFilePath: String,

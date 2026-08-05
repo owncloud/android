@@ -22,11 +22,11 @@ package com.owncloud.android.domain.sharing.shares.usecases
 
 import com.owncloud.android.domain.BaseUseCaseWithResult
 import com.owncloud.android.domain.sharing.shares.ShareRepository
-import com.owncloud.android.domain.spaces.model.SpaceMembers
+import com.owncloud.android.domain.sharing.shares.model.OCPermissions
 
 class GetOcisSharesAsyncUseCase(
     private val shareRepository: ShareRepository
-) : BaseUseCaseWithResult<SpaceMembers, GetOcisSharesAsyncUseCase.Params>() {
+) : BaseUseCaseWithResult<OCPermissions, GetOcisSharesAsyncUseCase.Params>() {
 
     override fun run(params: Params) =
         shareRepository.getOcisShares(params.accountName, params.spaceId, params.itemId)

@@ -243,7 +243,7 @@ class OCShareRepositoryTest {
     }
 
     @Test
-    fun `getOcisShares returns a SpaceMembers`() {
+    fun `getOcisShares returns a OCPermissions`() {
         every {
             remoteShareDataSource.getOcisShares(OC_ACCOUNT_NAME, OC_SPACE_PROJECT_WITH_IMAGE.id, OC_FILE.remoteId.orEmpty())
         } returns SPACE_MEMBERS

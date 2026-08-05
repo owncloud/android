@@ -66,7 +66,7 @@ data class RootResponse(
     val id: String,
     val webDavUrl: String,
     val deleted: DeleteResponse?,
-    val permissions: List<PermissionsResponse>?
+    val permissions: List<MemberPermissionResponse>?
 )
 
 @JsonClass(generateAdapter = true)
@@ -103,7 +103,7 @@ data class SpecialFolderResponse(
 )
 
 @JsonClass(generateAdapter = true)
-data class PermissionsResponse(
+data class MemberPermissionResponse(
     val id: String?,
     val expirationDateTime: String?,
 
@@ -130,13 +130,13 @@ data class GroupResponse(
 )
 
 @JsonClass(generateAdapter = true)
-data class SpacePermissionsResponse(
+data class PermissionsResponse(
     @Json(name = "@libre.graph.permissions.actions.allowedValues")
     val actions: List<String>,
     @Json(name = "@libre.graph.permissions.roles.allowedValues")
     val roles: List<RoleResponse>,
     @Json(name = "value")
-    val members: List<PermissionsResponse>?
+    val members: List<MemberPermissionResponse>?
 )
 
 @JsonClass(generateAdapter = true)

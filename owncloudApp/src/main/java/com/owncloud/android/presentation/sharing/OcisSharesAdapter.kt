@@ -29,13 +29,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.owncloud.android.R
 import com.owncloud.android.databinding.MemberItemBinding
 import com.owncloud.android.domain.roles.model.OCRole
-import com.owncloud.android.domain.spaces.model.SpaceMember
+import com.owncloud.android.domain.sharing.shares.model.MemberPermission
 import com.owncloud.android.utils.DisplayUtils
 import com.owncloud.android.utils.PreferenceUtils
 
 class OcisSharesAdapter : RecyclerView.Adapter<OcisSharesAdapter.OcisShareViewHolder>() {
 
-    private var shares: List<SpaceMember> = emptyList()
+    private var shares: List<MemberPermission> = emptyList()
     private var rolesMap: Map<String, String> = emptyMap()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OcisShareViewHolder {
@@ -71,10 +71,10 @@ class OcisSharesAdapter : RecyclerView.Adapter<OcisSharesAdapter.OcisShareViewHo
 
     override fun getItemCount(): Int = shares.size
 
-    fun setShares(shares: List<SpaceMember>, roles: List<OCRole>) {
+    fun setShares(shares: List<MemberPermission>, roles: List<OCRole>) {
         this.rolesMap = roles.associate { it.id to it.displayName }
         val sortedShares = shares.sortedWith(
-            compareByDescending<SpaceMember> { share -> roles.indexOfFirst { it.id in share.roles } }
+            compareByDescending<MemberPermission> { share -> roles.indexOfFirst { it.id in share.roles } }
                 .thenBy { it.displayName }
         )
         val diffResult = DiffUtil.calculateDiff(OcisSharesDiffUtil(this.shares, sortedShares))

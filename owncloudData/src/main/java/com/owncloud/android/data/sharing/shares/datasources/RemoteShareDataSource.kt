@@ -23,7 +23,7 @@ package com.owncloud.android.data.sharing.shares.datasources
 
 import com.owncloud.android.domain.sharing.shares.model.OCShare
 import com.owncloud.android.domain.sharing.shares.model.ShareType
-import com.owncloud.android.domain.spaces.model.SpaceMembers
+import com.owncloud.android.domain.sharing.shares.model.OCPermissions
 import com.owncloud.android.lib.resources.shares.RemoteShare.Companion.INIT_EXPIRATION_DATE_IN_MILLIS
 
 interface RemoteShareDataSource {
@@ -38,7 +38,7 @@ interface RemoteShareDataSource {
         accountName: String,
         spaceId: String,
         itemId: String
-    ): SpaceMembers
+    ): OCPermissions
 
     fun insert(
         remoteFilePath: String,

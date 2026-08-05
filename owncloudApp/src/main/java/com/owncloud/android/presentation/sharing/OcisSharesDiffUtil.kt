@@ -21,11 +21,11 @@
 package com.owncloud.android.presentation.sharing
 
 import androidx.recyclerview.widget.DiffUtil
-import com.owncloud.android.domain.spaces.model.SpaceMember
+import com.owncloud.android.domain.sharing.shares.model.MemberPermission
 
 class OcisSharesDiffUtil(
-    private val oldList: List<SpaceMember>,
-    private val newList: List<SpaceMember>,
+    private val oldList: List<MemberPermission>,
+    private val newList: List<MemberPermission>,
 ) : DiffUtil.Callback() {
 
     override fun getOldListSize(): Int = oldList.size

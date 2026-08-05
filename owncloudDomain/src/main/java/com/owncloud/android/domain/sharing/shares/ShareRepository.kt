@@ -25,7 +25,7 @@ package com.owncloud.android.domain.sharing.shares
 import androidx.lifecycle.LiveData
 import com.owncloud.android.domain.sharing.shares.model.OCShare
 import com.owncloud.android.domain.sharing.shares.model.ShareType
-import com.owncloud.android.domain.spaces.model.SpaceMembers
+import com.owncloud.android.domain.sharing.shares.model.OCPermissions
 
 interface ShareRepository {
 
@@ -77,7 +77,7 @@ interface ShareRepository {
 
     fun getShareAsLiveData(remoteId: String): LiveData<OCShare>
 
-    fun getOcisShares(accountName: String, spaceId: String, itemId: String): SpaceMembers
+    fun getOcisShares(accountName: String, spaceId: String, itemId: String): OCPermissions
 
     fun refreshSharesFromNetwork(filePath: String, accountName: String)
 
