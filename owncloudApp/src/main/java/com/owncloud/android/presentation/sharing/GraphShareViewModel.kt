@@ -21,6 +21,7 @@
 package com.owncloud.android.presentation.sharing
 
 import androidx.lifecycle.ViewModel
+import com.owncloud.android.domain.exceptions.IncompleteFileDataException
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.roles.model.OCRole
 import com.owncloud.android.domain.roles.usecases.GetRolesAsyncUseCase
@@ -32,6 +33,7 @@ import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 
 class GraphShareViewModel(
     private val getRolesAsyncUseCase: GetRolesAsyncUseCase,
@@ -56,15 +58,24 @@ class GraphShareViewModel(
         )
     }
 
-    fun getGraphShares() = runUseCaseWithResult(
-        coroutineDispatcher = coroutineDispatcherProvider.io,
-        showLoading = true,
-        flow = _shares,
-        useCase = getGraphSharesAsyncUseCase,
-        useCaseParams = GetGraphSharesAsyncUseCase.Params(
-            accountName = accountName,
-            spaceId = file.spaceId.orEmpty(),
-            itemId = file.remoteId.orEmpty()
+    fun getGraphShares() {
+        val spaceId = file.spaceId
+        val itemId = file.remoteId
+        if (spaceId == null || itemId == null) {
+            _shares.update { Event(UIResult.Error(error = IncompleteFileDataException())) }
+            return
+        }
+
+        runUseCaseWithResult(
+            coroutineDispatcher = coroutineDispatcherProvider.io,
+            showLoading = true,
+            flow = _shares,
+            useCase = getGraphSharesAsyncUseCase,
+            useCaseParams = GetGraphSharesAsyncUseCase.Params(
+                accountName = accountName,
+                spaceId = spaceId,
+                itemId = itemId
+            )
         )
-    )
+    }
 }
