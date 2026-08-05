@@ -506,6 +506,7 @@
     <string name="share_via_link_edit_permission_read_and_write_label">Download/View/Upload</string>
     <string name="share_via_link_edit_permission_upload_only_label">Upload Only (File Drop)</string>
     <string name="share_with_title">Share with</string>
+    <string name="share_with_people_title">Share with people</string>
     <string name="share_with_edit_title">Share with %1$s</string>
 
     <string name="share_search">Search</string>
