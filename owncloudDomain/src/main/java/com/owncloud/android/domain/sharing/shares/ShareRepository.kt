@@ -3,8 +3,9 @@
  *
  * @author David González Verdugo
  * @author Juan Carlos Garrote Gascón
+ * @author Jorge Aguado Recio
  *
- * Copyright (C) 2022 ownCloud GmbH.
+ * Copyright (C) 2026 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -24,6 +25,7 @@ package com.owncloud.android.domain.sharing.shares
 import androidx.lifecycle.LiveData
 import com.owncloud.android.domain.sharing.shares.model.OCShare
 import com.owncloud.android.domain.sharing.shares.model.ShareType
+import com.owncloud.android.domain.spaces.model.SpaceMembers
 
 interface ShareRepository {
 
@@ -74,6 +76,8 @@ interface ShareRepository {
     fun getSharesAsLiveData(filePath: String, accountName: String): LiveData<List<OCShare>>
 
     fun getShareAsLiveData(remoteId: String): LiveData<OCShare>
+
+    fun getOcisShares(accountName: String, spaceId: String, itemId: String): SpaceMembers
 
     fun refreshSharesFromNetwork(filePath: String, accountName: String)
 

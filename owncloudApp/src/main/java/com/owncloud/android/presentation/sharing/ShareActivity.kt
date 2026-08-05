@@ -360,7 +360,8 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
 
     override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean =
         if (keyCode == KeyEvent.KEYCODE_DPAD_DOWN) {
-            if (findViewById<View>(R.id.owncloud_app_bar).hasFocus()) {
+            val appBar = findViewById<View>(R.id.owncloud_app_bar)
+            if (appBar?.hasFocus() == true) {
                 findViewById<View>(R.id.share_fragment_container).requestFocus()
             }
             true

@@ -136,7 +136,7 @@ data class SpacePermissionsResponse(
     @Json(name = "@libre.graph.permissions.roles.allowedValues")
     val roles: List<RoleResponse>,
     @Json(name = "value")
-    val members: List<PermissionsResponse>
+    val members: List<PermissionsResponse>?
 )
 
 @JsonClass(generateAdapter = true)

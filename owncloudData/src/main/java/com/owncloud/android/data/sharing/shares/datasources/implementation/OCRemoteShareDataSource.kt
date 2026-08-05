@@ -2,7 +2,9 @@
  * ownCloud Android client application
  *
  * @author David González Verdugo
- * Copyright (C) 2020 ownCloud GmbH.
+ * @author Jorge Aguado Recio
+ *
+ * Copyright (C) 2026 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -23,8 +25,14 @@ import com.owncloud.android.data.ClientManager
 import com.owncloud.android.data.executeRemoteOperation
 import com.owncloud.android.data.sharing.shares.datasources.RemoteShareDataSource
 import com.owncloud.android.data.sharing.shares.datasources.mapper.RemoteShareMapper
+import com.owncloud.android.domain.links.model.OCLink
+import com.owncloud.android.domain.links.model.OCLinkType
+import com.owncloud.android.domain.roles.model.OCRole
 import com.owncloud.android.domain.sharing.shares.model.OCShare
 import com.owncloud.android.domain.sharing.shares.model.ShareType
+import com.owncloud.android.domain.spaces.model.SpaceMember
+import com.owncloud.android.domain.spaces.model.SpaceMembers
+import com.owncloud.android.lib.resources.spaces.responses.SpacePermissionsResponse
 
 class OCRemoteShareDataSource(
     private val clientManager: ClientManager,
@@ -46,6 +54,17 @@ class OCRemoteShareDataSource(
                 }
             }
         }
+    }
+
+    override fun getOcisShares(
+        accountName: String,
+        spaceId: String,
+        itemId: String
+    ): SpaceMembers {
+        val response = executeRemoteOperation {
+            clientManager.getShareService(accountName).getOcisShares(spaceId, itemId)
+        }
+        return response.toModel()
     }
 
     override fun insert(
@@ -101,6 +120,42 @@ class OCRemoteShareDataSource(
     override fun deleteShare(remoteId: String, accountName: String) {
         executeRemoteOperation {
             clientManager.getShareService(accountName).deleteShare(remoteId)
+        }
+    }
+
+    companion object {
+        fun SpacePermissionsResponse.toModel(): SpaceMembers {
+            val membersResponse = members.orEmpty()
+            return SpaceMembers(
+                roles = roles.map { spaceRoleResponse ->
+                    OCRole(
+                        id = spaceRoleResponse.id,
+                        displayName = spaceRoleResponse.displayName,
+                        description = spaceRoleResponse.description
+                    )
+                },
+                members = membersResponse.filter { it.grantedToV2 != null }.map { spaceMemberResponse ->
+                    SpaceMember(
+                        id = spaceMemberResponse.id ?: "",
+                        expirationDateTime = spaceMemberResponse.expirationDateTime,
+                        displayName = spaceMemberResponse.grantedToV2?.user?.displayName
+                            ?: spaceMemberResponse.grantedToV2?.group?.displayName ?: "",
+                        roles = spaceMemberResponse.roles ?: emptyList(),
+                        isGroup = spaceMemberResponse.grantedToV2?.group != null
+                    )
+                },
+                links = membersResponse.filter { it.grantedToV2 == null }.map { spaceLinkResponse ->
+                    OCLink(
+                        id = spaceLinkResponse.id.orEmpty(),
+                        createdDateTime = spaceLinkResponse.createdDateTime.orEmpty(),
+                        expirationDateTime = spaceLinkResponse.expirationDateTime,
+                        hasPassword = spaceLinkResponse.hasPassword ?: false,
+                        displayName = spaceLinkResponse.link?.displayName.orEmpty(),
+                        type = OCLinkType.parseFromString(spaceLinkResponse.link?.type.orEmpty()),
+                        webUrl = spaceLinkResponse.link?.webUrl.orEmpty()
+                    )
+                }
+            )
         }
     }
 }

@@ -95,6 +95,7 @@ import com.owncloud.android.domain.sharing.shares.usecases.CreatePublicShareAsyn
 import com.owncloud.android.domain.sharing.shares.usecases.DeleteShareAsyncUseCase
 import com.owncloud.android.domain.sharing.shares.usecases.EditPrivateShareAsyncUseCase
 import com.owncloud.android.domain.sharing.shares.usecases.EditPublicShareAsyncUseCase
+import com.owncloud.android.domain.sharing.shares.usecases.GetOcisSharesAsyncUseCase
 import com.owncloud.android.domain.sharing.shares.usecases.GetShareAsLiveDataUseCase
 import com.owncloud.android.domain.sharing.shares.usecases.GetSharesAsLiveDataUseCase
 import com.owncloud.android.domain.sharing.shares.usecases.RefreshSharesFromServerAsyncUseCase
@@ -233,6 +234,7 @@ val useCaseModule = module {
     factoryOf(::DeleteShareAsyncUseCase)
     factoryOf(::EditPrivateShareAsyncUseCase)
     factoryOf(::EditPublicShareAsyncUseCase)
+    factoryOf(::GetOcisSharesAsyncUseCase)
     factoryOf(::GetShareAsLiveDataUseCase)
     factoryOf(::GetShareesAsyncUseCase)
     factoryOf(::GetSharesAsLiveDataUseCase)

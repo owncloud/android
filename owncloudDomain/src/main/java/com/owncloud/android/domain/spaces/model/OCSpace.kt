@@ -136,5 +136,6 @@ data class SpaceMember(
     val id: String,
     val expirationDateTime: String?,
     val displayName: String,
-    val roles: List<String>
+    val roles: List<String>,
+    val isGroup: Boolean = false
 ) : Parcelable

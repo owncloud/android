@@ -196,8 +196,9 @@ class OCRemoteSpacesDataSource(
             )
 
         @VisibleForTesting
-        fun SpacePermissionsResponse.toModel(): SpaceMembers =
-            SpaceMembers(
+        fun SpacePermissionsResponse.toModel(): SpaceMembers {
+            val membersResponse = members.orEmpty()
+            return SpaceMembers(
                 roles = roles.map { spaceRoleResponse ->
                     OCRole(
                         id = spaceRoleResponse.id,
@@ -205,16 +206,17 @@ class OCRemoteSpacesDataSource(
                         description = spaceRoleResponse.description
                     )
                 },
-                members = members.filter { it.grantedToV2 != null }.map { spaceMemberResponse ->
-                    SpaceMember (
+                members = membersResponse.filter { it.grantedToV2 != null }.map { spaceMemberResponse ->
+                    SpaceMember(
                         id = spaceMemberResponse.id ?: "",
                         expirationDateTime = spaceMemberResponse.expirationDateTime,
                         displayName = spaceMemberResponse.grantedToV2?.user?.displayName
                             ?: spaceMemberResponse.grantedToV2?.group?.displayName ?: "",
-                        roles = spaceMemberResponse.roles ?: emptyList()
+                        roles = spaceMemberResponse.roles ?: emptyList(),
+                        isGroup = spaceMemberResponse.grantedToV2?.group != null
                     )
                 },
-                links = members.filter { it.grantedToV2 == null }.map { spaceLinkResponse ->
+                links = membersResponse.filter { it.grantedToV2 == null }.map { spaceLinkResponse ->
                     OCLink(
                         id = spaceLinkResponse.id.orEmpty(),
                         createdDateTime = spaceLinkResponse.createdDateTime.orEmpty(),
@@ -226,6 +228,7 @@ class OCRemoteSpacesDataSource(
                     )
                 }
             )
+        }
 
 
         private fun getRoleForUser(root: RootResponse, userId: String, userGroups: List<String>): String? {

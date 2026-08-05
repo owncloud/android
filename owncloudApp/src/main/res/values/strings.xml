@@ -492,6 +492,7 @@
     <string name="share_dialog_title">Share</string>
     <string name="share_with_user_section_title">Users and Groups</string>
     <string name="share_no_users">No data shared with users yet</string>
+    <string name="share_sync_failed">Shares could not be refreshed</string>
     <string name="share_via_link_section_title">Public links</string>
     <string name="share_via_link_create_title">Create link share</string>
     <string name="share_via_link_edit_title">Edit link share</string>
