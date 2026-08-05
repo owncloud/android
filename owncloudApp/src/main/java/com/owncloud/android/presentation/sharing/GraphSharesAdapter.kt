@@ -33,19 +33,19 @@ import com.owncloud.android.domain.sharing.shares.model.MemberPermission
 import com.owncloud.android.utils.DisplayUtils
 import com.owncloud.android.utils.PreferenceUtils
 
-class OcisSharesAdapter : RecyclerView.Adapter<OcisSharesAdapter.OcisShareViewHolder>() {
+class GraphSharesAdapter : RecyclerView.Adapter<GraphSharesAdapter.GraphShareViewHolder>() {
 
     private var shares: List<MemberPermission> = emptyList()
     private var rolesMap: Map<String, String> = emptyMap()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OcisShareViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GraphShareViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val view = inflater.inflate(R.layout.member_item, parent, false)
         view.filterTouchesWhenObscured = PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(parent.context)
-        return OcisShareViewHolder(view)
+        return GraphShareViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: OcisShareViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: GraphShareViewHolder, position: Int) {
         val share = shares[position]
         val roleNames = share.roles.mapNotNull { rolesMap[it] }
 
@@ -77,12 +77,12 @@ class OcisSharesAdapter : RecyclerView.Adapter<OcisSharesAdapter.OcisShareViewHo
             compareByDescending<MemberPermission> { share -> roles.indexOfFirst { it.id in share.roles } }
                 .thenBy { it.displayName }
         )
-        val diffResult = DiffUtil.calculateDiff(OcisSharesDiffUtil(this.shares, sortedShares))
+        val diffResult = DiffUtil.calculateDiff(GraphSharesDiffUtil(this.shares, sortedShares))
         this.shares = sortedShares
         diffResult.dispatchUpdatesTo(this)
     }
 
-    class OcisShareViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class GraphShareViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val binding = MemberItemBinding.bind(itemView)
     }
 }

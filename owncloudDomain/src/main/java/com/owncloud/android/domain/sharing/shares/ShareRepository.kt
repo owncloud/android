@@ -77,7 +77,7 @@ interface ShareRepository {
 
     fun getShareAsLiveData(remoteId: String): LiveData<OCShare>
 
-    fun getOcisShares(accountName: String, spaceId: String, itemId: String): OCPermissions
+    fun getGraphShares(accountName: String, spaceId: String, itemId: String): OCPermissions
 
     fun refreshSharesFromNetwork(filePath: String, accountName: String)
 

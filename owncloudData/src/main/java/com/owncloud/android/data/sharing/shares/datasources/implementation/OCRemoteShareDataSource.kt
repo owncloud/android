@@ -56,13 +56,13 @@ class OCRemoteShareDataSource(
         }
     }
 
-    override fun getOcisShares(
+    override fun getGraphShares(
         accountName: String,
         spaceId: String,
         itemId: String
     ): OCPermissions {
         val response = executeRemoteOperation {
-            clientManager.getShareService(accountName).getOcisShares(spaceId, itemId)
+            clientManager.getShareService(accountName).getGraphShares(spaceId, itemId)
         }
         return response.toModel()
     }

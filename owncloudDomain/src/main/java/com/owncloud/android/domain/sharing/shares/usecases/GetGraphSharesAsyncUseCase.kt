@@ -24,12 +24,12 @@ import com.owncloud.android.domain.BaseUseCaseWithResult
 import com.owncloud.android.domain.sharing.shares.ShareRepository
 import com.owncloud.android.domain.sharing.shares.model.OCPermissions
 
-class GetOcisSharesAsyncUseCase(
+class GetGraphSharesAsyncUseCase(
     private val shareRepository: ShareRepository
-) : BaseUseCaseWithResult<OCPermissions, GetOcisSharesAsyncUseCase.Params>() {
+) : BaseUseCaseWithResult<OCPermissions, GetGraphSharesAsyncUseCase.Params>() {
 
     override fun run(params: Params) =
-        shareRepository.getOcisShares(params.accountName, params.spaceId, params.itemId)
+        shareRepository.getGraphShares(params.accountName, params.spaceId, params.itemId)
 
     data class Params(val accountName: String, val spaceId: String, val itemId: String)
 }

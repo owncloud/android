@@ -243,16 +243,16 @@ class OCShareRepositoryTest {
     }
 
     @Test
-    fun `getOcisShares returns a OCPermissions`() {
+    fun `getGraphShares returns a OCPermissions`() {
         every {
-            remoteShareDataSource.getOcisShares(OC_ACCOUNT_NAME, OC_SPACE_PROJECT_WITH_IMAGE.id, OC_FILE.remoteId.orEmpty())
+            remoteShareDataSource.getGraphShares(OC_ACCOUNT_NAME, OC_SPACE_PROJECT_WITH_IMAGE.id, OC_FILE.remoteId.orEmpty())
         } returns SPACE_MEMBERS
 
-        val sharesResult = ocShareRepository.getOcisShares(OC_ACCOUNT_NAME, OC_SPACE_PROJECT_WITH_IMAGE.id, OC_FILE.remoteId.orEmpty())
+        val sharesResult = ocShareRepository.getGraphShares(OC_ACCOUNT_NAME, OC_SPACE_PROJECT_WITH_IMAGE.id, OC_FILE.remoteId.orEmpty())
         assertEquals(SPACE_MEMBERS, sharesResult)
 
         verify(exactly = 1) {
-            remoteShareDataSource.getOcisShares(OC_ACCOUNT_NAME, OC_SPACE_PROJECT_WITH_IMAGE.id, OC_FILE.remoteId.orEmpty())
+            remoteShareDataSource.getGraphShares(OC_ACCOUNT_NAME, OC_SPACE_PROJECT_WITH_IMAGE.id, OC_FILE.remoteId.orEmpty())
         }
     }
 

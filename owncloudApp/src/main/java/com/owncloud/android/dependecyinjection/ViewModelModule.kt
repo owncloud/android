@@ -53,7 +53,7 @@ import com.owncloud.android.presentation.settings.automaticuploads.SettingsVideo
 import com.owncloud.android.presentation.settings.logging.SettingsLogsViewModel
 import com.owncloud.android.presentation.settings.more.SettingsMoreViewModel
 import com.owncloud.android.presentation.settings.security.SettingsSecurityViewModel
-import com.owncloud.android.presentation.sharing.OcisShareViewModel
+import com.owncloud.android.presentation.sharing.GraphShareViewModel
 import com.owncloud.android.presentation.sharing.ShareViewModel
 import com.owncloud.android.presentation.spaces.SpacesListViewModel
 import com.owncloud.android.presentation.spaces.links.SpaceLinksViewModel
@@ -71,9 +71,9 @@ val viewModelModule = module {
     viewModelOf(::DrawerViewModel)
     viewModelOf(::FileDetailsViewModel)
     viewModelOf(::FileOperationsViewModel)
+    viewModelOf(::GraphShareViewModel)
     viewModelOf(::LogListViewModel)
     viewModelOf(::OAuthViewModel)
-    viewModelOf(::OcisShareViewModel)
     viewModelOf(::PatternViewModel)
     viewModelOf(::PreviewAudioViewModel)
     viewModelOf(::PreviewImageViewModel)

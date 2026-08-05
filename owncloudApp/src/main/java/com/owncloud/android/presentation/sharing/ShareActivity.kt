@@ -95,7 +95,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
         setupFileHeader(binding)
         if (file != null && account != null) {
             supportFragmentManager.transaction {
-                replace(R.id.members_fragment_container, OcisShareFragment.newInstance(file, account!!.name), TAG_SHARE_OCIS_FRAGMENT)
+                replace(R.id.members_fragment_container, GraphShareFragment.newInstance(file, account!!.name), TAG_GRAPH_SHARE_FRAGMENT)
             }
         }
     }
@@ -371,7 +371,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
 
     companion object {
         const val TAG_SHARE_FRAGMENT = "SHARE_FRAGMENT"
-        const val TAG_SHARE_OCIS_FRAGMENT = "SHARE_OCIS_FRAGMENT"
+        const val TAG_GRAPH_SHARE_FRAGMENT = "GRAPH_SHARE_FRAGMENT"
         const val TAG_SEARCH_FRAGMENT = "SEARCH_USER_AND_GROUPS_FRAGMENT"
         const val TAG_EDIT_SHARE_FRAGMENT = "EDIT_SHARE_FRAGMENT"
         const val TAG_PUBLIC_SHARE_DIALOG_FRAGMENT = "PUBLIC_SHARE_DIALOG_FRAGMENT"

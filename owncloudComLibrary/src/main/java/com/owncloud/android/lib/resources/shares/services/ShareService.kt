@@ -39,7 +39,7 @@ interface ShareService : Service {
         subfiles: Boolean
     ): RemoteOperationResult<ShareResponse>
 
-    fun getOcisShares(spaceId: String, itemId: String): RemoteOperationResult<PermissionsResponse>
+    fun getGraphShares(spaceId: String, itemId: String): RemoteOperationResult<PermissionsResponse>
 
     fun insertShare(
         remoteFilePath: String,

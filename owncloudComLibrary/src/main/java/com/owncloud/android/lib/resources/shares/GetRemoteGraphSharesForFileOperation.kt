@@ -32,7 +32,7 @@ import com.squareup.moshi.Moshi
 import timber.log.Timber
 import java.net.URL
 
-class GetRemoteOcisSharesOperation(
+class GetRemoteGraphSharesForFileOperation(
     private val spaceId: String,
     private val itemId: String,
 ) : RemoteOperation<PermissionsResponse>() {
@@ -62,14 +62,14 @@ class GetRemoteOcisSharesOperation(
                 result = RemoteOperationResult(ResultCode.OK)
                 result.data = getMethod.getResponseBodyAsString().let { adapter.fromJson(it) }
 
-                Timber.d("Get oCIS shares completed and parsed to ${result.data}")
+                Timber.d("Get graph shares completed and parsed to ${result.data}")
             } else {
                 result = RemoteOperationResult(getMethod)
-                Timber.e("Failed response while getting oCIS shares; status code: $status, response: $response")
+                Timber.e("Failed response while getting graph shares; status code: $status, response: $response")
             }
         } catch (e: Exception) {
             result = RemoteOperationResult(e)
-            Timber.e(e, "Exception while getting oCIS shares")
+            Timber.e(e, "Exception while getting graph shares")
         }
         return result
     }

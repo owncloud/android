@@ -120,8 +120,8 @@ class OCShareRepository(
     override fun getShareAsLiveData(remoteId: String): LiveData<OCShare> =
         localShareDataSource.getShareAsLiveData(remoteId)
 
-    override fun getOcisShares(accountName: String, spaceId: String, itemId: String): OCPermissions =
-        remoteShareDataSource.getOcisShares(accountName, spaceId, itemId)
+    override fun getGraphShares(accountName: String, spaceId: String, itemId: String): OCPermissions =
+        remoteShareDataSource.getGraphShares(accountName, spaceId, itemId)
 
     override fun refreshSharesFromNetwork(
         filePath: String,

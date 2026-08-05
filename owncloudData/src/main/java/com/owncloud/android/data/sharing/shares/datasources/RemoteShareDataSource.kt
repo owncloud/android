@@ -34,7 +34,7 @@ interface RemoteShareDataSource {
         accountName: String
     ): List<OCShare>
 
-    fun getOcisShares(
+    fun getGraphShares(
         accountName: String,
         spaceId: String,
         itemId: String

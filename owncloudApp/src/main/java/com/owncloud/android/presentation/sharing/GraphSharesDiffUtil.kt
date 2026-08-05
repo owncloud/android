@@ -23,7 +23,7 @@ package com.owncloud.android.presentation.sharing
 import androidx.recyclerview.widget.DiffUtil
 import com.owncloud.android.domain.sharing.shares.model.MemberPermission
 
-class OcisSharesDiffUtil(
+class GraphSharesDiffUtil(
     private val oldList: List<MemberPermission>,
     private val newList: List<MemberPermission>,
 ) : DiffUtil.Callback() {

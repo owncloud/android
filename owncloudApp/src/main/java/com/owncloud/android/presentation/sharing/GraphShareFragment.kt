@@ -38,18 +38,18 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import timber.log.Timber
 
-class OcisShareFragment : Fragment() {
+class GraphShareFragment : Fragment() {
     private var _binding: MembersFragmentBinding? = null
     private val binding get() = _binding!!
 
-    private val ocisShareViewModel by viewModel<OcisShareViewModel> {
+    private val graphShareViewModel by viewModel<GraphShareViewModel> {
         parametersOf(
             requireArguments().getString(ARG_ACCOUNT_NAME),
             requireArguments().getParcelable<OCFile>(ARG_FILE)
         )
     }
 
-    private lateinit var ocisSharesAdapter: OcisSharesAdapter
+    private lateinit var graphSharesAdapter: GraphSharesAdapter
 
     private var roles: List<OCRole> = emptyList()
 
@@ -62,14 +62,14 @@ class OcisShareFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.membersTitle.text = getString(R.string.share_with_people_title)
 
-        ocisSharesAdapter = OcisSharesAdapter()
+        graphSharesAdapter = GraphSharesAdapter()
         binding.membersRecyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext())
-            adapter = ocisSharesAdapter
+            adapter = graphSharesAdapter
         }
 
         binding.swipeRefreshMembers.setOnRefreshListener {
-            ocisShareViewModel.getOcisShares()
+            graphShareViewModel.getGraphShares()
         }
 
         subscribeToViewModels()
@@ -86,13 +86,13 @@ class OcisShareFragment : Fragment() {
     }
 
     private fun observeRoles() {
-        collectLatestLifecycleFlow(ocisShareViewModel.roles) { event ->
+        collectLatestLifecycleFlow(graphShareViewModel.roles) { event ->
             event?.let {
                 when (val uiResult = event.peekContent()) {
                     is UIResult.Success -> {
                         uiResult.data?.let {
                             roles = it
-                            ocisShareViewModel.getOcisShares()
+                            graphShareViewModel.getGraphShares()
                         }
                     }
                     is UIResult.Loading -> { }
@@ -106,7 +106,7 @@ class OcisShareFragment : Fragment() {
     }
 
     private fun observeShares() {
-        collectLatestLifecycleFlow(ocisShareViewModel.shares) { event ->
+        collectLatestLifecycleFlow(graphShareViewModel.shares) { event ->
             event?.let {
                 when (val uiResult = event.peekContent()) {
                     is UIResult.Success -> {
@@ -114,7 +114,7 @@ class OcisShareFragment : Fragment() {
                             val hasMembers = it.members.isNotEmpty()
                             binding.membersRecyclerView.isVisible = hasMembers
                             binding.noSharesMessage.isVisible = !hasMembers
-                            ocisSharesAdapter.setShares(it.members, it.roles)
+                            graphSharesAdapter.setShares(it.members, it.roles)
                             binding.swipeRefreshMembers.isRefreshing = false
                         }
                     }
@@ -133,12 +133,12 @@ class OcisShareFragment : Fragment() {
         private const val ARG_FILE = "FILE"
         private const val ARG_ACCOUNT_NAME = "ACCOUNT_NAME"
 
-        fun newInstance(file: OCFile, accountName: String): OcisShareFragment {
+        fun newInstance(file: OCFile, accountName: String): GraphShareFragment {
             val args = Bundle().apply {
                 putParcelable(ARG_FILE, file)
                 putString(ARG_ACCOUNT_NAME, accountName)
             }
-            return OcisShareFragment().apply {
+            return GraphShareFragment().apply {
                 arguments = args
             }
         }
