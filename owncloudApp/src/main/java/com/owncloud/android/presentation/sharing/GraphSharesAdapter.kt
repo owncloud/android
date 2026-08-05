@@ -74,8 +74,8 @@ class GraphSharesAdapter : RecyclerView.Adapter<GraphSharesAdapter.GraphShareVie
     fun setShares(shares: List<MemberPermission>, roles: List<OCRole>) {
         this.rolesMap = roles.associate { it.id to it.displayName }
         val sortedShares = shares.sortedWith(
-            compareByDescending<MemberPermission> { share -> roles.indexOfFirst { it.id in share.roles } }
-                .thenBy { it.displayName }
+            compareBy<MemberPermission> { it.isGroup }
+                .thenBy { it.displayName.lowercase() }
         )
         val diffResult = DiffUtil.calculateDiff(GraphSharesDiffUtil(this.shares, sortedShares))
         this.shares = sortedShares
