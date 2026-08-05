@@ -68,6 +68,10 @@ class OcisShareFragment : Fragment() {
             adapter = ocisSharesAdapter
         }
 
+        binding.swipeRefreshMembers.setOnRefreshListener {
+            ocisShareViewModel.getOcisShares()
+        }
+
         subscribeToViewModels()
     }
 
