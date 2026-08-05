@@ -2,7 +2,9 @@
  * ownCloud Android client application
  *
  * @author David González Verdugo
- * Copyright (C) 2020 ownCloud GmbH.
+ * @author Jorge Aguado Recio
+ *
+ * Copyright (C) 2026 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -28,10 +30,13 @@ import com.owncloud.android.domain.sharing.shares.model.OCShare
 import com.owncloud.android.domain.sharing.shares.model.ShareType
 import com.owncloud.android.lib.resources.shares.RemoteShare
 import com.owncloud.android.testutil.OC_ACCOUNT_NAME
+import com.owncloud.android.testutil.OC_FILE
 import com.owncloud.android.testutil.OC_PRIVATE_SHARE
 import com.owncloud.android.testutil.OC_PUBLIC_SHARE
 import com.owncloud.android.testutil.OC_SHARE
 import com.owncloud.android.testutil.OC_SHAREE
+import com.owncloud.android.testutil.OC_SPACE_PROJECT_WITH_IMAGE
+import com.owncloud.android.testutil.SPACE_MEMBERS
 import com.owncloud.android.testutil.livedata.getLastEmittedValue
 import io.mockk.every
 import io.mockk.mockk
@@ -234,6 +239,20 @@ class OCShareRepositoryTest {
 
         verify(exactly = 1) {
             localShareDataSource.getShareAsLiveData(OC_SHARE.remoteId)
+        }
+    }
+
+    @Test
+    fun `getOcisShares returns a SpaceMembers`() {
+        every {
+            remoteShareDataSource.getOcisShares(OC_ACCOUNT_NAME, OC_SPACE_PROJECT_WITH_IMAGE.id, OC_FILE.remoteId.orEmpty())
+        } returns SPACE_MEMBERS
+
+        val sharesResult = ocShareRepository.getOcisShares(OC_ACCOUNT_NAME, OC_SPACE_PROJECT_WITH_IMAGE.id, OC_FILE.remoteId.orEmpty())
+        assertEquals(SPACE_MEMBERS, sharesResult)
+
+        verify(exactly = 1) {
+            remoteShareDataSource.getOcisShares(OC_ACCOUNT_NAME, OC_SPACE_PROJECT_WITH_IMAGE.id, OC_FILE.remoteId.orEmpty())
         }
     }
 

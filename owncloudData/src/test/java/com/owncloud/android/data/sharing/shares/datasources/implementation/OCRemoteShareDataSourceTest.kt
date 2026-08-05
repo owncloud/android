@@ -4,8 +4,9 @@
  * @author David González Verdugo
  * @author Jesús Recio
  * @author Aitor Ballesteros Pavón
+ * @author Jorge Aguado Recio
  *
- * Copyright (C) 2023 ownCloud GmbH.
+ * Copyright (C) 2026 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -23,6 +24,7 @@
 package com.owncloud.android.data.sharing.shares.datasources.implementation
 
 import com.owncloud.android.data.ClientManager
+import com.owncloud.android.data.sharing.shares.datasources.implementation.OCRemoteShareDataSource.Companion.toModel
 import com.owncloud.android.data.sharing.shares.datasources.mapper.RemoteShareMapper
 import com.owncloud.android.domain.exceptions.ShareForbiddenException
 import com.owncloud.android.domain.exceptions.ShareNotFoundException
@@ -31,7 +33,10 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.shares.ShareResponse
 import com.owncloud.android.lib.resources.shares.services.implementation.OCShareService
 import com.owncloud.android.testutil.OC_ACCOUNT_NAME
+import com.owncloud.android.testutil.OC_FILE
 import com.owncloud.android.testutil.OC_SHARE
+import com.owncloud.android.testutil.OC_SPACE_PROJECT_WITH_IMAGE
+import com.owncloud.android.testutil.SPACE_PERMISSIONS_RESPONSE
 import com.owncloud.android.utils.createRemoteOperationResultMock
 import io.mockk.every
 import io.mockk.mockk
@@ -383,6 +388,23 @@ class OCRemoteShareDataSourceTest {
                 reshares = true,
                 subfiles = true,
             )
+        }
+    }
+
+    @Test
+    fun `getOcisShares returns a SpaceMembers`() {
+        val getSpaceMembersResult = createRemoteOperationResultMock(SPACE_PERMISSIONS_RESPONSE, isSuccess = true)
+
+        every {
+            ocShareService.getOcisShares(OC_SPACE_PROJECT_WITH_IMAGE.id, OC_FILE.remoteId.orEmpty())
+        } returns getSpaceMembersResult
+
+        val ocisShares = ocRemoteShareDataSource.getOcisShares(OC_ACCOUNT_NAME, OC_SPACE_PROJECT_WITH_IMAGE.id, OC_FILE.remoteId.orEmpty())
+        assertEquals(SPACE_PERMISSIONS_RESPONSE.toModel(), ocisShares)
+
+        verify(exactly = 1) {
+            clientManager.getShareService(OC_ACCOUNT_NAME)
+            ocShareService.getOcisShares(OC_SPACE_PROJECT_WITH_IMAGE.id, OC_FILE.remoteId.orEmpty())
         }
     }
 
