@@ -30,7 +30,7 @@ import com.owncloud.android.R
 import com.owncloud.android.databinding.MemberItemBinding
 import com.owncloud.android.domain.roles.model.OCRole
 import com.owncloud.android.domain.roles.model.OCRoleType
-import com.owncloud.android.domain.spaces.model.SpaceMember
+import com.owncloud.android.domain.sharing.shares.model.MemberPermission
 import com.owncloud.android.utils.DisplayUtils
 import com.owncloud.android.utils.PreferenceUtils
 
@@ -39,7 +39,7 @@ class SpaceMembersAdapter(
     private val accountId: String?
 ): RecyclerView.Adapter<SpaceMembersAdapter.SpaceMembersViewHolder>() {
 
-    private var members: List<SpaceMember> = emptyList()
+    private var members: List<MemberPermission> = emptyList()
     private var rolesMap: Map<String, String> = emptyMap()
     private var canRemoveMembers = false
     private var canEditMembers = false
@@ -105,7 +105,7 @@ class SpaceMembersAdapter(
     override fun getItemCount(): Int = members.size
 
     fun setSpaceMembers(
-        spaceMembers: List<SpaceMember>,
+        spaceMembers: List<MemberPermission>,
         roles: List<OCRole>,
         canRemoveMembers: Boolean,
         canEditMembers: Boolean,
@@ -118,7 +118,7 @@ class SpaceMembersAdapter(
         this.canRemoveMembers = canRemoveMembers
         this.canEditMembers = canEditMembers
         this.rolesMap = roles.associate { it.id to it.displayName }
-        val listOfMembersFiltered = spaceMembers.sortedWith(compareByDescending<SpaceMember> {
+        val listOfMembersFiltered = spaceMembers.sortedWith(compareByDescending<MemberPermission> {
                 member -> roles.indexOfFirst { it.id in member.roles } }.thenBy { member -> member.displayName })
         val diffCallback = SpaceMembersDiffUtil(this.members, listOfMembersFiltered, numberOfManagersChanged, hasUserPermissionsChanged)
         val diffResult = DiffUtil.calculateDiff(diffCallback)
@@ -132,8 +132,8 @@ class SpaceMembersAdapter(
     }
 
     interface SpaceMembersAdapterListener {
-        fun onRemoveMember(spaceMember: SpaceMember)
-        fun onEditMember(spaceMember: SpaceMember)
+        fun onRemoveMember(spaceMember: MemberPermission)
+        fun onEditMember(spaceMember: MemberPermission)
     }
 
     companion object {

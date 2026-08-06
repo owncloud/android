@@ -405,6 +405,7 @@
     <string name="error__upload__local_file_not_copied">%1$s could not be copied to %2$s local folder.</string>
 
     <string name="get_shares_error">It was not possible to retrieve the shares from the server</string>
+    <string name="get_graph_shares_incomplete_data_error">Some data could not be retrieved</string>
     <string name="get_sharees_error">It was not possible to retrieve users and groups from the server</string>
     <string name="get_capabilities_error">It was not possible to retrieve the capabilities from the server</string>
     <string name="share_link_file_error">It was not possible to share this file or folder</string>
@@ -492,6 +493,7 @@
     <string name="share_dialog_title">Share</string>
     <string name="share_with_user_section_title">Users and Groups</string>
     <string name="share_no_users">No data shared with users yet</string>
+    <string name="share_sync_failed">Shares could not be refreshed</string>
     <string name="share_via_link_section_title">Public links</string>
     <string name="share_via_link_create_title">Create link share</string>
     <string name="share_via_link_edit_title">Edit link share</string>
@@ -506,6 +508,7 @@
     <string name="share_via_link_edit_permission_read_and_write_label">Download/View/Upload</string>
     <string name="share_via_link_edit_permission_upload_only_label">Upload Only (File Drop)</string>
     <string name="share_with_title">Share with</string>
+    <string name="share_with_people_title">Share with people</string>
     <string name="share_with_edit_title">Share with %1$s</string>
 
     <string name="share_search">Search</string>
@@ -623,6 +626,8 @@
     <string name="release_notes_icon">Release note icon</string>
     <string name="release_notes_bugfixes_title">Minor bugfixes</string>
     <string name="release_notes_bugfixes_subtitle">Some bugs were fixed to improve experience in the app</string>
+    <string name="release_notes_4_9_0_sharing_ng_title">New sharing implementation for Infinite Scale</string>
+    <string name="release_notes_4_9_0_sharing_ng_subtitle">New interface and operations have been added to share files and folders on Infinite Scale accounts</string>
 
     <!-- Open in web -->
     <string name="ic_action_open_with_web">Open in %1$s (web)</string>

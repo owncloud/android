@@ -31,12 +31,12 @@ import com.owncloud.android.domain.members.usecases.EditMemberUseCase
 import com.owncloud.android.domain.members.usecases.RemoveMemberUseCase
 import com.owncloud.android.domain.roles.model.OCRole
 import com.owncloud.android.domain.spaces.model.OCSpace
-import com.owncloud.android.domain.spaces.model.SpaceMembers
+import com.owncloud.android.domain.sharing.shares.model.OCPermissions
 import com.owncloud.android.domain.spaces.usecases.GetSpaceMembersUseCase
 import com.owncloud.android.domain.roles.usecases.GetRolesAsyncUseCase
 import com.owncloud.android.domain.spaces.usecases.GetSpacePermissionsAsyncUseCase
 import com.owncloud.android.domain.members.usecases.SearchMembersUseCase
-import com.owncloud.android.domain.spaces.model.SpaceMember
+import com.owncloud.android.domain.sharing.shares.model.MemberPermission
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.ViewModelExt.runUseCaseWithResult
 import com.owncloud.android.extensions.toOCMember
@@ -67,8 +67,8 @@ class SpaceMembersViewModel(
     private val _roles = MutableStateFlow<Event<UIResult<List<OCRole>>>?>(null)
     val roles: StateFlow<Event<UIResult<List<OCRole>>>?> = _roles
 
-    private val _spaceMembers = MutableStateFlow<Event<UIResult<SpaceMembers>>?>(null)
-    val spaceMembers: StateFlow<Event<UIResult<SpaceMembers>>?> = _spaceMembers
+    private val _spaceMembers = MutableStateFlow<Event<UIResult<OCPermissions>>?>(null)
+    val spaceMembers: StateFlow<Event<UIResult<OCPermissions>>?> = _spaceMembers
 
     private val _spacePermissions = MutableStateFlow<Event<UIResult<List<String>>>?>(null)
     val spacePermissions: StateFlow<Event<UIResult<List<String>>>?> = _spacePermissions
@@ -146,7 +146,7 @@ class SpaceMembersViewModel(
         _addMemberUIState.value = AddMemberUIState(selectedMember = member)
     }
 
-    fun onMemberSelected(member: SpaceMember) {
+    fun onMemberSelected(member: MemberPermission) {
         onMemberSelected(member.toOCMember())
     }
 

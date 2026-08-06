@@ -18,33 +18,23 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.presentation.spaces.members
+package com.owncloud.android.presentation.sharing
 
 import androidx.recyclerview.widget.DiffUtil
 import com.owncloud.android.domain.sharing.shares.model.MemberPermission
 
-class SpaceMembersDiffUtil(
+class GraphSharesDiffUtil(
     private val oldList: List<MemberPermission>,
     private val newList: List<MemberPermission>,
-    private val hasNumberOfManagersChanged: Boolean,
-    private val hasUserPermissionsChanged: Boolean
 ) : DiffUtil.Callback() {
+
     override fun getOldListSize(): Int = oldList.size
 
     override fun getNewListSize(): Int = newList.size
 
-    override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-        val oldItem = oldList[oldItemPosition]
-        val newItem = newList[newItemPosition]
+    override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int) =
+        oldList[oldItemPosition].id == newList[newItemPosition].id
 
-        return oldItem.id == newItem.id
-    }
-
-    override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-        val oldItem = oldList[oldItemPosition]
-        val newItem = newList[newItemPosition]
-
-        return ((oldItem.id == newItem.id) && (oldItem.displayName == newItem.displayName) && (oldItem.roles == newItem.roles)
-                && (oldItem.expirationDateTime == newItem.expirationDateTime) && !hasNumberOfManagersChanged && !hasUserPermissionsChanged)
-    }
+    override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int) =
+        oldList[oldItemPosition] == newList[newItemPosition]
 }

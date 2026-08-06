@@ -18,22 +18,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.extensions
+package com.owncloud.android.domain.sharing.shares.usecases
 
-import com.owncloud.android.domain.members.model.OCMember
-import com.owncloud.android.domain.members.model.OCMemberType
-import com.owncloud.android.domain.sharing.shares.model.MemberPermission
+import com.owncloud.android.domain.BaseUseCaseWithResult
+import com.owncloud.android.domain.sharing.shares.ShareRepository
+import com.owncloud.android.domain.sharing.shares.model.OCPermissions
 
-private const val GROUP_PREFIX = "g:"
-private const val USER_PREFIX = "u:"
+class GetGraphSharesAsyncUseCase(
+    private val shareRepository: ShareRepository
+) : BaseUseCaseWithResult<OCPermissions, GetGraphSharesAsyncUseCase.Params>() {
 
-fun MemberPermission.toOCMember(): OCMember {
-    val isGroup = id.startsWith(GROUP_PREFIX)
-    val type = if (isGroup) OCMemberType.GROUP else OCMemberType.USER
-    return OCMember(
-        id = id.removePrefix(if (isGroup) GROUP_PREFIX else USER_PREFIX),
-        displayName = displayName,
-        surname = OCMemberType.toString(type),
-        type = type
-    )
+    override fun run(params: Params) =
+        shareRepository.getGraphShares(params.accountName, params.spaceId, params.itemId)
+
+    data class Params(val accountName: String, val spaceId: String, val itemId: String)
 }

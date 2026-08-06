@@ -3,7 +3,7 @@
  *
  * @author Jorge Aguado Recio
  *
- * Copyright (C) 2025 ownCloud GmbH.
+ * Copyright (C) 2026 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -18,7 +18,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.lib.resources.spaces
+package com.owncloud.android.lib.resources.shares
 
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.http.HttpConstants
@@ -32,16 +32,19 @@ import com.squareup.moshi.Moshi
 import timber.log.Timber
 import java.net.URL
 
-class GetRemoteSpacePermissionsOperation(
-    private val spaceId: String
-): RemoteOperation<PermissionsResponse>() {
+class GetRemoteGraphSharesForFileOperation(
+    private val spaceId: String,
+    private val itemId: String,
+) : RemoteOperation<PermissionsResponse>() {
     override fun run(client: OwnCloudClient): RemoteOperationResult<PermissionsResponse> {
         var result: RemoteOperationResult<PermissionsResponse>
         try {
             val requestUri = client.baseUri.buildUpon().apply {
-                appendEncodedPath(GRAPH_API_SPACES_PATH)
+                appendEncodedPath(GRAPH_API_DRIVES_PATH)
                 appendEncodedPath(spaceId)
-                appendEncodedPath(SPACE_PERMISSIONS_ENDPOINT)
+                appendEncodedPath(ITEMS_PATH)
+                appendEncodedPath(itemId)
+                appendEncodedPath(PERMISSIONS_ENDPOINT)
                 build()
             }
             val getMethod = GetMethod(URL(requestUri.toString()))
@@ -59,20 +62,21 @@ class GetRemoteSpacePermissionsOperation(
                 result = RemoteOperationResult(ResultCode.OK)
                 result.data = getMethod.getResponseBodyAsString().let { adapter.fromJson(it) }
 
-                Timber.d("Get space permissions for user completed and parsed to ${result.data}")
+                Timber.d("Get graph shares completed and parsed to ${result.data}")
             } else {
                 result = RemoteOperationResult(getMethod)
-                Timber.e("Failed response while getting space permissions; status code: $status, response: $response")
+                Timber.e("Failed response while getting graph shares; status code: $status, response: $response")
             }
         } catch (e: Exception) {
             result = RemoteOperationResult(e)
-            Timber.e(e, "Exception while getting space permissions for user")
+            Timber.e(e, "Exception while getting graph shares")
         }
         return result
     }
 
     companion object {
-        private const val GRAPH_API_SPACES_PATH = "graph/v1beta1/drives/"
-        private const val SPACE_PERMISSIONS_ENDPOINT = "root/permissions"
+        private const val GRAPH_API_DRIVES_PATH = "graph/v1beta1/drives/"
+        private const val ITEMS_PATH = "items"
+        private const val PERMISSIONS_ENDPOINT = "permissions"
     }
 }

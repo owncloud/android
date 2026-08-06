@@ -2,7 +2,9 @@
  * ownCloud Android client application
  *
  * @author David González Verdugo
- * Copyright (C) 2020 ownCloud GmbH.
+ * @author Jorge Aguado Recio
+ *
+ * Copyright (C) 2026 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -21,6 +23,7 @@ package com.owncloud.android.data.sharing.shares.datasources
 
 import com.owncloud.android.domain.sharing.shares.model.OCShare
 import com.owncloud.android.domain.sharing.shares.model.ShareType
+import com.owncloud.android.domain.sharing.shares.model.OCPermissions
 import com.owncloud.android.lib.resources.shares.RemoteShare.Companion.INIT_EXPIRATION_DATE_IN_MILLIS
 
 interface RemoteShareDataSource {
@@ -30,6 +33,12 @@ interface RemoteShareDataSource {
         subfiles: Boolean,
         accountName: String
     ): List<OCShare>
+
+    fun getGraphShares(
+        accountName: String,
+        spaceId: String,
+        itemId: String
+    ): OCPermissions
 
     fun insert(
         remoteFilePath: String,

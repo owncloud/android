@@ -18,22 +18,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.extensions
+package com.owncloud.android.domain.exceptions
 
-import com.owncloud.android.domain.members.model.OCMember
-import com.owncloud.android.domain.members.model.OCMemberType
-import com.owncloud.android.domain.sharing.shares.model.MemberPermission
-
-private const val GROUP_PREFIX = "g:"
-private const val USER_PREFIX = "u:"
-
-fun MemberPermission.toOCMember(): OCMember {
-    val isGroup = id.startsWith(GROUP_PREFIX)
-    val type = if (isGroup) OCMemberType.GROUP else OCMemberType.USER
-    return OCMember(
-        id = id.removePrefix(if (isGroup) GROUP_PREFIX else USER_PREFIX),
-        displayName = displayName,
-        surname = OCMemberType.toString(type),
-        type = type
-    )
-}
+class IncompleteFileDataException : Exception()

@@ -36,7 +36,7 @@ import com.owncloud.android.domain.members.model.OCMember
 import com.owncloud.android.domain.members.model.OCMemberType
 import com.owncloud.android.domain.roles.model.OCRole
 import com.owncloud.android.domain.spaces.model.OCSpace
-import com.owncloud.android.domain.spaces.model.SpaceMember
+import com.owncloud.android.domain.sharing.shares.model.MemberPermission
 import com.owncloud.android.extensions.collectLatestLifecycleFlow
 import com.owncloud.android.extensions.showErrorInSnackbar
 import com.owncloud.android.presentation.common.UIResult
@@ -91,7 +91,7 @@ class AddMemberFragment: Fragment(), SearchMembersAdapter.SearchMembersAdapterLi
         roles = requireArguments().getParcelableArrayList<OCRole>(ARG_ROLES) ?: arrayListOf()
 
         if (editMode) {
-            val selectedMember = requireArguments().getParcelable<SpaceMember>(ARG_SELECTED_MEMBER)
+            val selectedMember = requireArguments().getParcelable<MemberPermission>(ARG_SELECTED_MEMBER)
             selectedMember?.let {
                 bindEditMode(it, roles)
             }
@@ -141,7 +141,7 @@ class AddMemberFragment: Fragment(), SearchMembersAdapter.SearchMembersAdapterLi
     }
 
     private fun subscribeToViewModels() {
-        val spaceMembers = requireArguments().getParcelableArrayList<SpaceMember>(ARG_SPACE_MEMBERS) ?: arrayListOf()
+        val spaceMembers = requireArguments().getParcelableArrayList<MemberPermission>(ARG_SPACE_MEMBERS) ?: arrayListOf()
         searchMinLength = spaceMembersViewModel.capabilities?.filesSharingSearchMinLength ?: DEFAULT_SEARCH_MIN_LENGTH
 
         collectLatestLifecycleFlow(spaceMembersViewModel.members) { uiState ->
@@ -299,7 +299,7 @@ class AddMemberFragment: Fragment(), SearchMembersAdapter.SearchMembersAdapterLi
         }
     }
 
-    private fun bindEditMode(member: SpaceMember, roles: List<OCRole>) {
+    private fun bindEditMode(member: MemberPermission, roles: List<OCRole>) {
         selectedMemberId = member.id
         spaceMembersViewModel.onMemberSelected(member)
 
@@ -325,10 +325,10 @@ class AddMemberFragment: Fragment(), SearchMembersAdapter.SearchMembersAdapterLi
         fun newInstance(
             accountName: String,
             currentSpace: OCSpace,
-            spaceMembers: List<SpaceMember>,
+            spaceMembers: List<MemberPermission>,
             roles: List<OCRole>,
             editMode: Boolean,
-            selectedMember: SpaceMember?
+            selectedMember: MemberPermission?
         ): AddMemberFragment {
             val args = Bundle().apply {
                 putString(ARG_ACCOUNT_NAME, accountName)
