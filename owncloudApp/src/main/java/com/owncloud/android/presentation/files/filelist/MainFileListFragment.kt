@@ -44,6 +44,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.appcompat.widget.SearchView
@@ -73,6 +74,7 @@ import com.owncloud.android.domain.exceptions.TooEarlyException
 import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.domain.files.model.FileMenuOption
 import com.owncloud.android.domain.files.model.OCFile
+import com.owncloud.android.domain.files.model.OCFile.Companion.ROOT_PARENT_ID
 import com.owncloud.android.domain.files.model.OCFile.Companion.ROOT_PATH
 import com.owncloud.android.domain.files.model.OCFileSyncInfo
 import com.owncloud.android.domain.files.model.OCFileWithSyncInfo
@@ -180,6 +182,17 @@ class MainFileListFragment : Fragment(),
     private var openInWebProviders: Map<String, Int> = hashMapOf()
 
     private var isMultiPersonal = false
+
+    private val onBackPressedCallback = object : OnBackPressedCallback(false) {
+        override fun handleOnBackPressed() {
+            if (isFabExpanded()) {
+                collapseFab()
+                setFabMainContentDescription()
+            } else {
+                onBrowseUp()
+            }
+        }
+    }
 
     private var menu: Menu? = null
     private var checkedFiles: List<OCFile> = emptyList()
@@ -325,6 +338,7 @@ class MainFileListFragment : Fragment(),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         isMultiPersonal = capabilityViewModel.checkMultiPersonal()
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, onBackPressedCallback)
         initViews()
         subscribeToViewModels()
     }
@@ -518,6 +532,7 @@ class MainFileListFragment : Fragment(),
 
     private fun observeCurrentFolderDisplayed() {
         collectLatestLifecycleFlow(mainFileListViewModel.currentFolderDisplayed) { currentFolderDisplayed: OCFile ->
+            onBackPressedCallback.isEnabled = currentFolderDisplayed.parentId != ROOT_PARENT_ID
             fileActions?.onCurrentFolderUpdated(currentFolderDisplayed, mainFileListViewModel.getSpace())
             val fileListOption = mainFileListViewModel.fileListOption.value
             val refreshFolderNeeded = fileListOption.isAllFiles() ||
