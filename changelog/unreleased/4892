@@ -1,0 +1,6 @@
+Bugfix: Edge-to-edge multi-selection top bar
+
+The multi-selection top bar now spans behind the system bars in landscape mode
+on Android 15 and newer.
+
+https://github.com/owncloud/android/issues/4892
