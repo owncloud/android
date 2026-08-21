@@ -1,20 +1,20 @@
 ## 1. Hide keyboard during brute-force countdown
 
-- [ ] 1.1 In `PassCodeActivity.lockScreen()`, set `binding.numberKeyboard.visibility = View.INVISIBLE` after disabling the EditTexts
-- [ ] 1.2 In the `getFinishedTimeToUnlockLiveData` observer, set `binding.numberKeyboard.visibility = View.VISIBLE` alongside the existing EditText re-enable logic
+- [x] 1.1 In `PassCodeActivity.lockScreen()`, set `binding.numberKeyboard.visibility = View.INVISIBLE` after disabling the EditTexts
+- [x] 1.2 In the `getFinishedTimeToUnlockLiveData` observer, set `binding.numberKeyboard.visibility = View.VISIBLE` alongside the existing EditText re-enable logic
 
 ## 2. Clear error message when countdown ends
 
-- [ ] 2.1 In the `getFinishedTimeToUnlockLiveData` observer, set `binding.passcodeError.visibility = View.INVISIBLE` so the error is cleared when the user is allowed to try again
+- [x] 2.1 In the `getFinishedTimeToUnlockLiveData` observer, set `binding.passcodeError.visibility = View.INVISIBLE` so the error is cleared when the user is allowed to try again
 
 ## 3. Verify
 
-- [ ] 3.1 Run `./gradlew detekt` and confirm no new warnings
+- [x] 3.1 Run `./gradlew detekt` and confirm no new warnings
 - [ ] 3.2 Build and manually test the brute-force flow (see Test Plan below)
 
 ## 4. Changelog
 
-- [ ] 4.1 Add a calens entry at `changelog/XXXX.md` (replace XXXX with the PR number once created)
+- [x] 4.1 Add a calens entry at `changelog/XXXX.md` (replace XXXX with the PR number once created)
 
 ---
 
