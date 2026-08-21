@@ -1,0 +1,84 @@
+schema: spec-driven
+
+context: |
+  Product: ownCloud Android app — the official Android client for ownCloud servers.
+  Supports both ownCloud Infinite Scale (oCIS) and ownCloud Classic server backends.
+  GPL-2.0 licensed. Do not introduce new copyleft dependencies (GPL, AGPL, LGPL, MPL)
+  without discussion.
+
+  Tech stack:
+  - Language: Kotlin (primary), some legacy Java
+  - Async: Kotlin Coroutines 1.9.0
+  - DI: Koin 4.2.2
+  - Local DB: Room 2.8.4
+  - Image loading: Glide 4.15.1, Coil 2.2.2
+  - JSON: Moshi 1.15.0
+  - Logging: Timber 5.0.1
+  - Testing: JUnit 4, MockK 1.13.3
+  - Android SDK: minSdk=28, compileSdk=36, targetSdk=36
+  - App version: 4.8.3
+
+  Architecture — clean architecture across four modules:
+  - owncloudApp/        Presentation layer: ViewModels (MVVM), Fragments, Activities
+  - owncloudDomain/     Domain layer: UseCases (BaseUseCase / BaseUseCaseWithResult),
+                        domain models, repository interfaces
+  - owncloudData/       Data layer: repository implementations, Room DAOs, data sources
+  - owncloudComLibrary/ Network/communication layer: OCS/WebDAV operations,
+                        authentication, OkHttp
+
+  ViewModels expose state via StateFlow / SharedFlow. LiveData is being phased out;
+  do not introduce new LiveData usages.
+
+  Spec capability paths follow feature areas, e.g.:
+  - files/file-list, files/spaces, files/available-offline
+  - sharing/public-link, sharing/private-share, sharing/ocis-shares
+  - auth/passcode, auth/biometric
+  - transfers/upload, transfers/download
+  - settings/general
+
+  Branching (OneFlow model, master as main):
+  - feature/<name>      New features
+  - fix/<name>          Bug fixes
+  - improvement/<name>  Enhancements to existing features
+  - technical/<name>    Internal/technical tasks
+  Rebase onto master before submitting a PR.
+
+  Commits: Conventional Commits format (feat:, fix:, test:, chore:, etc.).
+  DCO sign-off required on every commit: use `git commit -s`.
+
+  Build commands:
+    ./gradlew assembleDebug
+    ./gradlew testDebugUnitTest
+    ./gradlew connectedDebugAndroidTest
+    ./gradlew detekt
+
+rules:
+  proposal:
+    - Mention whether the change affects only oCIS, only Classic, or both backends.
+    - A Non-goals section is always required.
+
+  specs:
+    - Use feature-area capability paths (e.g. sharing/public-link, files/file-list).
+    - Write requirements using WHEN/THEN/AND scenario format.
+
+  tasks:
+    - Always include a final task to add a calens changelog entry in changelog/.
+      The file is named <PRnumber>.md — leave the PR number as a placeholder (e.g. XXXX)
+      since the number is only known after the PR is created.
+    - Tasks that touch ViewModels must use StateFlow / SharedFlow, not LiveData.
+    - >-
+      For every new feature, include a Test Plan section at the bottom of tasks.md
+      with a table of manual test cases. Each row must have these columns:
+      Test Name | Steps | Expected Result | Outcome | Comments.
+      Leave Outcome and Comments blank — they are filled during or after testing.
+
+operations:
+  apply:
+    guidance:
+      - Every commit must include a DCO sign-off (`git commit -s`).
+      - Run `./gradlew detekt` before marking implementation complete.
+      - The calens entry task is last; leave the PR number as a placeholder. Use the present
+        tense for the title and Present perfect passive tense for description.
+  archive:
+    guidance:
+      - Confirm the calens entry file exists in changelog/ before archiving.
