@@ -1,0 +1,5 @@
+Bugfix: Hide keyboard and clear error when brute-force countdown ends
+
+The number keyboard has been hidden during the brute-force protection countdown so users cannot interact with it. The wrong-passcode error message has been cleared once the countdown ends, leaving a clean screen for the next attempt.
+
+https://github.com/owncloud/android/pull/XXXX
