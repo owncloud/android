@@ -112,6 +112,8 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
     private var oidcSupported = false
     private var isKiteworksServer = false
 
+    private var acceptedInsecureHttpUrl: String? = null
+
     private lateinit var binding: AccountSetupBinding
 
     // For handling AbstractAccountAuthenticator responses
@@ -141,6 +143,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
             }
         } else {
             authTokenType = savedInstanceState.getString(KEY_AUTH_TOKEN_TYPE)
+            acceptedInsecureHttpUrl = savedInstanceState.getString(KEY_INSECURE_HTTP_URL_ACCEPTED)
         }
 
         // UI initialization
@@ -346,6 +349,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
                             text = ""
                             visibility = INVISIBLE
                         }
+                        acceptedInsecureHttpUrl = null
                     }
                 }
             }
@@ -358,18 +362,23 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
                 } else {
                     text = getString(R.string.auth_connection_established)
                     setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_lock_open, 0, 0, 0)
-                    val builder = AlertDialog.Builder(context)
-                    builder.apply {
-                        setTitle(context.getString(R.string.insecure_http_url_title_dialog))
-                        setMessage(context.getString(R.string.insecure_http_url_message_dialog))
-                        setPositiveButton(R.string.insecure_http_url_continue_button) { dialog, which ->
-                            checkServerType(serverInfo)
+                    if (acceptedInsecureHttpUrl == serverInfo.baseUrl) {
+                        checkServerType(serverInfo)
+                    } else {
+                        val builder = AlertDialog.Builder(context)
+                        builder.apply {
+                            setTitle(context.getString(R.string.insecure_http_url_title_dialog))
+                            setMessage(context.getString(R.string.insecure_http_url_message_dialog))
+                            setPositiveButton(R.string.insecure_http_url_continue_button) { dialog, which ->
+                                acceptedInsecureHttpUrl = serverInfo.baseUrl
+                                checkServerType(serverInfo)
+                            }
+                            setNegativeButton(android.R.string.cancel) { dialog, which ->
+                                showOrHideBasicAuthFields(shouldBeVisible = false)
+                            }
+                            setCancelable(false)
+                            show()
                         }
-                        setNegativeButton(android.R.string.cancel) { dialog, which ->
-                            showOrHideBasicAuthFields(shouldBeVisible = false)
-                        }
-                        setCancelable(false)
-                        show()
                     }
                 }
                 isVisible = true
@@ -901,6 +910,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString(KEY_AUTH_TOKEN_TYPE, authTokenType)
+        outState.putString(KEY_INSECURE_HTTP_URL_ACCEPTED, acceptedInsecureHttpUrl)
     }
 
     override fun finish() {
@@ -928,5 +938,9 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
             binding.loginLayout.setPadding(systemInsets.left, 0, systemInsets.right, systemInsets.bottom)
             insets
         }
+    }
+
+    companion object {
+        private const val KEY_INSECURE_HTTP_URL_ACCEPTED = "insecureHttpUrlAccepted"
     }
 }
