@@ -1,32 +1,82 @@
 schema: spec-driven
 
-# Project context (optional)
-# This is shown to AI when creating artifacts.
-# Add your tech stack, conventions, style guides, domain knowledge, etc.
-# Example:
-#   context: |
-#     Tech stack: TypeScript, React, Node.js
-#     We use conventional commits
-#     Domain: e-commerce platform
+context: |
+  Product: ownCloud Android app (com.owncloud.android). Official mobile client for
+  ownCloud Infinite Scale (oCIS) and ownCloud Classic servers. Distributed via
+  Play Store and F-Droid. Licensed GPL-2.0.
 
-# Per-artifact rules (optional)
-# Add custom rules for specific artifacts.
-# Example:
-#   rules:
-#     proposal:
-#       - Keep proposals under 500 words
-#       - Always include a "Non-goals" section
-#     tasks:
-#       - Break tasks into chunks of max 2 hours
+  Tech stack (canonical versions in gradle/libs.versions.toml):
+  - Language: Kotlin 2.3.10 (JVM target 17); Android Gradle Plugin 9.2.1
+  - Build system: Gradle with version catalog (libs.versions.toml); KSP 2.3.10 for annotation processing
+  - Min SDK 28 (Android 9.0), target SDK 36 (Android 16), compile SDK 36
+  - DI: Koin 4.2.2 (koin-core, koin-android, koin-androidx-workmanager)
+  - Async & reactive: Kotlin Coroutines 1.9.0 (StateFlow / SharedFlow / Flow used in ViewModels alongside LiveData), AndroidX Lifecycle 2.5.1 (LiveData + ViewModel), WorkManager 2.8.1
+  - Persistence: Room 2.8.4 (KSP-generated, schemas under owncloudData/schemas/) + SharedPreferences
+  - HTTP / WebDAV: OkHttp 4.9.2 + dav4android (owncloud fork oc_support_2.1.5), Moshi 1.15.0 for JSON
+  - UI: AndroidX AppCompat 1.6.1, ConstraintLayout 2.1.4, Fragment 1.5.7, Material 1.8.0, Preference 1.2.0, Biometric 1.1.0, EmojiPicker 1.6.0, Browser 1.5.0, media3 1.1.1
+  - Images: Coil 2.2.2, Glide 4.15.1 (+ GlideToVectorYou), PhotoView 2.3.0
+  - Misc: Timber 5.0.1, Markwon 4.6.2, PatternLockView, FloatingActionButton 1.10.1, Stetho 1.6.0 (debug)
+  - Lint/style: Detekt 1.23.3 (+ formatting + libraries), ktlint gradle plugin 14.2.0, EditorConfig
+  - Tests: JUnit4 4.13.2, MockK 1.13.3, kotlinx-coroutines-test, AndroidX Test / Espresso 3.5.1, UI Automator, Room testing, dexopener 2.0.5
+  - Reports: SonarQube 4.0.0.2929, CycloneDX SBOM 2.3.1
 
-# Per-operation guidance (optional)
-# Add advisory guidance for how apply and archive work should be conducted.
-# This is separate from artifact rules above.
-# Example:
-#   operations:
-#     apply:
-#       guidance:
-#         - Keep test summaries concise
-#     archive:
-#       guidance:
-#         - Summarize the archive outcome before finishing
+  Multi-module architecture (clean architecture):
+  - owncloudApp/         presentation layer (Activities, Fragments, ViewModels, XML layouts)
+  - owncloudDomain/      business logic (use cases, domain models)
+  - owncloudData/        repositories, data sources, Room DB
+  - owncloudComLibrary/  shared HTTP/dav library
+  - owncloudTestUtil/    test helpers
+
+  Conventions:
+  - Kotlin idioms; match existing style in the touched module
+  - Conventional Commits (enforced via GitHub Actions on PR titles)
+  - Signed + DCO commits required: `git commit -S -s`
+  - Rebase-only workflow, no merge commits
+  - Branch naming: `<type>/<snake_case_description>`, all lowercase.
+    Common types: `feature/` (new user-visible features), `fix/` (bug fixes),
+    `chore/` (maintenance, tooling, translations), `technical/` (refactors,
+    infra, framework work). Reserved: `dependabot/` (automated) and
+    `change/` (occasional; prefer `feature/` or `fix/`).
+    Examples: `feature/list_ocis_shares`, `fix/ssl_handling`,
+    `chore/translations-update`, `technical/openspec_framework`.
+  - Do not add new dependencies without prior issue discussion
+  - No new copyleft dependencies (GPL/AGPL/LGPL/MPL) without discussion
+  - GitHub Actions must be owncloud/actions-*/verified publishers, pinned to full commit SHA
+
+  Common commands:
+  - ./gradlew assembleDebug
+  - ./gradlew testDebugUnitTest
+  - ./gradlew connectedDebugAndroidTest
+  - ./gradlew detekt
+
+rules:
+  proposal:
+    - Reference the GitHub issue number in the Why section when the change addresses one
+    - List affected module(s) (owncloudApp / owncloudDomain / owncloudData / owncloudComLibrary) in Impact
+    - Mention whether the change affects only oCIS, only Classic, or both backends
+    - A Non-goals section is always required
+  specs:
+    - Capability paths are kebab-case and flat under specs/ (no nested domain segments unless one already exists)
+    - Describe user-observable behavior only; never name Kotlin classes, XML ids, LiveData, or Koin modules in requirements
+    - Write requirements using WHEN/THEN/AND scenario format
+  design:
+    - Anchor decisions to concrete file paths and line ranges (e.g. `PassCodeActivity.kt:339-348`)
+    - Call out layout variants (portrait / sw720dp-land / -land) when the change touches XML
+    - Note whether ViewModel public surface, LiveData contracts, or SharedPreferences keys change
+  tasks:
+    - Each task ends with a "Verify by ..." clause naming how the outcome is observed (unit test, instrumentation test, manual on device, layout preview, grep)
+    - Group tasks by phase (Implementation / Layout verification / Regression checks) so reviewers can skim
+    - "Always end with a final task that adds a calens changelog entry at `changelog/unreleased/<PR-number>` (extensionless plain-text file); the task must not be marked done until the PR exists and its number replaces the placeholder"
+    - "The calens entry's first line is a type-prefixed title using one of `Bugfix:` / `Enhancement:` / `Change:` / `Security:` (categories from `changelog/CHANGELOG.tmpl`), followed by a short imperative summary"
+    - "The calens entry has a blank line, then one or two sentences of user-facing description (past tense, no code identifiers), a blank line, then the PR URL (`https://github.com/owncloud/android/pull/<number>`) — with the issue URL (`https://github.com/owncloud/android/issues/<number>`) on the line above it when the change closes one"
+
+operations:
+  apply:
+    guidance:
+      - Run `./gradlew detekt` before marking implementation tasks complete
+      - Prefer editing the existing Activity/Fragment/ViewModel over introducing a new component when the task fits inside one
+      - After each task, ask the user whether to continue with the next task or commit the changes made so far
+  archive:
+    guidance:
+      - "Confirm the corresponding CHANGELOG entry exists (or is queued via calens) before archiving user-visible changes"
+      - "Summarize the archive outcome in one line: capability touched + requirement count synced"
