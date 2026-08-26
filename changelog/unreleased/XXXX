@@ -1,0 +1,9 @@
+Bugfix: Stop re-showing the insecure-HTTP warning dialog on rotation
+
+The insecure-HTTP warning shown on the login screen for non-TLS server URLs no
+longer re-appeared after the user accepted it and rotated the device or triggered
+another configuration change. The dialog is shown again if the user edits the
+server URL or reopens the login screen.
+
+https://github.com/owncloud/android/issues/4386
+https://github.com/owncloud/android/pull/XXXX

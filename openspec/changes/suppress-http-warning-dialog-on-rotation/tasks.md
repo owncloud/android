@@ -9,7 +9,8 @@
 
 ## 2. Changelog
 
-- [ ] 2.1 Add a calens entry at `changelog/unreleased/<PR-number>` (extensionless plain-text file, PR-number placeholder replaced once the PR is opened) with the content:
+- [x] 2.1 Add a calens entry at `changelog/unreleased/<PR-number>` (extensionless plain-text file, PR-number placeholder replaced once the PR is 
+  opened) with the content:
 
   ```
   Bugfix: Stop re-showing the insecure-HTTP warning dialog on rotation
