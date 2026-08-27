@@ -41,7 +41,9 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/standard_quarter_padding"
+            android:paddingBottom="@dimen/standard_quarter_padding">
 
             <TextView
                 android:id="@+id/expiration_date_title"

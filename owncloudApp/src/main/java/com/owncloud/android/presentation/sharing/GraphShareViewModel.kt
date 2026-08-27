@@ -31,6 +31,7 @@ import com.owncloud.android.domain.members.model.OCMember
 import com.owncloud.android.domain.members.usecases.SearchMembersUseCase
 import com.owncloud.android.domain.roles.model.OCRole
 import com.owncloud.android.domain.roles.usecases.GetRolesAsyncUseCase
+import com.owncloud.android.domain.sharing.shares.usecases.AddGraphShareAsyncUseCase
 import com.owncloud.android.domain.sharing.shares.usecases.GetGraphSharesAsyncUseCase
 import com.owncloud.android.domain.sharing.shares.model.OCPermissions
 import com.owncloud.android.domain.user.usecases.GetUserIdAsyncUseCase
@@ -48,6 +49,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class GraphShareViewModel(
+    private val addGraphShareAsyncUseCase: AddGraphShareAsyncUseCase,
     private val getRolesAsyncUseCase: GetRolesAsyncUseCase,
     private val getGraphSharesAsyncUseCase: GetGraphSharesAsyncUseCase,
     private val getStoredCapabilitiesUseCase: GetStoredCapabilitiesUseCase,
@@ -69,6 +71,12 @@ class GraphShareViewModel(
 
     private val _members: MutableSharedFlow<MembersUIState> = MutableSharedFlow()
     val members: SharedFlow<MembersUIState> = _members
+
+    private val _addShareUIState = MutableStateFlow<AddShareUIState?>(null)
+    val addShareUIState: StateFlow<AddShareUIState?> = _addShareUIState
+
+    private val _addShareResultFlow = MutableStateFlow<Event<UIResult<Unit>>?>(null)
+    val addShareResultFlow: StateFlow<Event<UIResult<Unit>>?> = _addShareResultFlow
 
     private var searchJob: Job? = null
     var capabilities: OCCapability? = null
@@ -113,6 +121,29 @@ class GraphShareViewModel(
         )
     }
 
+    fun addGraphShare(member: OCMember, roleId: String) {
+        val spaceId = file.spaceId
+        val itemId = file.remoteId
+        if (spaceId == null || itemId == null) {
+            _addShareResultFlow.update { Event(UIResult.Error(error = IncompleteFileDataException())) }
+            return
+        }
+
+        runUseCaseWithResult(
+            coroutineDispatcher = coroutineDispatcherProvider.io,
+            flow = _addShareResultFlow,
+            useCase = addGraphShareAsyncUseCase,
+            useCaseParams = AddGraphShareAsyncUseCase.Params(
+                accountName = accountName,
+                spaceId = spaceId,
+                itemId = itemId,
+                member = member,
+                roleId = roleId,
+                expirationDate = _addShareUIState.value?.selectedExpirationDate
+            )
+        )
+    }
+
     fun searchMembers(query: String) {
         searchJob?.cancel()
         searchJob = viewModelScope.launch(coroutineDispatcherProvider.io) {
@@ -131,10 +162,33 @@ class GraphShareViewModel(
         }
     }
 
+    fun onMemberSelected(member: OCMember) {
+        _addShareUIState.value = AddShareUIState(selectedMember = member)
+    }
+
+    fun onRoleSelected(role: OCRole) {
+        _addShareUIState.update { it?.copy(selectedRole = role) }
+    }
+
+    fun onExpirationDateSelected(expirationDate: String?) {
+        _addShareUIState.update { it?.copy(selectedExpirationDate = expirationDate) }
+    }
+
+    fun resetViewModel() {
+        _addShareUIState.value = null
+        _addShareResultFlow.value = null
+    }
+
     data class MembersUIState(
         val members: List<OCMember>,
         val isLoading: Boolean,
         val error: Throwable?
+    )
+
+    data class AddShareUIState(
+        val selectedMember: OCMember? = null,
+        val selectedRole: OCRole? = null,
+        val selectedExpirationDate: String? = null
     )
 
     companion object {

@@ -34,6 +34,7 @@ import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.roles.model.OCRole
 import com.owncloud.android.extensions.collectLatestLifecycleFlow
 import com.owncloud.android.extensions.showErrorInSnackbar
+import com.owncloud.android.extensions.showMessageInSnackbar
 import com.owncloud.android.presentation.common.UIResult
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import org.koin.core.parameter.parametersOf
@@ -79,6 +80,7 @@ class GraphShareFragment : Fragment() {
         binding.addMemberButton.isVisible = file?.hasResharePermission ?: false
         binding.addMemberButton.setOnClickListener {
             if (file != null && accountName != null) {
+                graphShareViewModel.resetViewModel()
                 listener?.addGraphShare(file = file, accountName = accountName)
             }
         }
@@ -104,6 +106,7 @@ class GraphShareFragment : Fragment() {
     private fun subscribeToViewModels() {
         observeRoles()
         observeShares()
+        observeAddShareResult()
     }
 
     private fun observeRoles() {
@@ -145,6 +148,21 @@ class GraphShareFragment : Fragment() {
                         showErrorInSnackbar(R.string.share_sync_failed, uiResult.error)
                         Timber.e(uiResult.error, "Failed to retrieve shares")
                     }
+                }
+            }
+        }
+    }
+
+    private fun observeAddShareResult() {
+        collectLatestLifecycleFlow(graphShareViewModel.addShareResultFlow) { event ->
+            event?.peekContent()?.let { uiResult ->
+                when (uiResult) {
+                    is UIResult.Loading -> { }
+                    is UIResult.Success -> {
+                        showMessageInSnackbar(getString(R.string.share_add_correctly))
+                        graphShareViewModel.resetViewModel()
+                    }
+                    is UIResult.Error -> { }
                 }
             }
         }

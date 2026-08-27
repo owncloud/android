@@ -90,6 +90,7 @@ import com.owncloud.android.domain.members.usecases.SearchMembersUseCase
 import com.owncloud.android.domain.roles.usecases.GetRolesAsyncUseCase
 import com.owncloud.android.domain.server.usecases.GetServerInfoAsyncUseCase
 import com.owncloud.android.domain.sharing.sharees.GetShareesAsyncUseCase
+import com.owncloud.android.domain.sharing.shares.usecases.AddGraphShareAsyncUseCase
 import com.owncloud.android.domain.sharing.shares.usecases.CreatePrivateShareAsyncUseCase
 import com.owncloud.android.domain.sharing.shares.usecases.CreatePublicShareAsyncUseCase
 import com.owncloud.android.domain.sharing.shares.usecases.DeleteShareAsyncUseCase
@@ -229,6 +230,7 @@ val useCaseModule = module {
     factoryOf(::UnsetFilesAsAvailableOfflineUseCase)
 
     // Sharing
+    factoryOf(::AddGraphShareAsyncUseCase)
     factoryOf(::CreatePrivateShareAsyncUseCase)
     factoryOf(::CreatePublicShareAsyncUseCase)
     factoryOf(::DeleteShareAsyncUseCase)
