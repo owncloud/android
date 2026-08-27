@@ -393,12 +393,14 @@ val SPACE_MEMBERS = OCPermissions(
     members = listOf(
         MemberPermission(
             id = "u:$OC_USER_ID",
+            memberId = OC_USER_ID,
             expirationDateTime = null,
             displayName = OC_USER_INFO.displayName,
             roles = listOf("312c0871-5ef7-4b3a-85b6-0e4074c64049")
         ),
         MemberPermission(
             id = "g:${OC_USER_GROUPS[0]}",
+            memberId = OC_USER_GROUPS[0],
             expirationDateTime = "2025-07-03T12:09:43.364Z",
             displayName = "group-1",
             roles = listOf("a8d5fe5e-96e3-418d-825b-534dbdf22b99")

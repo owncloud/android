@@ -35,6 +35,7 @@ data class OCPermissions(
 @Parcelize
 data class MemberPermission(
     val id: String,
+    val memberId: String,
     val expirationDateTime: String?,
     val displayName: String,
     val roles: List<String>,

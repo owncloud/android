@@ -137,6 +137,8 @@ class OCRemoteShareDataSource(
                 members = membersResponse.filter { it.grantedToV2 != null }.map { spaceMemberResponse ->
                     MemberPermission(
                         id = spaceMemberResponse.id ?: "",
+                        memberId = spaceMemberResponse.grantedToV2?.user?.id
+                            ?: spaceMemberResponse.grantedToV2?.group?.id ?: "",
                         expirationDateTime = spaceMemberResponse.expirationDateTime,
                         displayName = spaceMemberResponse.grantedToV2?.user?.displayName
                             ?: spaceMemberResponse.grantedToV2?.group?.displayName ?: "",

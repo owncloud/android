@@ -20,6 +20,7 @@
 
 package com.owncloud.android.presentation.sharing
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -34,7 +35,7 @@ import com.owncloud.android.domain.roles.model.OCRole
 import com.owncloud.android.extensions.collectLatestLifecycleFlow
 import com.owncloud.android.extensions.showErrorInSnackbar
 import com.owncloud.android.presentation.common.UIResult
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import org.koin.core.parameter.parametersOf
 import timber.log.Timber
 
@@ -42,7 +43,7 @@ class GraphShareFragment : Fragment() {
     private var _binding: MembersFragmentBinding? = null
     private val binding get() = _binding!!
 
-    private val graphShareViewModel by viewModel<GraphShareViewModel> {
+    private val graphShareViewModel by activityViewModel<GraphShareViewModel> {
         parametersOf(
             requireArguments().getString(ARG_ACCOUNT_NAME),
             requireArguments().getParcelable<OCFile>(ARG_FILE)
@@ -52,6 +53,7 @@ class GraphShareFragment : Fragment() {
     private lateinit var graphSharesAdapter: GraphSharesAdapter
 
     private var roles: List<OCRole> = emptyList()
+    private var listener: GraphShareFragmentListener? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = MembersFragmentBinding.inflate(inflater, container, false)
@@ -73,9 +75,25 @@ class GraphShareFragment : Fragment() {
         }
 
         val file = requireArguments().getParcelable<OCFile>(ARG_FILE)
+        val accountName = requireArguments().getString(ARG_ACCOUNT_NAME)
         binding.addMemberButton.isVisible = file?.hasResharePermission ?: false
+        binding.addMemberButton.setOnClickListener {
+            if (file != null && accountName != null) {
+                listener?.addGraphShare(file = file, accountName = accountName)
+            }
+        }
 
         subscribeToViewModels()
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        try {
+            listener = context as GraphShareFragmentListener?
+        } catch (e: ClassCastException) {
+            Timber.e(e, "The activity attached does not implement GraphShareFragmentListener")
+            throw ClassCastException(activity.toString() + " must implement GraphShareFragmentListener")
+        }
     }
 
     override fun onDestroyView() {
@@ -130,6 +148,10 @@ class GraphShareFragment : Fragment() {
                 }
             }
         }
+    }
+
+    interface GraphShareFragmentListener {
+        fun addGraphShare(file: OCFile, accountName: String)
     }
 
     companion object {

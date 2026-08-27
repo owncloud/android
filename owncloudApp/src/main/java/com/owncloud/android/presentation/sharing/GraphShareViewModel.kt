@@ -21,23 +21,38 @@
 package com.owncloud.android.presentation.sharing
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.owncloud.android.domain.UseCaseResult
+import com.owncloud.android.domain.capabilities.model.OCCapability
+import com.owncloud.android.domain.capabilities.usecases.GetStoredCapabilitiesUseCase
 import com.owncloud.android.domain.exceptions.IncompleteFileDataException
 import com.owncloud.android.domain.files.model.OCFile
+import com.owncloud.android.domain.members.model.OCMember
+import com.owncloud.android.domain.members.usecases.SearchMembersUseCase
 import com.owncloud.android.domain.roles.model.OCRole
 import com.owncloud.android.domain.roles.usecases.GetRolesAsyncUseCase
 import com.owncloud.android.domain.sharing.shares.usecases.GetGraphSharesAsyncUseCase
 import com.owncloud.android.domain.sharing.shares.model.OCPermissions
+import com.owncloud.android.domain.user.usecases.GetUserIdAsyncUseCase
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.ViewModelExt.runUseCaseWithResult
 import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 class GraphShareViewModel(
     private val getRolesAsyncUseCase: GetRolesAsyncUseCase,
     private val getGraphSharesAsyncUseCase: GetGraphSharesAsyncUseCase,
+    private val getStoredCapabilitiesUseCase: GetStoredCapabilitiesUseCase,
+    private val searchMembersUseCase: SearchMembersUseCase,
+    private val getUserIdAsyncUseCase: GetUserIdAsyncUseCase,
     private val accountName: String,
     private val file: OCFile,
     private val coroutineDispatcherProvider: CoroutinesDispatcherProvider,
@@ -49,6 +64,15 @@ class GraphShareViewModel(
     private val _shares = MutableStateFlow<Event<UIResult<OCPermissions>>?>(null)
     val shares: StateFlow<Event<UIResult<OCPermissions>>?> = _shares
 
+    private val _userId = MutableStateFlow<Event<UIResult<String>>?>(null)
+    val userId: StateFlow<Event<UIResult<String>>?> = _userId
+
+    private val _members: MutableSharedFlow<MembersUIState> = MutableSharedFlow()
+    val members: SharedFlow<MembersUIState> = _members
+
+    private var searchJob: Job? = null
+    var capabilities: OCCapability? = null
+
     init {
         runUseCaseWithResult(
             coroutineDispatcher = coroutineDispatcherProvider.io,
@@ -56,6 +80,16 @@ class GraphShareViewModel(
             useCase = getRolesAsyncUseCase,
             useCaseParams = GetRolesAsyncUseCase.Params(accountName = accountName),
         )
+        runUseCaseWithResult(
+            coroutineDispatcher = coroutineDispatcherProvider.io,
+            showLoading = false,
+            flow = _userId,
+            useCase = getUserIdAsyncUseCase,
+            useCaseParams = GetUserIdAsyncUseCase.Params(accountName = accountName)
+        )
+        viewModelScope.launch(coroutineDispatcherProvider.io) {
+            capabilities = getStoredCapabilitiesUseCase(GetStoredCapabilitiesUseCase.Params(accountName))
+        }
     }
 
     fun getGraphShares() {
@@ -77,5 +111,33 @@ class GraphShareViewModel(
                 itemId = itemId
             )
         )
+    }
+
+    fun searchMembers(query: String) {
+        searchJob?.cancel()
+        searchJob = viewModelScope.launch(coroutineDispatcherProvider.io) {
+            delay(SEARCH_DELAY_MS)
+            _members.emit(MembersUIState(members = emptyList(), isLoading = true, error = null))
+            when (val result = searchMembersUseCase(SearchMembersUseCase.Params(accountName, query))) {
+                is UseCaseResult.Success -> _members.emit(MembersUIState(members = result.data, isLoading = false, error = null))
+                is UseCaseResult.Error -> _members.emit(MembersUIState(members = emptyList(), isLoading = false, error = result.getThrowableOrNull()))
+            }
+        }
+    }
+
+    fun clearSearch() {
+        viewModelScope.launch(coroutineDispatcherProvider.io) {
+            _members.emit(MembersUIState(members = emptyList(), isLoading = false, error = null))
+        }
+    }
+
+    data class MembersUIState(
+        val members: List<OCMember>,
+        val isLoading: Boolean,
+        val error: Throwable?
+    )
+
+    companion object {
+        private const val SEARCH_DELAY_MS = 500L
     }
 }
