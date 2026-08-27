@@ -20,14 +20,11 @@
 
 package com.owncloud.android.presentation.sharing
 
-import android.app.DatePickerDialog
-import android.icu.util.Calendar
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -36,19 +33,20 @@ import com.owncloud.android.databinding.AddMemberFragmentBinding
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.members.model.OCMember
 import com.owncloud.android.presentation.common.UIResult
-import com.owncloud.android.domain.members.model.OCMemberType
 import com.owncloud.android.domain.roles.model.OCRole
+import com.owncloud.android.extensions.bindDatePickerDialog
+import com.owncloud.android.extensions.bindRoles
+import com.owncloud.android.extensions.bindSelectedMember
 import com.owncloud.android.extensions.collectLatestLifecycleFlow
+import com.owncloud.android.extensions.openDatePickerDialog
 import com.owncloud.android.extensions.showErrorInSnackbar
+import com.owncloud.android.extensions.showOrHideEmptyView
 import com.owncloud.android.presentation.spaces.members.SearchMembersAdapter
 import com.owncloud.android.presentation.spaces.members.SpaceRolesAdapter
 import com.owncloud.android.utils.DisplayUtils
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import org.koin.core.parameter.parametersOf
 import timber.log.Timber
-import java.text.SimpleDateFormat
-import java.util.Locale
-import java.util.TimeZone
 
 class AddGraphShareFragment : Fragment(), SearchMembersAdapter.SearchMembersAdapterListener {
     private var _binding: AddMemberFragmentBinding? = null
@@ -121,19 +119,6 @@ class AddGraphShareFragment : Fragment(), SearchMembersAdapter.SearchMembersAdap
         graphShareViewModel.onMemberSelected(member)
     }
 
-    private fun showOrHideEmptyView(hasMembers: Boolean) {
-        binding.membersRecyclerView.isVisible = hasMembers
-        binding.emptyDataParent.apply {
-            val shouldShow = !hasMembers && binding.searchBar.query.length >= searchMinLength
-            root.isVisible = shouldShow
-            if (shouldShow) {
-                listEmptyDatasetIcon.setImageResource(R.drawable.ic_share_generic_white)
-                listEmptyDatasetTitle.setText(R.string.members_search_failed)
-                listEmptyDatasetSubTitle.setText(R.string.members_search_empty)
-            }
-        }
-    }
-
     private fun subscribeToViewModels() {
         val currentPermissions = (graphShareViewModel.shares.value?.peekContent() as? UIResult.Success)?.data
         roles = currentPermissions?.roles ?: emptyList()
@@ -166,7 +151,7 @@ class AddGraphShareFragment : Fragment(), SearchMembersAdapter.SearchMembersAdap
                     member.id == currentUserId || member.id in sharedMemberIds
                 }
                 val hasMembers = listOfMembersFiltered.isNotEmpty()
-                showOrHideEmptyView(hasMembers)
+                binding.showOrHideEmptyView(hasMembers, searchMinLength)
                 if (hasMembers) searchMembersAdapter.setMembers(listOfMembersFiltered)
                 uiState.error?.let {
                     Timber.e(uiState.error, "Failed to retrieve available users and groups")
@@ -185,7 +170,7 @@ class AddGraphShareFragment : Fragment(), SearchMembersAdapter.SearchMembersAdap
                     inviteMemberButton.contentDescription = getString(R.string.content_description_create_share_button)
                 }
                 it.selectedMember?.let { member ->
-                    bindSelectedMember(member)
+                    binding.bindSelectedMember(member)
                 }
                 it.selectedExpirationDate?.let { expirationDate ->
                     binding.expirationDateLayout.expirationDateValue.apply {
@@ -193,13 +178,13 @@ class AddGraphShareFragment : Fragment(), SearchMembersAdapter.SearchMembersAdap
                         text = DisplayUtils.displayDateToHumanReadable(expirationDate)
                     }
                 }
-                bindRoles(uiState.selectedRole?.id)
-                bindDatePickerDialog(uiState.selectedExpirationDate)
+                binding.bindRoles(rolesAdapter, uiState.selectedRole?.id)
+                bindDatePickerDialog(binding, uiState.selectedExpirationDate, graphShareViewModel::onExpirationDateSelected)
 
                 binding.expirationDateLayout.apply {
                     expirationDateLayout.setOnClickListener {
                         if (uiState.selectedExpirationDate != null) {
-                            openDatePickerDialog(uiState.selectedExpirationDate)
+                            openDatePickerDialog(binding, uiState.selectedExpirationDate, graphShareViewModel::onExpirationDateSelected)
                         } else {
                             expirationDateSwitch.isChecked = true
                         }
@@ -222,68 +207,6 @@ class AddGraphShareFragment : Fragment(), SearchMembersAdapter.SearchMembersAdap
                     is UIResult.Loading -> { }
                     is UIResult.Success -> parentFragmentManager.popBackStack()
                     is UIResult.Error -> showErrorInSnackbar(R.string.share_add_failed, uiResult.error)
-                }
-            }
-        }
-    }
-
-    private fun bindSelectedMember(member: OCMember) {
-        binding.selectedMemberLayout.apply {
-            memberIcon.setImageResource(if (member.type == OCMemberType.GROUP) R.drawable.ic_group else R.drawable.ic_user)
-            memberName.text = member.displayName
-            memberRole.text = member.surname
-        }
-    }
-
-    private fun bindRoles(selectedRoleId: String?) {
-        selectedRoleId?.let {
-            binding.inviteMemberButton.isEnabled = true
-            rolesAdapter.setSelectedRole(it)
-        }
-    }
-
-    private fun bindDatePickerDialog(expirationDate: String?) {
-        binding.expirationDateLayout.expirationDateSwitch.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                openDatePickerDialog(expirationDate)
-            } else {
-                binding.expirationDateLayout.expirationDateValue.visibility = View.GONE
-                graphShareViewModel.onExpirationDateSelected(null)
-            }
-        }
-    }
-
-    private fun openDatePickerDialog(expirationDate: String?) {
-        val calendar = Calendar.getInstance()
-        val formatter = SimpleDateFormat(DisplayUtils.DATE_FORMAT_ISO, Locale.ROOT).apply {
-            timeZone = TimeZone.getTimeZone("UTC")
-        }
-
-        expirationDate?.let {
-            calendar.time = formatter.parse(it)
-        }
-
-        DatePickerDialog(
-            requireContext(),
-            { _, selectedYear, selectedMonth, selectedDay ->
-                calendar.set(selectedYear, selectedMonth, selectedDay, 23, 59, 59)
-                calendar.set(Calendar.MILLISECOND, 999)
-                val isoExpirationDate = formatter.format(calendar.time)
-                graphShareViewModel.onExpirationDateSelected(isoExpirationDate)
-                binding.expirationDateLayout.expirationDateValue.apply {
-                    visibility = View.VISIBLE
-                    text = DisplayUtils.displayDateToHumanReadable(isoExpirationDate)
-                }
-            },
-            calendar.get(Calendar.YEAR),
-            calendar.get(Calendar.MONTH),
-            calendar.get(Calendar.DAY_OF_MONTH)
-        ).apply {
-            datePicker.minDate = Calendar.getInstance().timeInMillis
-            show()
-            setOnCancelListener {
-                if (expirationDate == null) {
-                    binding.expirationDateLayout.expirationDateSwitch.isChecked = false
                 }
             }
         }
