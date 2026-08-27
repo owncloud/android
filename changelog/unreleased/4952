@@ -1,0 +1,8 @@
+Enhancement: Create a share over a file or a folder on an oCIS server
+
+A new option to create a share over a file or a folder on an oCIS has been added.
+It will be only visible for users with proper permissions.
+
+https://github.com/owncloud/android/issues/4875
+https://github.com/owncloud/android/issues/4917
+https://github.com/owncloud/android/pull/4952
