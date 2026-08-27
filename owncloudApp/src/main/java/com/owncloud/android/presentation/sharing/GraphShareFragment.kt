@@ -72,6 +72,9 @@ class GraphShareFragment : Fragment() {
             graphShareViewModel.getGraphShares()
         }
 
+        val file = requireArguments().getParcelable<OCFile>(ARG_FILE)
+        binding.addMemberButton.isVisible = file?.hasResharePermission ?: false
+
         subscribeToViewModels()
     }
 
