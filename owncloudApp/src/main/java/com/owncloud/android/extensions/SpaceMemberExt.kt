@@ -22,12 +22,12 @@ package com.owncloud.android.extensions
 
 import com.owncloud.android.domain.members.model.OCMember
 import com.owncloud.android.domain.members.model.OCMemberType
-import com.owncloud.android.domain.spaces.model.SpaceMember
+import com.owncloud.android.domain.sharing.shares.model.MemberPermission
 
 private const val GROUP_PREFIX = "g:"
 private const val USER_PREFIX = "u:"
 
-fun SpaceMember.toOCMember(): OCMember {
+fun MemberPermission.toOCMember(): OCMember {
     val isGroup = id.startsWith(GROUP_PREFIX)
     val type = if (isGroup) OCMemberType.GROUP else OCMemberType.USER
     return OCMember(

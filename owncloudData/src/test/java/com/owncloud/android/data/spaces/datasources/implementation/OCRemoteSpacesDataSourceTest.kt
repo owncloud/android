@@ -102,7 +102,7 @@ class OCRemoteSpacesDataSourceTest {
     }
 
     @Test
-    fun `getSpaceMembers returns a SpaceMembers for a project space`() {
+    fun `getSpaceMembers returns a OCPermissions for a project space`() {
         val getSpaceMembersResult = createRemoteOperationResultMock(SPACE_PERMISSIONS_RESPONSE, isSuccess = true)
 
         every {

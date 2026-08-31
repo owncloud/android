@@ -33,6 +33,7 @@ import com.owncloud.android.domain.exceptions.CopyIntoSameFolderException
 import com.owncloud.android.domain.exceptions.FileAlreadyExistsException
 import com.owncloud.android.domain.exceptions.FileNotFoundException
 import com.owncloud.android.domain.exceptions.ForbiddenException
+import com.owncloud.android.domain.exceptions.IncompleteFileDataException
 import com.owncloud.android.domain.exceptions.IncorrectAddressException
 import com.owncloud.android.domain.exceptions.InstanceNotConfiguredException
 import com.owncloud.android.domain.exceptions.InvalidOverwriteException
@@ -84,6 +85,7 @@ fun Throwable.parseError(
             })
             is FileNotFoundException -> resources.getString(R.string.common_not_found)
             is ForbiddenException -> resources.getString(R.string.uploads_view_upload_status_failed_permission_error)
+            is IncompleteFileDataException -> resources.getString(R.string.get_graph_shares_incomplete_data_error)
             is IncorrectAddressException -> resources.getString(R.string.auth_incorrect_address_title)
             is InstanceNotConfiguredException -> resources.getString(R.string.auth_not_configured_title)
             is InvalidOverwriteException -> resources.getString(R.string.file_already_exists)

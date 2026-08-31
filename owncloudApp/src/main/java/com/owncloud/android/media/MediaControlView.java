@@ -4,7 +4,9 @@
  * @author David A. Velasco
  * @author Christian Schabesberger
  * @author David González Verdugo
- * Copyright (C) 2020 ownCloud GmbH.
+ * @author Jorge Aguado Recio
+ *
+ * Copyright (C) 2026 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -292,32 +294,28 @@ public class MediaControlView extends FrameLayout implements OnClickListener, On
     public void onClick(View v) {
         int pos;
         boolean playing = mPlayer.isPlaying();
-        switch (v.getId()) {
+        int id = v.getId();
 
-            case R.id.playBtn:
-                doPauseResume();
-                break;
-
-            case R.id.rewindBtn:
-                pos = mPlayer.getCurrentPosition();
-                pos -= 5000;
-                mPlayer.seekTo(pos);
-                if (!playing) {
-                    mPlayer.pause();  // necessary in some 2.3.x devices
-                }
-                setProgress();
-                break;
-
-            case R.id.forwardBtn:
-                pos = mPlayer.getCurrentPosition();
-                pos += 15000;
-                mPlayer.seekTo(pos);
-                if (!playing) {
-                    mPlayer.pause(); // necessary in some 2.3.x devices
-                }
-                setProgress();
-                break;
-
+        // Using an if / else if / else block because Java switch statements
+        // with resource ID comparisons are no longer supported in AGP 9
+        if (id == R.id.playBtn) {
+            doPauseResume();
+        } else if (id == R.id.rewindBtn) {
+            pos = mPlayer.getCurrentPosition();
+            pos -= 5000;
+            mPlayer.seekTo(pos);
+            if (!playing) {
+                mPlayer.pause();  // necessary in some 2.3.x devices
+            }
+            setProgress();
+        } else if (id == R.id.forwardBtn) {
+            pos = mPlayer.getCurrentPosition();
+            pos += 15000;
+            mPlayer.seekTo(pos);
+            if (!playing) {
+                mPlayer.pause(); // necessary in some 2.3.x devices
+            }
+            setProgress();
         }
     }
 

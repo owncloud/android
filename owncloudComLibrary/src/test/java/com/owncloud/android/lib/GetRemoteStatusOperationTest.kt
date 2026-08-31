@@ -1,5 +1,5 @@
 /* ownCloud Android Library is available under MIT license
- *   Copyright (C) 2021 ownCloud GmbH.
+ *   Copyright (C) 2026 ownCloud GmbH.
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -37,7 +37,7 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 
 @RunWith(RobolectricTestRunner::class)
-@Config(sdk = [Build.VERSION_CODES.O], manifest = Config.NONE)
+@Config(sdk = [Build.VERSION_CODES.P], manifest = Config.NONE)
 class GetRemoteStatusOperationTest {
 
     @Test

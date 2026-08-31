@@ -1,7 +1,7 @@
 /**
  * ownCloud Android client application
  *
- * Copyright (C) 2022 ownCloud GmbH.
+ * Copyright (C) 2026 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -30,9 +30,7 @@ import com.github.tmurakami.dexopener.DexOpener
  */
 class OCTestAndroidJUnitRunner : AndroidJUnitRunner() {
     override fun newApplication(cl: ClassLoader, className: String, context: Context): Application {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
-            DexOpener.install(this)
-        }
+        DexOpener.install(this)
         return super.newApplication(cl, className, context)
     }
 }

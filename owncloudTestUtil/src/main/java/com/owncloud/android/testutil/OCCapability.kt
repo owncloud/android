@@ -21,8 +21,10 @@
 
 package com.owncloud.android.testutil
 
+import com.owncloud.android.domain.capabilities.model.AppProviders
 import com.owncloud.android.domain.capabilities.model.CapabilityBooleanType
 import com.owncloud.android.domain.capabilities.model.OCCapability
+import com.owncloud.android.domain.capabilities.model.Spaces
 
 val OC_CAPABILITY =
     OCCapability(
@@ -61,7 +63,7 @@ val OC_CAPABILITY =
     )
 
 val OC_CAPABILITY_WITH_FILES_APP_PROVIDERS = OC_CAPABILITY.copy(
-    filesAppProviders = OCCapability.AppProviders(
+    filesAppProviders = AppProviders(
         enabled = true,
         version = "1.1.1",
         appsUrl = "/app-url",
@@ -72,7 +74,7 @@ val OC_CAPABILITY_WITH_FILES_APP_PROVIDERS = OC_CAPABILITY.copy(
 )
 
 val OC_CAPABILITY_WITH_MULTIPERSONAL_ENABLED = OC_CAPABILITY.copy(
-    spaces = OCCapability.Spaces(
+    spaces = Spaces(
         enabled = true,
         projects = true,
         shareJail = null,

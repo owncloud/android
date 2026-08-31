@@ -6,8 +6,9 @@
  * @author Christian Schabesberger
  * @author Aitor Ballesteros Pavón
  * @author Juan Carlos Garrote Gascón
+ * @author Jorge Aguado Recio
  *
- * Copyright (C) 2024 ownCloud GmbH.
+ * Copyright (C) 2026 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -50,6 +51,7 @@ import com.owncloud.android.R
 import com.owncloud.android.databinding.SharePublicDialogBinding
 import com.owncloud.android.domain.capabilities.model.CapabilityBooleanType
 import com.owncloud.android.domain.capabilities.model.OCCapability
+import com.owncloud.android.domain.capabilities.model.PasswordPolicy
 import com.owncloud.android.domain.exceptions.UnhandledHttpCodeException
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.sharing.shares.model.OCShare
@@ -364,7 +366,7 @@ class PublicShareDialogFragment : DialogFragment() {
         }
     }
 
-    private fun updateRequirementsPasswordPolicy(password: String, passwordPolicy: OCCapability.PasswordPolicy) {
+    private fun updateRequirementsPasswordPolicy(password: String, passwordPolicy: PasswordPolicy) {
 
         var hasMinCharacters = true
         var hasMaxCharacters = true

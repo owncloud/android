@@ -10,7 +10,7 @@
  * @author Aitor Ballesteros Pavón
  * @author Jorge Aguado Recio
  *
- * Copyright (C) 2025 ownCloud GmbH.
+ * Copyright (C) 2026 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -33,7 +33,6 @@ import android.app.NotificationManager.IMPORTANCE_LOW
 import android.content.Context
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
-import android.os.Build
 import android.os.Bundle
 import android.view.WindowManager
 import android.widget.CheckBox
@@ -272,10 +271,6 @@ class MainApp : Application() {
     }
 
     private fun createNotificationChannels() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
-            return
-        }
-
         createNotificationChannel(
             id = DOWNLOAD_NOTIFICATION_CHANNEL_ID,
             name = getString(R.string.download_notification_channel_name),

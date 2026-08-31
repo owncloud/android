@@ -621,16 +621,6 @@
     <string name="release_notes_icon">ໄອຄອນບັນທຶກປະຈຳລຸ້ນ</string>
     <string name="release_notes_bugfixes_title">ການແກ້ໄຂຂໍ້ຜິດພາດ</string>
     <string name="release_notes_bugfixes_subtitle">ແອັບຕອນນີ້ສະຖຽນ ແລະ ເຊື່ອຖືໄດ້ຫຼາຍຂຶ້ນ. ສຳລັບລາຍການການປ່ຽນແປງທັງໝົດ, ຢ້ຽມຊົມ owncloud.com</string>
-    <string name="release_notes_4_8_0_title_set_emoji_as_space_image">ຕັ້ງຄ່າອີໂມຈິເປັນຮູບພາບພື້ນທີ່</string>
-    <string name="release_notes_4_8_0_subtitle_set_emoji_as_space_image">ຕອນນີ້ທ່ານສາມາດໃຊ້ emojis ເພື່ອປັບແຕ່ງຮູບພາບພື້ນທີ່ຂອງທ່ານໄດ້ແລ້ວ</string>
-    <string name="release_notes_4_8_0_title_space_membership">ການຈັດການສະມາຊິກພື້ນທີ່</string>
-    <string name="release_notes_4_8_0_subtitle_space_membership">ຈັດການຜູ້ທີ່ມີສິດເຂົ້າເຖິງພື້ນທີ່ຂອງທ່ານໄດ້ງ່າຍຂຶ້ນ</string>
-    <string name="release_notes_4_8_0_title_spaces_permanent_links">ລິ້ງຖາວອນສຳລັບພື້ນທີ່</string>
-    <string name="release_notes_4_8_0_subtitle_spaces_permanent_links">ແບ່ງປັນລິ້ງທີ່ບໍ່ມີການປ່ຽນແປງສຳລັບພື້ນທີ່ສະເພາະ</string>
-    <string name="release_notes_4_8_0_title_space_public_links">ລິ້ງສາທາລະນະສຳລັບພື້ນທີ່</string>
-    <string name="release_notes_4_8_0_subtitle_space_public_links">ສ້າງລິ້ງສາທາລະນະເພື່ອແບ່ງປັນເນື້ອໃນພາຍໃນພື້ນທີ່</string>
-    <string name="release_notes_4_8_0_title_action_to_copy_or_move_destination_folder">ການນຳທາງໄປຫາໂຟນເດີປາຍທາງ</string>
-    <string name="release_notes_4_8_0_subtitle_action_to_copy_or_move_destination_folder">ການດຳເນີນການໃໝ່ເພື່ອໄປຫາໂຟນເດີປາຍທາງເມື່ອໄຟລ໌ ຫຼື ໂຟນເດີຖືກສຳເນົາ ຫຼື ຍ້າຍ</string>
     <!-- Open in web -->
     <string name="ic_action_open_with_web">ເປີດດ້ວຍ...</string>
     <string name="open_in_web_error_generic">ບໍ່ສາມາດເປີດໄຟລ໌ໃນເບຣົາເຊີໄດ້</string>

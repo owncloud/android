@@ -1,5 +1,6 @@
 # Table of Contents
 
+
 * [Changelog for 4.8.4](#changelog-for-owncloud-android-client-484-2026-08-31)
 * [Changelog for 4.8.3](#changelog-for-owncloud-android-client-483-2026-07-21)
 * [Changelog for 4.8.2](#changelog-for-owncloud-android-client-482-2026-07-01)
@@ -35,6 +36,7 @@
 * [Changelog for 2.18.1](#changelog-for-owncloud-android-client-2181-2021-07-20)
 * [Changelog for 2.18.0](#changelog-for-owncloud-android-client-2180-2021-05-24)
 * [Changelog for 2.17 versions and below](#changelog-for-217-versions-and-below)
+
 # Changelog for ownCloud Android Client [4.8.4] (2026-08-31)
 
 The following sections list the changes in ownCloud Android Client 4.8.4 relevant to

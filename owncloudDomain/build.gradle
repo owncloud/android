@@ -1,13 +1,12 @@
 apply plugin: 'com.android.library'
-apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-parcelize'
 
 android {
-    compileSdkVersion sdkCompileVersion
+    compileSdk sdkCompileVersion
 
     defaultConfig {
-        minSdkVersion sdkMinVersion
-        targetSdkVersion sdkTargetVersion
+        minSdk sdkMinVersion
+        targetSdk sdkTargetVersion
     }
 
     buildTypes {
@@ -20,10 +19,6 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
-    }
-
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_17.toString()
     }
 
     sourceSets {

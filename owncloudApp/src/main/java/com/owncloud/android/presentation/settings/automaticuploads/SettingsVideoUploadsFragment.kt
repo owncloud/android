@@ -5,7 +5,7 @@
  * @author Aitor Ballesteros Pavón
  * @author Jorge Aguado Recio
  *
- * Copyright (C) 2024 ownCloud GmbH.
+ * Copyright (C) 2026 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -25,7 +25,6 @@ package com.owncloud.android.presentation.settings.automaticuploads
 import android.app.Activity
 import android.content.DialogInterface
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.provider.DocumentsContract
 import android.view.View
@@ -207,9 +206,7 @@ class SettingsVideoUploadsFragment : PreferenceFragmentCompat() {
                 currentSourcePath.takeUnless { it.endsWith(File.separator) } ?: currentSourcePath.plus(File.separator)
             }
             val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE).apply {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    putExtra(DocumentsContract.EXTRA_INITIAL_URI, sourcePath)
-                }
+                putExtra(DocumentsContract.EXTRA_INITIAL_URI, sourcePath)
                 addFlags(
                     Intent.FLAG_GRANT_READ_URI_PERMISSION
                             or Intent.FLAG_GRANT_WRITE_URI_PERMISSION

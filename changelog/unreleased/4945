@@ -1,0 +1,7 @@
+Enhancement: List shares for oCIS accounts
+
+A new UI has been implemented to list and show information about the
+shares of a file or folder on oCIS accounts (using Graph API)
+
+https://github.com/owncloud/android/issues/4876
+https://github.com/owncloud/android/pull/4945

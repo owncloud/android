@@ -32,7 +32,6 @@ import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.graphics.drawable.Drawable
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -45,6 +44,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.appcompat.widget.SearchView
@@ -74,6 +74,7 @@ import com.owncloud.android.domain.exceptions.TooEarlyException
 import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.domain.files.model.FileMenuOption
 import com.owncloud.android.domain.files.model.OCFile
+import com.owncloud.android.domain.files.model.OCFile.Companion.ROOT_PARENT_ID
 import com.owncloud.android.domain.files.model.OCFile.Companion.ROOT_PATH
 import com.owncloud.android.domain.files.model.OCFileSyncInfo
 import com.owncloud.android.domain.files.model.OCFileWithSyncInfo
@@ -125,7 +126,7 @@ import com.owncloud.android.utils.PreferenceUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okio.Path.Companion.toPath
-import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import timber.log.Timber
@@ -146,7 +147,7 @@ class MainFileListFragment : Fragment(),
             requireArguments().getParcelable(ARG_FILE_LIST_OPTION),
         )
     }
-    private val fileOperationsViewModel by sharedViewModel<FileOperationsViewModel>()
+    private val fileOperationsViewModel by activityViewModel<FileOperationsViewModel>()
     private val transfersViewModel by viewModel<TransfersViewModel>()
     private val spacesListViewModel: SpacesListViewModel by viewModel {
         parametersOf(
@@ -181,6 +182,17 @@ class MainFileListFragment : Fragment(),
     private var openInWebProviders: Map<String, Int> = hashMapOf()
 
     private var isMultiPersonal = false
+
+    private val onBackPressedCallback = object : OnBackPressedCallback(false) {
+        override fun handleOnBackPressed() {
+            if (isFabExpanded()) {
+                collapseFab()
+                setFabMainContentDescription()
+            } else {
+                onBrowseUp()
+            }
+        }
+    }
 
     private var menu: Menu? = null
     private var checkedFiles: List<OCFile> = emptyList()
@@ -266,28 +278,26 @@ class MainFileListFragment : Fragment(),
         }
 
         private fun setRolesAccessibilityToMenuItems() {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                val roleAccessibilityDescription = getString(R.string.button_role_accessibility)
-                menu?.apply {
-                    findItem(R.id.file_action_select_all)?.contentDescription =
-                        "${getString(R.string.actionbar_select_all)} $roleAccessibilityDescription"
-                    findItem(R.id.action_select_inverse)?.contentDescription =
-                        "${getString(R.string.actionbar_select_inverse)} $roleAccessibilityDescription"
-                    findItem(R.id.action_open_file_with)?.contentDescription =
-                        "${getString(R.string.actionbar_open_with)} $roleAccessibilityDescription"
-                    findItem(R.id.action_rename_file)?.contentDescription = "${getString(R.string.common_rename)} $roleAccessibilityDescription"
-                    findItem(R.id.action_move)?.contentDescription = "${getString(R.string.actionbar_move)} $roleAccessibilityDescription"
-                    findItem(R.id.action_copy)?.contentDescription = "${getString(R.string.copy)} $roleAccessibilityDescription"
-                    findItem(R.id.action_send_file)?.contentDescription =
-                        "${getString(R.string.actionbar_send_file)} $roleAccessibilityDescription"
-                    findItem(R.id.action_set_available_offline)?.contentDescription =
-                        "${getString(R.string.set_available_offline)} $roleAccessibilityDescription"
-                    findItem(R.id.action_unset_available_offline)?.contentDescription =
-                        "${getString(R.string.unset_available_offline)} $roleAccessibilityDescription"
-                    findItem(R.id.action_see_details)?.contentDescription =
-                        "${getString(R.string.actionbar_see_details)} $roleAccessibilityDescription"
-                    findItem(R.id.action_remove_file)?.contentDescription = "${getString(R.string.common_remove)} $roleAccessibilityDescription"
-                }
+            val roleAccessibilityDescription = getString(R.string.button_role_accessibility)
+            menu?.apply {
+                findItem(R.id.file_action_select_all)?.contentDescription =
+                    "${getString(R.string.actionbar_select_all)} $roleAccessibilityDescription"
+                findItem(R.id.action_select_inverse)?.contentDescription =
+                    "${getString(R.string.actionbar_select_inverse)} $roleAccessibilityDescription"
+                findItem(R.id.action_open_file_with)?.contentDescription =
+                    "${getString(R.string.actionbar_open_with)} $roleAccessibilityDescription"
+                findItem(R.id.action_rename_file)?.contentDescription = "${getString(R.string.common_rename)} $roleAccessibilityDescription"
+                findItem(R.id.action_move)?.contentDescription = "${getString(R.string.actionbar_move)} $roleAccessibilityDescription"
+                findItem(R.id.action_copy)?.contentDescription = "${getString(R.string.copy)} $roleAccessibilityDescription"
+                findItem(R.id.action_send_file)?.contentDescription =
+                    "${getString(R.string.actionbar_send_file)} $roleAccessibilityDescription"
+                findItem(R.id.action_set_available_offline)?.contentDescription =
+                    "${getString(R.string.set_available_offline)} $roleAccessibilityDescription"
+                findItem(R.id.action_unset_available_offline)?.contentDescription =
+                    "${getString(R.string.unset_available_offline)} $roleAccessibilityDescription"
+                findItem(R.id.action_see_details)?.contentDescription =
+                    "${getString(R.string.actionbar_see_details)} $roleAccessibilityDescription"
+                findItem(R.id.action_remove_file)?.contentDescription = "${getString(R.string.common_remove)} $roleAccessibilityDescription"
             }
         }
 
@@ -328,6 +338,7 @@ class MainFileListFragment : Fragment(),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         isMultiPersonal = capabilityViewModel.checkMultiPersonal()
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, onBackPressedCallback)
         initViews()
         subscribeToViewModels()
     }
@@ -335,6 +346,9 @@ class MainFileListFragment : Fragment(),
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
         updateConfigDependentSizes()
+        if (mainFileListViewModel.isGridModeSetAsPreferred()) {
+            layoutManager.spanCount = ColumnQuantity(requireContext(), R.layout.grid_item).calculateNoOfColumns()
+        }
     }
 
     private fun updateConfigDependentSizes() {
@@ -518,6 +532,7 @@ class MainFileListFragment : Fragment(),
 
     private fun observeCurrentFolderDisplayed() {
         collectLatestLifecycleFlow(mainFileListViewModel.currentFolderDisplayed) { currentFolderDisplayed: OCFile ->
+            onBackPressedCallback.isEnabled = currentFolderDisplayed.parentId != ROOT_PARENT_ID
             fileActions?.onCurrentFolderUpdated(currentFolderDisplayed, mainFileListViewModel.getSpace())
             val fileListOption = mainFileListViewModel.fileListOption.value
             val refreshFolderNeeded = fileListOption.isAllFiles() ||

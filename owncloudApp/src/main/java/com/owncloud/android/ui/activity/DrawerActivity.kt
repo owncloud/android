@@ -33,7 +33,6 @@ import android.accounts.AccountManagerFuture
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.content.res.Configuration
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.provider.DocumentsContract
@@ -137,11 +136,9 @@ abstract class DrawerActivity : ToolbarActivity() {
         // Notch support
         getNavView()?.addOnAttachStateChangeListener(object : View.OnAttachStateChangeListener {
             override fun onViewAttachedToWindow(v: View) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                    v.rootWindowInsets.displayCutout?.let {
-                        getDrawerActiveUser()?.layoutParams?.height =
-                            DisplayUtils.getDrawerHeaderHeight(it.safeInsetTop, resources)
-                    }
+                v.rootWindowInsets.displayCutout?.let {
+                    getDrawerActiveUser()?.layoutParams?.height =
+                        DisplayUtils.getDrawerHeaderHeight(it.safeInsetTop, resources)
                 }
             }
 
@@ -499,16 +496,14 @@ abstract class DrawerActivity : ToolbarActivity() {
     }
 
     private fun setRolesAccessibilityToMenuItems() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val navViewMenu = getNavView()?.menu ?: return
-            val roleAccessibilityDescription = getString(R.string.button_role_accessibility)
-            navViewMenu.apply {
-                findItem(R.id.nav_settings)?.contentDescription = "${getString(R.string.actionbar_settings)} $roleAccessibilityDescription"
-                findItem(R.id.drawer_menu_feedback)?.contentDescription = "${getString(R.string.drawer_feedback)} $roleAccessibilityDescription"
-                findItem(R.id.drawer_menu_help)?.contentDescription = "${getString(R.string.prefs_help)} $roleAccessibilityDescription"
-                findItem(R.id.drawer_menu_privacy_policy)?.contentDescription =
-                    "${getString(R.string.prefs_privacy_policy)} $roleAccessibilityDescription"
-            }
+        val navViewMenu = getNavView()?.menu ?: return
+        val roleAccessibilityDescription = getString(R.string.button_role_accessibility)
+        navViewMenu.apply {
+            findItem(R.id.nav_settings)?.contentDescription = "${getString(R.string.actionbar_settings)} $roleAccessibilityDescription"
+            findItem(R.id.drawer_menu_feedback)?.contentDescription = "${getString(R.string.drawer_feedback)} $roleAccessibilityDescription"
+            findItem(R.id.drawer_menu_help)?.contentDescription = "${getString(R.string.prefs_help)} $roleAccessibilityDescription"
+            findItem(R.id.drawer_menu_privacy_policy)?.contentDescription =
+                "${getString(R.string.prefs_privacy_policy)} $roleAccessibilityDescription"
         }
     }
 

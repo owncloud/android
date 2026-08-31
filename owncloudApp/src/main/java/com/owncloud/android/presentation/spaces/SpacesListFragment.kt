@@ -181,15 +181,7 @@ class SpacesListFragment :
         collectLatestLifecycleFlow(spacesListViewModel.spacesList) { uiState ->
             var spacesToListFiltered: List<OCSpace>
             if (uiState.searchFilter != "") {
-                spacesToListFiltered =
-                    uiState.spaces.filter { it.name.lowercase().contains(uiState.searchFilter.lowercase()) && !it.isPersonal &&
-                            shouldShowDisabledSpace(it) }
-                val personalSpace = uiState.spaces.find { it.isPersonal }
-                personalSpace?.let {
-                    spacesToListFiltered = spacesToListFiltered.toMutableList().apply {
-                        add(0, personalSpace)
-                    }
-                }
+                spacesToListFiltered = uiState.spaces.filterSpaces(uiState.searchFilter, isMultiPersonal)
                 showOrHideEmptyView(spacesToListFiltered)
                 spacesListAdapter.setData(spacesToListFiltered, isMultiPersonal)
             } else {
@@ -482,6 +474,17 @@ class SpacesListFragment :
             }
         }
         binding.fileOptionsBottomSheetLayout.addView(fileOptionItemView)
+    }
+
+    private fun List<OCSpace>.filterSpaces(query: String, multiPersonal: Boolean): List<OCSpace> {
+        val queryLowercase = query.lowercase()
+        val spacesMatchingName = filter { it.name.lowercase().contains(queryLowercase) }
+        val matchingSpaces = spacesMatchingName.filter {
+            (multiPersonal || !it.isPersonal) && shouldShowDisabledSpace(it)
+        }
+        if (multiPersonal) return matchingSpaces
+        val personalSpace = find { it.isPersonal } ?: return matchingSpaces
+        return listOf(personalSpace) + matchingSpaces
     }
 
     private fun shouldShowDisabledSpace(space: OCSpace): Boolean = !space.isDisabled || spacesListViewModel.showDisabledSpaces

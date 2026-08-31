@@ -4,8 +4,9 @@
  * @author David González Verdugo
  * @author Abel García de Prada
  * @author Juan Carlos Garrote Gascón
+ * @author Jorge Aguado Recio
  *
- * Copyright (C) 2024 ownCloud GmbH.
+ * Copyright (C) 2026 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -73,6 +74,10 @@ class CapabilityViewModel(
             accountName = accountName
         )
     )
+
+    fun isOcisServer(): Boolean = runBlocking(coroutineDispatcherProvider.io) {
+        getStoredCapabilitiesUseCase(GetStoredCapabilitiesUseCase.Params(accountName))?.isSpacesAllowed() == true
+    }
 
     fun checkMultiPersonal(): Boolean = runBlocking(CoroutinesDispatcherProvider().io) {
         val capabilities = withContext(CoroutinesDispatcherProvider().io) {

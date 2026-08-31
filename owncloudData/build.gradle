@@ -1,13 +1,12 @@
 apply plugin: 'com.android.library'
 apply plugin: 'com.google.devtools.ksp'
-apply plugin: 'kotlin-android'
 
 android {
-    compileSdkVersion sdkCompileVersion
+    compileSdk sdkCompileVersion
 
     defaultConfig {
-        minSdkVersion sdkMinVersion
-        targetSdkVersion sdkTargetVersion
+        minSdk sdkMinVersion
+        targetSdk sdkTargetVersion
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -31,10 +30,6 @@ android {
         targetCompatibility JavaVersion.VERSION_17
     }
 
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_17.toString()
-    }
-
     sourceSets {
         androidTest.java.srcDirs += "src/test-common/java"
         test.java.srcDirs += "src/test-common/java"
@@ -42,7 +37,7 @@ android {
         androidTest.assets.srcDirs += files("$projectDir/schemas".toString())
     }
 
-    packagingOptions {
+    packaging {
         resources.excludes.add("META-INF/*")
     }
 

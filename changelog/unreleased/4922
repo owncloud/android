@@ -1,0 +1,6 @@
+Bugfix: Spaces search filter for multi-personal accounts (Kiteworks accounts)
+
+All matching personal spaces have been included in the spaces search filter for multi-personal accounts.
+
+https://github.com/owncloud/android/issues/4674
+https://github.com/owncloud/android/pull/4922

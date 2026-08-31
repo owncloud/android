@@ -2,7 +2,9 @@
  * ownCloud Android client application
  *
  * @author Fernando Sanz Velasco
- * Copyright (C) 2021 ownCloud GmbH.
+ * @author Jorge Aguado Recio
+ *
+ * Copyright (C) 2026 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -98,7 +100,7 @@ class MigrationToDB36Test : MigrationTest() {
                     "files_versioning)" +
                     " VALUES " +
                     "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
-            arrayOf(
+            arrayOf<Any?>(
                 OC_CAPABILITY.accountName,
                 OC_CAPABILITY.versionMajor,
                 OC_CAPABILITY.versionMinor,

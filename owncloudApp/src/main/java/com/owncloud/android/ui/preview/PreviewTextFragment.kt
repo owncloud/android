@@ -8,7 +8,7 @@
  * @author Aitor Ballesteros Pavón
  * @author Jorge Aguado Recio
  *
- * Copyright (C) 2024 ownCloud GmbH.
+ * Copyright (C) 2026 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -27,7 +27,6 @@ package com.owncloud.android.ui.preview
 
 import android.accounts.Account
 import android.os.AsyncTask
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -245,10 +244,8 @@ class PreviewTextFragment : FileFragment() {
     }
 
     private fun setRolesAccessibilityToMenuItems(menu: Menu) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            menu.findItem(R.id.action_see_details)?.contentDescription =
-                "${getString(R.string.actionbar_see_details)} ${getString(R.string.button_role_accessibility)}"
-        }
+        menu.findItem(R.id.action_see_details)?.contentDescription =
+            "${getString(R.string.actionbar_see_details)} ${getString(R.string.button_role_accessibility)}"
     }
 
     private fun loadAndShowTextPreview() {

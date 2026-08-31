@@ -2,7 +2,9 @@
  * ownCloud Android client application
  *
  * @author Abel García de Prada
- * Copyright (C) 2020 ownCloud GmbH.
+ * @author Jorge Aguado Recio
+ *
+ * Copyright (C) 2026 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -76,7 +78,7 @@ class OCCapabilityTest {
 
     @Test
     fun isOpenInWebAllowed() {
-        val item1 = OC_CAPABILITY.copy(filesAppProviders = OCCapability.AppProviders(true, "", null, null, "/open-with-web", null))
+        val item1 = OC_CAPABILITY.copy(filesAppProviders = AppProviders(true, "", null, null, "/open-with-web", null))
         assertTrue(item1.isOpenInWebAllowed())
 
         val item2 = OC_CAPABILITY.copy(filesAppProviders = null)

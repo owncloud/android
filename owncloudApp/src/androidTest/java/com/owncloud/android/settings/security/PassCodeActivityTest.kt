@@ -86,7 +86,7 @@ class PassCodeActivityTest {
         stopKoin()
 
         startKoin {
-            allowOverride(override = true)
+            allowOverride(true)
             context
             modules(
                 module {

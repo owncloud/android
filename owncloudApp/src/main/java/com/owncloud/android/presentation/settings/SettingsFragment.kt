@@ -2,8 +2,9 @@
  * ownCloud Android client application
  *
  * @author Juan Carlos Garrote Gascón
+ * @author Jorge Aguado Recio
  *
- * Copyright (C) 2021 ownCloud GmbH.
+ * Copyright (C) 2026 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -24,7 +25,6 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import androidx.preference.Preference
@@ -93,16 +93,12 @@ class SettingsFragment : PreferenceFragmentCompat() {
             true
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            subsectionNotifications?.setOnPreferenceClickListener {
-                val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).apply {
-                    putExtra(Settings.EXTRA_APP_PACKAGE, requireContext().packageName)
-                }
-                startActivity(intent)
-                true
+        subsectionNotifications?.setOnPreferenceClickListener {
+            val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).apply {
+                putExtra(Settings.EXTRA_APP_PACKAGE, requireContext().packageName)
             }
-        } else {
-            settingsScreen.removePreferenceFromScreen(subsectionNotifications)
+            startActivity(intent)
+            true
         }
 
         prefAboutApp?.apply {

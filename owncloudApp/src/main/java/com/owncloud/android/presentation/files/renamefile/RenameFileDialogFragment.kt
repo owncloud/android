@@ -37,7 +37,7 @@ import com.owncloud.android.extensions.avoidScreenshotsIfNeeded
 import com.owncloud.android.presentation.files.operations.FileOperation
 import com.owncloud.android.presentation.files.operations.FileOperationsViewModel
 import com.owncloud.android.utils.PreferenceUtils
-import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import org.koin.androidx.viewmodel.ext.android.activityViewModel
 
 /**
  * Dialog to input a new name for a file or folder to rename.
@@ -48,7 +48,7 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 class RenameFileDialogFragment : DialogFragment(), DialogInterface.OnClickListener {
 
     private var targetFile: OCFile? = null
-    private val filesViewModel: FileOperationsViewModel by sharedViewModel()
+    private val filesViewModel: FileOperationsViewModel by activityViewModel()
     private var isButtonEnabled = true
     private val maxFilenameLength = 223
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {

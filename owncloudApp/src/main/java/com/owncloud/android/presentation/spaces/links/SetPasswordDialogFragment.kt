@@ -37,7 +37,7 @@ import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.DialogFragment
 import com.owncloud.android.R
 import com.owncloud.android.databinding.SetPasswordDialogBinding
-import com.owncloud.android.domain.capabilities.model.OCCapability
+import com.owncloud.android.domain.capabilities.model.PasswordPolicy
 import com.owncloud.android.presentation.capabilities.CapabilityViewModel
 import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.presentation.sharing.generatePassword
@@ -57,7 +57,7 @@ class SetPasswordDialogFragment: DialogFragment() {
 
     private lateinit var setPasswordListener: SetPasswordListener
 
-    private var passwordPolicy: OCCapability.PasswordPolicy? = null
+    private var passwordPolicy: PasswordPolicy? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = SetPasswordDialogBinding.inflate(inflater, container, false)
@@ -134,7 +134,7 @@ class SetPasswordDialogFragment: DialogFragment() {
         setPasswordListener.onCancelPassword()
     }
 
-    private fun updatePasswordPolicyRequirements(password: String, passwordPolicy: OCCapability.PasswordPolicy) {
+    private fun updatePasswordPolicyRequirements(password: String, passwordPolicy: PasswordPolicy) {
         var hasMinCharacters = true
         var hasMaxCharacters = true
         var hasUpperCase = true

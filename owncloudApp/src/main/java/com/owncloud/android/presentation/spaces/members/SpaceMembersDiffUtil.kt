@@ -21,11 +21,11 @@
 package com.owncloud.android.presentation.spaces.members
 
 import androidx.recyclerview.widget.DiffUtil
-import com.owncloud.android.domain.spaces.model.SpaceMember
+import com.owncloud.android.domain.sharing.shares.model.MemberPermission
 
 class SpaceMembersDiffUtil(
-    private val oldList: List<SpaceMember>,
-    private val newList: List<SpaceMember>,
+    private val oldList: List<MemberPermission>,
+    private val newList: List<MemberPermission>,
     private val hasNumberOfManagersChanged: Boolean,
     private val hasUserPermissionsChanged: Boolean
 ) : DiffUtil.Callback() {

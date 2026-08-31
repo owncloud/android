@@ -1,0 +1,7 @@
+Enhancement: New UI for oCIS sharing
+
+A new UI has been implemented for oCIS sharing. The app now distinguishes between the backend in
+use: the new UI is displayed for oCIS, while the existing sharing UI is preserved for oC classic.
+
+https://github.com/owncloud/android/issues/4839
+https://github.com/owncloud/android/pull/4936

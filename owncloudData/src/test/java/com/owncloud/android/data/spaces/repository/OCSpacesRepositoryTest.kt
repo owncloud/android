@@ -252,7 +252,7 @@ class OCSpacesRepositoryTest {
     }
 
     @Test
-    fun `getSpaceMembers returns a SpaceMembers`() {
+    fun `getSpaceMembers returns a OCPermissions`() {
         every {
             remoteSpacesDataSource.getSpaceMembers(OC_ACCOUNT_NAME, OC_SPACE_PROJECT_WITH_IMAGE.id)
         } returns SPACE_MEMBERS

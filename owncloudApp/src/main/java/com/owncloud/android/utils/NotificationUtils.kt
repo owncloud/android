@@ -2,8 +2,9 @@
  * ownCloud Android client application
  *
  * @author Abel García de Prada
+ * @author Jorge Aguado Recio
  *
- * Copyright (C) 2023 ownCloud GmbH.
+ * Copyright (C) 2026 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -25,8 +26,6 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.os.Build
-import android.os.Build.VERSION.SDK_INT
 import android.os.Handler
 import android.os.HandlerThread
 import android.os.Process
@@ -89,14 +88,6 @@ object NotificationUtils {
 
         notificationManager.notify(notificationId, notificationBuilder.build())
 
-        // Remove success notification for devices with API < 26 with a workaround
-        if (SDK_INT < Build.VERSION_CODES.O && timeOut != null) {
-            cancelWithDelay(
-                notificationManager = notificationManager,
-                notificationId = notificationId,
-                delayInMillis = timeOut
-            )
-        }
     }
 
     fun composePendingIntentToRefreshCredentials(context: Context, account: Account): PendingIntent {

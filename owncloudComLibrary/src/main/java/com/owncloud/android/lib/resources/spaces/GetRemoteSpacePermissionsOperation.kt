@@ -26,7 +26,7 @@ import com.owncloud.android.lib.common.http.methods.nonwebdav.GetMethod
 import com.owncloud.android.lib.common.operations.RemoteOperation
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode
-import com.owncloud.android.lib.resources.spaces.responses.SpacePermissionsResponse
+import com.owncloud.android.lib.resources.spaces.responses.PermissionsResponse
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import timber.log.Timber
@@ -34,9 +34,9 @@ import java.net.URL
 
 class GetRemoteSpacePermissionsOperation(
     private val spaceId: String
-): RemoteOperation<SpacePermissionsResponse>() {
-    override fun run(client: OwnCloudClient): RemoteOperationResult<SpacePermissionsResponse> {
-        var result: RemoteOperationResult<SpacePermissionsResponse>
+): RemoteOperation<PermissionsResponse>() {
+    override fun run(client: OwnCloudClient): RemoteOperationResult<PermissionsResponse> {
+        var result: RemoteOperationResult<PermissionsResponse>
         try {
             val requestUri = client.baseUri.buildUpon().apply {
                 appendEncodedPath(GRAPH_API_SPACES_PATH)
@@ -54,7 +54,7 @@ class GetRemoteSpacePermissionsOperation(
                 Timber.d("Successful response: $response")
 
                 val moshi: Moshi = Moshi.Builder().build()
-                val adapter: JsonAdapter<SpacePermissionsResponse> = moshi.adapter(SpacePermissionsResponse::class.java)
+                val adapter: JsonAdapter<PermissionsResponse> = moshi.adapter(PermissionsResponse::class.java)
 
                 result = RemoteOperationResult(ResultCode.OK)
                 result.data = getMethod.getResponseBodyAsString().let { adapter.fromJson(it) }

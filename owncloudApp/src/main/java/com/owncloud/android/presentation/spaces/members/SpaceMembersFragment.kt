@@ -36,7 +36,7 @@ import com.owncloud.android.domain.links.model.OCLink
 import com.owncloud.android.domain.roles.model.OCRole
 import com.owncloud.android.domain.roles.model.OCRoleType
 import com.owncloud.android.domain.spaces.model.OCSpace
-import com.owncloud.android.domain.spaces.model.SpaceMember
+import com.owncloud.android.domain.sharing.shares.model.MemberPermission
 import com.owncloud.android.extensions.avoidScreenshotsIfNeeded
 import com.owncloud.android.extensions.collectLatestLifecycleFlow
 import com.owncloud.android.extensions.showAlertDialog
@@ -77,7 +77,7 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
 
     private var roles: List<OCRole> = emptyList()
     private var addMemberRoles: List<OCRole> = emptyList()
-    private var spaceMembers: List<SpaceMember> = emptyList()
+    private var spaceMembers: List<MemberPermission> = emptyList()
     private var spaceLinks: List<OCLink> = emptyList()
     private var listener: SpaceMemberFragmentListener? = null
     private var canRemoveMembersAndLinks = false
@@ -172,7 +172,7 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
         outState.putBoolean(CAN_READ_MEMBERS, canReadMembersAndLinks)
     }
 
-    override fun onRemoveMember(spaceMember: SpaceMember) {
+    override fun onRemoveMember(spaceMember: MemberPermission) {
         AlertDialog.Builder(requireContext())
             .setMessage(getString(R.string.members_remove_dialog_message, spaceMember.displayName))
             .setPositiveButton(getString(R.string.common_yes)) { _, _ -> spaceMembersViewModel.removeMember(spaceMember.id) }
@@ -181,7 +181,7 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
             .avoidScreenshotsIfNeeded()
     }
 
-    override fun onEditMember(spaceMember: SpaceMember) {
+    override fun onEditMember(spaceMember: MemberPermission) {
         spaceMembersViewModel.resetViewModel()
         val currentSpace = requireArguments().getParcelable<OCSpace>(ARG_CURRENT_SPACE) ?: return
         listener?.addMember(
@@ -458,7 +458,7 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
     }
 
     interface SpaceMemberFragmentListener {
-        fun addMember(space: OCSpace, spaceMembers: List<SpaceMember>, roles: List<OCRole>, editMode: Boolean, selectedMember: SpaceMember?)
+        fun addMember(space: OCSpace, spaceMembers: List<MemberPermission>, roles: List<OCRole>, editMode: Boolean, selectedMember: MemberPermission?)
         fun addPublicLink(space: OCSpace, editMode: Boolean, selectedPublicLink: OCLink?)
         fun copyOrSendPublicLink(publicLinkUrl: String, spaceName: String)
     }
