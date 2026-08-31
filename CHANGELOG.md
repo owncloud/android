@@ -1,5 +1,6 @@
 # Table of Contents
 
+* [Changelog for 4.8.4](#changelog-for-owncloud-android-client-484-2026-08-31)
 * [Changelog for 4.8.3](#changelog-for-owncloud-android-client-483-2026-07-21)
 * [Changelog for 4.8.2](#changelog-for-owncloud-android-client-482-2026-07-01)
 * [Changelog for 4.8.1](#changelog-for-owncloud-android-client-481-2026-06-09)
@@ -34,6 +35,27 @@
 * [Changelog for 2.18.1](#changelog-for-owncloud-android-client-2181-2021-07-20)
 * [Changelog for 2.18.0](#changelog-for-owncloud-android-client-2180-2021-05-24)
 * [Changelog for 2.17 versions and below](#changelog-for-217-versions-and-below)
+# Changelog for ownCloud Android Client [4.8.4] (2026-08-31)
+
+The following sections list the changes in ownCloud Android Client 4.8.4 relevant to
+ownCloud admins and users.
+
+[4.8.4]: https://github.com/owncloud/android/compare/v4.8.3...v4.8.4
+
+## Summary
+
+* Security - Prevent bypassing passcode, pattern and biometric lock: [#4958](https://github.com/owncloud/android/issues/4958)
+
+## Details
+
+* Security - Prevent bypassing passcode, pattern and biometric lock: [#4958](https://github.com/owncloud/android/issues/4958)
+
+   The back gesture has been prevented from dismissing the lock screen without
+   validating the passcode, pattern or biometric lock.
+
+   https://github.com/owncloud/android/issues/4958
+   https://github.com/owncloud/android/pull/4963
+
 # Changelog for ownCloud Android Client [4.8.3] (2026-07-21)
 
 The following sections list the changes in ownCloud Android Client 4.8.3 relevant to
