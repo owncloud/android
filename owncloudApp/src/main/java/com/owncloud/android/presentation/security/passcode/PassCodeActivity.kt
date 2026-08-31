@@ -39,6 +39,7 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.EditText
 import android.widget.LinearLayout
+import androidx.activity.OnBackPressedCallback
 import com.owncloud.android.BuildConfig
 import com.owncloud.android.R
 import com.owncloud.android.databinding.PasscodeLockActivityBinding
@@ -76,6 +77,15 @@ class PassCodeActivity : ToolbarActivity(), NumberKeyboardListener, EnableBiomet
     private var confirmingPassCode = false
     private val resultIntent = Intent()
 
+    private val onBackPressedCallback = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            if ((ACTION_CREATE == intent.action && intent.extras?.getBoolean(EXTRAS_LOCK_ENFORCED) != true) || ACTION_REMOVE == intent.action) {
+                PassCodeManager.onActivityStopped(this@PassCodeActivity)
+                finish()
+            }
+        }
+    }
+
     /**
      * Initializes the activity.
      *
@@ -91,6 +101,8 @@ class PassCodeActivity : ToolbarActivity(), NumberKeyboardListener, EnableBiomet
         }
 
         subscribeToViewModel()
+
+        onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
 
         _binding = PasscodeLockActivityBinding.inflate(layoutInflater)
 
@@ -180,18 +192,14 @@ class PassCodeActivity : ToolbarActivity(), NumberKeyboardListener, EnableBiomet
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        onBackPressed()
+        // Route the toolbar Up button through the same guarded callback as the back gesture/key.
+        onBackPressedDispatcher.onBackPressed()
         return true
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString(STATE_PASSCODE, passCodeViewModel.passcode.value.orEmpty())
-    }
-
-    override fun onBackPressed() {
-        PassCodeManager.onActivityStopped(this)
-        super.onBackPressed()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean = false
@@ -383,27 +391,6 @@ class PassCodeActivity : ToolbarActivity(), NumberKeyboardListener, EnableBiomet
     }
 
     /**
-     * Overrides click on the BACK arrow to correctly cancel ACTION_ENABLE or ACTION_DISABLE, while
-     * preventing than ACTION_CHECK may be worked around.
-     *
-     * @param keyCode       Key code of the key that triggered the down event.
-     * @param event         Event triggered.
-     * @return              'True' when the key event was processed by this method.
-     */
-    override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
-        if (keyCode == KeyEvent.KEYCODE_BACK && event.repeatCount == 0) {
-            if ((ACTION_CREATE == intent.action &&
-                        intent.extras?.getBoolean(EXTRAS_LOCK_ENFORCED) != true) ||
-                ACTION_REMOVE == intent.action
-            ) {
-                finish()
-            } // else, do nothing, but report that the key was consumed to stay alive
-            return true
-        }
-        return super.onKeyDown(keyCode, event)
-    }
-
-    /**
      * Saves the pass code input by the user as the current pass code.
      */
     private fun savePassCodeAndExit() {
@@ -462,8 +449,7 @@ class PassCodeActivity : ToolbarActivity(), NumberKeyboardListener, EnableBiomet
             }
 
             KeyEvent.KEYCODE_ESCAPE -> {
-                PassCodeManager.onActivityStopped(this)
-                super.onBackPressed()
+                onBackPressedDispatcher.onBackPressed()
                 true
             }
 

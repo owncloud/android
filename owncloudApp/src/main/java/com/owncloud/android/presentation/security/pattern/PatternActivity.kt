@@ -28,11 +28,11 @@ package com.owncloud.android.presentation.security.pattern
 import android.content.Intent
 import android.os.Bundle
 import android.os.SystemClock
-import android.view.KeyEvent
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
+import androidx.activity.OnBackPressedCallback
 import androidx.core.view.isVisible
 import com.andrognito.patternlockview.PatternLockView.Dot
 import com.andrognito.patternlockview.listener.PatternLockViewListener
@@ -70,12 +70,23 @@ class PatternActivity : ToolbarActivity(), EnableBiometrics {
 
     val resultIntent = Intent()
 
+    private val onBackPressedCallback = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            if (ACTION_REQUEST_WITH_RESULT == intent.action && intent.extras?.getBoolean(EXTRAS_LOCK_ENFORCED) != true || ACTION_CHECK_WITH_RESULT == intent.action) {
+                PatternManager.onActivityStopped(this@PatternActivity)
+                finish()
+            }
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         if (!BuildConfig.DEBUG) {
             window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
         }
+
+        onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
 
         _binding = PatternLockActivityBinding.inflate(layoutInflater)
 
@@ -157,13 +168,8 @@ class PatternActivity : ToolbarActivity(), EnableBiometrics {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        onBackPressed()
+        onBackPressedDispatcher.onBackPressed()
         return true
-    }
-
-    override fun onBackPressed() {
-        PatternManager.onActivityStopped(this)
-        super.onBackPressed()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean = false
@@ -321,27 +327,6 @@ class PatternActivity : ToolbarActivity(), EnableBiometrics {
             putString(PATTERN_HEADER_VIEW_TEXT, binding.patternHeader.text.toString())
             putBoolean(PATTERN_EXP_VIEW_STATE, binding.patternExplanation.isVisible)
         }
-    }
-
-    /**
-     * Overrides click on the BACK arrow to correctly cancel ACTION_ENABLE or ACTION_DISABLE, while
-     * preventing than ACTION_CHECK may be worked around.
-     *
-     * @param keyCode       Key code of the key that triggered the down event.
-     * @param event         Event triggered.
-     * @return              'True' when the key event was processed by this method.
-     */
-    override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
-        if (keyCode == KeyEvent.KEYCODE_BACK && event.repeatCount == 0) {
-            if (ACTION_REQUEST_WITH_RESULT == intent.action &&
-                intent.extras?.getBoolean(EXTRAS_LOCK_ENFORCED) != true ||
-                ACTION_CHECK_WITH_RESULT == intent.action
-            ) {
-                finish()
-            } // else, do nothing, but report that the key was consumed to stay alive
-            return true
-        }
-        return super.onKeyDown(keyCode, event)
     }
 
     override fun onOptionSelected(optionSelected: BiometricStatus) {
