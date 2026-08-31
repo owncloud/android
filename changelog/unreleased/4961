@@ -1,0 +1,7 @@
+Security: Prevent bypassing passcode, pattern and biometric lock
+
+The back gesture has been prevented from dismissing the lock screen
+without validating the passcode, pattern or biometric lock.
+
+https://github.com/owncloud/android/issues/4958
+https://github.com/owncloud/android/pull/4961
