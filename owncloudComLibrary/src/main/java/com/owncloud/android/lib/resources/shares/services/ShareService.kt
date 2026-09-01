@@ -41,6 +41,15 @@ interface ShareService : Service {
 
     fun getGraphShares(spaceId: String, itemId: String): RemoteOperationResult<PermissionsResponse>
 
+    fun addGraphShare(
+        spaceId: String,
+        itemId: String,
+        memberId: String,
+        memberType: String,
+        roleId: String,
+        expirationDate: String?
+    ): RemoteOperationResult<Unit>
+
     fun insertShare(
         remoteFilePath: String,
         shareType: ShareType,

@@ -36,6 +36,7 @@ import com.owncloud.android.testutil.OC_PUBLIC_SHARE
 import com.owncloud.android.testutil.OC_SHARE
 import com.owncloud.android.testutil.OC_SHAREE
 import com.owncloud.android.testutil.OC_SPACE_PROJECT_WITH_IMAGE
+import com.owncloud.android.testutil.OC_USER_MEMBER
 import com.owncloud.android.testutil.SPACE_MEMBERS
 import com.owncloud.android.testutil.livedata.getLastEmittedValue
 import io.mockk.every
@@ -253,6 +254,40 @@ class OCShareRepositoryTest {
 
         verify(exactly = 1) {
             remoteShareDataSource.getGraphShares(OC_ACCOUNT_NAME, OC_SPACE_PROJECT_WITH_IMAGE.id, OC_FILE.remoteId.orEmpty())
+        }
+    }
+
+    @Test
+    fun `addGraphShare adds a share correctly`() {
+        every {
+            remoteShareDataSource.addGraphShare(
+                accountName = OC_ACCOUNT_NAME,
+                spaceId = OC_SPACE_PROJECT_WITH_IMAGE.id,
+                itemId = OC_FILE.remoteId.orEmpty(),
+                member = OC_USER_MEMBER,
+                roleId = SPACE_MEMBERS.roles[0].id,
+                expirationDate = null
+            )
+        } returns Unit
+
+        ocShareRepository.addGraphShare(
+            accountName = OC_ACCOUNT_NAME,
+            spaceId = OC_SPACE_PROJECT_WITH_IMAGE.id,
+            itemId = OC_FILE.remoteId.orEmpty(),
+            member = OC_USER_MEMBER,
+            roleId = SPACE_MEMBERS.roles[0].id,
+            expirationDate = null
+        )
+
+        verify(exactly = 1) {
+            remoteShareDataSource.addGraphShare(
+                accountName = OC_ACCOUNT_NAME,
+                spaceId = OC_SPACE_PROJECT_WITH_IMAGE.id,
+                itemId = OC_FILE.remoteId.orEmpty(),
+                member = OC_USER_MEMBER,
+                roleId = SPACE_MEMBERS.roles[0].id,
+                expirationDate = null
+            )
         }
     }
 

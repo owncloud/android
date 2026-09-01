@@ -18,26 +18,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.domain.sharing.shares.model
+package com.owncloud.android.domain.exceptions
 
-import android.os.Parcelable
-import com.owncloud.android.domain.links.model.OCLink
-import com.owncloud.android.domain.roles.model.OCRole
-import kotlinx.parcelize.Parcelize
-
-@Parcelize
-data class OCPermissions(
-    val roles: List<OCRole>,
-    val members: List<MemberPermission>,
-    val links: List<OCLink>
-) : Parcelable
-
-@Parcelize
-data class MemberPermission(
-    val id: String,
-    val memberId: String,
-    val expirationDateTime: String?,
-    val displayName: String,
-    val roles: List<String>,
-    val isGroup: Boolean = false
-) : Parcelable
+class ConflictShareException : Exception()

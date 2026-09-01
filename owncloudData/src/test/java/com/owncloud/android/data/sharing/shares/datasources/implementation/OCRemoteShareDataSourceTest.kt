@@ -28,6 +28,7 @@ import com.owncloud.android.data.sharing.shares.datasources.implementation.OCRem
 import com.owncloud.android.data.sharing.shares.datasources.mapper.RemoteShareMapper
 import com.owncloud.android.domain.exceptions.ShareForbiddenException
 import com.owncloud.android.domain.exceptions.ShareNotFoundException
+import com.owncloud.android.domain.members.model.OCMemberType
 import com.owncloud.android.domain.sharing.shares.model.ShareType
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.shares.ShareResponse
@@ -36,6 +37,8 @@ import com.owncloud.android.testutil.OC_ACCOUNT_NAME
 import com.owncloud.android.testutil.OC_FILE
 import com.owncloud.android.testutil.OC_SHARE
 import com.owncloud.android.testutil.OC_SPACE_PROJECT_WITH_IMAGE
+import com.owncloud.android.testutil.OC_USER_MEMBER
+import com.owncloud.android.testutil.SPACE_MEMBERS
 import com.owncloud.android.testutil.SPACE_PERMISSIONS_RESPONSE
 import com.owncloud.android.utils.createRemoteOperationResultMock
 import io.mockk.every
@@ -51,6 +54,8 @@ class OCRemoteShareDataSourceTest {
     private val ocShareService: OCShareService = mockk()
     private val remoteShareMapper = RemoteShareMapper()
     private val clientManager: ClientManager = mockk(relaxed = true)
+
+    private val userType = OCMemberType.toString(OC_USER_MEMBER.type).lowercase()
 
     @Before
     fun setUp() {
@@ -405,6 +410,43 @@ class OCRemoteShareDataSourceTest {
         verify(exactly = 1) {
             clientManager.getShareService(OC_ACCOUNT_NAME)
             ocShareService.getGraphShares(OC_SPACE_PROJECT_WITH_IMAGE.id, OC_FILE.remoteId.orEmpty())
+        }
+    }
+
+    @Test
+    fun `addGraphShare adds a graph share correctly`() {
+        val addGraphShareResult = createRemoteOperationResultMock(Unit, isSuccess = true)
+
+        every {
+            ocShareService.addGraphShare(
+                spaceId = OC_SPACE_PROJECT_WITH_IMAGE.id,
+                itemId = OC_FILE.remoteId.orEmpty(),
+                memberId = OC_USER_MEMBER.id,
+                memberType = userType,
+                roleId = SPACE_MEMBERS.roles[0].id,
+                expirationDate = null
+            )
+        } returns addGraphShareResult
+
+        ocRemoteShareDataSource.addGraphShare(
+            accountName = OC_ACCOUNT_NAME,
+            spaceId = OC_SPACE_PROJECT_WITH_IMAGE.id,
+            itemId = OC_FILE.remoteId.orEmpty(),
+            member = OC_USER_MEMBER,
+            roleId = SPACE_MEMBERS.roles[0].id,
+            expirationDate = null
+        )
+
+        verify(exactly = 1) {
+            clientManager.getShareService(OC_ACCOUNT_NAME)
+            ocShareService.addGraphShare(
+                spaceId = OC_SPACE_PROJECT_WITH_IMAGE.id,
+                itemId = OC_FILE.remoteId.orEmpty(),
+                memberId = OC_USER_MEMBER.id,
+                memberType = userType,
+                roleId = SPACE_MEMBERS.roles[0].id,
+                expirationDate = null
+            )
         }
     }
 
