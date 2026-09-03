@@ -228,6 +228,8 @@ class PassCodeActivity : ToolbarActivity(), NumberKeyboardListener, EnableBiomet
         })
         passCodeViewModel.getFinishedTimeToUnlockLiveData.observe(this, Event.EventObserver {
             binding.lockTime.visibility = View.INVISIBLE
+            binding.numberKeyboard.visibility = View.VISIBLE
+            binding.passcodeError.visibility = View.INVISIBLE
             for (editText: EditText? in passCodeEditTexts) {
                 editText?.isEnabled = true
             }
@@ -347,6 +349,7 @@ class PassCodeActivity : ToolbarActivity(), NumberKeyboardListener, EnableBiomet
         val timeToUnlock = passCodeViewModel.getTimeToUnlockLeft()
         if (timeToUnlock > 0) {
             binding.lockTime.visibility = View.VISIBLE
+            binding.numberKeyboard.visibility = View.INVISIBLE
             for (editText: EditText? in passCodeEditTexts) {
                 editText?.isEnabled = false
             }
