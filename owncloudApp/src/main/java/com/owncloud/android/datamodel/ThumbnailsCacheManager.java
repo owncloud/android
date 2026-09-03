@@ -72,7 +72,7 @@ public class ThumbnailsCacheManager {
     private static DiskLruImageCache mThumbnailCache = null;
     private static boolean mThumbnailCacheStarting = true;
 
-    private static final int DISK_CACHE_SIZE = 1024 * 1024 * 10; // 10MB
+    private static final int DISK_CACHE_SIZE = 1024 * 1024 * 250; // 250MB
     private static final CompressFormat mCompressFormat = CompressFormat.JPEG;
     private static final int mCompressQuality = 70;
     private static OwnCloudClient mClient = null;
@@ -447,8 +447,7 @@ public class ThumbnailsCacheManager {
     private static ThumbnailGenerationTask getBitmapWorkerTask(ImageView imageView) {
         if (imageView != null) {
             final Drawable drawable = imageView.getDrawable();
-            if (drawable instanceof AsyncThumbnailDrawable) {
-                final AsyncThumbnailDrawable asyncDrawable = (AsyncThumbnailDrawable) drawable;
+            if (drawable instanceof AsyncThumbnailDrawable asyncDrawable) {
                 return asyncDrawable.getBitmapWorkerTask();
             }
         }
