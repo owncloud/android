@@ -59,7 +59,7 @@ import com.owncloud.android.domain.files.model.MIME_DIR_UNIX
 
 @Entity(
     tableName = FILES_TABLE_NAME,
-    indices = [Index(value = [FILE_OWNER, FILE_SPACE_ID])],
+    indices = [Index(name = "index_files_owner_spaceId", value = [FILE_OWNER, FILE_SPACE_ID])],
     foreignKeys = [ForeignKey(
         entity = SpacesEntity::class,
         parentColumns = arrayOf(SPACES_ACCOUNT_NAME, SPACES_ID),
