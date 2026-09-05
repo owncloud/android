@@ -24,6 +24,7 @@ package com.owncloud.android.data.spaces.db
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import androidx.room.Index
 import com.owncloud.android.data.ProviderMeta
 import com.owncloud.android.data.spaces.db.SpaceSpecialEntity.Companion.SPACES_SPECIAL_ACCOUNT_NAME
 import com.owncloud.android.data.spaces.db.SpaceSpecialEntity.Companion.SPACES_SPECIAL_ID
@@ -35,6 +36,10 @@ import com.owncloud.android.data.spaces.db.SpacesEntity.Companion.SPACES_LAST_MO
 @Entity(
     tableName = ProviderMeta.ProviderTableMeta.SPACES_SPECIAL_TABLE_NAME,
     primaryKeys = [SPACES_SPECIAL_SPACE_ID, SPACES_SPECIAL_ID],
+    indices = [Index(
+        name = "index_spaces_special_account_space",
+        value = [SPACES_SPECIAL_ACCOUNT_NAME, SPACES_SPECIAL_SPACE_ID]
+    )],
     foreignKeys = [ForeignKey(
         entity = SpacesEntity::class,
         parentColumns = arrayOf(SPACES_ACCOUNT_NAME, SPACES_ID),
