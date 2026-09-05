@@ -22,6 +22,7 @@ import android.database.Cursor
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.FILE_ACCOUNT_OWNER
@@ -58,6 +59,7 @@ import com.owncloud.android.domain.files.model.MIME_DIR_UNIX
 
 @Entity(
     tableName = FILES_TABLE_NAME,
+    indices = [Index(value = [FILE_OWNER, FILE_SPACE_ID])],
     foreignKeys = [ForeignKey(
         entity = SpacesEntity::class,
         parentColumns = arrayOf(SPACES_ACCOUNT_NAME, SPACES_ID),
