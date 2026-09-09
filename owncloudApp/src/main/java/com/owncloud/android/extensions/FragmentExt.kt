@@ -23,8 +23,10 @@
 package com.owncloud.android.extensions
 
 import android.app.AlertDialog
+import android.app.DatePickerDialog
 import android.content.Context
 import android.content.DialogInterface
+import android.icu.util.Calendar
 import android.view.Menu
 import android.view.MenuItem.SHOW_AS_ACTION_NEVER
 import android.view.View
@@ -36,10 +38,15 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.material.snackbar.Snackbar
 import com.owncloud.android.R
+import com.owncloud.android.databinding.AddMemberFragmentBinding
 import com.owncloud.android.domain.appregistry.model.AppRegistryProvider
+import com.owncloud.android.utils.DisplayUtils
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Locale
+import java.util.TimeZone
 
 fun Fragment.showErrorInSnackbar(genericErrorMessageId: Int, throwable: Throwable?) =
     throwable?.let {
@@ -107,6 +114,61 @@ fun <T> Fragment.collectLatestLifecycleFlow(
     lifecycleScope.launch {
         repeatOnLifecycle(lifecycleState) {
             flow.collectLatest(collect)
+        }
+    }
+}
+
+fun Fragment.bindDatePickerDialog(
+    binding: AddMemberFragmentBinding,
+    expirationDate: String?,
+    onExpirationDateSelected: (String?) -> Unit,
+) {
+    binding.expirationDateLayout.expirationDateSwitch.setOnCheckedChangeListener { _, isChecked ->
+        if (isChecked) {
+            openDatePickerDialog(binding, expirationDate, onExpirationDateSelected)
+        } else {
+            binding.expirationDateLayout.expirationDateValue.visibility = View.GONE
+            onExpirationDateSelected(null)
+        }
+    }
+}
+
+fun Fragment.openDatePickerDialog(
+    binding: AddMemberFragmentBinding,
+    expirationDate: String?,
+    onExpirationDateSelected: (String?) -> Unit,
+) {
+    val calendar = Calendar.getInstance()
+    val formatter = SimpleDateFormat(DisplayUtils.DATE_FORMAT_ISO, Locale.ROOT).apply {
+        timeZone = TimeZone.getTimeZone("UTC")
+    }
+
+    expirationDate?.let {
+        calendar.time = formatter.parse(it)
+    }
+
+    DatePickerDialog(
+        requireContext(),
+        { _, selectedYear, selectedMonth, selectedDay ->
+            calendar.set(selectedYear, selectedMonth, selectedDay, 23, 59, 59)
+            calendar.set(Calendar.MILLISECOND, 999)
+            val isoExpirationDate = formatter.format(calendar.time)
+            onExpirationDateSelected(isoExpirationDate)
+            binding.expirationDateLayout.expirationDateValue.apply {
+                visibility = View.VISIBLE
+                text = DisplayUtils.displayDateToHumanReadable(isoExpirationDate)
+            }
+        },
+        calendar.get(Calendar.YEAR),
+        calendar.get(Calendar.MONTH),
+        calendar.get(Calendar.DAY_OF_MONTH)
+    ).apply {
+        datePicker.minDate = Calendar.getInstance().timeInMillis
+        show()
+        setOnCancelListener {
+            if (expirationDate == null) {
+                binding.expirationDateLayout.expirationDateSwitch.isChecked = false
+            }
         }
     }
 }

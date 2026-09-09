@@ -30,6 +30,7 @@ import com.owncloud.android.domain.exceptions.BadOcVersionException
 import com.owncloud.android.domain.exceptions.CancelledException
 import com.owncloud.android.domain.exceptions.ConflictException
 import com.owncloud.android.domain.exceptions.ConflictMemberException
+import com.owncloud.android.domain.exceptions.ConflictShareException
 import com.owncloud.android.domain.exceptions.CopyIntoDescendantException
 import com.owncloud.android.domain.exceptions.DelayedForWifiException
 import com.owncloud.android.domain.exceptions.FileNotFoundException
@@ -120,6 +121,7 @@ private fun <T> handleRemoteOperationResult(
         RemoteOperationResult.ResultCode.INVALID_OVERWRITE -> throw InvalidOverwriteException()
         RemoteOperationResult.ResultCode.CONFLICT -> throw ConflictException()
         RemoteOperationResult.ResultCode.CONFLICT_MEMBER -> throw ConflictMemberException()
+        RemoteOperationResult.ResultCode.CONFLICT_SHARE -> throw ConflictShareException()
         RemoteOperationResult.ResultCode.SYNC_CONFLICT -> throw SyncConflictException()
         RemoteOperationResult.ResultCode.LOCAL_STORAGE_FULL -> throw LocalStorageFullException()
         RemoteOperationResult.ResultCode.LOCAL_STORAGE_NOT_MOVED -> throw LocalStorageNotMovedException()

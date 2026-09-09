@@ -21,6 +21,7 @@
 
 package com.owncloud.android.data.sharing.shares.datasources
 
+import com.owncloud.android.domain.members.model.OCMember
 import com.owncloud.android.domain.sharing.shares.model.OCShare
 import com.owncloud.android.domain.sharing.shares.model.ShareType
 import com.owncloud.android.domain.sharing.shares.model.OCPermissions
@@ -39,6 +40,15 @@ interface RemoteShareDataSource {
         spaceId: String,
         itemId: String
     ): OCPermissions
+
+    fun addGraphShare(
+        accountName: String,
+        spaceId: String,
+        itemId: String,
+        member: OCMember,
+        roleId: String,
+        expirationDate: String?
+    )
 
     fun insert(
         remoteFilePath: String,

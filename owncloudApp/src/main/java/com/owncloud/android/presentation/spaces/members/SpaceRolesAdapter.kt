@@ -69,7 +69,11 @@ class SpaceRolesAdapter(
             roleIcon.setImageResource(
                 when(OCRoleType.parseFromId(role.id)) {
                     OCRoleType.CAN_VIEW -> R.drawable.ic_viewer_role
+                    OCRoleType.CAN_VIEW_SHARE -> R.drawable.ic_viewer_role
                     OCRoleType.CAN_EDIT -> R.drawable.ic_lead_pencil_grey
+                    OCRoleType.CAN_EDIT_SHARE -> R.drawable.ic_lead_pencil_grey
+                    OCRoleType.CAN_EDIT_FOLDER_SHARE -> R.drawable.ic_uploads
+                    OCRoleType.CAN_EDIT_WITH_TRASHBIN_FOLDER_SHARE -> R.drawable.ic_lead_pencil_grey
                     OCRoleType.CAN_MANAGE -> R.drawable.ic_share_generic
                     OCRoleType.UNKNOWN_ROLE -> R.drawable.ic_user
                 }

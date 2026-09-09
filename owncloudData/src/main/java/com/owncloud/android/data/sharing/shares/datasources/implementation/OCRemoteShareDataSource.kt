@@ -27,6 +27,8 @@ import com.owncloud.android.data.sharing.shares.datasources.RemoteShareDataSourc
 import com.owncloud.android.data.sharing.shares.datasources.mapper.RemoteShareMapper
 import com.owncloud.android.domain.links.model.OCLink
 import com.owncloud.android.domain.links.model.OCLinkType
+import com.owncloud.android.domain.members.model.OCMember
+import com.owncloud.android.domain.members.model.OCMemberType
 import com.owncloud.android.domain.roles.model.OCRole
 import com.owncloud.android.domain.sharing.shares.model.OCShare
 import com.owncloud.android.domain.sharing.shares.model.ShareType
@@ -65,6 +67,20 @@ class OCRemoteShareDataSource(
             clientManager.getShareService(accountName).getGraphShares(spaceId, itemId)
         }
         return response.toModel()
+    }
+
+    override fun addGraphShare(
+        accountName: String,
+        spaceId: String,
+        itemId: String,
+        member: OCMember,
+        roleId: String,
+        expirationDate: String?
+    ) {
+        val memberType = OCMemberType.toString(member.type).lowercase()
+        executeRemoteOperation {
+            clientManager.getShareService(accountName).addGraphShare(spaceId, itemId, member.id, memberType, roleId, expirationDate)
+        }
     }
 
     override fun insert(
@@ -137,6 +153,8 @@ class OCRemoteShareDataSource(
                 members = membersResponse.filter { it.grantedToV2 != null }.map { spaceMemberResponse ->
                     MemberPermission(
                         id = spaceMemberResponse.id ?: "",
+                        memberId = spaceMemberResponse.grantedToV2?.user?.id
+                            ?: spaceMemberResponse.grantedToV2?.group?.id ?: "",
                         expirationDateTime = spaceMemberResponse.expirationDateTime,
                         displayName = spaceMemberResponse.grantedToV2?.user?.displayName
                             ?: spaceMemberResponse.grantedToV2?.group?.displayName ?: "",

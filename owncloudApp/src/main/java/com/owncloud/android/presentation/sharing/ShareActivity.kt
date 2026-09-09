@@ -63,7 +63,7 @@ import timber.log.Timber
 /**
  * Activity for sharing files
  */
-class ShareActivity : FileActivity(), ShareFragmentListener {
+class ShareActivity : FileActivity(), ShareFragmentListener, GraphShareFragment.GraphShareFragmentListener {
     private val shareViewModel: ShareViewModel by viewModel {
         parametersOf(
             file.remotePath,
@@ -78,7 +78,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
         super.onCreate(savedInstanceState)
 
         if (capabilityViewModel.isOcisServer()) {
-            setupOcisLayout()
+            setupOcisLayout(savedInstanceState)
         } else {
             setupLegacyLayout(savedInstanceState)
         }
@@ -88,12 +88,12 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
         observeShareDeletion()
     }
 
-    private fun setupOcisLayout() {
+    private fun setupOcisLayout(savedInstanceState: Bundle?) {
         val binding = MembersActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setupToolbar(binding.root)
         setupFileHeader(binding)
-        if (file != null && account != null) {
+        if (savedInstanceState == null && file != null && account != null) {
             supportFragmentManager.transaction {
                 replace(R.id.members_fragment_container, GraphShareFragment.newInstance(file, account!!.name), TAG_GRAPH_SHARE_FRAGMENT)
             }
@@ -107,6 +107,16 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
             supportFragmentManager.transaction {
                 replace(R.id.share_fragment_container, ShareFileFragment.newInstance(file, account!!), TAG_SHARE_FRAGMENT)
             }
+        }
+    }
+
+    override fun addGraphShare(file: OCFile, accountName: String) {
+        val addGraphShareFragment = AddGraphShareFragment.newInstance(file, accountName)
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.apply {
+            replace(R.id.members_fragment_container, addGraphShareFragment, TAG_ADD_GRAPH_SHARE_FRAGMENT)
+            addToBackStack(null)
+            commit()
         }
     }
 
@@ -372,6 +382,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
     companion object {
         const val TAG_SHARE_FRAGMENT = "SHARE_FRAGMENT"
         const val TAG_GRAPH_SHARE_FRAGMENT = "GRAPH_SHARE_FRAGMENT"
+        const val TAG_ADD_GRAPH_SHARE_FRAGMENT = "ADD_GRAPH_SHARE_FRAGMENT"
         const val TAG_SEARCH_FRAGMENT = "SEARCH_USER_AND_GROUPS_FRAGMENT"
         const val TAG_EDIT_SHARE_FRAGMENT = "EDIT_SHARE_FRAGMENT"
         const val TAG_PUBLIC_SHARE_DIALOG_FRAGMENT = "PUBLIC_SHARE_DIALOG_FRAGMENT"

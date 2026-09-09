@@ -28,6 +28,7 @@ import com.owncloud.android.domain.exceptions.AccountNotTheSameException
 import com.owncloud.android.domain.exceptions.BadOcVersionException
 import com.owncloud.android.domain.exceptions.ConflictException
 import com.owncloud.android.domain.exceptions.ConflictMemberException
+import com.owncloud.android.domain.exceptions.ConflictShareException
 import com.owncloud.android.domain.exceptions.CopyIntoDescendantException
 import com.owncloud.android.domain.exceptions.CopyIntoSameFolderException
 import com.owncloud.android.domain.exceptions.FileAlreadyExistsException
@@ -75,6 +76,7 @@ fun Throwable.parseError(
             is BadOcVersionException -> resources.getString(R.string.auth_bad_oc_version_title)
             is ConflictException -> resources.getString(R.string.error_conflict)
             is ConflictMemberException -> resources.getString(R.string.members_add_conflict_error)
+            is ConflictShareException -> resources.getString(R.string.share_add_conflict_error)
             is CopyIntoDescendantException -> resources.getString(R.string.copy_file_invalid_into_descendent)
             is CopyIntoSameFolderException -> resources.getString(R.string.copy_file_invalid_overwrite)
             is FileAlreadyExistsException -> resources.getString(R.string.file_already_exists)
