@@ -78,6 +78,7 @@ class GraphShareFragment : Fragment() {
         val file = requireArguments().getParcelable<OCFile>(ARG_FILE)
         val accountName = requireArguments().getString(ARG_ACCOUNT_NAME)
         binding.addMemberButton.isVisible = file?.hasResharePermission ?: false
+        binding.addMemberButton.contentDescription = getString(R.string.content_description_add_share)
         binding.addMemberButton.setOnClickListener {
             if (file != null && accountName != null) {
                 graphShareViewModel.resetViewModel()
