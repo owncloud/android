@@ -729,6 +729,7 @@
     <string name="content_description_remove_password_button">Remove password</string>
     <string name="content_description_generate_password_button">Generate password</string>
     <string name="content_description_copy_password_button">Copy password</string>
+    <string name="content_description_remove_share_button">Remove share %1$s</string>
 
     <string name="create_shortcut_dialog_title">Create a shortcut</string>
     <string name="create_shortcut_dialog_url">URL</string>

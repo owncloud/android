@@ -37,6 +37,7 @@ class GraphSharesAdapter : RecyclerView.Adapter<GraphSharesAdapter.GraphShareVie
 
     private var shares: List<MemberPermission> = emptyList()
     private var rolesMap: Map<String, String> = emptyMap()
+    private var canRemoveShares = false
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GraphShareViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -58,6 +59,11 @@ class GraphSharesAdapter : RecyclerView.Adapter<GraphSharesAdapter.GraphShareVie
             )
             memberRole.text = roleNames.joinToString(", ")
 
+            removeMemberButton.apply {
+                contentDescription = holder.itemView.context.getString(R.string.content_description_remove_share_button, share.displayName)
+                isVisible = canRemoveShares
+            }
+
             val hasExpirationDate = share.expirationDateTime != null
             expirationCalendarIcon.isVisible = hasExpirationDate
             expirationDate.isVisible = hasExpirationDate
@@ -71,13 +77,15 @@ class GraphSharesAdapter : RecyclerView.Adapter<GraphSharesAdapter.GraphShareVie
 
     override fun getItemCount(): Int = shares.size
 
-    fun setShares(shares: List<MemberPermission>, roles: List<OCRole>) {
+    fun setShares(shares: List<MemberPermission>, roles: List<OCRole>, canRemoveShares: Boolean) {
+        val hasUserPermissionsChanged = this.canRemoveShares != canRemoveShares
+        this.canRemoveShares = canRemoveShares
         this.rolesMap = roles.associate { it.id to it.displayName }
         val sortedShares = shares.sortedWith(
             compareBy<MemberPermission> { it.isGroup }
                 .thenBy { it.displayName.lowercase() }
         )
-        val diffResult = DiffUtil.calculateDiff(GraphSharesDiffUtil(this.shares, sortedShares))
+        val diffResult = DiffUtil.calculateDiff(GraphSharesDiffUtil(this.shares, sortedShares, hasUserPermissionsChanged))
         this.shares = sortedShares
         diffResult.dispatchUpdatesTo(this)
     }
