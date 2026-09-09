@@ -32,6 +32,7 @@ import com.owncloud.android.R
 import com.owncloud.android.databinding.AddMemberFragmentBinding
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.members.model.OCMember
+import com.owncloud.android.domain.sharing.shares.model.MemberPermission
 import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.domain.roles.model.OCRole
 import com.owncloud.android.extensions.bindDatePickerDialog
@@ -62,8 +63,9 @@ class AddGraphShareFragment : Fragment(), SearchMembersAdapter.SearchMembersAdap
     private lateinit var searchMembersAdapter: SearchMembersAdapter
     private lateinit var rolesAdapter: SpaceRolesAdapter
     private lateinit var recyclerView: RecyclerView
-    private lateinit var roles: List<OCRole>
 
+    private var roles: List<OCRole> = emptyList()
+    private var currentShares: List<MemberPermission> = emptyList()
     private var searchMinLength = DEFAULT_SEARCH_MIN_LENGTH
     private var currentUserId: String? = null
 
@@ -86,8 +88,6 @@ class AddGraphShareFragment : Fragment(), SearchMembersAdapter.SearchMembersAdap
             adapter = searchMembersAdapter
         }
 
-        subscribeToViewModels()
-
         rolesAdapter = SpaceRolesAdapter(onRoleSelected = {
             binding.inviteMemberButton.isEnabled = true
             graphShareViewModel.onRoleSelected(it)
@@ -97,6 +97,8 @@ class AddGraphShareFragment : Fragment(), SearchMembersAdapter.SearchMembersAdap
             adapter = rolesAdapter
         }
         rolesAdapter.setRoles(roles)
+
+        subscribeToViewModels()
 
         binding.searchBar.apply {
             if (savedInstanceState == null) { requestFocus() }
@@ -120,9 +122,6 @@ class AddGraphShareFragment : Fragment(), SearchMembersAdapter.SearchMembersAdap
     }
 
     private fun subscribeToViewModels() {
-        val currentPermissions = (graphShareViewModel.shares.value?.peekContent() as? UIResult.Success)?.data
-        roles = currentPermissions?.roles ?: emptyList()
-        val currentShares = currentPermissions?.members ?: emptyList()
         searchMinLength = graphShareViewModel.capabilities?.filesSharingSearchMinLength ?: DEFAULT_SEARCH_MIN_LENGTH
 
         collectLatestLifecycleFlow(graphShareViewModel.userId) { event ->
@@ -135,6 +134,22 @@ class AddGraphShareFragment : Fragment(), SearchMembersAdapter.SearchMembersAdap
                     is UIResult.Error -> {
                         Timber.e(uiResult.error, "Failed to retrieve user id")
                     }
+                }
+            }
+        }
+
+        collectLatestLifecycleFlow(graphShareViewModel.shares) { event ->
+            event?.let {
+                when (val uiResult = event.peekContent()) {
+                    is UIResult.Success -> {
+                        uiResult.data?.let {
+                            roles = it.roles
+                            currentShares = it.members
+                            rolesAdapter.setRoles(roles)
+                        }
+                    }
+                    is UIResult.Loading -> { }
+                    is UIResult.Error -> { Timber.e(uiResult.error, "Failed to retrieve shares") }
                 }
             }
         }
