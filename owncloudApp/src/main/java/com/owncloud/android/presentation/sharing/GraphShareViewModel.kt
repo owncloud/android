@@ -35,6 +35,7 @@ import com.owncloud.android.domain.sharing.shares.usecases.AddGraphShareAsyncUse
 import com.owncloud.android.domain.sharing.shares.usecases.GetGraphSharesAsyncUseCase
 import com.owncloud.android.domain.sharing.shares.model.OCPermissions
 import com.owncloud.android.domain.user.usecases.GetUserIdAsyncUseCase
+import com.owncloud.android.domain.spaces.usecases.GetSpacePermissionsAsyncUseCase
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.ViewModelExt.runUseCaseWithResult
 import com.owncloud.android.presentation.common.UIResult
@@ -55,6 +56,7 @@ class GraphShareViewModel(
     private val getStoredCapabilitiesUseCase: GetStoredCapabilitiesUseCase,
     private val searchMembersUseCase: SearchMembersUseCase,
     private val getUserIdAsyncUseCase: GetUserIdAsyncUseCase,
+    private val getSpacePermissionsAsyncUseCase: GetSpacePermissionsAsyncUseCase,
     private val accountName: String,
     private val file: OCFile,
     private val coroutineDispatcherProvider: CoroutinesDispatcherProvider,
@@ -81,6 +83,9 @@ class GraphShareViewModel(
     private var searchJob: Job? = null
     var capabilities: OCCapability? = null
 
+    private val _spacePermissions = MutableStateFlow<Event<UIResult<List<String>>>?>(null)
+    val spacePermissions: StateFlow<Event<UIResult<List<String>>>?> = _spacePermissions
+
     init {
         runUseCaseWithResult(
             coroutineDispatcher = coroutineDispatcherProvider.io,
@@ -98,6 +103,24 @@ class GraphShareViewModel(
         viewModelScope.launch(coroutineDispatcherProvider.io) {
             capabilities = getStoredCapabilitiesUseCase(GetStoredCapabilitiesUseCase.Params(accountName))
         }
+        getSpacePermissions()
+    }
+
+    fun getSpacePermissions() {
+        val spaceId = file.spaceId
+        if (spaceId == null) {
+            _spacePermissions.update { Event(UIResult.Error(error = IncompleteFileDataException())) }
+            return
+        }
+
+        runUseCaseWithResult(
+            coroutineDispatcher = coroutineDispatcherProvider.io,
+            flow = _spacePermissions,
+            useCase = getSpacePermissionsAsyncUseCase,
+            useCaseParams = GetSpacePermissionsAsyncUseCase.Params(accountName = accountName, spaceId = spaceId),
+            showLoading = false,
+            requiresConnection = true
+        )
     }
 
     fun getGraphShares() {

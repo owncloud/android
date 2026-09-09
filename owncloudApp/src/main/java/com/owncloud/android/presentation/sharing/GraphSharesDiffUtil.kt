@@ -26,6 +26,7 @@ import com.owncloud.android.domain.sharing.shares.model.MemberPermission
 class GraphSharesDiffUtil(
     private val oldList: List<MemberPermission>,
     private val newList: List<MemberPermission>,
+    private val hasUserPermissionsChanged: Boolean = false,
 ) : DiffUtil.Callback() {
 
     override fun getOldListSize(): Int = oldList.size
@@ -36,5 +37,5 @@ class GraphSharesDiffUtil(
         oldList[oldItemPosition].id == newList[newItemPosition].id
 
     override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int) =
-        oldList[oldItemPosition] == newList[newItemPosition]
+        oldList[oldItemPosition] == newList[newItemPosition] && !hasUserPermissionsChanged
 }
