@@ -26,7 +26,6 @@ package com.owncloud.android.presentation.files.filelist
 
 import android.accounts.Account
 import android.content.Context
-import android.graphics.Bitmap
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
@@ -42,7 +41,8 @@ import com.owncloud.android.R
 import com.owncloud.android.databinding.GridItemBinding
 import com.owncloud.android.databinding.ItemFileListBinding
 import com.owncloud.android.databinding.ListFooterBinding
-import com.owncloud.android.datamodel.ThumbnailsCacheManager
+import com.owncloud.android.presentation.thumbnails.ThumbnailsRequester
+import coil.load
 import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.domain.files.model.OCFileWithSyncInfo
 import com.owncloud.android.domain.files.model.OCFooterFile
@@ -188,7 +188,6 @@ class FileListAdapter(
             val fileIcon = holder.itemView.findViewById<ImageView>(R.id.thumbnail).apply {
                 tag = file.id
             }
-            val thumbnail: Bitmap? = file.remoteId?.let { ThumbnailsCacheManager.getBitmapFromDiskCache(file.remoteId) }
 
             holder.itemView.findViewById<LinearLayout>(R.id.ListItemLayout)?.apply {
                 contentDescription = "LinearLayout-$name"
@@ -203,7 +202,7 @@ class FileListAdapter(
             holder.itemView.findViewById<ImageView>(R.id.shared_via_users_icon).isVisible =
                 file.sharedWithSharee == true || file.isSharedWithMe
 
-            setSpecificViewHolder(viewType, holder, fileWithSyncInfo, thumbnail)
+            setSpecificViewHolder(viewType, holder, fileWithSyncInfo)
 
             setIconPinAccordingToFilesLocalState(holder.itemView.findViewById(R.id.localFileIndicator), fileWithSyncInfo)
 
@@ -237,22 +236,12 @@ class FileListAdapter(
                 // Folder
                 fileIcon.setImageResource(R.drawable.ic_menu_archive)
             } else {
-                // Set file icon depending on its mimetype. Ask for thumbnail later.
-                fileIcon.setImageResource(MimetypeIconUtil.getFileTypeIconId(file.mimeType, file.fileName))
-
-                if (thumbnail != null) {
-                    fileIcon.setImageBitmap(thumbnail)
-                }
-                if (file.needsToUpdateThumbnail && ThumbnailsCacheManager.cancelPotentialThumbnailWork(file, fileIcon)) {
-                    // generate new Thumbnail
-                    val task = ThumbnailsCacheManager.ThumbnailGenerationTask(fileIcon, account)
-                    val asyncDrawable = ThumbnailsCacheManager.AsyncThumbnailDrawable(context.resources, thumbnail, task)
-
-                    // If drawable is not visible, do not update it.
-                    if (asyncDrawable.minimumHeight > 0 && asyncDrawable.minimumWidth > 0) {
-                        fileIcon.setImageDrawable(asyncDrawable)
-                    }
-                    task.execute(file)
+                fileIcon.load(
+                    ThumbnailsRequester.getPreviewUriForFile(fileWithSyncInfo, account!!),
+                    ThumbnailsRequester.getCoilImageLoader()
+                ) {
+                    placeholder(MimetypeIconUtil.getFileTypeIconId(file.mimeType, file.fileName))
+                    error(MimetypeIconUtil.getFileTypeIconId(file.mimeType, file.fileName))
                 }
 
                 if (file.mimeType == "image/png") {
@@ -272,7 +261,7 @@ class FileListAdapter(
         }
     }
 
-    private fun setSpecificViewHolder(viewType: Int, holder: RecyclerView.ViewHolder, fileWithSyncInfo: OCFileWithSyncInfo, thumbnail: Bitmap?) {
+    private fun setSpecificViewHolder(viewType: Int, holder: RecyclerView.ViewHolder, fileWithSyncInfo: OCFileWithSyncInfo) {
         val file = fileWithSyncInfo.file
 
         when (viewType) {
@@ -327,23 +316,14 @@ class FileListAdapter(
                 val fileIcon = holder.itemView.findViewById<ImageView>(R.id.thumbnail)
                 val layoutParams = fileIcon.layoutParams as ViewGroup.MarginLayoutParams
 
-                if (thumbnail == null) {
-                    view.binding.Filename.text = file.fileName
-                    // Reset layout params values default
-                    manageGridLayoutParams(
-                        layoutParams = layoutParams,
-                        marginVertical = 0,
-                        height = context.resources.getDimensionPixelSize(R.dimen.item_file_grid_height),
-                        width = context.resources.getDimensionPixelSize(R.dimen.item_file_grid_width),
-                    )
-                } else {
-                    manageGridLayoutParams(
-                        layoutParams = layoutParams,
-                        marginVertical = context.resources.getDimensionPixelSize(R.dimen.item_file_image_grid_margin),
-                        height = ViewGroup.LayoutParams.MATCH_PARENT,
-                        width = ViewGroup.LayoutParams.MATCH_PARENT,
-                    )
-                }
+                view.binding.Filename.text = file.fileName
+                // Reset layout params values default
+                manageGridLayoutParams(
+                    layoutParams = layoutParams,
+                    marginVertical = 0,
+                    height = context.resources.getDimensionPixelSize(R.dimen.item_file_grid_height),
+                    width = context.resources.getDimensionPixelSize(R.dimen.item_file_grid_width),
+                )
             }
         }
     }
@@ -412,7 +392,7 @@ class FileListAdapter(
             }
 
             filesCount == 1 -> {
-                 when {
+                when {
                     foldersCount <= 0 -> {
                         context.getString(R.string.file_list__footer__file)
                     }
