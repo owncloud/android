@@ -236,7 +236,7 @@ class PassCodeActivity : ToolbarActivity(), NumberKeyboardListener, EnableBiomet
             passCodeEditTexts.first()?.requestFocus()
         })
 
-        passCodeViewModel.status.observe(this) { status ->
+        passCodeViewModel.status.observe(this, Event.EventObserver { status ->
             when (status.action) {
                 PasscodeAction.CHECK -> {
                     when (status.type) {
@@ -262,7 +262,7 @@ class PassCodeActivity : ToolbarActivity(), NumberKeyboardListener, EnableBiomet
                     }
                 }
             }
-        }
+        })
 
         passCodeViewModel.passcode.observe(this) { passcode ->
             passCodeEditTexts.forEachIndexed { index, editText ->

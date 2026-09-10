@@ -57,8 +57,8 @@ class PassCodeViewModel(
     val passcode: LiveData<String>
         get() = _passcode
 
-    private var _status = MutableLiveData<Status>()
-    val status: LiveData<Status>
+    private var _status = MutableLiveData<Event<Status>>()
+    val status: LiveData<Event<Status>>
         get() = _status
 
     private var numberOfPasscodeDigits: Int
@@ -116,24 +116,24 @@ class PassCodeViewModel(
             if (passCode != null && passCode.length < getNumberOfPassCodeDigits()) {
                 setMigrationRequired(true)
                 removePassCode()
-                _status.postValue(Status(PasscodeAction.CHECK, PasscodeType.MIGRATION))
+                _status.postValue(Event(Status(PasscodeAction.CHECK, PasscodeType.MIGRATION)))
             }
-            _status.postValue(Status(PasscodeAction.CHECK, PasscodeType.OK))
+            _status.postValue(Event(Status(PasscodeAction.CHECK, PasscodeType.OK)))
             resetNumberOfAttempts()
         } else {
             increaseNumberOfAttempts()
             clearPassCode()
-            _status.postValue(Status(PasscodeAction.CHECK, PasscodeType.ERROR))
+            _status.postValue(Event(Status(PasscodeAction.CHECK, PasscodeType.ERROR)))
         }
     }
 
     private fun actionRemovePasscode() {
         if (checkPassCodeIsValid(passcodeString.toString())) {
             removePassCode()
-            _status.postValue(Status(PasscodeAction.REMOVE, PasscodeType.OK))
+            _status.postValue(Event(Status(PasscodeAction.REMOVE, PasscodeType.OK)))
         } else {
             clearPassCode()
-            _status.postValue(Status(PasscodeAction.REMOVE, PasscodeType.ERROR))
+            _status.postValue(Event(Status(PasscodeAction.REMOVE, PasscodeType.ERROR)))
         }
     }
 
@@ -142,13 +142,13 @@ class PassCodeViewModel(
         if (!confirmingPassCode) {
             requestPassCodeConfirmation()
             clearPassCode()
-            _status.postValue(Status(PasscodeAction.CREATE, PasscodeType.NO_CONFIRM))
+            _status.postValue(Event(Status(PasscodeAction.CREATE, PasscodeType.NO_CONFIRM)))
         } else if (confirmPassCode()) {
             setPassCode()
-            _status.postValue(Status(PasscodeAction.CREATE, PasscodeType.CONFIRM))
+            _status.postValue(Event(Status(PasscodeAction.CREATE, PasscodeType.CONFIRM)))
         } else {
             clearPassCode()
-            _status.postValue(Status(PasscodeAction.CREATE, PasscodeType.ERROR))
+            _status.postValue(Event(Status(PasscodeAction.CREATE, PasscodeType.ERROR)))
         }
     }
 
