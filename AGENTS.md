@@ -57,7 +57,7 @@ Build types: `debug` / `release`. Combined targets follow the pattern `assembleO
 ## SDK & Toolchain
 
 - Min SDK 28 (Android 9), Target/Compile SDK 36
-- Kotlin 2.3.10, JDK 17, AGP 9.2.1
+- Kotlin 2.3.10, JDK 17, AGP 9.2.1, Gradle 9.7.1
 - Version catalog: `gradle/libs.versions.toml`
 
 ## Build & Test Commands
