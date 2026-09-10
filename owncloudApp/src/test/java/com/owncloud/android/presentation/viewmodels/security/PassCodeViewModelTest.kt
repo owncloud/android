@@ -143,7 +143,7 @@ class PassCodeViewModelTest : ViewModelTest() {
         passCodeViewModel.onNumberClicked(1)
         passCodeViewModel.onNumberClicked(1)
 
-        assertEquals(Status(PasscodeAction.CHECK, PasscodeType.OK), passCodeViewModel.status.value)
+        assertEquals(Status(PasscodeAction.CHECK, PasscodeType.OK), passCodeViewModel.status.value?.peekContent())
 
         verify(exactly = 1) {
             preferencesProvider.putInt(PREFERENCE_LOCK_ATTEMPTS, 0)
@@ -161,7 +161,7 @@ class PassCodeViewModelTest : ViewModelTest() {
         passCodeViewModel.onNumberClicked(1)
         passCodeViewModel.onNumberClicked(1)
 
-        assertEquals(Status(PasscodeAction.CHECK, PasscodeType.ERROR), passCodeViewModel.status.value)
+        assertEquals(Status(PasscodeAction.CHECK, PasscodeType.ERROR), passCodeViewModel.status.value?.peekContent())
 
         verify(exactly = 1) {
             preferencesProvider.putInt(PREFERENCE_LOCK_ATTEMPTS, any())
@@ -180,7 +180,7 @@ class PassCodeViewModelTest : ViewModelTest() {
         passCodeViewModel.onNumberClicked(1)
         passCodeViewModel.onNumberClicked(1)
 
-        assertEquals(Status(PasscodeAction.REMOVE, PasscodeType.OK), passCodeViewModel.status.value)
+        assertEquals(Status(PasscodeAction.REMOVE, PasscodeType.OK), passCodeViewModel.status.value?.peekContent())
 
         verify(exactly = 1) {
             preferencesProvider.removePreference(PREFERENCE_PASSCODE)
@@ -199,7 +199,7 @@ class PassCodeViewModelTest : ViewModelTest() {
         passCodeViewModel.onNumberClicked(1)
         passCodeViewModel.onNumberClicked(1)
 
-        assertEquals(Status(PasscodeAction.REMOVE, PasscodeType.ERROR), passCodeViewModel.status.value)
+        assertEquals(Status(PasscodeAction.REMOVE, PasscodeType.ERROR), passCodeViewModel.status.value?.peekContent())
     }
 
     @Test
@@ -212,7 +212,7 @@ class PassCodeViewModelTest : ViewModelTest() {
         passCodeViewModel.onNumberClicked(1)
         passCodeViewModel.onNumberClicked(1)
 
-        assertEquals(Status(PasscodeAction.CREATE, PasscodeType.NO_CONFIRM), passCodeViewModel.status.value)
+        assertEquals(Status(PasscodeAction.CREATE, PasscodeType.NO_CONFIRM), passCodeViewModel.status.value?.peekContent())
     }
 
     @Test
@@ -231,7 +231,7 @@ class PassCodeViewModelTest : ViewModelTest() {
         passCodeViewModel.onNumberClicked(1)
         passCodeViewModel.onNumberClicked(1)
 
-        assertEquals(Status(PasscodeAction.CREATE, PasscodeType.CONFIRM), passCodeViewModel.status.value)
+        assertEquals(Status(PasscodeAction.CREATE, PasscodeType.CONFIRM), passCodeViewModel.status.value?.peekContent())
 
         verify(exactly = 1) {
             preferencesProvider.putString(PREFERENCE_PASSCODE, any())
@@ -255,7 +255,7 @@ class PassCodeViewModelTest : ViewModelTest() {
         passCodeViewModel.onNumberClicked(1)
         passCodeViewModel.onNumberClicked(1)
 
-        assertEquals(Status(PasscodeAction.CREATE, PasscodeType.ERROR), passCodeViewModel.status.value)
+        assertEquals(Status(PasscodeAction.CREATE, PasscodeType.ERROR), passCodeViewModel.status.value?.peekContent())
     }
 
     @Test

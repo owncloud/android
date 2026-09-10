@@ -66,7 +66,7 @@ class PassCodeActivityTest {
 
     private lateinit var timeToUnlockLiveData: MutableLiveData<Event<String>>
     private lateinit var finishTimeToUnlockLiveData: MutableLiveData<Event<Boolean>>
-    private lateinit var statusLiveData: MutableLiveData<Status>
+    private lateinit var statusLiveData: MutableLiveData<Event<Status>>
     private lateinit var passcodeLiveData: MutableLiveData<String>
 
     private lateinit var passCodeViewModel: PassCodeViewModel
@@ -206,7 +206,7 @@ class PassCodeActivityTest {
         // Open Activity in passcode creation mode
         openPasscodeActivity(PassCodeActivity.ACTION_CREATE)
 
-        statusLiveData.postValue(Status(PasscodeAction.CREATE, PasscodeType.NO_CONFIRM))
+        statusLiveData.postValue(Event(Status(PasscodeAction.CREATE, PasscodeType.NO_CONFIRM)))
 
         with(R.id.header) {
             isDisplayed(true)
@@ -224,7 +224,7 @@ class PassCodeActivityTest {
         // Open Activity in passcode creation mode
         openPasscodeActivity(PassCodeActivity.ACTION_CREATE)
 
-        statusLiveData.postValue(Status(PasscodeAction.CREATE, PasscodeType.CONFIRM))
+        statusLiveData.postValue(Event(Status(PasscodeAction.CREATE, PasscodeType.CONFIRM)))
 
         // Click dialog's enable option
         onView(withText(R.string.common_yes)).perform(click())
@@ -238,7 +238,7 @@ class PassCodeActivityTest {
         // Open Activity in passcode creation mode
         openPasscodeActivity(PassCodeActivity.ACTION_CREATE)
 
-        statusLiveData.postValue(Status(PasscodeAction.CREATE, PasscodeType.ERROR))
+        statusLiveData.postValue(Event(Status(PasscodeAction.CREATE, PasscodeType.ERROR)))
 
         with(R.id.header) {
             isDisplayed(true)
@@ -278,7 +278,7 @@ class PassCodeActivityTest {
         // Open Activity in passcode deletion mode
         openPasscodeActivity(PassCodeActivity.ACTION_REMOVE)
 
-        statusLiveData.postValue(Status(PasscodeAction.REMOVE, PasscodeType.OK))
+        statusLiveData.postValue(Event(Status(PasscodeAction.REMOVE, PasscodeType.OK)))
 
         assertEquals(activityScenario.result.resultCode, Activity.RESULT_OK)
     }
@@ -288,7 +288,7 @@ class PassCodeActivityTest {
         // Open Activity in passcode deletion mode
         openPasscodeActivity(PassCodeActivity.ACTION_REMOVE)
 
-        statusLiveData.postValue(Status(PasscodeAction.REMOVE, PasscodeType.ERROR))
+        statusLiveData.postValue(Event(Status(PasscodeAction.REMOVE, PasscodeType.ERROR)))
 
         with(R.id.header) {
             isDisplayed(true)
@@ -311,7 +311,7 @@ class PassCodeActivityTest {
         // Open Activity in passcode creation mode
         openPasscodeActivity(PassCodeActivity.ACTION_CREATE)
 
-        statusLiveData.postValue(Status(PasscodeAction.CREATE, PasscodeType.CONFIRM))
+        statusLiveData.postValue(Event(Status(PasscodeAction.CREATE, PasscodeType.CONFIRM)))
 
         onView(withText(R.string.biometric_dialog_title)).check(matches(isDisplayed()))
         onView(withText(R.string.common_yes)).check(matches(isDisplayed()))
@@ -325,7 +325,7 @@ class PassCodeActivityTest {
         // Open Activity in passcode creation mode
         openPasscodeActivity(PassCodeActivity.ACTION_CREATE)
 
-        statusLiveData.postValue(Status(PasscodeAction.CREATE, PasscodeType.CONFIRM))
+        statusLiveData.postValue(Event(Status(PasscodeAction.CREATE, PasscodeType.CONFIRM)))
 
         onView(withText(R.string.common_yes)).perform(click())
 
@@ -340,7 +340,7 @@ class PassCodeActivityTest {
         // Open Activity in passcode creation mode
         openPasscodeActivity(PassCodeActivity.ACTION_CREATE)
 
-        statusLiveData.postValue(Status(PasscodeAction.CREATE, PasscodeType.CONFIRM))
+        statusLiveData.postValue(Event(Status(PasscodeAction.CREATE, PasscodeType.CONFIRM)))
 
         onView(withText(R.string.common_no)).perform(click())
 
