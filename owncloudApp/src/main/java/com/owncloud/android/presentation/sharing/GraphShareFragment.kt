@@ -20,6 +20,7 @@
 
 package com.owncloud.android.presentation.sharing
 
+import android.app.AlertDialog
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -32,6 +33,8 @@ import com.owncloud.android.R
 import com.owncloud.android.databinding.MembersFragmentBinding
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.roles.model.OCRole
+import com.owncloud.android.domain.sharing.shares.model.MemberPermission
+import com.owncloud.android.extensions.avoidScreenshotsIfNeeded
 import com.owncloud.android.extensions.collectLatestLifecycleFlow
 import com.owncloud.android.extensions.showErrorInSnackbar
 import com.owncloud.android.extensions.showMessageInSnackbar
@@ -40,7 +43,7 @@ import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import org.koin.core.parameter.parametersOf
 import timber.log.Timber
 
-class GraphShareFragment : Fragment() {
+class GraphShareFragment : Fragment(), GraphSharesAdapter.GraphSharesAdapterListener {
     private var _binding: MembersFragmentBinding? = null
     private val binding get() = _binding!!
 
@@ -66,7 +69,7 @@ class GraphShareFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.membersTitle.text = getString(R.string.share_with_people_title)
 
-        graphSharesAdapter = GraphSharesAdapter()
+        graphSharesAdapter = GraphSharesAdapter(this)
         binding.membersRecyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = graphSharesAdapter
@@ -103,6 +106,15 @@ class GraphShareFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onRemoveShare(share: MemberPermission) {
+        AlertDialog.Builder(requireContext())
+            .setMessage(getString(R.string.confirmation_remove_share_message, share.displayName))
+            .setPositiveButton(getString(R.string.common_yes)) { _, _ ->  }
+            .setNegativeButton(getString(R.string.common_no)) { dialog, _ -> dialog.dismiss() }
+            .show()
+            .avoidScreenshotsIfNeeded()
     }
 
     private fun subscribeToViewModels() {
