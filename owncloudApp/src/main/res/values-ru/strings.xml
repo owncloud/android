@@ -677,6 +677,7 @@
     <string name="create_space_dialog_name">Имя</string>
     <string name="create_space_dialog_subtitle">подзаголовок</string>
     <string name="create_space_dialog_quota">Квота</string>
+    <string name="create_space_dialog_gb_unit">ГБ</string>
     <string name="disabled_space_label">Отключена</string>
     <string name="members_title">Участники</string>
     <string name="link_role_accessibility">Ссылка</string>
