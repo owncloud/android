@@ -1,0 +1,6 @@
+Bugfix: Show the full description of space permissions
+
+More room has been given to the description of a role in the space member permissions list, so longer descriptions are no longer cut after the second line, and any text that still does not fit is ellipsized.
+
+https://github.com/owncloud/android/issues/4968
+https://github.com/owncloud/android/pull/4976
