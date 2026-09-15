@@ -59,6 +59,7 @@ class GraphShareFragment : Fragment(), GraphSharesAdapter.GraphSharesAdapterList
     private var roles: List<OCRole> = emptyList()
     private var listener: GraphShareFragmentListener? = null
     private var canRemoveShares: Boolean = false
+    private var canEditShares: Boolean = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = MembersFragmentBinding.inflate(inflater, container, false)
@@ -156,7 +157,7 @@ class GraphShareFragment : Fragment(), GraphSharesAdapter.GraphSharesAdapterList
                             val hasMembers = it.members.isNotEmpty()
                             binding.membersRecyclerView.isVisible = hasMembers
                             binding.noSharesMessage.isVisible = !hasMembers
-                            graphSharesAdapter.setShares(it.members, it.roles, canRemoveShares)
+                            graphSharesAdapter.setShares(it.members, it.roles, canRemoveShares, canEditShares)
                             binding.swipeRefreshMembers.isRefreshing = false
                         }
                     }
@@ -191,6 +192,7 @@ class GraphShareFragment : Fragment(), GraphSharesAdapter.GraphSharesAdapterList
 
     private fun checkPermissions(spacePermissions: List<String>) {
         canRemoveShares = DRIVES_DELETE_PERMISSION in spacePermissions
+        canEditShares = DRIVES_UPDATE_PERMISSION in spacePermissions
     }
 
     private fun observeAddShareResult() {
@@ -232,6 +234,7 @@ class GraphShareFragment : Fragment(), GraphSharesAdapter.GraphSharesAdapterList
         private const val ARG_FILE = "FILE"
         private const val ARG_ACCOUNT_NAME = "ACCOUNT_NAME"
         private const val DRIVES_DELETE_PERMISSION = "libre.graph/driveItem/permissions/delete"
+        private const val DRIVES_UPDATE_PERMISSION = "libre.graph/driveItem/permissions/update"
 
         fun newInstance(file: OCFile, accountName: String): GraphShareFragment {
             val args = Bundle().apply {

@@ -40,6 +40,7 @@ class GraphSharesAdapter(
     private var shares: List<MemberPermission> = emptyList()
     private var rolesMap: Map<String, String> = emptyMap()
     private var canRemoveShares = false
+    private var canEditShares = false
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GraphShareViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -69,6 +70,11 @@ class GraphSharesAdapter(
                 }
             }
 
+            editMemberButton.apply {
+                contentDescription = holder.itemView.context.getString(R.string.content_description_edit_share, share.displayName)
+                isVisible = canEditShares
+            }
+
             val hasExpirationDate = share.expirationDateTime != null
             expirationCalendarIcon.isVisible = hasExpirationDate
             expirationDate.isVisible = hasExpirationDate
@@ -82,9 +88,10 @@ class GraphSharesAdapter(
 
     override fun getItemCount(): Int = shares.size
 
-    fun setShares(shares: List<MemberPermission>, roles: List<OCRole>, canRemoveShares: Boolean) {
-        val hasUserPermissionsChanged = this.canRemoveShares != canRemoveShares
+    fun setShares(shares: List<MemberPermission>, roles: List<OCRole>, canRemoveShares: Boolean, canEditShares: Boolean) {
+        val hasUserPermissionsChanged = this.canRemoveShares != canRemoveShares || this.canEditShares != canEditShares
         this.canRemoveShares = canRemoveShares
+        this.canEditShares = canEditShares
         this.rolesMap = roles.associate { it.id to it.displayName }
         val sortedShares = shares.sortedWith(
             compareBy<MemberPermission> { it.isGroup }
