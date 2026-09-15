@@ -61,6 +61,7 @@ class OCShareRepositoryTest {
     private val password = "password"
     private val permissions = OC_SHARE.permissions
     private val expiration = RemoteShare.INIT_EXPIRATION_DATE_IN_MILLIS
+    private val shareId = "share-id"
 
     @Test
     fun `insertPrivateShare inserts a private OCShare correctly`() {
@@ -287,6 +288,34 @@ class OCShareRepositoryTest {
                 member = OC_USER_MEMBER,
                 roleId = SPACE_MEMBERS.roles[0].id,
                 expirationDate = null
+            )
+        }
+    }
+
+    @Test
+    fun `removeGraphShare removes a share correctly`() {
+        every {
+            remoteShareDataSource.removeGraphShare(
+                accountName = OC_ACCOUNT_NAME,
+                spaceId = OC_SPACE_PROJECT_WITH_IMAGE.id,
+                itemId = OC_FILE.remoteId.orEmpty(),
+                shareId = shareId
+            )
+        } returns Unit
+
+        ocShareRepository.removeGraphShare(
+            accountName = OC_ACCOUNT_NAME,
+            spaceId = OC_SPACE_PROJECT_WITH_IMAGE.id,
+            itemId = OC_FILE.remoteId.orEmpty(),
+            shareId = shareId
+        )
+
+        verify(exactly = 1) {
+            remoteShareDataSource.removeGraphShare(
+                accountName = OC_ACCOUNT_NAME,
+                spaceId = OC_SPACE_PROJECT_WITH_IMAGE.id,
+                itemId = OC_FILE.remoteId.orEmpty(),
+                shareId = shareId
             )
         }
     }

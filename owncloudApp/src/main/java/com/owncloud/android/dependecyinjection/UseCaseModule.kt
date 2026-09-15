@@ -100,6 +100,7 @@ import com.owncloud.android.domain.sharing.shares.usecases.GetGraphSharesAsyncUs
 import com.owncloud.android.domain.sharing.shares.usecases.GetShareAsLiveDataUseCase
 import com.owncloud.android.domain.sharing.shares.usecases.GetSharesAsLiveDataUseCase
 import com.owncloud.android.domain.sharing.shares.usecases.RefreshSharesFromServerAsyncUseCase
+import com.owncloud.android.domain.sharing.shares.usecases.RemoveGraphShareAsyncUseCase
 import com.owncloud.android.domain.spaces.usecases.CreateSpaceUseCase
 import com.owncloud.android.domain.spaces.usecases.DisableSpaceUseCase
 import com.owncloud.android.domain.spaces.usecases.EditSpaceImageUseCase
@@ -241,6 +242,7 @@ val useCaseModule = module {
     factoryOf(::GetShareesAsyncUseCase)
     factoryOf(::GetSharesAsLiveDataUseCase)
     factoryOf(::RefreshSharesFromServerAsyncUseCase)
+    factoryOf(::RemoveGraphShareAsyncUseCase)
 
     // Spaces
     factoryOf(::CreateSpaceUseCase)
