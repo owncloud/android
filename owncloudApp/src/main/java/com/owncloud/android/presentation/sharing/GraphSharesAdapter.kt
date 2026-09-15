@@ -62,7 +62,7 @@ class GraphSharesAdapter(
             memberRole.text = roleNames.joinToString(", ")
 
             removeMemberButton.apply {
-                contentDescription = holder.itemView.context.getString(R.string.content_description_remove_share_button, share.displayName)
+                contentDescription = holder.itemView.context.getString(R.string.content_description_delete_share, share.displayName)
                 isVisible = canRemoveShares
                 setOnClickListener {
                     listener.onRemoveShare(share)
