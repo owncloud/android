@@ -55,6 +55,7 @@ class GraphShareFragment : Fragment() {
 
     private var roles: List<OCRole> = emptyList()
     private var listener: GraphShareFragmentListener? = null
+    private var canEditShares: Boolean = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = MembersFragmentBinding.inflate(inflater, container, false)
@@ -107,6 +108,7 @@ class GraphShareFragment : Fragment() {
     private fun subscribeToViewModels() {
         observeRoles()
         observeShares()
+        observeSpacePermissions()
         observeAddShareResult()
     }
 
@@ -139,7 +141,7 @@ class GraphShareFragment : Fragment() {
                             val hasMembers = it.members.isNotEmpty()
                             binding.membersRecyclerView.isVisible = hasMembers
                             binding.noSharesMessage.isVisible = !hasMembers
-                            graphSharesAdapter.setShares(it.members, it.roles)
+                            graphSharesAdapter.setShares(it.members, it.roles, canEditShares)
                             binding.swipeRefreshMembers.isRefreshing = false
                         }
                     }
@@ -152,6 +154,28 @@ class GraphShareFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun observeSpacePermissions() {
+        collectLatestLifecycleFlow(graphShareViewModel.spacePermissions) { event ->
+            event?.let {
+                when (val uiResult = event.peekContent()) {
+                    is UIResult.Success -> {
+                        uiResult.data?.let { spacePermissions ->
+                            checkPermissions(spacePermissions)
+                        }
+                    }
+                    is UIResult.Loading -> { }
+                    is UIResult.Error -> {
+                        Timber.e(uiResult.error, "Failed to retrieve space permissions")
+                    }
+                }
+            }
+        }
+    }
+
+    private fun checkPermissions(spacePermissions: List<String>) {
+        canEditShares = DRIVES_UPDATE_PERMISSION in spacePermissions
     }
 
     private fun observeAddShareResult() {
@@ -176,6 +200,7 @@ class GraphShareFragment : Fragment() {
     companion object {
         private const val ARG_FILE = "FILE"
         private const val ARG_ACCOUNT_NAME = "ACCOUNT_NAME"
+        private const val DRIVES_UPDATE_PERMISSION = "libre.graph/driveItem/permissions/update"
 
         fun newInstance(file: OCFile, accountName: String): GraphShareFragment {
             val args = Bundle().apply {
