@@ -111,7 +111,7 @@ class GraphShareFragment : Fragment(), GraphSharesAdapter.GraphSharesAdapterList
     override fun onRemoveShare(share: MemberPermission) {
         AlertDialog.Builder(requireContext())
             .setMessage(getString(R.string.confirmation_remove_share_message, share.displayName))
-            .setPositiveButton(getString(R.string.common_yes)) { _, _ ->  }
+            .setPositiveButton(getString(R.string.common_yes)) { _, _ -> graphShareViewModel.removeGraphShare(share.id) }
             .setNegativeButton(getString(R.string.common_no)) { dialog, _ -> dialog.dismiss() }
             .show()
             .avoidScreenshotsIfNeeded()
@@ -122,6 +122,7 @@ class GraphShareFragment : Fragment(), GraphSharesAdapter.GraphSharesAdapterList
         observeShares()
         observeSpacePermissions()
         observeAddShareResult()
+        observeRemoveShareResult()
     }
 
     private fun observeRoles() {
@@ -200,6 +201,22 @@ class GraphShareFragment : Fragment(), GraphSharesAdapter.GraphSharesAdapterList
                         graphShareViewModel.resetViewModel()
                     }
                     is UIResult.Error -> { }
+                }
+            }
+        }
+    }
+
+    private fun observeRemoveShareResult() {
+        collectLatestLifecycleFlow(graphShareViewModel.removeShareResultFlow) { uiResult ->
+            when (uiResult) {
+                is UIResult.Loading -> { }
+                is UIResult.Success -> {
+                    showMessageInSnackbar(getString(R.string.share_remove_correctly))
+                    graphShareViewModel.getGraphShares()
+                }
+                is UIResult.Error -> {
+                    showErrorInSnackbar(R.string.share_remove_failed, uiResult.error)
+                    Timber.e(uiResult.error, "Failed to remove a graph share")
                 }
             }
         }

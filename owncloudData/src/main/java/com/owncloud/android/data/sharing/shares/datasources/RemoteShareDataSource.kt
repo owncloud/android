@@ -50,6 +50,13 @@ interface RemoteShareDataSource {
         expirationDate: String?
     )
 
+    fun removeGraphShare(
+        accountName: String,
+        spaceId: String,
+        itemId: String,
+        shareId: String
+    )
+
     fun insert(
         remoteFilePath: String,
         shareType: ShareType,

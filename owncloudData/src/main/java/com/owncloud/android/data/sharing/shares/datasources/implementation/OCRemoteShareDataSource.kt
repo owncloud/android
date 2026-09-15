@@ -83,6 +83,17 @@ class OCRemoteShareDataSource(
         }
     }
 
+    override fun removeGraphShare(
+        accountName: String,
+        spaceId: String,
+        itemId: String,
+        shareId: String
+    ) {
+        executeRemoteOperation {
+            clientManager.getShareService(accountName).removeGraphShare(spaceId, itemId, shareId)
+        }
+    }
+
     override fun insert(
         remoteFilePath: String,
         shareType: ShareType,

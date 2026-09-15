@@ -93,6 +93,13 @@ interface ShareRepository {
         expirationDate: String?
     )
 
+    fun removeGraphShare(
+        accountName: String,
+        spaceId: String,
+        itemId: String,
+        shareId: String
+    )
+
     fun refreshSharesFromNetwork(filePath: String, accountName: String)
 
     fun deleteShare(remoteId: String, accountName: String)
