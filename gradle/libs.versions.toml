@@ -44,7 +44,7 @@ moshi = "1.15.2"
 patternlockview = "a90b0d4bf0"
 photoView = "2.3.0"
 preference = "1.2.1"
-sonarqube = "4.0.0.2929"
+sonarqube = "7.5.0.8588"
 stetho = "1.6.0"
 timber = "5.0.1"
 
