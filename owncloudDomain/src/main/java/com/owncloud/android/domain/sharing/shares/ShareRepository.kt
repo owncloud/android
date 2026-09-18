@@ -100,6 +100,15 @@ interface ShareRepository {
         shareId: String
     )
 
+    fun editGraphShare(
+        accountName: String,
+        spaceId: String,
+        itemId: String,
+        shareId: String,
+        roleId: String,
+        expirationDate: String?
+    )
+
     fun refreshSharesFromNetwork(filePath: String, accountName: String)
 
     fun deleteShare(remoteId: String, accountName: String)

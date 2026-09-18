@@ -70,6 +70,7 @@ class AddGraphShareFragment : Fragment(), SearchMembersAdapter.SearchMembersAdap
     private var searchMinLength = DEFAULT_SEARCH_MIN_LENGTH
     private var currentUserId: String? = null
     private var editMode = false
+    private var selectedShareId = ""
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = AddMemberFragmentBinding.inflate(inflater, container, false)
@@ -218,7 +219,11 @@ class AddGraphShareFragment : Fragment(), SearchMembersAdapter.SearchMembersAdap
                 binding.inviteMemberButton.setOnClickListener {
                     uiState.selectedMember?.let { selectedMember ->
                         uiState.selectedRole?.let { selectedRole ->
-                            graphShareViewModel.addGraphShare(selectedMember, selectedRole.id)
+                            if (editMode) {
+                                graphShareViewModel.editGraphShare(selectedShareId, selectedRole.id, uiState.selectedExpirationDate)
+                            } else {
+                                graphShareViewModel.addGraphShare(selectedMember, selectedRole.id)
+                            }
                         }
                     }
                 }
@@ -234,9 +239,20 @@ class AddGraphShareFragment : Fragment(), SearchMembersAdapter.SearchMembersAdap
                 }
             }
         }
+
+        collectLatestLifecycleFlow(graphShareViewModel.editShareResultFlow) { event ->
+            event?.peekContent()?.let { uiResult ->
+                when (uiResult) {
+                    is UIResult.Loading -> { }
+                    is UIResult.Success -> parentFragmentManager.popBackStack()
+                    is UIResult.Error -> showErrorInSnackbar(R.string.share_edit_failed, uiResult.error)
+                }
+            }
+        }
     }
 
     private fun bindEditMode(share: MemberPermission, roles: List<OCRole>) {
+        selectedShareId = share.id
         graphShareViewModel.onMemberSelected(share.toOCMember())
 
         val selectedRole = roles.first { it.id == share.roles[0] }

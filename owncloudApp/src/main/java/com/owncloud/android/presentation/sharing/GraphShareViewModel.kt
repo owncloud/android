@@ -32,6 +32,7 @@ import com.owncloud.android.domain.members.usecases.SearchMembersUseCase
 import com.owncloud.android.domain.roles.model.OCRole
 import com.owncloud.android.domain.roles.usecases.GetRolesAsyncUseCase
 import com.owncloud.android.domain.sharing.shares.usecases.AddGraphShareAsyncUseCase
+import com.owncloud.android.domain.sharing.shares.usecases.EditGraphShareAsyncUseCase
 import com.owncloud.android.domain.sharing.shares.usecases.GetGraphSharesAsyncUseCase
 import com.owncloud.android.domain.sharing.shares.usecases.RemoveGraphShareAsyncUseCase
 import com.owncloud.android.domain.sharing.shares.model.OCPermissions
@@ -52,6 +53,7 @@ import kotlinx.coroutines.launch
 
 class GraphShareViewModel(
     private val addGraphShareAsyncUseCase: AddGraphShareAsyncUseCase,
+    private val editGraphShareAsyncUseCase: EditGraphShareAsyncUseCase,
     private val getRolesAsyncUseCase: GetRolesAsyncUseCase,
     private val getGraphSharesAsyncUseCase: GetGraphSharesAsyncUseCase,
     private val getStoredCapabilitiesUseCase: GetStoredCapabilitiesUseCase,
@@ -84,6 +86,9 @@ class GraphShareViewModel(
 
     private val _removeShareResultFlow = MutableSharedFlow<UIResult<Unit>>()
     val removeShareResultFlow: SharedFlow<UIResult<Unit>> = _removeShareResultFlow
+
+    private val _editShareResultFlow = MutableStateFlow<Event<UIResult<Unit>>?>(null)
+    val editShareResultFlow: StateFlow<Event<UIResult<Unit>>?> = _editShareResultFlow
 
     private var searchJob: Job? = null
     var capabilities: OCCapability? = null
@@ -195,6 +200,29 @@ class GraphShareViewModel(
         )
     }
 
+    fun editGraphShare(shareId: String, roleId: String, expirationDate: String?) {
+        val spaceId = file.spaceId
+        val itemId = file.remoteId
+        if (spaceId == null || itemId == null) {
+            _editShareResultFlow.update { Event(UIResult.Error(error = IncompleteFileDataException())) }
+            return
+        }
+
+        runUseCaseWithResult(
+            coroutineDispatcher = coroutineDispatcherProvider.io,
+            flow = _editShareResultFlow,
+            useCase = editGraphShareAsyncUseCase,
+            useCaseParams = EditGraphShareAsyncUseCase.Params(
+                accountName = accountName,
+                spaceId = spaceId,
+                itemId = itemId,
+                shareId = shareId,
+                roleId = roleId,
+                expirationDate = expirationDate
+            )
+        )
+    }
+
     fun searchMembers(query: String) {
         searchJob?.cancel()
         searchJob = viewModelScope.launch(coroutineDispatcherProvider.io) {
@@ -228,6 +256,7 @@ class GraphShareViewModel(
     fun resetViewModel() {
         _addShareUIState.value = null
         _addShareResultFlow.value = null
+        _editShareResultFlow.value = null
     }
 
     data class MembersUIState(

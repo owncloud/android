@@ -94,6 +94,19 @@ class OCRemoteShareDataSource(
         }
     }
 
+    override fun editGraphShare(
+        accountName: String,
+        spaceId: String,
+        itemId: String,
+        shareId: String,
+        roleId: String,
+        expirationDate: String?
+    ) {
+        executeRemoteOperation {
+            clientManager.getShareService(accountName).editGraphShare(spaceId, itemId, shareId, roleId, expirationDate)
+        }
+    }
+
     override fun insert(
         remoteFilePath: String,
         shareType: ShareType,

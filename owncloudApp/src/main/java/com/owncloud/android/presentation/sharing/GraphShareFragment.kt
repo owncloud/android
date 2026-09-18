@@ -135,6 +135,7 @@ class GraphShareFragment : Fragment(), GraphSharesAdapter.GraphSharesAdapterList
         observeSpacePermissions()
         observeAddShareResult()
         observeRemoveShareResult()
+        observeEditShareResult()
     }
 
     private fun observeRoles() {
@@ -230,6 +231,21 @@ class GraphShareFragment : Fragment(), GraphSharesAdapter.GraphSharesAdapterList
                 is UIResult.Error -> {
                     showErrorInSnackbar(R.string.share_remove_failed, uiResult.error)
                     Timber.e(uiResult.error, "Failed to remove a graph share")
+                }
+            }
+        }
+    }
+
+    private fun observeEditShareResult() {
+        collectLatestLifecycleFlow(graphShareViewModel.editShareResultFlow) { event ->
+            event?.peekContent()?.let { uiResult ->
+                when (uiResult) {
+                    is UIResult.Loading -> { }
+                    is UIResult.Success -> {
+                        showMessageInSnackbar(getString(R.string.share_edit_correctly))
+                        graphShareViewModel.resetViewModel()
+                    }
+                    is UIResult.Error -> { }
                 }
             }
         }
