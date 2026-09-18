@@ -97,6 +97,7 @@ Build types: `debug` / `release`. Combined targets follow the pattern `assembleO
 - **Signed commits:** All commits **must** be GPG-signed with DCO sign-off: `git commit -s -S -m "type: description"`
 - **Rebase policy:** Always rebase; never create merge commits. Use `git pull --rebase` before pushing.
 - **Code style:** Detekt (zero-tolerance, `maxIssues: 0`), ktlint, EditorConfig (max line length: 150)
+- **New files:** Every newly created file must end with a trailing blank line (final newline).
 - **PR process:** Rebase on the target branch before opening a PR. All CI checks must pass.
 
 ## Changelog
