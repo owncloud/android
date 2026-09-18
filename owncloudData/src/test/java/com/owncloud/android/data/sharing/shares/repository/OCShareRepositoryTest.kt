@@ -321,6 +321,40 @@ class OCShareRepositoryTest {
     }
 
     @Test
+    fun `editGraphShare edits a share correctly`() {
+        every {
+            remoteShareDataSource.editGraphShare(
+                accountName = OC_ACCOUNT_NAME,
+                spaceId = OC_SPACE_PROJECT_WITH_IMAGE.id,
+                itemId = OC_FILE.remoteId.orEmpty(),
+                shareId = shareId,
+                roleId = SPACE_MEMBERS.roles[0].id,
+                expirationDate = null
+            )
+        } returns Unit
+
+        ocShareRepository.editGraphShare(
+            accountName = OC_ACCOUNT_NAME,
+            spaceId = OC_SPACE_PROJECT_WITH_IMAGE.id,
+            itemId = OC_FILE.remoteId.orEmpty(),
+            shareId = shareId,
+            roleId = SPACE_MEMBERS.roles[0].id,
+            expirationDate = null
+        )
+
+        verify(exactly = 1) {
+            remoteShareDataSource.editGraphShare(
+                accountName = OC_ACCOUNT_NAME,
+                spaceId = OC_SPACE_PROJECT_WITH_IMAGE.id,
+                itemId = OC_FILE.remoteId.orEmpty(),
+                shareId = shareId,
+                roleId = SPACE_MEMBERS.roles[0].id,
+                expirationDate = null
+            )
+        }
+    }
+
+    @Test
     fun `refreshSharesFromNetwork refreshes shares correctly when the list of shares received is not empty`() {
         every {
             remoteShareDataSource.getShares(
