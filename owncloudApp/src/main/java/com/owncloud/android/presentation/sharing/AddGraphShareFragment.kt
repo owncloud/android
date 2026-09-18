@@ -138,6 +138,15 @@ class AddGraphShareFragment : Fragment(), SearchMembersAdapter.SearchMembersAdap
     private fun subscribeToViewModels() {
         searchMinLength = graphShareViewModel.capabilities?.filesSharingSearchMinLength ?: DEFAULT_SEARCH_MIN_LENGTH
 
+        observeUserId()
+        observeShares()
+        observeMembers()
+        observeAddShareUIState()
+        observeAddShareResult()
+        observeEditShareResult()
+    }
+
+    private fun observeUserId() {
         collectLatestLifecycleFlow(graphShareViewModel.userId) { event ->
             event?.let {
                 when (val uiResult = event.peekContent()) {
@@ -151,7 +160,9 @@ class AddGraphShareFragment : Fragment(), SearchMembersAdapter.SearchMembersAdap
                 }
             }
         }
+    }
 
+    private fun observeShares() {
         collectLatestLifecycleFlow(graphShareViewModel.shares) { event ->
             event?.let {
                 when (val uiResult = event.peekContent()) {
@@ -163,7 +174,9 @@ class AddGraphShareFragment : Fragment(), SearchMembersAdapter.SearchMembersAdap
                 }
             }
         }
+    }
 
+    private fun observeMembers() {
         collectLatestLifecycleFlow(graphShareViewModel.members) { uiState ->
             if (uiState.isLoading) {
                 binding.indeterminateProgressBar.visibility = View.VISIBLE
@@ -184,7 +197,9 @@ class AddGraphShareFragment : Fragment(), SearchMembersAdapter.SearchMembersAdap
                 }
             }
         }
+    }
 
+    private fun observeAddShareUIState() {
         collectLatestLifecycleFlow(graphShareViewModel.addShareUIState) { uiState ->
             uiState?.let {
                 binding.apply {
@@ -229,7 +244,9 @@ class AddGraphShareFragment : Fragment(), SearchMembersAdapter.SearchMembersAdap
                 }
             }
         }
+    }
 
+    private fun observeAddShareResult() {
         collectLatestLifecycleFlow(graphShareViewModel.addShareResultFlow) { event ->
             event?.peekContent()?.let { uiResult ->
                 when (uiResult) {
@@ -239,7 +256,9 @@ class AddGraphShareFragment : Fragment(), SearchMembersAdapter.SearchMembersAdap
                 }
             }
         }
+    }
 
+    private fun observeEditShareResult() {
         collectLatestLifecycleFlow(graphShareViewModel.editShareResultFlow) { event ->
             event?.peekContent()?.let { uiResult ->
                 when (uiResult) {
