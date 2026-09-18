@@ -120,6 +120,7 @@ class GraphShareFragment : Fragment(), GraphSharesAdapter.GraphSharesAdapterList
         observeShares()
         observeSpacePermissions()
         observeAddShareResult()
+        observeEditShareResult()
     }
 
     private fun observeRoles() {
@@ -195,6 +196,21 @@ class GraphShareFragment : Fragment(), GraphSharesAdapter.GraphSharesAdapterList
                     is UIResult.Loading -> { }
                     is UIResult.Success -> {
                         showMessageInSnackbar(getString(R.string.share_add_correctly))
+                        graphShareViewModel.resetViewModel()
+                    }
+                    is UIResult.Error -> { }
+                }
+            }
+        }
+    }
+
+    private fun observeEditShareResult() {
+        collectLatestLifecycleFlow(graphShareViewModel.editShareResultFlow) { event ->
+            event?.peekContent()?.let { uiResult ->
+                when (uiResult) {
+                    is UIResult.Loading -> { }
+                    is UIResult.Success -> {
+                        showMessageInSnackbar(getString(R.string.share_edit_correctly))
                         graphShareViewModel.resetViewModel()
                     }
                     is UIResult.Error -> { }
