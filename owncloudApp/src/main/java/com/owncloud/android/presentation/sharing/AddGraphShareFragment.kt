@@ -42,6 +42,7 @@ import com.owncloud.android.extensions.collectLatestLifecycleFlow
 import com.owncloud.android.extensions.openDatePickerDialog
 import com.owncloud.android.extensions.showErrorInSnackbar
 import com.owncloud.android.extensions.showOrHideEmptyView
+import com.owncloud.android.extensions.toOCMember
 import com.owncloud.android.presentation.spaces.members.SearchMembersAdapter
 import com.owncloud.android.presentation.spaces.members.SpaceRolesAdapter
 import com.owncloud.android.utils.DisplayUtils
@@ -68,6 +69,8 @@ class AddGraphShareFragment : Fragment(), SearchMembersAdapter.SearchMembersAdap
     private var currentShares: List<MemberPermission> = emptyList()
     private var searchMinLength = DEFAULT_SEARCH_MIN_LENGTH
     private var currentUserId: String? = null
+    private var editMode = false
+    private var selectedShareId = ""
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = AddMemberFragmentBinding.inflate(inflater, container, false)
@@ -81,6 +84,10 @@ class AddGraphShareFragment : Fragment(), SearchMembersAdapter.SearchMembersAdap
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        editMode = requireArguments().getBoolean(ARG_EDIT_MODE, false)
+        roles = requireArguments().getParcelableArrayList(ARG_ROLES) ?: emptyList()
+
         searchMembersAdapter = SearchMembersAdapter(this)
         recyclerView = binding.membersRecyclerView
         recyclerView.apply {
@@ -97,6 +104,13 @@ class AddGraphShareFragment : Fragment(), SearchMembersAdapter.SearchMembersAdap
             adapter = rolesAdapter
         }
         rolesAdapter.setRoles(roles)
+
+        if (editMode) {
+            val selectedShare = requireArguments().getParcelable<MemberPermission>(ARG_SELECTED_SHARE)
+            selectedShare?.let {
+                bindEditMode(it, roles)
+            }
+        }
 
         subscribeToViewModels()
 
@@ -124,6 +138,15 @@ class AddGraphShareFragment : Fragment(), SearchMembersAdapter.SearchMembersAdap
     private fun subscribeToViewModels() {
         searchMinLength = graphShareViewModel.capabilities?.filesSharingSearchMinLength ?: DEFAULT_SEARCH_MIN_LENGTH
 
+        observeUserId()
+        observeShares()
+        observeMembers()
+        observeAddShareUIState()
+        observeAddShareResult()
+        observeEditShareResult()
+    }
+
+    private fun observeUserId() {
         collectLatestLifecycleFlow(graphShareViewModel.userId) { event ->
             event?.let {
                 when (val uiResult = event.peekContent()) {
@@ -137,23 +160,23 @@ class AddGraphShareFragment : Fragment(), SearchMembersAdapter.SearchMembersAdap
                 }
             }
         }
+    }
 
+    private fun observeShares() {
         collectLatestLifecycleFlow(graphShareViewModel.shares) { event ->
             event?.let {
                 when (val uiResult = event.peekContent()) {
                     is UIResult.Success -> {
-                        uiResult.data?.let {
-                            roles = it.roles
-                            currentShares = it.members
-                            rolesAdapter.setRoles(roles)
-                        }
+                        uiResult.data?.let { currentShares = it.members }
                     }
                     is UIResult.Loading -> { }
                     is UIResult.Error -> { Timber.e(uiResult.error, "Failed to retrieve shares") }
                 }
             }
         }
+    }
 
+    private fun observeMembers() {
         collectLatestLifecycleFlow(graphShareViewModel.members) { uiState ->
             if (uiState.isLoading) {
                 binding.indeterminateProgressBar.visibility = View.VISIBLE
@@ -174,14 +197,16 @@ class AddGraphShareFragment : Fragment(), SearchMembersAdapter.SearchMembersAdap
                 }
             }
         }
+    }
 
+    private fun observeAddShareUIState() {
         collectLatestLifecycleFlow(graphShareViewModel.addShareUIState) { uiState ->
             uiState?.let {
                 binding.apply {
                     searchMemberLayout.visibility = View.GONE
                     addMemberLayout.visibility = View.VISIBLE
                     inviteMemberButton.visibility = View.VISIBLE
-                    inviteMemberButton.text = getString(R.string.action_share)
+                    inviteMemberButton.text = getString(if (editMode) R.string.share_confirm_public_link_button else R.string.action_share)
                     inviteMemberButton.contentDescription = getString(R.string.content_description_create_share_button)
                 }
                 it.selectedMember?.let { member ->
@@ -209,13 +234,19 @@ class AddGraphShareFragment : Fragment(), SearchMembersAdapter.SearchMembersAdap
                 binding.inviteMemberButton.setOnClickListener {
                     uiState.selectedMember?.let { selectedMember ->
                         uiState.selectedRole?.let { selectedRole ->
-                            graphShareViewModel.addGraphShare(selectedMember, selectedRole.id)
+                            if (editMode) {
+                                graphShareViewModel.editGraphShare(selectedShareId, selectedRole.id, uiState.selectedExpirationDate)
+                            } else {
+                                graphShareViewModel.addGraphShare(selectedMember, selectedRole.id)
+                            }
                         }
                     }
                 }
             }
         }
+    }
 
+    private fun observeAddShareResult() {
         collectLatestLifecycleFlow(graphShareViewModel.addShareResultFlow) { event ->
             event?.peekContent()?.let { uiResult ->
                 when (uiResult) {
@@ -227,15 +258,52 @@ class AddGraphShareFragment : Fragment(), SearchMembersAdapter.SearchMembersAdap
         }
     }
 
+    private fun observeEditShareResult() {
+        collectLatestLifecycleFlow(graphShareViewModel.editShareResultFlow) { event ->
+            event?.peekContent()?.let { uiResult ->
+                when (uiResult) {
+                    is UIResult.Loading -> { }
+                    is UIResult.Success -> parentFragmentManager.popBackStack()
+                    is UIResult.Error -> showErrorInSnackbar(R.string.share_edit_failed, uiResult.error)
+                }
+            }
+        }
+    }
+
+    private fun bindEditMode(share: MemberPermission, roles: List<OCRole>) {
+        selectedShareId = share.id
+        graphShareViewModel.onMemberSelected(share.toOCMember())
+
+        val selectedRole = roles.first { it.id == share.roles[0] }
+        graphShareViewModel.onRoleSelected(selectedRole)
+
+        share.expirationDateTime?.let { expirationDate ->
+            graphShareViewModel.onExpirationDateSelected(expirationDate)
+            binding.expirationDateLayout.expirationDateSwitch.isChecked = true
+        }
+    }
+
     companion object {
         private const val ARG_FILE = "FILE"
         private const val ARG_ACCOUNT_NAME = "ACCOUNT_NAME"
+        private const val ARG_EDIT_MODE = "EDIT_MODE"
+        private const val ARG_SELECTED_SHARE = "SELECTED_SHARE"
+        private const val ARG_ROLES = "ROLES"
         private const val DEFAULT_SEARCH_MIN_LENGTH = 3
 
-        fun newInstance(file: OCFile, accountName: String): AddGraphShareFragment {
+        fun newInstance(
+            file: OCFile,
+            accountName: String,
+            roles: List<OCRole>,
+            editMode: Boolean,
+            selectedShare: MemberPermission?
+        ): AddGraphShareFragment {
             val args = Bundle().apply {
                 putParcelable(ARG_FILE, file)
                 putString(ARG_ACCOUNT_NAME, accountName)
+                putParcelableArrayList(ARG_ROLES, ArrayList(roles))
+                putBoolean(ARG_EDIT_MODE, editMode)
+                putParcelable(ARG_SELECTED_SHARE, selectedShare)
             }
             return AddGraphShareFragment().apply {
                 arguments = args

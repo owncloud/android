@@ -94,6 +94,7 @@ import com.owncloud.android.domain.sharing.shares.usecases.AddGraphShareAsyncUse
 import com.owncloud.android.domain.sharing.shares.usecases.CreatePrivateShareAsyncUseCase
 import com.owncloud.android.domain.sharing.shares.usecases.CreatePublicShareAsyncUseCase
 import com.owncloud.android.domain.sharing.shares.usecases.DeleteShareAsyncUseCase
+import com.owncloud.android.domain.sharing.shares.usecases.EditGraphShareAsyncUseCase
 import com.owncloud.android.domain.sharing.shares.usecases.EditPrivateShareAsyncUseCase
 import com.owncloud.android.domain.sharing.shares.usecases.EditPublicShareAsyncUseCase
 import com.owncloud.android.domain.sharing.shares.usecases.GetGraphSharesAsyncUseCase
@@ -234,6 +235,7 @@ val useCaseModule = module {
     factoryOf(::CreatePrivateShareAsyncUseCase)
     factoryOf(::CreatePublicShareAsyncUseCase)
     factoryOf(::DeleteShareAsyncUseCase)
+    factoryOf(::EditGraphShareAsyncUseCase)
     factoryOf(::EditPrivateShareAsyncUseCase)
     factoryOf(::EditPublicShareAsyncUseCase)
     factoryOf(::GetGraphSharesAsyncUseCase)

@@ -40,6 +40,8 @@ import com.owncloud.android.R
 import com.owncloud.android.databinding.MembersActivityBinding
 import com.owncloud.android.datamodel.ThumbnailsCacheManager
 import com.owncloud.android.domain.files.model.OCFile
+import com.owncloud.android.domain.roles.model.OCRole
+import com.owncloud.android.domain.sharing.shares.model.MemberPermission
 import com.owncloud.android.domain.sharing.shares.model.OCShare
 import com.owncloud.android.domain.sharing.shares.model.ShareType
 import com.owncloud.android.domain.utils.Event.EventObserver
@@ -110,8 +112,14 @@ class ShareActivity : FileActivity(), ShareFragmentListener, GraphShareFragment.
         }
     }
 
-    override fun addGraphShare(file: OCFile, accountName: String) {
-        val addGraphShareFragment = AddGraphShareFragment.newInstance(file, accountName)
+    override fun addGraphShare(file: OCFile, accountName: String, roles: List<OCRole>, editMode: Boolean, selectedShare: MemberPermission?) {
+        val addGraphShareFragment = AddGraphShareFragment.newInstance(
+            file = file,
+            accountName = accountName,
+            roles = roles,
+            editMode = editMode,
+            selectedShare = selectedShare
+        )
         val transaction = supportFragmentManager.beginTransaction()
         transaction.apply {
             replace(R.id.members_fragment_container, addGraphShareFragment, TAG_ADD_GRAPH_SHARE_FRAGMENT)

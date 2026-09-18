@@ -497,6 +497,8 @@
     <string name="share_add_correctly">Share created correctly</string>
     <string name="share_add_failed">Share could not be created</string>
     <string name="share_add_conflict_error">Is already shared with this user/group</string>
+    <string name="share_edit_correctly">Share edited correctly</string>
+    <string name="share_edit_failed">Share could not be edited</string>
     <string name="share_via_link_section_title">Public links</string>
     <string name="share_via_link_create_title">Create link share</string>
     <string name="share_via_link_edit_title">Edit link share</string>

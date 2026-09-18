@@ -32,6 +32,7 @@ import com.owncloud.android.R
 import com.owncloud.android.databinding.MembersFragmentBinding
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.roles.model.OCRole
+import com.owncloud.android.domain.sharing.shares.model.MemberPermission
 import com.owncloud.android.extensions.collectLatestLifecycleFlow
 import com.owncloud.android.extensions.showErrorInSnackbar
 import com.owncloud.android.extensions.showMessageInSnackbar
@@ -40,7 +41,7 @@ import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import org.koin.core.parameter.parametersOf
 import timber.log.Timber
 
-class GraphShareFragment : Fragment() {
+class GraphShareFragment : Fragment(), GraphSharesAdapter.GraphSharesAdapterListener {
     private var _binding: MembersFragmentBinding? = null
     private val binding get() = _binding!!
 
@@ -55,6 +56,7 @@ class GraphShareFragment : Fragment() {
 
     private var roles: List<OCRole> = emptyList()
     private var listener: GraphShareFragmentListener? = null
+    private var canEditShares: Boolean = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = MembersFragmentBinding.inflate(inflater, container, false)
@@ -65,7 +67,7 @@ class GraphShareFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.membersTitle.text = getString(R.string.share_with_people_title)
 
-        graphSharesAdapter = GraphSharesAdapter()
+        graphSharesAdapter = GraphSharesAdapter(this)
         binding.membersRecyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = graphSharesAdapter
@@ -82,7 +84,7 @@ class GraphShareFragment : Fragment() {
         binding.addMemberButton.setOnClickListener {
             if (file != null && accountName != null) {
                 graphShareViewModel.resetViewModel()
-                listener?.addGraphShare(file = file, accountName = accountName)
+                listener?.addGraphShare(file = file, accountName = accountName, roles = roles, editMode = false, selectedShare = null)
             }
         }
 
@@ -104,30 +106,20 @@ class GraphShareFragment : Fragment() {
         _binding = null
     }
 
-    private fun subscribeToViewModels() {
-        observeRoles()
-        observeShares()
-        observeAddShareResult()
+    override fun onEditShare(share: MemberPermission) {
+        val file = requireArguments().getParcelable<OCFile>(ARG_FILE)
+        val accountName = requireArguments().getString(ARG_ACCOUNT_NAME)
+        if (file != null && accountName != null) {
+            graphShareViewModel.resetViewModel()
+            listener?.addGraphShare(file = file, accountName = accountName, roles = roles, editMode = true, selectedShare = share)
+        }
     }
 
-    private fun observeRoles() {
-        collectLatestLifecycleFlow(graphShareViewModel.roles) { event ->
-            event?.let {
-                when (val uiResult = event.peekContent()) {
-                    is UIResult.Success -> {
-                        uiResult.data?.let {
-                            roles = it
-                            graphShareViewModel.getGraphShares()
-                        }
-                    }
-                    is UIResult.Loading -> { }
-                    is UIResult.Error -> {
-                        showErrorInSnackbar(R.string.share_sync_failed, uiResult.error)
-                        Timber.e(uiResult.error, "Failed to retrieve platform roles")
-                    }
-                }
-            }
-        }
+    private fun subscribeToViewModels() {
+        observeShares()
+        observeSpacePermissions()
+        observeAddShareResult()
+        observeEditShareResult()
     }
 
     private fun observeShares() {
@@ -136,10 +128,11 @@ class GraphShareFragment : Fragment() {
                 when (val uiResult = event.peekContent()) {
                     is UIResult.Success -> {
                         uiResult.data?.let {
+                            roles = it.roles
                             val hasMembers = it.members.isNotEmpty()
                             binding.membersRecyclerView.isVisible = hasMembers
                             binding.noSharesMessage.isVisible = !hasMembers
-                            graphSharesAdapter.setShares(it.members, it.roles)
+                            graphSharesAdapter.setShares(it.members, it.roles, canEditShares)
                             binding.swipeRefreshMembers.isRefreshing = false
                         }
                     }
@@ -152,6 +145,28 @@ class GraphShareFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun observeSpacePermissions() {
+        collectLatestLifecycleFlow(graphShareViewModel.spacePermissions) { event ->
+            event?.let {
+                when (val uiResult = event.peekContent()) {
+                    is UIResult.Success -> {
+                        uiResult.data?.let { spacePermissions ->
+                            checkPermissions(spacePermissions)
+                        }
+                    }
+                    is UIResult.Loading -> { }
+                    is UIResult.Error -> {
+                        Timber.e(uiResult.error, "Failed to retrieve space permissions")
+                    }
+                }
+            }
+        }
+    }
+
+    private fun checkPermissions(spacePermissions: List<String>) {
+        canEditShares = DRIVES_UPDATE_PERMISSION in spacePermissions
     }
 
     private fun observeAddShareResult() {
@@ -169,13 +184,29 @@ class GraphShareFragment : Fragment() {
         }
     }
 
+    private fun observeEditShareResult() {
+        collectLatestLifecycleFlow(graphShareViewModel.editShareResultFlow) { event ->
+            event?.peekContent()?.let { uiResult ->
+                when (uiResult) {
+                    is UIResult.Loading -> { }
+                    is UIResult.Success -> {
+                        showMessageInSnackbar(getString(R.string.share_edit_correctly))
+                        graphShareViewModel.resetViewModel()
+                    }
+                    is UIResult.Error -> { }
+                }
+            }
+        }
+    }
+
     interface GraphShareFragmentListener {
-        fun addGraphShare(file: OCFile, accountName: String)
+        fun addGraphShare(file: OCFile, accountName: String, roles: List<OCRole>, editMode: Boolean, selectedShare: MemberPermission?)
     }
 
     companion object {
         private const val ARG_FILE = "FILE"
         private const val ARG_ACCOUNT_NAME = "ACCOUNT_NAME"
+        private const val DRIVES_UPDATE_PERMISSION = "libre.graph/driveItem/permissions/update"
 
         fun newInstance(file: OCFile, accountName: String): GraphShareFragment {
             val args = Bundle().apply {

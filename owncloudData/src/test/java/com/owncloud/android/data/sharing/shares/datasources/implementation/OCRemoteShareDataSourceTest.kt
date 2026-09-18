@@ -56,6 +56,7 @@ class OCRemoteShareDataSourceTest {
     private val clientManager: ClientManager = mockk(relaxed = true)
 
     private val userType = OCMemberType.toString(OC_USER_MEMBER.type).lowercase()
+    private val shareId = "share-id"
 
     @Before
     fun setUp() {
@@ -444,6 +445,41 @@ class OCRemoteShareDataSourceTest {
                 itemId = OC_FILE.remoteId.orEmpty(),
                 memberId = OC_USER_MEMBER.id,
                 memberType = userType,
+                roleId = SPACE_MEMBERS.roles[0].id,
+                expirationDate = null
+            )
+        }
+    }
+
+    @Test
+    fun `editGraphShare edits a graph share correctly`() {
+        val editGraphShareResult = createRemoteOperationResultMock(Unit, isSuccess = true)
+
+        every {
+            ocShareService.editGraphShare(
+                spaceId = OC_SPACE_PROJECT_WITH_IMAGE.id,
+                itemId = OC_FILE.remoteId.orEmpty(),
+                shareId = shareId,
+                roleId = SPACE_MEMBERS.roles[0].id,
+                expirationDate = null
+            )
+        } returns editGraphShareResult
+
+        ocRemoteShareDataSource.editGraphShare(
+            accountName = OC_ACCOUNT_NAME,
+            spaceId = OC_SPACE_PROJECT_WITH_IMAGE.id,
+            itemId = OC_FILE.remoteId.orEmpty(),
+            shareId = shareId,
+            roleId = SPACE_MEMBERS.roles[0].id,
+            expirationDate = null
+        )
+
+        verify(exactly = 1) {
+            clientManager.getShareService(OC_ACCOUNT_NAME)
+            ocShareService.editGraphShare(
+                spaceId = OC_SPACE_PROJECT_WITH_IMAGE.id,
+                itemId = OC_FILE.remoteId.orEmpty(),
+                shareId = shareId,
                 roleId = SPACE_MEMBERS.roles[0].id,
                 expirationDate = null
             )

@@ -30,11 +30,12 @@ import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.members.model.OCMember
 import com.owncloud.android.domain.members.usecases.SearchMembersUseCase
 import com.owncloud.android.domain.roles.model.OCRole
-import com.owncloud.android.domain.roles.usecases.GetRolesAsyncUseCase
 import com.owncloud.android.domain.sharing.shares.usecases.AddGraphShareAsyncUseCase
+import com.owncloud.android.domain.sharing.shares.usecases.EditGraphShareAsyncUseCase
 import com.owncloud.android.domain.sharing.shares.usecases.GetGraphSharesAsyncUseCase
 import com.owncloud.android.domain.sharing.shares.model.OCPermissions
 import com.owncloud.android.domain.user.usecases.GetUserIdAsyncUseCase
+import com.owncloud.android.domain.spaces.usecases.GetSpacePermissionsAsyncUseCase
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.ViewModelExt.runUseCaseWithResult
 import com.owncloud.android.presentation.common.UIResult
@@ -50,18 +51,16 @@ import kotlinx.coroutines.launch
 
 class GraphShareViewModel(
     private val addGraphShareAsyncUseCase: AddGraphShareAsyncUseCase,
-    private val getRolesAsyncUseCase: GetRolesAsyncUseCase,
+    private val editGraphShareAsyncUseCase: EditGraphShareAsyncUseCase,
     private val getGraphSharesAsyncUseCase: GetGraphSharesAsyncUseCase,
     private val getStoredCapabilitiesUseCase: GetStoredCapabilitiesUseCase,
     private val searchMembersUseCase: SearchMembersUseCase,
     private val getUserIdAsyncUseCase: GetUserIdAsyncUseCase,
+    private val getSpacePermissionsAsyncUseCase: GetSpacePermissionsAsyncUseCase,
     private val accountName: String,
     private val file: OCFile,
     private val coroutineDispatcherProvider: CoroutinesDispatcherProvider,
 ) : ViewModel() {
-
-    private val _roles = MutableStateFlow<Event<UIResult<List<OCRole>>>?>(null)
-    val roles: StateFlow<Event<UIResult<List<OCRole>>>?> = _roles
 
     private val _shares = MutableStateFlow<Event<UIResult<OCPermissions>>?>(null)
     val shares: StateFlow<Event<UIResult<OCPermissions>>?> = _shares
@@ -78,16 +77,16 @@ class GraphShareViewModel(
     private val _addShareResultFlow = MutableStateFlow<Event<UIResult<Unit>>?>(null)
     val addShareResultFlow: StateFlow<Event<UIResult<Unit>>?> = _addShareResultFlow
 
+    private val _editShareResultFlow = MutableStateFlow<Event<UIResult<Unit>>?>(null)
+    val editShareResultFlow: StateFlow<Event<UIResult<Unit>>?> = _editShareResultFlow
+
     private var searchJob: Job? = null
     var capabilities: OCCapability? = null
 
+    private val _spacePermissions = MutableStateFlow<Event<UIResult<List<String>>>?>(null)
+    val spacePermissions: StateFlow<Event<UIResult<List<String>>>?> = _spacePermissions
+
     init {
-        runUseCaseWithResult(
-            coroutineDispatcher = coroutineDispatcherProvider.io,
-            flow = _roles,
-            useCase = getRolesAsyncUseCase,
-            useCaseParams = GetRolesAsyncUseCase.Params(accountName = accountName),
-        )
         runUseCaseWithResult(
             coroutineDispatcher = coroutineDispatcherProvider.io,
             showLoading = false,
@@ -98,6 +97,25 @@ class GraphShareViewModel(
         viewModelScope.launch(coroutineDispatcherProvider.io) {
             capabilities = getStoredCapabilitiesUseCase(GetStoredCapabilitiesUseCase.Params(accountName))
         }
+        getGraphShares()
+        getSpacePermissions()
+    }
+
+    fun getSpacePermissions() {
+        val spaceId = file.spaceId
+        if (spaceId == null) {
+            _spacePermissions.update { Event(UIResult.Error(error = IncompleteFileDataException())) }
+            return
+        }
+
+        runUseCaseWithResult(
+            coroutineDispatcher = coroutineDispatcherProvider.io,
+            flow = _spacePermissions,
+            useCase = getSpacePermissionsAsyncUseCase,
+            useCaseParams = GetSpacePermissionsAsyncUseCase.Params(accountName = accountName, spaceId = spaceId),
+            showLoading = false,
+            requiresConnection = true
+        )
     }
 
     fun getGraphShares() {
@@ -144,6 +162,29 @@ class GraphShareViewModel(
         )
     }
 
+    fun editGraphShare(shareId: String, roleId: String, expirationDate: String?) {
+        val spaceId = file.spaceId
+        val itemId = file.remoteId
+        if (spaceId == null || itemId == null) {
+            _editShareResultFlow.update { Event(UIResult.Error(error = IncompleteFileDataException())) }
+            return
+        }
+
+        runUseCaseWithResult(
+            coroutineDispatcher = coroutineDispatcherProvider.io,
+            flow = _editShareResultFlow,
+            useCase = editGraphShareAsyncUseCase,
+            useCaseParams = EditGraphShareAsyncUseCase.Params(
+                accountName = accountName,
+                spaceId = spaceId,
+                itemId = itemId,
+                shareId = shareId,
+                roleId = roleId,
+                expirationDate = expirationDate
+            )
+        )
+    }
+
     fun searchMembers(query: String) {
         searchJob?.cancel()
         searchJob = viewModelScope.launch(coroutineDispatcherProvider.io) {
@@ -177,6 +218,7 @@ class GraphShareViewModel(
     fun resetViewModel() {
         _addShareUIState.value = null
         _addShareResultFlow.value = null
+        _editShareResultFlow.value = null
     }
 
     data class MembersUIState(
