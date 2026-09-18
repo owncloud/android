@@ -30,7 +30,6 @@ import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.members.model.OCMember
 import com.owncloud.android.domain.members.usecases.SearchMembersUseCase
 import com.owncloud.android.domain.roles.model.OCRole
-import com.owncloud.android.domain.roles.usecases.GetRolesAsyncUseCase
 import com.owncloud.android.domain.sharing.shares.usecases.AddGraphShareAsyncUseCase
 import com.owncloud.android.domain.sharing.shares.usecases.EditGraphShareAsyncUseCase
 import com.owncloud.android.domain.sharing.shares.usecases.GetGraphSharesAsyncUseCase
@@ -54,7 +53,6 @@ import kotlinx.coroutines.launch
 class GraphShareViewModel(
     private val addGraphShareAsyncUseCase: AddGraphShareAsyncUseCase,
     private val editGraphShareAsyncUseCase: EditGraphShareAsyncUseCase,
-    private val getRolesAsyncUseCase: GetRolesAsyncUseCase,
     private val getGraphSharesAsyncUseCase: GetGraphSharesAsyncUseCase,
     private val getStoredCapabilitiesUseCase: GetStoredCapabilitiesUseCase,
     private val searchMembersUseCase: SearchMembersUseCase,
@@ -65,9 +63,6 @@ class GraphShareViewModel(
     private val file: OCFile,
     private val coroutineDispatcherProvider: CoroutinesDispatcherProvider,
 ) : ViewModel() {
-
-    private val _roles = MutableStateFlow<Event<UIResult<List<OCRole>>>?>(null)
-    val roles: StateFlow<Event<UIResult<List<OCRole>>>?> = _roles
 
     private val _shares = MutableStateFlow<Event<UIResult<OCPermissions>>?>(null)
     val shares: StateFlow<Event<UIResult<OCPermissions>>?> = _shares
@@ -99,12 +94,6 @@ class GraphShareViewModel(
     init {
         runUseCaseWithResult(
             coroutineDispatcher = coroutineDispatcherProvider.io,
-            flow = _roles,
-            useCase = getRolesAsyncUseCase,
-            useCaseParams = GetRolesAsyncUseCase.Params(accountName = accountName),
-        )
-        runUseCaseWithResult(
-            coroutineDispatcher = coroutineDispatcherProvider.io,
             showLoading = false,
             flow = _userId,
             useCase = getUserIdAsyncUseCase,
@@ -113,6 +102,7 @@ class GraphShareViewModel(
         viewModelScope.launch(coroutineDispatcherProvider.io) {
             capabilities = getStoredCapabilitiesUseCase(GetStoredCapabilitiesUseCase.Params(accountName))
         }
+        getGraphShares()
         getSpacePermissions()
     }
 
