@@ -73,6 +73,9 @@ class GraphSharesAdapter(
             editMemberButton.apply {
                 contentDescription = holder.itemView.context.getString(R.string.content_description_edit_share, share.displayName)
                 isVisible = canEditShares
+                setOnClickListener {
+                    listener.onEditShare(share)
+                }
             }
 
             val hasExpirationDate = share.expirationDateTime != null
@@ -108,5 +111,6 @@ class GraphSharesAdapter(
 
     interface GraphSharesAdapterListener {
         fun onRemoveShare(share: MemberPermission)
+        fun onEditShare(share: MemberPermission)
     }
 }

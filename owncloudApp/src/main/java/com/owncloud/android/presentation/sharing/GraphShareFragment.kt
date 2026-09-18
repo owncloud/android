@@ -87,7 +87,7 @@ class GraphShareFragment : Fragment(), GraphSharesAdapter.GraphSharesAdapterList
         binding.addMemberButton.setOnClickListener {
             if (file != null && accountName != null) {
                 graphShareViewModel.resetViewModel()
-                listener?.addGraphShare(file = file, accountName = accountName)
+                listener?.addGraphShare(file = file, accountName = accountName, roles = roles, editMode = false, selectedShare = null)
             }
         }
 
@@ -120,6 +120,15 @@ class GraphShareFragment : Fragment(), GraphSharesAdapter.GraphSharesAdapterList
             .avoidScreenshotsIfNeeded()
     }
 
+    override fun onEditShare(share: MemberPermission) {
+        val file = requireArguments().getParcelable<OCFile>(ARG_FILE)
+        val accountName = requireArguments().getString(ARG_ACCOUNT_NAME)
+        if (file != null && accountName != null) {
+            graphShareViewModel.resetViewModel()
+            listener?.addGraphShare(file = file, accountName = accountName, roles = roles, editMode = true, selectedShare = share)
+        }
+    }
+
     private fun subscribeToViewModels() {
         observeRoles()
         observeShares()
@@ -134,7 +143,6 @@ class GraphShareFragment : Fragment(), GraphSharesAdapter.GraphSharesAdapterList
                 when (val uiResult = event.peekContent()) {
                     is UIResult.Success -> {
                         uiResult.data?.let {
-                            roles = it
                             graphShareViewModel.getGraphShares()
                         }
                     }
@@ -154,6 +162,7 @@ class GraphShareFragment : Fragment(), GraphSharesAdapter.GraphSharesAdapterList
                 when (val uiResult = event.peekContent()) {
                     is UIResult.Success -> {
                         uiResult.data?.let {
+                            roles = it.roles
                             val hasMembers = it.members.isNotEmpty()
                             binding.membersRecyclerView.isVisible = hasMembers
                             binding.noSharesMessage.isVisible = !hasMembers
@@ -227,7 +236,7 @@ class GraphShareFragment : Fragment(), GraphSharesAdapter.GraphSharesAdapterList
     }
 
     interface GraphShareFragmentListener {
-        fun addGraphShare(file: OCFile, accountName: String)
+        fun addGraphShare(file: OCFile, accountName: String, roles: List<OCRole>, editMode: Boolean, selectedShare: MemberPermission?)
     }
 
     companion object {
