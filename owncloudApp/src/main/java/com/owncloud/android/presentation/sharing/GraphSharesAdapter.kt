@@ -33,7 +33,9 @@ import com.owncloud.android.domain.sharing.shares.model.MemberPermission
 import com.owncloud.android.utils.DisplayUtils
 import com.owncloud.android.utils.PreferenceUtils
 
-class GraphSharesAdapter : RecyclerView.Adapter<GraphSharesAdapter.GraphShareViewHolder>() {
+class GraphSharesAdapter(
+    private val listener: GraphSharesAdapterListener
+) : RecyclerView.Adapter<GraphSharesAdapter.GraphShareViewHolder>() {
 
     private var shares: List<MemberPermission> = emptyList()
     private var rolesMap: Map<String, String> = emptyMap()
@@ -62,6 +64,9 @@ class GraphSharesAdapter : RecyclerView.Adapter<GraphSharesAdapter.GraphShareVie
             editMemberButton.apply {
                 contentDescription = holder.itemView.context.getString(R.string.content_description_edit_share, share.displayName)
                 isVisible = canEditShares
+                setOnClickListener {
+                    listener.onEditShare(share)
+                }
             }
 
             val hasExpirationDate = share.expirationDateTime != null
@@ -92,5 +97,9 @@ class GraphSharesAdapter : RecyclerView.Adapter<GraphSharesAdapter.GraphShareVie
 
     class GraphShareViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val binding = MemberItemBinding.bind(itemView)
+    }
+
+    interface GraphSharesAdapterListener {
+        fun onEditShare(share: MemberPermission)
     }
 }
