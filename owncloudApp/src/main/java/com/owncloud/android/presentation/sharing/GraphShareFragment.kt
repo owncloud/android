@@ -116,30 +116,10 @@ class GraphShareFragment : Fragment(), GraphSharesAdapter.GraphSharesAdapterList
     }
 
     private fun subscribeToViewModels() {
-        observeRoles()
         observeShares()
         observeSpacePermissions()
         observeAddShareResult()
         observeEditShareResult()
-    }
-
-    private fun observeRoles() {
-        collectLatestLifecycleFlow(graphShareViewModel.roles) { event ->
-            event?.let {
-                when (val uiResult = event.peekContent()) {
-                    is UIResult.Success -> {
-                        uiResult.data?.let {
-                            graphShareViewModel.getGraphShares()
-                        }
-                    }
-                    is UIResult.Loading -> { }
-                    is UIResult.Error -> {
-                        showErrorInSnackbar(R.string.share_sync_failed, uiResult.error)
-                        Timber.e(uiResult.error, "Failed to retrieve platform roles")
-                    }
-                }
-            }
-        }
     }
 
     private fun observeShares() {
