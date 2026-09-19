@@ -405,6 +405,7 @@
     <string name="error__upload__local_file_not_copied">ບໍ່ສາມາດສຳເນົາ %1$s ໄປທີ່ໂຟລເດີຂອງແອັບໄດ້</string>
 
     <string name="get_shares_error">ບໍ່ສາມາດເອົາຂໍ້ມູນການແຊຣ໌ໄດ້</string>
+    <string name="get_graph_shares_incomplete_data_error">ບໍ່ສາມາດດຶງຂໍ້ມູນບາງຢ່າງໄດ້</string>
     <string name="get_sharees_error">ບໍ່ສາມາດເອົາລາຍຊື່ຜູ້ທີ່ອາດແຊຣ໌ໃຫ້ໄດ້</string>
     <string name="get_capabilities_error">ບໍ່ສາມາດເອົາຄວາມສາມາດຂອງລະບົບໄດ້</string>
     <string name="share_link_file_error">ມີບາງຢ່າງຜິດພາດ. ໄຟລ໌ອາດຈະຖືກລຶບໄປແລ້ວ ຫຼື ບໍ່ສາມາດໃຊ້ງານໄດ້ອີກຕໍ່ໄປ.</string>
@@ -492,6 +493,10 @@
     <string name="share_dialog_title">ແຊຣ໌</string>
     <string name="share_with_user_section_title">ແຊຣ໌ກັບຜູ້ໃຊ້ ແລະ ກຸ່ມ</string>
     <string name="share_no_users">ບໍ່ມີຜູ້ໃຊ້ທີ່ຖືກແຊຣ໌ໃຫ້</string>
+    <string name="share_sync_failed">ບໍ່ສາມາດໂຫຼດການແບ່ງປັນຄືນໃໝ່ໄດ້</string>
+    <string name="share_add_correctly">ສ້າງການແບ່ງປັນສຳເລັດແລ້ວ</string>
+    <string name="share_add_failed">ບໍ່ສາມາດສ້າງການແບ່ງປັນໄດ້</string>
+    <string name="share_add_conflict_error">ໄດ້ແບ່ງປັນໃຫ້ຜູ້ໃຊ້/ກຸ່ມນີ້ແລ້ວ</string>
     <string name="share_via_link_section_title">ແຊຣ໌ຜ່ານລິ້ງ</string>
     <string name="share_via_link_create_title">ສ້າງລິ້ງແຊຣ໌</string>
     <string name="share_via_link_edit_title">ແກ້ໄຂລິ້ງແຊຣ໌</string>
@@ -506,6 +511,7 @@
     <string name="share_via_link_edit_permission_read_and_write_label">ອະນຸຍາດໃຫ້ແກ້ໄຂ</string>
     <string name="share_via_link_edit_permission_upload_only_label">ອັບໂຫຼດເທົ່ານັ້ນ (ສົ່ງໄຟລ໌)</string>
     <string name="share_with_title">ແຊຣ໌ກັບ...</string>
+    <string name="share_with_people_title">ແບ່ງປັນໃຫ້ຜູ້ຄົນ</string>
     <string name="share_with_edit_title">ແກ້ໄຂການແຊຣ໌ກັບ...</string>
 
     <string name="share_search">ຄົ້ນຫາ</string>
@@ -597,6 +603,7 @@
     <string name="scoped_storage_wizard_explanation">ເພື່ອປົກປ້ອງຂໍ້ມູນຂອງທ່ານໃຫ້ດີຂຶ້ນ, ໂຟລເດີທີ່ແອັບໃຊ້ເກັບໄຟລ໌ຈຳເປັນຕ້ອງຖືກຍ້າຍ</string>
     <string name="scoped_storage_wizard_intro">ໄຟລ໌ຈາກບັນຊີຂອງທ່ານ ຈະຖືກຍ້າຍໄປຍັງໂຟລເດີສ່ວນຕົວ. ທ່ານຍັງຄົງສາມາດເຂົ້າເຖິງໄດ້ໂດຍໃຊ້ແອັບນີ້, ແຕ່ບໍ່ສາມາດເຂົ້າເຖິງຈາກແອັບອື່ນໄດ້</string>
     <string name="scoped_storage_wizard_intro_button">ດຳເນີນການຕໍ່</string>
+    <string name="scoped_storage_wizard_not_enough_space_warning">⚠ ພື້ນທີ່ຫວ່າງໃນອຸປະກອນຂອງທ່ານຕອນນີ້ມີຈຳກັດ. ບາງໄຟລ໌ອາດຈະບໍ່ຖືກຍ້າຍ, ກະລຸນາກວດເບິ່ງວ່າທຸກໄຟລ໌ທີ່ດາວໂຫຼດຍັງຄົງຢູ່ຫຼັງຈາກຂະບວນການສຳເລັດແລ້ວ.</string>
     <string name="scoped_storage_wizard_migrate_and_clean_button">ຍ້າຍໄຟລ໌</string>
     <string name="scoped_storage_wizard_migration_completed">ການຍ້າຍຂໍ້ມູນສຳເລັດສົມບູນ</string>
     <string name="scoped_storage_wizard_migration_completed_access_files_button">ເຂົ້າເຖິງໄຟລ໌</string>
@@ -621,6 +628,9 @@
     <string name="release_notes_icon">ໄອຄອນບັນທຶກປະຈຳລຸ້ນ</string>
     <string name="release_notes_bugfixes_title">ການແກ້ໄຂຂໍ້ຜິດພາດ</string>
     <string name="release_notes_bugfixes_subtitle">ແອັບຕອນນີ້ສະຖຽນ ແລະ ເຊື່ອຖືໄດ້ຫຼາຍຂຶ້ນ. ສຳລັບລາຍການການປ່ຽນແປງທັງໝົດ, ຢ້ຽມຊົມ owncloud.com</string>
+    <string name="release_notes_4_9_0_sharing_ng_title">ລະບົບການແບ່ງປັນແບບໃໝ່ສຳລັບ Infinite Scale</string>
+    <string name="release_notes_4_9_0_sharing_ng_subtitle">ໄດ້ເພີ່ມໜ້າຕາ ແລະ ລະບົບການເຮັດວຽກໃໝ່ສຳລັບການແບ່ງປັນໄຟລ໌ ແລະ ໂຟນເດີໃນບັນຊີ Infinite Scale</string>
+
     <!-- Open in web -->
     <string name="ic_action_open_with_web">ເປີດດ້ວຍ...</string>
     <string name="open_in_web_error_generic">ບໍ່ສາມາດເປີດໄຟລ໌ໃນເບຣົາເຊີໄດ້</string>
@@ -708,6 +718,7 @@
     <string name="content_description_member_expiration_date">ວັນໝົດອາຍຸຂອງສະມາຊິກ</string>
     <string name="content_description_add_member">ເພີ່ມສະມາຊິກ</string>
     <string name="content_description_invite_member_button">ປຸ່ມເຊີນສະມາຊິກ</string>
+    <string name="content_description_create_share_button">ສ້າງການແບ່ງປັນ</string>
     <string name="content_description_expiration_date_switch">ສະຫຼັບວັນໝົດອາຍຸ</string>
     <string name="content_description_remove_member_button">ປຸ່ມລຶບສະມາຊິກ</string>
     <string name="content_description_edit_member_button">ປຸ່ມແກ້ໄຂສະມາຊິກ</string>
@@ -785,6 +796,7 @@
 
     <string name="public_link_create_title">ສ້າງລິ້ງສາທາລະນະ</string>
     <string name="public_link_set_password">ຕັ້ງລະຫັດຜ່ານ</string>
+    <string name="public_link_password_enforced_error">ຈຳເປັນຕ້ອງໃສ່ລະຫັດຜ່ານ</string>
     <string name="public_link_view">ເບິ່ງ</string>
     <string name="public_link_view_description">ເບິ່ງ, ດາວໂຫຼດ</string>
     <string name="public_link_edit">ແກ້ໄຂ</string>
@@ -796,6 +808,14 @@
     <string name="public_link_default_display_name">ລິ້ງທີ່ບໍ່ມີຊື່</string>
     <string name="public_link_add_correctly">ສ້າງລິ້ງສາທາລະນະສຳເລັດແລ້ວ</string>
     <string name="public_link_add_failed">ຕັ້ງຄ່າ</string>
+    <string name="public_link_remove_dialog_title">ທ່ານຕ້ອງການລຶບລິ້ງ: 1%1$s ແທ້ບໍ່\?</string>
+    <string name="public_link_remove_dialog_message">ບໍ່ສາມາດສ້າງລິ້ງເດີມຄືນໃໝ່ໄດ້</string>
+    <string name="public_link_remove_correctly">ລຶບລິ້ງສາທາລະນະສຳເລັດແລ້ວ</string>
+    <string name="public_link_remove_failed">ບໍ່ສາມາດລຶບລິ້ງສາທາລະນະໄດ້</string>
+    <string name="public_link_edit_title">ແກ້ໄຂລິ້ງສາທາລະນະ</string>
+    <string name="public_link_edit_correctly">ແກ້ໄຂລິ້ງສາທາລະນະສຳເລັດແລ້ວ</string>
+    <string name="public_link_edit_failed">ບໍ່ສາມາດແກ້ໄຂລິ້ງສາທາລະນະໄດ້</string>
+
     <string name="feedback_dialog_get_in_contact_description">ມີບັນຫາກັບການຕິດຕັ້ງ ownCloud ຂອງທ່ານ ຫຼື ບໍ່\? ຕິດຕໍ່ທີມງານຂອງພວກເຮົາສຳລັບຂໍ້ມູນເພີ່ມເຕີມ</string>
 
     <string name="link_role_accessibility">ລິ້ງ</string>
