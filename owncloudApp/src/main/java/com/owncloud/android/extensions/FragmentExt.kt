@@ -62,7 +62,7 @@ fun Fragment.showMessageInSnackbar(
     val bottomNavView = rootView.findViewById<View?>(R.id.bottom_nav_view)
     val snackbar = Snackbar.make(requiredView, message, duration)
     if (bottomNavView?.isVisible == true) { snackbar.setAnchorView(bottomNavView) }
-    snackbar.show()
+    snackbar.applyResponsiveWidth().show()
 }
 
 fun Fragment.showSnackbarWithAction(
@@ -74,6 +74,7 @@ fun Fragment.showSnackbarWithAction(
     val requiredView = view ?: return
     Snackbar.make(requiredView, message, duration)
         .setAction(actionText) { action() }
+        .applyResponsiveWidth()
         .show()
 }
 
