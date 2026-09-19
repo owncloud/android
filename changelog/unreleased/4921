@@ -1,0 +1,9 @@
+Bugfix: Widen snackbars on tablets
+
+Snackbars used the Material default width on tablets, so they only occupied a
+narrow band in the middle of the screen and left the rest of the row empty.
+The width now expands to fill the parent when the device reports a
+smallest-width of at least 600dp, so tablet users see a snackbar that spans
+the row like it does on phones.
+
+https://github.com/owncloud/android/issues/4921
