@@ -62,10 +62,7 @@ _____
 
 ### TASKS:
 
- - [ ] [GIT] Merge translations branch `chore/translations-update` into `master`
- - [ ] [GIT] Merge calens branch `chore/changelog-update` into `master`
- - [ ] [GIT] Merge sbom branch `chore/sbom-update` into `master`
- - [ ] [GIT] Create branch `release/M.m.p` in owncloud/android from `latest` or squashed commit including `latest`
+ - [ ] [GIT] Create branch `release/M.m.p` in owncloud/android from `latest`
  - [ ] [DEV] Update version number and name in build.gradle in owncloudApp module
  - [ ] [DIS] Update release notes in app and changelog in `unreleased` with the proper content for the release
  - [ ] [DIS] Move Calens files from `unreleased` to a new folder like `M.m.p_YYYY-MM-DD` inside the `changelog` folder
@@ -76,7 +73,6 @@ _____
  - [ ] [DIS] Check for new screenshots in Play Store/GitHub/F-Droid and generate them
  - [ ] [QA] Design test plan
  - [ ] [QA] Test execution
- - [ ] [QA] Trigger CI builds for unit tests and UI tests, in case changelog conflicts avoid them in GitHub
  - [ ] [QA] QA approval
  - [ ] [DIS] Upload release APK and bundle to internal ownCloud instance
  - [ ] [DIS] Upload and publish release bundle and changelog in Play Store
