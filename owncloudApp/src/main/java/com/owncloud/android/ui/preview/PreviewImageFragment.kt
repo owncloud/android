@@ -51,6 +51,7 @@ import com.owncloud.android.R
 import com.owncloud.android.databinding.PreviewImageFragmentBinding
 import com.owncloud.android.domain.files.model.MIME_SVG
 import com.owncloud.android.domain.files.model.OCFile
+import com.owncloud.android.extensions.applyResponsiveWidth
 import com.owncloud.android.extensions.collectLatestLifecycleFlow
 import com.owncloud.android.extensions.filterMenuOptions
 import com.owncloud.android.extensions.sendDownloadedFilesByShareSheet
@@ -248,13 +249,17 @@ class PreviewImageFragment : FileFragment() {
 
             R.id.action_set_available_offline -> {
                 fileOperationsViewModel.performOperation(FileOperation.SetFilesAsAvailableOffline(listOf(file)))
-                Snackbar.make(requireActivity().window.decorView, R.string.confirmation_set_available_offline, Snackbar.LENGTH_LONG).show()
+                Snackbar.make(requireActivity().window.decorView, R.string.confirmation_set_available_offline, Snackbar.LENGTH_LONG)
+                    .applyResponsiveWidth()
+                    .show()
                 true
             }
 
             R.id.action_unset_available_offline -> {
                 fileOperationsViewModel.performOperation(FileOperation.UnsetFilesAsAvailableOffline(listOf(file)))
-                Snackbar.make(requireActivity().window.decorView, R.string.confirmation_unset_available_offline, Snackbar.LENGTH_LONG).show()
+                Snackbar.make(requireActivity().window.decorView, R.string.confirmation_unset_available_offline, Snackbar.LENGTH_LONG)
+                    .applyResponsiveWidth()
+                    .show()
                 true
             }
 

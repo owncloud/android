@@ -100,7 +100,7 @@ fun Activity.showMessageInSnackbar(
     val bottomNavView = findViewById<View?>(R.id.bottom_nav_view)
     val snackbar = Snackbar.make(findViewById(layoutId), message, duration)
     if (bottomNavView?.isVisible == true) { snackbar.setAnchorView(bottomNavView) }
-    snackbar.show()
+    snackbar.applyResponsiveWidth().show()
 }
 
 fun Activity.showSnackbarWithAction(
@@ -112,7 +112,7 @@ fun Activity.showSnackbarWithAction(
     val bottomNavView = findViewById<View?>(R.id.bottom_nav_view)
     val snackbar = Snackbar.make(findViewById(android.R.id.content), message, duration)
     if (bottomNavView?.isVisible == true) { snackbar.setAnchorView(bottomNavView) }
-    snackbar.setAction(actionText) { action() }.show()
+    snackbar.setAction(actionText) { action() }.applyResponsiveWidth().show()
 }
 
 fun Activity.showErrorInToast(
