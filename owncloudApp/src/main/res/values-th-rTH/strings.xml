@@ -252,7 +252,6 @@
   <string name="confirmation_remove_account_alert_camera_uploads">บัญชีนี้มีการอัปโหลดรูปภาพที่แนบมาจากกล้อง การลบบัญชีจะปิดการอัปโหลดรูปภาพจากกล้อง คุณต้องการลบบัญชี %1$s?</string>
   <string name="confirmation_remove_public_share_title">ลบลิงก์</string>
   <string name="confirmation_remove_private_share_title">ลบการแชร์แบบส่วนตัว</string>
-  <string name="confirmation_remove_share_message">คุณต้องการลบแชร์ %1$s?</string>
   <string name="remove_success_msg">ลบเรียบร้อยแล้ว</string>
   <string name="remove_fail_msg">ไม่สามารถลบได้</string>
   <string name="rename_dialog_title">กรอกชื่อใหม่</string>

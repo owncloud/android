@@ -272,7 +272,6 @@
   <string name="confirmation_remove_account_alert_camera_uploads">To konto jest powiązane z wysyłaniem z aparatu, usunięcie konta wyłączy wysyłanie z aparatu. Czy na pewno chcesz usunąć konto %1$s?</string>
   <string name="confirmation_remove_public_share_title">Usuń link</string>
   <string name="confirmation_remove_private_share_title">Usuń prywatny udział</string>
-  <string name="confirmation_remove_share_message">Czy na pewno chcesz usunąć udział %1$s?</string>
   <string name="remove_success_msg">Usunięto</string>
   <string name="remove_fail_msg">Nie można usunąć</string>
   <string name="rename_dialog_title">Wprowadź nową nazwę</string>

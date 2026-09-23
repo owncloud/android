@@ -322,7 +322,6 @@
     <string name="confirmation_remove_account_alert_camera_uploads">Sellel kontol on kaamera üleslaadimised lisatud, konto kustutamine keelab kaamera ülesaadimised. Kas soovid tõesti kustutada konto %1$s?</string>
     <string name="confirmation_remove_public_share_title">Eemalda link</string>
     <string name="confirmation_remove_private_share_title">Eemalda privaatne jagamine</string>
-    <string name="confirmation_remove_share_message">Kas soovid tõesti eemaldada %1$s jagamise?</string>
     <string name="remove_success_msg">Eemaldamine oli edukas</string>
     <string name="remove_fail_msg">Eemaldamine ebaõnnestus</string>
     <string name="rename_dialog_title">Sisesta uus nimi</string>

@@ -296,7 +296,6 @@
   <string name="confirmation_remove_account_alert_camera_uploads">К этой учётной записи привязаны закачки из камеры; удаление записи отключит закачки из камеры. Вы действительно хотите удалить учётную запись %1$s?</string>
   <string name="confirmation_remove_public_share_title">Удалить ссылку</string>
   <string name="confirmation_remove_private_share_title">Удалить общий доступ</string>
-  <string name="confirmation_remove_share_message">Вы действительно хотите удалить общий доступ %1$s?</string>
   <string name="remove_success_msg">Удаление завершено</string>
   <string name="remove_fail_msg">Ошибка удаления</string>
   <string name="rename_dialog_title">Введите новое имя</string>

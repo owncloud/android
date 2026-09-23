@@ -50,6 +50,12 @@ interface ShareService : Service {
         expirationDate: String?
     ): RemoteOperationResult<Unit>
 
+    fun removeGraphShare(
+        spaceId: String,
+        itemId: String,
+        shareId: String
+    ): RemoteOperationResult<Unit>
+
     fun insertShare(
         remoteFilePath: String,
         shareType: ShareType,

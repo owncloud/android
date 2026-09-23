@@ -316,7 +316,6 @@
     <string name="confirmation_remove_account_alert_camera_uploads">Tähän tiliin on liitetty kameran kuvien lähetys. Tilin poistaminen poistaa käytöstä kameran kuvien lähettämisen. Haluatko todellakin poistaa tilin %1$s? </string>
     <string name="confirmation_remove_public_share_title">Poista linkki</string>
     <string name="confirmation_remove_private_share_title">Poista henkilökohtainen jako</string>
-    <string name="confirmation_remove_share_message">Haluatko todellakin poistaa %1$s jaon?</string>
     <string name="remove_success_msg">Poistettu onnistuneesti</string>
     <string name="remove_fail_msg">Poistamista ei voitu suorittaa loppuun asti</string>
     <string name="rename_dialog_title">Anna uusi nimi</string>

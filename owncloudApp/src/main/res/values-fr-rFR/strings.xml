@@ -248,7 +248,6 @@ Téléchargez-le ici : %2$s</string>
   <string name="confirmation_remove_account_alert_camera_uploads">Ce compte est associé à des téléversements depuis un appareil photo, supprimer le compte supprimera également ces fichiers. Voulez vous vraiment supprimer le compte %1$s ?</string>
   <string name="confirmation_remove_public_share_title">Supprimer le lien</string>
   <string name="confirmation_remove_private_share_title">Supprimer le partage privé</string>
-  <string name="confirmation_remove_share_message">Voulez-vous vraiment supprimer le partage %1$s ?</string>
   <string name="remove_success_msg">Suppression réussie</string>
   <string name="remove_fail_msg">Suppression échouée</string>
   <string name="rename_dialog_title">Saisir un nouveau nom</string>

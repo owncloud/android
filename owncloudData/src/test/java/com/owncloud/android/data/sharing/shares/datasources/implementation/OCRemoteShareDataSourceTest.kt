@@ -56,6 +56,7 @@ class OCRemoteShareDataSourceTest {
     private val clientManager: ClientManager = mockk(relaxed = true)
 
     private val userType = OCMemberType.toString(OC_USER_MEMBER.type).lowercase()
+    private val shareId = "share-id"
 
     @Before
     fun setUp() {
@@ -446,6 +447,35 @@ class OCRemoteShareDataSourceTest {
                 memberType = userType,
                 roleId = SPACE_MEMBERS.roles[0].id,
                 expirationDate = null
+            )
+        }
+    }
+
+    @Test
+    fun `removeGraphShare removes a graph share correctly`() {
+        val removeGraphShareResult = createRemoteOperationResultMock(Unit, isSuccess = true)
+
+        every {
+            ocShareService.removeGraphShare(
+                spaceId = OC_SPACE_PROJECT_WITH_IMAGE.id,
+                itemId = OC_FILE.remoteId.orEmpty(),
+                shareId = shareId
+            )
+        } returns removeGraphShareResult
+
+        ocRemoteShareDataSource.removeGraphShare(
+            accountName = OC_ACCOUNT_NAME,
+            spaceId = OC_SPACE_PROJECT_WITH_IMAGE.id,
+            itemId = OC_FILE.remoteId.orEmpty(),
+            shareId = shareId
+        )
+
+        verify(exactly = 1) {
+            clientManager.getShareService(OC_ACCOUNT_NAME)
+            ocShareService.removeGraphShare(
+                spaceId = OC_SPACE_PROJECT_WITH_IMAGE.id,
+                itemId = OC_FILE.remoteId.orEmpty(),
+                shareId = shareId
             )
         }
     }

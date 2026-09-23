@@ -239,7 +239,6 @@
   <string name="confirmation_remove_account_alert">هل ترغب حقًا في إزالة حساب %1$s؟</string>
   <string name="confirmation_remove_public_share_title">إزالة الرابط</string>
   <string name="confirmation_remove_private_share_title">إزالة المشاركة الخاصة</string>
-  <string name="confirmation_remove_share_message">هل ترغب حقًا في إزالة مشاركة %1$s؟</string>
   <string name="remove_success_msg">نجحت الإزالة</string>
   <string name="remove_fail_msg">فشلت الإزالة</string>
   <string name="rename_dialog_title">أدخل اسمًا جديدًا</string>

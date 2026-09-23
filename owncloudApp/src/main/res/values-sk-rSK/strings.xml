@@ -167,7 +167,6 @@
   <string name="confirmation_remove_account_alert">Vážne chcete odtrániť konto %1$s?</string>
   <string name="confirmation_remove_public_share_title">Odstránenie linku</string>
   <string name="confirmation_remove_private_share_title">Odstránenie privátneho zdieľania</string>
-  <string name="confirmation_remove_share_message">Vážne chcete odstrániť  %1$s zdieľanie?</string>
   <string name="remove_success_msg">Úspešne odstránené</string>
   <string name="remove_fail_msg">Odstránenie zlyhalo</string>
   <string name="rename_dialog_title">Zadajte nové meno</string>
