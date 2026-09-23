@@ -77,6 +77,7 @@ import com.owncloud.android.domain.files.model.OCFile.Companion.ROOT_PARENT_ID
 import com.owncloud.android.domain.spaces.model.OCSpace
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.checkPasscodeEnforced
+import com.owncloud.android.extensions.applyResponsiveWidth
 import com.owncloud.android.extensions.collectLatestLifecycleFlow
 import com.owncloud.android.extensions.goToUrl
 import com.owncloud.android.extensions.isDownloadPending
@@ -1408,7 +1409,9 @@ class FileDisplayActivity : FileActivity(),
 
                     is SynchronizeFileUseCase.SyncType.DownloadEnqueued -> {
                         fileWaitingToPreview?.let {
-                            Snackbar.make(findViewById(android.R.id.content), R.string.new_remote_version_found_msg, Snackbar.LENGTH_LONG).show()
+                            Snackbar.make(findViewById(android.R.id.content), R.string.new_remote_version_found_msg, Snackbar.LENGTH_LONG)
+                                .applyResponsiveWidth()
+                                .show()
                             startSyncThenOpen(it)
                             fileWaitingToPreview = null
                         } ?: showSnackMessage(getString(R.string.download_enqueued_msg))

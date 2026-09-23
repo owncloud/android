@@ -63,6 +63,7 @@ import com.owncloud.android.R
 import com.owncloud.android.databinding.VideoPreviewBinding
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.utils.Event
+import com.owncloud.android.extensions.applyResponsiveWidth
 import com.owncloud.android.extensions.filterMenuOptions
 import com.owncloud.android.extensions.sendDownloadedFilesByShareSheet
 import com.owncloud.android.extensions.showErrorInSnackbar
@@ -411,7 +412,7 @@ class PreviewVideoActivity : FileActivity(), Player.Listener, OnPrepareVideoPlay
                 val fileToSetAsAvailableOffline = ArrayList<OCFile>()
                 fileToSetAsAvailableOffline.add(file)
                 fileOperationsViewModel.performOperation(SetFilesAsAvailableOffline(fileToSetAsAvailableOffline))
-                Snackbar.make(binding.root, R.string.confirmation_set_available_offline, Snackbar.LENGTH_LONG).show()
+                Snackbar.make(binding.root, R.string.confirmation_set_available_offline, Snackbar.LENGTH_LONG).applyResponsiveWidth().show()
                 true
             }
 
@@ -419,7 +420,7 @@ class PreviewVideoActivity : FileActivity(), Player.Listener, OnPrepareVideoPlay
                 val fileToUnsetAsAvailableOffline = ArrayList<OCFile>()
                 fileToUnsetAsAvailableOffline.add(file)
                 fileOperationsViewModel.performOperation(UnsetFilesAsAvailableOffline(fileToUnsetAsAvailableOffline))
-                Snackbar.make(binding.root, R.string.confirmation_unset_available_offline, Snackbar.LENGTH_LONG).show()
+                Snackbar.make(binding.root, R.string.confirmation_unset_available_offline, Snackbar.LENGTH_LONG).applyResponsiveWidth().show()
                 true
             }
 
