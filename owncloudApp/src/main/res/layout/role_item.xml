@@ -74,8 +74,8 @@
                 android:text="@string/placeholder_sentence"
                 android:textSize="13sp"
                 android:textColor="@color/textColor"
-                android:ellipsize="middle"
-                android:maxLines="2"/>
+                android:ellipsize="end"
+                android:maxLines="4"/>
 
         </LinearLayout>
 
