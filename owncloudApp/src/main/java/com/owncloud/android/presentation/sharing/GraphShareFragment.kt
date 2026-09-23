@@ -110,6 +110,8 @@ class GraphShareFragment : Fragment(), GraphSharesAdapter.GraphSharesAdapterList
 
     override fun onRemoveShare(share: MemberPermission) {
         AlertDialog.Builder(requireContext())
+            .setIcon(R.drawable.ic_warning)
+            .setTitle(getString(R.string.confirmation_remove_private_share_title))
             .setMessage(getString(R.string.confirmation_remove_share_message, share.displayName))
             .setPositiveButton(getString(R.string.common_yes)) { _, _ -> graphShareViewModel.removeGraphShare(share.id) }
             .setNegativeButton(getString(R.string.common_no)) { dialog, _ -> dialog.dismiss() }
