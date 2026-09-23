@@ -306,7 +306,6 @@
     <string name="confirmation_remove_account_alert_camera_uploads">이 계정은 카메라 업로드 대상이며, 이 계정을 제거하면 카메라 업로드 기능이 꺼집니다. %1$s 계정을 제거하시겠습니까?</string>
     <string name="confirmation_remove_public_share_title">링크 삭제</string>
     <string name="confirmation_remove_private_share_title">비공개 공유 제거</string>
-    <string name="confirmation_remove_share_message">%1$s 공유를 제거하시겠습니까?</string>
     <string name="remove_success_msg">삭제함</string>
     <string name="remove_fail_msg">삭제할 수 없음</string>
     <string name="rename_dialog_title">새 이름 입력</string>

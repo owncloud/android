@@ -247,7 +247,6 @@
   <string name="confirmation_remove_account_alert_camera_uploads">بۇ ھېساباتقا كامېرا يوللاش باغلانغان بولۇپ ، ھېساباتنى ئۆچۈرگەندە كامېرا يوللاشنى چەكلەيدۇ. راستىنلا% 1 $ s ھېساباتنى ئۆچۈرمەكچىمۇ؟</string>
   <string name="confirmation_remove_public_share_title">ئۇلانمىنى ئۆچۈر</string>
   <string name="confirmation_remove_private_share_title">شەخسىي ئۈلۈشنى ئۆچۈرۈڭ</string>
-  <string name="confirmation_remove_share_message">راستىنلا% 1 $ s نى ئۆچۈرمەكچىمۇ؟</string>
   <string name="remove_success_msg">ئېلىۋېتىش مۇۋەپپەقىيەتلىك بولدى</string>
   <string name="remove_fail_msg">ئۆچۈرۈش مەغلۇب بولدى</string>
   <string name="rename_dialog_title">يېڭى ئىسىم كىرگۈزۈڭ</string>

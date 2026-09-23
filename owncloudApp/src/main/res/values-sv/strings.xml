@@ -246,7 +246,6 @@
   <string name="confirmation_remove_account_alert">Vll du verkligen ta bort kontot %1$s?</string>
   <string name="confirmation_remove_public_share_title">Ta bort länk</string>
   <string name="confirmation_remove_private_share_title">Ta bort privatdelning</string>
-  <string name="confirmation_remove_share_message">Vill du verkligen radera %1$s delning?</string>
   <string name="remove_success_msg">Lyckad radering</string>
   <string name="remove_fail_msg">Radering kunde inte slutföras</string>
   <string name="rename_dialog_title">Ange ett nytt namn</string>

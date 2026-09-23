@@ -244,7 +244,6 @@
   <string name="confirmation_remove_account_alert_camera_uploads">Този профил има прикачени качвания от камерата, премахването му ще деактивира качванията от камерата. Наистина ли искате да премахнете профила на %1$s?</string>
   <string name="confirmation_remove_public_share_title">Изтриване на връзка</string>
   <string name="confirmation_remove_private_share_title">Изтриване на поверително споделяне</string>
-  <string name="confirmation_remove_share_message">Наистина ли искате да премахнете споделеният %1$s?</string>
   <string name="remove_success_msg">Премахването е успешно</string>
   <string name="remove_fail_msg">Премахването е неуспешно</string>
   <string name="rename_dialog_title">Въведете ново име</string>

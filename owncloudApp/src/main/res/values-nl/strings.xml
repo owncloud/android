@@ -237,7 +237,6 @@ Download hier: %2$s</string>
   <string name="confirmation_remove_account_alert">Wilt u werkelijk account %1$s verwijderen?</string>
   <string name="confirmation_remove_public_share_title">Verwijderen link</string>
   <string name="confirmation_remove_private_share_title">Verwijder privé gedeelde bestanden</string>
-  <string name="confirmation_remove_share_message">Wilt u werkelijk het delen van %1$sverwijderen?</string>
   <string name="remove_success_msg">Succesvol verwijderd</string>
   <string name="remove_fail_msg">Verwijdering kon niet voltooid worden</string>
   <string name="rename_dialog_title">Voer een nieuwe naam in</string>

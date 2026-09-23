@@ -245,7 +245,6 @@
   <string name="confirmation_remove_account_alert_camera_uploads">Questo account contiene immagini caricate dalla fotocamera. Rimuovendo l\'account il caricamento delle immagini dalla fotocamera verrà disabilitato. Si è sicuri di voler rimuovere l\'account %1$s?</string>
   <string name="confirmation_remove_public_share_title">Rimuovi collegamento</string>
   <string name="confirmation_remove_private_share_title">Rimuovi la condivisione privata</string>
-  <string name="confirmation_remove_share_message">Vuoi veramente rimuovere la condivisione %1$s ?</string>
   <string name="remove_success_msg">Rimozione effettuata con successo</string>
   <string name="remove_fail_msg">La rimozione non può essere completata</string>
   <string name="rename_dialog_title">Digita un nuovo nome</string>

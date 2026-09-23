@@ -323,7 +323,6 @@
     <string name="confirmation_remove_account_alert_camera_uploads">Für dieses Konto sind Kamera-Uploads eingerichtet. Wenn Sie das Konto entfernen, werden die Kamera-Uploads deaktiviert. Möchten Sie das Konto %1$s wirklich entfernen? </string>
     <string name="confirmation_remove_public_share_title">Link entfernen</string>
     <string name="confirmation_remove_private_share_title">Private Freigabe entfernen</string>
-    <string name="confirmation_remove_share_message">Möchten Sie die Freigabe %1$s wirklich löschen?</string>
     <string name="remove_success_msg">Erfolgreich gelöscht</string>
     <string name="remove_fail_msg">Löschvorgang fehlgeschlagen.</string>
     <string name="rename_dialog_title">Geben Sie einen neuen Namen ein</string>

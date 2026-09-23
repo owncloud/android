@@ -279,7 +279,6 @@
     <string name="confirmation_remove_account_alert_camera_uploads">Bu hesaba kamera yüklemeleri eklenmiş, hesabın kaldırılması kamera yüklemelerini devre dışı bırakacaktır. %1$s hesabını gerçekten kaldırmak istiyor musunuz?</string>
     <string name="confirmation_remove_public_share_title">Bağlantıyı sil</string>
     <string name="confirmation_remove_private_share_title">Özel paylaşımı kaldır</string>
-    <string name="confirmation_remove_share_message">Gerçekten %1$s paylaşımını kaldırmak istiyor musunuz?</string>
     <string name="remove_success_msg">Kaldırma başarılı</string>
     <string name="remove_fail_msg">Kaldırma başarısız</string>
     <string name="rename_dialog_title">Yeni bir isim girin</string>

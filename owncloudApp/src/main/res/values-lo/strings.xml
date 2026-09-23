@@ -323,7 +323,6 @@
     <string name="confirmation_remove_account_alert_camera_uploads">ການລຶບບັນຊີນີ້ຈະປິດໃຊ້ງານການອັບໂຫຼດອັດຕະໂນມັດສຳລັບບັນຊີນີ້. ທ່ານແນ່ໃຈບໍ່ວ່າຕ້ອງການດຳເນີນການຕໍ່\?</string>
     <string name="confirmation_remove_public_share_title">ຢືນຢັນການລຶບ</string>
     <string name="confirmation_remove_private_share_title">ຢືນຢັນການລຶບ</string>
-    <string name="confirmation_remove_share_message">ທ່ານແນ່ໃຈບໍ່ວ່າຕ້ອງການລຶບການແຊຣ໌ນີ້\?</string>
     <string name="remove_success_msg">ລຶບສຳເລັດ</string>
     <string name="remove_fail_msg">ບໍ່ສາມາດລຶບໄດ້</string>
     <string name="rename_dialog_title">ປ່ຽນຊື່</string>

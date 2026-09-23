@@ -299,7 +299,6 @@
   <string name="confirmation_remove_account_alert_camera_uploads">此帳號已附加相機上傳功能，刪除該帳號將停用相機上傳功能。 您真的要移除帳號嗎%1$s?</string>
   <string name="confirmation_remove_public_share_title">移除連結</string>
   <string name="confirmation_remove_private_share_title">移除私人的分享</string>
-  <string name="confirmation_remove_share_message">您真的要移除%1$s分享?</string>
   <string name="remove_success_msg">成功地移除</string>
   <string name="remove_fail_msg">刪除失敗</string>
   <string name="rename_dialog_title">輸入新名稱</string>

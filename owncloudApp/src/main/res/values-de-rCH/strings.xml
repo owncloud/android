@@ -232,7 +232,6 @@
   <string name="confirmation_remove_account_alert">Möchtest du das Konto von %1$s wirklich löschen?</string>
   <string name="confirmation_remove_public_share_title">Link entfernen</string>
   <string name="confirmation_remove_private_share_title">Private Freigabe entfernen</string>
-  <string name="confirmation_remove_share_message">Willst Du die Freigabe %1$s wirklich entfernen?</string>
   <string name="remove_success_msg">Erfolgreich gelöscht</string>
   <string name="remove_fail_msg">Der Löschvorgang konnte nicht beendet werden</string>
   <string name="rename_dialog_title">Gib einen neuen Namen ein</string>

@@ -287,7 +287,6 @@ Téléchargez-le ici : %2$s</string>
   <string name="confirmation_remove_account_alert">Voulez-vous vraiment supprimer le compte %1$s ?</string>
   <string name="confirmation_remove_public_share_title">Supprimer le lien</string>
   <string name="confirmation_remove_private_share_title">Supprimer partage privé</string>
-  <string name="confirmation_remove_share_message">Voullez-vous vraiment supprimer le partage %1$s ?</string>
   <string name="remove_success_msg">Suppression effectuée avec succès</string>
   <string name="remove_fail_msg">Suppression impossible</string>
   <string name="rename_dialog_title">Entrez un nouveau nom</string>
