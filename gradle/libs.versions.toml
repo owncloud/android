@@ -44,7 +44,6 @@ moshi = "1.15.2"
 patternlockview = "a90b0d4bf0"
 photoView = "2.3.0"
 preference = "1.2.1"
-sonarqube = "4.0.0.2929"
 stetho = "1.6.0"
 timber = "5.0.1"
 
@@ -129,6 +128,5 @@ markwon = ["markwon-core", "markwon-ext-tables", "markwon-ext-strikethrough", "m
 [plugins]
 kotlin = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
-sonarqube = { id = "org.sonarqube", version.ref = "sonarqube" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 cyclonedx = { id = "org.cyclonedx.bom", version.ref = "cyclonedx" }

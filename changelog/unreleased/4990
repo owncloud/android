@@ -1,0 +1,5 @@
+Change: Remove sonarqube dependency
+
+Sonarqube dependency has been removed since it's no longer used
+
+https://github.com/owncloud/android/pull/4990
