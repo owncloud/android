@@ -174,6 +174,8 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
 
     override fun onRemoveMember(spaceMember: MemberPermission) {
         AlertDialog.Builder(requireContext())
+            .setIcon(R.drawable.ic_warning)
+            .setTitle(getString(R.string.members_remove_dialog_header))
             .setMessage(getString(R.string.members_remove_dialog_message, spaceMember.displayName))
             .setPositiveButton(getString(R.string.common_yes)) { _, _ -> spaceMembersViewModel.removeMember(spaceMember.id) }
             .setNegativeButton(getString(R.string.common_no)) { dialog, _ -> dialog.dismiss() }
