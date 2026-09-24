@@ -1,0 +1,5 @@
+Enhancement: Add header to remove member dialog
+
+A header has been added to the remove member from space dialog in order to be consistent with other removal dialogs
+
+https://github.com/owncloud/android/pull/4989
