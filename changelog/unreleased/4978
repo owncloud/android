@@ -1,0 +1,7 @@
+Enhancement: Edit a share over a file or a folder on an oCIS server
+
+A new option to edit a share over a file or a folder on an oCIS has been added.
+It will be only visible for users with proper permissions.
+
+https://github.com/owncloud/android/issues/4937
+https://github.com/owncloud/android/pull/4978
