@@ -57,6 +57,7 @@ class GraphShareFragment : Fragment(), GraphSharesAdapter.GraphSharesAdapterList
     private lateinit var graphSharesAdapter: GraphSharesAdapter
 
     private var roles: List<OCRole> = emptyList()
+    private var shares: List<MemberPermission> = emptyList()
     private var listener: GraphShareFragmentListener? = null
     private var canRemoveShares: Boolean = false
     private var canEditShares: Boolean = false
@@ -144,10 +145,8 @@ class GraphShareFragment : Fragment(), GraphSharesAdapter.GraphSharesAdapterList
                     is UIResult.Success -> {
                         uiResult.data?.let {
                             roles = it.roles
-                            val hasMembers = it.members.isNotEmpty()
-                            binding.membersRecyclerView.isVisible = hasMembers
-                            binding.noSharesMessage.isVisible = !hasMembers
-                            graphSharesAdapter.setShares(it.members, it.roles, canRemoveShares, canEditShares)
+                            shares = it.members
+                            showShares()
                             binding.swipeRefreshMembers.isRefreshing = false
                         }
                     }
@@ -169,6 +168,7 @@ class GraphShareFragment : Fragment(), GraphSharesAdapter.GraphSharesAdapterList
                     is UIResult.Success -> {
                         uiResult.data?.let { spacePermissions ->
                             checkPermissions(spacePermissions)
+                            showShares()
                         }
                     }
                     is UIResult.Loading -> { }
@@ -192,6 +192,7 @@ class GraphShareFragment : Fragment(), GraphSharesAdapter.GraphSharesAdapterList
                     is UIResult.Loading -> { }
                     is UIResult.Success -> {
                         showMessageInSnackbar(getString(R.string.share_add_correctly))
+                        graphShareViewModel.getGraphShares()
                         graphShareViewModel.resetViewModel()
                     }
                     is UIResult.Error -> { }
@@ -223,12 +224,20 @@ class GraphShareFragment : Fragment(), GraphSharesAdapter.GraphSharesAdapterList
                     is UIResult.Loading -> { }
                     is UIResult.Success -> {
                         showMessageInSnackbar(getString(R.string.share_edit_correctly))
+                        graphShareViewModel.getGraphShares()
                         graphShareViewModel.resetViewModel()
                     }
                     is UIResult.Error -> { }
                 }
             }
         }
+    }
+
+    private fun showShares() {
+        val hasShares = shares.isNotEmpty()
+        binding.membersRecyclerView.isVisible = hasShares
+        binding.noSharesMessage.isVisible = !hasShares
+        graphSharesAdapter.setShares(shares, roles, canRemoveShares, canEditShares)
     }
 
     interface GraphShareFragmentListener {
