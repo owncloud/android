@@ -34,6 +34,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import com.google.android.material.snackbar.Snackbar;
+import com.owncloud.android.extensions.SnackbarExtKt;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.presentation.authentication.AccountUtils;
@@ -331,6 +332,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         if (bottomNavView != null && bottomNavView.getVisibility() == View.VISIBLE) {
             snackbar.setAnchorView(bottomNavView);
         }
-        snackbar.show();
+        SnackbarExtKt.applyResponsiveWidth(snackbar).show();
     }
 }
