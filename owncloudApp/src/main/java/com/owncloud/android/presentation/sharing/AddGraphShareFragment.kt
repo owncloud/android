@@ -70,7 +70,7 @@ class AddGraphShareFragment : Fragment(), SearchMembersAdapter.SearchMembersAdap
     private var searchMinLength = DEFAULT_SEARCH_MIN_LENGTH
     private var currentUserId: String? = null
     private var editMode = false
-    private var selectedShareId = ""
+    private var selectedShareId: String? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = AddMemberFragmentBinding.inflate(inflater, container, false)
@@ -235,7 +235,9 @@ class AddGraphShareFragment : Fragment(), SearchMembersAdapter.SearchMembersAdap
                     uiState.selectedMember?.let { selectedMember ->
                         uiState.selectedRole?.let { selectedRole ->
                             if (editMode) {
-                                graphShareViewModel.editGraphShare(selectedShareId, selectedRole.id, uiState.selectedExpirationDate)
+                                selectedShareId?.let { shareId ->
+                                    graphShareViewModel.editGraphShare(shareId, selectedRole.id, uiState.selectedExpirationDate)
+                                }
                             } else {
                                 graphShareViewModel.addGraphShare(selectedMember, selectedRole.id)
                             }
@@ -274,8 +276,10 @@ class AddGraphShareFragment : Fragment(), SearchMembersAdapter.SearchMembersAdap
         selectedShareId = share.id
         graphShareViewModel.onMemberSelected(share.toOCMember())
 
-        val selectedRole = roles.first { it.id == share.roles[0] }
-        graphShareViewModel.onRoleSelected(selectedRole)
+        val selectedRole = share.roles.firstOrNull()?.let { roleId ->
+            roles.firstOrNull { it.id == roleId }
+        }
+        selectedRole?.let { graphShareViewModel.onRoleSelected(it) }
 
         share.expirationDateTime?.let { expirationDate ->
             graphShareViewModel.onExpirationDateSelected(expirationDate)
