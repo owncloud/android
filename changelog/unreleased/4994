@@ -1,0 +1,7 @@
+Bugfix: Hide three dot menu on space cards for Kiteworks accounts
+
+The three dot menu shown on space cards has been hidden for Kiteworks accounts, since
+spaces are folders in those servers and clicking on Members made the app crash.
+
+https://github.com/owncloud/android/issues/4991
+https://github.com/owncloud/android/pull/4994
