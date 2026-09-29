@@ -99,7 +99,7 @@ class SpacesListAdapter(
                 }
             }
 
-            if (isPickerMode) {
+            if (isPickerMode || isMultiPersonal) {
                 spacesThreeDotMenu.visibility = View.GONE
             }
 
