@@ -28,7 +28,6 @@ private const val GROUP_PREFIX = "g:"
 private const val USER_PREFIX = "u:"
 
 fun MemberPermission.toOCMember(): OCMember {
-    val isGroup = id.startsWith(GROUP_PREFIX)
     val type = if (isGroup) OCMemberType.GROUP else OCMemberType.USER
     return OCMember(
         id = id.removePrefix(if (isGroup) GROUP_PREFIX else USER_PREFIX),

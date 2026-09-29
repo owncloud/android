@@ -480,6 +480,41 @@ class OCRemoteShareDataSourceTest {
         }
     }
 
+    @Test
+    fun `editGraphShare edits a graph share correctly`() {
+        val editGraphShareResult = createRemoteOperationResultMock(Unit, isSuccess = true)
+
+        every {
+            ocShareService.editGraphShare(
+                spaceId = OC_SPACE_PROJECT_WITH_IMAGE.id,
+                itemId = OC_FILE.remoteId.orEmpty(),
+                shareId = shareId,
+                roleId = SPACE_MEMBERS.roles[0].id,
+                expirationDate = null
+            )
+        } returns editGraphShareResult
+
+        ocRemoteShareDataSource.editGraphShare(
+            accountName = OC_ACCOUNT_NAME,
+            spaceId = OC_SPACE_PROJECT_WITH_IMAGE.id,
+            itemId = OC_FILE.remoteId.orEmpty(),
+            shareId = shareId,
+            roleId = SPACE_MEMBERS.roles[0].id,
+            expirationDate = null
+        )
+
+        verify(exactly = 1) {
+            clientManager.getShareService(OC_ACCOUNT_NAME)
+            ocShareService.editGraphShare(
+                spaceId = OC_SPACE_PROJECT_WITH_IMAGE.id,
+                itemId = OC_FILE.remoteId.orEmpty(),
+                shareId = shareId,
+                roleId = SPACE_MEMBERS.roles[0].id,
+                expirationDate = null
+            )
+        }
+    }
+
     @Test(expected = ShareNotFoundException::class)
     fun `insert throws a ShareNotFoundException when share is not found`() {
         insertShareOperationWithError(RemoteOperationResult.ResultCode.SHARE_NOT_FOUND)

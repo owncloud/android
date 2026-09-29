@@ -30,6 +30,7 @@ import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.shares.AddRemoteGraphShareOperation
 import com.owncloud.android.lib.resources.shares.CreateRemoteShareOperation
+import com.owncloud.android.lib.resources.shares.EditRemoteGraphShareOperation
 import com.owncloud.android.lib.resources.shares.GetRemoteGraphSharesForFileOperation
 import com.owncloud.android.lib.resources.shares.GetRemoteSharesForFileOperation
 import com.owncloud.android.lib.resources.shares.RemoveRemoteGraphShareOperation
@@ -70,6 +71,15 @@ class OCShareService(override val client: OwnCloudClient) : ShareService {
         shareId: String
     ): RemoteOperationResult<Unit> =
         RemoveRemoteGraphShareOperation(spaceId, itemId, shareId).execute(client)
+
+    override fun editGraphShare(
+        spaceId: String,
+        itemId: String,
+        shareId: String,
+        roleId: String,
+        expirationDate: String?
+    ): RemoteOperationResult<Unit> =
+        EditRemoteGraphShareOperation(spaceId, itemId, shareId, roleId, expirationDate).execute(client)
 
     override fun insertShare(
         remoteFilePath: String,

@@ -140,6 +140,15 @@ class OCShareRepository(
         shareId: String
     ) = remoteShareDataSource.removeGraphShare(accountName, spaceId, itemId, shareId)
 
+    override fun editGraphShare(
+        accountName: String,
+        spaceId: String,
+        itemId: String,
+        shareId: String,
+        roleId: String,
+        expirationDate: String?
+    ) = remoteShareDataSource.editGraphShare(accountName, spaceId, itemId, shareId, roleId, expirationDate)
+
     override fun refreshSharesFromNetwork(
         filePath: String,
         accountName: String
