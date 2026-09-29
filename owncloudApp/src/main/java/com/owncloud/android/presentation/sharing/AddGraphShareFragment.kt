@@ -207,7 +207,8 @@ class AddGraphShareFragment : Fragment(), SearchMembersAdapter.SearchMembersAdap
                     addMemberLayout.visibility = View.VISIBLE
                     inviteMemberButton.visibility = View.VISIBLE
                     inviteMemberButton.text = getString(if (editMode) R.string.share_confirm_public_link_button else R.string.action_share)
-                    inviteMemberButton.contentDescription = getString(R.string.content_description_create_share_button)
+                    inviteMemberButton.contentDescription =
+                        getString(if (editMode) R.string.content_description_edit_share_button else R.string.content_description_create_share_button)
                 }
                 it.selectedMember?.let { member ->
                     binding.bindSelectedMember(member)
