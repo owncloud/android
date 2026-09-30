@@ -80,6 +80,10 @@ class AddMemberFragment: Fragment(), SearchMembersAdapter.SearchMembersAdapterLi
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        editMode = requireArguments().getBoolean(ARG_EDIT_MODE, false)
+        roles = requireArguments().getParcelableArrayList<OCRole>(ARG_ROLES) ?: arrayListOf()
+
         searchMembersAdapter = SearchMembersAdapter(this)
         recyclerView = binding.membersRecyclerView
         recyclerView.apply {
@@ -87,8 +91,15 @@ class AddMemberFragment: Fragment(), SearchMembersAdapter.SearchMembersAdapterLi
             adapter = searchMembersAdapter
         }
 
-        editMode = requireArguments().getBoolean(ARG_EDIT_MODE, false)
-        roles = requireArguments().getParcelableArrayList<OCRole>(ARG_ROLES) ?: arrayListOf()
+        rolesAdapter = SpaceRolesAdapter(onRoleSelected = {
+            binding.inviteMemberButton.isEnabled = true
+            spaceMembersViewModel.onRoleSelected(it)
+        })
+        binding.rolesRecyclerView.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = rolesAdapter
+        }
+        rolesAdapter.setRoles(roles)
 
         if (editMode) {
             val selectedMember = requireArguments().getParcelable<MemberPermission>(ARG_SELECTED_MEMBER)
@@ -237,15 +248,6 @@ class AddMemberFragment: Fragment(), SearchMembersAdapter.SearchMembersAdapterLi
     }
 
     private fun bindRoles(selectedRoleId: String?) {
-        rolesAdapter = SpaceRolesAdapter(onRoleSelected = {
-            binding.inviteMemberButton.isEnabled = true
-            spaceMembersViewModel.onRoleSelected(it)
-        })
-        binding.rolesRecyclerView.apply {
-            layoutManager = LinearLayoutManager(requireContext())
-            adapter = rolesAdapter
-        }
-        rolesAdapter.setRoles(roles)
         selectedRoleId?.let {
             binding.inviteMemberButton.isEnabled = true
             rolesAdapter.setSelectedRole(it)
