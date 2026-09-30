@@ -23,8 +23,9 @@ import com.google.android.material.snackbar.Snackbar
 
 fun Snackbar.applyResponsiveWidth(): Snackbar {
     if (view.context.resources.configuration.smallestScreenWidthDp >= 600) {
+        val screenWidth = view.context.resources.displayMetrics.widthPixels
         view.updateLayoutParams<ViewGroup.LayoutParams> {
-            width = ViewGroup.LayoutParams.MATCH_PARENT
+            width = (screenWidth * 0.8).toInt()
         }
     }
     return this
