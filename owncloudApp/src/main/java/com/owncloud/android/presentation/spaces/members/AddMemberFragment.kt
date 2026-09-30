@@ -151,9 +151,9 @@ class AddMemberFragment: Fragment(), SearchMembersAdapter.SearchMembersAdapterLi
                 binding.membersRecyclerView.visibility = View.GONE
             } else {
                 binding.indeterminateProgressBar.visibility = View.GONE
-                val listOfMembersFiltered = uiState.members.filter { member ->
-                    !spaceMembers.any { spaceMember ->
-                        spaceMember.id == "u:${member.id}" || spaceMember.id == "g:${member.id}" }
+                val spaceMemberIds = spaceMembers.mapTo(HashSet()) { it.id }
+                val listOfMembersFiltered = uiState.members.filterNot { member ->
+                    "u:${member.id}" in spaceMemberIds || "g:${member.id}" in spaceMemberIds
                 }
                 val hasMembers = listOfMembersFiltered.isNotEmpty()
                 showOrHideEmptyView(hasMembers)
