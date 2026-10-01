@@ -494,11 +494,13 @@
     <string name="share_with_user_section_title">Users and Groups</string>
     <string name="share_no_users">No data shared with users yet</string>
     <string name="share_sync_failed">Shares could not be refreshed</string>
+    <string name="share_add">Create share</string>
     <string name="share_add_correctly">Share created correctly</string>
     <string name="share_add_failed">Share could not be created</string>
     <string name="share_add_conflict_error">Is already shared with this user/group</string>
     <string name="share_remove_correctly">Share removed correctly</string>
     <string name="share_remove_failed">Share could not be removed</string>
+    <string name="share_edit">Edit share</string>
     <string name="share_edit_correctly">Share edited correctly</string>
     <string name="share_edit_failed">Share could not be edited</string>
     <string name="share_via_link_section_title">Public links</string>
