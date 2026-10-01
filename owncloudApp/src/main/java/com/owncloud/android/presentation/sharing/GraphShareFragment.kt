@@ -69,6 +69,7 @@ class GraphShareFragment : Fragment(), GraphSharesAdapter.GraphSharesAdapterList
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        requireActivity().title = getString(R.string.share_dialog_title)
         binding.membersTitle.text = getString(R.string.share_with_people_title)
 
         graphSharesAdapter = GraphSharesAdapter(this)

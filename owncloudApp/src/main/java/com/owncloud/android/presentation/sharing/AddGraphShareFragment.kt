@@ -88,6 +88,8 @@ class AddGraphShareFragment : Fragment(), SearchMembersAdapter.SearchMembersAdap
         editMode = requireArguments().getBoolean(ARG_EDIT_MODE, false)
         roles = requireArguments().getParcelableArrayList(ARG_ROLES) ?: emptyList()
 
+        requireActivity().title = getString(if (editMode) R.string.share_edit else R.string.share_add)
+
         searchMembersAdapter = SearchMembersAdapter(this)
         recyclerView = binding.membersRecyclerView
         recyclerView.apply {
