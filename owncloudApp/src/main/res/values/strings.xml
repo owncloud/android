@@ -498,6 +498,7 @@
     <string name="share_add_correctly">Share created correctly</string>
     <string name="share_add_failed">Share could not be created</string>
     <string name="share_add_conflict_error">Is already shared with this user/group</string>
+    <string name="share_remove">Remove share</string>
     <string name="share_remove_correctly">Share removed correctly</string>
     <string name="share_remove_failed">Share could not be removed</string>
     <string name="share_edit">Edit share</string>
