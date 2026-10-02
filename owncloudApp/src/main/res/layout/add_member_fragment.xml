@@ -27,7 +27,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/invite_member_button"
+        app:layout_constraintBottom_toTopOf="@id/confirm_action_button"
         app:layout_constraintStart_toStartOf="parent">
 
         <LinearLayout
@@ -173,7 +173,7 @@
     </ScrollView>
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/invite_member_button"
+        android:id="@+id/confirm_action_button"
         style="@style/Button.Primary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

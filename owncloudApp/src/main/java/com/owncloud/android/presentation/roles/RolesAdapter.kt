@@ -18,7 +18,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.presentation.spaces.members
+package com.owncloud.android.presentation.roles
 
 import android.view.LayoutInflater
 import android.view.View
@@ -30,23 +30,23 @@ import com.owncloud.android.domain.roles.model.OCRole
 import com.owncloud.android.domain.roles.model.OCRoleType
 import com.owncloud.android.utils.PreferenceUtils
 
-class SpaceRolesAdapter(
+class RolesAdapter(
     val onRoleSelected: ((OCRole) -> Unit)? = null
-): RecyclerView.Adapter<SpaceRolesAdapter.SpaceRolesViewHolder>() {
+): RecyclerView.Adapter<RolesAdapter.RolesViewHolder>() {
 
     private var roles: List<OCRole> = emptyList()
     private var selectedRoleId: String? = null
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SpaceRolesViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RolesViewHolder {
         val inflater = LayoutInflater.from(parent.context)
 
         val view = inflater.inflate(R.layout.role_item, parent, false)
         view.filterTouchesWhenObscured = PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(parent.context)
 
-        return SpaceRolesViewHolder(view)
+        return RolesViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: SpaceRolesViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: RolesViewHolder, position: Int) {
         val role = roles[position]
 
         holder.binding.apply {
@@ -91,7 +91,7 @@ class SpaceRolesAdapter(
         this.selectedRoleId = id
     }
 
-    class SpaceRolesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class RolesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val binding = RoleItemBinding.bind(itemView)
     }
 }

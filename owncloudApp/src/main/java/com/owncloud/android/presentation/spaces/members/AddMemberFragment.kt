@@ -41,6 +41,8 @@ import com.owncloud.android.extensions.openDatePickerDialog
 import com.owncloud.android.extensions.showErrorInSnackbar
 import com.owncloud.android.extensions.showOrHideEmptyView
 import com.owncloud.android.presentation.common.UIResult
+import com.owncloud.android.presentation.members.SearchMembersAdapter
+import com.owncloud.android.presentation.roles.RolesAdapter
 import com.owncloud.android.utils.DisplayUtils
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import org.koin.core.parameter.parametersOf
@@ -58,7 +60,7 @@ class AddMemberFragment: Fragment(), SearchMembersAdapter.SearchMembersAdapterLi
     }
 
     private lateinit var searchMembersAdapter: SearchMembersAdapter
-    private lateinit var rolesAdapter: SpaceRolesAdapter
+    private lateinit var rolesAdapter: RolesAdapter
     private lateinit var recyclerView: RecyclerView
     private lateinit var roles: List<OCRole>
 
@@ -89,8 +91,8 @@ class AddMemberFragment: Fragment(), SearchMembersAdapter.SearchMembersAdapterLi
             adapter = searchMembersAdapter
         }
 
-        rolesAdapter = SpaceRolesAdapter(onRoleSelected = {
-            binding.inviteMemberButton.isEnabled = true
+        rolesAdapter = RolesAdapter(onRoleSelected = {
+            binding.confirmActionButton.isEnabled = true
             spaceMembersViewModel.onRoleSelected(it)
         })
         binding.rolesRecyclerView.apply {
@@ -166,7 +168,7 @@ class AddMemberFragment: Fragment(), SearchMembersAdapter.SearchMembersAdapterLi
                 binding.apply {
                     searchMemberLayout.visibility = View.GONE
                     addMemberLayout.visibility = View.VISIBLE
-                    inviteMemberButton.visibility = View.VISIBLE
+                    confirmActionButton.visibility = View.VISIBLE
                 }
                 it.selectedMember?.let { member ->
                     binding.bindSelectedMember(member)
@@ -189,7 +191,7 @@ class AddMemberFragment: Fragment(), SearchMembersAdapter.SearchMembersAdapterLi
                         }
                     }
                 }
-                binding.inviteMemberButton.setOnClickListener {
+                binding.confirmActionButton.setOnClickListener {
                     uiState.selectedMember?.let { selectedMember ->
                         uiState.selectedRole?.let { selectedRole ->
                             if (editMode) {
@@ -235,7 +237,7 @@ class AddMemberFragment: Fragment(), SearchMembersAdapter.SearchMembersAdapterLi
             spaceMembersViewModel.onExpirationDateSelected(expirationDate)
             binding.expirationDateLayout.expirationDateSwitch.isChecked = true
         }
-        binding.inviteMemberButton.text = getString(R.string.share_confirm_public_link_button)
+        binding.confirmActionButton.text = getString(R.string.share_confirm_public_link_button)
     }
 
     companion object {
