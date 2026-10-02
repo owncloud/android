@@ -18,7 +18,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.presentation.spaces.members
+package com.owncloud.android.presentation.members
 
 import androidx.recyclerview.widget.DiffUtil
 import com.owncloud.android.domain.members.model.OCMember
