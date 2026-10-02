@@ -37,7 +37,7 @@ import com.owncloud.android.data.spaces.db.SpacesEntity.Companion.SPACES_LAST_MO
     tableName = ProviderMeta.ProviderTableMeta.SPACES_SPECIAL_TABLE_NAME,
     primaryKeys = [SPACES_SPECIAL_SPACE_ID, SPACES_SPECIAL_ID],
     indices = [Index(
-        name = "index_spaces_special_account_space",
+        name = "index_spaces_special_account_spaceId",
         value = [SPACES_SPECIAL_ACCOUNT_NAME, SPACES_SPECIAL_SPACE_ID]
     )],
     foreignKeys = [ForeignKey(
