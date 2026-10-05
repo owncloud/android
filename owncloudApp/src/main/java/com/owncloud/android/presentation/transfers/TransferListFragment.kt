@@ -39,6 +39,7 @@ import com.owncloud.android.databinding.FragmentTransferListBinding
 import com.owncloud.android.domain.spaces.model.OCSpace
 import com.owncloud.android.domain.transfers.model.OCTransfer
 import com.owncloud.android.domain.transfers.model.TransferResult
+import com.owncloud.android.extensions.applyResponsiveWidth
 import com.owncloud.android.extensions.collectLatestLifecycleFlow
 import com.owncloud.android.presentation.authentication.AccountUtils
 import com.owncloud.android.presentation.capabilities.CapabilityViewModel
@@ -88,7 +89,7 @@ class TransferListFragment : Fragment() {
                             view,
                             getString(R.string.local_file_not_found_toast),
                             Snackbar.LENGTH_LONG
-                        ).show()
+                        ).applyResponsiveWidth().show()
                     }
                 }
             },

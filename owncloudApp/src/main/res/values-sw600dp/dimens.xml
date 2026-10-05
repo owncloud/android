@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Remove Material's 576dp snackbar max-width cap on tablets
+         so applyResponsiveWidth() can set a percentage-based width -->
+    <dimen name="design_snackbar_max_width">-1px</dimen>
+</resources>
