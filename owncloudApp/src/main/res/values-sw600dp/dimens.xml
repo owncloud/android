@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Remove Material's 576dp snackbar max-width cap on tablets
          so applyResponsiveWidth() can set a percentage-based width -->
-    <dimen name="design_snackbar_max_width">-1px</dimen>
+    <dimen name="design_snackbar_max_width" tools:ignore="MissingDefaultResource">-1px</dimen>
 </resources>
