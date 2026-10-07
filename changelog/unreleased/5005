@@ -1,0 +1,7 @@
+Enhancement: Add index for foreign keys
+
+New indices have been added to the database for columns used in foreign keys, avoiding full table scans on operations such as cascading deletes or updates.
+
+https://github.com/owncloud/android/issues/4971
+https://github.com/owncloud/android/pull/4972
+https://github.com/owncloud/android/pull/5005
