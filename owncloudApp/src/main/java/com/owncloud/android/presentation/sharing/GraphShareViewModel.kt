@@ -226,6 +226,7 @@ class GraphShareViewModel(
     }
 
     fun clearSearch() {
+        searchJob?.cancel()
         viewModelScope.launch(coroutineDispatcherProvider.io) {
             _members.emit(MembersUIState(members = emptyList(), isLoading = false, error = null))
         }
