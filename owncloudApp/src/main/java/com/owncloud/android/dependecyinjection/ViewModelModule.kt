@@ -54,7 +54,7 @@ import com.owncloud.android.presentation.settings.logging.SettingsLogsViewModel
 import com.owncloud.android.presentation.settings.more.SettingsMoreViewModel
 import com.owncloud.android.presentation.settings.security.SettingsSecurityViewModel
 import com.owncloud.android.presentation.sharing.GraphShareViewModel
-import com.owncloud.android.presentation.sharing.ShareViewModel
+import com.owncloud.android.presentation.sharing.OcsShareViewModel
 import com.owncloud.android.presentation.spaces.SpacesListViewModel
 import com.owncloud.android.presentation.spaces.links.SpaceLinksViewModel
 import com.owncloud.android.presentation.spaces.members.SpaceMembersViewModel
@@ -95,7 +95,7 @@ val viewModelModule = module {
     viewModel { (accountName: String) -> CapabilityViewModel(accountName, get(), get(), get(), get()) }
     viewModel { (action: PasscodeAction) -> PassCodeViewModel(get(), get(), action) }
     viewModel { (filePath: String, accountName: String) ->
-        ShareViewModel(filePath, accountName, get(), get(), get(), get(), get(), get(), get(), get(), get(), get())
+        OcsShareViewModel(filePath, accountName, get(), get(), get(), get(), get(), get(), get(), get(), get(), get())
     }
     viewModel { (initialFolderToDisplay: OCFile, fileListOption: FileListOption) ->
         MainFileListViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(),

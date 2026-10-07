@@ -50,10 +50,10 @@ import com.owncloud.android.extensions.showErrorInSnackbar
 import com.owncloud.android.lib.resources.shares.RemoteShare
 import com.owncloud.android.presentation.capabilities.CapabilityViewModel
 import com.owncloud.android.presentation.common.UIResult
-import com.owncloud.android.presentation.sharing.sharees.EditPrivateShareFragment
-import com.owncloud.android.presentation.sharing.sharees.SearchShareesFragment
+import com.owncloud.android.presentation.sharing.sharees.EditPrivateOcsShareFragment
+import com.owncloud.android.presentation.sharing.sharees.SearchOcsShareesFragment
 import com.owncloud.android.presentation.sharing.sharees.UsersAndGroupsSearchProvider
-import com.owncloud.android.presentation.sharing.shares.PublicShareDialogFragment
+import com.owncloud.android.presentation.sharing.shares.PublicOcsShareDialogFragment
 import com.owncloud.android.ui.activity.FileActivity
 import com.owncloud.android.extensions.showDialogFragment
 import com.owncloud.android.utils.DisplayUtils
@@ -65,8 +65,8 @@ import timber.log.Timber
 /**
  * Activity for sharing files
  */
-class ShareActivity : FileActivity(), ShareFragmentListener, GraphShareFragment.GraphShareFragmentListener {
-    private val shareViewModel: ShareViewModel by viewModel {
+class ShareActivity : FileActivity(), OcsShareFragmentListener, GraphShareFragment.GraphShareFragmentListener {
+    private val shareViewModel: OcsShareViewModel by viewModel {
         parametersOf(
             file.remotePath,
             account?.name
@@ -107,7 +107,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener, GraphShareFragment.
         setupToolbar(findViewById(R.id.share_activity_layout))
         if (savedInstanceState == null && file != null && account != null) {
             supportFragmentManager.transaction {
-                replace(R.id.share_fragment_container, ShareFileFragment.newInstance(file, account!!), TAG_SHARE_FRAGMENT)
+                replace(R.id.share_fragment_container, OcsShareFileFragment.newInstance(file, account!!), TAG_SHARE_FRAGMENT)
             }
         }
     }
@@ -158,7 +158,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener, GraphShareFragment.
 
     override fun showSearchUsersAndGroups() {
         supportFragmentManager.transaction {
-            val searchFragment = SearchShareesFragment.newInstance(file, account)
+            val searchFragment = SearchOcsShareesFragment.newInstance(file, account)
             replace(
                 R.id.share_fragment_container,
                 searchFragment,
@@ -274,7 +274,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener, GraphShareFragment.
         ft.addToBackStack(null)
 
         // Create and show the dialog.
-        val newFragment = EditPrivateShareFragment.newInstance(share, file, account)
+        val newFragment = EditPrivateOcsShareFragment.newInstance(share, file, account)
         newFragment.show(
             ft,
             TAG_EDIT_SHARE_FRAGMENT
@@ -295,7 +295,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener, GraphShareFragment.
         // dialog, so make our own transaction and take care of that here.
 
         // Create and show the dialog
-        val createPublicShareFragment = PublicShareDialogFragment.newInstanceToCreate(
+        val createPublicShareFragment = PublicOcsShareDialogFragment.newInstanceToCreate(
             file,
             account,
             defaultLinkName
@@ -309,7 +309,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener, GraphShareFragment.
 
     override fun showEditPublicShare(share: OCShare) {
         // Create and show the dialog.
-        val editPublicShareFragment = PublicShareDialogFragment.newInstanceToUpdate(file, account, share)
+        val editPublicShareFragment = PublicOcsShareDialogFragment.newInstanceToUpdate(file, account, share)
         showDialogFragment(
             editPublicShareFragment,
             TAG_PUBLIC_SHARE_DIALOG_FRAGMENT
@@ -339,7 +339,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener, GraphShareFragment.
     }
 
     override fun showRemoveShare(share: OCShare) {
-        val removePublicShareFragment = RemoveShareDialogFragment.newInstance(share, account)
+        val removePublicShareFragment = RemoveOcsShareDialogFragment.newInstance(share, account)
         showDialogFragment(
             removePublicShareFragment,
             TAG_REMOVE_SHARE_DIALOG_FRAGMENT
