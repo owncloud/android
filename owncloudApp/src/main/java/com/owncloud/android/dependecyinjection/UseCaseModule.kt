@@ -89,18 +89,18 @@ import com.owncloud.android.domain.members.usecases.RemoveMemberUseCase
 import com.owncloud.android.domain.members.usecases.SearchMembersUseCase
 import com.owncloud.android.domain.roles.usecases.GetRolesAsyncUseCase
 import com.owncloud.android.domain.server.usecases.GetServerInfoAsyncUseCase
-import com.owncloud.android.domain.sharing.sharees.GetShareesAsyncUseCase
+import com.owncloud.android.domain.sharing.sharees.GetOcsShareesAsyncUseCase
 import com.owncloud.android.domain.sharing.shares.usecases.AddGraphShareAsyncUseCase
-import com.owncloud.android.domain.sharing.shares.usecases.CreatePrivateShareAsyncUseCase
-import com.owncloud.android.domain.sharing.shares.usecases.CreatePublicShareAsyncUseCase
-import com.owncloud.android.domain.sharing.shares.usecases.DeleteShareAsyncUseCase
+import com.owncloud.android.domain.sharing.shares.usecases.CreatePrivateOcsShareAsyncUseCase
+import com.owncloud.android.domain.sharing.shares.usecases.CreatePublicOcsShareAsyncUseCase
+import com.owncloud.android.domain.sharing.shares.usecases.DeleteOcsShareAsyncUseCase
 import com.owncloud.android.domain.sharing.shares.usecases.EditGraphShareAsyncUseCase
-import com.owncloud.android.domain.sharing.shares.usecases.EditPrivateShareAsyncUseCase
-import com.owncloud.android.domain.sharing.shares.usecases.EditPublicShareAsyncUseCase
+import com.owncloud.android.domain.sharing.shares.usecases.EditPrivateOcsShareAsyncUseCase
+import com.owncloud.android.domain.sharing.shares.usecases.EditPublicOcsShareAsyncUseCase
 import com.owncloud.android.domain.sharing.shares.usecases.GetGraphSharesAsyncUseCase
-import com.owncloud.android.domain.sharing.shares.usecases.GetShareAsLiveDataUseCase
-import com.owncloud.android.domain.sharing.shares.usecases.GetSharesAsLiveDataUseCase
-import com.owncloud.android.domain.sharing.shares.usecases.RefreshSharesFromServerAsyncUseCase
+import com.owncloud.android.domain.sharing.shares.usecases.GetOcsShareAsLiveDataUseCase
+import com.owncloud.android.domain.sharing.shares.usecases.GetOcsSharesAsLiveDataUseCase
+import com.owncloud.android.domain.sharing.shares.usecases.RefreshOcsSharesFromServerAsyncUseCase
 import com.owncloud.android.domain.sharing.shares.usecases.RemoveGraphShareAsyncUseCase
 import com.owncloud.android.domain.spaces.usecases.CreateSpaceUseCase
 import com.owncloud.android.domain.spaces.usecases.DisableSpaceUseCase
@@ -233,17 +233,17 @@ val useCaseModule = module {
 
     // Sharing
     factoryOf(::AddGraphShareAsyncUseCase)
-    factoryOf(::CreatePrivateShareAsyncUseCase)
-    factoryOf(::CreatePublicShareAsyncUseCase)
-    factoryOf(::DeleteShareAsyncUseCase)
+    factoryOf(::CreatePrivateOcsShareAsyncUseCase)
+    factoryOf(::CreatePublicOcsShareAsyncUseCase)
+    factoryOf(::DeleteOcsShareAsyncUseCase)
     factoryOf(::EditGraphShareAsyncUseCase)
-    factoryOf(::EditPrivateShareAsyncUseCase)
-    factoryOf(::EditPublicShareAsyncUseCase)
+    factoryOf(::EditPrivateOcsShareAsyncUseCase)
+    factoryOf(::EditPublicOcsShareAsyncUseCase)
     factoryOf(::GetGraphSharesAsyncUseCase)
-    factoryOf(::GetShareAsLiveDataUseCase)
-    factoryOf(::GetShareesAsyncUseCase)
-    factoryOf(::GetSharesAsLiveDataUseCase)
-    factoryOf(::RefreshSharesFromServerAsyncUseCase)
+    factoryOf(::GetOcsShareAsLiveDataUseCase)
+    factoryOf(::GetOcsShareesAsyncUseCase)
+    factoryOf(::GetOcsSharesAsLiveDataUseCase)
+    factoryOf(::RefreshOcsSharesFromServerAsyncUseCase)
     factoryOf(::RemoveGraphShareAsyncUseCase)
 
     // Spaces
