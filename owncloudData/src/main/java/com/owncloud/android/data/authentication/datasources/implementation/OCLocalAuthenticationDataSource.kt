@@ -28,6 +28,7 @@ import android.net.Uri
 import com.owncloud.android.data.authentication.KEY_CLIENT_REGISTRATION_CLIENT_EXPIRATION_DATE
 import com.owncloud.android.data.authentication.KEY_CLIENT_REGISTRATION_CLIENT_ID
 import com.owncloud.android.data.authentication.KEY_CLIENT_REGISTRATION_CLIENT_SECRET
+import com.owncloud.android.data.authentication.KEY_CLIENT_REGISTRATION_TOKEN_ENDPOINT_AUTH_METHOD
 import com.owncloud.android.data.authentication.KEY_FEATURE_ALLOWED
 import com.owncloud.android.data.authentication.KEY_FEATURE_SPACES
 import com.owncloud.android.data.authentication.KEY_IS_KITEWORKS_SERVER
@@ -121,6 +122,11 @@ class OCLocalAuthenticationDataSource(
                     setUserData(it, KEY_CLIENT_REGISTRATION_CLIENT_ID, clientRegistrationInfo.clientId)
                     setUserData(it, KEY_CLIENT_REGISTRATION_CLIENT_SECRET, clientRegistrationInfo.clientSecret)
                     setUserData(it, KEY_CLIENT_REGISTRATION_CLIENT_EXPIRATION_DATE, clientRegistrationInfo.clientSecretExpiration.toString())
+                    setUserData(
+                        it,
+                        KEY_CLIENT_REGISTRATION_TOKEN_ENDPOINT_AUTH_METHOD,
+                        clientRegistrationInfo.tokenEndpointAuthMethod
+                    )
                 }
             }
 

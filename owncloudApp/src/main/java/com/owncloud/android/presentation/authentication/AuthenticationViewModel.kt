@@ -26,11 +26,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.owncloud.android.MainApp
 import com.owncloud.android.R
 import com.owncloud.android.domain.authentication.oauth.RegisterClientUseCase
 import com.owncloud.android.domain.authentication.oauth.RequestTokenUseCase
 import com.owncloud.android.domain.authentication.oauth.model.ClientRegistrationInfo
+import com.owncloud.android.domain.authentication.oauth.model.OIDCServerConfiguration
 import com.owncloud.android.domain.authentication.oauth.model.TokenRequest
 import com.owncloud.android.domain.authentication.oauth.model.TokenResponse
 import com.owncloud.android.domain.authentication.usecases.GetBaseUrlUseCase
@@ -39,6 +39,7 @@ import com.owncloud.android.domain.authentication.usecases.LoginOAuthAsyncUseCas
 import com.owncloud.android.domain.authentication.usecases.SupportsOAuth2UseCase
 import com.owncloud.android.domain.capabilities.usecases.GetStoredCapabilitiesUseCase
 import com.owncloud.android.domain.capabilities.usecases.RefreshCapabilitiesFromServerAsyncUseCase
+import com.owncloud.android.domain.exceptions.OAuth2ErrorException
 import com.owncloud.android.domain.server.model.ServerInfo
 import com.owncloud.android.domain.server.usecases.GetServerInfoAsyncUseCase
 import com.owncloud.android.domain.spaces.usecases.RefreshSpacesFromServerAsyncUseCase
@@ -231,12 +232,23 @@ class AuthenticationViewModel(
     )
 
     fun registerClient(
-        registrationEndpoint: String
+        registrationEndpoint: String,
+        oidcServerConfiguration: OIDCServerConfiguration,
     ) {
+        val tokenEndpointAuthMethod = try {
+            oidcServerConfiguration.selectRegistrationAuthMethod()
+        } catch (exception: OAuth2ErrorException) {
+            _registerClient.value = Event(UIResult.Error(error = exception))
+            return
+        }
+
+        // Replace any previous registration before dispatching so a failure cannot reuse its method.
+        _registerClient.value = Event(UIResult.Loading())
+
         val registrationRequest = OAuthUtils.buildClientRegistrationRequest(
             registrationEndpoint = registrationEndpoint,
-            MainApp.appContext
-        )
+            contextProvider.getContext()
+        ).copy(tokenEndpointAuthMethod = tokenEndpointAuthMethod)
 
         runUseCaseWithResult(
             coroutineDispatcher = coroutinesDispatcherProvider.io,
