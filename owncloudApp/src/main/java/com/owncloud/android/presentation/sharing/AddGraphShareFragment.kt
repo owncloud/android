@@ -43,8 +43,8 @@ import com.owncloud.android.extensions.openDatePickerDialog
 import com.owncloud.android.extensions.showErrorInSnackbar
 import com.owncloud.android.extensions.showOrHideEmptyView
 import com.owncloud.android.extensions.toOCMember
-import com.owncloud.android.presentation.spaces.members.SearchMembersAdapter
-import com.owncloud.android.presentation.spaces.members.SpaceRolesAdapter
+import com.owncloud.android.presentation.members.SearchMembersAdapter
+import com.owncloud.android.presentation.roles.RolesAdapter
 import com.owncloud.android.utils.DisplayUtils
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import org.koin.core.parameter.parametersOf
@@ -62,7 +62,7 @@ class AddGraphShareFragment : Fragment(), SearchMembersAdapter.SearchMembersAdap
     }
 
     private lateinit var searchMembersAdapter: SearchMembersAdapter
-    private lateinit var rolesAdapter: SpaceRolesAdapter
+    private lateinit var rolesAdapter: RolesAdapter
     private lateinit var recyclerView: RecyclerView
 
     private var roles: List<OCRole> = emptyList()
@@ -97,8 +97,8 @@ class AddGraphShareFragment : Fragment(), SearchMembersAdapter.SearchMembersAdap
             adapter = searchMembersAdapter
         }
 
-        rolesAdapter = SpaceRolesAdapter(onRoleSelected = {
-            binding.inviteMemberButton.isEnabled = true
+        rolesAdapter = RolesAdapter(onRoleSelected = {
+            binding.confirmActionButton.isEnabled = true
             graphShareViewModel.onRoleSelected(it)
         })
         binding.rolesRecyclerView.apply {
@@ -207,9 +207,9 @@ class AddGraphShareFragment : Fragment(), SearchMembersAdapter.SearchMembersAdap
                 binding.apply {
                     searchMemberLayout.visibility = View.GONE
                     addMemberLayout.visibility = View.VISIBLE
-                    inviteMemberButton.visibility = View.VISIBLE
-                    inviteMemberButton.text = getString(if (editMode) R.string.share_confirm_public_link_button else R.string.action_share)
-                    inviteMemberButton.contentDescription =
+                    confirmActionButton.visibility = View.VISIBLE
+                    confirmActionButton.text = getString(if (editMode) R.string.share_confirm_public_link_button else R.string.action_share)
+                    confirmActionButton.contentDescription =
                         getString(if (editMode) R.string.content_description_edit_share_button else R.string.content_description_create_share_button)
                 }
                 it.selectedMember?.let { member ->
@@ -234,7 +234,7 @@ class AddGraphShareFragment : Fragment(), SearchMembersAdapter.SearchMembersAdap
                     }
                 }
 
-                binding.inviteMemberButton.setOnClickListener {
+                binding.confirmActionButton.setOnClickListener {
                     uiState.selectedMember?.let { selectedMember ->
                         uiState.selectedRole?.let { selectedRole ->
                             if (editMode) {

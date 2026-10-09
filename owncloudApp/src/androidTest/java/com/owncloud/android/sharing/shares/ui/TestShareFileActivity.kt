@@ -25,13 +25,13 @@ import androidx.fragment.app.commit
 import com.owncloud.android.R
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.sharing.shares.model.OCShare
-import com.owncloud.android.presentation.sharing.ShareFragmentListener
+import com.owncloud.android.presentation.sharing.OcsShareFragmentListener
 import com.owncloud.android.services.OperationsService
 import com.owncloud.android.testing.SingleFragmentActivity
 import com.owncloud.android.ui.fragment.FileFragment.ContainerActivity
 import com.owncloud.android.ui.helpers.FileOperationsHelper
 
-class TestShareFileActivity : SingleFragmentActivity(), ShareFragmentListener, ContainerActivity {
+class TestShareFileActivity : SingleFragmentActivity(), OcsShareFragmentListener, ContainerActivity {
     fun startFragment(fragment: Fragment) {
         supportFragmentManager.commit(allowStateLoss = true) {
             add(R.id.container, fragment, TEST_FRAGMENT_TAG)
