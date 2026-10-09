@@ -25,8 +25,11 @@ import com.owncloud.android.data.ClientManager
 import com.owncloud.android.data.oauth.OC_REMOTE_CLIENT_REGISTRATION_RESPONSE
 import com.owncloud.android.data.oauth.OC_REMOTE_OIDC_DISCOVERY_RESPONSE
 import com.owncloud.android.data.oauth.OC_REMOTE_TOKEN_RESPONSE
+import com.owncloud.android.domain.authentication.oauth.model.OIDCServerConfiguration
+import com.owncloud.android.domain.exceptions.ServerNotReachableException
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
+import com.owncloud.android.lib.resources.oauth.params.ClientRegistrationParams
 import com.owncloud.android.lib.resources.oauth.responses.ClientRegistrationResponse
 import com.owncloud.android.lib.resources.oauth.responses.OIDCDiscoveryResponse
 import com.owncloud.android.lib.resources.oauth.responses.TokenResponse
@@ -151,5 +154,47 @@ class OCRemoteOAuthDataSourceTest {
             clientManager.getClientForAnonymousCredentials(OC_CLIENT_REGISTRATION_REQUEST.registrationEndpoint, false)
             oidcService.registerClientWithRegistrationEndpoint(ocClientMocked, any())
         }
+    }
+
+    @Test
+    fun `registerClient returns a ClientRegistrationInfo with the requested auth method`() {
+        val clientRegistrationResponse: RemoteOperationResult<ClientRegistrationResponse> =
+            createRemoteOperationResultMock(data = OC_REMOTE_CLIENT_REGISTRATION_RESPONSE, isSuccess = true)
+        val capturedParams = mutableListOf<ClientRegistrationParams>()
+
+        every {
+            oidcService.registerClientWithRegistrationEndpoint(ocClientMocked, capture(capturedParams))
+        } returns clientRegistrationResponse
+
+        val postRequest = OC_CLIENT_REGISTRATION_REQUEST.copy(
+            tokenEndpointAuthMethod = OIDCServerConfiguration.CLIENT_SECRET_POST
+        )
+        val basicInfo = remoteOAuthDataSource.registerClient(OC_CLIENT_REGISTRATION_REQUEST)
+        val postInfo = remoteOAuthDataSource.registerClient(postRequest)
+
+        assertEquals(OC_CLIENT_REGISTRATION_REQUEST.tokenEndpointAuthMethod, capturedParams[0].tokenEndpointAuthMethod)
+        assertEquals(OIDCServerConfiguration.CLIENT_SECRET_POST, capturedParams[1].tokenEndpointAuthMethod)
+        assertEquals(OC_CLIENT_REGISTRATION.copy(tokenEndpointAuthMethod = OIDCServerConfiguration.CLIENT_SECRET_BASIC), basicInfo)
+        assertEquals(OC_CLIENT_REGISTRATION.copy(tokenEndpointAuthMethod = OIDCServerConfiguration.CLIENT_SECRET_POST), postInfo)
+
+        verify(exactly = 2) {
+            oidcService.registerClientWithRegistrationEndpoint(ocClientMocked, any())
+        }
+    }
+
+    @Test(expected = ServerNotReachableException::class)
+    fun `registerClient returns a ServerNotReachableException when the server is not available`() {
+        val clientRegistrationResponse: RemoteOperationResult<ClientRegistrationResponse> =
+            createRemoteOperationResultMock(
+                data = OC_REMOTE_CLIENT_REGISTRATION_RESPONSE,
+                isSuccess = false,
+                resultCode = RemoteOperationResult.ResultCode.HOST_NOT_AVAILABLE,
+            )
+
+        every {
+            oidcService.registerClientWithRegistrationEndpoint(ocClientMocked, any())
+        } returns clientRegistrationResponse
+
+        remoteOAuthDataSource.registerClient(OC_CLIENT_REGISTRATION_REQUEST)
     }
 }

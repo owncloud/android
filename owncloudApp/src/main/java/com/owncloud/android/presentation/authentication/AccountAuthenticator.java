@@ -54,6 +54,7 @@ import java.io.File;
 import static com.owncloud.android.data.authentication.AuthenticationConstantsKt.KEY_CLIENT_REGISTRATION_CLIENT_EXPIRATION_DATE;
 import static com.owncloud.android.data.authentication.AuthenticationConstantsKt.KEY_CLIENT_REGISTRATION_CLIENT_ID;
 import static com.owncloud.android.data.authentication.AuthenticationConstantsKt.KEY_CLIENT_REGISTRATION_CLIENT_SECRET;
+import static com.owncloud.android.data.authentication.AuthenticationConstantsKt.KEY_CLIENT_REGISTRATION_TOKEN_ENDPOINT_AUTH_METHOD;
 import static com.owncloud.android.data.authentication.AuthenticationConstantsKt.KEY_OAUTH2_REFRESH_TOKEN;
 import static com.owncloud.android.presentation.authentication.AuthenticatorConstants.KEY_AUTH_TOKEN_TYPE;
 import static org.koin.java.KoinJavaComponent.inject;
@@ -339,10 +340,14 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
         UseCaseResult<OIDCServerConfiguration> oidcServerConfigurationUseCaseResult =
                 oidcDiscoveryUseCase.getValue().invoke(oidcDiscoveryUseCaseParams);
 
-        String tokenEndpoint;
+        // Capture the dynamic client before resource defaults replace a missing id or secret.
+        String registeredClientId = accountManager.getUserData(account, KEY_CLIENT_REGISTRATION_CLIENT_ID);
+        String registeredClientSecret = accountManager.getUserData(account, KEY_CLIENT_REGISTRATION_CLIENT_SECRET);
+        String storedAuthMethod = accountManager.getUserData(account, KEY_CLIENT_REGISTRATION_TOKEN_ENDPOINT_AUTH_METHOD);
+        boolean hasDynamicClient = registeredClientId != null;
 
-        String clientId = accountManager.getUserData(account, KEY_CLIENT_REGISTRATION_CLIENT_ID);
-        String clientSecret = accountManager.getUserData(account, KEY_CLIENT_REGISTRATION_CLIENT_SECRET);
+        String clientId = registeredClientId;
+        String clientSecret = registeredClientSecret;
 
         String clientIdForRequest = null;
         String clientSecretForRequest = null;
@@ -367,24 +372,36 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
             }
         }
 
+        String tokenEndpoint;
         if (oidcServerConfigurationUseCaseResult.isSuccess()) {
             Timber.d("OIDC Discovery success. Server discovery info: [ %s ]",
                     oidcServerConfigurationUseCaseResult.getDataOrNull());
 
             // Use token endpoint retrieved from oidc discovery
             tokenEndpoint = oidcServerConfigurationUseCaseResult.getDataOrNull().getTokenEndpoint();
-
-            if (oidcServerConfigurationUseCaseResult.getDataOrNull() != null &&
-            oidcServerConfigurationUseCaseResult.getDataOrNull().isTokenEndpointAuthMethodSupportedClientSecretPost()) {
-                clientIdForRequest = clientId;
-                clientSecretForRequest = clientSecret;
-                useAuthorizationHeader = false;
-            }
         } else {
             Timber.d("OIDC Discovery failed. Server discovery info: [ %s ]",
                     oidcServerConfigurationUseCaseResult.getThrowableOrNull().toString());
 
             tokenEndpoint = baseUrl + File.separator + mContext.getString(R.string.oauth2_url_endpoint_access);
+        }
+
+        if (hasDynamicClient) {
+            // Pin the method stored at registration. Legacy dynamic clients have no method and stay on Basic.
+            String authMethod = storedAuthMethod != null
+                    ? storedAuthMethod
+                    : OIDCServerConfiguration.CLIENT_SECRET_BASIC;
+            if (OIDCServerConfiguration.CLIENT_SECRET_POST.equals(authMethod)) {
+                clientIdForRequest = registeredClientId;
+                clientSecretForRequest = registeredClientSecret;
+                useAuthorizationHeader = false;
+            }
+        } else if (oidcServerConfigurationUseCaseResult.isSuccess()
+                && oidcServerConfigurationUseCaseResult.getDataOrNull() != null
+                && oidcServerConfigurationUseCaseResult.getDataOrNull().isTokenEndpointAuthMethodSupportedClientSecretPost()) {
+            clientIdForRequest = clientId;
+            clientSecretForRequest = clientSecret;
+            useAuthorizationHeader = false;
         }
 
         String clientAuth = OAuthUtils.Companion.getClientAuth(clientSecret, clientId);
