@@ -38,6 +38,7 @@ import com.owncloud.android.lib.common.http.HttpConstants.AUTHORIZATION_HEADER
 import com.owncloud.android.lib.common.http.HttpConstants.OC_X_REQUEST_ID
 import com.owncloud.android.lib.common.http.HttpConstants.USER_AGENT_HEADER
 import com.owncloud.android.lib.common.utils.RandomUtils
+import com.owncloud.android.lib.common.accounts.AccountUtils as AppAccountUtils
 import com.owncloud.android.presentation.authentication.AccountUtils
 import okhttp3.Headers.Companion.toHeaders
 import okhttp3.Interceptor
@@ -52,23 +53,37 @@ object ThumbnailsRequester : KoinComponent {
     private val clientManager: ClientManager by inject()
 
     private const val SPACE_SPECIAL_PREVIEW_URI = "%s?scalingup=0&a=1&x=%d&y=%d&c=%s&preview=1"
-    private const val FILE_PREVIEW_URI = "%s%s?x=%d&y=%d&c=%s&preview=1&id=%s"
+    private const val FILE_PREVIEW_URI = "%s/%s?x=%d&y=%d&c=%s&preview=1&id=%s"
 
-    private const val DISK_CACHE_SIZE: Long = 1024 * 1024 * 10 // 10MB
+    private const val DISK_CACHE_SIZE: Long = 1024 * 1024 * 250 // 250MB
 
+    private var imageLoader: ImageLoader? = null
+    private var lastAccountName: String? = null
+
+    @Synchronized
     fun getCoilImageLoader(): ImageLoader {
-        val ownCloudClient = getOwnCloudClient()
+        val currentAccount = AccountUtils.getCurrentOwnCloudAccount(appContext)
+        val currentAccountName = currentAccount?.name
+
+        if (imageLoader != null && lastAccountName == currentAccountName) {
+            return imageLoader!!
+        }
+
+        val ownCloudClient = clientManager.getClientForCoilThumbnails(
+            accountName = currentAccountName ?: ""
+        )
 
         val coilRequestHeaderInterceptor = CoilRequestHeaderInterceptor(
             requestHeaders = hashMapOf(
-                AUTHORIZATION_HEADER to ownCloudClient.credentials.headerAuth,
+                AUTHORIZATION_HEADER to (ownCloudClient.credentials?.headerAuth ?: ""),
                 ACCEPT_ENCODING_HEADER to ACCEPT_ENCODING_IDENTITY,
                 USER_AGENT_HEADER to SingleSessionManager.getUserAgent(),
                 OC_X_REQUEST_ID to RandomUtils.generateRandomUUID(),
             )
         )
 
-        return ImageLoader(appContext).newBuilder().okHttpClient(
+        lastAccountName = currentAccountName
+        imageLoader = ImageLoader(appContext).newBuilder().okHttpClient(
             okHttpClient = ownCloudClient.okHttpClient.newBuilder().addNetworkInterceptor(coilRequestHeaderInterceptor).build()
         ).logger(DebugLogger())
             .memoryCache {
@@ -83,6 +98,8 @@ object ThumbnailsRequester : KoinComponent {
                     .build()
             }
             .build()
+
+        return imageLoader!!
     }
 
     fun getPreviewUriForSpaceSpecial(spaceSpecial: SpaceSpecial): String {
@@ -99,9 +116,8 @@ object ThumbnailsRequester : KoinComponent {
     }
 
     fun getPreviewUriForFile(ocFile: OCFileWithSyncInfo, account: Account): String {
-        var baseUrl = getOwnCloudClient().baseUri.toString() + "/remote.php/dav/files/" + account.name.split("@".toRegex())
-            .dropLastWhile { it.isEmpty() }
-            .toTypedArray()[0]
+        var baseUrl = getOwnCloudClient().baseUri.toString() + "/remote.php/dav/files/" +
+                AppAccountUtils.getUserId(account, appContext)
         ocFile.space?.getSpaceSpecialImage()?.let {
             baseUrl = it.webDavUrl
         }
@@ -111,8 +127,8 @@ object ThumbnailsRequester : KoinComponent {
         return String.format(
             Locale.ROOT,
             FILE_PREVIEW_URI,
-            baseUrl,
-            Uri.encode(ocFile.file.remotePath, "/"),
+            baseUrl.removeSuffix("/"),
+            Uri.encode(ocFile.file.remotePath, "/").removePrefix("/"),
             fileThumbnailSize,
             fileThumbnailSize,
             ocFile.file.etag,
@@ -121,7 +137,7 @@ object ThumbnailsRequester : KoinComponent {
     }
 
     private fun getOwnCloudClient() = clientManager.getClientForCoilThumbnails(
-        accountName = AccountUtils.getCurrentOwnCloudAccount(appContext).name
+        accountName = AccountUtils.getCurrentOwnCloudAccount(appContext)?.name ?: ""
     )
 
     private class CoilRequestHeaderInterceptor(

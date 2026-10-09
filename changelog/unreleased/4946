@@ -1,0 +1,5 @@
+Enhancement: Thumbnail caching
+
+Thumbnail caching system has been improved for a better experience and performance.
+
+https://github.com/owncloud/android/pull/4946
