@@ -243,17 +243,34 @@ abstract class DrawerActivity : ToolbarActivity() {
 
     private fun bottomBarNavigationTo(menuItemId: Int, isCurrentOptionActive: Boolean) {
         when (menuItemId) {
-            R.id.nav_all_files -> navigateToOption(FileListOption.ALL_FILES)
-            R.id.nav_spaces -> navigateToOption(FileListOption.SPACES_LIST)
+            R.id.nav_all_files -> navigateToOptionIfAccountReady(FileListOption.ALL_FILES)
+            R.id.nav_spaces -> navigateToOptionIfAccountReady(FileListOption.SPACES_LIST)
             R.id.nav_uploads -> if (!isCurrentOptionActive) {
                 val uploadListIntent = Intent(applicationContext, UploadListActivity::class.java)
                 uploadListIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 startActivity(uploadListIntent)
             }
 
-            R.id.nav_available_offline_files -> navigateToOption(FileListOption.AV_OFFLINE)
-            R.id.nav_shared_by_link_files -> navigateToOption(FileListOption.SHARED_BY_LINK)
+            R.id.nav_available_offline_files -> navigateToOptionIfAccountReady(FileListOption.AV_OFFLINE)
+            R.id.nav_shared_by_link_files -> navigateToOptionIfAccountReady(FileListOption.SHARED_BY_LINK)
         }
+    }
+
+    /**
+     * #4998: when there's no valid account (e.g. the last account was just
+     * removed), [BaseActivity.swapToDefaultAccount] kicks off the
+     * account-setup flow but leaves the account null for the rest of this
+     * activity's lifecycle. [navigateToOption] eventually calls
+     * `getStorageManager()`, which constructs a `FileDataStorageManager(account)`
+     * and NPEs on that null account. The setup screen is already launching,
+     * so there's nothing useful to navigate to here — no-op instead of
+     * crashing.
+     */
+    private fun navigateToOptionIfAccountReady(fileListOption: FileListOption) {
+        if (account == null) {
+            return
+        }
+        navigateToOption(fileListOption)
     }
 
     private fun openHelp() {
