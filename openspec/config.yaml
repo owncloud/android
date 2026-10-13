@@ -83,6 +83,7 @@ rules:
 operations:
   apply:
     guidance:
+      - When a subtask is finished, you must stop and ask the user for confirmation before continuing with the other tasks. Do not proceed to the next subtask until the user explicitly confirms.
       - After implementing each module layer, run ./gradlew detekt on that module before moving to the next.
       - Write unit tests in a dedicated task group, not scattered across implementation tasks. Unit tests tasks must be the last ones to run.
       - Keep changes focused and atomic — do not refactor unrelated code as part of the same implementation.
