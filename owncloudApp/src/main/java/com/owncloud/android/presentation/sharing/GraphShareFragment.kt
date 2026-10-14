@@ -99,6 +99,13 @@ class GraphShareFragment : Fragment(), GraphSharesAdapter.GraphSharesAdapterList
 
         val file = requireArguments().getParcelable<OCFile>(ARG_FILE)
         val accountName = requireArguments().getString(ARG_ACCOUNT_NAME)
+        binding.publicLinksWarning.text = getString(
+            if (file?.isFolder == true) {
+                R.string.share_warning_about_forwarding_folder_public_links
+            } else {
+                R.string.share_warning_about_forwarding_file_public_links
+            }
+        )
         binding.addMemberButton.isVisible = file?.hasResharePermission ?: false
         binding.addMemberButton.contentDescription = getString(R.string.content_description_add_share)
         binding.addMemberButton.setOnClickListener {
