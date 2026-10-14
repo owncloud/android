@@ -1,19 +1,19 @@
 ## 1. Verify the existing data pipeline (no code changes expected)
 
-- [ ] 1.1 Confirm `OCPermissions.links: List<OCLink>` is populated from the permissions endpoint by inspecting `OCRemoteShareDataSource.getGraphShares(...)` / `PermissionsResponse.toModel()`; verify by adding a temporary log or a debugger breakpoint in `GraphShareViewModel` showing `links` is non-empty for an item that has links on the server.
-- [ ] 1.2 Confirm `OCLinkType.toStringResId()` maps `view`→"Can view", `edit`→"Can edit", `createOnly`→"Secret file drop"; verify by reading the extension and the referenced string resources. If `createOnly` does not map to "Secret file drop", note the gap for task 2.1.
+- [x] 1.1 Confirm `OCPermissions.links: List<OCLink>` is populated from the permissions endpoint by inspecting `OCRemoteShareDataSource.getGraphShares(...)` / `PermissionsResponse.toModel()`; verify by adding a temporary log or a debugger breakpoint in `GraphShareViewModel` showing `links` is non-empty for an item that has links on the server.
+- [x] 1.2 Confirm `OCLinkType.toStringResId()` maps `view`→"Can view", `edit`→"Can edit", `createOnly`→"Secret file drop"; verify by reading the extension and the referenced string resources. If `createOnly` does not map to "Secret file drop", note the gap for task 2.1.
 
 ## 2. Strings (owncloudApp)
 
-- [ ] 2.1 Add/verify string resources in `owncloudApp/src/main/res/values/strings.xml`: two item-type warnings — "Anyone with the link has access to the file" and "Anyone with the link has access to the folder" — and the three permission labels ("Can view", "Can edit", "Secret file drop"); verify `./gradlew lintDebug` passes with no missing-resource errors.
+- [x] 2.1 Add/verify string resources in `owncloudApp/src/main/res/values/strings.xml`: two item-type warnings — "Anyone with the link has access to the file" and "Anyone with the link has access to the folder" — and the three permission labels ("Can view", "Can edit", "Secret file drop"); verify `./gradlew lintDebug` passes with no missing-resource errors.
 
 ## 3. Render public links in the Sharing NG panel (owncloudApp)
 
-- [ ] 3.1 Expose `OCPermissions.links` to the UI in `GraphShareViewModel`/`GraphShareFragment.observeShares()` (currently only `.roles`/`.members` are read); verify by logging the links list reaches the Fragment when the panel opens.
-- [ ] 3.2 Decide and implement the links adapter: reuse `SpaceLinksAdapter` with only the share-link (chain icon) callback enabled, or add a sibling `GraphLinksAdapter` (+ `GraphLinksDiffUtil`) rendering `public_link_item.xml`; verify the sharing panel shows one row per link with name, permission, and (when present) expiration.
-- [ ] 3.3 Bind the adapter to `public_links_recycler_view` in the sharing panel and toggle `no_public_links_message` / section visibility (mirroring `SpaceMembersFragment.showOrHideEmptyView`/`showSpaceLinks`); verify an item with no links shows the empty message and an item with links shows the list.
-- [ ] 3.4 Render the link name directly from `link["@libre.graph.displayName"]` (no fallback — the server guarantees a non-empty name); verify a link renders with its display name.
-- [ ] 3.5 Show the expiration row only when `OCLink.expirationDateTime` is non-null; verify a link without expiration shows no expiration row and one with expiration shows the date.
+- [x] 3.1 Expose `OCPermissions.links` to the UI in `GraphShareViewModel`/`GraphShareFragment.observeShares()` (currently only `.roles`/`.members` are read); verify by logging the links list reaches the Fragment when the panel opens.
+- [x] 3.2 Decide and implement the links adapter: reuse `SpaceLinksAdapter` with only the share-link (chain icon) callback enabled, or add a sibling `GraphLinksAdapter` (+ `GraphLinksDiffUtil`) rendering `public_link_item.xml`; verify the sharing panel shows one row per link with name, permission, and (when present) expiration.
+- [x] 3.3 Bind the adapter to `public_links_recycler_view` in the sharing panel and toggle `no_public_links_message` / section visibility (mirroring `SpaceMembersFragment.showOrHideEmptyView`/`showSpaceLinks`); verify an item with no links shows the empty message and an item with links shows the list.
+- [x] 3.4 Render the link name directly from `link["@libre.graph.displayName"]` (no fallback — the server guarantees a non-empty name); verify a link renders with its display name.
+- [x] 3.5 Show the expiration row only when `OCLink.expirationDateTime` is non-null; verify a link without expiration shows no expiration row and one with expiration shows the date.
 - [ ] 3.6 Wire the chain icon to share `OCLink.webUrl` through the Android share sheet; verify tapping the icon opens the share sheet offering the URL.
 - [ ] 3.7 Set the `public_links_warning` text programmatically in `GraphShareFragment` based on `OCFile.isFolder` (file → "...the file", folder → "...the folder"), leaving `SpaceMembersFragment`'s "space" wording unchanged; verify the file and folder sharing panels show the correct warning.
 - [ ] 3.8 Suppress out-of-scope affordances (create/edit/remove link) in this flow; verify no add/edit/delete link controls are shown or actionable in the Sharing NG public-links section.
