@@ -1,0 +1,6 @@
+Bugfix: Guard bottom navigation against crash when no account is set
+
+A null-account check has been added to the bottom navigation so it skips navigation instead of crashing.
+
+https://github.com/owncloud/android/issues/4998
+https://github.com/owncloud/android/pull/5012
