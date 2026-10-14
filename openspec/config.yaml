@@ -74,6 +74,7 @@ rules:
   tasks:
     - Order implementation tasks following the module dependency chain — owncloudComLibrary first, then owncloudData, owncloudDomain, owncloudApp last.
     - Add unit tests only for layers where they are established — UseCases in owncloudDomain, Repository/DataSource implementations in owncloudData. Do not add unit tests to any other layer or module.
+    - Only when the user explicitly requests release notes in the spec, include a release notes task as the final implementation task, placed immediately before the changelog task — draft the user-facing release notes entry summarising the change for end users. If the spec does not call for release notes, do not add this task.
     - Include a changelog task — create changelog/unreleased/XXXX (placeholder until PR number is known) following the project's changelog format.
     - If the implementation requires updating the context section above or CLAUDE.md, include a dedicated task for those documentation updates.
     - Add a QA section at the end of tasks.md with a test plan table with columns — Test name, Steps to execute, Expected result, Result, Comments — covering positive, negative, and regression cases.
