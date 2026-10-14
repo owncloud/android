@@ -14,7 +14,7 @@
 - [x] 3.3 Bind the adapter to `public_links_recycler_view` in the sharing panel and toggle `no_public_links_message` / section visibility (mirroring `SpaceMembersFragment.showOrHideEmptyView`/`showSpaceLinks`); verify an item with no links shows the empty message and an item with links shows the list.
 - [x] 3.4 Render the link name directly from `link["@libre.graph.displayName"]` (no fallback — the server guarantees a non-empty name); verify a link renders with its display name.
 - [x] 3.5 Show the expiration row only when `OCLink.expirationDateTime` is non-null; verify a link without expiration shows no expiration row and one with expiration shows the date.
-- [ ] 3.6 Wire the chain icon to share `OCLink.webUrl` through the Android share sheet; verify tapping the icon opens the share sheet offering the URL.
+- [x] 3.6 Wire the chain icon to share `OCLink.webUrl` through the Android share sheet; verify tapping the icon opens the share sheet offering the URL.
 - [ ] 3.7 Set the `public_links_warning` text programmatically in `GraphShareFragment` based on `OCFile.isFolder` (file → "...the file", folder → "...the folder"), leaving `SpaceMembersFragment`'s "space" wording unchanged; verify the file and folder sharing panels show the correct warning.
 - [ ] 3.8 Suppress out-of-scope affordances (create/edit/remove link) in this flow; verify no add/edit/delete link controls are shown or actionable in the Sharing NG public-links section.
 

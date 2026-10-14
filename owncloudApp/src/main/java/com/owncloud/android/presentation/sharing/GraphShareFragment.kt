@@ -279,7 +279,8 @@ class GraphShareFragment : Fragment(), GraphSharesAdapter.GraphSharesAdapterList
     }
 
     override fun onCopyOrSendPublicLink(publicLinkUrl: String) {
-
+        val file = requireArguments().getParcelable<OCFile>(ARG_FILE)
+        listener?.copyOrSendPublicLink(publicLinkUrl, file?.fileName.orEmpty())
     }
 
     override fun onRemovePublicLink(publicLinkId: String, publicLinkDisplayName: String) { }
@@ -288,6 +289,7 @@ class GraphShareFragment : Fragment(), GraphSharesAdapter.GraphSharesAdapterList
 
     interface GraphShareFragmentListener {
         fun addGraphShare(file: OCFile, accountName: String, roles: List<OCRole>, editMode: Boolean, selectedShare: MemberPermission?)
+        fun copyOrSendPublicLink(publicLinkUrl: String, fileName: String)
     }
 
     companion object {

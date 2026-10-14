@@ -27,6 +27,7 @@
 
 package com.owncloud.android.presentation.sharing
 
+import android.accounts.AccountManager
 import android.app.SearchManager
 import android.content.Intent
 import android.os.Bundle
@@ -49,6 +50,7 @@ import com.owncloud.android.extensions.adaptInfiniteEdges
 import com.owncloud.android.extensions.showErrorInSnackbar
 import com.owncloud.android.lib.resources.shares.RemoteShare
 import com.owncloud.android.presentation.capabilities.CapabilityViewModel
+import com.owncloud.android.presentation.common.ShareSheetHelper
 import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.presentation.sharing.sharees.EditPrivateOcsShareFragment
 import com.owncloud.android.presentation.sharing.sharees.SearchOcsShareesFragment
@@ -126,6 +128,24 @@ class ShareActivity : FileActivity(), OcsShareFragmentListener, GraphShareFragme
             addToBackStack(null)
             commit()
         }
+    }
+
+    override fun copyOrSendPublicLink(publicLinkUrl: String, fileName: String) {
+        val displayName = AccountManager.get(this).getUserData(account, KEY_DISPLAY_NAME)
+
+        val intentToShareLink = Intent(Intent.ACTION_SEND).apply {
+            type = TYPE_PLAIN
+            putExtra(Intent.EXTRA_TEXT, publicLinkUrl)
+            putExtra(Intent.EXTRA_SUBJECT, getString(R.string.subject_user_shared_with_you, displayName, fileName))
+        }
+
+        val shareSheetIntent = ShareSheetHelper().getShareSheetIntent(
+            intent = intentToShareLink,
+            context = this,
+            title = R.string.activity_chooser_title,
+            packagesToExclude = arrayOf(packageName)
+        )
+        startActivity(shareSheetIntent)
     }
 
     private fun setupToolbar(root: View) {
@@ -395,5 +415,7 @@ class ShareActivity : FileActivity(), OcsShareFragmentListener, GraphShareFragme
         const val TAG_EDIT_SHARE_FRAGMENT = "EDIT_SHARE_FRAGMENT"
         const val TAG_PUBLIC_SHARE_DIALOG_FRAGMENT = "PUBLIC_SHARE_DIALOG_FRAGMENT"
         const val TAG_REMOVE_SHARE_DIALOG_FRAGMENT = "REMOVE_SHARE_DIALOG_FRAGMENT"
+        private const val TYPE_PLAIN = "text/plain"
+        private const val KEY_DISPLAY_NAME = "oc_display_name"
     }
 }
