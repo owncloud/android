@@ -74,6 +74,7 @@ rules:
   tasks:
     - Order implementation tasks following the module dependency chain — owncloudComLibrary first, then owncloudData, owncloudDomain, owncloudApp last.
     - Add unit tests only for layers where they are established — UseCases in owncloudDomain, Repository/DataSource implementations in owncloudData. Do not add unit tests to any other layer or module.
+    - Only when the user explicitly requests release notes in the spec, include a release notes task as the final implementation task, placed immediately before the changelog task — draft the user-facing release notes entry summarising the change for end users. If the spec does not call for release notes, do not add this task.
     - Include a changelog task — create changelog/unreleased/XXXX (placeholder until PR number is known) following the project's changelog format.
     - If the implementation requires updating the context section above or CLAUDE.md, include a dedicated task for those documentation updates.
     - Add a QA section at the end of tasks.md with a test plan table with columns — Test name, Steps to execute, Expected result, Result, Comments — covering positive, negative, and regression cases.
@@ -83,10 +84,12 @@ rules:
 operations:
   apply:
     guidance:
+      - When a subtask is finished, you must stop and ask the user for confirmation before continuing with the other tasks. Do not proceed to the next subtask until the user explicitly confirms.
       - After implementing each module layer, run ./gradlew detekt on that module before moving to the next.
       - Write unit tests in a dedicated task group, not scattered across implementation tasks. Unit tests tasks must be the last ones to run.
       - Keep changes focused and atomic — do not refactor unrelated code as part of the same implementation.
       - Every new file must end with a trailing blank line.
+      - Never mark the static analysis & build task (analysing and compiling the app — detekt / ktlint / lint / unit tests) as executed. Run it to validate locally, but leave its checkbox unchecked, since its result is not a committable change.
   verify:
     guidance:
       - Cross-check the implementation against specs.md — every SHALL/MUST requirement must be traceable to a concrete code path or test.
