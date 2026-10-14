@@ -20,7 +20,7 @@
 
 ## 4. Changelog
 
-- [ ] 4.1 Create `changelog/unreleased/XXXX` (placeholder PR number) with an `Enhancement` entry titled under 80 chars, body in present perfect passive tense, linking the issue (`https://github.com/owncloud/android/issues/4956`) and PR; verify the file follows the format in CLAUDE.md and `./gradlew` build is unaffected.
+- [x] 4.1 Create `changelog/unreleased/XXXX` (placeholder PR number) with an `Enhancement` entry titled under 80 chars, body in present perfect passive tense, linking the issue (`https://github.com/owncloud/android/issues/4956`) and PR; verify the file follows the format in CLAUDE.md and `./gradlew` build is unaffected.
 
 ## 5. Static analysis & build
 

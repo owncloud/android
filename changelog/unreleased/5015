@@ -1,0 +1,7 @@
+Enhancement: List existing public links on oCIS servers
+
+The existing public links of a file or folder have been listed, showing each link's name,
+permission and expiration date, with a chain icon to share the link's URL.
+
+https://github.com/owncloud/android/issues/4956
+https://github.com/owncloud/android/pull/5015
