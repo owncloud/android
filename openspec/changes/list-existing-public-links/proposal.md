@@ -30,4 +30,4 @@ Out of scope: creating, editing, or deleting public links; displaying password-p
 - **owncloudDomain** (business): UseCase + domain model for an item's public links; repository interface for retrieving them (if not already covered by the shares flow).
 - **owncloudData** (data): repository/data-source mapping of the permissions response `value` array into public-link domain models.
 - **owncloudComLibrary** (networking): Moshi models for the permissions response `link` object fields, if not already present.
-- No new third-party dependencies; reuses the existing Graph API permissions integration and the spaces' links UI (issue #4752) as a layout reference.
+- No new third-party dependencies; reuses the existing Graph API permissions integration and the spaces' links row UI (issue #4752), which is renamed to `PublicLinksAdapter`/`PublicLinksDiffUtil` and moved to a shared `presentation/links` package so both screens share it.

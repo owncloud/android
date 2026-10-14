@@ -18,7 +18,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.presentation.spaces.links
+package com.owncloud.android.presentation.links
 
 import android.view.LayoutInflater
 import android.view.View
@@ -33,80 +33,80 @@ import com.owncloud.android.extensions.toStringResId
 import com.owncloud.android.utils.DisplayUtils
 import com.owncloud.android.utils.PreferenceUtils
 
-class SpaceLinksAdapter(
-    private val listener: SpaceLinksAdapterListener
-): RecyclerView.Adapter<SpaceLinksAdapter.SpaceLinksViewHolder>() {
+class PublicLinksAdapter(
+    private val listener: PublicLinksAdapterListener
+): RecyclerView.Adapter<PublicLinksAdapter.PublicLinksViewHolder>() {
 
-    private var spaceLinks: List<OCLink> = emptyList()
+    private var publicLinks: List<OCLink> = emptyList()
     private var canRemoveLinks = false
     private var canEditLinks = false
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SpaceLinksViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PublicLinksViewHolder {
         val inflater = LayoutInflater.from(parent.context)
 
         val view = inflater.inflate(R.layout.public_link_item, parent, false)
         view.filterTouchesWhenObscured = PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(parent.context)
 
-        return SpaceLinksViewHolder(view)
+        return PublicLinksViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: SpaceLinksViewHolder, position: Int) {
-        val spaceLink = spaceLinks[position]
+    override fun onBindViewHolder(holder: PublicLinksViewHolder, position: Int) {
+        val publicLink = publicLinks[position]
         holder.binding.apply {
-            publicLinkDisplayName.text = spaceLink.displayName
-            publicLinkType.text = holder.itemView.context.getString(spaceLink.type.toStringResId())
+            publicLinkDisplayName.text = publicLink.displayName
+            publicLinkType.text = holder.itemView.context.getString(publicLink.type.toStringResId())
 
-            val hasExpirationDate = spaceLink.expirationDateTime != null
+            val hasExpirationDate = publicLink.expirationDateTime != null
             expirationCalendarIcon.isVisible = hasExpirationDate
             expirationDate.isVisible = hasExpirationDate
             if (hasExpirationDate) {
                 expirationDate.apply {
-                    text = DisplayUtils.displayDateToHumanReadable(spaceLink.expirationDateTime)
+                    text = DisplayUtils.displayDateToHumanReadable(publicLink.expirationDateTime)
                     contentDescription = holder.itemView.context.getString(R.string.content_description_member_expiration_date, expirationDate.text)
                 }
             }
             copyPublicLinkButton.apply {
-                contentDescription = holder.itemView.context.getString(R.string.content_description_get_public_link, spaceLink.displayName)
+                contentDescription = holder.itemView.context.getString(R.string.content_description_get_public_link, publicLink.displayName)
                 setOnClickListener {
-                    listener.onCopyOrSendPublicLink(spaceLink.webUrl)
+                    listener.onCopyOrSendPublicLink(publicLink.webUrl)
                 }
             }
 
             removePublicLinkButton.apply {
-                contentDescription = holder.itemView.context.getString(R.string.content_description_delete_public_link, spaceLink.displayName)
+                contentDescription = holder.itemView.context.getString(R.string.content_description_delete_public_link, publicLink.displayName)
                 isVisible = canRemoveLinks
                 setOnClickListener {
-                    listener.onRemovePublicLink(spaceLink.id, spaceLink.displayName)
+                    listener.onRemovePublicLink(publicLink.id, publicLink.displayName)
                 }
             }
 
             editPublicLinkButton.apply {
-                contentDescription = holder.itemView.context.getString(R.string.content_description_edit_public_link, spaceLink.displayName)
+                contentDescription = holder.itemView.context.getString(R.string.content_description_edit_public_link, publicLink.displayName)
                 isVisible = canEditLinks
                 setOnClickListener {
-                    listener.onEditPublicLink(spaceLink)
+                    listener.onEditPublicLink(publicLink)
                 }
             }
         }
     }
 
-    override fun getItemCount(): Int = spaceLinks.size
+    override fun getItemCount(): Int = publicLinks.size
 
-    fun setSpaceLinks(spaceLinks: List<OCLink>, canRemoveLinks: Boolean, canEditLinks: Boolean) {
+    fun setPublicLinks(publicLinks: List<OCLink>, canRemoveLinks: Boolean, canEditLinks: Boolean) {
         val hasUserPermissionsChanged = this.canEditLinks != canEditLinks || this.canRemoveLinks != canRemoveLinks
         this.canRemoveLinks = canRemoveLinks
         this.canEditLinks = canEditLinks
-        val diffCallback = SpaceLinksDiffUtil(this.spaceLinks, spaceLinks, hasUserPermissionsChanged)
+        val diffCallback = PublicLinksDiffUtil(this.publicLinks, publicLinks, hasUserPermissionsChanged)
         val diffResult = DiffUtil.calculateDiff(diffCallback)
-        this.spaceLinks = spaceLinks
+        this.publicLinks = publicLinks
         diffResult.dispatchUpdatesTo(this)
     }
 
-    class SpaceLinksViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class PublicLinksViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val binding = PublicLinkItemBinding.bind(itemView)
     }
 
-    interface SpaceLinksAdapterListener {
+    interface PublicLinksAdapterListener {
         fun onCopyOrSendPublicLink(publicLinkUrl: String)
         fun onRemovePublicLink(publicLinkId: String, publicLinkDisplayName: String)
         fun onEditPublicLink(publicLink: OCLink)

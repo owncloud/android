@@ -40,7 +40,7 @@ import com.owncloud.android.extensions.collectLatestLifecycleFlow
 import com.owncloud.android.extensions.showErrorInSnackbar
 import com.owncloud.android.extensions.showMessageInSnackbar
 import com.owncloud.android.presentation.common.UIResult
-import com.owncloud.android.presentation.spaces.links.SpaceLinksAdapter
+import com.owncloud.android.presentation.links.PublicLinksAdapter
 import com.owncloud.android.utils.DisplayUtils
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import org.koin.core.parameter.parametersOf
@@ -50,7 +50,7 @@ import java.util.Date
 import java.util.Locale
 import java.util.TimeZone
 
-class GraphShareFragment : Fragment(), GraphSharesAdapter.GraphSharesAdapterListener, SpaceLinksAdapter.SpaceLinksAdapterListener {
+class GraphShareFragment : Fragment(), GraphSharesAdapter.GraphSharesAdapterListener, PublicLinksAdapter.PublicLinksAdapterListener {
     private var _binding: MembersFragmentBinding? = null
     private val binding get() = _binding!!
 
@@ -62,7 +62,7 @@ class GraphShareFragment : Fragment(), GraphSharesAdapter.GraphSharesAdapterList
     }
 
     private lateinit var graphSharesAdapter: GraphSharesAdapter
-    private lateinit var graphLinksAdapter: SpaceLinksAdapter
+    private lateinit var graphLinksAdapter: PublicLinksAdapter
 
     private var roles: List<OCRole> = emptyList()
     private var shares: List<MemberPermission> = emptyList()
@@ -87,7 +87,7 @@ class GraphShareFragment : Fragment(), GraphSharesAdapter.GraphSharesAdapterList
             adapter = graphSharesAdapter
         }
 
-        graphLinksAdapter = SpaceLinksAdapter(this)
+        graphLinksAdapter = PublicLinksAdapter(this)
         binding.publicLinksRecyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = graphLinksAdapter
@@ -272,8 +272,8 @@ class GraphShareFragment : Fragment(), GraphSharesAdapter.GraphSharesAdapterList
         val formatter = SimpleDateFormat(DisplayUtils.DATE_FORMAT_ISO, Locale.ROOT).apply {
             timeZone = TimeZone.getTimeZone("UTC")
         }
-        graphLinksAdapter.setSpaceLinks(
-            spaceLinks = links.sortedByDescending { link ->
+        graphLinksAdapter.setPublicLinks(
+            publicLinks = links.sortedByDescending { link ->
                 if (link.createdDateTime.isNotEmpty()) {
                     formatter.parse(link.createdDateTime)
                 } else {
