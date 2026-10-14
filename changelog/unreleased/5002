@@ -1,0 +1,8 @@
+Change: Refactor legacy sharing and space members code
+
+Legacy sharing classes have been renamed with an Ocs prefix, the UI shared between
+shares and space members has been consolidated into neutral, reusable components, and
+the space members logic has been aligned with the graph shares implementation.
+
+https://github.com/owncloud/android/issues/4971
+https://github.com/owncloud/android/pull/5002

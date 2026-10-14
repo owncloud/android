@@ -42,7 +42,7 @@ import com.owncloud.android.MainApp
 import com.owncloud.android.R
 import com.owncloud.android.presentation.authentication.AccountUtils
 import com.owncloud.android.domain.capabilities.usecases.GetStoredCapabilitiesUseCase
-import com.owncloud.android.domain.sharing.sharees.GetShareesAsyncUseCase
+import com.owncloud.android.domain.sharing.sharees.GetOcsShareesAsyncUseCase
 import com.owncloud.android.domain.sharing.sharees.model.OCSharee
 import com.owncloud.android.domain.sharing.shares.model.ShareType
 import com.owncloud.android.extensions.parseError
@@ -136,10 +136,10 @@ class UsersAndGroupsSearchProvider : ContentProvider() {
         val searchMinLength = capabilities?.filesSharingSearchMinLength ?: 3
         if (userQuery.length < searchMinLength) { return MatrixCursor(COLUMNS) }
 
-        val getShareesAsyncUseCase: GetShareesAsyncUseCase by inject()
+        val getShareesAsyncUseCase: GetOcsShareesAsyncUseCase by inject()
 
         val getShareesResult = getShareesAsyncUseCase(
-            GetShareesAsyncUseCase.Params(
+            GetOcsShareesAsyncUseCase.Params(
                 searchString = userQuery,
                 page = REQUESTED_PAGE,
                 perPage = RESULTS_PER_PAGE,

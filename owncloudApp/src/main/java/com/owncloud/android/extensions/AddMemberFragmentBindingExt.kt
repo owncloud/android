@@ -25,7 +25,7 @@ import com.owncloud.android.R
 import com.owncloud.android.databinding.AddMemberFragmentBinding
 import com.owncloud.android.domain.members.model.OCMember
 import com.owncloud.android.domain.members.model.OCMemberType
-import com.owncloud.android.presentation.spaces.members.SpaceRolesAdapter
+import com.owncloud.android.presentation.roles.RolesAdapter
 
 fun AddMemberFragmentBinding.showOrHideEmptyView(hasMembers: Boolean, searchMinLength: Int) {
     membersRecyclerView.isVisible = hasMembers
@@ -48,9 +48,9 @@ fun AddMemberFragmentBinding.bindSelectedMember(member: OCMember) {
     }
 }
 
-fun AddMemberFragmentBinding.bindRoles(rolesAdapter: SpaceRolesAdapter, selectedRoleId: String?) {
+fun AddMemberFragmentBinding.bindRoles(rolesAdapter: RolesAdapter, selectedRoleId: String?) {
     selectedRoleId?.let {
-        inviteMemberButton.isEnabled = true
+        confirmActionButton.isEnabled = true
         rolesAdapter.setSelectedRole(it)
     }
 }

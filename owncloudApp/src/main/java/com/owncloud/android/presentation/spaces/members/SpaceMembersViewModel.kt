@@ -43,6 +43,7 @@ import com.owncloud.android.extensions.toOCMember
 import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -128,6 +129,7 @@ class SpaceMembersViewModel(
     fun searchMembers(query: String) {
         searchJob?.cancel()
         searchJob = viewModelScope.launch(coroutineDispatcherProvider.io) {
+            delay(SEARCH_DELAY_MS)
             _members.emit(MembersUIState(members = emptyList(), isLoading = true , error = null))
             when (val result = searchMembersUseCase(SearchMembersUseCase.Params(accountName, query))) {
                 is UseCaseResult.Success -> _members.emit(MembersUIState(members = result.data, isLoading = false, error = null))
@@ -137,6 +139,7 @@ class SpaceMembersViewModel(
     }
 
     fun clearSearch() {
+        searchJob?.cancel()
         viewModelScope.launch(coroutineDispatcherProvider.io) {
             _members.emit(MembersUIState(members = emptyList(), isLoading = false , error = null))
         }
@@ -218,4 +221,8 @@ class SpaceMembersViewModel(
         val selectedRole: OCRole? = null,
         val selectedExpirationDate: String? = null
     )
+
+    companion object {
+        private const val SEARCH_DELAY_MS = 500L
+    }
 }
