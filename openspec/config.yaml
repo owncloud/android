@@ -89,6 +89,7 @@ operations:
       - Write unit tests in a dedicated task group, not scattered across implementation tasks. Unit tests tasks must be the last ones to run.
       - Keep changes focused and atomic — do not refactor unrelated code as part of the same implementation.
       - Every new file must end with a trailing blank line.
+      - Never mark the static analysis & build task (analysing and compiling the app — detekt / ktlint / lint / unit tests) as executed. Run it to validate locally, but leave its checkbox unchecked, since its result is not a committable change.
   verify:
     guidance:
       - Cross-check the implementation against specs.md — every SHALL/MUST requirement must be traceable to a concrete code path or test.
