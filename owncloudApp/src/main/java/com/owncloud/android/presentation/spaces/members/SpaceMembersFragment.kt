@@ -43,7 +43,7 @@ import com.owncloud.android.extensions.showAlertDialog
 import com.owncloud.android.extensions.showErrorInSnackbar
 import com.owncloud.android.extensions.showMessageInSnackbar
 import com.owncloud.android.presentation.common.UIResult
-import com.owncloud.android.presentation.spaces.links.SpaceLinksAdapter
+import com.owncloud.android.presentation.links.PublicLinksAdapter
 import com.owncloud.android.presentation.spaces.links.SpaceLinksViewModel
 import com.owncloud.android.utils.DisplayUtils
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
@@ -54,7 +54,7 @@ import java.util.Date
 import java.util.Locale
 import java.util.TimeZone
 
-class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapterListener, SpaceLinksAdapter.SpaceLinksAdapterListener {
+class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapterListener, PublicLinksAdapter.PublicLinksAdapterListener {
     private var _binding: MembersFragmentBinding? = null
     private val binding get() = _binding!!
 
@@ -72,7 +72,7 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
     }
 
     private lateinit var spaceMembersAdapter: SpaceMembersAdapter
-    private lateinit var spaceLinksAdapter: SpaceLinksAdapter
+    private lateinit var spaceLinksAdapter: PublicLinksAdapter
     private lateinit var currentSpace: OCSpace
 
     private var roles: List<OCRole> = emptyList()
@@ -104,7 +104,7 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
             adapter = spaceMembersAdapter
         }
 
-        spaceLinksAdapter = SpaceLinksAdapter(this)
+        spaceLinksAdapter = PublicLinksAdapter(this)
         binding.publicLinksRecyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = spaceLinksAdapter
@@ -446,8 +446,8 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
         val formatter = SimpleDateFormat(DisplayUtils.DATE_FORMAT_ISO, Locale.ROOT).apply {
             timeZone = TimeZone.getTimeZone("UTC")
         }
-        spaceLinksAdapter.setSpaceLinks(
-            spaceLinks = spaceLinks.sortedByDescending { spaceLink ->
+        spaceLinksAdapter.setPublicLinks(
+            publicLinks = spaceLinks.sortedByDescending { spaceLink ->
                 if (spaceLink.createdDateTime.isNotEmpty()) {
                     formatter.parse(spaceLink.createdDateTime)
                 } else {

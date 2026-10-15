@@ -18,12 +18,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.presentation.spaces.links
+package com.owncloud.android.presentation.links
 
 import androidx.recyclerview.widget.DiffUtil
 import com.owncloud.android.domain.links.model.OCLink
 
-class SpaceLinksDiffUtil(
+class PublicLinksDiffUtil(
     private val oldList: List<OCLink>,
     private val newList: List<OCLink>,
     private val hasUserPermissionsChanged: Boolean

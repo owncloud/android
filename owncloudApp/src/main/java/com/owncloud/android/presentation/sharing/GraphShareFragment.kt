@@ -32,6 +32,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.owncloud.android.R
 import com.owncloud.android.databinding.MembersFragmentBinding
 import com.owncloud.android.domain.files.model.OCFile
+import com.owncloud.android.domain.links.model.OCLink
 import com.owncloud.android.domain.roles.model.OCRole
 import com.owncloud.android.domain.sharing.shares.model.MemberPermission
 import com.owncloud.android.extensions.avoidScreenshotsIfNeeded
@@ -39,11 +40,17 @@ import com.owncloud.android.extensions.collectLatestLifecycleFlow
 import com.owncloud.android.extensions.showErrorInSnackbar
 import com.owncloud.android.extensions.showMessageInSnackbar
 import com.owncloud.android.presentation.common.UIResult
+import com.owncloud.android.presentation.links.PublicLinksAdapter
+import com.owncloud.android.utils.DisplayUtils
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import org.koin.core.parameter.parametersOf
 import timber.log.Timber
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+import java.util.TimeZone
 
-class GraphShareFragment : Fragment(), GraphSharesAdapter.GraphSharesAdapterListener {
+class GraphShareFragment : Fragment(), GraphSharesAdapter.GraphSharesAdapterListener, PublicLinksAdapter.PublicLinksAdapterListener {
     private var _binding: MembersFragmentBinding? = null
     private val binding get() = _binding!!
 
@@ -55,9 +62,11 @@ class GraphShareFragment : Fragment(), GraphSharesAdapter.GraphSharesAdapterList
     }
 
     private lateinit var graphSharesAdapter: GraphSharesAdapter
+    private lateinit var graphLinksAdapter: PublicLinksAdapter
 
     private var roles: List<OCRole> = emptyList()
     private var shares: List<MemberPermission> = emptyList()
+    private var links: List<OCLink> = emptyList()
     private var listener: GraphShareFragmentListener? = null
     private var canRemoveShares: Boolean = false
     private var canEditShares: Boolean = false
@@ -78,12 +87,25 @@ class GraphShareFragment : Fragment(), GraphSharesAdapter.GraphSharesAdapterList
             adapter = graphSharesAdapter
         }
 
+        graphLinksAdapter = PublicLinksAdapter(this)
+        binding.publicLinksRecyclerView.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = graphLinksAdapter
+        }
+
         binding.swipeRefreshMembers.setOnRefreshListener {
             graphShareViewModel.getGraphShares()
         }
 
         val file = requireArguments().getParcelable<OCFile>(ARG_FILE)
         val accountName = requireArguments().getString(ARG_ACCOUNT_NAME)
+        binding.publicLinksWarning.text = getString(
+            if (file?.isFolder == true) {
+                R.string.share_warning_about_forwarding_folder_public_links
+            } else {
+                R.string.share_warning_about_forwarding_file_public_links
+            }
+        )
         binding.addMemberButton.isVisible = file?.hasResharePermission ?: false
         binding.addMemberButton.contentDescription = getString(R.string.content_description_add_share)
         binding.addMemberButton.setOnClickListener {
@@ -147,7 +169,9 @@ class GraphShareFragment : Fragment(), GraphSharesAdapter.GraphSharesAdapterList
                         uiResult.data?.let {
                             roles = it.roles
                             shares = it.members
+                            links = it.links
                             showShares()
+                            showLinks()
                             binding.swipeRefreshMembers.isRefreshing = false
                         }
                     }
@@ -241,8 +265,38 @@ class GraphShareFragment : Fragment(), GraphSharesAdapter.GraphSharesAdapterList
         graphSharesAdapter.setShares(shares, roles, canRemoveShares, canEditShares)
     }
 
+    private fun showLinks() {
+        val hasLinks = links.isNotEmpty()
+        binding.publicLinksRecyclerView.isVisible = hasLinks
+        binding.noPublicLinksMessage.isVisible = !hasLinks
+        val formatter = SimpleDateFormat(DisplayUtils.DATE_FORMAT_ISO, Locale.ROOT).apply {
+            timeZone = TimeZone.getTimeZone("UTC")
+        }
+        graphLinksAdapter.setPublicLinks(
+            publicLinks = links.sortedByDescending { link ->
+                if (link.createdDateTime.isNotEmpty()) {
+                    formatter.parse(link.createdDateTime)
+                } else {
+                    Date(0)
+                }
+            },
+            canRemoveLinks = false,
+            canEditLinks = false
+        )
+    }
+
+    override fun onCopyOrSendPublicLink(publicLinkUrl: String) {
+        val file = requireArguments().getParcelable<OCFile>(ARG_FILE)
+        listener?.copyOrSendPublicLink(publicLinkUrl, file?.fileName.orEmpty())
+    }
+
+    override fun onRemovePublicLink(publicLinkId: String, publicLinkDisplayName: String) { }
+
+    override fun onEditPublicLink(publicLink: OCLink) { }
+
     interface GraphShareFragmentListener {
         fun addGraphShare(file: OCFile, accountName: String, roles: List<OCRole>, editMode: Boolean, selectedShare: MemberPermission?)
+        fun copyOrSendPublicLink(publicLinkUrl: String, fileName: String)
     }
 
     companion object {
