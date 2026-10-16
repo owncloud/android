@@ -404,6 +404,9 @@ class OCFileRepository(
                             }
                             // Fix: What about renames? Need to fix storage path
                         })
+                } else if (shareMetadataChanged(localChildToSync, remoteChild)) {
+                    // oC10 does not change the etag when only share metadata changes.
+                    folderContentUpdated.add(childWithRefreshedShareMetadata(remoteChild, localChildToSync, remoteFolder))
                 }
             }
 
@@ -608,6 +611,26 @@ class OCFileRepository(
         localStorageProvider.deleteLocalFile(ocFile)
         deleteOrResetFileFromDatabase(ocFile, onlyFromLocalStorage)
     }
+
+    private fun shareMetadataChanged(localChild: OCFile, remoteChild: OCFile): Boolean =
+        localChild.sharedByLink != remoteChild.sharedByLink ||
+            (localChild.sharedWithSharee == true) != (remoteChild.sharedWithSharee == true) ||
+            localChild.permissions != remoteChild.permissions
+
+    private fun childWithRefreshedShareMetadata(
+        remoteChild: OCFile,
+        localChild: OCFile,
+        remoteFolder: OCFile,
+    ): OCFile =
+        remoteChild.apply {
+            copyLocalPropertiesFrom(localChild)
+            // DO NOT update etag till contents are synced. Share fields stay on the remote child.
+            etag = localChild.etag
+            needsToUpdateThumbnail = localChild.needsToUpdateThumbnail
+            if (remoteFolder.isAvailableOffline) {
+                availableOfflineStatus = AVAILABLE_OFFLINE_PARENT
+            }
+        }
 
     private fun deleteOrResetFileFromDatabase(ocFile: OCFile, onlyFromLocalStorage: Boolean) {
         if (onlyFromLocalStorage) {

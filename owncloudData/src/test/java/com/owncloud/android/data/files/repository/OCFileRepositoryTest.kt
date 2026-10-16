@@ -1687,6 +1687,71 @@ class OCFileRepositoryTest {
 
     @Suppress("MaxLineLength")
     @Test
+    fun `refreshFolder saves a folder child when the etag matches but share badges changed`() {
+        val ocParentFolderWithoutSpaceId = OC_PARENT_FOLDER_WITH_SPACE_ID.copy(spaceId = null)
+        val remoteFolderChild = OC_FOLDER_WITH_SPACE_ID.copy(spaceId = null, sharedByLink = true)
+        val expectedFolderChild = OC_FOLDER_WITH_SPACE_ID.copy(sharedByLink = true)
+        every {
+            remoteFileDataSource.refreshFolder(
+                remotePath = OC_PARENT_FOLDER_WITH_SPACE_ID.remotePath,
+                accountName = OC_PARENT_FOLDER_WITH_SPACE_ID.owner,
+                spaceWebDavUrl = OC_SPACE_PERSONAL.root.webDavUrl
+            )
+        } returns listOf(ocParentFolderWithoutSpaceId, remoteFolderChild)
+        every {
+            localFileDataSource.getFileByRemotePath(
+                remotePath = OC_PARENT_FOLDER_WITH_SPACE_ID.remotePath,
+                owner = OC_PARENT_FOLDER_WITH_SPACE_ID.owner,
+                spaceId = OC_PARENT_FOLDER_WITH_SPACE_ID.spaceId
+            )
+        } returns OC_PARENT_FOLDER_WITH_SPACE_ID
+        every {
+            localFileDataSource.getFolderContent(
+                folderId = OC_PARENT_FOLDER_WITH_SPACE_ID.id!!
+            )
+        } returns listOf(OC_FOLDER_WITH_SPACE_ID)
+        every {
+            localFileDataSource.saveFilesInFolderAndReturnTheFilesThatChanged(
+                listOfFiles = listOf(expectedFolderChild),
+                folder = OC_PARENT_FOLDER_WITH_SPACE_ID,
+            )
+        } returns listOf(expectedFolderChild)
+
+        val listOfFiles = ocFileRepository.refreshFolder(
+            OC_PARENT_FOLDER_WITH_SPACE_ID.remotePath,
+            OC_PARENT_FOLDER_WITH_SPACE_ID.owner,
+            OC_PARENT_FOLDER_WITH_SPACE_ID.spaceId,
+            false
+        )
+        assertEquals(listOf(expectedFolderChild), listOfFiles)
+
+        verify(exactly = 1) {
+            localSpacesDataSource.getWebDavUrlForSpace(
+                spaceId = OC_PARENT_FOLDER_WITH_SPACE_ID.spaceId,
+                accountName = OC_PARENT_FOLDER_WITH_SPACE_ID.owner
+            )
+            remoteFileDataSource.refreshFolder(
+                remotePath = OC_PARENT_FOLDER_WITH_SPACE_ID.remotePath,
+                accountName = OC_PARENT_FOLDER_WITH_SPACE_ID.owner,
+                spaceWebDavUrl = OC_SPACE_PERSONAL.root.webDavUrl
+            )
+            localFileDataSource.getFileByRemotePath(
+                remotePath = OC_PARENT_FOLDER_WITH_SPACE_ID.remotePath,
+                owner = OC_PARENT_FOLDER_WITH_SPACE_ID.owner,
+                spaceId = OC_PARENT_FOLDER_WITH_SPACE_ID.spaceId
+            )
+            localFileDataSource.getFolderContent(
+                folderId = OC_PARENT_FOLDER_WITH_SPACE_ID.id!!
+            )
+            localFileDataSource.saveFilesInFolderAndReturnTheFilesThatChanged(
+                listOfFiles = listOf(expectedFolderChild),
+                folder = OC_PARENT_FOLDER_WITH_SPACE_ID,
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
     fun `refreshFolder returns an empty list of OCFiles when folder and its content already exists in database but there are additional files in conflict in local to be removed`() {
         val ocParentFolderWithoutSpaceId = OC_PARENT_FOLDER_WITH_SPACE_ID.copy(spaceId = null)
         val ocFileWithoutSpaceId = OC_FILE_WITH_SPACE_ID.copy(spaceId = null)
