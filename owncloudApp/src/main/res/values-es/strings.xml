@@ -323,6 +323,7 @@
     <string name="confirmation_remove_account_alert_camera_uploads">Esta cuenta tiene cargas de cámara adjuntas, eliminar la cuenta deshabilitará las cargas de cámara. ¿De verdad quieres eliminar la cuenta %1$s?</string>
     <string name="confirmation_remove_public_share_title">Eliminar enlace</string>
     <string name="confirmation_remove_private_share_title">Eliminar compartición privada</string>
+    <string name="confirmation_remove_share_message">Quiere realmente dejar de compartir con %1$s\?</string>
     <string name="remove_success_msg">Borrado correctamente</string>
     <string name="remove_fail_msg">El borrado no pudo ser completado</string>
     <string name="rename_dialog_title">Introduzca un nombre nuevo</string>
@@ -404,6 +405,7 @@
     <string name="error__upload__local_file_not_copied">%1$s no pudo ser copiado a la carpeta local %2$s</string>
 
     <string name="get_shares_error">No se pudieron recuperar las comparticiones del servidor</string>
+    <string name="get_graph_shares_incomplete_data_error">No se pudieron obtener datos</string>
     <string name="get_sharees_error">No fue posible recuperar usuarios y grupos del servidor</string>
     <string name="get_capabilities_error">No fue posible recuperar las capacidades del servidor</string>
     <string name="share_link_file_error">No se pudo compartir este archivo o carpeta</string>
@@ -491,6 +493,15 @@
     <string name="share_dialog_title">Compartir</string>
     <string name="share_with_user_section_title">Usuarios y Grupos</string>
     <string name="share_no_users">Aún no se ha compartido con ningún usuario.</string>
+    <string name="share_sync_failed">No se pudieron actualizar las comparticiones</string>
+    <string name="share_add">Crear compartición</string>
+    <string name="share_add_correctly">La compartición se creó correctamente</string>
+    <string name="share_add_failed">No se pudo compartir</string>
+    <string name="share_add_conflict_error">Está ya compartido con este usuario/grupo</string>
+    <string name="share_remove_correctly">La compartición se eliminó correctamente</string>
+    <string name="share_remove_failed">La compartición no se pudo eliminar</string>
+    <string name="share_edit_correctly">La compartición se editó correctamente</string>
+    <string name="share_edit_failed">La compartición no se pudo editar</string>
     <string name="share_via_link_section_title">Enlace Publico</string>
     <string name="share_via_link_create_title">Crear enlace compartido</string>
     <string name="share_via_link_edit_title">Editar enlace compartido</string>
@@ -505,6 +516,7 @@
     <string name="share_via_link_edit_permission_read_and_write_label">Descargar/Ver/Subir</string>
     <string name="share_via_link_edit_permission_upload_only_label">Solo cargar (Archivar)</string>
     <string name="share_with_title">Compartir con</string>
+    <string name="share_with_people_title">Compartir con usuarios</string>
     <string name="share_with_edit_title">Compartir con %1$s</string>
 
     <string name="share_search">Buscar</string>
@@ -623,6 +635,8 @@
     <string name="release_notes_icon">Icono notas de lanzamiento</string>
     <string name="release_notes_bugfixes_title">Solución de problemas</string>
     <string name="release_notes_bugfixes_subtitle">Algunos errores se solucionaron para mejorar la experiencia en la app</string>
+    <string name="release_notes_4_9_0_sharing_ng_title">Nueva implementación de compartir para Infinite Scale</string>
+    <string name="release_notes_4_9_0_sharing_ng_subtitle">Una nueva interfaz y operaciones se han añadido para compartir ficheros y carpetas en cuentas Infinite Scale</string>
 
     <!-- Open in web -->
     <string name="ic_action_open_with_web">Open in %1$s (web)</string>
@@ -711,6 +725,8 @@
     <string name="content_description_member_expiration_date">Caduca el %1$s</string>
     <string name="content_description_add_member">Añadir nuevo miembro</string>
     <string name="content_description_invite_member_button">Invitar a un miembro</string>
+    <string name="content_description_create_share_button">Crear compartición</string>
+    <string name="content_description_edit_share_button">Guardar compartición</string>
     <string name="content_description_expiration_date_switch">Fecha de caducidad</string>
     <string name="content_description_remove_member_button">Eliminar miembro %1$s</string>
     <string name="content_description_edit_member_button">Editar miembro %1$s</string>
@@ -776,6 +792,7 @@
     <string name="members_options">Opciones</string>
     <string name="members_expiration_date">Fecha de caducidad</string>
     <string name="members_invite">Invitar</string>
+    <string name="members_remove_dialog_header">Eliminar miembro</string>
     <string name="members_remove_dialog_message">Quiere realmente eliminar el miembro %1$s\?</string>
     <string name="members_remove_correctly">Miembro eliminado correctamente</string>
     <string name="members_remove_failed">El miembro no pudo ser eliminado</string>
