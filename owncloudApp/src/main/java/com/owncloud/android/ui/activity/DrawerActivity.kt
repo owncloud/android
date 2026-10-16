@@ -242,9 +242,6 @@ abstract class DrawerActivity : ToolbarActivity() {
     }
 
     private fun bottomBarNavigationTo(menuItemId: Int, isCurrentOptionActive: Boolean) {
-        // #4998: account can be null here if the last account was just removed and
-        // BaseActivity.swapToDefaultAccount() is already launching account setup;
-        // navigateToOption() would NPE on getStorageManager() in that case.
         if (account == null) {
             return
         }
