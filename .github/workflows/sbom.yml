@@ -46,7 +46,7 @@ jobs:
 
       # Set up Java 17 (required by Gradle and CycloneDX plugin)
       - name: Set up JDK 17
-        uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6 #v6.0.1
+        uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad #v6.1.0
         with:
           java-version: '17'
           distribution: 'temurin'
@@ -116,7 +116,7 @@ jobs:
       - name: Generate GitHub App token
         if: steps.compare.outputs.changes == 'true'
         id: app-token
-        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+        uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
         with:
           app-id: ${{ secrets.SBOM_APP_ID }}
           private-key: ${{ secrets.SBOM_APP_PRIVATE_KEY }}
