@@ -15,7 +15,7 @@
 
 ## 3. Release notes
 
-- [ ] 3.1 Draft the user-facing release notes entry summarising the oCIS Share/permalink change for end users.
+- [x] 3.1 Draft the user-facing release notes entry summarising the oCIS Share/permalink change for end users.
 
 ## 4. Changelog
 
