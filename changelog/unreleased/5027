@@ -1,0 +1,6 @@
+Bugfix: Broken format specifiers and escape sequences in Uyghur translations
+
+Spaces incorrectly inserted inside format specifiers (e.g. `% 1 $ s`, `% d`) have been removed, and broken escape sequences (`\ N`, `\ \"`) have been fixed.
+
+https://github.com/owncloud/android/issues/5019
+https://github.com/owncloud/android/pull/5027
