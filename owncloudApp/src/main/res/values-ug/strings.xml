@@ -85,7 +85,7 @@
   <string name="bottom_nav_links">ئۇلىنىشلار</string>
   <string name="bottom_nav_shares">ھەمبەھىر</string>
   <string name="recommend_subject">ئەقلىيفونىڭىزدا%1$s سىناپ بېقىڭ!</string>
-  <string name="recommend_text">سىزنى ئەقلىيفونىڭىزدا%1$s ئىشلىتىشكە تەكلىپ قىلماقچى! \ N بۇ يەرگە چۈشۈرۈڭ:%2$s</string>
+  <string name="recommend_text">سىزنى ئەقلىيفونىڭىزدا%1$s ئىشلىتىشكە تەكلىپ قىلماقچى!\nبۇ يەرگە چۈشۈرۈڭ:%2$s</string>
   <string name="auth_failure_snackbar">دەلىللەش مەغلۇپ بولدى. قايتا كىرىش ئۈچۈن قايتا كىرىڭ.</string>
   <string name="server_not_supported">مۇلازىمېتىر نەشرىڭىز 10 دىن تۆۋەن ، شۇڭا ئۇنى قوللىمايدۇ ، مۇلازىمېتىرىڭىزنى يېڭى نەشرىگە يېڭىلاڭ.</string>
   <string name="auth_failure_snackbar_action">ھېساباتنى ئۆزگەرتىش</string>
@@ -333,8 +333,8 @@
   <string name="copy_file_invalid_into_descendent">ھۆججەت قىسقۇچنى ئەۋلادلارغا كۆچۈرگىلى بولمايدۇ.</string>
   <string name="copy_file_invalid_overwrite">بۇ ھۆججەت نىشان ھۆججەت قىسقۇچىدا مەۋجۇت.</string>
   <string name="copy_file_error">بۇ ھۆججەت ياكى ھۆججەت قىسقۇچنى كۆچۈرمەكچى بولغاندا خاتالىق كۆرۈلدى.</string>
-  <string name="subject_user_shared_with_you">%1$s سىز بىلەن ئورتاقلاشتى \ \"%2$s \"</string>
-  <string name="subject_shared_with_you">\ \"%1$s \" سىز بىلەن ئورتاقلاشتى</string>
+  <string name="subject_user_shared_with_you">%1$s سىز بىلەن ئورتاقلاشتى \"%2$s\"</string>
+  <string name="subject_shared_with_you">\"%1$s\" سىز بىلەن ئورتاقلاشتى</string>
   <string name="username">ئىشلەتكۈچى ئىسمى</string>
   <string name="file_list__footer__folder">1 ھۆججەت قىسقۇچ</string>
   <string name="file_list__footer__folders">%1$d ھۆججەت قىسقۇچ</string>
@@ -444,7 +444,7 @@
   <string name="error_webfinger_username_empty">ئىشلەتكۈچى ئىسمى قۇرۇق</string>
   <!--Release Notes-->
   <string name="release_notes_header">%1$s دىكى يېڭى</string>
-  <string name="release_notes_footer">%1$s نى ئىشلەتكەنلىكىڭىزگە رەھمەت. \ N❤</string>
+  <string name="release_notes_footer">%1$s نى ئىشلەتكەنلىكىڭىزگە رەھمەت.\n❤</string>
   <string name="release_notes_proceed">داۋاملاشتۇرۇڭ</string>
   <string name="release_notes_bugfixes_title">كىچىك خاتالىق</string>
   <string name="release_notes_bugfixes_subtitle">بەزى خاتالىقلار ئەپتىكى تەجرىبىنى ياخشىلاش ئۈچۈن ئوڭشالدى</string>
@@ -471,7 +471,7 @@
   <string name="password_policy_max_characters">ئەڭ كۆپ بولغاندا%1$d ھەرپ</string>
   <string name="password_policy_min_digits">كەم دېگەندە%1$d سان</string>
   <string name="password_policy_lowercase_characters">كەم دېگەندە%1$d كىچىك ھەرپ</string>
-  <string name="password_policy_min_special_character">ئالاھىدە ھەرپلەرنىڭ كەم دېگەندە%1$d: \ \"%2$s \"</string>
+  <string name="password_policy_min_special_character">ئالاھىدە ھەرپلەرنىڭ كەم دېگەندە%1$d: \"%2$s\"</string>
   <string name="password_policy_error_password_banned">بەختكە قارشى ، پارولىڭىز ئادەتتە ئىشلىتىلىدۇ. بىخەتەرلىكىڭىز ئۈچۈن پەرەز قىلىش تەس بولغان پارولنى تاللاڭ.</string>
   <string name="prefs_delete_local_files_entries_never">ھەرگىز بولمايدۇ</string>
   <string name="prefs_delete_local_files_entries_1hour">1 سائەت</string>
@@ -479,7 +479,7 @@
   <string name="prefs_delete_local_files_entries_1day">1 كۈن</string>
   <string name="prefs_delete_local_files_entries_30days">30 كۈن</string>
   <string name="prefs_delete_local_files">يەرلىك نۇسخىسىنى ئۆچۈرۈڭ</string>
-  <string name="prefs_delete_local_files_summary">تورسىز ھالەتتە ئاپتوماتىك چۈشۈرۈلگەن ھۆججەتلەرنى ئۆچۈرۈۋېتىڭ ، ئۇلارنىڭ ئاخىرقى ئىشلىتىلىش ۋاقتى تاللانغان ۋاقىتتىن ئېشىپ كەتكەندە. \ N تاللانغان ۋاقىت:%1$s</string>
+  <string name="prefs_delete_local_files_summary">تورسىز ھالەتتە ئاپتوماتىك چۈشۈرۈلگەن ھۆججەتلەرنى ئۆچۈرۈۋېتىڭ ، ئۇلارنىڭ ئاخىرقى ئىشلىتىلىش ۋاقتى تاللانغان ۋاقىتتىن ئېشىپ كەتكەندە.\nتاللانغان ۋاقىت:%1$s</string>
   <string name="insecure_http_url_title_dialog">بىخەتەر بولمىغان HTTP URL</string>
   <string name="insecure_http_url_continue_button">داۋاملاشتۇر</string>
   <string name="clean_data_account_title">يەرلىك ساقلاشنى ئۆچۈرۈڭ</string>
