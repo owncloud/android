@@ -40,6 +40,7 @@ import androidx.fragment.app.transaction
 import com.owncloud.android.R
 import com.owncloud.android.databinding.MembersActivityBinding
 import com.owncloud.android.datamodel.ThumbnailsCacheManager
+import com.owncloud.android.domain.capabilities.model.CapabilityBooleanType
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.roles.model.OCRole
 import com.owncloud.android.domain.sharing.shares.model.MemberPermission
@@ -169,7 +170,13 @@ class ShareActivity : FileActivity(), OcsShareFragmentListener, GraphShareFragme
             binding.itemSize.text = DisplayUtils.bytesToHumanReadable(file.length, this, true)
         }
 
-        binding.permanentLinkButton.isVisible = false
+        val privateLinkDisabled = capabilityViewModel.getStoredCapabilities()?.filesPrivateLinks == CapabilityBooleanType.FALSE
+        if (file.privateLink.isNullOrEmpty() || privateLinkDisabled) {
+            binding.permanentLinkButton.isVisible = false
+        } else {
+            binding.permanentLinkButton.isVisible = true
+            binding.permanentLinkButton.setOnClickListener { copyOrSendPrivateLink(file) }
+        }
     }
 
     /**************************************************************************************************************

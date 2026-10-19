@@ -79,6 +79,10 @@ class CapabilityViewModel(
         getStoredCapabilitiesUseCase(GetStoredCapabilitiesUseCase.Params(accountName))?.isSpacesAllowed() == true
     }
 
+    fun getStoredCapabilities(): OCCapability? = runBlocking(coroutineDispatcherProvider.io) {
+        getStoredCapabilitiesUseCase(GetStoredCapabilitiesUseCase.Params(accountName))
+    }
+
     fun checkMultiPersonal(): Boolean = runBlocking(CoroutinesDispatcherProvider().io) {
         val capabilities = withContext(CoroutinesDispatcherProvider().io) {
             getStoredCapabilitiesUseCase(GetStoredCapabilitiesUseCase.Params(accountName))

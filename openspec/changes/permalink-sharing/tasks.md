@@ -7,10 +7,10 @@
 
 ## 2. oCIS permalink button (owncloudApp — ShareActivity)
 
-- [ ] 2.1 Expose the stored `filesPrivateLinks` capability to `ShareActivity` — reuse an existing `CapabilityViewModel` accessor if one returns the `OCCapability`, otherwise add a thin read-only getter on `CapabilityViewModel` backed by `GetStoredCapabilitiesUseCase` (mirroring `isOcisServer()`); verify by reading that `ShareActivity.setupFileHeader()` can read `filesPrivateLinks` without querying Room directly.
-- [ ] 2.2 In `ShareActivity.setupFileHeader()`, replace the hard-coded `binding.permanentLinkButton.isVisible = false` (`ShareActivity.kt:172`) with the oC10 rule: hide when `file.privateLink.isNullOrEmpty()` or `filesPrivateLinks == CapabilityBooleanType.FALSE`, otherwise show the button; verify by reading that the visibility logic matches `OcsShareFileFragment.showOrHidePrivateLink()`.
-- [ ] 2.3 When the button is shown, wire `binding.permanentLinkButton.setOnClickListener { copyOrSendPrivateLink(file) }` (reference `SpaceMembersActivity.kt:74`); verify manually on an oCIS account that tapping the permalink button in the Share header copies/sends the item's private link.
-- [ ] 2.4 Manual check — hidden states: on oCIS, open the Share header for an item with no private link and for an account where `filesPrivateLinks` is `FALSE`; verify the permalink button is not shown in either case.
+- [x] 2.1 Expose the stored `filesPrivateLinks` capability to `ShareActivity` — reuse an existing `CapabilityViewModel` accessor if one returns the `OCCapability`, otherwise add a thin read-only getter on `CapabilityViewModel` backed by `GetStoredCapabilitiesUseCase` (mirroring `isOcisServer()`); verify by reading that `ShareActivity.setupFileHeader()` can read `filesPrivateLinks` without querying Room directly.
+- [x] 2.2 In `ShareActivity.setupFileHeader()`, replace the hard-coded `binding.permanentLinkButton.isVisible = false` (`ShareActivity.kt:172`) with the oC10 rule: hide when `file.privateLink.isNullOrEmpty()` or `filesPrivateLinks == CapabilityBooleanType.FALSE`, otherwise show the button; verify by reading that the visibility logic matches `OcsShareFileFragment.showOrHidePrivateLink()`.
+- [x] 2.3 When the button is shown, wire `binding.permanentLinkButton.setOnClickListener { copyOrSendPrivateLink(file) }` (reference `SpaceMembersActivity.kt:74`); verify manually on an oCIS account that tapping the permalink button in the Share header copies/sends the item's private link.
+- [x] 2.4 Manual check — hidden states: on oCIS, open the Share header for an item with no private link and for an account where `filesPrivateLinks` is `FALSE`; verify the permalink button is not shown in either case.
 
 ## 3. Release notes
 
