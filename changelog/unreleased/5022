@@ -1,0 +1,8 @@
+Enhancement: Permalink for files and folders on oCIS servers
+
+The share screen has been made reachable for any single file or folder on Infinite Scale accounts,
+regardless of capabilities and permissions, and a button to copy or send the item's permalink
+has been added in its header.
+
+https://github.com/owncloud/android/issues/4939
+https://github.com/owncloud/android/pull/5022

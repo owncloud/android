@@ -19,7 +19,7 @@
 
 ## 4. Changelog
 
-- [ ] 4.1 Add `changelog/unreleased/<PR-number>` with a `Bugfix` entry (title under 80 chars, present-perfect-passive body) linking `https://github.com/owncloud/android/issues/4939` and the PR URL; verify the file matches the CLAUDE.md changelog format.
+- [x] 4.1 Add `changelog/unreleased/<PR-number>` with an `Enhancement` entry (title under 80 chars, present-perfect-passive body) linking `https://github.com/owncloud/android/issues/4939` and the PR URL; verify the file matches the CLAUDE.md changelog format.
 
 ## 5. Final verification
 

@@ -25,5 +25,5 @@ On oCIS the permalink can become unreachable. The `Share` screen is the only ent
   - No unit tests are added: the change touches only the presentation layer (owncloudApp), where unit tests are not established per project convention. The oCIS reachability and permalink behavior are covered by the manual QA cases in `tasks.md`.
 - **owncloudDomain / owncloudData / owncloudComLibrary**: no changes. `OCFile.privateLink` is already populated from the `oc:privatelink` PROPFIND property and `OCCapability.isSpacesAllowed()` already exists.
 - **Release notes**: user-facing entry summarising the oCIS Share/permalink change.
-- **Changelog**: new `Bugfix` entry under `changelog/unreleased/`.
+- **Changelog**: new `Enhancement` entry under `changelog/unreleased/`.
 - No new dependencies.
