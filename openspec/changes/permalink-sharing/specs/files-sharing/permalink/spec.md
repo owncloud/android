@@ -48,12 +48,16 @@ On an oC10 account, the conditions under which the `Share` menu option is offere
 
 ### Requirement: Permalink button shown and functional in the oCIS Share header
 
-On an oCIS account, the Share header SHALL display the permalink (private link) button when the selected item has a non-empty private link and the `filesPrivateLinks` capability is not `FALSE`. When the button is displayed and the user activates it, the system SHALL copy or send that item's private link, reusing the existing private-link copy/send action.
+On an oCIS account, the Share header SHALL display the permalink (private link) button when the selected item has a non-empty private link and the `filesPrivateLinks` capability is not `FALSE`. When the button is displayed and the user activates it, the system SHALL copy or send that item's private link, reusing the existing private-link copy/send action. When the user long-presses the button, the system SHALL show an informational message explaining what a private link is.
 
 #### Scenario: Item with a private link and private links not disabled
 - **WHEN** the oCIS Share header is shown for an item whose private link is non-empty and the `filesPrivateLinks` capability is not `FALSE`
 - **THEN** the permalink button is visible
 - **AND** activating it copies or sends that item's private link
+
+#### Scenario: Long-pressing the permalink button
+- **WHEN** the oCIS Share header is shown for an item whose private link is non-empty and the user long-presses the permalink button
+- **THEN** an informational message explaining the private link is shown
 
 #### Scenario: Private links capability disabled
 - **WHEN** the oCIS Share header is shown and the `filesPrivateLinks` capability is `FALSE`

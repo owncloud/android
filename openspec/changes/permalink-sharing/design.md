@@ -44,20 +44,26 @@ if (shareReachable) optionsToShow.add(FileMenuOption.SHARE)
 - **Alternative rejected**: removing the oC10-only inputs and reducing the gate to `!onlyAvailableOfflineFiles && isSingleSelection(files)` for everyone. Rejected because it changes oC10 behavior (an item "shared with me" with resharing disabled would newly show `Share`), which is explicitly out of scope.
 
 ### D2: Implement the oCIS permalink button in `ShareActivity.setupFileHeader()`
-Replace the hard-coded `binding.permanentLinkButton.isVisible = false` with the oC10 rule, then wire the click to the existing override:
+Replace the hard-coded `binding.permanentLinkButton.isVisible = false` with the oC10 rule inside a single `binding.permanentLinkButton.apply { … }` block, wiring the click to the existing override and a long press to the info toast:
 
 ```kotlin
 val privateLinkDisabled = capabilities?.filesPrivateLinks == CapabilityBooleanType.FALSE
-if (file.privateLink.isNullOrEmpty() || privateLinkDisabled) {
-    binding.permanentLinkButton.isVisible = false
-} else {
-    binding.permanentLinkButton.isVisible = true
-    binding.permanentLinkButton.setOnClickListener { copyOrSendPrivateLink(file) }
+binding.permanentLinkButton.apply {
+    if (file.privateLink.isNullOrEmpty() || privateLinkDisabled) {
+        isVisible = false
+    } else {
+        isVisible = true
+        setOnClickListener { copyOrSendPrivateLink(file) }
+        setOnLongClickListener {
+            Toast.makeText(this@ShareActivity, R.string.private_link_info, Toast.LENGTH_LONG).show()
+            true
+        }
+    }
 }
 ```
 
 - **Why here**: `setupFileHeader()` already runs only on the oCIS layout branch, so no extra oCIS guard is required; the button and the `copyOrSendPrivateLink` plumbing already exist.
-- **Why mirror oC10's rule** instead of inventing one: keeps permalink visibility consistent across both screens (hidden when no link or `filesPrivateLinks == FALSE`).
+- **Why mirror oC10's rule** instead of inventing one: keeps permalink behavior consistent across both screens — hidden when no link or `filesPrivateLinks == FALSE`, click copies/sends the private link, and long press shows the `R.string.private_link_info` toast, exactly as `OcsShareFileFragment.showOrHidePrivateLink()` does.
 - **Capability access**: a thin read-only `getStoredCapabilities()` getter (backed by `GetStoredCapabilitiesUseCase`) was added to `CapabilityViewModel`, replacing the previous `isOcisServer()` boolean accessor. `onCreate()` reads the stored `OCCapability` once through it, branches on `isSpacesAllowed()`, and passes the capabilities into `setupFileHeader(binding, capabilities)`; `filesPrivateLinks` is read from that parameter rather than re-querying Room or the view model inside the method.
 - **Reference**: `SpaceMembersActivity.kt:74` wires the same button via `setOnClickListener`.
 

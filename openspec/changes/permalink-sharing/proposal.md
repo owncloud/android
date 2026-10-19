@@ -6,7 +6,7 @@ On oCIS the permalink can become unreachable. The `Share` screen is the only ent
 
 - On oCIS accounts (identified by the `spaces` capability, `OCCapability.isSpacesAllowed()`), the `Share` menu option becomes reachable for any single selected item, independent of the `resharing`/`sharing` capabilities, the `R` permission, and the `share_via_link_feature`/`share_with_users_feature` setup flags. It stays hidden in the available-offline shortcut and for multiselection.
 - On oC10 the `Share` gate is left unchanged (no observable difference).
-- On oCIS, the `permanent_link_button` in the Share header (`members_activity.xml`, driven by `ShareActivity.setupFileHeader()`) is made visible and wired to `copyOrSendPrivateLink(file)`, shown only when the item has a private link and the `filesPrivateLinks` capability is not `FALSE` — mirroring oC10's `showOrHidePrivateLink()` and the `SpaceMembersActivity` reference.
+- On oCIS, the `permanent_link_button` in the Share header (`members_activity.xml`, driven by `ShareActivity.setupFileHeader()`) is made visible and wired to `copyOrSendPrivateLink(file)` on click and to an informational toast (`R.string.private_link_info`) on long press, shown only when the item has a private link and the `filesPrivateLinks` capability is not `FALSE` — mirroring oC10's `showOrHidePrivateLink()` and the `SpaceMembersActivity` reference.
 - The capability/feature-flag gating of the "share with users" and "share by link" sections *inside* the Share screen is untouched on both server types.
 
 ## Capabilities

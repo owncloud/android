@@ -35,6 +35,7 @@ import android.view.KeyEvent
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.transaction
 import com.owncloud.android.R
@@ -173,11 +174,17 @@ class ShareActivity : FileActivity(), OcsShareFragmentListener, GraphShareFragme
         }
 
         val privateLinkDisabled = capabilities?.filesPrivateLinks == CapabilityBooleanType.FALSE
-        if (file.privateLink.isNullOrEmpty() || privateLinkDisabled) {
-            binding.permanentLinkButton.isVisible = false
-        } else {
-            binding.permanentLinkButton.isVisible = true
-            binding.permanentLinkButton.setOnClickListener { copyOrSendPrivateLink(file) }
+        binding.permanentLinkButton.apply {
+            if (file.privateLink.isNullOrEmpty() || privateLinkDisabled) {
+                isVisible = false
+            } else {
+                isVisible = true
+                setOnClickListener { copyOrSendPrivateLink(file) }
+                setOnLongClickListener {
+                    Toast.makeText(this@ShareActivity, R.string.private_link_info, Toast.LENGTH_LONG).show()
+                    true
+                }
+            }
         }
     }
 

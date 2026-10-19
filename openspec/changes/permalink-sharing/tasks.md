@@ -11,6 +11,7 @@
 - [x] 2.2 In `ShareActivity.setupFileHeader(binding, capabilities)`, replace the hard-coded `binding.permanentLinkButton.isVisible = false` with the oC10 rule, reading `filesPrivateLinks` from the `capabilities` parameter passed in from `onCreate()`: hide when `file.privateLink.isNullOrEmpty()` or `filesPrivateLinks == CapabilityBooleanType.FALSE`, otherwise show the button; verify by reading that the visibility logic matches `OcsShareFileFragment.showOrHidePrivateLink()`.
 - [x] 2.3 When the button is shown, wire `binding.permanentLinkButton.setOnClickListener { copyOrSendPrivateLink(file) }` (reference `SpaceMembersActivity.kt:74`); verify manually on an oCIS account that tapping the permalink button in the Share header copies/sends the item's private link.
 - [x] 2.4 Manual check — hidden states: on oCIS, open the Share header for an item with no private link and for an account where `filesPrivateLinks` is `FALSE`; verify the permalink button is not shown in either case.
+- [x] 2.5 When the button is shown, also wire `binding.permanentLinkButton.setOnLongClickListener { ... }` to show a toast with `R.string.private_link_info` and return `true`, mirroring oC10's `OcsShareFileFragment.showOrHidePrivateLink()`; verify manually on an oCIS account that long-pressing the permalink button shows the informational message.
 
 ## 3. Release notes
 
@@ -41,6 +42,7 @@
 | **Permalink button (oCIS)** | | | | |
 | Button shown | 1. On an oCIS account where `filesPrivateLinks` is not `FALSE`<br>2. Open the Share screen for an item that has a private link | The permalink (permanent link) button is shown in the Share header | | |
 | Copy/send permalink | 1. Open the Share header for an item with a private link<br>2. Tap the permalink button | The item's private link is copied/sent (same behavior as oC10 `copyOrSendPrivateLink`) | | |
+| Long-press permalink | 1. Open the Share header for an item with a private link<br>2. Long-press the permalink button | An informational toast explaining the private link is shown (same behavior as oC10) | | |
 | Button hidden — no private link | 1. Open the Share header for an item with no private link | The permalink button is not shown | | |
 | Button hidden — capability FALSE | 1. Use an account where `filesPrivateLinks` is `FALSE`<br>2. Open the Share header for any item | The permalink button is not shown | | |
 | **Regression (oC10)** | | | | |
