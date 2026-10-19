@@ -242,6 +242,9 @@ abstract class DrawerActivity : ToolbarActivity() {
     }
 
     private fun bottomBarNavigationTo(menuItemId: Int, isCurrentOptionActive: Boolean) {
+        if (account == null) {
+            return
+        }
         when (menuItemId) {
             R.id.nav_all_files -> navigateToOption(FileListOption.ALL_FILES)
             R.id.nav_spaces -> navigateToOption(FileListOption.SPACES_LIST)
