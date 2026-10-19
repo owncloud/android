@@ -75,10 +75,6 @@ class CapabilityViewModel(
         )
     )
 
-    fun isOcisServer(): Boolean = runBlocking(coroutineDispatcherProvider.io) {
-        getStoredCapabilitiesUseCase(GetStoredCapabilitiesUseCase.Params(accountName))?.isSpacesAllowed() == true
-    }
-
     fun getStoredCapabilities(): OCCapability? = runBlocking(coroutineDispatcherProvider.io) {
         getStoredCapabilitiesUseCase(GetStoredCapabilitiesUseCase.Params(accountName))
     }

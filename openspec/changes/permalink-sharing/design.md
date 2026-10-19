@@ -7,7 +7,7 @@ See proposal.md — Why. Two independent pieces must change, both scoped to oCIS
 
 Relevant existing facts the design relies on:
 - `OCCapability.isSpacesAllowed()` (`spaces?.enabled == true`) is the established oCIS/oC10 discriminator across the app.
-- `ShareActivity` already resolves `capabilityViewModel.isOcisServer()` (which calls `isSpacesAllowed()`) and branches `setupOcisLayout()` vs `setupLegacyLayout()`. `setupFileHeader()` runs only on the oCIS branch.
+- `ShareActivity.onCreate()` fetches the stored `OCCapability` once via `capabilityViewModel.getStoredCapabilities()`, branches `setupOcisLayout()` vs `setupLegacyLayout()` on `isSpacesAllowed()`, and passes the capabilities down to `setupFileHeader()`, which runs only on the oCIS branch.
 - `ShareActivity` already overrides `copyOrSendPrivateLink(file)` → `fileOperationsHelper.copyOrSendPrivateLink(file)`.
 - oC10's rule (`OcsShareFileFragment.showOrHidePrivateLink()`): hide when `file.privateLink.isNullOrEmpty()` or `filesPrivateLinks == CapabilityBooleanType.FALSE`.
 - `FilterFileMenuOptionsUseCase` already fetches `capability = capabilityRepository.getStoredCapabilities(params.accountName)`.
@@ -47,8 +47,7 @@ if (shareReachable) optionsToShow.add(FileMenuOption.SHARE)
 Replace the hard-coded `binding.permanentLinkButton.isVisible = false` with the oC10 rule, then wire the click to the existing override:
 
 ```kotlin
-val privateLinkDisabled =
-    capabilityViewModel.getStoredCapabilities()?.filesPrivateLinks == CapabilityBooleanType.FALSE
+val privateLinkDisabled = capabilities?.filesPrivateLinks == CapabilityBooleanType.FALSE
 if (file.privateLink.isNullOrEmpty() || privateLinkDisabled) {
     binding.permanentLinkButton.isVisible = false
 } else {
@@ -59,7 +58,7 @@ if (file.privateLink.isNullOrEmpty() || privateLinkDisabled) {
 
 - **Why here**: `setupFileHeader()` already runs only on the oCIS layout branch, so no extra oCIS guard is required; the button and the `copyOrSendPrivateLink` plumbing already exist.
 - **Why mirror oC10's rule** instead of inventing one: keeps permalink visibility consistent across both screens (hidden when no link or `filesPrivateLinks == FALSE`).
-- **Capability access**: `CapabilityViewModel` already exposes stored capabilities for the account (used by `isOcisServer()`); read `filesPrivateLinks` through it. If no accessor returns the full `OCCapability`, add a thin read-only getter on `CapabilityViewModel` rather than re-querying Room from the Activity — confirm the exact accessor during apply (see Open Questions).
+- **Capability access**: a thin read-only `getStoredCapabilities()` getter (backed by `GetStoredCapabilitiesUseCase`) was added to `CapabilityViewModel`, replacing the previous `isOcisServer()` boolean accessor. `onCreate()` reads the stored `OCCapability` once through it, branches on `isSpacesAllowed()`, and passes the capabilities into `setupFileHeader(binding, capabilities)`; `filesPrivateLinks` is read from that parameter rather than re-querying Room or the view model inside the method.
 - **Reference**: `SpaceMembersActivity.kt:74` wires the same button via `setOnClickListener`.
 
 ## Risks / Trade-offs
@@ -70,4 +69,4 @@ if (file.privateLink.isNullOrEmpty() || privateLinkDisabled) {
 
 ## Open Questions
 
-- Which existing `CapabilityViewModel` accessor returns the stored `OCCapability` (or specifically `filesPrivateLinks`) for the account, or whether a small read-only getter must be added. This is an implementation detail that does not affect the specs, the approach, or the task breakdown; resolve it when editing `ShareActivity`.
+- ~~Which existing `CapabilityViewModel` accessor returns the stored `OCCapability` (or specifically `filesPrivateLinks`) for the account, or whether a small read-only getter must be added.~~ **Resolved:** no existing accessor returned the full `OCCapability`, so a read-only `getStoredCapabilities()` getter was added to `CapabilityViewModel`, backed by `GetStoredCapabilitiesUseCase`; `onCreate()` calls it once and passes the result into `setupFileHeader()`. The former `isOcisServer()` boolean accessor was removed, as `getStoredCapabilities()?.isSpacesAllowed()` now covers both the layout branch and the permalink rule.
