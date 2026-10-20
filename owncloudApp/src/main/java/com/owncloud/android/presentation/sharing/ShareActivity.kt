@@ -96,7 +96,7 @@ class ShareActivity : FileActivity(), OcsShareFragmentListener, GraphShareFragme
         observeShareDeletion()
     }
 
-    private fun setupOcisLayout(savedInstanceState: Bundle?, capabilities: OCCapability?) {
+    private fun setupOcisLayout(savedInstanceState: Bundle?, capabilities: OCCapability) {
         val binding = MembersActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setupToolbar(binding.root)
@@ -158,7 +158,7 @@ class ShareActivity : FileActivity(), OcsShareFragmentListener, GraphShareFragme
         supportActionBar?.setHomeActionContentDescription(R.string.common_back)
     }
 
-    private fun setupFileHeader(binding: MembersActivityBinding, capabilities: OCCapability?) {
+    private fun setupFileHeader(binding: MembersActivityBinding, capabilities: OCCapability) {
         binding.itemIcon.setImageResource(MimetypeIconUtil.getFileTypeIconId(file.mimeType, file.fileName))
         if (file.isImage) {
             val thumbnail = ThumbnailsCacheManager.getBitmapFromDiskCache(file.remoteId.toString())
@@ -173,7 +173,7 @@ class ShareActivity : FileActivity(), OcsShareFragmentListener, GraphShareFragme
             binding.itemSize.text = DisplayUtils.bytesToHumanReadable(file.length, this, true)
         }
 
-        val privateLinkDisabled = capabilities?.filesPrivateLinks == CapabilityBooleanType.FALSE
+        val privateLinkDisabled = capabilities.filesPrivateLinks == CapabilityBooleanType.FALSE
         binding.permanentLinkButton.apply {
             if (file.privateLink.isNullOrEmpty() || privateLinkDisabled) {
                 isVisible = false

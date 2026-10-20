@@ -47,7 +47,7 @@ if (shareReachable) optionsToShow.add(FileMenuOption.SHARE)
 Replace the hard-coded `binding.permanentLinkButton.isVisible = false` with the oC10 rule inside a single `binding.permanentLinkButton.apply { … }` block, wiring the click to the existing override and a long press to the info toast:
 
 ```kotlin
-val privateLinkDisabled = capabilities?.filesPrivateLinks == CapabilityBooleanType.FALSE
+val privateLinkDisabled = capabilities.filesPrivateLinks == CapabilityBooleanType.FALSE
 binding.permanentLinkButton.apply {
     if (file.privateLink.isNullOrEmpty() || privateLinkDisabled) {
         isVisible = false
@@ -64,7 +64,7 @@ binding.permanentLinkButton.apply {
 
 - **Why here**: `setupFileHeader()` already runs only on the oCIS layout branch, so no extra oCIS guard is required; the button and the `copyOrSendPrivateLink` plumbing already exist.
 - **Why mirror oC10's rule** instead of inventing one: keeps permalink behavior consistent across both screens — hidden when no link or `filesPrivateLinks == FALSE`, click copies/sends the private link, and long press shows the `R.string.private_link_info` toast, exactly as `OcsShareFileFragment.showOrHidePrivateLink()` does.
-- **Capability access**: a thin read-only `getStoredCapabilities()` getter (backed by `GetStoredCapabilitiesUseCase`) was added to `CapabilityViewModel`, replacing the previous `isOcisServer()` boolean accessor. `onCreate()` reads the stored `OCCapability` once through it, branches on `isSpacesAllowed()`, and passes the capabilities into `setupFileHeader(binding, capabilities)`; `filesPrivateLinks` is read from that parameter rather than re-querying Room or the view model inside the method.
+- **Capability access**: a thin read-only `getStoredCapabilities()` getter (backed by `GetStoredCapabilitiesUseCase`) was added to `CapabilityViewModel`, replacing the previous `isOcisServer()` boolean accessor. `onCreate()` reads the stored `OCCapability` once through it, branches on `capabilities?.isSpacesAllowed() == true`, and passes the capabilities into `setupFileHeader(binding, capabilities)`; `filesPrivateLinks` is read from that parameter rather than re-querying Room or the view model inside the method. Because the oCIS branch is only reached when `capabilities` is non-null (Kotlin smart-casts it inside the `if`), both `setupOcisLayout` and `setupFileHeader` take a non-null `OCCapability` and read `capabilities.filesPrivateLinks` directly — no `?.` needed.
 - **Reference**: `SpaceMembersActivity.kt:74` wires the same button via `setOnClickListener`.
 
 ## Risks / Trade-offs
