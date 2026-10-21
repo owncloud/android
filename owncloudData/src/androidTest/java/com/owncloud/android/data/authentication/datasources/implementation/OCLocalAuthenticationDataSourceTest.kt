@@ -27,11 +27,13 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.owncloud.android.data.authentication.KEY_CLIENT_REGISTRATION_CLIENT_EXPIRATION_DATE
 import com.owncloud.android.data.authentication.KEY_CLIENT_REGISTRATION_CLIENT_ID
 import com.owncloud.android.data.authentication.KEY_CLIENT_REGISTRATION_CLIENT_SECRET
+import com.owncloud.android.data.authentication.KEY_CLIENT_REGISTRATION_TOKEN_ENDPOINT_AUTH_METHOD
 import com.owncloud.android.data.authentication.KEY_OAUTH2_REFRESH_TOKEN
 import com.owncloud.android.data.authentication.KEY_OAUTH2_SCOPE
 import com.owncloud.android.data.authentication.SELECTED_ACCOUNT
 import com.owncloud.android.data.providers.SharedPreferencesProvider
 import com.owncloud.android.domain.authentication.oauth.model.ClientRegistrationInfo
+import com.owncloud.android.domain.authentication.oauth.model.OIDCServerConfiguration
 import com.owncloud.android.domain.exceptions.AccountNotFoundException
 import com.owncloud.android.domain.exceptions.AccountNotNewException
 import com.owncloud.android.domain.exceptions.AccountNotTheSameException
@@ -291,6 +293,159 @@ class OCLocalAuthenticationDataSourceTest {
     }
 
     @Test
+    fun addOAuthAccountStoresPostAuthMethod() {
+        mockRegularAccountCreationFlow()
+        mockSelectedAccountNameInPreferences()
+
+        val postRegistration = OC_CLIENT_REGISTRATION.copy(
+            tokenEndpointAuthMethod = OIDCServerConfiguration.CLIENT_SECRET_POST
+        )
+        val newAccountName = ocLocalAuthenticationDataSource.addOAuthAccount(
+            OC_ACCOUNT_ID,
+            OC_REDIRECTION_PATH.lastPermanentLocation,
+            OC_AUTH_TOKEN_TYPE,
+            OC_ACCESS_TOKEN,
+            OC_SECURE_SERVER_INFO_BASIC_AUTH,
+            OC_USER_INFO,
+            OC_REFRESH_TOKEN,
+            OC_SCOPE,
+            null,
+            postRegistration
+        )
+
+        val newAccount = Account(OC_ACCOUNT_NAME, OC_ACCOUNT.type)
+        assertEquals(newAccount.name, newAccountName)
+        verifyOAuthParamsAreUpdated(
+            newAccount,
+            OC_ACCESS_TOKEN,
+            OC_OAUTH_SUPPORTED_TRUE,
+            OC_REFRESH_TOKEN,
+            OC_SCOPE,
+            postRegistration,
+            1
+        )
+    }
+
+    @Test
+    fun addOAuthAccountReauthorizationReplacesAuthMethod() {
+        mockSelectedAccountNameInPreferences()
+
+        val postRegistration = OC_CLIENT_REGISTRATION.copy(
+            tokenEndpointAuthMethod = OIDCServerConfiguration.CLIENT_SECRET_POST
+        )
+        val accountName = ocLocalAuthenticationDataSource.addOAuthAccount(
+            OC_ACCOUNT_ID,
+            OC_REDIRECTION_PATH.lastPermanentLocation,
+            OC_AUTH_TOKEN_TYPE,
+            OC_ACCESS_TOKEN,
+            OC_SECURE_SERVER_INFO_BASIC_AUTH,
+            OC_USER_INFO.copy(id = OC_ACCOUNT_ID),
+            OC_REFRESH_TOKEN,
+            OC_SCOPE,
+            OC_ACCOUNT_NAME,
+            postRegistration
+        )
+
+        assertEquals(OC_ACCOUNT_NAME, accountName)
+        verifyOAuthParamsAreUpdated(
+            OC_ACCOUNT,
+            OC_ACCESS_TOKEN,
+            OC_OAUTH_SUPPORTED_TRUE,
+            OC_REFRESH_TOKEN,
+            OC_SCOPE,
+            postRegistration,
+            1
+        )
+    }
+
+    @Test
+    fun addOAuthAccountIsolatesAuthMethodBetweenAccounts() {
+        mockRegularAccountCreationFlow()
+        mockSelectedAccountNameInPreferences()
+
+        val postRegistration = OC_CLIENT_REGISTRATION.copy(
+            tokenEndpointAuthMethod = OIDCServerConfiguration.CLIENT_SECRET_POST
+        )
+        ocLocalAuthenticationDataSource.addOAuthAccount(
+            OC_ACCOUNT_ID,
+            OC_REDIRECTION_PATH.lastPermanentLocation,
+            OC_AUTH_TOKEN_TYPE,
+            OC_ACCESS_TOKEN,
+            OC_SECURE_SERVER_INFO_BASIC_AUTH,
+            OC_USER_INFO,
+            OC_REFRESH_TOKEN,
+            OC_SCOPE,
+            null,
+            postRegistration
+        )
+
+        val firstAccount = Account(OC_ACCOUNT_NAME, OC_ACCOUNT.type)
+        val secondAccount = Account("other@demo.owncloud.com", OC_ACCOUNT.type)
+        mockGetAccountsByType(OC_ACCOUNT.type, arrayOf(firstAccount))
+
+        ocLocalAuthenticationDataSource.addOAuthAccount(
+            "other",
+            OC_REDIRECTION_PATH.lastPermanentLocation,
+            OC_AUTH_TOKEN_TYPE,
+            OC_ACCESS_TOKEN,
+            OC_SECURE_SERVER_INFO_BASIC_AUTH,
+            OC_USER_INFO,
+            OC_REFRESH_TOKEN,
+            OC_SCOPE,
+            null,
+            OC_CLIENT_REGISTRATION
+        )
+
+        verify(exactly = 1) {
+            accountManager.setUserData(
+                firstAccount,
+                KEY_CLIENT_REGISTRATION_TOKEN_ENDPOINT_AUTH_METHOD,
+                OIDCServerConfiguration.CLIENT_SECRET_POST
+            )
+        }
+        verify(exactly = 0) {
+            accountManager.setUserData(
+                firstAccount,
+                KEY_CLIENT_REGISTRATION_TOKEN_ENDPOINT_AUTH_METHOD,
+                OIDCServerConfiguration.CLIENT_SECRET_BASIC
+            )
+        }
+        verify(exactly = 1) {
+            accountManager.setUserData(
+                secondAccount,
+                KEY_CLIENT_REGISTRATION_TOKEN_ENDPOINT_AUTH_METHOD,
+                OC_CLIENT_REGISTRATION.tokenEndpointAuthMethod
+            )
+        }
+    }
+
+    @Test
+    fun addOAuthAccountWithoutRegistrationDoesNotStoreAuthMethod() {
+        mockRegularAccountCreationFlow()
+        mockSelectedAccountNameInPreferences()
+
+        ocLocalAuthenticationDataSource.addOAuthAccount(
+            OC_ACCOUNT_ID,
+            OC_REDIRECTION_PATH.lastPermanentLocation,
+            OC_AUTH_TOKEN_TYPE,
+            OC_ACCESS_TOKEN,
+            OC_SECURE_SERVER_INFO_BASIC_AUTH,
+            OC_USER_INFO,
+            OC_REFRESH_TOKEN,
+            OC_SCOPE,
+            null,
+            null
+        )
+
+        verify(exactly = 0) {
+            accountManager.setUserData(any(), KEY_CLIENT_REGISTRATION_TOKEN_ENDPOINT_AUTH_METHOD, any())
+            accountManager.setUserData(any(), KEY_CLIENT_REGISTRATION_CLIENT_ID, any())
+            accountManager.setUserData(any(), KEY_CLIENT_REGISTRATION_CLIENT_SECRET, any())
+            accountManager.setUserData(any(), KEY_CLIENT_REGISTRATION_CLIENT_EXPIRATION_DATE, any())
+        }
+    }
+
+    @Test
     fun supportsOAuth2Ok() {
 
         every {
@@ -409,6 +564,11 @@ class OCLocalAuthenticationDataSourceTest {
             accountManager.setUserData(account, KEY_CLIENT_REGISTRATION_CLIENT_SECRET, clientInfo.clientSecret)
             accountManager.setUserData(account, KEY_CLIENT_REGISTRATION_CLIENT_ID, clientInfo.clientId)
             accountManager.setUserData(account, KEY_CLIENT_REGISTRATION_CLIENT_EXPIRATION_DATE, clientInfo.clientSecretExpiration.toString())
+            accountManager.setUserData(
+                account,
+                KEY_CLIENT_REGISTRATION_TOKEN_ENDPOINT_AUTH_METHOD,
+                clientInfo.tokenEndpointAuthMethod
+            )
         }
     }
 
