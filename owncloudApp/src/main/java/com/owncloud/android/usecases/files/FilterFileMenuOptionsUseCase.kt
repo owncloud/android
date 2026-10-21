@@ -65,6 +65,7 @@ class FilterFileMenuOptionsUseCase(
             false
         }
         val resharingAllowed = capability?.let { !anyFileSharedWithMe(files) || it.filesSharingResharing.isTrue } ?: false
+        val isOcis = capability?.isSpacesAllowed() == true
         val displaySelectAll = params.displaySelectAll
         val displaySelectInverse = params.displaySelectInverse
         val onlyAvailableOfflineFiles = params.onlyAvailableOfflineFiles
@@ -87,8 +88,13 @@ class FilterFileMenuOptionsUseCase(
             optionsToShow.add(FileMenuOption.SELECT_INVERSE)
         }
         // Share
-        if (!onlyAvailableOfflineFiles && shareViaLinkOrWithUsersAllowed && resharingAllowed &&
-            hasResharePermission) {
+        val shareReachable = if (isOcis) {
+            !onlyAvailableOfflineFiles && isSingleSelection(files)
+        } else {
+            !onlyAvailableOfflineFiles && shareViaLinkOrWithUsersAllowed && resharingAllowed &&
+                hasResharePermission
+        }
+        if (shareReachable) {
             optionsToShow.add(FileMenuOption.SHARE)
         }
         // Open with (different to preview!)

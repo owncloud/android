@@ -35,11 +35,14 @@ import android.view.KeyEvent
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.transaction
 import com.owncloud.android.R
 import com.owncloud.android.databinding.MembersActivityBinding
 import com.owncloud.android.datamodel.ThumbnailsCacheManager
+import com.owncloud.android.domain.capabilities.model.CapabilityBooleanType
+import com.owncloud.android.domain.capabilities.model.OCCapability
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.roles.model.OCRole
 import com.owncloud.android.domain.sharing.shares.model.MemberPermission
@@ -81,8 +84,9 @@ class ShareActivity : FileActivity(), OcsShareFragmentListener, GraphShareFragme
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        if (capabilityViewModel.isOcisServer()) {
-            setupOcisLayout(savedInstanceState)
+        val capabilities = capabilityViewModel.getStoredCapabilities()
+        if (capabilities?.isSpacesAllowed() == true) {
+            setupOcisLayout(savedInstanceState, capabilities)
         } else {
             setupLegacyLayout(savedInstanceState)
         }
@@ -92,11 +96,11 @@ class ShareActivity : FileActivity(), OcsShareFragmentListener, GraphShareFragme
         observeShareDeletion()
     }
 
-    private fun setupOcisLayout(savedInstanceState: Bundle?) {
+    private fun setupOcisLayout(savedInstanceState: Bundle?, capabilities: OCCapability) {
         val binding = MembersActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setupToolbar(binding.root)
-        setupFileHeader(binding)
+        setupFileHeader(binding, capabilities)
         if (savedInstanceState == null && file != null && account != null) {
             supportFragmentManager.transaction {
                 replace(R.id.members_fragment_container, GraphShareFragment.newInstance(file, account!!.name), TAG_GRAPH_SHARE_FRAGMENT)
@@ -154,7 +158,7 @@ class ShareActivity : FileActivity(), OcsShareFragmentListener, GraphShareFragme
         supportActionBar?.setHomeActionContentDescription(R.string.common_back)
     }
 
-    private fun setupFileHeader(binding: MembersActivityBinding) {
+    private fun setupFileHeader(binding: MembersActivityBinding, capabilities: OCCapability) {
         binding.itemIcon.setImageResource(MimetypeIconUtil.getFileTypeIconId(file.mimeType, file.fileName))
         if (file.isImage) {
             val thumbnail = ThumbnailsCacheManager.getBitmapFromDiskCache(file.remoteId.toString())
@@ -169,7 +173,19 @@ class ShareActivity : FileActivity(), OcsShareFragmentListener, GraphShareFragme
             binding.itemSize.text = DisplayUtils.bytesToHumanReadable(file.length, this, true)
         }
 
-        binding.permanentLinkButton.isVisible = false
+        val privateLinkDisabled = capabilities.filesPrivateLinks == CapabilityBooleanType.FALSE
+        binding.permanentLinkButton.apply {
+            if (file.privateLink.isNullOrEmpty() || privateLinkDisabled) {
+                isVisible = false
+            } else {
+                isVisible = true
+                setOnClickListener { copyOrSendPrivateLink(file) }
+                setOnLongClickListener {
+                    Toast.makeText(this@ShareActivity, R.string.private_link_info, Toast.LENGTH_LONG).show()
+                    true
+                }
+            }
+        }
     }
 
     /**************************************************************************************************************
