@@ -39,6 +39,7 @@ See proposal.md — Why for motivation. The `owncloudApp/build.gradle` release b
 | Moshi `@JsonClass`-annotated models in `owncloudComLibrary` | `-keep @com.squareup.moshi.JsonClass class * { *; }` | KSP generates adapters at compile time, but the annotated model fields must not be renamed or JSON field mapping breaks |
 | Room entities and DAOs | Already covered by Room's bundled consumer rules — verify after first build by inspecting `configuration.txt` | Room ships its own `-keep` rules in its AAR |
 | Koin wiring | No keep rules needed | Koin resolves dependencies via reified type parameters, not reflection on class names |
+| `PreferenceFragmentCompat` subclasses in `settings.xml` and custom `Preference` subclasses in preference XML | Explicit `-keep` per class `{ public <init>(...); }` | `androidx.preference` loads them via `Fragment.instantiate(context, className)` at runtime; renaming causes `ClassNotFoundException` when tapping any Settings item |
 | All other classes | Default R8 behavior (shrink + obfuscate) | No known issues; the `configuration.txt` dump after the first build is the safety net |
 
 ### D4: Verify merged rules after the first successful release build
@@ -50,7 +51,7 @@ See proposal.md — Why for motivation. The `owncloudApp/build.gradle` release b
 ## Risks / Trade-offs
 
 - **[Risk] Keep rules are incomplete** → Mitigation: Run the release APK on a device/emulator and exercise login, file listing, upload, download, and background sync before opening the PR. Missing keep rules typically surface as `ClassNotFoundException` or Moshi deserialization errors at runtime, not at build time.
-- **[Risk] R8 removes code that is used only via reflection (e.g. custom View classes inflated from XML)** → Mitigation: Review the R8 usage report (`usage.txt` in the mapping output directory) and add `@Keep` annotations or explicit rules for any incorrectly removed class.
+- **[Risk] R8 removes code that is used only via reflection (e.g. custom View classes inflated from XML, `PreferenceFragmentCompat` subclasses in preference XML)** → Mitigation: Review the R8 usage report (`usage.txt` in the mapping output directory) and add `@Keep` annotations or explicit rules for any incorrectly removed class. Confirmed during smoke testing: Settings sub-screens crashed until keep rules were added for all six settings fragments and `LargePreferenceCategory`.
 - **[Risk] Detekt flags new annotations or changed constructs** → Mitigation: Run `./gradlew detekt` locally after every change to the keep rules file and before pushing.
 
 ## Migration Plan
