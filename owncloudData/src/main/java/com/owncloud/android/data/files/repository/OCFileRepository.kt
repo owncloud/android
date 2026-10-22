@@ -387,7 +387,9 @@ class OCFileRepository(
                         })
                 } else if (localChildToSync.etag != remoteChild.etag ||
                     localChildToSync.localModificationTimestamp > remoteChild.lastSyncDateForData!! ||
-                    isActionSetFolderAvailableOfflineOrSynchronize
+                    isActionSetFolderAvailableOfflineOrSynchronize ||
+                    // The etag does not always change when only share metadata changes.
+                    shareMetadataChanged(localChildToSync, remoteChild)
                 ) {
                     // File exists in the database, we need to check several stuff.
                     folderContentUpdated.add(
@@ -608,6 +610,11 @@ class OCFileRepository(
         localStorageProvider.deleteLocalFile(ocFile)
         deleteOrResetFileFromDatabase(ocFile, onlyFromLocalStorage)
     }
+
+    private fun shareMetadataChanged(localChild: OCFile, remoteChild: OCFile): Boolean =
+        localChild.sharedByLink != remoteChild.sharedByLink ||
+            (localChild.sharedWithSharee == true) != (remoteChild.sharedWithSharee == true) ||
+            localChild.permissions != remoteChild.permissions
 
     private fun deleteOrResetFileFromDatabase(ocFile: OCFile, onlyFromLocalStorage: Boolean) {
         if (onlyFromLocalStorage) {
