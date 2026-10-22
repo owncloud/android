@@ -55,8 +55,8 @@ See proposal.md — Why for motivation. The `owncloudApp/build.gradle` release b
 
 ## Migration Plan
 
-1. Add `minifyEnabled true` and `proguardFiles` to the `release` build type in `owncloudApp/build.gradle`.
-2. Create `owncloudApp/proguard-rules.pro` with keep rules per D3.
+1. Add `minifyEnabled true` and `proguardFiles` to the `release` build type in `owncloudApp/build.gradle`, and immediately create a minimal stub `owncloudApp/proguard-rules.pro` (header comment only) so the build configuration is valid before any keep rules are written.
+2. Populate `owncloudApp/proguard-rules.pro` with keep rules per D3.
 3. Run `./gradlew assembleOriginalRelease` and resolve any build errors.
 4. Inspect `configuration.txt` (D4) and iterate on `proguard-rules.pro` as needed.
 5. Install the release APK on a device/emulator and smoke-test (login, file listing, upload, download, background sync).

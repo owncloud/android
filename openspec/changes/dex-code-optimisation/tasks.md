@@ -1,8 +1,9 @@
 ## 1. Build Configuration
 
-- [ ] 1.1 Add `minifyEnabled true` to the `release` build type in `owncloudApp/build.gradle`
-- [ ] 1.2 Add `proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'` to the `release` build type in `owncloudApp/build.gradle`
-- [ ] 1.3 Verify that the `debug` build type in `owncloudApp/build.gradle` has no `minifyEnabled` change (remains false by default)
+- [x] 1.1 Add `minifyEnabled true` to the `release` build type in `owncloudApp/build.gradle`
+- [x] 1.2 Add `proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'` to the `release` build type in `owncloudApp/build.gradle`
+- [x] 1.3 Verify that the `debug` build type in `owncloudApp/build.gradle` has no `minifyEnabled` change (remains false by default)
+- [x] 1.4 Create `owncloudApp/proguard-rules.pro` as a minimal stub (header comment only) so the `proguardFiles` reference added in task 1.2 is immediately satisfied and `assembleOriginalRelease` does not fail with "Supplied proguard configuration does not exist". Keep rules are populated in Group 2.
 
 ## 2. ProGuard Rules
 
