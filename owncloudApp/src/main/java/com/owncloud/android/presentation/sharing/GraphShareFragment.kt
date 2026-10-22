@@ -70,6 +70,7 @@ class GraphShareFragment : Fragment(), GraphSharesAdapter.GraphSharesAdapterList
     private var listener: GraphShareFragmentListener? = null
     private var canRemoveShares: Boolean = false
     private var canEditShares: Boolean = false
+    private var canCreatePublicLinks: Boolean = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = MembersFragmentBinding.inflate(inflater, container, false)
@@ -208,6 +209,8 @@ class GraphShareFragment : Fragment(), GraphSharesAdapter.GraphSharesAdapterList
     private fun checkPermissions(spacePermissions: List<String>) {
         canRemoveShares = DRIVES_DELETE_PERMISSION in spacePermissions
         canEditShares = DRIVES_UPDATE_PERMISSION in spacePermissions
+        canCreatePublicLinks = DRIVES_CREATE_PERMISSION in spacePermissions
+        binding.addPublicLinkButton.isVisible = canCreatePublicLinks
     }
 
     private fun observeAddShareResult() {
@@ -304,6 +307,7 @@ class GraphShareFragment : Fragment(), GraphSharesAdapter.GraphSharesAdapterList
         private const val ARG_ACCOUNT_NAME = "ACCOUNT_NAME"
         private const val DRIVES_DELETE_PERMISSION = "libre.graph/driveItem/permissions/delete"
         private const val DRIVES_UPDATE_PERMISSION = "libre.graph/driveItem/permissions/update"
+        private const val DRIVES_CREATE_PERMISSION = "libre.graph/driveItem/permissions/create"
 
         fun newInstance(file: OCFile, accountName: String): GraphShareFragment {
             val args = Bundle().apply {
