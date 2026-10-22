@@ -1,7 +1,7 @@
 ## 1. The `+` affordance
 
-- [ ] 1.1 Derive and expose a `+`-affordance visibility flag in `GraphShareViewModel` from the `libre.graph/driveItem/permissions/create` entry in the fetched permissions response.
-- [ ] 1.2 Show the `+` affordance in the `PUBLIC LINKS` header of `GraphShareFragment` bound to the ViewModel flag (1.1). Verify the button appears only when create permission is granted.
+- [x] 1.1 Derive and expose a `+`-affordance visibility flag in `GraphShareFragment.checkPermissions(...)` from the `libre.graph/driveItem/permissions/create` entry in the fetched space permissions list. _Implemented in `GraphShareFragment.checkPermissions(spacePermissions)` (where sibling `canRemoveShares`/`canEditShares` are derived) via a new `canCreatePublicLinks` flag + `DRIVES_CREATE_PERMISSION` constant, rather than in the ViewModel — matching the existing permission-check pattern._
+- [x] 1.2 Show the `+` affordance in the `PUBLIC LINKS` header of `GraphShareFragment` bound to the visibility flag (1.1). Verify the button appears only when create permission is granted. _Set `addPublicLinkButton.isVisible = canCreatePublicLinks` in `checkPermissions`; the `add_public_link_button` already existed in `members_fragment.xml` (default `gone`). No click action yet (task 2.3)._
 
 ## 2. Instantiate the creation screen
 
