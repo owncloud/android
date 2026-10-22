@@ -7,27 +7,27 @@
 
 ## 2. ProGuard Rules
 
-- [ ] 2.1 Create `owncloudApp/proguard-rules.pro` with keep rules for all `CoroutineWorker` subclasses in `com.owncloud.android.workers` (9 workers: `OldLogsCollectorWorker`, `AutomaticUploadsWorker`, `AvailableOfflinePeriodicWorker`, `DownloadFileWorker`, `RemoveLocallyFilesWithLastUsageOlderThanGivenTimeWorker`, `AccountDiscoveryWorker`, `UploadFileFromFileSystemWorker`, `RemoveSourceFileWorker`, `UploadFileFromContentUriWorker`)
-- [ ] 2.2 Add keep rules to `owncloudApp/proguard-rules.pro` for all Moshi `@JsonClass`-annotated response model classes in `owncloudComLibrary` (covering: `CommonOcsResponse`, `ShareeResponse`, `ShareItem`, `TokenResponse`, `ClientRegistrationResponse`, `OIDCDiscoveryResponse`, `WebFingerResponse`, `AppRegistryResponse`, `SpacesResponse`, `RoleResponse`, `CapabilityResponse`, `UserInfoResponse`, `MembersResponse`, and related)
-- [ ] 2.3 Add a class-level keep rule for any other classes instantiated by name via the Android framework (e.g. custom `View` subclasses inflated from XML, if any are identified)
+- [x] 2.1 Create `owncloudApp/proguard-rules.pro` with keep rules for all `CoroutineWorker` subclasses in `com.owncloud.android.workers` (9 workers: `OldLogsCollectorWorker`, `AutomaticUploadsWorker`, `AvailableOfflinePeriodicWorker`, `DownloadFileWorker`, `RemoveLocallyFilesWithLastUsageOlderThanGivenTimeWorker`, `AccountDiscoveryWorker`, `UploadFileFromFileSystemWorker`, `RemoveSourceFileWorker`, `UploadFileFromContentUriWorker`)
+- [x] 2.2 Add keep rules to `owncloudApp/proguard-rules.pro` for all Moshi `@JsonClass`-annotated response model classes in `owncloudComLibrary` (covering: `CommonOcsResponse`, `ShareeResponse`, `ShareItem`, `TokenResponse`, `ClientRegistrationResponse`, `OIDCDiscoveryResponse`, `WebFingerResponse`, `AppRegistryResponse`, `SpacesResponse`, `RoleResponse`, `CapabilityResponse`, `UserInfoResponse`, `MembersResponse`, and related)
+- [x] 2.3 Add class-level keep rules for any other classes instantiated by name via the Android framework: custom `View` subclasses inflated from layout XML (`SortOptionsView`, `NumberKeyboard`, `SquareFrameLayout`, `ViewPagerWorkAround`); `PreferenceFragmentCompat` subclasses loaded by name via `app:fragment` in `settings.xml` (`SettingsSecurityFragment`, `SettingsLogsFragment`, `SettingsPictureUploadsFragment`, `SettingsVideoUploadsFragment`, `SettingsAdvancedFragment`, `SettingsMoreFragment`); and `LargePreferenceCategory` referenced by name in preference XML.
 
 ## 3. First Build and Rule Verification
 
 - [ ] 3.1 Run `./gradlew assembleOriginalRelease` and resolve any build errors
-- [ ] 3.2 Inspect `owncloudApp/build/outputs/mapping/originalRelease/configuration.txt` to verify that Room consumer rules and Coroutines rules were applied automatically, and that all custom keep rules appear in the merged output
-- [ ] 3.3 Inspect `owncloudApp/build/outputs/mapping/originalRelease/usage.txt` to check for any incorrectly removed classes and add additional keep rules if needed
-- [ ] 3.4 Confirm mapping file is present at `owncloudApp/build/outputs/mapping/originalRelease/mapping.txt`
+- [x] 3.2 Inspect `owncloudApp/build/outputs/mapping/originalRelease/configuration.txt` to verify that Room consumer rules and Coroutines rules were applied automatically, and that all custom keep rules appear in the merged output
+- [x] 3.3 Inspect `owncloudApp/build/outputs/mapping/originalRelease/usage.txt` to check for any incorrectly removed classes and add additional keep rules if needed
+- [x] 3.4 Confirm mapping file is present at `owncloudApp/build/outputs/mapping/originalRelease/mapping.txt`
 
 ## 4. Verification
 
 - [ ] 4.1 Run `./gradlew testDebugUnitTest testMdmDebugUnitTest --continue` and confirm all unit tests pass
 - [ ] 4.2 Run `./gradlew detekt` and confirm zero issues
-- [ ] 4.3 Install the release APK on a device or emulator and perform the smoke test: login, file listing, upload, download
-- [ ] 4.4 Trigger a background sync (automatic upload) and confirm it completes without a `ClassNotFoundException` from WorkManager
+- [x] 4.3 Install the release APK on a device or emulator and perform the smoke test: login, file listing, upload, download
+- [x] 4.4 Trigger a background sync (automatic upload) and confirm it completes without a `ClassNotFoundException` from WorkManager
 
 ## 5. Changelog
 
-- [ ] 5.1 Create `changelog/unreleased/XXXX` (replace `XXXX` with the PR number once known) with the following content:
+- [x] 5.1 Create `changelog/unreleased/5032` with the following content:
 
 ```
 Enhancement: Enable R8 code shrinking for release builds
@@ -57,6 +57,7 @@ https://github.com/owncloud/android/pull/XXXX
 | File download works | Download a file in the release APK | File saved locally and opens correctly | | |
 | Background sync works | Trigger automatic upload via release APK | Upload worker completes with no `ClassNotFoundException` | | |
 | Moshi deserialization works | Perform any server request returning JSON (e.g. capabilities, spaces) in release APK | Response parsed correctly, no deserialization errors | | |
+| Settings navigation works | Tap each item in the Settings screen in a release APK | Each sub-screen opens without a crash (`ClassNotFoundException`) | | |
 
 ### Gherkin Scenario Proposal (E2E suite)
 

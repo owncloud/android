@@ -32,6 +32,11 @@ The ProGuard/R8 rules file SHALL include keep rules that prevent shrinking or re
 - **WHEN** the app deserializes a JSON response from the ownCloud server in a release build
 - **THEN** all annotated fields are correctly mapped and no deserialization errors occur due to renamed fields
 
+#### Scenario: Settings sub-screens open correctly in release builds
+
+- **WHEN** the user taps any item in the Settings screen in a release build
+- **THEN** the corresponding settings sub-screen opens without a `ClassNotFoundException`
+
 ### Requirement: Library modules are not affected
 
 The `owncloudComLibrary`, `owncloudData`, and `owncloudDomain` library modules SHALL keep `minifyEnabled false`; only `owncloudApp` is changed.
