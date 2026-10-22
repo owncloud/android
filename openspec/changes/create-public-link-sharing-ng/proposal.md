@@ -31,6 +31,6 @@ Out of scope: editing or deleting existing links, configuring password-protectio
 - **owncloudComLibrary** (networking): item-targeted `createLink` operation + service method (returns success; the response is not consumed).
 - **owncloudData** (data): remote datasource + repository `addLink` extended with an `itemId`.
 - **owncloudDomain** (business): `AddLinkUseCase`/`LinksRepository` extended with `itemId`; shared `OCLinkType` → password-policy mapping over `OCCapability`.
-- **owncloudApp** (presentation): `createPublicLink(...)` and `+`-visibility in `GraphShareViewModel`; generalized creation Fragment; list refresh on success and chain-icon share; possible rename/relocation of reused space-scoped classes; Koin wiring in `dependecyinjection/`.
+- **owncloudApp** (presentation): `createPublicLink(...)` in `GraphShareViewModel` and `+`-visibility in `GraphShareFragment`; generalized creation Fragment; list refresh on success and chain-icon share; possible rename/relocation of reused space-scoped classes; Koin wiring in `dependecyinjection/`.
 - Tests: unit tests apply only to the repositories and datasources (`OCLinksRepositoryTest`, `OCRemoteLinksDataSourceTest`); no unit tests are added for the operation, use case, ViewModel, or UI layers.
 - Changelog: an `Enhancement` entry in `changelog/unreleased/`.
