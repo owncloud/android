@@ -1,0 +1,6 @@
+Enhancement: Enable R8 code optimisation for release builds
+
+R8 code optimisation has been enabled for release builds, reducing the APK size.
+
+https://github.com/owncloud/android/issues/5029
+https://github.com/owncloud/android/pull/5032
