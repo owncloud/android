@@ -1,0 +1,7 @@
+Bugfix: Double separator in automatic uploads remote path
+
+The remote path of automatic uploads has been fixed so it no longer contains a
+double separator when the destination folder path ends with a separator.
+
+https://github.com/owncloud/android/issues/4451
+https://github.com/owncloud/android/pull/5033
