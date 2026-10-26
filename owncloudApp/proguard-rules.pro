@@ -22,6 +22,13 @@
 # annotated classes in owncloudComLibrary without enumerating them individually.
 -keep @com.squareup.moshi.JsonClass class * { *; }
 
+# --- Domain models serialized to Room via Moshi reflection ---
+# AppRegistryProvider is a domain-layer class with no @JsonClass annotation. It is serialized to
+# JSON by KotlinJsonAdapterFactory and stored as a plain string in the app_providers Room column.
+# Without this rule R8 renames its fields, making stored JSON unstable across releases and causing
+# app providers to silently disappear after an app update.
+-keep class com.owncloud.android.domain.appregistry.model.AppRegistryProvider { *; }
+
 # --- Custom Views inflated from XML ---
 # The Android LayoutInflater reads the fully-qualified class name from the XML attribute and
 # calls the constructor via reflection (typically the two-argument Context+AttributeSet form).
