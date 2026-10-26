@@ -35,6 +35,7 @@ See proposal.md — Why for motivation. The `owncloudApp/build.gradle` release b
 
 | Category | Rule strategy | Rationale |
 |---|---|---|
+| Custom `View` subclasses inflated from layout XML (`SortOptionsView`, `NumberKeyboard`, `SquareFrameLayout`, `ViewPagerWorkAround`) | No explicit rule needed — covered automatically by AAPT | AGP's AAPT step scans layout XML files and emits keep rules into `aapt_rules.txt` for every custom view referenced by class name. R8 merges these automatically; duplicating them in `proguard-rules.pro` is redundant. |
 | `CoroutineWorker` subclasses in `com.owncloud.android.workers` | `-keep class com.owncloud.android.workers.** { public <init>(...); }` | WorkManager instantiates workers by class name from the `WorkRequest`; renaming breaks lookup |
 | Moshi `@JsonClass`-annotated models in `owncloudComLibrary` | `-keep @com.squareup.moshi.JsonClass class * { *; }` | KSP generates adapters at compile time, but the annotated model fields must not be renamed or JSON field mapping breaks |
 | Room entities and DAOs | Already covered by Room's bundled consumer rules — verify after first build by inspecting `configuration.txt` | Room ships its own `-keep` rules in its AAR |

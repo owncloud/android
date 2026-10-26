@@ -6,7 +6,7 @@ The release APK published on Google Play has DEX code optimization disabled beca
 
 - Enable `minifyEnabled true` in the `release` build type of `owncloudApp/build.gradle`.
 - Add `proguardFiles` referencing `getDefaultProguardFile('proguard-android-optimize.txt')` and a new `owncloudApp/proguard-rules.pro`.
-- Create `owncloudApp/proguard-rules.pro` with keep rules for: `CoroutineWorker` subclasses in `com.owncloud.android.workers`, Moshi `@JsonClass`-annotated response models in `owncloudComLibrary`, domain model classes serialized to Room via Moshi reflection (`AppRegistryProvider`), custom `View` and `Preference` subclasses inflated from XML by the Android framework, and `PreferenceFragmentCompat` subclasses loaded by name via `app:fragment` in preference XML.
+- Create `owncloudApp/proguard-rules.pro` with keep rules for: `CoroutineWorker` subclasses in `com.owncloud.android.workers`, Moshi `@JsonClass`-annotated response models in `owncloudComLibrary`, domain model classes serialized to Room via Moshi reflection (`AppRegistryProvider`), and `PreferenceFragmentCompat` subclasses (wildcard) and `LargePreferenceCategory` loaded by name via `app:fragment` in preference XML. Custom `View` subclasses inflated from layout XML are covered automatically by AAPT and need no explicit rule.
 - Debug builds remain unaffected (`minifyEnabled false`).
 - Library modules (`owncloudData`, `owncloudDomain`, `owncloudComLibrary`) are not changed.
 
