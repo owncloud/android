@@ -42,14 +42,10 @@
 # --- Settings fragments and custom Preference subclasses loaded by name ---
 # androidx.preference inflates app:fragment values from settings.xml using
 # Fragment.instantiate(context, className) at runtime. R8 cannot infer this from bytecode,
-# so renaming any of these fragments causes a ClassNotFoundException when tapping the item.
-# LargePreferenceCategory is a custom Preference subclass in settings_picture/video_uploads.xml
-# and is also inflated by the preference framework via reflection.
--keep class com.owncloud.android.presentation.settings.security.SettingsSecurityFragment { public <init>(...); }
--keep class com.owncloud.android.presentation.settings.logging.SettingsLogsFragment { public <init>(...); }
--keep class com.owncloud.android.presentation.settings.automaticuploads.SettingsPictureUploadsFragment { public <init>(...); }
--keep class com.owncloud.android.presentation.settings.automaticuploads.SettingsVideoUploadsFragment { public <init>(...); }
--keep class com.owncloud.android.presentation.settings.advanced.SettingsAdvancedFragment { public <init>(...); }
--keep class com.owncloud.android.presentation.settings.more.SettingsMoreFragment { public <init>(...); }
+# so renaming any subclass causes a ClassNotFoundException when tapping the item.
+# A wildcard rule covers all current and future PreferenceFragmentCompat subclasses without
+# requiring per-class enumeration. LargePreferenceCategory extends Preference (not
+# PreferenceFragmentCompat) so it needs its own explicit rule.
+-keep class * extends androidx.preference.PreferenceFragmentCompat { public <init>(...); }
 -keep class com.owncloud.android.presentation.settings.LargePreferenceCategory { public <init>(...); }
 
