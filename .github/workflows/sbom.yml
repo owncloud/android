@@ -15,8 +15,9 @@ concurrency:
   group: sbom-update
   cancel-in-progress: false
 
+# Everything that writes (the SBOM branch and PR) uses the App token below.
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   sbom:
