@@ -11,6 +11,8 @@
 - [x] 2.2 Add keep rules to `owncloudApp/proguard-rules.pro` for all Moshi `@JsonClass`-annotated response model classes in `owncloudComLibrary` (covering: `CommonOcsResponse`, `ShareeResponse`, `ShareItem`, `TokenResponse`, `ClientRegistrationResponse`, `OIDCDiscoveryResponse`, `WebFingerResponse`, `AppRegistryResponse`, `SpacesResponse`, `RoleResponse`, `CapabilityResponse`, `UserInfoResponse`, `MembersResponse`, and related)
 - [x] 2.3 Add class-level keep rules for any other classes instantiated by name via the Android framework: custom `View` subclasses inflated from layout XML (`SortOptionsView`, `NumberKeyboard`, `SquareFrameLayout`, `ViewPagerWorkAround`); `PreferenceFragmentCompat` subclasses loaded by name via `app:fragment` in `settings.xml` (`SettingsSecurityFragment`, `SettingsLogsFragment`, `SettingsPictureUploadsFragment`, `SettingsVideoUploadsFragment`, `SettingsAdvancedFragment`, `SettingsMoreFragment`); and `LargePreferenceCategory` referenced by name in preference XML.
 
+- [x] 2.4 Add keep rule to `owncloudApp/proguard-rules.pro` for `AppRegistryProvider` (`-keep class com.owncloud.android.domain.appregistry.model.AppRegistryProvider { *; }`), preserving field names used as JSON keys when serializing app providers to Room
+
 ## 3. First Build and Rule Verification
 
 - [ ] 3.1 Run `./gradlew assembleOriginalRelease` and resolve any build errors
@@ -57,6 +59,7 @@ https://github.com/owncloud/android/pull/XXXX
 | File download works | Download a file in the release APK | File saved locally and opens correctly | | |
 | Background sync works | Trigger automatic upload via release APK | Upload worker completes with no `ClassNotFoundException` | | |
 | Moshi deserialization works | Perform any server request returning JSON (e.g. capabilities, spaces) in release APK | Response parsed correctly, no deserialization errors | | |
+| App registry providers persist across updates | (1) Build a release APK from this branch and install it on a device. (2) Open a file that has office app support so the app fetches and caches app registry data from the server. (3) Make a trivial change (e.g. bump a string constant) to force a different R8 obfuscation mapping, build a second release APK, and install it over the top without uninstalling. (4) Open the same file again. Note: using a pre-PR `master` build as the "before" APK is not suitable because `master` has `minifyEnabled false` and R8 is inactive, so no obfuscation mapping exists to conflict. Both APKs must be R8-enabled release builds from this branch. | "Open in web" / office app options still appear after the update, no silent data loss | | |
 | Settings navigation works | Tap each item in the Settings screen in a release APK | Each sub-screen opens without a crash (`ClassNotFoundException`) | | |
 
 ### Gherkin Scenario Proposal (E2E suite)

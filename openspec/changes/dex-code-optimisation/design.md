@@ -40,6 +40,7 @@ See proposal.md — Why for motivation. The `owncloudApp/build.gradle` release b
 | Room entities and DAOs | Already covered by Room's bundled consumer rules — verify after first build by inspecting `configuration.txt` | Room ships its own `-keep` rules in its AAR |
 | Koin wiring | No keep rules needed | Koin resolves dependencies via reified type parameters, not reflection on class names |
 | `PreferenceFragmentCompat` subclasses in `settings.xml` and custom `Preference` subclasses in preference XML | Explicit `-keep` per class `{ public <init>(...); }` | `androidx.preference` loads them via `Fragment.instantiate(context, className)` at runtime; renaming causes `ClassNotFoundException` when tapping any Settings item |
+| Domain model classes serialized to Room via Moshi reflection (`AppRegistryProvider` in `owncloudDomain`) | `-keep class com.owncloud.android.domain.appregistry.model.AppRegistryProvider { *; }` | `AppRegistryProvider` has no `@JsonClass` annotation and is serialized by `KotlinJsonAdapterFactory` using reflected field names as JSON keys. Without this rule R8 renames the fields freely; the JSON format stored in Room becomes unstable across releases and app providers silently disappear after an update. Adding `@JsonClass` is not an option as it would introduce a Moshi dependency into the domain layer. |
 | All other classes | Default R8 behavior (shrink + obfuscate) | No known issues; the `configuration.txt` dump after the first build is the safety net |
 
 ### D4: Verify merged rules after the first successful release build

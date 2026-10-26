@@ -32,6 +32,11 @@ The ProGuard/R8 rules file SHALL include keep rules that prevent shrinking or re
 - **WHEN** the app deserializes a JSON response from the ownCloud server in a release build
 - **THEN** all annotated fields are correctly mapped and no deserialization errors occur due to renamed fields
 
+#### Scenario: App registry providers survive an app update in release builds
+
+- **WHEN** the app fetches and caches app registry data (app providers) in a release build and the app is subsequently updated to a new release build
+- **THEN** the cached app providers are deserialized correctly from Room and displayed in the "open in web" / office app menu without silent data loss
+
 #### Scenario: Settings sub-screens open correctly in release builds
 
 - **WHEN** the user taps any item in the Settings screen in a release build
