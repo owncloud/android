@@ -29,15 +29,6 @@
 # app providers to silently disappear after an app update.
 -keep class com.owncloud.android.domain.appregistry.model.AppRegistryProvider { *; }
 
-# --- Custom Views inflated from XML ---
-# The Android LayoutInflater reads the fully-qualified class name from the XML attribute and
-# calls the constructor via reflection (typically the two-argument Context+AttributeSet form).
-# R8 cannot infer this usage from bytecode alone, so each class must be named explicitly.
-# Only constructors are kept; the rest of each class is still subject to obfuscation.
--keep class com.owncloud.android.presentation.files.SortOptionsView { public <init>(...); }
--keep class com.owncloud.android.presentation.security.passcode.NumberKeyboard { public <init>(...); }
--keep class com.owncloud.android.presentation.security.passcode.SquareFrameLayout { public <init>(...); }
--keep class com.owncloud.android.ui.preview.ViewPagerWorkAround { public <init>(...); }
 
 # --- Settings fragments and custom Preference subclasses loaded by name ---
 # androidx.preference inflates app:fragment values from settings.xml using
