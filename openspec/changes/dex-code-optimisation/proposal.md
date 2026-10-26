@@ -23,5 +23,5 @@ None — no existing spec-level behavior changes. The app's observable user-faci
 ## Impact
 
 - **`owncloudApp/build.gradle`**: `release` build type gains `minifyEnabled true` and `proguardFiles`.
-- **`owncloudApp/proguard-rules.pro`** (new file): keep rules for Workers, Moshi models, domain models serialized to Room via reflection (`AppRegistryProvider`), and reflection-loaded classes.
+- **`owncloudApp/proguard-rules.pro`** (new file): keep rules for Workers and reflection-loaded classes; `-keepnames` for Moshi models and `AppRegistryProvider` to preserve JSON field names without blocking R8 shrinking.
 - No new runtime dependencies introduced.

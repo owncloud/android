@@ -16,11 +16,11 @@
 
 # --- Moshi JSON models ---
 # Moshi's KSP code generator produces a JsonAdapter for every @JsonClass-annotated class at
-# compile time. The adapter references field names by their original String values, so renaming
-# a field or its enclosing class causes a MissingKotlinParameterException or silent null at
-# runtime. Keeping all members (fields + accessors) prevents that. This rule matches all
-# annotated classes in owncloudComLibrary without enumerating them individually.
--keep @com.squareup.moshi.JsonClass class * { *; }
+# compile time. The adapter references class and field names by their original String values, so
+# renaming them causes a MissingKotlinParameterException or silent null at runtime. -keepnames
+# preserves those names while still allowing R8 to remove unused members — unlike -keep { *; }
+# which would block all shrinking on every annotated class.
+-keepnames @com.squareup.moshi.JsonClass class *
 
 # --- Domain models serialized to Room via Moshi reflection ---
 # AppRegistryProvider is a domain-layer class with no @JsonClass annotation. It is serialized to
