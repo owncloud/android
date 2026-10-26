@@ -120,6 +120,8 @@ jobs:
         with:
           app-id: ${{ secrets.SBOM_APP_ID }}
           private-key: ${{ secrets.SBOM_APP_PRIVATE_KEY }}
+          permission-contents: write
+          permission-pull-requests: write
 
       # Create a branch with latest SBOM changes only if there are changes
       - name: Create or update SBOM PR

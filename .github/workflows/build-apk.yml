@@ -61,10 +61,12 @@ jobs:
       # Validate build variant (mainly for workflow_call usage)
       - name: Validate build variant
         run: |
-          case "${{ inputs.build_variant }}" in
+          case "${INPUTS_BUILD_VARIANT}" in
             originalDebug|originalRelease|mdmDebug|mdmRelease|qaDebug|qaRelease) ;;
-            *) echo "Invalid build_variant: ${{ inputs.build_variant }}" && exit 1 ;;
+            *) echo "Invalid build_variant: ${INPUTS_BUILD_VARIANT}" && exit 1 ;;
           esac
+        env:
+          INPUTS_BUILD_VARIANT: ${{ inputs.build_variant }}
 
       # Checkout the repo
       - name: Checkout current repo
@@ -72,6 +74,7 @@ jobs:
         with:
           repository: owncloud/android
           ref: ${{ inputs.version }}
+          persist-credentials: false
 
       # Retrieve and expose the app commit hash as a workflow output
       - name: Get commit hash
@@ -101,7 +104,9 @@ jobs:
 
       # Build the apk with the given variant
       - name: Build APK
-        run: ./gradlew clean assemble${{ inputs.build_variant }}
+        run: ./gradlew clean assemble${INPUTS_BUILD_VARIANT}
+        env:
+          INPUTS_BUILD_VARIANT: ${{ inputs.build_variant }}
 
       # Name the output artifact with date, commit, and variant
       - name: Set artifact name
@@ -109,12 +114,12 @@ jobs:
         run: |
           DATE=$(date +%Y%m%d_%H%M)
           COMMIT=$(git rev-parse --short HEAD)
-          VARIANT="${{ inputs.build_variant }}"
+          VARIANT="${INPUTS_BUILD_VARIANT}"
 
           # Extract flavor and build type from variant (e.g. qaRelease -> qa / release)
           FLAVOR=$(echo "$VARIANT" | sed -E 's/(Release|Debug)//' | tr '[:upper:]' '[:lower:]')
           BUILD_TYPE=$(echo "$VARIANT" | grep -qi debug && echo debug || echo release)
-          NAME="ownCloud-${{ inputs.build_variant }}-${COMMIT}-${DATE}.apk"
+          NAME="ownCloud-${INPUTS_BUILD_VARIANT}-${COMMIT}-${DATE}.apk"
 
           APK_PATH=$(find ./owncloudApp/build/outputs/apk/$FLAVOR/$BUILD_TYPE/ -name "*.apk")
 
@@ -131,6 +136,8 @@ jobs:
 
           # Publish as output
           echo "artifact_name=$NAME" >> $GITHUB_OUTPUT
+        env:
+          INPUTS_BUILD_VARIANT: ${{ inputs.build_variant }}
 
       # Publish the artifact
       - name: Upload artifact
