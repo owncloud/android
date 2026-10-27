@@ -89,11 +89,12 @@ A link created without a name SHALL be created with the name "Unnamed Link" (tra
 
 ### Requirement: Refresh list on success
 
-On a successful creation the system SHALL refresh the `PUBLIC LINKS` list so that the newly created link appears. The response returned by the creation request is not consumed; the updated list is obtained by re-fetching the item's permissions.
+On a successful creation the system SHALL refresh the `PUBLIC LINKS` list so that the newly created link appears, and SHALL show a success message confirming the link was created. The response returned by the creation request is not consumed; the updated list is obtained by re-fetching the item's permissions.
 
 #### Scenario: New link appears after refresh
 - **WHEN** the server confirms a successful link creation
 - **THEN** the `PUBLIC LINKS` list is refreshed and the newly created link appears in it
+- **AND** a success message is shown confirming the creation
 - **AND** its chain icon shares that link's `webUrl` through the Android share sheet
 
 ### Requirement: Error handling keeps the creation view open

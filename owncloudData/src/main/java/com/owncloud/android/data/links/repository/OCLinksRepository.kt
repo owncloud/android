@@ -28,8 +28,16 @@ class OCLinksRepository(
     private val remoteLinksDataSource: RemoteLinksDataSource
 ): LinksRepository {
 
-    override fun addLink(accountName: String, spaceId: String, displayName: String, type: OCLinkType, expirationDate: String?, password: String?) {
-        remoteLinksDataSource.addLink(accountName, spaceId, displayName, type, expirationDate, password)
+    override fun addLink(
+        accountName: String,
+        spaceId: String,
+        itemId: String?,
+        displayName: String,
+        type: OCLinkType,
+        expirationDate: String?,
+        password: String?
+    ) {
+        remoteLinksDataSource.addLink(accountName, spaceId, itemId, displayName, type, expirationDate, password)
     }
 
     override fun editLink(accountName: String, spaceId: String, linkId: String, displayName: String, type: OCLinkType, expirationDate: String?) {
