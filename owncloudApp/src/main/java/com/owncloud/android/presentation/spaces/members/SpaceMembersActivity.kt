@@ -34,7 +34,7 @@ import com.owncloud.android.domain.spaces.model.OCSpace
 import com.owncloud.android.domain.sharing.shares.model.MemberPermission
 import com.owncloud.android.extensions.adaptInfiniteEdges
 import com.owncloud.android.presentation.common.ShareSheetHelper
-import com.owncloud.android.presentation.spaces.links.AddPublicLinkFragment
+import com.owncloud.android.presentation.links.AddPublicLinkFragment
 import com.owncloud.android.ui.activity.FileActivity
 import com.owncloud.android.utils.DisplayUtils
 

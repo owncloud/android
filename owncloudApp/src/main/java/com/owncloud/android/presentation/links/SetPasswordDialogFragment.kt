@@ -18,7 +18,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.presentation.spaces.links
+package com.owncloud.android.presentation.links
 
 import android.content.ClipData
 import android.content.ClipboardManager

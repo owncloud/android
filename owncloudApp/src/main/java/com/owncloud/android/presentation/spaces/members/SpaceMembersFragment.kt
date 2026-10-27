@@ -44,7 +44,7 @@ import com.owncloud.android.extensions.showErrorInSnackbar
 import com.owncloud.android.extensions.showMessageInSnackbar
 import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.presentation.links.PublicLinksAdapter
-import com.owncloud.android.presentation.spaces.links.SpaceLinksViewModel
+import com.owncloud.android.presentation.links.PublicLinksViewModel
 import com.owncloud.android.utils.DisplayUtils
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import org.koin.core.parameter.parametersOf
@@ -64,7 +64,7 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
             requireArguments().getParcelable<OCSpace>(ARG_CURRENT_SPACE)
         )
     }
-    private val spaceLinksViewModel: SpaceLinksViewModel by activityViewModel {
+    private val publicLinksViewModel: PublicLinksViewModel by activityViewModel {
         parametersOf(
             requireArguments().getString(ARG_ACCOUNT_NAME),
             requireArguments().getParcelable<OCSpace>(ARG_CURRENT_SPACE)?.id,
@@ -136,7 +136,7 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
         }
 
         binding.addPublicLinkButton.setOnClickListener {
-            spaceLinksViewModel.resetViewModel()
+            publicLinksViewModel.resetViewModel()
             listener?.addPublicLink(
                 space = currentSpace,
                 editMode = false,
@@ -204,13 +204,13 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
             title = getString(R.string.public_link_remove_dialog_title, publicLinkDisplayName),
             message = getString(R.string.public_link_remove_dialog_message),
             positiveButtonText = getString(R.string.common_yes),
-            positiveButtonListener = { _: DialogInterface?, _: Int -> spaceLinksViewModel.removePublicLink(publicLinkId) },
+            positiveButtonListener = { _: DialogInterface?, _: Int -> publicLinksViewModel.removePublicLink(publicLinkId) },
             negativeButtonText = getString(R.string.common_no)
         )
     }
 
     override fun onEditPublicLink(publicLink: OCLink) {
-        spaceLinksViewModel.resetViewModel()
+        publicLinksViewModel.resetViewModel()
         listener?.addPublicLink(
             space = currentSpace,
             editMode = true,
@@ -353,13 +353,13 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
     }
 
     private fun observeAddLinkResult() {
-        collectLatestLifecycleFlow(spaceLinksViewModel.addLinkResultFlow) { event ->
+        collectLatestLifecycleFlow(publicLinksViewModel.addLinkResultFlow) { event ->
             event?.peekContent()?.let { uiResult ->
                 when (uiResult) {
                     is UIResult.Loading -> { }
                     is UIResult.Success -> {
                         showMessageInSnackbar(getString(R.string.public_link_add_correctly))
-                        spaceLinksViewModel.resetViewModel()
+                        publicLinksViewModel.resetViewModel()
                     }
                     is UIResult.Error -> { }
                 }
@@ -368,7 +368,7 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
     }
 
     private fun observeRemoveLinkResult() {
-        collectLatestLifecycleFlow(spaceLinksViewModel.removeLinkResultFlow) { uiResult ->
+        collectLatestLifecycleFlow(publicLinksViewModel.removeLinkResultFlow) { uiResult ->
             when (uiResult) {
                 is UIResult.Loading -> { }
                 is UIResult.Success -> {
@@ -384,15 +384,15 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
     }
 
     private fun observeEditLinkResult() {
-        collectLatestLifecycleFlow(spaceLinksViewModel.editLinkResultFlow) { event ->
+        collectLatestLifecycleFlow(publicLinksViewModel.editLinkResultFlow) { event ->
             event?.peekContent()?.let { uiResult ->
                 when (uiResult) {
                     is UIResult.Loading -> { }
                     is UIResult.Success -> {
-                        if (spaceLinksViewModel.addPublicLinkUIState.value?.wasPasswordChanged == false) {
+                        if (publicLinksViewModel.addPublicLinkUIState.value?.wasPasswordChanged == false) {
                             showMessageInSnackbar(getString(R.string.public_link_edit_correctly))
                         }
-                        spaceLinksViewModel.resetViewModel()
+                        publicLinksViewModel.resetViewModel()
                     }
                     is UIResult.Error -> { }
                 }
@@ -401,7 +401,7 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
     }
 
     private fun observeEditPasswordLinkResult() {
-        collectLatestLifecycleFlow(spaceLinksViewModel.editPasswordLinkResultFlow) { event ->
+        collectLatestLifecycleFlow(publicLinksViewModel.editPasswordLinkResultFlow) { event ->
             event?.peekContent()?.let { uiResult ->
                 when (uiResult) {
                     is UIResult.Loading -> { }

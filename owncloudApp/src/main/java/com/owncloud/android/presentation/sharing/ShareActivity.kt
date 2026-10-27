@@ -55,7 +55,7 @@ import com.owncloud.android.lib.resources.shares.RemoteShare
 import com.owncloud.android.presentation.capabilities.CapabilityViewModel
 import com.owncloud.android.presentation.common.ShareSheetHelper
 import com.owncloud.android.presentation.common.UIResult
-import com.owncloud.android.presentation.spaces.links.AddPublicLinkFragment
+import com.owncloud.android.presentation.links.AddPublicLinkFragment
 import com.owncloud.android.presentation.sharing.sharees.EditPrivateOcsShareFragment
 import com.owncloud.android.presentation.sharing.sharees.SearchOcsShareesFragment
 import com.owncloud.android.presentation.sharing.sharees.UsersAndGroupsSearchProvider

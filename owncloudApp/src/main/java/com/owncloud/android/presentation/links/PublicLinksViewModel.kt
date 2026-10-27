@@ -18,7 +18,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.presentation.spaces.links
+package com.owncloud.android.presentation.links
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -41,7 +41,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class SpaceLinksViewModel(
+class PublicLinksViewModel(
     private val addLinkUseCase: AddLinkUseCase,
     private val editLinkUseCase: EditLinkUseCase,
     private val editPasswordLinkUseCase: EditPasswordLinkUseCase,
