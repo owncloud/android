@@ -116,6 +116,12 @@ class GraphShareFragment : Fragment(), GraphSharesAdapter.GraphSharesAdapterList
             }
         }
 
+        binding.addPublicLinkButton.setOnClickListener {
+            if (file != null && accountName != null) {
+                listener?.addPublicLink(file = file, accountName = accountName)
+            }
+        }
+
         subscribeToViewModels()
     }
 
@@ -299,6 +305,7 @@ class GraphShareFragment : Fragment(), GraphSharesAdapter.GraphSharesAdapterList
 
     interface GraphShareFragmentListener {
         fun addGraphShare(file: OCFile, accountName: String, roles: List<OCRole>, editMode: Boolean, selectedShare: MemberPermission?)
+        fun addPublicLink(file: OCFile, accountName: String)
         fun copyOrSendPublicLink(publicLinkUrl: String, fileName: String)
     }
 

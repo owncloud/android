@@ -30,7 +30,6 @@ import com.owncloud.android.domain.links.usecases.AddLinkUseCase
 import com.owncloud.android.domain.links.usecases.EditLinkUseCase
 import com.owncloud.android.domain.links.usecases.EditPasswordLinkUseCase
 import com.owncloud.android.domain.links.usecases.RemoveLinkUseCase
-import com.owncloud.android.domain.spaces.model.OCSpace
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.ViewModelExt.runUseCaseWithResult
 import com.owncloud.android.presentation.common.UIResult
@@ -49,7 +48,7 @@ class SpaceLinksViewModel(
     private val getStoredCapabilitiesUseCase: GetStoredCapabilitiesUseCase,
     private val removeLinkUseCase: RemoveLinkUseCase,
     private val accountName: String,
-    private val space: OCSpace,
+    private val spaceId: String,
     private val coroutineDispatcherProvider: CoroutinesDispatcherProvider
 ): ViewModel() {
 
@@ -97,7 +96,7 @@ class SpaceLinksViewModel(
                 useCase = addLinkUseCase,
                 useCaseParams = AddLinkUseCase.Params(
                     accountName = accountName,
-                    spaceId = space.id,
+                    spaceId = spaceId,
                     displayName = displayName,
                     type = it,
                     expirationDate = _addPublicLinkUIState.value?.selectedExpirationDate,
@@ -114,7 +113,7 @@ class SpaceLinksViewModel(
             useCase = removeLinkUseCase,
             useCaseParams = RemoveLinkUseCase.Params(
                 accountName = accountName,
-                spaceId = space.id,
+                spaceId = spaceId,
                 linkId = linkId
             )
         )
@@ -138,7 +137,7 @@ class SpaceLinksViewModel(
                 useCase = editLinkUseCase,
                 useCaseParams = EditLinkUseCase.Params(
                     accountName = accountName,
-                    spaceId = space.id,
+                    spaceId = spaceId,
                     linkId = linkId,
                     displayName = displayName,
                     type = it,
@@ -170,7 +169,7 @@ class SpaceLinksViewModel(
             useCase = editPasswordLinkUseCase,
             useCaseParams = EditPasswordLinkUseCase.Params(
                 accountName = accountName,
-                spaceId = space.id,
+                spaceId = spaceId,
                 linkId = linkId,
                 password = _addPublicLinkUIState.value?.selectedPassword
             )

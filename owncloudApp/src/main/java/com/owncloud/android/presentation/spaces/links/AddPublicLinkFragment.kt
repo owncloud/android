@@ -31,9 +31,9 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.owncloud.android.R
 import com.owncloud.android.databinding.AddPublicLinkFragmentBinding
+import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.links.model.OCLink
 import com.owncloud.android.domain.links.model.OCLinkType
-import com.owncloud.android.domain.spaces.model.OCSpace
 import com.owncloud.android.extensions.collectLatestLifecycleFlow
 import com.owncloud.android.extensions.hideSoftKeyboard
 import com.owncloud.android.extensions.showErrorInSnackbar
@@ -50,11 +50,12 @@ class AddPublicLinkFragment: Fragment(), SetPasswordDialogFragment.SetPasswordLi
     private val binding get() = _binding!!
 
     private val accountName get() = requireArguments().getString(ARG_ACCOUNT_NAME) ?: ""
+    private val file get() = requireArguments().getParcelable<OCFile>(ARG_FILE)
 
     private val spaceLinksViewModel: SpaceLinksViewModel by activityViewModel {
         parametersOf(
             accountName,
-            requireArguments().getParcelable(ARG_CURRENT_SPACE)
+            requireArguments().getString(ARG_SPACE_ID)
         )
     }
 
@@ -78,6 +79,9 @@ class AddPublicLinkFragment: Fragment(), SetPasswordDialogFragment.SetPasswordLi
             canViewPublicLinkRadioButton.tag = OCLinkType.CAN_VIEW
             canEditPublicLinkRadioButton.tag = OCLinkType.CAN_EDIT
             secretFileDropPublicLinkRadioButton.tag = OCLinkType.CREATE_ONLY
+            val isFolder = file?.isFolder ?: true
+            secretFileDropPublicLinkLayout.isVisible = isFolder
+            secretFileDropPublicLinkDivider.isVisible = isFolder
         }
 
         collectLatestLifecycleFlow(spaceLinksViewModel.addPublicLinkUIState) { uiState ->
@@ -335,21 +339,24 @@ class AddPublicLinkFragment: Fragment(), SetPasswordDialogFragment.SetPasswordLi
     companion object {
         private const val DIALOG_SET_PASSWORD = "DIALOG_SET_PASSWORD"
         private const val ARG_ACCOUNT_NAME = "ARG_ACCOUNT_NAME"
-        private const val ARG_CURRENT_SPACE = "ARG_CURRENT_SPACE"
+        private const val ARG_SPACE_ID = "ARG_SPACE_ID"
         private const val ARG_EDIT_MODE = "ARG_EDIT_MODE"
         private const val ARG_SELECTED_PUBLIC_LINK = "ARG_SELECTED_PUBLIC_LINK"
+        private const val ARG_FILE = "ARG_FILE"
 
         fun newInstance(
             accountName: String,
-            currentSpace: OCSpace,
+            spaceId: String,
             editMode: Boolean,
-            selectedPublicLink: OCLink?
+            selectedPublicLink: OCLink?,
+            file: OCFile? = null
         ): AddPublicLinkFragment {
             val args = Bundle().apply {
                 putString(ARG_ACCOUNT_NAME, accountName)
-                putParcelable(ARG_CURRENT_SPACE, currentSpace)
+                putString(ARG_SPACE_ID, spaceId)
                 putBoolean(ARG_EDIT_MODE, editMode)
                 putParcelable(ARG_SELECTED_PUBLIC_LINK, selectedPublicLink)
+                putParcelable(ARG_FILE, file)
             }
             return AddPublicLinkFragment().apply {
                 arguments = args
