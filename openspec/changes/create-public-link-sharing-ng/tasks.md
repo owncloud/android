@@ -36,7 +36,7 @@
 
 ## 7. Changelog
 
-- [ ] 7.1 Add `changelog/unreleased/XXXX` (placeholder number until the PR is opened) as an `Enhancement` following the project changelog format, linking issue #4955 and the PR. Verify the file matches the required format.
+- [x] 7.1 Add `changelog/unreleased/XXXX` (placeholder number until the PR is opened) as an `Enhancement` following the project changelog format, linking issue #4955 and the PR. Verify the file matches the required format. _Done: created `changelog/unreleased/5030` (the PR number, confirmed via `gh pr view`) — `Enhancement:` title, description, and links to issue #4955 + PR #5030; format matches existing unreleased entries, trailing newline included._
 
 ## 8. Verification
 

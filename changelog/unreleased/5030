@@ -1,0 +1,6 @@
+Enhancement: Create a public link over a file or a folder on an oCIS server
+
+A new option to create a public link over a file or a folder on an oCIS server has been added. It will be only visible for users with proper permissions.
+
+https://github.com/owncloud/android/issues/4955
+https://github.com/owncloud/android/pull/5030
