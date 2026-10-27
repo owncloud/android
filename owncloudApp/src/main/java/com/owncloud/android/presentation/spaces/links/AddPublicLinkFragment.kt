@@ -84,6 +84,45 @@ class AddPublicLinkFragment: Fragment(), SetPasswordDialogFragment.SetPasswordLi
             secretFileDropPublicLinkDivider.isVisible = isFolder
         }
 
+        subscribeToViewModels()
+
+        if (editMode) { bindEditMode() }
+
+        bindRadioButtonsListeners()
+
+        bindPasswordListeners()
+
+        binding.createPublicLinkButton.setOnClickListener {
+            val displayName = binding.publicLinkNameEditText.text.toString().ifEmpty { getString(R.string.public_link_default_display_name) }
+            if (editMode) {
+                selectedPublicLink?.let { spaceLinksViewModel.editPublicLink(it.id, displayName) }
+            } else {
+                spaceLinksViewModel.createPublicLink(displayName)
+            }
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    override fun onCancelPassword() {
+        if (!isPasswordEnforced && !hasPassword) {
+            binding.passwordLayout.setPasswordSwitch.isChecked = false
+        }
+    }
+
+    override fun onSetPassword(password: String) {
+        val normalizedPassword = password.ifBlank { null }
+        val hasPassword = normalizedPassword != null
+        if (!isPasswordEnforced && !hasPassword) {
+            binding.passwordLayout.setPasswordSwitch.isChecked = false
+        }
+        spaceLinksViewModel.onPasswordSelected(normalizedPassword, hasPassword)
+    }
+
+    private fun subscribeToViewModels() {
         collectLatestLifecycleFlow(spaceLinksViewModel.addPublicLinkUIState) { uiState ->
             uiState?.let {
                 it.selectedExpirationDate?.let { expirationDate ->
@@ -167,41 +206,6 @@ class AddPublicLinkFragment: Fragment(), SetPasswordDialogFragment.SetPasswordLi
                 }
             }
         }
-
-        if (editMode) { bindEditMode() }
-
-        bindRadioButtonsListeners()
-
-        bindPasswordListeners()
-
-        binding.createPublicLinkButton.setOnClickListener {
-            val displayName = binding.publicLinkNameEditText.text.toString().ifEmpty { getString(R.string.public_link_default_display_name) }
-            if (editMode) {
-                selectedPublicLink?.let { spaceLinksViewModel.editPublicLink(it.id, displayName) }
-            } else {
-                spaceLinksViewModel.createPublicLink(displayName)
-            }
-        }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
-    override fun onCancelPassword() {
-        if (!isPasswordEnforced && !hasPassword) {
-            binding.passwordLayout.setPasswordSwitch.isChecked = false
-        }
-    }
-
-    override fun onSetPassword(password: String) {
-        val normalizedPassword = password.ifBlank { null }
-        val hasPassword = normalizedPassword != null
-        if (!isPasswordEnforced && !hasPassword) {
-            binding.passwordLayout.setPasswordSwitch.isChecked = false
-        }
-        spaceLinksViewModel.onPasswordSelected(normalizedPassword, hasPassword)
     }
 
     private fun bindRadioButtonsListeners() {
