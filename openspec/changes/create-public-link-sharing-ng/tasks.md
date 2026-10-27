@@ -31,8 +31,8 @@
 
 ## 6. Unit Tests
 
-- [ ] 6.1 In `OCRemoteLinksDataSourceTest`, extend tests for `addLink` to assert delegation to the item-targeted path (non-null `itemId`) and that the null-`itemId` (space) path still resolves correctly. Use `createRemoteOperationResultMock`.
-- [ ] 6.2 In `OCLinksRepositoryTest`, extend tests for `addLink` to assert delegation to the datasource for the item path (`itemId` non-null) and the space path (`itemId` null).
+- [x] 6.1 In `OCRemoteLinksDataSourceTest`, extend tests for `addLink` to assert delegation to the item-targeted path (non-null `itemId`) and that the null-`itemId` (space) path still resolves correctly. Use `createRemoteOperationResultMock`. _Done: existing space test updated to pass `itemId = null` (new post-`spaceId` position); added `addLink adds a public link over a file item correctly` asserting delegation with a non-null `OC_FILE.remoteId`. Both pass._
+- [x] 6.2 In `OCLinksRepositoryTest`, extend tests for `addLink` to assert delegation to the datasource for the item path (`itemId` non-null) and the space path (`itemId` null). _Done (same pass — compile-coupled with 6.1): space test updated with `itemId = null`; added item-path test with non-null `OC_FILE.remoteId` asserting delegation to the datasource. Both pass; the data-layer test build is green again._
 
 ## 7. Changelog
 

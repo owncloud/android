@@ -22,6 +22,7 @@ package com.owncloud.android.data.links.repository
 
 import com.owncloud.android.data.links.datasources.RemoteLinksDataSource
 import com.owncloud.android.testutil.OC_ACCOUNT_NAME
+import com.owncloud.android.testutil.OC_FILE
 import com.owncloud.android.testutil.OC_SPACE_PROJECT_WITH_IMAGE
 import com.owncloud.android.testutil.SPACE_MEMBERS
 import io.mockk.every
@@ -42,6 +43,7 @@ class OCLinksRepositoryTest {
             remoteLinksDataSource.addLink(
                 accountName = OC_ACCOUNT_NAME,
                 spaceId = OC_SPACE_PROJECT_WITH_IMAGE.id,
+                itemId = null,
                 displayName = SPACE_MEMBERS.links[0].displayName,
                 type = SPACE_MEMBERS.links[0].type,
                 expirationDate = SPACE_MEMBERS.links[0].expirationDateTime,
@@ -52,6 +54,7 @@ class OCLinksRepositoryTest {
         ocLinksRepository.addLink(
             accountName = OC_ACCOUNT_NAME,
             spaceId = OC_SPACE_PROJECT_WITH_IMAGE.id,
+            itemId = null,
             displayName = SPACE_MEMBERS.links[0].displayName,
             type = SPACE_MEMBERS.links[0].type,
             expirationDate = SPACE_MEMBERS.links[0].expirationDateTime,
@@ -62,6 +65,44 @@ class OCLinksRepositoryTest {
             remoteLinksDataSource.addLink(
                 accountName = OC_ACCOUNT_NAME,
                 spaceId = OC_SPACE_PROJECT_WITH_IMAGE.id,
+                itemId = null,
+                displayName = SPACE_MEMBERS.links[0].displayName,
+                type = SPACE_MEMBERS.links[0].type,
+                expirationDate = SPACE_MEMBERS.links[0].expirationDateTime,
+                password = password
+            )
+        }
+    }
+
+    @Test
+    fun `addLink adds a public link over a file item correctly`() {
+        every {
+            remoteLinksDataSource.addLink(
+                accountName = OC_ACCOUNT_NAME,
+                spaceId = OC_SPACE_PROJECT_WITH_IMAGE.id,
+                itemId = OC_FILE.remoteId,
+                displayName = SPACE_MEMBERS.links[0].displayName,
+                type = SPACE_MEMBERS.links[0].type,
+                expirationDate = SPACE_MEMBERS.links[0].expirationDateTime,
+                password = password
+            )
+        } returns Unit
+
+        ocLinksRepository.addLink(
+            accountName = OC_ACCOUNT_NAME,
+            spaceId = OC_SPACE_PROJECT_WITH_IMAGE.id,
+            itemId = OC_FILE.remoteId,
+            displayName = SPACE_MEMBERS.links[0].displayName,
+            type = SPACE_MEMBERS.links[0].type,
+            expirationDate = SPACE_MEMBERS.links[0].expirationDateTime,
+            password = password
+        )
+
+        verify(exactly = 1) {
+            remoteLinksDataSource.addLink(
+                accountName = OC_ACCOUNT_NAME,
+                spaceId = OC_SPACE_PROJECT_WITH_IMAGE.id,
+                itemId = OC_FILE.remoteId,
                 displayName = SPACE_MEMBERS.links[0].displayName,
                 type = SPACE_MEMBERS.links[0].type,
                 expirationDate = SPACE_MEMBERS.links[0].expirationDateTime,

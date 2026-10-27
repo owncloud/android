@@ -24,6 +24,7 @@ import com.owncloud.android.data.ClientManager
 import com.owncloud.android.domain.links.model.OCLinkType
 import com.owncloud.android.lib.resources.links.services.OCLinksService
 import com.owncloud.android.testutil.OC_ACCOUNT_NAME
+import com.owncloud.android.testutil.OC_FILE
 import com.owncloud.android.testutil.OC_SPACE_PROJECT_WITH_IMAGE
 import com.owncloud.android.testutil.SPACE_MEMBERS
 import com.owncloud.android.utils.createRemoteOperationResultMock
@@ -55,6 +56,7 @@ class OCRemoteLinksDataSourceTest {
         every {
             ocLinksService.addLink(
                 spaceId = OC_SPACE_PROJECT_WITH_IMAGE.id,
+                itemId = null,
                 displayName = SPACE_MEMBERS.links[0].displayName,
                 type = OCLinkType.toString(SPACE_MEMBERS.links[0].type),
                 expirationDate = SPACE_MEMBERS.links[0].expirationDateTime,
@@ -65,6 +67,7 @@ class OCRemoteLinksDataSourceTest {
         ocRemoteLinksDataSource.addLink(
             accountName = OC_ACCOUNT_NAME,
             spaceId = OC_SPACE_PROJECT_WITH_IMAGE.id,
+            itemId = null,
             displayName = SPACE_MEMBERS.links[0].displayName,
             type = SPACE_MEMBERS.links[0].type,
             expirationDate = SPACE_MEMBERS.links[0].expirationDateTime,
@@ -75,6 +78,45 @@ class OCRemoteLinksDataSourceTest {
             clientManager.getLinksService(OC_ACCOUNT_NAME)
             ocLinksService.addLink(
                 spaceId = OC_SPACE_PROJECT_WITH_IMAGE.id,
+                itemId = null,
+                displayName = SPACE_MEMBERS.links[0].displayName,
+                type = OCLinkType.toString(SPACE_MEMBERS.links[0].type),
+                expirationDate = SPACE_MEMBERS.links[0].expirationDateTime,
+                password = password
+            )
+        }
+    }
+
+    @Test
+    fun `addLink adds a public link over a file item correctly`() {
+        val addLinkResult = createRemoteOperationResultMock(Unit, isSuccess = true)
+
+        every {
+            ocLinksService.addLink(
+                spaceId = OC_SPACE_PROJECT_WITH_IMAGE.id,
+                itemId = OC_FILE.remoteId,
+                displayName = SPACE_MEMBERS.links[0].displayName,
+                type = OCLinkType.toString(SPACE_MEMBERS.links[0].type),
+                expirationDate = SPACE_MEMBERS.links[0].expirationDateTime,
+                password = password
+            )
+        } returns addLinkResult
+
+        ocRemoteLinksDataSource.addLink(
+            accountName = OC_ACCOUNT_NAME,
+            spaceId = OC_SPACE_PROJECT_WITH_IMAGE.id,
+            itemId = OC_FILE.remoteId,
+            displayName = SPACE_MEMBERS.links[0].displayName,
+            type = SPACE_MEMBERS.links[0].type,
+            expirationDate = SPACE_MEMBERS.links[0].expirationDateTime,
+            password = password
+        )
+
+        verify(exactly = 1) {
+            clientManager.getLinksService(OC_ACCOUNT_NAME)
+            ocLinksService.addLink(
+                spaceId = OC_SPACE_PROJECT_WITH_IMAGE.id,
+                itemId = OC_FILE.remoteId,
                 displayName = SPACE_MEMBERS.links[0].displayName,
                 type = OCLinkType.toString(SPACE_MEMBERS.links[0].type),
                 expirationDate = SPACE_MEMBERS.links[0].expirationDateTime,
