@@ -67,7 +67,7 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
     private val spaceLinksViewModel: SpaceLinksViewModel by activityViewModel {
         parametersOf(
             requireArguments().getString(ARG_ACCOUNT_NAME),
-            requireArguments().getParcelable(ARG_CURRENT_SPACE)
+            requireArguments().getParcelable<OCSpace>(ARG_CURRENT_SPACE)?.id,
         )
     }
 

@@ -55,7 +55,8 @@ class AddPublicLinkFragment: Fragment(), SetPasswordDialogFragment.SetPasswordLi
     private val spaceLinksViewModel: SpaceLinksViewModel by activityViewModel {
         parametersOf(
             accountName,
-            requireArguments().getString(ARG_SPACE_ID)
+            requireArguments().getString(ARG_SPACE_ID),
+            file?.remoteId
         )
     }
 

@@ -49,6 +49,7 @@ class SpaceLinksViewModel(
     private val removeLinkUseCase: RemoveLinkUseCase,
     private val accountName: String,
     private val spaceId: String,
+    private val itemId: String? = null,
     private val coroutineDispatcherProvider: CoroutinesDispatcherProvider
 ): ViewModel() {
 
@@ -97,6 +98,7 @@ class SpaceLinksViewModel(
                 useCaseParams = AddLinkUseCase.Params(
                     accountName = accountName,
                     spaceId = spaceId,
+                    itemId = itemId,
                     displayName = displayName,
                     type = it,
                     expirationDate = _addPublicLinkUIState.value?.selectedExpirationDate,

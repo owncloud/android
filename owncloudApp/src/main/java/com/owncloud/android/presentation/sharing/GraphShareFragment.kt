@@ -41,6 +41,7 @@ import com.owncloud.android.extensions.showErrorInSnackbar
 import com.owncloud.android.extensions.showMessageInSnackbar
 import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.presentation.links.PublicLinksAdapter
+import com.owncloud.android.presentation.spaces.links.SpaceLinksViewModel
 import com.owncloud.android.utils.DisplayUtils
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import org.koin.core.parameter.parametersOf
@@ -58,6 +59,15 @@ class GraphShareFragment : Fragment(), GraphSharesAdapter.GraphSharesAdapterList
         parametersOf(
             requireArguments().getString(ARG_ACCOUNT_NAME),
             requireArguments().getParcelable<OCFile>(ARG_FILE)
+        )
+    }
+
+    private val spaceLinksViewModel by activityViewModel<SpaceLinksViewModel> {
+        val file = requireArguments().getParcelable<OCFile>(ARG_FILE)
+        parametersOf(
+            requireArguments().getString(ARG_ACCOUNT_NAME),
+            file?.spaceId,
+            file?.remoteId
         )
     }
 
@@ -166,6 +176,7 @@ class GraphShareFragment : Fragment(), GraphSharesAdapter.GraphSharesAdapterList
         observeAddShareResult()
         observeRemoveShareResult()
         observeEditShareResult()
+        observeAddLinkResult()
     }
 
     private fun observeShares() {
@@ -228,6 +239,22 @@ class GraphShareFragment : Fragment(), GraphSharesAdapter.GraphSharesAdapterList
                         showMessageInSnackbar(getString(R.string.share_add_correctly))
                         graphShareViewModel.getGraphShares()
                         graphShareViewModel.resetViewModel()
+                    }
+                    is UIResult.Error -> { }
+                }
+            }
+        }
+    }
+
+    private fun observeAddLinkResult() {
+        collectLatestLifecycleFlow(spaceLinksViewModel.addLinkResultFlow) { event ->
+            event?.peekContent()?.let { uiResult ->
+                when (uiResult) {
+                    is UIResult.Loading -> { }
+                    is UIResult.Success -> {
+                        showMessageInSnackbar(getString(R.string.public_link_add_correctly))
+                        graphShareViewModel.getGraphShares()
+                        spaceLinksViewModel.resetViewModel()
                     }
                     is UIResult.Error -> { }
                 }
