@@ -15,8 +15,9 @@ concurrency:
   group: sbom-update
   cancel-in-progress: false
 
+# Everything that writes (the SBOM branch and PR) uses the App token below.
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   sbom:
@@ -120,6 +121,8 @@ jobs:
         with:
           app-id: ${{ secrets.SBOM_APP_ID }}
           private-key: ${{ secrets.SBOM_APP_PRIVATE_KEY }}
+          permission-contents: write
+          permission-pull-requests: write
 
       # Create a branch with latest SBOM changes only if there are changes
       - name: Create or update SBOM PR
