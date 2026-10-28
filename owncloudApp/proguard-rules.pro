@@ -29,6 +29,15 @@
 # app providers to silently disappear after an app update.
 -keep class com.owncloud.android.domain.appregistry.model.AppRegistryProvider { *; }
 
+# --- HTTP logging models serialized by Moshi reflection ---
+# LogRequest, LogResponse and all nested data classes (Request, RequestInfo, Response,
+# ResponseInfo, Reply, Body) in the logging package have no @JsonClass annotation.
+# LogInterceptor serializes them via KotlinJsonAdapterFactory inside intercept(), which runs
+# whenever the user enables HTTP logs (set_httpLogs preference, accessible in release).
+# intercept() has no try/catch, so a renaming-induced serialization failure crashes all network
+# requests the moment the user turns logging on to diagnose a problem.
+-keep class com.owncloud.android.lib.common.http.logging.** { *; }
+
 
 # --- Settings fragments and custom Preference subclasses loaded by name ---
 # androidx.preference inflates app:fragment values from settings.xml using
