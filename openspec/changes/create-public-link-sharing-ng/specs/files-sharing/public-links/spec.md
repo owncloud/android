@@ -12,6 +12,10 @@ The `PUBLIC LINKS` section header SHALL present a create (`+`) affordance only w
 - **WHEN** the item's permissions response does not grant `libre.graph/driveItem/permissions/create`
 - **THEN** the `+` affordance is not shown in the `PUBLIC LINKS` section header
 
+#### Scenario: Create permission revoked during the session
+- **WHEN** the `+` affordance is shown and the item's permissions are re-fetched (e.g. via pull-to-refresh) and no longer grant `libre.graph/driveItem/permissions/create`
+- **THEN** the `+` affordance is hidden without the user leaving the sharing panel
+
 ### Requirement: Open the link-creation view
 
 Tapping the `+` affordance SHALL open a link-creation view that lets the user configure a new public link with a name, a permission type, a password, and an expiration date.

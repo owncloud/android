@@ -80,7 +80,6 @@ class GraphShareFragment : Fragment(), GraphSharesAdapter.GraphSharesAdapterList
     private var listener: GraphShareFragmentListener? = null
     private var canRemoveShares: Boolean = false
     private var canEditShares: Boolean = false
-    private var canCreatePublicLinks: Boolean = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = MembersFragmentBinding.inflate(inflater, container, false)
@@ -105,6 +104,7 @@ class GraphShareFragment : Fragment(), GraphSharesAdapter.GraphSharesAdapterList
         }
 
         binding.swipeRefreshMembers.setOnRefreshListener {
+            graphShareViewModel.getSpacePermissions()
             graphShareViewModel.getGraphShares()
         }
 
@@ -117,7 +117,6 @@ class GraphShareFragment : Fragment(), GraphSharesAdapter.GraphSharesAdapterList
                 R.string.share_warning_about_forwarding_file_public_links
             }
         )
-        binding.addMemberButton.isVisible = file?.hasResharePermission ?: false
         binding.addMemberButton.contentDescription = getString(R.string.content_description_add_share)
         binding.addMemberButton.setOnClickListener {
             if (file != null && accountName != null) {
@@ -226,8 +225,9 @@ class GraphShareFragment : Fragment(), GraphSharesAdapter.GraphSharesAdapterList
     private fun checkPermissions(spacePermissions: List<String>) {
         canRemoveShares = DRIVES_DELETE_PERMISSION in spacePermissions
         canEditShares = DRIVES_UPDATE_PERMISSION in spacePermissions
-        canCreatePublicLinks = DRIVES_CREATE_PERMISSION in spacePermissions
-        binding.addPublicLinkButton.isVisible = canCreatePublicLinks
+        val hasCreatePermission = DRIVES_CREATE_PERMISSION in spacePermissions
+        binding.addMemberButton.isVisible = hasCreatePermission
+        binding.addPublicLinkButton.isVisible = hasCreatePermission
     }
 
     private fun observeAddShareResult() {
