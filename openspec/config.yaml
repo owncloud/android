@@ -73,9 +73,11 @@ rules:
 
   tasks:
     - Order implementation tasks following the module dependency chain — owncloudComLibrary first, then owncloudData, owncloudDomain, owncloudApp last.
-    - Add unit tests only for layers where they are established — UseCases in owncloudDomain, Repository/DataSource implementations in owncloudData. Do not add unit tests to any other layer or module.
-    - Only when the user explicitly requests release notes in the spec, include a release notes task as the final implementation task, placed immediately before the changelog task — draft the user-facing release notes entry summarising the change for end users. If the spec does not call for release notes, do not add this task.
+    - Add unit tests ONLY for Repository and DataSource implementations in owncloudData. Do not add unit tests to any other layer or module — not to UseCases in owncloudDomain, nor to owncloudApp, owncloudComLibrary, or owncloudTestUtil — since those test suites are currently unmaintained.
+    - Unit tests MUST live in their own dedicated task group, placed immediately before the changelog group.
+    - Only when the user explicitly requests release notes in the spec, include a release notes task placed after the unit tests group (if one exists) and immediately before the changelog group. Draft the user-facing release notes entry summarising the change for end users. If the spec does not call for release notes, do not add this task. Release notes live in the releaseNotesList inside the companion object of owncloudApp/src/main/java/com/owncloud/android/presentation/releasenotes/ReleaseNotesViewModel.kt — add a new ReleaseNote entry there (with its title/subtitle string resources), not in any other location.
     - Include a changelog task — create changelog/unreleased/XXXX (placeholder until PR number is known) following the project's changelog format.
+    - The changelog task and the verification task MUST always live in separate task groups — never combine them into a single group. The changelog group MUST be placed immediately before the verification group, which is always the last group. So the final groups are ordered as unit tests group (if any), then release notes task (if any), then changelog group, then verification group.
     - If the implementation requires updating the context section above or CLAUDE.md, include a dedicated task for those documentation updates.
     - Add a QA section at the end of tasks.md with a test plan table with columns — Test name, Steps to execute, Expected result, Result, Comments — covering positive, negative, and regression cases.
     - Add a Gherkin scenario proposal in the QA section for adding to the E2E suite. It must appear under a heading named exactly "### Gherkin scenarios (E2E suite proposal)" and the scenario itself must be wrapped in a fenced code block (```gherkin ... ```), since the archive step only propagates the scenario when it finds that exact heading and fence. Every Scenario entry must include a 3–4 line free-text description between the scenario title and the first step keyword, stating the aim of the scenario, the key precondition that makes it distinct, and the expected outcome in plain English — do not simply restate the step text.
@@ -86,9 +88,10 @@ operations:
     guidance:
       - When a subtask is finished, you must stop and ask the user for confirmation before continuing with the other tasks. Do not proceed to the next subtask until the user explicitly confirms.
       - After implementing each module layer, run ./gradlew detekt on that module before moving to the next.
-      - Write unit tests in a dedicated task group, not scattered across implementation tasks. Unit tests tasks must be the last ones to run.
+      - Write unit tests in a dedicated task group, not scattered across implementation tasks.
       - Keep changes focused and atomic — do not refactor unrelated code as part of the same implementation.
       - Every new file must end with a trailing blank line.
+      - Only add code comments when the names of variables/methods or the logic are not self-explanatory. Never add comments just for the sake of it — if the code is already descriptive, leave it uncommented.
       - Never mark the static analysis & build task (analysing and compiling the app — detekt / ktlint / lint / unit tests) as executed. Run it to validate locally, but leave its checkbox unchecked, since its result is not a committable change.
   verify:
     guidance:
