@@ -388,7 +388,6 @@ class OCFileRepository(
                 } else if (localChildToSync.etag != remoteChild.etag ||
                     localChildToSync.localModificationTimestamp > remoteChild.lastSyncDateForData!! ||
                     isActionSetFolderAvailableOfflineOrSynchronize ||
-                    // The etag does not always change when only share metadata changes.
                     shareMetadataChanged(localChildToSync, remoteChild)
                 ) {
                     // File exists in the database, we need to check several stuff.
