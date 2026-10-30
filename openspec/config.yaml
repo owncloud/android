@@ -105,4 +105,23 @@ operations:
     guidance:
       - Verify changelog/unreleased/<PR-number> exists and is correctly filled in before archiving.
       - Confirm ./gradlew detekt and ./gradlew testDebugUnitTest testMdmDebugUnitTest --continue all pass.
-      - After the archive move completes, check whether tasks.md contains a Gherkin block (the fenced code block under the heading "### Gherkin scenarios (E2E suite proposal)"). If no such block is found, skip silently. If one is found, perform these steps using the gh CLI. (1) Derive the original change name as the basename of changeRoot — the directory name before the date prefix was added (e.g. "create-public-link-sharing-ng"). (2) Get the SHA of the default branch of owncloud/android-scenario-testing with "gh api repos/owncloud/android-scenario-testing/git/ref/heads/master --jq '.object.sha'" . (3) Create branch feature/<change-name> in that repo with "gh api repos/owncloud/android-scenario-testing/git/refs --method POST -f ref='refs/heads/feature/<change-name>' -f sha='<BASE_SHA>'". (4) Build the source.md content with a top-level heading "# <change-name>" followed by the raw Gherkin text (without the surrounding fence markers). (5) Base64-encode the content and create the file at openspec/changes/<change-name>/source.md on that branch with "gh api repos/owncloud/android-scenario-testing/contents/openspec/changes/<change-name>/source.md --method PUT -f message='feat: add E2E scenario source for <change-name>' -f content='<BASE64>' -f branch='feature/<change-name>'". If gh is unavailable or the branch already exists, report the error in the archive summary but do not block the archive.
+      - >-
+        After the archive move completes, check whether tasks.md contains a Gherkin block
+        (the fenced code block under the heading "### Gherkin scenarios (E2E suite proposal)").
+        If no such block is found, skip silently. If one is found, perform these steps using the gh CLI.
+        (1) Derive the original change name as the basename of changeRoot — the directory name before
+        the date prefix was added (e.g. "create-public-link-sharing-ng").
+        (2) Get the SHA of the default branch of owncloud/android-scenario-testing with
+        "gh api repos/owncloud/android-scenario-testing/git/ref/heads/master --jq '.object.sha'".
+        (3) Create branch feature/<change-name> in that repo with
+        "gh api repos/owncloud/android-scenario-testing/git/refs --method POST
+        -f ref='refs/heads/feature/<change-name>' -f sha='<BASE_SHA>'".
+        (4) Build the source.md content with a top-level heading "# <change-name>" followed by
+        the raw Gherkin text (without the surrounding fence markers).
+        (5) Base64-encode the content and create the file at
+        openspec/changes/<change-name>/source.md on that branch with
+        "gh api repos/owncloud/android-scenario-testing/contents/openspec/changes/<change-name>/source.md
+        --method PUT -f message='feat: add E2E scenario source for <change-name>'
+        -f content='<BASE64>' -f branch='feature/<change-name>'".
+        If gh is unavailable or the branch already exists, report the error in the archive summary
+        but do not block the archive.
