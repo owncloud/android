@@ -1687,7 +1687,7 @@ class OCFileRepositoryTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `refreshFolder saves a folder child when the etag matches but share badges changed`() {
+    fun `refreshFolder returns a list with the OCFile that changed when the etag matches but sharedByLink changed`() {
         val ocParentFolderWithoutSpaceId = OC_PARENT_FOLDER_WITH_SPACE_ID.copy(spaceId = null)
         val remoteFolderChild = OC_FOLDER_WITH_SPACE_ID.copy(spaceId = null, sharedByLink = true)
         val expectedFolderChild = OC_FOLDER_WITH_SPACE_ID.copy(sharedByLink = true)
