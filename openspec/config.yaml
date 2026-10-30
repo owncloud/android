@@ -1,5 +1,12 @@
 schema: spec-driven
 
+authoring_notes:
+  - >-
+    Use the >- folded-scalar style for any guidance string longer than ~120 characters.
+    Plain scalars on a single long line trigger YAML parse warnings in some parsers;
+    >- folds multiple short lines into the same single-space-separated string at parse
+    time without changing the value.
+
 context: |
   ## Product
   ownCloud Android client — a file sync/sharing app targeting Android 9+ (Min SDK 28, Target/Compile SDK 36).
