@@ -1,0 +1,7 @@
+Bugfix: Refresh share badges when the folder etag is unchanged
+
+Share badges have been refreshed on pull-to-refresh when a file or folder is shared or unshared
+but the server keeps the same etag for it.
+
+https://github.com/owncloud/android/issues/4938
+https://github.com/owncloud/android/pull/5013
