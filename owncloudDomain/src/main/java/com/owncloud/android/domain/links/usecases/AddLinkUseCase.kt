@@ -29,12 +29,21 @@ class AddLinkUseCase(
 ): BaseUseCaseWithResult<Unit, AddLinkUseCase.Params>() {
 
     override fun run(params: Params) {
-        linksRepository.addLink(params.accountName, params.spaceId, params.displayName, params.type, params.expirationDate, params.password)
+        linksRepository.addLink(
+            params.accountName,
+            params.spaceId,
+            params.itemId,
+            params.displayName,
+            params.type,
+            params.expirationDate,
+            params.password
+        )
     }
 
     data class Params(
         val accountName: String,
         val spaceId: String,
+        val itemId: String?,
         val displayName: String,
         val type: OCLinkType,
         val expirationDate: String?,

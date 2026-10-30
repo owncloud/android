@@ -36,6 +36,7 @@ import com.owncloud.android.presentation.conflicts.ConflictsResolveViewModel
 import com.owncloud.android.presentation.files.details.FileDetailsViewModel
 import com.owncloud.android.presentation.files.filelist.MainFileListViewModel
 import com.owncloud.android.presentation.files.operations.FileOperationsViewModel
+import com.owncloud.android.presentation.links.PublicLinksViewModel
 import com.owncloud.android.presentation.logging.LogListViewModel
 import com.owncloud.android.presentation.migration.MigrationViewModel
 import com.owncloud.android.presentation.previews.PreviewAudioViewModel
@@ -56,7 +57,6 @@ import com.owncloud.android.presentation.settings.security.SettingsSecurityViewM
 import com.owncloud.android.presentation.sharing.GraphShareViewModel
 import com.owncloud.android.presentation.sharing.OcsShareViewModel
 import com.owncloud.android.presentation.spaces.SpacesListViewModel
-import com.owncloud.android.presentation.spaces.links.SpaceLinksViewModel
 import com.owncloud.android.presentation.spaces.members.SpaceMembersViewModel
 import com.owncloud.android.presentation.transfers.TransfersViewModel
 import com.owncloud.android.ui.ReceiveExternalFilesViewModel
@@ -88,10 +88,12 @@ val viewModelModule = module {
     viewModelOf(::SettingsSecurityViewModel)
     viewModelOf(::SettingsVideoUploadsViewModel)
     viewModelOf(::SettingsViewModel)
-    viewModelOf(::SpaceLinksViewModel)
     viewModelOf(::SpaceMembersViewModel)
     viewModelOf(::FileOperationsViewModel)
 
+    viewModel { (accountName: String, spaceId: String, itemId: String?) ->
+        PublicLinksViewModel(get(), get(), get(), get(), get(), accountName, spaceId, itemId, get())
+    }
     viewModel { (accountName: String) -> CapabilityViewModel(accountName, get(), get(), get(), get()) }
     viewModel { (action: PasscodeAction) -> PassCodeViewModel(get(), get(), action) }
     viewModel { (filePath: String, accountName: String) ->

@@ -41,6 +41,7 @@ import com.owncloud.android.extensions.showErrorInSnackbar
 import com.owncloud.android.extensions.showMessageInSnackbar
 import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.presentation.links.PublicLinksAdapter
+import com.owncloud.android.presentation.links.PublicLinksViewModel
 import com.owncloud.android.utils.DisplayUtils
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import org.koin.core.parameter.parametersOf
@@ -58,6 +59,15 @@ class GraphShareFragment : Fragment(), GraphSharesAdapter.GraphSharesAdapterList
         parametersOf(
             requireArguments().getString(ARG_ACCOUNT_NAME),
             requireArguments().getParcelable<OCFile>(ARG_FILE)
+        )
+    }
+
+    private val publicLinksViewModel by activityViewModel<PublicLinksViewModel> {
+        val file = requireArguments().getParcelable<OCFile>(ARG_FILE)
+        parametersOf(
+            requireArguments().getString(ARG_ACCOUNT_NAME),
+            file?.spaceId,
+            file?.remoteId
         )
     }
 
@@ -94,6 +104,7 @@ class GraphShareFragment : Fragment(), GraphSharesAdapter.GraphSharesAdapterList
         }
 
         binding.swipeRefreshMembers.setOnRefreshListener {
+            graphShareViewModel.getSpacePermissions()
             graphShareViewModel.getGraphShares()
         }
 
@@ -106,12 +117,17 @@ class GraphShareFragment : Fragment(), GraphSharesAdapter.GraphSharesAdapterList
                 R.string.share_warning_about_forwarding_file_public_links
             }
         )
-        binding.addMemberButton.isVisible = file?.hasResharePermission ?: false
         binding.addMemberButton.contentDescription = getString(R.string.content_description_add_share)
         binding.addMemberButton.setOnClickListener {
             if (file != null && accountName != null) {
                 graphShareViewModel.resetViewModel()
                 listener?.addGraphShare(file = file, accountName = accountName, roles = roles, editMode = false, selectedShare = null)
+            }
+        }
+
+        binding.addPublicLinkButton.setOnClickListener {
+            if (file != null && accountName != null) {
+                listener?.addPublicLink(file = file, accountName = accountName)
             }
         }
 
@@ -159,6 +175,7 @@ class GraphShareFragment : Fragment(), GraphSharesAdapter.GraphSharesAdapterList
         observeAddShareResult()
         observeRemoveShareResult()
         observeEditShareResult()
+        observeAddLinkResult()
     }
 
     private fun observeShares() {
@@ -208,6 +225,9 @@ class GraphShareFragment : Fragment(), GraphSharesAdapter.GraphSharesAdapterList
     private fun checkPermissions(spacePermissions: List<String>) {
         canRemoveShares = DRIVES_DELETE_PERMISSION in spacePermissions
         canEditShares = DRIVES_UPDATE_PERMISSION in spacePermissions
+        val hasCreatePermission = DRIVES_CREATE_PERMISSION in spacePermissions
+        binding.addMemberButton.isVisible = hasCreatePermission
+        binding.addPublicLinkButton.isVisible = hasCreatePermission
     }
 
     private fun observeAddShareResult() {
@@ -219,6 +239,22 @@ class GraphShareFragment : Fragment(), GraphSharesAdapter.GraphSharesAdapterList
                         showMessageInSnackbar(getString(R.string.share_add_correctly))
                         graphShareViewModel.getGraphShares()
                         graphShareViewModel.resetViewModel()
+                    }
+                    is UIResult.Error -> { }
+                }
+            }
+        }
+    }
+
+    private fun observeAddLinkResult() {
+        collectLatestLifecycleFlow(publicLinksViewModel.addLinkResultFlow) { event ->
+            event?.peekContent()?.let { uiResult ->
+                when (uiResult) {
+                    is UIResult.Loading -> { }
+                    is UIResult.Success -> {
+                        showMessageInSnackbar(getString(R.string.public_link_add_correctly))
+                        graphShareViewModel.getGraphShares()
+                        publicLinksViewModel.resetViewModel()
                     }
                     is UIResult.Error -> { }
                 }
@@ -296,6 +332,7 @@ class GraphShareFragment : Fragment(), GraphSharesAdapter.GraphSharesAdapterList
 
     interface GraphShareFragmentListener {
         fun addGraphShare(file: OCFile, accountName: String, roles: List<OCRole>, editMode: Boolean, selectedShare: MemberPermission?)
+        fun addPublicLink(file: OCFile, accountName: String)
         fun copyOrSendPublicLink(publicLinkUrl: String, fileName: String)
     }
 
@@ -304,6 +341,7 @@ class GraphShareFragment : Fragment(), GraphSharesAdapter.GraphSharesAdapterList
         private const val ARG_ACCOUNT_NAME = "ACCOUNT_NAME"
         private const val DRIVES_DELETE_PERMISSION = "libre.graph/driveItem/permissions/delete"
         private const val DRIVES_UPDATE_PERMISSION = "libre.graph/driveItem/permissions/update"
+        private const val DRIVES_CREATE_PERMISSION = "libre.graph/driveItem/permissions/create"
 
         fun newInstance(file: OCFile, accountName: String): GraphShareFragment {
             val args = Bundle().apply {

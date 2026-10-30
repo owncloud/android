@@ -29,9 +29,17 @@ class OCRemoteLinksDataSource(
     private val clientManager: ClientManager
 ): RemoteLinksDataSource {
 
-    override fun addLink(accountName: String, spaceId: String, displayName: String, type: OCLinkType, expirationDate: String?, password: String?) {
+    override fun addLink(
+        accountName: String,
+        spaceId: String,
+        itemId: String?,
+        displayName: String,
+        type: OCLinkType,
+        expirationDate: String?,
+        password: String?
+    ) {
         executeRemoteOperation {
-            clientManager.getLinksService(accountName).addLink(spaceId, displayName, OCLinkType.toString(type), expirationDate, password)
+            clientManager.getLinksService(accountName).addLink(spaceId, itemId, displayName, OCLinkType.toString(type), expirationDate, password)
         }
     }
 

@@ -31,6 +31,7 @@ class OCLinksService(override val client: OwnCloudClient) : LinksService {
 
     override fun addLink(
         spaceId: String,
+        itemId: String?,
         displayName: String,
         type: String,
         expirationDate: String?,
@@ -38,6 +39,7 @@ class OCLinksService(override val client: OwnCloudClient) : LinksService {
     ): RemoteOperationResult<Unit> =
         AddRemoteLinkOperation(
             spaceId = spaceId,
+            itemId = itemId,
             displayName = displayName,
             type = type,
             expirationDate = expirationDate,

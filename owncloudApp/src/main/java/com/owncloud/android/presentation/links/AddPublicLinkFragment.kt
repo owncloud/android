@@ -18,7 +18,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.presentation.spaces.links
+package com.owncloud.android.presentation.links
 
 import android.app.DatePickerDialog
 import android.icu.util.Calendar
@@ -31,9 +31,9 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.owncloud.android.R
 import com.owncloud.android.databinding.AddPublicLinkFragmentBinding
+import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.links.model.OCLink
 import com.owncloud.android.domain.links.model.OCLinkType
-import com.owncloud.android.domain.spaces.model.OCSpace
 import com.owncloud.android.extensions.collectLatestLifecycleFlow
 import com.owncloud.android.extensions.hideSoftKeyboard
 import com.owncloud.android.extensions.showErrorInSnackbar
@@ -50,11 +50,13 @@ class AddPublicLinkFragment: Fragment(), SetPasswordDialogFragment.SetPasswordLi
     private val binding get() = _binding!!
 
     private val accountName get() = requireArguments().getString(ARG_ACCOUNT_NAME) ?: ""
+    private val file get() = requireArguments().getParcelable<OCFile>(ARG_FILE)
 
-    private val spaceLinksViewModel: SpaceLinksViewModel by activityViewModel {
+    private val publicLinksViewModel: PublicLinksViewModel by activityViewModel {
         parametersOf(
             accountName,
-            requireArguments().getParcelable(ARG_CURRENT_SPACE)
+            requireArguments().getString(ARG_SPACE_ID),
+            file?.remoteId
         )
     }
 
@@ -78,9 +80,51 @@ class AddPublicLinkFragment: Fragment(), SetPasswordDialogFragment.SetPasswordLi
             canViewPublicLinkRadioButton.tag = OCLinkType.CAN_VIEW
             canEditPublicLinkRadioButton.tag = OCLinkType.CAN_EDIT
             secretFileDropPublicLinkRadioButton.tag = OCLinkType.CREATE_ONLY
+            val isFolder = file?.isFolder ?: true
+            secretFileDropPublicLinkLayout.isVisible = isFolder
+            secretFileDropPublicLinkDivider.isVisible = isFolder
         }
 
-        collectLatestLifecycleFlow(spaceLinksViewModel.addPublicLinkUIState) { uiState ->
+        subscribeToViewModels()
+
+        if (editMode) { bindEditMode() }
+
+        bindRadioButtonsListeners()
+
+        bindPasswordListeners()
+
+        binding.createPublicLinkButton.setOnClickListener {
+            val displayName = binding.publicLinkNameEditText.text.toString().ifEmpty { getString(R.string.public_link_default_display_name) }
+            if (editMode) {
+                selectedPublicLink?.let { publicLinksViewModel.editPublicLink(it.id, displayName) }
+            } else {
+                publicLinksViewModel.createPublicLink(displayName)
+            }
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    override fun onCancelPassword() {
+        if (!isPasswordEnforced && !hasPassword) {
+            binding.passwordLayout.setPasswordSwitch.isChecked = false
+        }
+    }
+
+    override fun onSetPassword(password: String) {
+        val normalizedPassword = password.ifBlank { null }
+        val hasPassword = normalizedPassword != null
+        if (!isPasswordEnforced && !hasPassword) {
+            binding.passwordLayout.setPasswordSwitch.isChecked = false
+        }
+        publicLinksViewModel.onPasswordSelected(normalizedPassword, hasPassword)
+    }
+
+    private fun subscribeToViewModels() {
+        collectLatestLifecycleFlow(publicLinksViewModel.addPublicLinkUIState) { uiState ->
             uiState?.let {
                 it.selectedExpirationDate?.let { expirationDate ->
                     binding.expirationDateLayout.expirationDateValue.apply {
@@ -126,7 +170,7 @@ class AddPublicLinkFragment: Fragment(), SetPasswordDialogFragment.SetPasswordLi
             }
         }
 
-        collectLatestLifecycleFlow(spaceLinksViewModel.addLinkResultFlow) { event ->
+        collectLatestLifecycleFlow(publicLinksViewModel.addLinkResultFlow) { event ->
             event?.peekContent()?.let { uiResult ->
                 when (uiResult) {
                     is UIResult.Loading -> { }
@@ -136,7 +180,7 @@ class AddPublicLinkFragment: Fragment(), SetPasswordDialogFragment.SetPasswordLi
             }
         }
 
-        collectLatestLifecycleFlow(spaceLinksViewModel.editLinkResultFlow) { event ->
+        collectLatestLifecycleFlow(publicLinksViewModel.editLinkResultFlow) { event ->
             event?.peekContent()?.let { uiResult ->
                 when (uiResult) {
                     is UIResult.Loading -> { }
@@ -146,7 +190,7 @@ class AddPublicLinkFragment: Fragment(), SetPasswordDialogFragment.SetPasswordLi
             }
         }
 
-        collectLatestLifecycleFlow(spaceLinksViewModel.editPasswordLinkResultFlow) { event ->
+        collectLatestLifecycleFlow(publicLinksViewModel.editPasswordLinkResultFlow) { event ->
             event?.peekContent()?.let { uiResult ->
                 when (uiResult) {
                     is UIResult.Loading -> { }
@@ -154,7 +198,7 @@ class AddPublicLinkFragment: Fragment(), SetPasswordDialogFragment.SetPasswordLi
                         val displayName = binding.publicLinkNameEditText.text.toString().ifEmpty {
                             getString(R.string.public_link_default_display_name)
                         }
-                        selectedPublicLink?.let { spaceLinksViewModel.editLink(it.id, displayName) }
+                        selectedPublicLink?.let { publicLinksViewModel.editLink(it.id, displayName) }
                         parentFragmentManager.popBackStack()
                     }
                     is UIResult.Error -> {
@@ -163,41 +207,6 @@ class AddPublicLinkFragment: Fragment(), SetPasswordDialogFragment.SetPasswordLi
                 }
             }
         }
-
-        if (editMode) { bindEditMode() }
-
-        bindRadioButtonsListeners()
-
-        bindPasswordListeners()
-
-        binding.createPublicLinkButton.setOnClickListener {
-            val displayName = binding.publicLinkNameEditText.text.toString().ifEmpty { getString(R.string.public_link_default_display_name) }
-            if (editMode) {
-                selectedPublicLink?.let { spaceLinksViewModel.editPublicLink(it.id, displayName) }
-            } else {
-                spaceLinksViewModel.createPublicLink(displayName)
-            }
-        }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
-    override fun onCancelPassword() {
-        if (!isPasswordEnforced && !hasPassword) {
-            binding.passwordLayout.setPasswordSwitch.isChecked = false
-        }
-    }
-
-    override fun onSetPassword(password: String) {
-        val normalizedPassword = password.ifBlank { null }
-        val hasPassword = normalizedPassword != null
-        if (!isPasswordEnforced && !hasPassword) {
-            binding.passwordLayout.setPasswordSwitch.isChecked = false
-        }
-        spaceLinksViewModel.onPasswordSelected(normalizedPassword, hasPassword)
     }
 
     private fun bindRadioButtonsListeners() {
@@ -220,8 +229,8 @@ class AddPublicLinkFragment: Fragment(), SetPasswordDialogFragment.SetPasswordLi
             selectedRadioButton.isChecked = true
         }
         val selectedPermission = selectedRadioButton.tag as OCLinkType
-        isPasswordEnforced = spaceLinksViewModel.checkPasswordEnforced(selectedPermission)
-        spaceLinksViewModel.onPermissionSelected(selectedPermission)
+        isPasswordEnforced = publicLinksViewModel.checkPasswordEnforced(selectedPermission)
+        publicLinksViewModel.onPermissionSelected(selectedPermission)
     }
 
     private fun bindDatePickerDialog(expirationDate: String?) {
@@ -231,7 +240,7 @@ class AddPublicLinkFragment: Fragment(), SetPasswordDialogFragment.SetPasswordLi
                 openDatePickerDialog(expirationDate)
             } else {
                 binding.expirationDateLayout.expirationDateValue.visibility = View.GONE
-                spaceLinksViewModel.onExpirationDateSelected(null)
+                publicLinksViewModel.onExpirationDateSelected(null)
             }
         }
     }
@@ -252,7 +261,7 @@ class AddPublicLinkFragment: Fragment(), SetPasswordDialogFragment.SetPasswordLi
                 calendar.set(selectedYear, selectedMonth, selectedDay, 23, 59, 59)
                 calendar.set(Calendar.MILLISECOND, 999)
                 val isoExpirationDate = formatter.format(calendar.time)
-                spaceLinksViewModel.onExpirationDateSelected(isoExpirationDate)
+                publicLinksViewModel.onExpirationDateSelected(isoExpirationDate)
                 binding.expirationDateLayout.expirationDateValue.apply {
                     visibility = View.VISIBLE
                     text = DisplayUtils.displayDateToHumanReadable(isoExpirationDate)
@@ -294,7 +303,7 @@ class AddPublicLinkFragment: Fragment(), SetPasswordDialogFragment.SetPasswordLi
 
     private fun removePassword() {
         hideKeyboardAndClearFocus()
-        spaceLinksViewModel.onPasswordSelected(null, false)
+        publicLinksViewModel.onPasswordSelected(null, false)
     }
 
     private fun hideKeyboardAndClearFocus() {
@@ -310,7 +319,7 @@ class AddPublicLinkFragment: Fragment(), SetPasswordDialogFragment.SetPasswordLi
             }
 
             // Do not recreate the edit view after the first iteration
-            if (spaceLinksViewModel.addPublicLinkUIState.value?.selectedPermission != null) return
+            if (publicLinksViewModel.addPublicLinkUIState.value?.selectedPermission != null) return
 
             binding.publicLinkNameEditText.setText(it.displayName)
 
@@ -322,11 +331,11 @@ class AddPublicLinkFragment: Fragment(), SetPasswordDialogFragment.SetPasswordLi
             }
 
             if (it.hasPassword) {
-                spaceLinksViewModel.onPasswordSelected(password = null, hasPassword = true, wasPasswordChanged = false)
+                publicLinksViewModel.onPasswordSelected(password = null, hasPassword = true, wasPasswordChanged = false)
             }
 
             it.expirationDateTime?.let { expirationDate ->
-                spaceLinksViewModel.onExpirationDateSelected(expirationDate)
+                publicLinksViewModel.onExpirationDateSelected(expirationDate)
                 binding.expirationDateLayout.expirationDateSwitch.isChecked = true
             }
         }
@@ -335,21 +344,24 @@ class AddPublicLinkFragment: Fragment(), SetPasswordDialogFragment.SetPasswordLi
     companion object {
         private const val DIALOG_SET_PASSWORD = "DIALOG_SET_PASSWORD"
         private const val ARG_ACCOUNT_NAME = "ARG_ACCOUNT_NAME"
-        private const val ARG_CURRENT_SPACE = "ARG_CURRENT_SPACE"
+        private const val ARG_SPACE_ID = "ARG_SPACE_ID"
         private const val ARG_EDIT_MODE = "ARG_EDIT_MODE"
         private const val ARG_SELECTED_PUBLIC_LINK = "ARG_SELECTED_PUBLIC_LINK"
+        private const val ARG_FILE = "ARG_FILE"
 
         fun newInstance(
             accountName: String,
-            currentSpace: OCSpace,
+            spaceId: String,
             editMode: Boolean,
-            selectedPublicLink: OCLink?
+            selectedPublicLink: OCLink?,
+            file: OCFile? = null
         ): AddPublicLinkFragment {
             val args = Bundle().apply {
                 putString(ARG_ACCOUNT_NAME, accountName)
-                putParcelable(ARG_CURRENT_SPACE, currentSpace)
+                putString(ARG_SPACE_ID, spaceId)
                 putBoolean(ARG_EDIT_MODE, editMode)
                 putParcelable(ARG_SELECTED_PUBLIC_LINK, selectedPublicLink)
+                putParcelable(ARG_FILE, file)
             }
             return AddPublicLinkFragment().apply {
                 arguments = args
