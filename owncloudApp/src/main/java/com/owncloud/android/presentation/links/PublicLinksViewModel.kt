@@ -49,7 +49,7 @@ class PublicLinksViewModel(
     private val removeLinkUseCase: RemoveLinkUseCase,
     private val accountName: String,
     private val spaceId: String,
-    private val itemId: String? = null,
+    private val itemId: String?,
     private val coroutineDispatcherProvider: CoroutinesDispatcherProvider
 ): ViewModel() {
 

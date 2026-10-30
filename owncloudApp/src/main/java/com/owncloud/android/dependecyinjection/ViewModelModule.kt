@@ -79,7 +79,6 @@ val viewModelModule = module {
     viewModelOf(::PreviewImageViewModel)
     viewModelOf(::PreviewTextViewModel)
     viewModelOf(::PreviewVideoViewModel)
-    viewModelOf(::PublicLinksViewModel)
     viewModelOf(::ReceiveExternalFilesViewModel)
     viewModelOf(::ReleaseNotesViewModel)
     viewModelOf(::SettingsAdvancedViewModel)
@@ -92,6 +91,9 @@ val viewModelModule = module {
     viewModelOf(::SpaceMembersViewModel)
     viewModelOf(::FileOperationsViewModel)
 
+    viewModel { (accountName: String, spaceId: String, itemId: String?) ->
+        PublicLinksViewModel(get(), get(), get(), get(), get(), accountName, spaceId, itemId, get())
+    }
     viewModel { (accountName: String) -> CapabilityViewModel(accountName, get(), get(), get(), get()) }
     viewModel { (action: PasscodeAction) -> PassCodeViewModel(get(), get(), action) }
     viewModel { (filePath: String, accountName: String) ->

@@ -56,7 +56,7 @@ When a class originally scoped to spaces is reused here for file/folder links, e
 
 ### Koin modules to update
 - `UseCaseModule.kt` — only if a new UseCase is added; the `AddLinkUseCase` signature change needs no re-registration.
-- `ViewModelModule.kt` — no new ViewModel; the file flow reuses `PublicLinksViewModel` (renamed from `SpaceLinksViewModel` under D5, so update its import/`viewModelOf` reference). Its injected params stay `String`-typed (`accountName`, `spaceId`, and the new optional `itemId`), resolved positionally by Koin — confirm the graph still resolves.
+- `ViewModelModule.kt` — no new ViewModel; the file flow reuses `PublicLinksViewModel` (renamed from `SpaceLinksViewModel` under D5). It MUST be registered with an explicit positional lambda — `viewModel { (accountName: String, spaceId: String, itemId: String?) -> PublicLinksViewModel(get(), get(), get(), get(), get(), accountName, spaceId, itemId, get()) }` — and NOT `viewModelOf(::PublicLinksViewModel)`: the reflective `viewModelOf` form injects the injected params by type, and with two `String` params it cannot distinguish `spaceId` from `itemId` (it feeds `itemId` the `spaceId` value), which forces the item path on the space flow (→ `400`). The explicit lambda binds the three params (`accountName`, `spaceId`, `itemId`) by position, so each resolver's `parametersOf(accountName, spaceId, itemId)` lines up.
 - `RemoteDataSourceModule.kt` / `RepositoryModule.kt` — no binding changes (signatures change in place); `OCRemoteLinksDataSource` / `OCLinksRepository` already bound.
 - Any class moved/renamed under D5 must have its Koin binding (and all references) updated accordingly.
 

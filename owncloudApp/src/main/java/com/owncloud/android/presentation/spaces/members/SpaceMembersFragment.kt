@@ -68,6 +68,7 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
         parametersOf(
             requireArguments().getString(ARG_ACCOUNT_NAME),
             requireArguments().getParcelable<OCSpace>(ARG_CURRENT_SPACE)?.id,
+            null
         )
     }
 
