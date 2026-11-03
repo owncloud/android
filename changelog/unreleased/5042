@@ -1,0 +1,6 @@
+Bugfix: Remove share option from Kiteworks accounts
+
+The share option from bottom sheet and topbar has been removed for Kiteworks accounts, as it is not supported.
+
+https://github.com/owncloud/android/issues/5008
+https://github.com/owncloud/android/pull/5042
