@@ -391,7 +391,7 @@ class MainFileListFragment : Fragment(),
             updateActionModeAfterTogglingSelected()
             true
         }
-        if (isPickingAFolder() || getCurrentSpace()?.isPersonal == false) {
+        if (isPickingAFolder() || getCurrentSpace()?.isPersonal == false || isMultiPersonal) {
             menu.findItem(R.id.action_share_current_folder)?.itemId?.let { menu.removeItem(it) }
         } else {
             menu.findItem(R.id.action_share_current_folder)?.setOnMenuItemClickListener {

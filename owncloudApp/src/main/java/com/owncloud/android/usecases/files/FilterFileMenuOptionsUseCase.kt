@@ -66,6 +66,7 @@ class FilterFileMenuOptionsUseCase(
         }
         val resharingAllowed = capability?.let { !anyFileSharedWithMe(files) || it.filesSharingResharing.isTrue } ?: false
         val isOcis = capability?.isSpacesAllowed() == true
+        val isKiteworksServer = capability?.spaces?.hasMultiplePersonalSpaces == true
         val displaySelectAll = params.displaySelectAll
         val displaySelectInverse = params.displaySelectInverse
         val onlyAvailableOfflineFiles = params.onlyAvailableOfflineFiles
@@ -94,7 +95,7 @@ class FilterFileMenuOptionsUseCase(
             !onlyAvailableOfflineFiles && shareViaLinkOrWithUsersAllowed && resharingAllowed &&
                 hasResharePermission
         }
-        if (shareReachable) {
+        if (shareReachable && !isKiteworksServer) {
             optionsToShow.add(FileMenuOption.SHARE)
         }
         // Open with (different to preview!)
