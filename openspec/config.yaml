@@ -124,8 +124,14 @@ operations:
         (3) Create branch feature/<change-name> in that repo with
         "gh api repos/owncloud/android-scenario-testing/git/refs --method POST
         -f ref='refs/heads/feature/<change-name>' -f sha='<BASE_SHA>'".
-        (4) Build the source.md content with a top-level heading "# <change-name>" followed by
-        the raw Gherkin text (without the surrounding fence markers).
+        (4) Build the source.md content as a fully formatted markdown document with this
+        exact structure: (a) top-level heading "# <change-name>"; (b) for each Scenario in
+        the Gherkin block, numbered subheading "## Scenario N: <scenario-title>" (N = 1, 2,
+        …); (c) the free-text description found between the Scenario title and the first
+        Given/When/Then/And/But keyword, emitted as a plain prose paragraph; (d) the
+        scenario steps (Given/When/Then/And/But lines only, without the Scenario title line)
+        wrapped in a fenced ```gherkin ... ``` code block. Separate every element with a
+        blank line. Repeat (b)–(d) for every Scenario found.
         (5) Base64-encode the content and create the file at
         openspec/changes/<change-name>/source.md on that branch with
         "gh api repos/owncloud/android-scenario-testing/contents/openspec/changes/<change-name>/source.md
