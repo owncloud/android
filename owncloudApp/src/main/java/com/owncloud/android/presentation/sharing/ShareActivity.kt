@@ -55,6 +55,7 @@ import com.owncloud.android.lib.resources.shares.RemoteShare
 import com.owncloud.android.presentation.capabilities.CapabilityViewModel
 import com.owncloud.android.presentation.common.ShareSheetHelper
 import com.owncloud.android.presentation.common.UIResult
+import com.owncloud.android.presentation.links.AddPublicLinkFragment
 import com.owncloud.android.presentation.sharing.sharees.EditPrivateOcsShareFragment
 import com.owncloud.android.presentation.sharing.sharees.SearchOcsShareesFragment
 import com.owncloud.android.presentation.sharing.sharees.UsersAndGroupsSearchProvider
@@ -129,6 +130,23 @@ class ShareActivity : FileActivity(), OcsShareFragmentListener, GraphShareFragme
         val transaction = supportFragmentManager.beginTransaction()
         transaction.apply {
             replace(R.id.members_fragment_container, addGraphShareFragment, TAG_ADD_GRAPH_SHARE_FRAGMENT)
+            addToBackStack(null)
+            commit()
+        }
+    }
+
+    override fun addPublicLink(file: OCFile, accountName: String) {
+        val spaceId = file.spaceId ?: return
+        val addPublicLinkFragment = AddPublicLinkFragment.newInstance(
+            accountName = accountName,
+            spaceId = spaceId,
+            editMode = false,
+            selectedPublicLink = null,
+            file = file
+        )
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.apply {
+            replace(R.id.members_fragment_container, addPublicLinkFragment, TAG_ADD_PUBLIC_LINK_FRAGMENT)
             addToBackStack(null)
             commit()
         }
@@ -427,6 +445,7 @@ class ShareActivity : FileActivity(), OcsShareFragmentListener, GraphShareFragme
         const val TAG_SHARE_FRAGMENT = "SHARE_FRAGMENT"
         const val TAG_GRAPH_SHARE_FRAGMENT = "GRAPH_SHARE_FRAGMENT"
         const val TAG_ADD_GRAPH_SHARE_FRAGMENT = "ADD_GRAPH_SHARE_FRAGMENT"
+        const val TAG_ADD_PUBLIC_LINK_FRAGMENT = "ADD_PUBLIC_LINK_FRAGMENT"
         const val TAG_SEARCH_FRAGMENT = "SEARCH_USER_AND_GROUPS_FRAGMENT"
         const val TAG_EDIT_SHARE_FRAGMENT = "EDIT_SHARE_FRAGMENT"
         const val TAG_PUBLIC_SHARE_DIALOG_FRAGMENT = "PUBLIC_SHARE_DIALOG_FRAGMENT"

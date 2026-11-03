@@ -34,7 +34,7 @@ import com.owncloud.android.domain.spaces.model.OCSpace
 import com.owncloud.android.domain.sharing.shares.model.MemberPermission
 import com.owncloud.android.extensions.adaptInfiniteEdges
 import com.owncloud.android.presentation.common.ShareSheetHelper
-import com.owncloud.android.presentation.spaces.links.AddPublicLinkFragment
+import com.owncloud.android.presentation.links.AddPublicLinkFragment
 import com.owncloud.android.ui.activity.FileActivity
 import com.owncloud.android.utils.DisplayUtils
 
@@ -112,7 +112,7 @@ class SpaceMembersActivity: FileActivity(), SpaceMembersFragment.SpaceMemberFrag
     }
 
     override fun addPublicLink(space: OCSpace, editMode: Boolean, selectedPublicLink: OCLink?) {
-        val addPublicLinkFragment = AddPublicLinkFragment.newInstance(account.name, space, editMode, selectedPublicLink)
+        val addPublicLinkFragment = AddPublicLinkFragment.newInstance(account.name, space.id, editMode, selectedPublicLink)
         val transaction = supportFragmentManager.beginTransaction()
         transaction.apply {
             replace(R.id.members_fragment_container, addPublicLinkFragment, TAG_ADD_PUBLIC_LINK_FRAGMENT)

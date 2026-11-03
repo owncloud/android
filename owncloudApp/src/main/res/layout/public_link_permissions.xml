@@ -202,6 +202,7 @@
     </LinearLayout>
 
     <View
+        android:id="@+id/secret_file_drop_public_link_divider"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginTop="@dimen/standard_quarter_margin"
