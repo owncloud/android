@@ -127,6 +127,7 @@ class GraphShareFragment : Fragment(), GraphSharesAdapter.GraphSharesAdapterList
 
         binding.addPublicLinkButton.setOnClickListener {
             if (file != null && accountName != null) {
+                publicLinksViewModel.resetViewModel()
                 listener?.addPublicLink(file = file, accountName = accountName)
             }
         }

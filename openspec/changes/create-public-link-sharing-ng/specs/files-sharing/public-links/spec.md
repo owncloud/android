@@ -50,6 +50,10 @@ The password field and the expiration-date field SHALL be hidden until the user 
 - **WHEN** the user selects a permission type
 - **THEN** the password field and the expiration-date field become visible
 
+#### Scenario: Fields hidden again when the creation view is reopened
+- **WHEN** the user selects a permission type, leaves the creation view without creating a link, and reopens it
+- **THEN** the password field and the expiration-date field are hidden again until a permission type is selected anew
+
 ### Requirement: Enforce server password policy
 
 The system SHALL require a password before the creation form can be submitted when the server capabilities mandate one for the selected permission type. When `OCIS_SHARING_PUBLIC_SHARE_MUST_HAVE_PASSWORD` is set, a password SHALL be required for every permission type. When `OCIS_SHARING_PUBLIC_WRITEABLE_SHARE_MUST_HAVE_PASSWORD` is set, a password SHALL be required for the "Can edit" and "Secret file drop" permission types. The policy SHALL be read from the capabilities already fetched for the session; the system SHALL NOT make an additional network call to determine it.
