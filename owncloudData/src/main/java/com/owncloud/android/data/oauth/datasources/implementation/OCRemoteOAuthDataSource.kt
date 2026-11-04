@@ -80,7 +80,7 @@ class OCRemoteOAuthDataSource(
             )
         }
 
-        return remoteClientRegistrationInfo.toModel()
+        return remoteClientRegistrationInfo.toModel(clientRegistrationRequest.tokenEndpointAuthMethod)
     }
 
     /**************************************************************************************************************
@@ -148,11 +148,12 @@ class OCRemoteOAuthDataSource(
             applicationType = this.applicationType
         )
 
-    private fun ClientRegistrationResponse.toModel(): ClientRegistrationInfo =
+    private fun ClientRegistrationResponse.toModel(tokenEndpointAuthMethod: String): ClientRegistrationInfo =
         ClientRegistrationInfo(
             clientId = this.clientId,
             clientSecret = this.clientSecret,
             clientIdIssuedAt = this.clientIdIssuedAt,
-            clientSecretExpiration = this.clientSecretExpiration
+            clientSecretExpiration = this.clientSecretExpiration,
+            tokenEndpointAuthMethod = tokenEndpointAuthMethod,
         )
 }
