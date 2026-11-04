@@ -229,6 +229,8 @@ abstract class DrawerActivity : ToolbarActivity() {
     private fun setSpacesVisibilityBottomBar(uiResult: UIResult<OCCapability>) {
         if (uiResult is UIResult.Success) {
             val capabilities = uiResult.data
+            // Kiteworks servers (identified by multiple personal spaces) do not support sharing
+            getBottomNavigationView()?.menu?.get(1)?.isVisible = capabilities?.spaces?.hasMultiplePersonalSpaces != true
             if (AccountUtils.isSpacesFeatureAllowedForAccount(baseContext, account, capabilities)) {
                 getBottomNavigationView()?.menu?.get(0)?.title = getString(R.string.bottom_nav_personal)
                 getBottomNavigationView()?.menu?.get(1)?.title = getString(R.string.bottom_nav_shares)
