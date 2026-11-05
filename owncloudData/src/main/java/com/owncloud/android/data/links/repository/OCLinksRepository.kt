@@ -40,12 +40,20 @@ class OCLinksRepository(
         remoteLinksDataSource.addLink(accountName, spaceId, itemId, displayName, type, expirationDate, password)
     }
 
-    override fun editLink(accountName: String, spaceId: String, linkId: String, displayName: String, type: OCLinkType, expirationDate: String?) {
-        remoteLinksDataSource.editLink(accountName, spaceId, linkId, displayName, type, expirationDate)
+    override fun editLink(
+        accountName: String,
+        spaceId: String,
+        itemId: String?,
+        linkId: String,
+        displayName: String,
+        type: OCLinkType,
+        expirationDate: String?
+    ) {
+        remoteLinksDataSource.editLink(accountName, spaceId, itemId, linkId, displayName, type, expirationDate)
     }
 
-    override fun editPasswordLink(accountName: String, spaceId: String, linkId: String, password: String?) {
-        remoteLinksDataSource.editPasswordLink(accountName, spaceId, linkId, password)
+    override fun editPasswordLink(accountName: String, spaceId: String, itemId: String?, linkId: String, password: String?) {
+        remoteLinksDataSource.editPasswordLink(accountName, spaceId, itemId, linkId, password)
     }
 
     override fun removeLink(accountName: String, spaceId: String, linkId: String) {

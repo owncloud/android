@@ -32,7 +32,14 @@ interface LinksService: Service {
         expirationDate: String?,
         password: String?
     ): RemoteOperationResult<Unit>
-    fun editLink(spaceId: String, linkId: String, displayName: String, type: String, expirationDate: String?): RemoteOperationResult<Unit>
-    fun editPasswordLink(spaceId: String, linkId: String, password: String?): RemoteOperationResult<Unit>
+    fun editLink(
+        spaceId: String,
+        itemId: String?,
+        linkId: String,
+        displayName: String,
+        type: String,
+        expirationDate: String?
+    ): RemoteOperationResult<Unit>
+    fun editPasswordLink(spaceId: String, itemId: String?, linkId: String, password: String?): RemoteOperationResult<Unit>
     fun removeLink(spaceId: String, linkId: String): RemoteOperationResult<Unit>
 }

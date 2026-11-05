@@ -1,23 +1,23 @@
 ## 1. ComLibrary — item-targeted edit operations (owncloudComLibrary)
 
-- [ ] 1.1 Parametrize `EditRemoteLinkOperation` with an optional `itemId: String?` (no default): when non-null build the PATCH path as `graph/v1beta1/drives/{spaceId}/items/{itemId}/permissions/{linkId}`, when null keep `drives/{spaceId}/root/permissions/{linkId}`. Keep the request body and the `Unit` return exactly as in the space-link edit. Verify both paths compile.
-- [ ] 1.2 Parametrize `EditRemotePasswordLinkOperation` with an optional `itemId: String?` (no default): when non-null build the POST path as `graph/v1beta1/drives/{spaceId}/items/{itemId}/permissions/{linkId}/setPassword`, when null keep `drives/{spaceId}/root/permissions/{linkId}/setPassword`. Keep the `PASSWORD_ENFORCED`/`Unit` behavior. Verify both paths compile.
-- [ ] 1.3 Add the optional `itemId: String?` (no default) to `LinksService.editLink` / `editPasswordLink` and forward it in `OCLinksService` to the two operations; keep `editLink`'s existing attribute params unchanged. Verify the null-itemId (space) path still resolves to `root/permissions/{linkId}`.
+- [x] 1.1 Parametrize `EditRemoteLinkOperation` with an optional `itemId: String?` (no default): when non-null build the PATCH path as `graph/v1beta1/drives/{spaceId}/items/{itemId}/permissions/{linkId}`, when null keep `drives/{spaceId}/root/permissions/{linkId}`. Keep the request body and the `Unit` return exactly as in the space-link edit. Verify both paths compile.
+- [x] 1.2 Parametrize `EditRemotePasswordLinkOperation` with an optional `itemId: String?` (no default): when non-null build the POST path as `graph/v1beta1/drives/{spaceId}/items/{itemId}/permissions/{linkId}/setPassword`, when null keep `drives/{spaceId}/root/permissions/{linkId}/setPassword`. Keep the `PASSWORD_ENFORCED`/`Unit` behavior. Verify both paths compile.
+- [x] 1.3 Add the optional `itemId: String?` (no default) to `LinksService.editLink` / `editPasswordLink` and forward it in `OCLinksService` to the two operations; keep `editLink`'s existing attribute params unchanged. Verify the null-itemId (space) path still resolves to `root/permissions/{linkId}`.
 
 ## 2. Data — thread `itemId` through datasource and repository (owncloudData)
 
-- [ ] 2.1 Add the optional `itemId: String?` (no default) to `RemoteLinksDataSource.editLink` / `editPasswordLink` and to `OCRemoteLinksDataSource`'s implementations, delegating to `ClientManager.getLinksService(...).editLink/editPasswordLink(...)`; keep `editLink`'s existing attribute params unchanged. Verify item-targeted and space paths compile and delegate correctly.
-- [ ] 2.2 Add the optional `itemId: String?` (no default) to `LinksRepository.editLink` / `editPasswordLink` (interface) and `OCLinksRepository` (impl), forwarding to the datasource; keep the existing attribute params unchanged. Verify the interface/impl compile and delegate for both paths.
+- [x] 2.1 Add the optional `itemId: String?` (no default) to `RemoteLinksDataSource.editLink` / `editPasswordLink` and to `OCRemoteLinksDataSource`'s implementations, delegating to `ClientManager.getLinksService(...).editLink/editPasswordLink(...)`; keep `editLink`'s existing attribute params unchanged. Verify item-targeted and space paths compile and delegate correctly.
+- [x] 2.2 Add the optional `itemId: String?` (no default) to `LinksRepository.editLink` / `editPasswordLink` (interface) and `OCLinksRepository` (impl), forwarding to the datasource; keep the existing attribute params unchanged. Verify the interface/impl compile and delegate for both paths.
 
 ## 3. Domain — extend edit use cases (owncloudDomain)
 
-- [ ] 3.1 Extend `EditLinkUseCase.Params` with the optional `itemId: String?` (no default), keeping the existing attribute params (`displayName`, `type`, `expirationDate`) unchanged; forward all to `LinksRepository.editLink`. Keep the `Unit` result.
-- [ ] 3.2 Extend `EditPasswordLinkUseCase.Params` with the optional `itemId: String?` (no default); forward it to `LinksRepository.editPasswordLink`. Keep the `Unit` result.
+- [x] 3.1 Extend `EditLinkUseCase.Params` with the optional `itemId: String?` (no default), keeping the existing attribute params (`displayName`, `type`, `expirationDate`) unchanged; forward all to `LinksRepository.editLink`. Keep the `Unit` result.
+- [x] 3.2 Extend `EditPasswordLinkUseCase.Params` with the optional `itemId: String?` (no default); forward it to `LinksRepository.editPasswordLink`. Keep the `Unit` result.
 
 ## 4. Presentation — compute changed fields and pass `itemId` (owncloudApp)
 
-- [ ] 4.1 In `PublicLinksViewModel.editLink`, pass the constructor `itemId` into `EditLinkUseCase.Params` alongside the existing attribute values (`type`, `displayName`, `expirationDate`), keeping the same logic as the space-link edit. Pass `itemId` into `EditPasswordLinkUseCase.Params` in `editPasswordPublicLink`. Verify the PATCH targets `items/{itemId}/permissions/{linkId}` with the link's attributes.
-- [ ] 4.2 Confirm `PublicLinksViewModel.resetViewModel()` clears `editLinkResultFlow`, `editPasswordLinkResultFlow`, and recreates `AddPublicLinkUIState()` (resetting `wasPasswordChanged`/`selectedPermission`) so reopening the edit view for another link inherits no stale selection. Add any missing reset. Verify reopening the edit view starts clean.
+- [x] 4.1 In `PublicLinksViewModel.editLink`, pass the constructor `itemId` into `EditLinkUseCase.Params` alongside the existing attribute values (`type`, `displayName`, `expirationDate`), keeping the same logic as the space-link edit. Pass `itemId` into `EditPasswordLinkUseCase.Params` in `editPasswordPublicLink`. Verify the PATCH targets `items/{itemId}/permissions/{linkId}` with the link's attributes.
+- [x] 4.2 Confirm `PublicLinksViewModel.resetViewModel()` clears `editLinkResultFlow`, `editPasswordLinkResultFlow`, and recreates `AddPublicLinkUIState()` (resetting `wasPasswordChanged`/`selectedPermission`) so reopening the edit view for another link inherits no stale selection. Add any missing reset. Verify reopening the edit view starts clean.
 
 ## 5. Presentation — enable and launch the edit flow from the panel (owncloudApp)
 

@@ -140,6 +140,7 @@ class PublicLinksViewModel(
                 useCaseParams = EditLinkUseCase.Params(
                     accountName = accountName,
                     spaceId = spaceId,
+                    itemId = itemId,
                     linkId = linkId,
                     displayName = displayName,
                     type = it,
@@ -172,6 +173,7 @@ class PublicLinksViewModel(
             useCaseParams = EditPasswordLinkUseCase.Params(
                 accountName = accountName,
                 spaceId = spaceId,
+                itemId = itemId,
                 linkId = linkId,
                 password = _addPublicLinkUIState.value?.selectedPassword
             )
