@@ -128,7 +128,7 @@ class GraphShareFragment : Fragment(), GraphSharesAdapter.GraphSharesAdapterList
         binding.addPublicLinkButton.setOnClickListener {
             if (file != null && accountName != null) {
                 publicLinksViewModel.resetViewModel()
-                listener?.addPublicLink(file = file, accountName = accountName)
+                listener?.addPublicLink(file = file, accountName = accountName, editMode = false, selectedPublicLink = null)
             }
         }
 
@@ -329,11 +329,18 @@ class GraphShareFragment : Fragment(), GraphSharesAdapter.GraphSharesAdapterList
 
     override fun onRemovePublicLink(publicLinkId: String, publicLinkDisplayName: String) { }
 
-    override fun onEditPublicLink(publicLink: OCLink) { }
+    override fun onEditPublicLink(publicLink: OCLink) {
+        val file = requireArguments().getParcelable<OCFile>(ARG_FILE)
+        val accountName = requireArguments().getString(ARG_ACCOUNT_NAME)
+        if (file != null && accountName != null) {
+            publicLinksViewModel.resetViewModel()
+            listener?.addPublicLink(file = file, accountName = accountName, editMode = true, selectedPublicLink = publicLink)
+        }
+    }
 
     interface GraphShareFragmentListener {
         fun addGraphShare(file: OCFile, accountName: String, roles: List<OCRole>, editMode: Boolean, selectedShare: MemberPermission?)
-        fun addPublicLink(file: OCFile, accountName: String)
+        fun addPublicLink(file: OCFile, accountName: String, editMode: Boolean, selectedPublicLink: OCLink?)
         fun copyOrSendPublicLink(publicLinkUrl: String, fileName: String)
     }
 
