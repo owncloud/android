@@ -177,6 +177,8 @@ class GraphShareFragment : Fragment(), GraphSharesAdapter.GraphSharesAdapterList
         observeRemoveShareResult()
         observeEditShareResult()
         observeAddLinkResult()
+        observeEditLinkResult()
+        observeEditPasswordLinkResult()
     }
 
     private fun observeShares() {
@@ -257,6 +259,39 @@ class GraphShareFragment : Fragment(), GraphSharesAdapter.GraphSharesAdapterList
                         showMessageInSnackbar(getString(R.string.public_link_add_correctly))
                         graphShareViewModel.getGraphShares()
                         publicLinksViewModel.resetViewModel()
+                    }
+                    is UIResult.Error -> { }
+                }
+            }
+        }
+    }
+
+    private fun observeEditLinkResult() {
+        collectLatestLifecycleFlow(publicLinksViewModel.editLinkResultFlow) { event ->
+            event?.peekContent()?.let { uiResult ->
+                when (uiResult) {
+                    is UIResult.Loading -> { }
+                    is UIResult.Success -> {
+                        if (publicLinksViewModel.addPublicLinkUIState.value?.wasPasswordChanged != true) {
+                            graphShareViewModel.getGraphShares()
+                            showMessageInSnackbar(getString(R.string.public_link_edit_correctly))
+                        }
+                        publicLinksViewModel.resetViewModel()
+                    }
+                    is UIResult.Error -> { }
+                }
+            }
+        }
+    }
+
+    private fun observeEditPasswordLinkResult() {
+        collectLatestLifecycleFlow(publicLinksViewModel.editPasswordLinkResultFlow) { event ->
+            event?.peekContent()?.let { uiResult ->
+                when (uiResult) {
+                    is UIResult.Loading -> { }
+                    is UIResult.Success -> {
+                        graphShareViewModel.getGraphShares()
+                        showMessageInSnackbar(getString(R.string.public_link_edit_correctly))
                     }
                     is UIResult.Error -> { }
                 }
