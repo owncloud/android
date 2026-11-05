@@ -212,6 +212,7 @@ class GraphShareFragment : Fragment(), GraphSharesAdapter.GraphSharesAdapterList
                         uiResult.data?.let { spacePermissions ->
                             checkPermissions(spacePermissions)
                             showShares()
+                            showLinks()
                         }
                     }
                     is UIResult.Loading -> { }
