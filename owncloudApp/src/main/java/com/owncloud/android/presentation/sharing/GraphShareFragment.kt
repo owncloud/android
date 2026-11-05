@@ -79,7 +79,7 @@ class GraphShareFragment : Fragment(), GraphSharesAdapter.GraphSharesAdapterList
     private var links: List<OCLink> = emptyList()
     private var listener: GraphShareFragmentListener? = null
     private var canRemoveShares: Boolean = false
-    private var canEditShares: Boolean = false
+    private var canEditSharesAndLinks: Boolean = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = MembersFragmentBinding.inflate(inflater, container, false)
@@ -225,7 +225,7 @@ class GraphShareFragment : Fragment(), GraphSharesAdapter.GraphSharesAdapterList
 
     private fun checkPermissions(spacePermissions: List<String>) {
         canRemoveShares = DRIVES_DELETE_PERMISSION in spacePermissions
-        canEditShares = DRIVES_UPDATE_PERMISSION in spacePermissions
+        canEditSharesAndLinks = DRIVES_UPDATE_PERMISSION in spacePermissions
         val hasCreatePermission = DRIVES_CREATE_PERMISSION in spacePermissions
         binding.addMemberButton.isVisible = hasCreatePermission
         binding.addPublicLinkButton.isVisible = hasCreatePermission
@@ -299,7 +299,7 @@ class GraphShareFragment : Fragment(), GraphSharesAdapter.GraphSharesAdapterList
         val hasShares = shares.isNotEmpty()
         binding.membersRecyclerView.isVisible = hasShares
         binding.noSharesMessage.isVisible = !hasShares
-        graphSharesAdapter.setShares(shares, roles, canRemoveShares, canEditShares)
+        graphSharesAdapter.setShares(shares, roles, canRemoveShares, canEditSharesAndLinks)
     }
 
     private fun showLinks() {
@@ -318,7 +318,7 @@ class GraphShareFragment : Fragment(), GraphSharesAdapter.GraphSharesAdapterList
                 }
             },
             canRemoveLinks = false,
-            canEditLinks = false
+            canEditLinks = canEditSharesAndLinks
         )
     }
 
