@@ -28,8 +28,8 @@
 
 ## 6. Unit Tests (owncloudData)
 
-- [ ] 6.1 In `OCRemoteLinksDataSourceTest`, extend the `editLink` and `editPasswordLink` tests to cover the item path (non-null `itemId` = `OC_FILE.remoteId`) and keep the space path (null `itemId`), asserting delegation to `getLinksService(...).editLink/editPasswordLink(...)` with the right arguments. Use `createRemoteOperationResultMock`.
-- [ ] 6.2 In `OCLinksRepositoryTest`, extend the `editLink` and `editPasswordLink` tests to assert delegation to the datasource for the item path (non-null `itemId`) and the space path (null `itemId`).
+- [x] 6.1 In `OCRemoteLinksDataSourceTest`, extend the `editLink` and `editPasswordLink` tests to cover the item path (non-null `itemId` = `OC_FILE.remoteId`) and keep the space path (null `itemId`), asserting delegation to `getLinksService(...).editLink/editPasswordLink(...)` with the right arguments. Use `createRemoteOperationResultMock`.
+- [x] 6.2 In `OCLinksRepositoryTest`, extend the `editLink` and `editPasswordLink` tests to assert delegation to the datasource for the item path (non-null `itemId`) and the space path (null `itemId`).
 
 ## 7. Changelog
 
