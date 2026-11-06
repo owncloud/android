@@ -33,7 +33,7 @@
 
 ## 7. Changelog
 
-- [ ] 7.1 Add `changelog/unreleased/XXXX` (placeholder number until the PR is opened) as an `Enhancement` following the project changelog format, with a title under 80 chars, a present-perfect-passive description, and links to issue #4970 and the PR. Verify the file matches the required format and ends with a trailing newline.
+- [x] 7.1 Add `changelog/unreleased/5044` (placeholder number until the PR is opened) as an `Enhancement` following the project changelog format, with a title under 80 chars, a present-perfect-passive description, and links to issue #4970 and the PR. Verify the file matches the required format and ends with a trailing newline.
 
 ## 8. Verification
 
