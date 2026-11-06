@@ -35,6 +35,7 @@ import java.net.URL
 
 class EditRemoteLinkOperation(
     private val spaceId: String,
+    private val itemId: String?,
     private val linkId: String,
     private val displayName: String,
     private val type: String,
@@ -46,7 +47,13 @@ class EditRemoteLinkOperation(
             val uriBuilder = client.baseUri.buildUpon().apply {
                 appendEncodedPath(GRAPH_API_DRIVES_PATH)
                 appendEncodedPath(spaceId)
-                appendEncodedPath(GRAPH_API_ROOT_PERMISSIONS_PATH)
+                if (itemId == null) {
+                    appendEncodedPath(GRAPH_API_ROOT_PERMISSIONS_PATH)
+                } else {
+                    appendEncodedPath(GRAPH_API_ITEMS_PATH)
+                    appendEncodedPath(itemId)
+                    appendEncodedPath(GRAPH_API_PERMISSIONS_PATH)
+                }
                 appendEncodedPath(linkId)
             }
 
@@ -82,6 +89,8 @@ class EditRemoteLinkOperation(
     companion object {
         private const val GRAPH_API_DRIVES_PATH = "graph/v1beta1/drives/"
         private const val GRAPH_API_ROOT_PERMISSIONS_PATH = "root/permissions"
+        private const val GRAPH_API_ITEMS_PATH = "items"
+        private const val GRAPH_API_PERMISSIONS_PATH = "permissions"
         private const val EXPIRATION_DATE_BODY_PARAM = "expirationDateTime"
         private const val LINK_BODY_PARAM = "link"
         private const val DISPLAY_NAME_BODY_PARAM = "@libre.graph.displayName"

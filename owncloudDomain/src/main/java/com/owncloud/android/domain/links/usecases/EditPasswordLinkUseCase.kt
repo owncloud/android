@@ -28,12 +28,13 @@ class EditPasswordLinkUseCase(
 ): BaseUseCaseWithResult<Unit, EditPasswordLinkUseCase.Params>() {
 
     override fun run(params: Params) {
-        linksRepository.editPasswordLink(params.accountName, params.spaceId, params.linkId, params.password)
+        linksRepository.editPasswordLink(params.accountName, params.spaceId, params.itemId, params.linkId, params.password)
     }
 
     data class Params(
         val accountName: String,
         val spaceId: String,
+        val itemId: String?,
         val linkId: String,
         val password: String?
     )
