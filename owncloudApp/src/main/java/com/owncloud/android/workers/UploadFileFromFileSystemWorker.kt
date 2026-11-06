@@ -179,7 +179,12 @@ class UploadFileFromFileSystemWorker(
         var pathToGrant: String = File(uploadPath).parent ?: ""
         pathToGrant = if (pathToGrant.endsWith(File.separator)) pathToGrant else pathToGrant + File.separator
 
-        val checkPathExistenceOperation = CheckPathExistenceRemoteOperation(pathToGrant, false, spaceWebDavUrl)
+        val checkPathExistenceOperation =
+            CheckPathExistenceRemoteOperation(
+                remotePath = pathToGrant,
+                isUserLoggedIn = AccountUtils.getCurrentOwnCloudAccount(appContext) != null,
+                spaceWebDavUrl = spaceWebDavUrl,
+            )
         val checkPathExistenceResult = checkPathExistenceOperation.execute(client)
         if (checkPathExistenceResult.code == ResultCode.FILE_NOT_FOUND) {
             val createRemoteFolderOperation = CreateRemoteFolderOperation(
