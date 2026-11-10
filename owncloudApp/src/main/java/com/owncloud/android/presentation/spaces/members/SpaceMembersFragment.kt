@@ -229,7 +229,6 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
         observeAddLinkResult()
         observeRemoveLinkResult()
         observeEditLinkResult()
-        observeEditPasswordLinkResult()
     }
 
     private fun observeRoles() {
@@ -390,24 +389,15 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
                 when (uiResult) {
                     is UIResult.Loading -> { }
                     is UIResult.Success -> {
-                        if (publicLinksViewModel.addPublicLinkUIState.value?.wasPasswordChanged == false) {
-                            showMessageInSnackbar(getString(R.string.public_link_edit_correctly))
-                        }
+                        showMessageInSnackbar(getString(R.string.public_link_edit_correctly))
                         publicLinksViewModel.resetViewModel()
                     }
-                    is UIResult.Error -> { }
-                }
-            }
-        }
-    }
-
-    private fun observeEditPasswordLinkResult() {
-        collectLatestLifecycleFlow(publicLinksViewModel.editPasswordLinkResultFlow) { event ->
-            event?.peekContent()?.let { uiResult ->
-                when (uiResult) {
-                    is UIResult.Loading -> { }
-                    is UIResult.Success -> showMessageInSnackbar(getString(R.string.public_link_edit_correctly))
-                    is UIResult.Error -> { }
+                    is UIResult.Error -> {
+                        if (publicLinksViewModel.addPublicLinkUIState.value?.wasPasswordChanged == true) {
+                            showMessageInSnackbar(getString(R.string.public_link_edit_partially_failed))
+                            publicLinksViewModel.resetViewModel()
+                        }
+                    }
                 }
             }
         }

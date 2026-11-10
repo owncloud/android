@@ -178,7 +178,6 @@ class GraphShareFragment : Fragment(), GraphSharesAdapter.GraphSharesAdapterList
         observeEditShareResult()
         observeAddLinkResult()
         observeEditLinkResult()
-        observeEditPasswordLinkResult()
     }
 
     private fun observeShares() {
@@ -272,28 +271,17 @@ class GraphShareFragment : Fragment(), GraphSharesAdapter.GraphSharesAdapterList
                 when (uiResult) {
                     is UIResult.Loading -> { }
                     is UIResult.Success -> {
-                        if (publicLinksViewModel.addPublicLinkUIState.value?.wasPasswordChanged != true) {
-                            graphShareViewModel.getGraphShares()
-                            showMessageInSnackbar(getString(R.string.public_link_edit_correctly))
-                        }
-                        publicLinksViewModel.resetViewModel()
-                    }
-                    is UIResult.Error -> { }
-                }
-            }
-        }
-    }
-
-    private fun observeEditPasswordLinkResult() {
-        collectLatestLifecycleFlow(publicLinksViewModel.editPasswordLinkResultFlow) { event ->
-            event?.peekContent()?.let { uiResult ->
-                when (uiResult) {
-                    is UIResult.Loading -> { }
-                    is UIResult.Success -> {
                         graphShareViewModel.getGraphShares()
                         showMessageInSnackbar(getString(R.string.public_link_edit_correctly))
+                        publicLinksViewModel.resetViewModel()
                     }
-                    is UIResult.Error -> { }
+                    is UIResult.Error -> {
+                        if (publicLinksViewModel.addPublicLinkUIState.value?.wasPasswordChanged == true) {
+                            graphShareViewModel.getGraphShares()
+                            showMessageInSnackbar(getString(R.string.public_link_edit_partially_failed))
+                            publicLinksViewModel.resetViewModel()
+                        }
+                    }
                 }
             }
         }
