@@ -1,21 +1,21 @@
 ## 1. Networking layer — item-aware DELETE path (owncloudComLibrary)
 
-- [ ] 1.1 Add a nullable `itemId: String?` parameter to `RemoveRemoteLinkOperation` (between `spaceId` and `linkId`) and branch the path construction: when `itemId` is `null` keep `root/permissions`, otherwise append `items`, the `itemId`, then `permissions`, before appending `linkId`. Mirror the constant naming and null-branching already used by `AddRemoteLinkOperation` in the same package. Verify by inspecting the built URL for both branches — `graph/v1beta1/drives/{spaceId}/items/{itemId}/permissions/{linkId}` and `graph/v1beta1/drives/{spaceId}/root/permissions/{linkId}`.
-- [ ] 1.2 Add `itemId: String?` to `LinksService.removeLink(spaceId, itemId, linkId)` and pass it through in `OCLinksService.removeLink` when constructing `RemoveRemoteLinkOperation`. Verify `:owncloudComLibrary:compileDebugKotlin` succeeds.
+- [x] 1.1 Add a nullable `itemId: String?` parameter to `RemoveRemoteLinkOperation` (between `spaceId` and `linkId`) and branch the path construction: when `itemId` is `null` keep `root/permissions`, otherwise append `items`, the `itemId`, then `permissions`, before appending `linkId`. Mirror the constant naming and null-branching already used by `AddRemoteLinkOperation` in the same package. Verify by inspecting the built URL for both branches — `graph/v1beta1/drives/{spaceId}/items/{itemId}/permissions/{linkId}` and `graph/v1beta1/drives/{spaceId}/root/permissions/{linkId}`.
+- [x] 1.2 Add `itemId: String?` to `LinksService.removeLink(spaceId, itemId, linkId)` and pass it through in `OCLinksService.removeLink` when constructing `RemoveRemoteLinkOperation`. Verify `:owncloudComLibrary:compileDebugKotlin` succeeds.
 
 ## 2. Data layer — thread itemId through (owncloudData)
 
-- [ ] 2.1 Add `itemId: String?` to `RemoteLinksDataSource.removeLink` and to `OCRemoteLinksDataSource.removeLink`, forwarding it to `getLinksService(accountName).removeLink(spaceId, itemId, linkId)`. Verify the override matches the interface and the module compiles.
-- [ ] 2.2 Add `itemId: String?` to `OCLinksRepository.removeLink` and forward it to `remoteLinksDataSource.removeLink(...)`. Verify `:owncloudData:compileDebugKotlin` succeeds.
+- [x] 2.1 Add `itemId: String?` to `RemoteLinksDataSource.removeLink` and to `OCRemoteLinksDataSource.removeLink`, forwarding it to `getLinksService(accountName).removeLink(spaceId, itemId, linkId)`. Verify the override matches the interface and the module compiles.
+- [x] 2.2 Add `itemId: String?` to `OCLinksRepository.removeLink` and forward it to `remoteLinksDataSource.removeLink(...)`. Verify `:owncloudData:compileDebugKotlin` succeeds.
 
 ## 3. Domain layer — use case and repository contract (owncloudDomain)
 
-- [ ] 3.1 Add `itemId: String?` to the `LinksRepository.removeLink` interface signature, keeping parameter order consistent with `addLink`. Verify `:owncloudDomain:compileDebugKotlin` succeeds.
-- [ ] 3.2 Add `itemId: String?` to `RemoveLinkUseCase.Params` and pass `params.itemId` in `run(...)`. Verify the use case compiles and no Koin module needs editing — `factoryOf(::RemoveLinkUseCase)` binds by constructor reference and the constructor is unchanged.
+- [x] 3.1 Add `itemId: String?` to the `LinksRepository.removeLink` interface signature, keeping parameter order consistent with `addLink`. Verify `:owncloudDomain:compileDebugKotlin` succeeds.
+- [x] 3.2 Add `itemId: String?` to `RemoveLinkUseCase.Params` and pass `params.itemId` in `run(...)`. Verify the use case compiles and no Koin module needs editing — `factoryOf(::RemoveLinkUseCase)` binds by constructor reference and the constructor is unchanged.
 
 ## 4. Presentation layer — pass itemId from the ViewModel (owncloudApp)
 
-- [ ] 4.1 In `PublicLinksViewModel.removePublicLink(linkId)`, pass the ViewModel's existing `itemId` field into `RemoveLinkUseCase.Params`. Verify no signature change is needed on `removePublicLink` itself, since `itemId` is already a constructor property bound to `file?.remoteId`.
+- [x] 4.1 In `PublicLinksViewModel.removePublicLink(linkId)`, pass the ViewModel's existing `itemId` field into `RemoveLinkUseCase.Params`. Verify no signature change is needed on `removePublicLink` itself, since `itemId` is already a constructor property bound to `file?.remoteId`.
 
 ## 5. Presentation layer — sharing panel UI wiring (owncloudApp)
 

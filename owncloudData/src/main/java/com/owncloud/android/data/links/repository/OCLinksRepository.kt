@@ -56,7 +56,7 @@ class OCLinksRepository(
         remoteLinksDataSource.editPasswordLink(accountName, spaceId, itemId, linkId, password)
     }
 
-    override fun removeLink(accountName: String, spaceId: String, linkId: String) {
-        remoteLinksDataSource.removeLink(accountName, spaceId, linkId)
+    override fun removeLink(accountName: String, spaceId: String, itemId: String?, linkId: String) {
+        remoteLinksDataSource.removeLink(accountName, spaceId, itemId, linkId)
     }
 }

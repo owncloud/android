@@ -76,9 +76,14 @@ class OCLinksService(override val client: OwnCloudClient) : LinksService {
             password = password
         ).execute(client)
 
-    override fun removeLink(spaceId: String, linkId: String): RemoteOperationResult<Unit> =
+    override fun removeLink(
+        spaceId: String,
+        itemId: String?,
+        linkId: String
+    ): RemoteOperationResult<Unit> =
         RemoveRemoteLinkOperation(
             spaceId = spaceId,
+            itemId = itemId,
             linkId = linkId
         ).execute(client)
 }

@@ -42,5 +42,5 @@ interface LinksRepository {
         expirationDate: String?
     )
     fun editPasswordLink(accountName: String, spaceId: String, itemId: String?, linkId: String, password: String?)
-    fun removeLink(accountName: String, spaceId: String, linkId: String)
+    fun removeLink(accountName: String, spaceId: String, itemId: String?, linkId: String)
 }
