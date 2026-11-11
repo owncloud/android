@@ -178,6 +178,7 @@ class GraphShareFragment : Fragment(), GraphSharesAdapter.GraphSharesAdapterList
         observeEditShareResult()
         observeAddLinkResult()
         observeEditLinkResult()
+        observeRemoveLinkResult()
     }
 
     private fun observeShares() {
@@ -298,6 +299,22 @@ class GraphShareFragment : Fragment(), GraphSharesAdapter.GraphSharesAdapterList
                 is UIResult.Error -> {
                     showErrorInSnackbar(R.string.share_remove_failed, uiResult.error)
                     Timber.e(uiResult.error, "Failed to remove a graph share")
+                }
+            }
+        }
+    }
+
+    private fun observeRemoveLinkResult() {
+        collectLatestLifecycleFlow(publicLinksViewModel.removeLinkResultFlow) { uiResult ->
+            when (uiResult) {
+                is UIResult.Loading -> { }
+                is UIResult.Success -> {
+                    showMessageInSnackbar(getString(R.string.public_link_remove_correctly))
+                    graphShareViewModel.getGraphShares()
+                }
+                is UIResult.Error -> {
+                    showErrorInSnackbar(R.string.public_link_remove_failed, uiResult.error)
+                    Timber.e(uiResult.error, "Failed to remove a public link")
                 }
             }
         }
