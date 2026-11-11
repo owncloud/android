@@ -33,7 +33,7 @@
 
 ## 7. Changelog
 
-- [ ] 7.1 Create `changelog/unreleased/XXXX` (replace `XXXX` with the PR number once known) with type `Enhancement`, a title under 80 characters, a description in present perfect passive tense, the issue link `https://github.com/owncloud/android/issues/4973` and the PR link. Verify the file ends with a trailing newline and matches the format of the other files in `changelog/unreleased/`.
+- [x] 7.1 Create `changelog/unreleased/5048` (named after PR #5048) with type `Enhancement`, a title under 80 characters, a description in present perfect passive tense, the issue link `https://github.com/owncloud/android/issues/4973` and the PR link. Verify the file ends with a trailing newline and matches the format of the other files in `changelog/unreleased/`.
 
 ## 8. Verification
 

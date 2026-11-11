@@ -1,0 +1,7 @@
+Enhancement: Remove a public link over a file or a folder on an oCIS server
+
+A new option to remove a public link over a file or a folder on an oCIS server has been added.
+It will be only visible for users with proper permissions.
+
+https://github.com/owncloud/android/issues/4973
+https://github.com/owncloud/android/pull/5048
