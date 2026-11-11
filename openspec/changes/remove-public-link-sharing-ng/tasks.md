@@ -28,8 +28,8 @@
 
 ## 6. Unit tests (owncloudData)
 
-- [ ] 6.1 Update the `removeLink` test in `OCLinksRepositoryTest` for the new `itemId` parameter, and add a case covering a `null` `itemId`, asserting the value is forwarded to `remoteLinksDataSource.removeLink(...)` in both cases. Verify `./gradlew :owncloudData:testDebugUnitTest --tests "*OCLinksRepositoryTest*"` passes.
-- [ ] 6.2 Update the `removeLink` test in `OCRemoteLinksDataSourceTest` for the new `itemId` parameter, and add a case covering a `null` `itemId`, asserting `ocLinksService.removeLink(spaceId, itemId, linkId)` is invoked with the expected arguments. Verify `./gradlew :owncloudData:testDebugUnitTest --tests "*OCRemoteLinksDataSourceTest*"` passes.
+- [x] 6.1 Update the `removeLink` test in `OCLinksRepositoryTest` for the new `itemId` parameter, and add a case covering a `null` `itemId`, asserting the value is forwarded to `remoteLinksDataSource.removeLink(...)` in both cases. Verify `./gradlew :owncloudData:testDebugUnitTest --tests "*OCLinksRepositoryTest*"` passes.
+- [x] 6.2 Update the `removeLink` test in `OCRemoteLinksDataSourceTest` for the new `itemId` parameter, and add a case covering a `null` `itemId`, asserting `ocLinksService.removeLink(spaceId, itemId, linkId)` is invoked with the expected arguments. Verify `./gradlew :owncloudData:testDebugUnitTest --tests "*OCRemoteLinksDataSourceTest*"` passes.
 
 ## 7. Changelog
 

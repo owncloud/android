@@ -272,6 +272,7 @@ class OCRemoteLinksDataSourceTest {
         every {
             ocLinksService.removeLink(
                 spaceId = OC_SPACE_PROJECT_WITH_IMAGE.id,
+                itemId = null,
                 linkId = SPACE_MEMBERS.links[0].id
             )
         } returns removeLinkResult
@@ -279,6 +280,7 @@ class OCRemoteLinksDataSourceTest {
         ocRemoteLinksDataSource.removeLink(
             accountName = OC_ACCOUNT_NAME,
             spaceId = OC_SPACE_PROJECT_WITH_IMAGE.id,
+            itemId = null,
             linkId = SPACE_MEMBERS.links[0].id
         )
 
@@ -286,6 +288,36 @@ class OCRemoteLinksDataSourceTest {
             clientManager.getLinksService(OC_ACCOUNT_NAME)
             ocLinksService.removeLink(
                 spaceId = OC_SPACE_PROJECT_WITH_IMAGE.id,
+                itemId = null,
+                linkId = SPACE_MEMBERS.links[0].id
+            )
+        }
+    }
+
+    @Test
+    fun `removeLink removes a public link from a file item correctly`() {
+        val removeLinkResult = createRemoteOperationResultMock(Unit, isSuccess = true)
+
+        every {
+            ocLinksService.removeLink(
+                spaceId = OC_SPACE_PROJECT_WITH_IMAGE.id,
+                itemId = OC_FILE.remoteId,
+                linkId = SPACE_MEMBERS.links[0].id
+            )
+        } returns removeLinkResult
+
+        ocRemoteLinksDataSource.removeLink(
+            accountName = OC_ACCOUNT_NAME,
+            spaceId = OC_SPACE_PROJECT_WITH_IMAGE.id,
+            itemId = OC_FILE.remoteId,
+            linkId = SPACE_MEMBERS.links[0].id
+        )
+
+        verify(exactly = 1) {
+            clientManager.getLinksService(OC_ACCOUNT_NAME)
+            ocLinksService.removeLink(
+                spaceId = OC_SPACE_PROJECT_WITH_IMAGE.id,
+                itemId = OC_FILE.remoteId,
                 linkId = SPACE_MEMBERS.links[0].id
             )
         }

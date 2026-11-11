@@ -253,6 +253,7 @@ class OCLinksRepositoryTest {
             remoteLinksDataSource.removeLink(
                 accountName = OC_ACCOUNT_NAME,
                 spaceId = OC_SPACE_PROJECT_WITH_IMAGE.id,
+                itemId = null,
                 linkId = SPACE_MEMBERS.links[0].id
             )
         } returns Unit
@@ -260,6 +261,7 @@ class OCLinksRepositoryTest {
         ocLinksRepository.removeLink(
             accountName = OC_ACCOUNT_NAME,
             spaceId = OC_SPACE_PROJECT_WITH_IMAGE.id,
+            itemId = null,
             linkId = SPACE_MEMBERS.links[0].id
         )
 
@@ -267,6 +269,35 @@ class OCLinksRepositoryTest {
             remoteLinksDataSource.removeLink(
                 accountName = OC_ACCOUNT_NAME,
                 spaceId = OC_SPACE_PROJECT_WITH_IMAGE.id,
+                itemId = null,
+                linkId = SPACE_MEMBERS.links[0].id
+            )
+        }
+    }
+
+    @Test
+    fun `removeLink removes a public link from a file item correctly`() {
+        every {
+            remoteLinksDataSource.removeLink(
+                accountName = OC_ACCOUNT_NAME,
+                spaceId = OC_SPACE_PROJECT_WITH_IMAGE.id,
+                itemId = OC_FILE.remoteId,
+                linkId = SPACE_MEMBERS.links[0].id
+            )
+        } returns Unit
+
+        ocLinksRepository.removeLink(
+            accountName = OC_ACCOUNT_NAME,
+            spaceId = OC_SPACE_PROJECT_WITH_IMAGE.id,
+            itemId = OC_FILE.remoteId,
+            linkId = SPACE_MEMBERS.links[0].id
+        )
+
+        verify(exactly = 1) {
+            remoteLinksDataSource.removeLink(
+                accountName = OC_ACCOUNT_NAME,
+                spaceId = OC_SPACE_PROJECT_WITH_IMAGE.id,
+                itemId = OC_FILE.remoteId,
                 linkId = SPACE_MEMBERS.links[0].id
             )
         }
