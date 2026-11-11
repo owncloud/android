@@ -45,6 +45,7 @@ class PublicLinksDiffUtil(
 
         return ((oldItem.id == newItem.id) && (oldItem.expirationDateTime == newItem.expirationDateTime) &&
                 (oldItem.displayName == newItem.displayName) && (oldItem.type == newItem.type) &&
-                (oldItem.webUrl == newItem.webUrl) && !hasUserPermissionsChanged)
+                (oldItem.webUrl == newItem.webUrl) && (oldItem.hasPassword == newItem.hasPassword) &&
+                !hasUserPermissionsChanged)
     }
 }

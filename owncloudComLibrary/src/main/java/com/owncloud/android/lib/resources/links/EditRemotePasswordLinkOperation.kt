@@ -57,7 +57,7 @@ class EditRemotePasswordLinkOperation(
             }
 
             val requestBody = JSONObject().apply {
-                put(PASSWORD_BODY_PARAM, password)
+                put(PASSWORD_BODY_PARAM, password ?: JSONObject.NULL)
             }.toString().toRequestBody(CONTENT_TYPE_JSON.toMediaType())
 
             val postMethod = PostMethod(URL(uriBuilder.build().toString()), requestBody)
