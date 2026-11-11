@@ -44,6 +44,7 @@ import com.owncloud.android.datamodel.ThumbnailsCacheManager
 import com.owncloud.android.domain.capabilities.model.CapabilityBooleanType
 import com.owncloud.android.domain.capabilities.model.OCCapability
 import com.owncloud.android.domain.files.model.OCFile
+import com.owncloud.android.domain.links.model.OCLink
 import com.owncloud.android.domain.roles.model.OCRole
 import com.owncloud.android.domain.sharing.shares.model.MemberPermission
 import com.owncloud.android.domain.sharing.shares.model.OCShare
@@ -135,13 +136,13 @@ class ShareActivity : FileActivity(), OcsShareFragmentListener, GraphShareFragme
         }
     }
 
-    override fun addPublicLink(file: OCFile, accountName: String) {
+    override fun addPublicLink(file: OCFile, accountName: String, editMode: Boolean, selectedPublicLink: OCLink?) {
         val spaceId = file.spaceId ?: return
         val addPublicLinkFragment = AddPublicLinkFragment.newInstance(
             accountName = accountName,
             spaceId = spaceId,
-            editMode = false,
-            selectedPublicLink = null,
+            editMode = editMode,
+            selectedPublicLink = selectedPublicLink,
             file = file
         )
         val transaction = supportFragmentManager.beginTransaction()

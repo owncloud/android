@@ -117,6 +117,7 @@ class OCLinksRepositoryTest {
             remoteLinksDataSource.editLink(
                 accountName = OC_ACCOUNT_NAME,
                 spaceId = OC_SPACE_PROJECT_WITH_IMAGE.id,
+                itemId = null,
                 linkId = SPACE_MEMBERS.links[0].id,
                 displayName = SPACE_MEMBERS.links[0].displayName,
                 type = SPACE_MEMBERS.links[0].type,
@@ -127,6 +128,7 @@ class OCLinksRepositoryTest {
         ocLinksRepository.editLink(
             accountName = OC_ACCOUNT_NAME,
             spaceId = OC_SPACE_PROJECT_WITH_IMAGE.id,
+            itemId = null,
             linkId = SPACE_MEMBERS.links[0].id,
             displayName = SPACE_MEMBERS.links[0].displayName,
             type = SPACE_MEMBERS.links[0].type,
@@ -137,6 +139,44 @@ class OCLinksRepositoryTest {
             remoteLinksDataSource.editLink(
                 accountName = OC_ACCOUNT_NAME,
                 spaceId = OC_SPACE_PROJECT_WITH_IMAGE.id,
+                itemId = null,
+                linkId = SPACE_MEMBERS.links[0].id,
+                displayName = SPACE_MEMBERS.links[0].displayName,
+                type = SPACE_MEMBERS.links[0].type,
+                expirationDate = SPACE_MEMBERS.links[0].expirationDateTime
+            )
+        }
+    }
+
+    @Test
+    fun `editLink edits a public link from a file item correctly`() {
+        every {
+            remoteLinksDataSource.editLink(
+                accountName = OC_ACCOUNT_NAME,
+                spaceId = OC_SPACE_PROJECT_WITH_IMAGE.id,
+                itemId = OC_FILE.remoteId,
+                linkId = SPACE_MEMBERS.links[0].id,
+                displayName = SPACE_MEMBERS.links[0].displayName,
+                type = SPACE_MEMBERS.links[0].type,
+                expirationDate = SPACE_MEMBERS.links[0].expirationDateTime
+            )
+        } returns Unit
+
+        ocLinksRepository.editLink(
+            accountName = OC_ACCOUNT_NAME,
+            spaceId = OC_SPACE_PROJECT_WITH_IMAGE.id,
+            itemId = OC_FILE.remoteId,
+            linkId = SPACE_MEMBERS.links[0].id,
+            displayName = SPACE_MEMBERS.links[0].displayName,
+            type = SPACE_MEMBERS.links[0].type,
+            expirationDate = SPACE_MEMBERS.links[0].expirationDateTime
+        )
+
+        verify(exactly = 1) {
+            remoteLinksDataSource.editLink(
+                accountName = OC_ACCOUNT_NAME,
+                spaceId = OC_SPACE_PROJECT_WITH_IMAGE.id,
+                itemId = OC_FILE.remoteId,
                 linkId = SPACE_MEMBERS.links[0].id,
                 displayName = SPACE_MEMBERS.links[0].displayName,
                 type = SPACE_MEMBERS.links[0].type,
@@ -151,6 +191,7 @@ class OCLinksRepositoryTest {
             remoteLinksDataSource.editPasswordLink(
                 accountName = OC_ACCOUNT_NAME,
                 spaceId = OC_SPACE_PROJECT_WITH_IMAGE.id,
+                itemId = null,
                 linkId = SPACE_MEMBERS.links[0].id,
                 password = password
             )
@@ -159,6 +200,7 @@ class OCLinksRepositoryTest {
         ocLinksRepository.editPasswordLink(
             accountName = OC_ACCOUNT_NAME,
             spaceId = OC_SPACE_PROJECT_WITH_IMAGE.id,
+            itemId = null,
             linkId = SPACE_MEMBERS.links[0].id,
             password = password
         )
@@ -167,6 +209,38 @@ class OCLinksRepositoryTest {
             remoteLinksDataSource.editPasswordLink(
                 accountName = OC_ACCOUNT_NAME,
                 spaceId = OC_SPACE_PROJECT_WITH_IMAGE.id,
+                itemId = null,
+                linkId = SPACE_MEMBERS.links[0].id,
+                password = password
+            )
+        }
+    }
+
+    @Test
+    fun `editPasswordLink edits the password of a public link from a file item correctly`() {
+        every {
+            remoteLinksDataSource.editPasswordLink(
+                accountName = OC_ACCOUNT_NAME,
+                spaceId = OC_SPACE_PROJECT_WITH_IMAGE.id,
+                itemId = OC_FILE.remoteId,
+                linkId = SPACE_MEMBERS.links[0].id,
+                password = password
+            )
+        } returns Unit
+
+        ocLinksRepository.editPasswordLink(
+            accountName = OC_ACCOUNT_NAME,
+            spaceId = OC_SPACE_PROJECT_WITH_IMAGE.id,
+            itemId = OC_FILE.remoteId,
+            linkId = SPACE_MEMBERS.links[0].id,
+            password = password
+        )
+
+        verify(exactly = 1) {
+            remoteLinksDataSource.editPasswordLink(
+                accountName = OC_ACCOUNT_NAME,
+                spaceId = OC_SPACE_PROJECT_WITH_IMAGE.id,
+                itemId = OC_FILE.remoteId,
                 linkId = SPACE_MEMBERS.links[0].id,
                 password = password
             )

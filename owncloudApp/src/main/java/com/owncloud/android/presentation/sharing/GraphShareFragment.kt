@@ -79,7 +79,7 @@ class GraphShareFragment : Fragment(), GraphSharesAdapter.GraphSharesAdapterList
     private var links: List<OCLink> = emptyList()
     private var listener: GraphShareFragmentListener? = null
     private var canRemoveShares: Boolean = false
-    private var canEditShares: Boolean = false
+    private var canEditSharesAndLinks: Boolean = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = MembersFragmentBinding.inflate(inflater, container, false)
@@ -128,7 +128,7 @@ class GraphShareFragment : Fragment(), GraphSharesAdapter.GraphSharesAdapterList
         binding.addPublicLinkButton.setOnClickListener {
             if (file != null && accountName != null) {
                 publicLinksViewModel.resetViewModel()
-                listener?.addPublicLink(file = file, accountName = accountName)
+                listener?.addPublicLink(file = file, accountName = accountName, editMode = false, selectedPublicLink = null)
             }
         }
 
@@ -177,6 +177,7 @@ class GraphShareFragment : Fragment(), GraphSharesAdapter.GraphSharesAdapterList
         observeRemoveShareResult()
         observeEditShareResult()
         observeAddLinkResult()
+        observeEditLinkResult()
     }
 
     private fun observeShares() {
@@ -212,6 +213,7 @@ class GraphShareFragment : Fragment(), GraphSharesAdapter.GraphSharesAdapterList
                         uiResult.data?.let { spacePermissions ->
                             checkPermissions(spacePermissions)
                             showShares()
+                            showLinks()
                         }
                     }
                     is UIResult.Loading -> { }
@@ -225,7 +227,7 @@ class GraphShareFragment : Fragment(), GraphSharesAdapter.GraphSharesAdapterList
 
     private fun checkPermissions(spacePermissions: List<String>) {
         canRemoveShares = DRIVES_DELETE_PERMISSION in spacePermissions
-        canEditShares = DRIVES_UPDATE_PERMISSION in spacePermissions
+        canEditSharesAndLinks = DRIVES_UPDATE_PERMISSION in spacePermissions
         val hasCreatePermission = DRIVES_CREATE_PERMISSION in spacePermissions
         binding.addMemberButton.isVisible = hasCreatePermission
         binding.addPublicLinkButton.isVisible = hasCreatePermission
@@ -258,6 +260,28 @@ class GraphShareFragment : Fragment(), GraphSharesAdapter.GraphSharesAdapterList
                         publicLinksViewModel.resetViewModel()
                     }
                     is UIResult.Error -> { }
+                }
+            }
+        }
+    }
+
+    private fun observeEditLinkResult() {
+        collectLatestLifecycleFlow(publicLinksViewModel.editLinkResultFlow) { event ->
+            event?.peekContent()?.let { uiResult ->
+                when (uiResult) {
+                    is UIResult.Loading -> { }
+                    is UIResult.Success -> {
+                        graphShareViewModel.getGraphShares()
+                        showMessageInSnackbar(getString(R.string.public_link_edit_correctly))
+                        publicLinksViewModel.resetViewModel()
+                    }
+                    is UIResult.Error -> {
+                        if (publicLinksViewModel.addPublicLinkUIState.value?.wasPasswordChanged == true) {
+                            graphShareViewModel.getGraphShares()
+                            showMessageInSnackbar(getString(R.string.public_link_edit_partially_failed))
+                            publicLinksViewModel.resetViewModel()
+                        }
+                    }
                 }
             }
         }
@@ -299,7 +323,7 @@ class GraphShareFragment : Fragment(), GraphSharesAdapter.GraphSharesAdapterList
         val hasShares = shares.isNotEmpty()
         binding.membersRecyclerView.isVisible = hasShares
         binding.noSharesMessage.isVisible = !hasShares
-        graphSharesAdapter.setShares(shares, roles, canRemoveShares, canEditShares)
+        graphSharesAdapter.setShares(shares, roles, canRemoveShares, canEditSharesAndLinks)
     }
 
     private fun showLinks() {
@@ -318,7 +342,7 @@ class GraphShareFragment : Fragment(), GraphSharesAdapter.GraphSharesAdapterList
                 }
             },
             canRemoveLinks = false,
-            canEditLinks = false
+            canEditLinks = canEditSharesAndLinks
         )
     }
 
@@ -329,11 +353,18 @@ class GraphShareFragment : Fragment(), GraphSharesAdapter.GraphSharesAdapterList
 
     override fun onRemovePublicLink(publicLinkId: String, publicLinkDisplayName: String) { }
 
-    override fun onEditPublicLink(publicLink: OCLink) { }
+    override fun onEditPublicLink(publicLink: OCLink) {
+        val file = requireArguments().getParcelable<OCFile>(ARG_FILE)
+        val accountName = requireArguments().getString(ARG_ACCOUNT_NAME)
+        if (file != null && accountName != null) {
+            publicLinksViewModel.resetViewModel()
+            listener?.addPublicLink(file = file, accountName = accountName, editMode = true, selectedPublicLink = publicLink)
+        }
+    }
 
     interface GraphShareFragmentListener {
         fun addGraphShare(file: OCFile, accountName: String, roles: List<OCRole>, editMode: Boolean, selectedShare: MemberPermission?)
-        fun addPublicLink(file: OCFile, accountName: String)
+        fun addPublicLink(file: OCFile, accountName: String, editMode: Boolean, selectedPublicLink: OCLink?)
         fun copyOrSendPublicLink(publicLinkUrl: String, fileName: String)
     }
 

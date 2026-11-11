@@ -829,6 +829,7 @@
     <string name="public_link_edit_title">Edit public link</string>
     <string name="public_link_edit_correctly">Public link edited correctly</string>
     <string name="public_link_edit_failed">Public link could not be edited</string>
+    <string name="public_link_edit_partially_failed">Password updated but the rest of the changes could not be saved</string>
 
     <string name="feedback_dialog_get_in_contact_description"><![CDATA[ Ask for help in our <a href=\"%1$s\"><b>forum</b></a> or contribute in our <a href=\"%2$s\"><b>GitHub repo</b></a>]]></string>
 

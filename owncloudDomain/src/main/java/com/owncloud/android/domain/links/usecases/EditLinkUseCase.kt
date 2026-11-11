@@ -29,12 +29,21 @@ class EditLinkUseCase(
 ): BaseUseCaseWithResult<Unit, EditLinkUseCase.Params>() {
 
     override fun run(params: Params) {
-        linksRepository.editLink(params.accountName, params.spaceId, params.linkId, params.displayName, params.type, params.expirationDate)
+        linksRepository.editLink(
+            params.accountName,
+            params.spaceId,
+            params.itemId,
+            params.linkId,
+            params.displayName,
+            params.type,
+            params.expirationDate
+        )
     }
 
     data class Params(
         val accountName: String,
         val spaceId: String,
+        val itemId: String?,
         val linkId: String,
         val displayName: String,
         val type: OCLinkType,
