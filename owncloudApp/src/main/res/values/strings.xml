@@ -822,8 +822,8 @@
     <string name="public_link_default_display_name">Unnamed Link</string>
     <string name="public_link_add_correctly">Public link created correctly</string>
     <string name="public_link_add_failed">Public link could not be created</string>
-    <string name="public_link_remove_dialog_title">Do you really want to remove the link: %1$s?</string>
-    <string name="public_link_remove_dialog_message">Recreating the same link again is not possible</string>
+    <string name="public_link_remove_dialog_title">Remove public link</string>
+    <string name="public_link_remove_dialog_message">Do you want to remove the public link: %1$s? Recreating the same link again is not possible</string>
     <string name="public_link_remove_correctly">Public link removed correctly</string>
     <string name="public_link_remove_failed">Public link could not be removed</string>
     <string name="public_link_edit_title">Edit public link</string>

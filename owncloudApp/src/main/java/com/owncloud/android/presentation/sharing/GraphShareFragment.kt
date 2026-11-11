@@ -351,7 +351,16 @@ class GraphShareFragment : Fragment(), GraphSharesAdapter.GraphSharesAdapterList
         listener?.copyOrSendPublicLink(publicLinkUrl, file?.fileName.orEmpty())
     }
 
-    override fun onRemovePublicLink(publicLinkId: String, publicLinkDisplayName: String) { }
+    override fun onRemovePublicLink(publicLinkId: String, publicLinkDisplayName: String) {
+        AlertDialog.Builder(requireContext())
+            .setIcon(R.drawable.ic_warning)
+            .setTitle(getString(R.string.public_link_remove_dialog_title))
+            .setMessage(getString(R.string.public_link_remove_dialog_message, publicLinkDisplayName))
+            .setPositiveButton(getString(R.string.common_yes)) { _, _ -> publicLinksViewModel.removePublicLink(publicLinkId) }
+            .setNegativeButton(getString(R.string.common_no)) { dialog, _ -> dialog.dismiss() }
+            .show()
+            .avoidScreenshotsIfNeeded()
+    }
 
     override fun onEditPublicLink(publicLink: OCLink) {
         val file = requireArguments().getParcelable<OCFile>(ARG_FILE)

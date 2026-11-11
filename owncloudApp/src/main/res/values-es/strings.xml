@@ -800,8 +800,6 @@
     <string name="public_link_default_display_name">Link sin nombre</string>
     <string name="public_link_add_correctly">Enlace público creado correctamente</string>
     <string name="public_link_add_failed">No se pudo crear el enlace público</string>
-    <string name="public_link_remove_dialog_title">Quiere realmente eliminar el enlace %1$s\?</string>
-    <string name="public_link_remove_dialog_message">No es posible volver a crear el mismo enlace</string>
     <string name="public_link_remove_correctly">Enlace público eliminado correctamente</string>
     <string name="public_link_remove_failed">No se pudo eliminar el enlace público</string>
     <string name="public_link_edit_title">Editar enlace público</string>
