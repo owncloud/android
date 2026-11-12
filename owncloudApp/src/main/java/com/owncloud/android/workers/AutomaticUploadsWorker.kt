@@ -49,7 +49,6 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 import timber.log.Timber
-import java.io.File
 import java.util.Date
 import java.util.concurrent.TimeUnit
 
@@ -144,9 +143,10 @@ class AutomaticUploadsWorker(
         showNotification(syncType, localPicturesDocumentFiles.size)
 
         for (documentFile in localPicturesDocumentFiles) {
+            val uploadPath = folderBackUpConfiguration.getRemotePathForFile(documentFile.name.orEmpty())
             val uploadId = storeInUploadsDatabase(
                 documentFile = documentFile,
-                uploadPath = folderBackUpConfiguration.uploadPath.plus(File.separator).plus(documentFile.name),
+                uploadPath = uploadPath,
                 accountName = folderBackUpConfiguration.accountName,
                 behavior = folderBackUpConfiguration.behavior,
                 createdByWorker = when (syncType) {
@@ -157,7 +157,7 @@ class AutomaticUploadsWorker(
             )
             enqueueSingleUpload(
                 contentUri = documentFile.uri,
-                uploadPath = folderBackUpConfiguration.uploadPath.plus(File.separator).plus(documentFile.name),
+                uploadPath = uploadPath,
                 lastModified = documentFile.lastModified(),
                 behavior = folderBackUpConfiguration.behavior.toString(),
                 accountName = folderBackUpConfiguration.accountName,

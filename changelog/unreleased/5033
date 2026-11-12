@@ -1,0 +1,10 @@
+Bugfix: Retried automatic uploads end in conflict
+
+Retrying a failed automatic upload no longer ends in conflict when the
+destination folder does not exist in the server yet. The folder is now created
+before the file is uploaded again. Besides, the remote path of automatic uploads
+no longer contains a double separator when the destination folder path ends
+with a separator.
+
+https://github.com/owncloud/android/issues/4451
+https://github.com/owncloud/android/pull/5033
