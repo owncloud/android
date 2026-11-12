@@ -53,6 +53,7 @@ import com.owncloud.android.MainApp.Companion.accountType
 import com.owncloud.android.R
 import com.owncloud.android.data.authentication.KEY_USER_ID
 import com.owncloud.android.databinding.AccountSetupBinding
+import com.owncloud.android.domain.authentication.oauth.model.OIDCServerConfiguration
 import com.owncloud.android.domain.authentication.oauth.model.ResponseType
 import com.owncloud.android.domain.authentication.oauth.model.TokenRequest
 import com.owncloud.android.domain.authentication.oauth.model.TokenResponse
@@ -406,7 +407,8 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
                 if (registrationEndpoint != null) {
                     registerClient(
                         authorizationEndpoint = serverInfo.oidcServerConfiguration.authorizationEndpoint.toUri(),
-                        registrationEndpoint = registrationEndpoint
+                        registrationEndpoint = registrationEndpoint,
+                        oidcServerConfiguration = serverInfo.oidcServerConfiguration,
                     )
                 } else {
                     performGetAuthorizationCodeRequest(serverInfo.oidcServerConfiguration.authorizationEndpoint.toUri())
@@ -520,9 +522,13 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
      */
     private fun registerClient(
         authorizationEndpoint: Uri,
-        registrationEndpoint: String
+        registrationEndpoint: String,
+        oidcServerConfiguration: OIDCServerConfiguration,
     ) {
-        authenticationViewModel.registerClient(registrationEndpoint)
+        authenticationViewModel.registerClient(
+            registrationEndpoint = registrationEndpoint,
+            oidcServerConfiguration = oidcServerConfiguration,
+        )
         authenticationViewModel.registerClient.observe(this) {
             when (val uiResult = it.peekContent()) {
                 is UIResult.Loading -> {}
@@ -645,39 +651,53 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
     private fun exchangeAuthorizationCodeForTokens(authorizationCode: String) {
         binding.serverStatusText.text = getString(R.string.auth_getting_authorization)
 
-        val clientRegistrationInfo = authenticationViewModel.registerClient.value?.peekContent()?.getStoredData()
+        // Only a successful registration carries a method. Failures fall back to preconfigured credentials.
+        val clientRegistrationInfo =
+            (authenticationViewModel.registerClient.value?.peekContent() as? UIResult.Success)?.data
+        val registeredSecret = clientRegistrationInfo?.clientSecret
 
-        val clientAuth = if (clientRegistrationInfo?.clientId != null && clientRegistrationInfo.clientSecret != null) {
-            OAuthUtils.getClientAuth(clientRegistrationInfo.clientSecret as String, clientRegistrationInfo.clientId)
-
+        val clientAuth = if (clientRegistrationInfo != null && registeredSecret != null) {
+            OAuthUtils.getClientAuth(registeredSecret, clientRegistrationInfo.clientId)
+        } else if (isKiteworksServer) {
+            OAuthUtils.getClientAuth(getString(R.string.kiteworks_client_secret), getString(R.string.kiteworks_client_id))
         } else {
-            if (isKiteworksServer) {
-                OAuthUtils.getClientAuth(getString(R.string.kiteworks_client_secret), getString(R.string.kiteworks_client_id))
-            } else {
-                OAuthUtils.getClientAuth(getString(R.string.oauth2_client_secret), getString(R.string.oauth2_client_id))
-            }
+            OAuthUtils.getClientAuth(getString(R.string.oauth2_client_secret), getString(R.string.oauth2_client_id))
         }
 
         // Use oidc discovery one, or build an oauth endpoint using serverBaseUrl + Setup string.
-        val tokenEndPoint: String
-
-        var clientId: String? = null
-        var clientSecret: String? = null
-        var useAuthorizationHeader = true
-
+        // The registered auth method is resolved separately so later discovery cannot change it.
         val serverInfo = authenticationViewModel.serverInfo.value?.peekContent()?.getStoredData()
-        if (serverInfo is ServerInfo.OIDCServer) {
-            tokenEndPoint = serverInfo.oidcServerConfiguration.tokenEndpoint
-            if (serverInfo.oidcServerConfiguration.isTokenEndpointAuthMethodSupportedClientSecretPost()) {
+        val tokenEndPoint = if (serverInfo is ServerInfo.OIDCServer) {
+            serverInfo.oidcServerConfiguration.tokenEndpoint
+        } else {
+            "$serverBaseUrl${File.separator}${contextProvider.getString(R.string.oauth2_url_endpoint_access)}"
+        }
+
+        val useClientSecretPost = if (clientRegistrationInfo == null) {
+            serverInfo is ServerInfo.OIDCServer &&
+                serverInfo.oidcServerConfiguration.isTokenEndpointAuthMethodSupportedClientSecretPost()
+        } else {
+            clientRegistrationInfo.tokenEndpointAuthMethod == OIDCServerConfiguration.CLIENT_SECRET_POST
+        }
+
+        val clientId: String?
+        val clientSecret: String?
+        val useAuthorizationHeader: Boolean
+        if (useClientSecretPost) {
+            if (clientRegistrationInfo != null) {
+                clientId = clientRegistrationInfo.clientId
+                clientSecret = clientRegistrationInfo.clientSecret
+            } else {
                 val defaultClientId = if (isKiteworksServer) R.string.kiteworks_client_id else R.string.oauth2_client_id
                 val defaultClientSecret = if (isKiteworksServer) R.string.kiteworks_client_secret else R.string.oauth2_client_secret
-
-                clientId = clientRegistrationInfo?.clientId ?: contextProvider.getString(defaultClientId)
-                clientSecret = clientRegistrationInfo?.clientSecret ?: contextProvider.getString(defaultClientSecret)
-                useAuthorizationHeader = false
+                clientId = contextProvider.getString(defaultClientId)
+                clientSecret = contextProvider.getString(defaultClientSecret)
             }
+            useAuthorizationHeader = false
         } else {
-            tokenEndPoint = "$serverBaseUrl${File.separator}${contextProvider.getString(R.string.oauth2_url_endpoint_access)}"
+            clientId = null
+            clientSecret = null
+            useAuthorizationHeader = true
         }
 
         val requestToken = TokenRequest.AccessToken(

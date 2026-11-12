@@ -1,0 +1,5 @@
+Bugfix: Persist OAuth client authentication method
+
+The authentication method selected during dynamic OAuth client registration has been stored with the client credentials and has been reused for authorization-code exchange and token refresh.
+
+https://github.com/owncloud/android/issues/4891

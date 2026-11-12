@@ -22,6 +22,8 @@
 
 package com.owncloud.android.domain.authentication.oauth.model
 
+import com.owncloud.android.domain.exceptions.OAuth2ErrorException
+
 data class OIDCServerConfiguration(
     val authorizationEndpoint: String,
     val checkSessionIframe: String?,
@@ -36,5 +38,26 @@ data class OIDCServerConfiguration(
     val isKiteworksServer: Boolean = false,
 ) {
     fun isTokenEndpointAuthMethodSupportedClientSecretPost(): Boolean =
-        tokenEndpointAuthMethodsSupported?.any { it == "client_secret_post" } ?: false
+        tokenEndpointAuthMethodsSupported?.any { it == CLIENT_SECRET_POST } ?: false
+
+    /**
+     * Auth method submitted with dynamic client registration.
+     * Basic wins when both supported methods are advertised. Omitted discovery metadata defaults to Basic.
+     * An explicit list that contains neither supported method cannot be registered.
+     */
+    fun selectRegistrationAuthMethod(): String {
+        val advertisedMethods = tokenEndpointAuthMethodsSupported ?: return CLIENT_SECRET_BASIC
+        if (advertisedMethods.any { it == CLIENT_SECRET_BASIC }) {
+            return CLIENT_SECRET_BASIC
+        }
+        if (advertisedMethods.any { it == CLIENT_SECRET_POST }) {
+            return CLIENT_SECRET_POST
+        }
+        throw OAuth2ErrorException()
+    }
+
+    companion object {
+        const val CLIENT_SECRET_BASIC = "client_secret_basic"
+        const val CLIENT_SECRET_POST = "client_secret_post"
+    }
 }
