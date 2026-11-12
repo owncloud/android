@@ -116,6 +116,7 @@ class PublicLinksViewModel(
             useCaseParams = RemoveLinkUseCase.Params(
                 accountName = accountName,
                 spaceId = spaceId,
+                itemId = itemId,
                 linkId = linkId
             )
         )

@@ -31,6 +31,7 @@ import java.net.URL
 
 class RemoveRemoteLinkOperation(
     private val spaceId: String,
+    private val itemId: String?,
     private val linkId: String
 ): RemoteOperation<Unit>() {
     override fun run(client: OwnCloudClient): RemoteOperationResult<Unit> {
@@ -39,7 +40,13 @@ class RemoveRemoteLinkOperation(
             val uriBuilder = client.baseUri.buildUpon().apply {
                 appendEncodedPath(GRAPH_API_SPACES_PATH)
                 appendEncodedPath(spaceId)
-                appendEncodedPath(GRAPH_API_ROOT_PERMISSIONS_PATH)
+                if (itemId == null) {
+                    appendEncodedPath(GRAPH_API_ROOT_PERMISSIONS_PATH)
+                } else {
+                    appendEncodedPath(GRAPH_API_ITEMS_PATH)
+                    appendEncodedPath(itemId)
+                    appendEncodedPath(GRAPH_API_PERMISSIONS_PATH)
+                }
                 appendEncodedPath(linkId)
             }
 
@@ -66,5 +73,7 @@ class RemoveRemoteLinkOperation(
     companion object {
         private const val GRAPH_API_SPACES_PATH = "graph/v1beta1/drives/"
         private const val GRAPH_API_ROOT_PERMISSIONS_PATH = "root/permissions"
+        private const val GRAPH_API_ITEMS_PATH = "items"
+        private const val GRAPH_API_PERMISSIONS_PATH = "permissions"
     }
 }

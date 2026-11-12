@@ -799,8 +799,6 @@
     <string name="public_link_default_display_name">Link ohne Namen</string>
     <string name="public_link_add_correctly">Öffentlicher Link erfolgreich erstellt</string>
     <string name="public_link_add_failed">Der öffentliche Link konnte nicht erstellt werden</string>
-    <string name="public_link_remove_dialog_title">Möchten Sie den Link: %1$s wirklich entfernen\?</string>
-    <string name="public_link_remove_dialog_message">Es ist nicht möglich, denselben Link erneut zu erstellen</string>
     <string name="public_link_remove_correctly">Der öffentlicher Link wurde ordnungsgemäß entfernt</string>
     <string name="public_link_remove_failed">Der öffentliche Link konnte nicht entfernt werden</string>
     <string name="public_link_edit_title">Öffentlichen Link bearbeiten</string>

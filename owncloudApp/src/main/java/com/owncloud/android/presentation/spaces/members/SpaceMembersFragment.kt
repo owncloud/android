@@ -22,7 +22,6 @@ package com.owncloud.android.presentation.spaces.members
 
 import android.app.AlertDialog
 import android.content.Context
-import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -39,7 +38,6 @@ import com.owncloud.android.domain.spaces.model.OCSpace
 import com.owncloud.android.domain.sharing.shares.model.MemberPermission
 import com.owncloud.android.extensions.avoidScreenshotsIfNeeded
 import com.owncloud.android.extensions.collectLatestLifecycleFlow
-import com.owncloud.android.extensions.showAlertDialog
 import com.owncloud.android.extensions.showErrorInSnackbar
 import com.owncloud.android.extensions.showMessageInSnackbar
 import com.owncloud.android.presentation.common.UIResult
@@ -201,13 +199,14 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
     }
 
     override fun onRemovePublicLink(publicLinkId: String, publicLinkDisplayName: String) {
-        showAlertDialog(
-            title = getString(R.string.public_link_remove_dialog_title, publicLinkDisplayName),
-            message = getString(R.string.public_link_remove_dialog_message),
-            positiveButtonText = getString(R.string.common_yes),
-            positiveButtonListener = { _: DialogInterface?, _: Int -> publicLinksViewModel.removePublicLink(publicLinkId) },
-            negativeButtonText = getString(R.string.common_no)
-        )
+        AlertDialog.Builder(requireContext())
+            .setIcon(R.drawable.ic_warning)
+            .setTitle(getString(R.string.public_link_remove_dialog_title))
+            .setMessage(getString(R.string.public_link_remove_dialog_message, publicLinkDisplayName))
+            .setPositiveButton(getString(R.string.common_yes)) { _, _ -> publicLinksViewModel.removePublicLink(publicLinkId) }
+            .setNegativeButton(getString(R.string.common_no)) { dialog, _ -> dialog.dismiss() }
+            .show()
+            .avoidScreenshotsIfNeeded()
     }
 
     override fun onEditPublicLink(publicLink: OCLink) {

@@ -28,12 +28,13 @@ class RemoveLinkUseCase(
 ): BaseUseCaseWithResult<Unit, RemoveLinkUseCase.Params>() {
 
     override fun run(params: Params) {
-        linksRepository.removeLink(params.accountName, params.spaceId, params.linkId)
+        linksRepository.removeLink(params.accountName, params.spaceId, params.itemId, params.linkId)
     }
 
     data class Params(
         val accountName: String,
         val spaceId: String,
+        val itemId: String?,
         val linkId: String
     )
 

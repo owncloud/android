@@ -78,7 +78,7 @@ class GraphShareFragment : Fragment(), GraphSharesAdapter.GraphSharesAdapterList
     private var shares: List<MemberPermission> = emptyList()
     private var links: List<OCLink> = emptyList()
     private var listener: GraphShareFragmentListener? = null
-    private var canRemoveShares: Boolean = false
+    private var canRemoveSharesAndLinks: Boolean = false
     private var canEditSharesAndLinks: Boolean = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -178,6 +178,7 @@ class GraphShareFragment : Fragment(), GraphSharesAdapter.GraphSharesAdapterList
         observeEditShareResult()
         observeAddLinkResult()
         observeEditLinkResult()
+        observeRemoveLinkResult()
     }
 
     private fun observeShares() {
@@ -226,7 +227,7 @@ class GraphShareFragment : Fragment(), GraphSharesAdapter.GraphSharesAdapterList
     }
 
     private fun checkPermissions(spacePermissions: List<String>) {
-        canRemoveShares = DRIVES_DELETE_PERMISSION in spacePermissions
+        canRemoveSharesAndLinks = DRIVES_DELETE_PERMISSION in spacePermissions
         canEditSharesAndLinks = DRIVES_UPDATE_PERMISSION in spacePermissions
         val hasCreatePermission = DRIVES_CREATE_PERMISSION in spacePermissions
         binding.addMemberButton.isVisible = hasCreatePermission
@@ -303,6 +304,22 @@ class GraphShareFragment : Fragment(), GraphSharesAdapter.GraphSharesAdapterList
         }
     }
 
+    private fun observeRemoveLinkResult() {
+        collectLatestLifecycleFlow(publicLinksViewModel.removeLinkResultFlow) { uiResult ->
+            when (uiResult) {
+                is UIResult.Loading -> { }
+                is UIResult.Success -> {
+                    showMessageInSnackbar(getString(R.string.public_link_remove_correctly))
+                    graphShareViewModel.getGraphShares()
+                }
+                is UIResult.Error -> {
+                    showErrorInSnackbar(R.string.public_link_remove_failed, uiResult.error)
+                    Timber.e(uiResult.error, "Failed to remove a public link")
+                }
+            }
+        }
+    }
+
     private fun observeEditShareResult() {
         collectLatestLifecycleFlow(graphShareViewModel.editShareResultFlow) { event ->
             event?.peekContent()?.let { uiResult ->
@@ -323,7 +340,7 @@ class GraphShareFragment : Fragment(), GraphSharesAdapter.GraphSharesAdapterList
         val hasShares = shares.isNotEmpty()
         binding.membersRecyclerView.isVisible = hasShares
         binding.noSharesMessage.isVisible = !hasShares
-        graphSharesAdapter.setShares(shares, roles, canRemoveShares, canEditSharesAndLinks)
+        graphSharesAdapter.setShares(shares, roles, canRemoveSharesAndLinks, canEditSharesAndLinks)
     }
 
     private fun showLinks() {
@@ -341,7 +358,7 @@ class GraphShareFragment : Fragment(), GraphSharesAdapter.GraphSharesAdapterList
                     Date(0)
                 }
             },
-            canRemoveLinks = false,
+            canRemoveLinks = canRemoveSharesAndLinks,
             canEditLinks = canEditSharesAndLinks
         )
     }
@@ -351,7 +368,16 @@ class GraphShareFragment : Fragment(), GraphSharesAdapter.GraphSharesAdapterList
         listener?.copyOrSendPublicLink(publicLinkUrl, file?.fileName.orEmpty())
     }
 
-    override fun onRemovePublicLink(publicLinkId: String, publicLinkDisplayName: String) { }
+    override fun onRemovePublicLink(publicLinkId: String, publicLinkDisplayName: String) {
+        AlertDialog.Builder(requireContext())
+            .setIcon(R.drawable.ic_warning)
+            .setTitle(getString(R.string.public_link_remove_dialog_title))
+            .setMessage(getString(R.string.public_link_remove_dialog_message, publicLinkDisplayName))
+            .setPositiveButton(getString(R.string.common_yes)) { _, _ -> publicLinksViewModel.removePublicLink(publicLinkId) }
+            .setNegativeButton(getString(R.string.common_no)) { dialog, _ -> dialog.dismiss() }
+            .show()
+            .avoidScreenshotsIfNeeded()
+    }
 
     override fun onEditPublicLink(publicLink: OCLink) {
         val file = requireArguments().getParcelable<OCFile>(ARG_FILE)

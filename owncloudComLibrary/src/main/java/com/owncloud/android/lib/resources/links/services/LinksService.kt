@@ -41,5 +41,5 @@ interface LinksService: Service {
         expirationDate: String?
     ): RemoteOperationResult<Unit>
     fun editPasswordLink(spaceId: String, itemId: String?, linkId: String, password: String?): RemoteOperationResult<Unit>
-    fun removeLink(spaceId: String, linkId: String): RemoteOperationResult<Unit>
+    fun removeLink(spaceId: String, itemId: String?, linkId: String): RemoteOperationResult<Unit>
 }

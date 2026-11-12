@@ -63,9 +63,9 @@ class OCRemoteLinksDataSource(
         }
     }
 
-    override fun removeLink(accountName: String, spaceId: String, linkId: String) {
+    override fun removeLink(accountName: String, spaceId: String, itemId: String?, linkId: String) {
         executeRemoteOperation {
-            clientManager.getLinksService(accountName).removeLink(spaceId, linkId)
+            clientManager.getLinksService(accountName).removeLink(spaceId, itemId, linkId)
         }
     }
 }
