@@ -38,6 +38,7 @@ import com.owncloud.android.extensions.collectLatestLifecycleFlow
 import com.owncloud.android.extensions.hideSoftKeyboard
 import com.owncloud.android.extensions.showErrorInSnackbar
 import com.owncloud.android.presentation.common.UIResult
+import com.owncloud.android.ui.activity.BaseActivity
 import com.owncloud.android.utils.DisplayUtils
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import org.koin.core.parameter.parametersOf
@@ -96,6 +97,7 @@ class AddPublicLinkFragment: Fragment(), SetPasswordDialogFragment.SetPasswordLi
         binding.createPublicLinkButton.setOnClickListener {
             val displayName = binding.publicLinkNameEditText.text.toString().ifEmpty { getString(R.string.public_link_default_display_name) }
             if (editMode) {
+                (requireActivity() as BaseActivity).showLoadingDialog(R.string.common_loading)
                 selectedPublicLink?.let { publicLinksViewModel.editPublicLink(it.id, displayName) }
             } else {
                 publicLinksViewModel.createPublicLink(displayName)
@@ -173,9 +175,15 @@ class AddPublicLinkFragment: Fragment(), SetPasswordDialogFragment.SetPasswordLi
         collectLatestLifecycleFlow(publicLinksViewModel.addLinkResultFlow) { event ->
             event?.peekContent()?.let { uiResult ->
                 when (uiResult) {
-                    is UIResult.Loading -> { }
-                    is UIResult.Success -> parentFragmentManager.popBackStack()
-                    is UIResult.Error -> showErrorInSnackbar(R.string.public_link_add_failed, uiResult.error)
+                    is UIResult.Loading -> { (requireActivity() as BaseActivity).showLoadingDialog(R.string.common_loading) }
+                    is UIResult.Success -> {
+                        (requireActivity() as BaseActivity).dismissLoadingDialog()
+                        parentFragmentManager.popBackStack()
+                    }
+                    is UIResult.Error -> {
+                        (requireActivity() as BaseActivity).dismissLoadingDialog()
+                        showErrorInSnackbar(R.string.public_link_add_failed, uiResult.error)
+                    }
                 }
             }
         }
@@ -184,8 +192,14 @@ class AddPublicLinkFragment: Fragment(), SetPasswordDialogFragment.SetPasswordLi
             event?.peekContent()?.let { uiResult ->
                 when (uiResult) {
                     is UIResult.Loading -> { }
-                    is UIResult.Success -> parentFragmentManager.popBackStack()
-                    is UIResult.Error -> showErrorInSnackbar(R.string.public_link_edit_failed, uiResult.error)
+                    is UIResult.Success -> {
+                        (requireActivity() as BaseActivity).dismissLoadingDialog()
+                        parentFragmentManager.popBackStack()
+                    }
+                    is UIResult.Error -> {
+                        (requireActivity() as BaseActivity).dismissLoadingDialog()
+                        showErrorInSnackbar(R.string.public_link_edit_failed, uiResult.error)
+                    }
                 }
             }
         }
@@ -202,6 +216,7 @@ class AddPublicLinkFragment: Fragment(), SetPasswordDialogFragment.SetPasswordLi
                         parentFragmentManager.popBackStack()
                     }
                     is UIResult.Error -> {
+                        (requireActivity() as BaseActivity).dismissLoadingDialog()
                         showErrorInSnackbar(R.string.public_link_edit_failed, uiResult.error)
                     }
                 }

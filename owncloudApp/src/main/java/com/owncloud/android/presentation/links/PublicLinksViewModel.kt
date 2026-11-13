@@ -93,6 +93,7 @@ class PublicLinksViewModel(
         _addPublicLinkUIState.value?.selectedPermission?.let {
             runUseCaseWithResult(
                 coroutineDispatcher = coroutineDispatcherProvider.io,
+                showLoading = true,
                 flow = _addLinkResultFlow,
                 useCase = addLinkUseCase,
                 useCaseParams = AddLinkUseCase.Params(
@@ -111,6 +112,7 @@ class PublicLinksViewModel(
     fun removePublicLink(linkId: String) {
         runUseCaseWithResult(
             coroutineDispatcher = coroutineDispatcherProvider.io,
+            showLoading = true,
             sharedFlow = _removeLinkResultFlow,
             useCase = removeLinkUseCase,
             useCaseParams = RemoveLinkUseCase.Params(

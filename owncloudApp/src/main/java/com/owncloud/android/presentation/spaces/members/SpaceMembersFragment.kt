@@ -43,6 +43,7 @@ import com.owncloud.android.extensions.showMessageInSnackbar
 import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.presentation.links.PublicLinksAdapter
 import com.owncloud.android.presentation.links.PublicLinksViewModel
+import com.owncloud.android.ui.activity.BaseActivity
 import com.owncloud.android.utils.DisplayUtils
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import org.koin.core.parameter.parametersOf
@@ -323,12 +324,14 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
     private fun observeRemoveMemberResult() {
         collectLatestLifecycleFlow(spaceMembersViewModel.removeMemberResultFlow) { uiResult ->
             when (uiResult) {
-                is UIResult.Loading -> { }
+                is UIResult.Loading -> { (requireActivity() as BaseActivity).showLoadingDialog(R.string.common_loading) }
                 is UIResult.Success -> {
+                    (requireActivity() as BaseActivity).dismissLoadingDialog()
                     showMessageInSnackbar(getString(R.string.members_remove_correctly))
                     spaceMembersViewModel.getSpaceMembers()
                 }
                 is UIResult.Error -> {
+                    (requireActivity() as BaseActivity).dismissLoadingDialog()
                     Timber.e(uiResult.error, "Failed to remove a member from space: ${currentSpace.id}")
                     showErrorInSnackbar(R.string.members_remove_failed, uiResult.error)
                 }
@@ -369,12 +372,14 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
     private fun observeRemoveLinkResult() {
         collectLatestLifecycleFlow(publicLinksViewModel.removeLinkResultFlow) { uiResult ->
             when (uiResult) {
-                is UIResult.Loading -> { }
+                is UIResult.Loading -> { (requireActivity() as BaseActivity).showLoadingDialog(R.string.common_loading) }
                 is UIResult.Success -> {
+                    (requireActivity() as BaseActivity).dismissLoadingDialog()
                     showMessageInSnackbar(getString(R.string.public_link_remove_correctly))
                     spaceMembersViewModel.getSpaceMembers()
                 }
                 is UIResult.Error -> {
+                    (requireActivity() as BaseActivity).dismissLoadingDialog()
                     Timber.e(uiResult.error, "Failed to remove a public link from space: ${currentSpace.id}")
                     showErrorInSnackbar(R.string.public_link_remove_failed, uiResult.error)
                 }
@@ -388,10 +393,12 @@ class SpaceMembersFragment : Fragment(), SpaceMembersAdapter.SpaceMembersAdapter
                 when (uiResult) {
                     is UIResult.Loading -> { }
                     is UIResult.Success -> {
+                        (requireActivity() as BaseActivity).dismissLoadingDialog()
                         showMessageInSnackbar(getString(R.string.public_link_edit_correctly))
                         publicLinksViewModel.resetViewModel()
                     }
                     is UIResult.Error -> {
+                        (requireActivity() as BaseActivity).dismissLoadingDialog()
                         if (publicLinksViewModel.addPublicLinkUIState.value?.wasPasswordChanged == true) {
                             showMessageInSnackbar(getString(R.string.public_link_edit_partially_failed))
                             publicLinksViewModel.resetViewModel()
