@@ -47,7 +47,7 @@ jobs:
 
       # Set up Java 17 (required by Gradle and CycloneDX plugin)
       - name: Set up JDK 17
-        uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad #v6.1.0
+        uses: actions/setup-java@77dd5b2ce225ea11469928ac317850245a74ae78 #v6.2.0
         with:
           java-version: '17'
           distribution: 'temurin'
@@ -127,7 +127,7 @@ jobs:
       # Create a branch with latest SBOM changes only if there are changes
       - name: Create or update SBOM PR
         if: steps.compare.outputs.changes == 'true'
-        uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
+        uses: peter-evans/create-pull-request@15733dbdfeedb4f7fdb73d13c6f5ac83b710fab8 # v8.1.2
         with:
           add-paths: sbom.json
           token: ${{ steps.app-token.outputs.token }}
