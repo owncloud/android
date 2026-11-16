@@ -164,6 +164,7 @@ class SpaceMembersViewModel(
     fun addMember(member: OCMember, roleId: String, expirationDate: String?) {
         runUseCaseWithResult(
             coroutineDispatcher = coroutineDispatcherProvider.io,
+            showLoading = true,
             flow = _addMemberResultFlow,
             useCase = addMemberUseCase,
             useCaseParams = AddMemberUseCase.Params(
@@ -179,6 +180,7 @@ class SpaceMembersViewModel(
     fun removeMember(memberId: String) {
         runUseCaseWithResult(
             coroutineDispatcher = coroutineDispatcherProvider.io,
+            showLoading = true,
             sharedFlow = _removeMemberResultFlow,
             useCase = removeMemberUseCase,
             useCaseParams = RemoveMemberUseCase.Params(
@@ -192,6 +194,7 @@ class SpaceMembersViewModel(
     fun editMember(memberId: String, roleId: String, expirationDate: String?) {
         runUseCaseWithResult(
             coroutineDispatcher = coroutineDispatcherProvider.io,
+            showLoading = true,
             flow = _editMemberResultFlow,
             useCase = editMemberUseCase,
             useCaseParams = EditMemberUseCase.Params(

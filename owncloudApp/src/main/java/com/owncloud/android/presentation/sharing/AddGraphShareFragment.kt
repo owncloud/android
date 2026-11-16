@@ -45,6 +45,7 @@ import com.owncloud.android.extensions.showOrHideEmptyView
 import com.owncloud.android.extensions.toOCMember
 import com.owncloud.android.presentation.members.SearchMembersAdapter
 import com.owncloud.android.presentation.roles.RolesAdapter
+import com.owncloud.android.ui.activity.BaseActivity
 import com.owncloud.android.utils.DisplayUtils
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import org.koin.core.parameter.parametersOf
@@ -255,9 +256,15 @@ class AddGraphShareFragment : Fragment(), SearchMembersAdapter.SearchMembersAdap
         collectLatestLifecycleFlow(graphShareViewModel.addShareResultFlow) { event ->
             event?.peekContent()?.let { uiResult ->
                 when (uiResult) {
-                    is UIResult.Loading -> { }
-                    is UIResult.Success -> parentFragmentManager.popBackStack()
-                    is UIResult.Error -> showErrorInSnackbar(R.string.share_add_failed, uiResult.error)
+                    is UIResult.Loading -> { (requireActivity() as BaseActivity).showLoadingDialog(R.string.common_loading) }
+                    is UIResult.Success -> {
+                        (requireActivity() as BaseActivity).dismissLoadingDialog()
+                        parentFragmentManager.popBackStack()
+                    }
+                    is UIResult.Error -> {
+                        (requireActivity() as BaseActivity).dismissLoadingDialog()
+                        showErrorInSnackbar(R.string.share_add_failed, uiResult.error)
+                    }
                 }
             }
         }
@@ -267,9 +274,15 @@ class AddGraphShareFragment : Fragment(), SearchMembersAdapter.SearchMembersAdap
         collectLatestLifecycleFlow(graphShareViewModel.editShareResultFlow) { event ->
             event?.peekContent()?.let { uiResult ->
                 when (uiResult) {
-                    is UIResult.Loading -> { }
-                    is UIResult.Success -> parentFragmentManager.popBackStack()
-                    is UIResult.Error -> showErrorInSnackbar(R.string.share_edit_failed, uiResult.error)
+                    is UIResult.Loading -> { (requireActivity() as BaseActivity).showLoadingDialog(R.string.common_loading) }
+                    is UIResult.Success -> {
+                        (requireActivity() as BaseActivity).dismissLoadingDialog()
+                        parentFragmentManager.popBackStack()
+                    }
+                    is UIResult.Error -> {
+                        (requireActivity() as BaseActivity).dismissLoadingDialog()
+                        showErrorInSnackbar(R.string.share_edit_failed, uiResult.error)
+                    }
                 }
             }
         }
