@@ -1,0 +1,7 @@
+Enhancement: Loading spinner in sharing operations on an oCIS server
+
+A loading spinner has been added while creating, editing or removing
+shares, public links and space members on an oCIS server.
+
+https://github.com/owncloud/android/issues/5028
+https://github.com/owncloud/android/pull/5050
