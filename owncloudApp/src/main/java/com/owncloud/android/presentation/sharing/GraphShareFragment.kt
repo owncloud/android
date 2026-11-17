@@ -42,6 +42,7 @@ import com.owncloud.android.extensions.showMessageInSnackbar
 import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.presentation.links.PublicLinksAdapter
 import com.owncloud.android.presentation.links.PublicLinksViewModel
+import com.owncloud.android.ui.activity.BaseActivity
 import com.owncloud.android.utils.DisplayUtils
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import org.koin.core.parameter.parametersOf
@@ -272,11 +273,13 @@ class GraphShareFragment : Fragment(), GraphSharesAdapter.GraphSharesAdapterList
                 when (uiResult) {
                     is UIResult.Loading -> { }
                     is UIResult.Success -> {
+                        (requireActivity() as BaseActivity).dismissLoadingDialog()
                         graphShareViewModel.getGraphShares()
                         showMessageInSnackbar(getString(R.string.public_link_edit_correctly))
                         publicLinksViewModel.resetViewModel()
                     }
                     is UIResult.Error -> {
+                        (requireActivity() as BaseActivity).dismissLoadingDialog()
                         if (publicLinksViewModel.addPublicLinkUIState.value?.wasPasswordChanged == true) {
                             graphShareViewModel.getGraphShares()
                             showMessageInSnackbar(getString(R.string.public_link_edit_partially_failed))
@@ -291,12 +294,14 @@ class GraphShareFragment : Fragment(), GraphSharesAdapter.GraphSharesAdapterList
     private fun observeRemoveShareResult() {
         collectLatestLifecycleFlow(graphShareViewModel.removeShareResultFlow) { uiResult ->
             when (uiResult) {
-                is UIResult.Loading -> { }
+                is UIResult.Loading -> { (requireActivity() as BaseActivity).showLoadingDialog(R.string.common_loading) }
                 is UIResult.Success -> {
+                    (requireActivity() as BaseActivity).dismissLoadingDialog()
                     showMessageInSnackbar(getString(R.string.share_remove_correctly))
                     graphShareViewModel.getGraphShares()
                 }
                 is UIResult.Error -> {
+                    (requireActivity() as BaseActivity).dismissLoadingDialog()
                     showErrorInSnackbar(R.string.share_remove_failed, uiResult.error)
                     Timber.e(uiResult.error, "Failed to remove a graph share")
                 }
@@ -307,12 +312,14 @@ class GraphShareFragment : Fragment(), GraphSharesAdapter.GraphSharesAdapterList
     private fun observeRemoveLinkResult() {
         collectLatestLifecycleFlow(publicLinksViewModel.removeLinkResultFlow) { uiResult ->
             when (uiResult) {
-                is UIResult.Loading -> { }
+                is UIResult.Loading -> { (requireActivity() as BaseActivity).showLoadingDialog(R.string.common_loading) }
                 is UIResult.Success -> {
+                    (requireActivity() as BaseActivity).dismissLoadingDialog()
                     showMessageInSnackbar(getString(R.string.public_link_remove_correctly))
                     graphShareViewModel.getGraphShares()
                 }
                 is UIResult.Error -> {
+                    (requireActivity() as BaseActivity).dismissLoadingDialog()
                     showErrorInSnackbar(R.string.public_link_remove_failed, uiResult.error)
                     Timber.e(uiResult.error, "Failed to remove a public link")
                 }

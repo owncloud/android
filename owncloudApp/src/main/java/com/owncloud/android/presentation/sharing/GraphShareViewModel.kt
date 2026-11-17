@@ -154,6 +154,7 @@ class GraphShareViewModel(
 
         runUseCaseWithResult(
             coroutineDispatcher = coroutineDispatcherProvider.io,
+            showLoading = true,
             flow = _addShareResultFlow,
             useCase = addGraphShareAsyncUseCase,
             useCaseParams = AddGraphShareAsyncUseCase.Params(
@@ -179,6 +180,7 @@ class GraphShareViewModel(
 
         runUseCaseWithResult(
             coroutineDispatcher = coroutineDispatcherProvider.io,
+            showLoading = true,
             sharedFlow = _removeShareResultFlow,
             useCase = removeGraphShareAsyncUseCase,
             useCaseParams = RemoveGraphShareAsyncUseCase.Params(
@@ -200,6 +202,7 @@ class GraphShareViewModel(
 
         runUseCaseWithResult(
             coroutineDispatcher = coroutineDispatcherProvider.io,
+            showLoading = true,
             flow = _editShareResultFlow,
             useCase = editGraphShareAsyncUseCase,
             useCaseParams = EditGraphShareAsyncUseCase.Params(
