@@ -321,6 +321,7 @@
     <string name="confirmation_remove_account_alert_camera_uploads">Kjo llogari ka të bashkëngjitura ngarkime nga kamera, heqja e llogarisë do të çaktivizojë ngarkimet nga kamera. Doni vërtet të hiqet llogaria %1$s?</string>
     <string name="confirmation_remove_public_share_title">Hiqe lidhjen</string>
     <string name="confirmation_remove_private_share_title">Hiqe pjesën private</string>
+    <string name="confirmation_remove_share_message">Doni të ndalet ndarja me %1$s?</string>
     <string name="remove_success_msg">Heqja doli me sukses</string>
     <string name="remove_fail_msg">Heqja dështoi</string>
     <string name="rename_dialog_title">Jepni një emër të ri</string>
@@ -402,6 +403,7 @@
     <string name="error__upload__local_file_not_copied">%1$s s\’u kopjua dot te dosja vendore %2$s.</string>
 
     <string name="get_shares_error">S\’qe e mundur të merreshin pjesët nga shërbyesi</string>
+    <string name="get_graph_shares_incomplete_data_error">S’u morën dot disa të dhëna</string>
     <string name="get_sharees_error">S\’qe e mundur të merreshin përdorues dhe grupe nga shërbyesi</string>
     <string name="get_capabilities_error">S\’qe e mundur të merreshin aftësi nga shërbyesi</string>
     <string name="share_link_file_error">S\’qe e mundur të ndahej me të tjerë kjo kartelë ose dosje</string>
@@ -447,9 +449,18 @@
     <string name="move_file_invalid_into_descendent">S\’është e mundur të zhvendoset një dosje në një tjetër brenda saj.</string>
     <string name="move_file_invalid_overwrite">Kartela gjendet tashmë te dosja vendmbërritje.</string>
     <string name="move_file_error">Ndodhi një gabim teksa përpiqej të zhvendosej kjo kartelë apo dosje.</string>
+    <string name="move_file_correctly">U hoq saktësisht objekti(et)</string>
+
     <string name="copy_file_invalid_into_descendent">S\’është e mundur të kopjohet një dosje në një tjetër brenda saj.</string>
     <string name="copy_file_invalid_overwrite">Kartela gjendet tashmë te dosja vendmbërritje.</string>
     <string name="copy_file_error">Ndodhi një gabim teksa përpiqej të kopjohej kjo kartelë apo dosje.</string>
+    <string name="copy_file_correctly">Objekti(et) u kopjuan saktësisht</string>
+
+    <string name="go_to_destination_folder">Hap Dosje</string>
+
+
+
+
     <string name="subject_user_shared_with_you">%1$s ndau me ju \"%2$s\"</string>
     <string name="subject_shared_with_you">\"%1$s\" është ndarë me ju</string>
 
@@ -480,6 +491,17 @@
     <string name="share_dialog_title">Ndaje me të tjerë</string>
     <string name="share_with_user_section_title">Përdorues dhe Grupe</string>
     <string name="share_no_users">Ende pa të dhëna të ndara me përdorues</string>
+    <string name="share_sync_failed">Pjesët s’u freskuan dot</string>
+    <string name="share_add">Krijoni pjesë</string>
+    <string name="share_add_correctly">Pjesa u krijua saktësisht</string>
+    <string name="share_add_failed">Pjesa s’u krijua dot</string>
+    <string name="share_add_conflict_error">Ndahet tashmë me këtë përdorues/grup</string>
+    <string name="share_remove">Hiqe pjesën</string>
+    <string name="share_remove_correctly">Pjesa u hoq saktësisht</string>
+    <string name="share_remove_failed">Pjesa s’u hoq dot</string>
+    <string name="share_edit">Përpunoni pjesë</string>
+    <string name="share_edit_correctly">Pjesa u përpunua saktësisht</string>
+    <string name="share_edit_failed">Pjesa s’u përpunua dot</string>
     <string name="share_via_link_section_title">Lidhje publike</string>
     <string name="share_via_link_create_title">Krijoni ndarje lidhjesh</string>
     <string name="share_via_link_edit_title">Përpunoni ndarje lidhjesh</string>
@@ -494,6 +516,7 @@
     <string name="share_via_link_edit_permission_read_and_write_label">Të shkarkojë/Të shohë/Të ngarkojë</string>
     <string name="share_via_link_edit_permission_upload_only_label">Vetëm Ngarkime (Me Lënie Kartelash)</string>
     <string name="share_with_title">Ndajeni me</string>
+    <string name="share_with_people_title">Ndani me njerëz</string>
     <string name="share_with_edit_title">Ndajeni me %1$s</string>
 
     <string name="share_search">Kërko</string>
@@ -533,6 +556,9 @@
     <string name="share_no_public_links">Ende s\’janë krijuar lidhje publike.</string>
     <string name="share_no_link_in_this_share">Kjo pjesë s’ka lidhje.</string>
     <string name="share_warning_about_forwarding_public_links">Cilido që zotëron lidhjen, ka hyrje te kartela/dosja.</string>
+    <string name="share_warning_about_forwarding_space_public_links">Cilido me lidhjen përfiton hyrje te hapësira.</string>
+    <string name="share_warning_about_forwarding_file_public_links">Cilido me lidhjen përfiton hyrje te kartela.</string>
+    <string name="share_warning_about_forwarding_folder_public_links">Cilido me lidhjen përfiton hyrje te dosja.</string>
     <string name="share_via_link_default_password">*****</string>
     <string name="share_via_link_password_enforced_label">Fjalëkalim *</string>
     <string name="share_via_link_expiration_date_enforced_label">Skadim *</string>
@@ -585,6 +611,7 @@
     <string name="scoped_storage_wizard_explanation">U gjetën %1$s të dhëna në depozitën tuaj të jashtme. Do të kalohen te depozita e parrezik në pajisjen tuaj. Pas migrimit, kartelat e mbetura do të spastrohen prej depozitës tuaj të jashtme, për të shmangur përsëdytje dhe cenueshmëri.</string>
     <string name="scoped_storage_wizard_intro">Aplikacioni juaj është përditësuar. Ky përditësim aplikacioni migron kartelat tuaja te një vendndodhje më e sigurt në pajisjen tuaj. Ky migrim një herë i të dhënave është i domosdoshëm dhe mund të duhet deri në një minutë, ose më tepër.</string>
     <string name="scoped_storage_wizard_intro_button">Le t’ia fillojmë</string>
+    <string name="scoped_storage_wizard_not_enough_space_warning">⚠️  Hapësira juaj e lirë aktualisht kufizohet në pajisjen tuaj. Disa kartela mund të mos jenë migruar, ju lutemi, kontrolloni se krejt kartelat e shkarkuara vazhdojnë të shkarkohen, pasi procesi të jetë plotësuar.</string>
     <string name="scoped_storage_wizard_migrate_and_clean_button">Migroje tani</string>
     <string name="scoped_storage_wizard_migration_completed">Migrimi u plotësua me sukses. Kartelat tuaja tani janë më të sigurta se kurrë më parë.</string>
     <string name="scoped_storage_wizard_migration_completed_access_files_button">Përdorni kartelat tuaja</string>
@@ -609,6 +636,11 @@
     <string name="release_notes_icon">Ikonë shënimesh hedhjeje në qarkullim</string>
     <string name="release_notes_bugfixes_title">Ndreqje të metash të vockla</string>
     <string name="release_notes_bugfixes_subtitle">U ndreqën disa të meta, për të përmirësuar punimin te aplikacioni</string>
+    <string name="release_notes_4_9_0_sharing_ng_title">Sendërtim i ri i ndarjes me të tjerë për Infinite Scale</string>
+    <string name="release_notes_4_9_0_sharing_ng_subtitle">Janë shtuar ndërfaqe dhe veprime të reja për ndarje kartelash dhe dosjesh me të tjerë në llogari Infinite</string>
+    <string name="release_notes_5_0_0_permalink_title">Permalidhje kartelash dhe dosjesh në Infinite Scale</string>
+    <string name="release_notes_5_0_0_permalink_subtitle">Përdoruesit e Infinite Scale-it tani mund të marrin lidhje të përhershme për një kartelë, ose dosje dhe ta ndajnë me të tjerë</string>
+
     <!-- Open in web -->
     <string name="ic_action_open_with_web">Hape në %1$s (web)</string>
     <string name="open_in_web_error_generic">S’u hap dot në web</string>
@@ -687,6 +719,7 @@
     <string name="content_description_space_name">Emër hapësire %1$s</string>
     <string name="content_description_space_three_dot_menu">Menu hapësire %1$s</string>
     <string name="content_description_space_subtitle">Nëntitull hapësire %1$s</string>
+    <string name="content_description_create_button">Krijoje</string>
     <string name="content_description_cancel_button">Anuloje</string>
     <string name="content_description_quota_switch">Kuota hapësire</string>
     <string name="content_description_member_user">Përdorues %1$s</string>
@@ -694,7 +727,18 @@
     <string name="content_description_member_expiration_date">Skadon më %1$s</string>
     <string name="content_description_add_member">Shtoni anëtar të ri</string>
     <string name="content_description_invite_member_button">Ftoni anëtar</string>
+    <string name="content_description_create_share_button">Krijoni pjesë</string>
+    <string name="content_description_edit_share_button">Ruaje pjesën</string>
     <string name="content_description_expiration_date_switch">Datë skadimi</string>
+    <string name="content_description_remove_member_button">Hiq anëtarin %1$s</string>
+    <string name="content_description_edit_member_button">Përpunoni anëtarin %1$s</string>
+    <string name="content_description_permanent_link_button">Merr lidhjen e përhershme</string>
+    <string name="content_description_create_public_link_button">Krijo lidhje publike</string>
+    <string name="content_description_set_password_button">Caktoni fjalëkalim</string>
+    <string name="content_description_remove_password_button">Hiqe fjalëkalimin</string>
+    <string name="content_description_generate_password_button">Prodho fjalëkalim</string>
+    <string name="content_description_copy_password_button">Kopjoje fjalëkalimin</string>
+
     <string name="create_shortcut_dialog_title">Krijoni një shkurtore</string>
     <string name="create_shortcut_dialog_url">URL</string>
     <string name="create_shortcut_dialog_url_error_no_blanks">URL-ja s’mund të përmbajë hapësira të zbrazëta</string>
@@ -741,6 +785,7 @@
     <string name="set_space_icon">Cakton ikonë</string>
     <string name="members_title">Anëtarë</string>
     <string name="members_add">Shtoni anëtar</string>
+    <string name="members_add_correctly">Amëtari u ftua si duhet</string>
     <string name="members_add_failed">Anëtari s’u ftua dot</string>
     <string name="members_add_conflict_error">Është tashmë i ftuar te hapësira e përzgjedhur</string>
     <string name="members_search_failed">S’u gjetën përfundime</string>
@@ -749,8 +794,35 @@
     <string name="members_options">Mundësi</string>
     <string name="members_expiration_date">Datë skadimi</string>
     <string name="members_invite">Ftesë</string>
+    <string name="members_remove_dialog_header">Hiqe anëtarin</string>
+    <string name="members_remove_dialog_message">Doni vërtet të hiqet anëtari: %1$s?</string>
+    <string name="members_remove_correctly">Anëtari u hoq si duhet</string>
+    <string name="members_remove_failed">Anëtari s’u hoq dot</string>
+    <string name="members_edit">Përpunoni anëtar</string>
+    <string name="members_edit_correctly">Anëtari u përpunua saktësisht</string>
+    <string name="members_edit_failed">Anëtari s’u përpunua dot</string>
     <string name="member_type_user">Përdorues</string>
     <string name="member_type_group">Grup</string>
+    <string name="current_user_label">(unë)</string>
+
+    <string name="public_link_create_title">Krijo lidhje publike</string>
+    <string name="public_link_set_password">Caktoni fjalëkalim</string>
+    <string name="public_link_password_enforced_error">Fjalëkalimi është i detyrueshëm</string>
+    <string name="public_link_view">Mund të shohë</string>
+    <string name="public_link_view_description">Të shohë, të shkarkojë</string>
+    <string name="public_link_edit">Mund të përpunojë</string>
+    <string name="public_link_edit_description">Të shohë, të ngarkojë, të përpunojë, të shkarkojë, të fshijë</string>
+    <string name="public_link_upload">Mund të ngarkojë</string>
+    <string name="public_link_create_only">Lënie kartele të fshehtë</string>
+    <string name="public_link_create_only_description">Vetëm të ngarkojë, lënda ekzistuese nuk shfaqet</string>
+    <string name="public_link_default_display_name">Lidhje Pa Emër</string>
+    <string name="public_link_add_correctly">Lidhja publike u krijua saktësisht</string>
+    <string name="public_link_add_failed">Lidhja publike s’u krijua dot</string>
+    <string name="public_link_remove_correctly">Lidhja publike u hoq saktësisht</string>
+    <string name="public_link_remove_failed">Lidhja publike s’u hoq dot</string>
+    <string name="public_link_edit_title">Përpunoni lidhje publike</string>
+    <string name="public_link_edit_correctly">Lidhja publike u përpunua saktësisht</string>
+    <string name="public_link_edit_failed">Lidhja publike s’u përpunua dot</string>
     <string name="feedback_dialog_get_in_contact_description"><![CDATA[ Kërkoni ndihmë te <a href=\"%1$s\"><b>forumi</b></a> ynë, ose kontribuoni te <a href=\"%2$s\"><b>depoja jonë GitHub</b></a>]]></string>
 
     <string name="link_role_accessibility">Lidhje</string>
