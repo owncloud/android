@@ -24,4 +24,5 @@ data class ClientRegistrationInfo(
     val clientSecret: String?,
     val clientIdIssuedAt: Int?,
     val clientSecretExpiration: Int,
+    val tokenEndpointAuthMethod: String = OIDCServerConfiguration.CLIENT_SECRET_BASIC,
 )

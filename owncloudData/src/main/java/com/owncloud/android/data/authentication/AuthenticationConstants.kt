@@ -51,6 +51,7 @@ const val KEY_FEATURE_SPACES = "KEY_FEATURE_SPACES"
 const val KEY_CLIENT_REGISTRATION_CLIENT_ID = "client_id"
 const val KEY_CLIENT_REGISTRATION_CLIENT_SECRET = "client_secret"
 const val KEY_CLIENT_REGISTRATION_CLIENT_EXPIRATION_DATE = "client_secret_expires_at"
+const val KEY_CLIENT_REGISTRATION_TOKEN_ENDPOINT_AUTH_METHOD = "token_endpoint_auth_method"
 
 const val KEY_IS_KITEWORKS_SERVER = "is_kiteworks_server"
 
