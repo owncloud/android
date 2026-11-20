@@ -1,0 +1,5 @@
+Enhancement: Add Claude Code skills for UI elements dictionary maintenance
+
+A reusable `git-signed-commit` skill and an `update-ui-dictionary` skill have been added to automate GPG-verified dictionary updates in `android-scenario-testing` from within Claude Code.                                  
+
+https://github.com/owncloud/android/pull/5057
