@@ -1,9 +1,11 @@
 ---
 name: update-ui-dictionary
-description: Detects UI element ID changes in the current branch and creates an update branch in android-scenario-testing with a regenerated `ui_elements_dictionary.md`.
+description: Detects UI element ID changes in the current branch and creates an update branch in android-scenario-testing with a regenerated `ui_elements_dictionary.md`. Accepts an optional `force` argument to skip the diff check and regenerate unconditionally.
 ---
 
 Update the UI elements dictionary in `android-scenario-testing` when the current change introduces new, modified, or removed `android:id` values in layout or menu XMLs.
+
+Invoke as `/update-ui-dictionary` for the normal incremental flow, or `/update-ui-dictionary force` to regenerate unconditionally regardless of diffs (useful when running on `master` or as a periodic baseline refresh).
 
 **Prerequisites:**
 
@@ -16,7 +18,9 @@ Update the UI elements dictionary in `android-scenario-testing` when the current
 
 ## Step 1 — Detect UI ID changes
 
-Run a git diff between the current branch and `master`, scoped to layout and menu XML files:
+**Check for the `force` argument first.** If the skill was invoked with the word `force` anywhere in its arguments, skip the diff entirely, announce "Force mode — skipping diff, regenerating dictionary unconditionally." and continue to Step 2.
+
+Otherwise, run a git diff between the current branch and `master`, scoped to layout and menu XML files:
 
 ```bash
 git diff master...HEAD -- \
