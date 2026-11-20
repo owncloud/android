@@ -153,6 +153,14 @@ Archive a completed change in the experimental workflow.
    - Whether specs were synced (if applicable)
    - Note about any warnings (incomplete artifacts/tasks)
 
+7. **Update UI elements dictionary** *(post-archive step)*
+
+   After the archive is complete, invoke the `update-ui-dictionary` skill inline.
+
+   Skip this step entirely (without asking) if the current git branch does not start with `feature/`.
+
+   Otherwise run the skill and include its outcome (updated or skipped) in the summary output.
+
 **Output On Success**
 
 ```markdown
