@@ -19,6 +19,8 @@
 
 package com.owncloud.android.domain.automaticuploads.model
 
+import java.io.File
+
 data class FolderBackUpConfiguration(
     val accountName: String,
     val behavior: UploadBehavior,
@@ -33,6 +35,13 @@ data class FolderBackUpConfiguration(
 
     val isPictureUploads get() = name == pictureUploadsName
     val isVideoUploads get() = name == videoUploadsName
+
+    /**
+     * Remote path for a file uploaded to this folder. The upload path may end with a separator
+     * (folders picked in the app do), so it is trimmed to avoid a double separator.
+     */
+    fun getRemotePathForFile(fileName: String): String =
+        uploadPath.trimEnd(File.separatorChar) + File.separator + fileName
 
     companion object {
         const val pictureUploadsName = "Picture uploads"
