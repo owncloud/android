@@ -1,0 +1,7 @@
+Bugfix: Role item text overflow
+
+The role title and description in the roles list have been adapted so they no longer
+overflow past the right edge, and the title now wraps to a maximum of two lines
+with a middle ellipsis instead of being clipped against the margin.
+
+https://github.com/owncloud/android/pull/5062
