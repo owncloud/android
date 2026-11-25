@@ -30,6 +30,7 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.Service
 import com.owncloud.android.lib.resources.shares.ShareResponse
 import com.owncloud.android.lib.resources.shares.ShareType
+import com.owncloud.android.lib.resources.shares.responses.SharedWithMeResponse
 import com.owncloud.android.lib.resources.spaces.responses.PermissionsResponse
 
 interface ShareService : Service {
@@ -40,6 +41,8 @@ interface ShareService : Service {
     ): RemoteOperationResult<ShareResponse>
 
     fun getGraphShares(spaceId: String, itemId: String): RemoteOperationResult<PermissionsResponse>
+
+    fun getSharedWithMe(): RemoteOperationResult<SharedWithMeResponse>
 
     fun addGraphShare(
         spaceId: String,

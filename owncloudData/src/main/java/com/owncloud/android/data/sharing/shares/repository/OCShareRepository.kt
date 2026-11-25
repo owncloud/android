@@ -28,6 +28,7 @@ import com.owncloud.android.data.sharing.shares.datasources.RemoteShareDataSourc
 import com.owncloud.android.domain.members.model.OCMember
 import com.owncloud.android.domain.sharing.shares.ShareRepository
 import com.owncloud.android.domain.sharing.shares.model.OCShare
+import com.owncloud.android.domain.sharing.shares.model.OCSharedWithMe
 import com.owncloud.android.domain.sharing.shares.model.ShareType
 import com.owncloud.android.domain.sharing.shares.model.OCPermissions
 import com.owncloud.android.lib.resources.shares.RemoteShare
@@ -123,6 +124,9 @@ class OCShareRepository(
 
     override fun getGraphShares(accountName: String, spaceId: String, itemId: String): OCPermissions =
         remoteShareDataSource.getGraphShares(accountName, spaceId, itemId)
+
+    override fun getSharedWithMe(accountName: String): List<OCSharedWithMe> =
+        remoteShareDataSource.getSharedWithMe(accountName)
 
     override fun addGraphShare(
         accountName: String,

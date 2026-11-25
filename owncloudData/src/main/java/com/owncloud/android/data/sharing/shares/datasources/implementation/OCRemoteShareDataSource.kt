@@ -31,9 +31,11 @@ import com.owncloud.android.domain.members.model.OCMember
 import com.owncloud.android.domain.members.model.OCMemberType
 import com.owncloud.android.domain.roles.model.OCRole
 import com.owncloud.android.domain.sharing.shares.model.OCShare
+import com.owncloud.android.domain.sharing.shares.model.OCSharedWithMe
 import com.owncloud.android.domain.sharing.shares.model.ShareType
 import com.owncloud.android.domain.sharing.shares.model.MemberPermission
 import com.owncloud.android.domain.sharing.shares.model.OCPermissions
+import com.owncloud.android.lib.resources.shares.responses.SharedWithMeItemResponse
 import com.owncloud.android.lib.resources.spaces.responses.PermissionsResponse
 
 class OCRemoteShareDataSource(
@@ -67,6 +69,13 @@ class OCRemoteShareDataSource(
             clientManager.getShareService(accountName).getGraphShares(spaceId, itemId)
         }
         return response.toModel()
+    }
+
+    override fun getSharedWithMe(accountName: String): List<OCSharedWithMe> {
+        val response = executeRemoteOperation {
+            clientManager.getShareService(accountName).getSharedWithMe()
+        }
+        return response.value.map { it.toModel() }
     }
 
     override fun addGraphShare(
@@ -164,6 +173,18 @@ class OCRemoteShareDataSource(
     }
 
     companion object {
+        fun SharedWithMeItemResponse.toModel(): OCSharedWithMe =
+            OCSharedWithMe(
+                id = id,
+                remoteItemId = remoteItem.id,
+                name = name,
+                size = size,
+                mimeType = file?.mimeType,
+                sharerDisplayName = createdBy?.user?.displayName ?: "",
+                isHidden = isHidden ?: false,
+                isSynchronized = isSynchronized ?: false
+            )
+
         fun PermissionsResponse.toModel(): OCPermissions {
             val membersResponse = members.orEmpty()
             return OCPermissions(

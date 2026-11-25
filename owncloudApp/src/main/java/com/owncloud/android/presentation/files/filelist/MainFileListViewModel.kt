@@ -4,8 +4,9 @@
  * @author Fernando Sanz Velasco
  * @author Jose Antonio Barros Ramos
  * @author Juan Carlos Garrote Gascón
+ * @author Jorge Aguado Recio
  *
- * Copyright (C) 2023 ownCloud GmbH.
+ * Copyright (C) 2026 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -43,7 +44,10 @@ import com.owncloud.android.domain.files.usecases.GetFileByRemotePathUseCase
 import com.owncloud.android.domain.files.usecases.GetFolderContentAsStreamUseCase
 import com.owncloud.android.domain.files.usecases.GetSharedByLinkForAccountAsStreamUseCase
 import com.owncloud.android.domain.files.usecases.SortFilesWithSyncInfoUseCase
+import com.owncloud.android.domain.sharing.shares.model.OCSharedWithMe
+import com.owncloud.android.domain.sharing.shares.usecases.GetSharedWithMeAsyncUseCase
 import com.owncloud.android.domain.spaces.model.OCSpace
+import com.owncloud.android.domain.spaces.model.OCSpace.Companion.SPACE_ID_SHARES
 import com.owncloud.android.domain.spaces.usecases.GetSpaceWithSpecialsByIdForAccountUseCase
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.ViewModelExt.runUseCaseWithResult
@@ -77,6 +81,7 @@ import com.owncloud.android.domain.files.usecases.SortType.Companion as SortType
 class MainFileListViewModel(
     private val getFolderContentAsStreamUseCase: GetFolderContentAsStreamUseCase,
     private val getSharedByLinkForAccountAsStreamUseCase: GetSharedByLinkForAccountAsStreamUseCase,
+    private val getSharedWithMeAsyncUseCase: GetSharedWithMeAsyncUseCase,
     private val getFilesAvailableOfflineFromAccountAsStreamUseCase: GetFilesAvailableOfflineFromAccountAsStreamUseCase,
     private val getFileByIdUseCase: GetFileByIdUseCase,
     private val getFileByRemotePathUseCase: GetFileByRemotePathUseCase,
@@ -101,6 +106,9 @@ class MainFileListViewModel(
     private val searchFilter: MutableStateFlow<String> = MutableStateFlow("")
     private val sortTypeAndOrder = MutableStateFlow(Pair(SortType.SORT_TYPE_BY_NAME, SortOrder.SORT_ORDER_ASCENDING))
     val space: MutableStateFlow<OCSpace?> = MutableStateFlow(null)
+
+    private val sharedWithMeEntries: MutableStateFlow<List<OCSharedWithMe>?> = MutableStateFlow(null)
+
     val appRegistryToCreateFiles: StateFlow<List<AppRegistryMimeType>> =
         getAppRegistryWhichAllowCreationAsStreamUseCase(
             GetAppRegistryWhichAllowCreationAsStreamUseCase.Params(
@@ -166,6 +174,14 @@ class MainFileListViewModel(
                     syncMode = SYNC_CONTENTS,
                 )
             )
+        }
+    }
+
+    fun refreshSharedWithMe() {
+        viewModelScope.launch(coroutinesDispatcherProvider.io) {
+            val accountName = currentFolderDisplayed.value.owner
+            val result = getSharedWithMeAsyncUseCase(GetSharedWithMeAsyncUseCase.Params(accountName))
+            sharedWithMeEntries.update { result.getDataOrNull() }
         }
     }
 
@@ -395,6 +411,8 @@ class MainFileListViewModel(
 
     /**
      * In root folder, all the shared by link files should be shown. Otherwise, the folder content should be shown.
+     * On a spaces-enabled account the root of this option is the Shares jail, whose content is narrowed down to the
+     * shares the server reports and enriched with them.
      * Logic to handle the browse back in [manageBrowseUp]
      */
     private fun retrieveFlowForShareByLink(
@@ -403,8 +421,33 @@ class MainFileListViewModel(
     ): Flow<List<OCFileWithSyncInfo>> =
         if (currentFolderDisplayed.remotePath == ROOT_PATH && currentFolderDisplayed.spaceId == null) {
             getSharedByLinkForAccountAsStreamUseCase(GetSharedByLinkForAccountAsStreamUseCase.Params(accountName))
+        } else if (currentFolderDisplayed.remotePath == ROOT_PATH && currentFolderDisplayed.spaceId == SPACE_ID_SHARES) {
+            retrieveFlowForSharedWithMe(currentFolderDisplayed, accountName)
         } else {
             retrieveFlowForAllFiles(currentFolderDisplayed, accountName)
+        }
+
+    /**
+     * Keeps only the jail children that match a visible share and copies that share onto the row, so the list shows
+     * what the server reports. While the shares are unavailable the jail content passes through untouched.
+     */
+    private fun retrieveFlowForSharedWithMe(
+        currentFolderDisplayed: OCFile,
+        accountName: String,
+    ): Flow<List<OCFileWithSyncInfo>> =
+        combine(
+            retrieveFlowForAllFiles(currentFolderDisplayed, accountName),
+            sharedWithMeEntries,
+        ) { jailContent, entries ->
+            if (entries == null) {
+                jailContent
+            } else {
+                jailContent.mapNotNull { fileWithSyncInfo ->
+                    val file = fileWithSyncInfo.file
+                    val entry = entries.firstOrNull { it.id == file.remoteId } ?: entries.firstOrNull { it.name == file.fileName }
+                    entry?.let { fileWithSyncInfo.copy(sharedWithMe = it) }
+                }
+            }
         }
 
     /**
