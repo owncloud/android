@@ -149,6 +149,14 @@ Archive a completed change in the experimental workflow.
    - Spec sync status (synced / sync skipped / no delta specs)
    - Note about any warnings (incomplete artifacts/tasks)
 
+7. **Update UI elements dictionary** *(post-archive step)*
+
+   After the archive is complete, invoke the `update-ui-dictionary` skill inline.
+
+   Skip this step entirely (without asking) if the current git branch does not start with `feature/`.
+
+   Otherwise run the skill and include its outcome (updated or skipped) in the summary output.
+
 **Output On Success**
 
 ```markdown
@@ -223,3 +231,4 @@ Target archive directory already exists.
 - Existing CLI checks, resolved paths, prompts, and command contracts are unchanged
 - Artifact rules constrain only the specs being written and are never operation guidance
 - Never copy runtime context, operation guidance, or artifact-rule text verbatim into output files
+- **Any commit created in `owncloud/android-scenario-testing`** — including Gherkin scenario commits driven by `operationGuidance` — must be created by invoking the `git-signed-commit` skill instead of calling `gh api git/commits` directly. Obtain `TREE_SHA` and `PARENT_SHA` through the normal `gh api` tree/blob steps, then hand them off to the skill.
