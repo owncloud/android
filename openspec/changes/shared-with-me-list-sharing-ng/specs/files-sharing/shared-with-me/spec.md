@@ -1,49 +1,53 @@
 ## Purpose
 
-Defines the `Shared with me` list on spaces-enabled accounts: the resources other users have shared with the current user, sourced from the server's own list of incoming shares, together with the sharing context shown for each entry, the operations available on it, and the matching folder exposed to other apps through the Documents Provider.
+Defines the `Shared with me` list on spaces-enabled accounts: the resources other users have shared with the current user — the Shares jail listing, filtered and enriched by the server's own list of incoming shares — together with the sharing context shown for each entry, the operations available on it, and the matching folder exposed to other apps through the Documents Provider.
 
 ## ADDED Requirements
 
-### Requirement: Shared-with-me entries come from the server's incoming-shares list
+### Requirement: The list is the Shares jail filtered by the server's incoming-shares list
 
-On a spaces-enabled account, opening the `Shares` tab SHALL request the current account's incoming shares from the Graph endpoint `GET /graph/v1beta1/me/drive/sharedWithMe`. The request SHALL carry no query parameters, and the full list SHALL be read from the response's `value` array; the system SHALL NOT paginate. The list SHALL NOT be sourced from a WebDAV listing of the Shares jail.
+On a spaces-enabled account, opening the `Shares` tab SHALL list the contents of the Shares jail root and SHALL request the current account's incoming shares from the Graph endpoint `GET /graph/v1beta1/me/drive/sharedWithMe`. The request SHALL carry no query parameters, and the full list SHALL be read from the response's `value` array; the system SHALL NOT paginate. A jail child SHALL be listed only when it matches a visible entry in that response, and each listed child SHALL carry the sharing context of its matching entry.
 
 #### Scenario: Opening the Shares tab on a spaces-enabled account
 - **WHEN** a user selects the `Shares` tab on a spaces-enabled account
 - **THEN** the system requests `GET /graph/v1beta1/me/drive/sharedWithMe` for that account
-- **AND** the list is built from the entries in the response's `value` array
+- **AND** the listed resources are the jail children that match an entry in the response's `value` array
 
 #### Scenario: Shares jail root has never been cached
 - **WHEN** a user selects the `Shares` tab on a spaces-enabled account that has never cached the Shares jail root folder
-- **THEN** the system still requests the incoming shares from the server
-- **AND** the list is populated from the response rather than showing a static empty view
+- **THEN** the system resolves the jail root and refreshes it before listing
+- **AND** the list is populated rather than showing a static empty view
 
 #### Scenario: Returning to the tab re-queries the server
 - **WHEN** a user leaves the `Shares` tab and selects it again
 - **THEN** the system requests the incoming shares from the server again
 
+#### Scenario: Jail child the server no longer reports as shared
+- **WHEN** the Shares jail contains a cached child that matches no entry in the response
+- **THEN** that child is not listed
+
 ### Requirement: Hidden shares are excluded
 
-An entry whose `@UI.Hidden` is `true` SHALL NOT appear in the `Shared with me` list. An entry whose `@UI.Hidden` is `false` or absent SHALL be treated as visible.
+A resource whose matching entry has `@UI.Hidden` set to `true` SHALL NOT appear in the `Shared with me` list. An entry whose `@UI.Hidden` is `false` or absent SHALL be treated as visible.
 
 #### Scenario: Hidden entry in the response
 - **WHEN** the response contains an entry whose `@UI.Hidden` is `true`
-- **THEN** that entry is not listed
+- **THEN** the resource it matches is not listed
 
 #### Scenario: Visible entry in the response
 - **WHEN** the response contains an entry whose `@UI.Hidden` is `false`
-- **THEN** that entry is listed
+- **THEN** the resource it matches is listed
 
 #### Scenario: Entry without the hidden flag
 - **WHEN** the response contains an entry that carries no `@UI.Hidden` value
-- **THEN** that entry is listed
+- **THEN** the resource it matches is listed
 
 ### Requirement: Each entry shows its resource details and who shared it
 
-Every listed entry SHALL show the shared resource's name, its size and the display name of the user who shared it. No role, permission or sharing-role information SHALL be rendered on a list entry.
+In list mode, every listed entry SHALL show the shared resource's name, its size and the display name of the user who shared it. No role, permission or sharing-role information SHALL be rendered on a list entry. In grid mode, which the tab inherits from the shared file list, the sharer SHALL NOT be rendered: that layout has no slot for it.
 
 #### Scenario: Entry shows name, size and sharer
-- **WHEN** an entry for a resource shared by another user is listed
+- **WHEN** an entry for a resource shared by another user is listed in list mode
 - **THEN** the entry shows the resource name
 - **AND** the entry shows the resource size
 - **AND** the entry shows the display name of the user who shared it
@@ -54,11 +58,19 @@ Every listed entry SHALL show the shared resource's name, its size and the displ
 
 ### Requirement: Synchronized entries carry a read-only sync badge
 
-An entry whose `@client.synchronize` is `true` SHALL show a sync badge, placed next to the sharing badge and to the left of the item size. An entry whose `@client.synchronize` is `false` or absent SHALL show no sync badge. The badge SHALL be purely informative: it SHALL NOT be tappable, and it SHALL NOT reflect or alter the item's available-offline state, which keeps its own indicator. The badge SHALL carry a content description so assistive technologies announce it.
+An entry whose `@client.synchronize` is `true` SHALL show a sync badge in the same badge row as the sharing badge — in list mode next to it and to the left of the item size — in both list and grid mode. An entry whose `@client.synchronize` is `false` or absent SHALL show no sync badge. The badge SHALL be purely informative: it SHALL NOT be tappable, and it SHALL NOT reflect or alter the item's available-offline state, which keeps its own indicator. The badge SHALL carry a content description so assistive technologies announce it. No other file list SHALL start showing this badge.
 
 #### Scenario: Entry marked as synchronized
-- **WHEN** an entry whose `@client.synchronize` is `true` is listed
+- **WHEN** an entry whose `@client.synchronize` is `true` is listed in list mode
 - **THEN** the entry shows the sync badge next to the sharing badge, to the left of the item size
+
+#### Scenario: Entry marked as synchronized in grid mode
+- **WHEN** an entry whose `@client.synchronize` is `true` is listed in grid mode
+- **THEN** the entry shows the sync badge in the same badge row as the sharing badge
+
+#### Scenario: Other file lists keep their badge row
+- **WHEN** a user opens `All files`, `Available offline` or a space
+- **THEN** no row shows the sync badge
 
 #### Scenario: Entry not marked as synchronized
 - **WHEN** an entry whose `@client.synchronize` is `false` is listed
@@ -106,33 +118,35 @@ A listed folder SHALL be browseable and a listed file SHALL be downloadable and 
 - **WHEN** a user opens the options for a listed entry
 - **THEN** the `Share` option is offered
 
-### Requirement: Empty, loading and error states
+### Requirement: Empty, refresh and failure states
 
-The `No shares` empty-dataset view SHALL be shown only when the server's response contains no visible share. Pull to refresh SHALL re-query the endpoint. When the request fails because of a network or server error, the system SHALL show an error message and SHALL keep the previously loaded list rather than clearing it or showing the empty-dataset view.
+The `No shares` empty-dataset view SHALL be shown only when the list has no resource to show. Pull to refresh SHALL both re-request the incoming shares and refresh the Shares jail. When the incoming-shares request fails because of a network or server error, the system SHALL list the Shares jail contents unfiltered and without sharing context, rather than clearing the list, showing the empty-dataset view, or blocking the tab with an error — the same degradation rule the Documents Provider applies, so the two surfaces cannot diverge on failure. The jail refresh SHALL keep its existing error reporting.
 
 #### Scenario: Server returns no visible share
 - **WHEN** the response contains no entry, or only entries whose `@UI.Hidden` is `true`
 - **THEN** the `No shares` empty-dataset view is shown
 
 #### Scenario: Server returns visible shares
-- **WHEN** the response contains at least one visible entry
-- **THEN** the entries are listed
+- **WHEN** the response contains at least one visible entry matching a jail child
+- **THEN** the matching resources are listed
 - **AND** the empty-dataset view is not shown
 
 #### Scenario: Pull to refresh
 - **WHEN** a user pulls down on the list
 - **THEN** the system requests the incoming shares from the server again
+- **AND** the system refreshes the Shares jail
 - **AND** the list is rebuilt from the new response
 
-#### Scenario: Request fails with a list already on screen
-- **WHEN** the request fails with a network or server error and entries are already listed
-- **THEN** an error message is shown
-- **AND** the previously listed entries remain on screen
-
-#### Scenario: Request fails with no list yet
-- **WHEN** the request fails with a network or server error and no entry has ever been listed
-- **THEN** an error message is shown
+#### Scenario: Incoming-shares request fails
+- **WHEN** the incoming-shares request fails with a network or server error
+- **THEN** the Shares jail contents are listed unfiltered
+- **AND** no sharer and no sync badge are shown on those rows
 - **AND** the empty-dataset view is not presented as the server's answer
+
+#### Scenario: Incoming-shares request fails with nothing cached
+- **WHEN** the incoming-shares request fails and the Shares jail has no cached child
+- **THEN** the list is empty
+- **AND** the tab is still usable and can be refreshed
 
 ### Requirement: The share panel offers only the permalink for an item shared with the user
 

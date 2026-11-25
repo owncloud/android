@@ -23,6 +23,7 @@ package com.owncloud.android.data.sharing.shares.datasources
 
 import com.owncloud.android.domain.members.model.OCMember
 import com.owncloud.android.domain.sharing.shares.model.OCShare
+import com.owncloud.android.domain.sharing.shares.model.OCSharedWithMe
 import com.owncloud.android.domain.sharing.shares.model.ShareType
 import com.owncloud.android.domain.sharing.shares.model.OCPermissions
 import com.owncloud.android.lib.resources.shares.RemoteShare.Companion.INIT_EXPIRATION_DATE_IN_MILLIS
@@ -40,6 +41,8 @@ interface RemoteShareDataSource {
         spaceId: String,
         itemId: String
     ): OCPermissions
+
+    fun getSharedWithMe(accountName: String): List<OCSharedWithMe>
 
     fun addGraphShare(
         accountName: String,

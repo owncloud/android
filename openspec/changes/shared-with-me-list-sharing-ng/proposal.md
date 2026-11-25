@@ -6,11 +6,13 @@ On spaces-enabled accounts the `Shares` tab is a plain WebDAV listing of the Sha
 
 - New Graph operation `GET /graph/v1beta1/me/drive/sharedWithMe`, exposed through `ShareService`, a remote data source, a repository method and a `GetSharedWithMeAsyncUseCase`.
 - New domain model for a shared-with-me entry: resource identity, sharer display name, `@UI.Hidden` flag and `@client.synchronize` flag.
-- `SharesFragment` becomes the real list: it renders the Graph entries joined to their Shares-jail `OCFile` rows, with swipe-to-refresh, an error snackbar that keeps the previously loaded list, and the existing empty-dataset view shown only when the endpoint returns no visible share.
-- The `Shares` tab routes to `SharesFragment` for spaces-enabled accounts, replacing the current "is the jail root cached?" fork in `FileDisplayActivity.navigateTo()`.
-- A new sync badge (drawable + content description) appears in the list item badge row for entries whose `@client.synchronize` is `true`.
+- The `Shares` tab keeps using the existing file list (`MainFileListFragment`) rooted at the Shares jail, and that list is now filtered and enriched by the Graph payload: hidden shares are dropped, and every remaining row carries its sharer display name and synchronize state. The `SharesFragment` placeholder is removed.
+- `OCFileWithSyncInfo` gains an optional sharing-context field so a file list row can carry per-row sharing data that does not exist on `OCFile`. Nothing is persisted.
+- The `Shares` tab always routes to the jail-rooted list on spaces-enabled accounts, replacing the current "is the jail root cached?" fork in `FileDisplayActivity.navigateTo()`.
+- A new sync badge (drawable + content description) appears in the file list badge row, in both the list and grid item layouts, for entries whose `@client.synchronize` is `true`.
 - `GraphShareFragment` hides its `Share with people` and `Public links` sections for an item shared with the user, leaving the header permalink as the only sharing affordance.
-- The Documents Provider's `Shares` folder excludes `@UI.Hidden` shares so it lists the same resources as the in-app list.
+- The Documents Provider's `Shares` folder excludes `@UI.Hidden` shares so it lists the same resources as the in-app list, under the same matching rule.
+- When the incoming-shares request fails, both surfaces list the Shares jail unfiltered rather than failing or reporting an error.
 - Legacy (non-spaces) accounts keep today's behaviour on both surfaces.
 
 ## Capabilities
@@ -25,6 +27,6 @@ On spaces-enabled accounts the `Shares` tab is a plain WebDAV listing of the Sha
 
 - `owncloudComLibrary`: new remote operation + Moshi response models; `ShareService` gains `getSharedWithMe()`.
 - `owncloudData`: new remote data source, mapper and repository method; unit tests for both.
-- `owncloudDomain`: new model, repository contract method and use case.
-- `owncloudApp`: `SharesFragment`, new ViewModel and adapter, new drawable/strings, `FileDisplayActivity` routing, `GraphShareFragment` gating, `DocumentsStorageProvider`, Koin wiring.
+- `owncloudDomain`: new model, repository contract method, use case, and one additive optional field on `OCFileWithSyncInfo`.
+- `owncloudApp`: one new flow branch in `MainFileListViewModel`, two guarded branches in `FileListAdapter`, the sync badge in `item_file_list.xml` and `grid_item.xml`, new drawable/string, `FileDisplayActivity` routing, `GraphShareFragment` gating, `DocumentsStorageProvider`, Koin wiring; `SharesFragment` and `shares_fragment.xml` removed.
 - No new third-party dependencies; no Room schema change.

@@ -20,6 +20,7 @@
 
 package com.owncloud.android.domain.files.model
 
+import com.owncloud.android.domain.sharing.shares.model.OCSharedWithMe
 import com.owncloud.android.domain.spaces.model.OCSpace
 import java.util.UUID
 
@@ -29,4 +30,6 @@ data class OCFileWithSyncInfo(
     val downloadWorkerUuid: UUID? = null,
     val isSynchronizing: Boolean = false,
     val space: OCSpace? = null,
+    // Only set for rows of the Shared with me list, which enriches them from the server; never persisted
+    val sharedWithMe: OCSharedWithMe? = null,
 )

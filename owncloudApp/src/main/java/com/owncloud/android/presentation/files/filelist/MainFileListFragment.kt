@@ -79,6 +79,7 @@ import com.owncloud.android.domain.files.model.OCFile.Companion.ROOT_PATH
 import com.owncloud.android.domain.files.model.OCFileSyncInfo
 import com.owncloud.android.domain.files.model.OCFileWithSyncInfo
 import com.owncloud.android.domain.spaces.model.OCSpace
+import com.owncloud.android.domain.spaces.model.OCSpace.Companion.SPACE_ID_SHARES
 import com.owncloud.android.domain.transfers.model.OCTransfer
 import com.owncloud.android.domain.transfers.model.TransferStatus
 import com.owncloud.android.domain.utils.Event
@@ -439,6 +440,15 @@ class MainFileListFragment : Fragment(),
                     shouldSyncContents = !isPickingAFolder(), // For picking a folder option, we just need a refresh
                 )
             )
+            // Only the Shared with me list reads these entries: this listener is shared by every file list and by
+            // the folder picker, and jail children inherit the Shares space, so the root check is needed too
+            val folderDisplayed = mainFileListViewModel.getFile()
+            if (mainFileListViewModel.fileListOption.value == FileListOption.SHARED_BY_LINK &&
+                folderDisplayed.remotePath == ROOT_PATH &&
+                folderDisplayed.spaceId == SPACE_ID_SHARES
+            ) {
+                mainFileListViewModel.refreshSharedWithMe()
+            }
         }
 
         // Set Refresh FAB and its listener
