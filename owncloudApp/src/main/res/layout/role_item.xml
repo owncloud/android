@@ -53,20 +53,21 @@
 
             <TextView
                 android:id="@+id/role_name"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/standard_half_margin"
                 android:layout_marginStart="@dimen/standard_half_margin"
+                android:layout_marginEnd="@dimen/standard_half_margin"
                 android:text="@string/placeholder_filename"
                 android:textSize="@dimen/two_line_primary_text_size"
                 android:textColor="@color/textColor"
                 android:textStyle="bold"
                 android:ellipsize="middle"
-                android:maxLines="1"/>
+                android:maxLines="2"/>
 
             <TextView
                 android:id="@+id/role_description"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/standard_half_margin"
                 android:layout_marginEnd="@dimen/standard_half_margin"
