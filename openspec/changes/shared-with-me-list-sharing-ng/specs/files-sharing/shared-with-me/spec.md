@@ -6,7 +6,7 @@ Defines the `Shared with me` list on spaces-enabled accounts: the resources othe
 
 ### Requirement: The list is the Shares jail filtered by the server's incoming-shares list
 
-On a spaces-enabled account, opening the `Shares` tab SHALL list the contents of the Shares jail root and SHALL request the current account's incoming shares from the Graph endpoint `GET /graph/v1beta1/me/drive/sharedWithMe`. The request SHALL carry no query parameters, and the full list SHALL be read from the response's `value` array; the system SHALL NOT paginate. A jail child SHALL be listed only when it matches a visible entry in that response, and each listed child SHALL carry the sharing context of its matching entry.
+On a spaces-enabled account, opening the `Shares` tab SHALL list the contents of the Shares jail root and SHALL request the current account's incoming shares from the Graph endpoint `GET /graph/v1beta1/me/drive/sharedWithMe`. The request SHALL carry no query parameters, and the full list SHALL be read from the response's `value` array; the system SHALL NOT paginate. A jail child SHALL be listed only when it matches a visible entry in that response, and each listed child SHALL carry the sharing context of its matching entry. On an account whose Shares space is not yet known to the client, the tab SHALL keep the behaviour it had before this change and SHALL NOT request the endpoint.
 
 #### Scenario: Opening the Shares tab on a spaces-enabled account
 - **WHEN** a user selects the `Shares` tab on a spaces-enabled account
@@ -14,9 +14,14 @@ On a spaces-enabled account, opening the `Shares` tab SHALL list the contents of
 - **AND** the listed resources are the jail children that match an entry in the response's `value` array
 
 #### Scenario: Shares jail root has never been cached
-- **WHEN** a user selects the `Shares` tab on a spaces-enabled account that has never cached the Shares jail root folder
+- **WHEN** a user selects the `Shares` tab on a spaces-enabled account whose Shares space is known but whose jail root folder has never been cached
 - **THEN** the system resolves the jail root and refreshes it before listing
 - **AND** the list is populated rather than showing a static empty view
+
+#### Scenario: Shares space not yet known to the client
+- **WHEN** a user selects the `Shares` tab on a spaces-enabled account whose Shares space has not been synchronized yet
+- **THEN** the tab shows what it showed before this change and no incoming-shares request is made
+- **AND** selecting the tab again, once the Shares space is known, lists the shares
 
 #### Scenario: Returning to the tab re-queries the server
 - **WHEN** a user leaves the `Shares` tab and selects it again

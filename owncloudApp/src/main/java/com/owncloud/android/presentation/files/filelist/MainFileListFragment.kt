@@ -342,6 +342,23 @@ class MainFileListFragment : Fragment(),
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, onBackPressedCallback)
         initViews()
         subscribeToViewModels()
+        refreshSharedWithMeIfDisplayed()
+    }
+
+    /**
+     * Request the incoming shares, which only the Shared with me list reads.
+     *
+     * This fragment and its view model are shared by every file list and by the folder picker, and jail children
+     * inherit the Shares space, so neither the file list option nor the space identifies that list on its own.
+     */
+    private fun refreshSharedWithMeIfDisplayed() {
+        val folderDisplayed = mainFileListViewModel.getFile()
+        if (mainFileListViewModel.fileListOption.value == FileListOption.SHARED_BY_LINK &&
+            folderDisplayed.remotePath == ROOT_PATH &&
+            folderDisplayed.spaceId == SPACE_ID_SHARES
+        ) {
+            mainFileListViewModel.refreshSharedWithMe()
+        }
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
@@ -440,15 +457,7 @@ class MainFileListFragment : Fragment(),
                     shouldSyncContents = !isPickingAFolder(), // For picking a folder option, we just need a refresh
                 )
             )
-            // Only the Shared with me list reads these entries: this listener is shared by every file list and by
-            // the folder picker, and jail children inherit the Shares space, so the root check is needed too
-            val folderDisplayed = mainFileListViewModel.getFile()
-            if (mainFileListViewModel.fileListOption.value == FileListOption.SHARED_BY_LINK &&
-                folderDisplayed.remotePath == ROOT_PATH &&
-                folderDisplayed.spaceId == SPACE_ID_SHARES
-            ) {
-                mainFileListViewModel.refreshSharedWithMe()
-            }
+            refreshSharedWithMeIfDisplayed()
         }
 
         // Set Refresh FAB and its listener
@@ -1058,6 +1067,7 @@ class MainFileListFragment : Fragment(),
         binding.swipeRefreshMainFileList.isEnabled = newFileListOption != FileListOption.AV_OFFLINE
         mainFileListViewModel.updateFolderToDisplay(file)
         showOrHideFab(newFileListOption, file)
+        refreshSharedWithMeIfDisplayed()
     }
 
     /**
