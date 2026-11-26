@@ -386,6 +386,7 @@ class OCFileRepository(
 
                         })
                 } else if (localChildToSync.etag != remoteChild.etag ||
+                    localChildToSync.remotePath != remoteChild.remotePath ||
                     localChildToSync.localModificationTimestamp > remoteChild.lastSyncDateForData!! ||
                     isActionSetFolderAvailableOfflineOrSynchronize ||
                     shareMetadataChanged(localChildToSync, remoteChild)
