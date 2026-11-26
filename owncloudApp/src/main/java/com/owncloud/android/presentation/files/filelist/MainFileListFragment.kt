@@ -935,9 +935,12 @@ class MainFileListFragment : Fragment(),
         val maxUploadsToRefresh = resources.getInteger(R.integer.max_uploads_to_refresh)
         collectLatestLifecycleFlow(transfersViewModel.transfersWithSpaceStateFlow) { transfers ->
             if (transfers.isNotEmpty()) {
+                val currentAccountName = withContext(Dispatchers.IO) {
+                    AccountUtils.getCurrentOwnCloudAccount(requireContext()).name
+                }
                 val newlySucceededTransfers = transfers.map { it.first }.filter {
                     it.status == TransferStatus.TRANSFER_SUCCEEDED &&
-                            it.accountName == AccountUtils.getCurrentOwnCloudAccount(requireContext()).name
+                            it.accountName == currentAccountName
                 }
                 val safeSucceededTransfers = succeededTransfers
                 if (safeSucceededTransfers == null) {
