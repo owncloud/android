@@ -822,11 +822,15 @@
     <string name="public_link_default_display_name">Връзка без име</string>
     <string name="public_link_add_correctly">Публичната връзка е създадена успешно</string>
     <string name="public_link_add_failed">Публичната връзка не можа да бъде създадена</string>
+    <string name="public_link_remove_dialog_title">Премахване на публична връзка</string>
+    <string name="public_link_remove_dialog_message">Искате ли да премахнете публичната връзка: %1$s\? Повторното създаване на същата връзка е невъзможно</string>
     <string name="public_link_remove_correctly">Публичната връзка е премахната успешно</string>
     <string name="public_link_remove_failed">Публичната връзка не можа да бъде премахната</string>
     <string name="public_link_edit_title">Редактиране на публична връзка</string>
     <string name="public_link_edit_correctly">Публичната връзка е редактирана успешно</string>
     <string name="public_link_edit_failed">Публичната връзка не можа да бъде редактирана</string>
+    <string name="public_link_edit_partially_failed">Паролата е актуализирана, но останалите промени не можаха да бъдат запазени</string>
+
     <string name="feedback_dialog_get_in_contact_description"><![CDATA[ Потърсете помощ във <a href=\"%1$s\"><b>форума</b></a> ни или допринесете в нашето <a href=\"%2$s\"><b>хранилище в GitHub</b></a>]]></string>
 
     <string name="link_role_accessibility">Връзка</string>
