@@ -1,0 +1,6 @@
+Bugfix: Server-side folder renames are now correctly detected and reflected after sync
+
+A regression has been fixed where a server-side folder rename was not detected during synchronization when the folder etag had not changed since the last sync
+
+https://github.com/owncloud/android/issues/5014
+https://github.com/owncloud/android/pull/5064
