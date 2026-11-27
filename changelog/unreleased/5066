@@ -1,0 +1,5 @@
+Bugfix: Prevent ANR caused by account read on main thread
+
+Account information has been moved to a background thread to prevent ANRs when file transfers complete.
+
+https://github.com/owncloud/android/pull/5066
